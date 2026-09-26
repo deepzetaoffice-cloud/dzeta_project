@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.*
+
+# Next.js / build output
+.next/
+out/
+build/
+dist/
+*.tsbuildinfo
+next-env.d.ts
+
+# Test and audit output
+coverage/
+playwright-report/
+test-results/
+.lighthouseci/
+
+# Environment and secrets (never commit; .env.example IS committed)
+.env
+.env.*
+!.env.example
+
+# AI scratch space: temporary files live here and are deleted at task end
+.scratch/
+
+# Claude Code personal overrides (shared settings.json IS committed)
+.claude/settings.local.json
+
+# Deploy
+.vercel
+
+# Logs and OS noise
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+.DS_Store
+Thumbs.db
+desktop.ini

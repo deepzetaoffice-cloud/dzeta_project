@@ -1,0 +1,537 @@
+<title>DeepZeta Colour System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  color-scheme:dark;
+  --navy:#010413; --navy-900:#050A1C; --navy-850:#08122E; --navy-800:#0B1C4A; --navy-700:#16224A;
+  --border:#33457F; --slate:#5D73B8; --mist:#9FB0E0; --frost:#C9D4FF; --white:#F4F6FB;
+  --cyan:#08C6FD; --azure:#1A84FD; --royal:#2139F6; --violet:#7946FC; --ice:#7CF3FF; --sky:#3DA9FC; --signal:#2F6BFF; --violet-soft:#A78BFF;
+  --sig:linear-gradient(135deg,#08C6FD 0%,#1A84FD 50%,#7946FC 100%);
+  --zeta:linear-gradient(150deg,#09E8FE 0%,#00B5FC 25%,#147BFC 50%,#4639F9 75%,#602CFA 100%);
+  --sans:'Montserrat',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,'SFMono-Regular',Menlo,monospace;
+}
+*{box-sizing:border-box}
+html{background:var(--navy);overflow-x:clip}
+body{margin:0;background:var(--navy);color:var(--white);font-family:var(--sans);font-size:15px;line-height:1.55;
+  background-image:linear-gradient(rgba(26,132,253,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(26,132,253,.06) 1px,transparent 1px);
+  background-size:80px 80px;overflow-x:clip;padding-inline:clamp(16px,4vw,56px);padding-block:0 80px}
+.wrap{max-width:1180px;margin:0 auto}
+a{color:var(--sky)}
+/* ---------- hero ---------- */
+.hero{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:40px;align-items:center;padding-block:56px 40px}
+.hero::before{content:"";position:absolute;inset:-40px -10vw auto;height:560px;z-index:-1;
+  background:radial-gradient(ellipse 48% 55% at 30% 45%,rgba(24,70,210,.55) 0%,rgba(12,34,120,.26) 45%,rgba(1,4,19,0) 78%)}
+.hero .logo{width:100%;max-width:440px;justify-self:center}
+.hero .logo svg{width:100%;height:auto;display:block}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--cyan)}
+h1{font-size:clamp(34px,5vw,58px);line-height:1.04;font-weight:800;margin:.35em 0 .3em;letter-spacing:-.02em;text-wrap:balance}
+h1 .z{background:var(--zeta);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{color:var(--mist);max-width:56ch;margin:0}
+.ratio{margin-top:26px;max-width:520px}
+.ratio .bar{display:flex;height:14px;border-radius:7px;overflow:hidden;border:1px solid var(--navy-700)}
+.ratio .bar span:nth-child(1){flex:70;background:linear-gradient(90deg,#010413,#08122E 60%,#16224A)}
+.ratio .bar span:nth-child(2){flex:20;background:linear-gradient(90deg,#9FB0E0,#F4F6FB)}
+.ratio .bar span:nth-child(3){flex:10;background:var(--sig)}
+.ratio .legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:8px;font-size:12.5px;color:var(--mist);font-family:var(--mono)}
+.ratio .legend b{color:var(--white);font-weight:500}
+/* ---------- nav ---------- */
+nav.toc{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;gap:6px;flex-wrap:wrap;padding:12px 0;background:rgba(1,4,19,.86);backdrop-filter:blur(12px);border-bottom:1px solid var(--navy-700);margin-bottom:8px}
+nav.toc a{font-size:12.5px;font-weight:600;color:var(--frost);text-decoration:none;padding:6px 12px;border-radius:999px;border:1px solid var(--navy-700)}
+nav.toc a:hover,nav.toc a:focus-visible{border-color:var(--cyan);color:var(--white);outline:none}
+/* ---------- sections ---------- */
+section{padding-top:64px}
+.sh{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:22px;border-bottom:1px solid var(--navy-700);padding-bottom:14px}
+h2{font-size:clamp(22px,2.6vw,30px);margin:0;font-weight:700;letter-spacing:-.01em}
+h2 small{display:block;font-family:var(--mono);font-size:12px;letter-spacing:.16em;color:var(--slate);font-weight:400;text-transform:uppercase;margin-bottom:6px}
+.sh p{margin:0;color:var(--mist);max-width:60ch;font-size:14px}
+/* ---------- swatches ---------- */
+.grid{display:grid;gap:16px}
+.g-core{grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr))}
+.g-sup{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+.sw{background:var(--navy-850);border:1px solid var(--navy-700);border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
+.chip{height:150px;position:relative;display:flex;align-items:flex-end;justify-content:space-between;padding:14px}
+.g-sup .chip{height:110px}
+.chip .aa{font-family:var(--mono);font-size:11.5px;padding:3px 8px;border-radius:999px;background:rgba(1,4,19,.55);color:#F4F6FB;backdrop-filter:blur(4px)}
+.meta{padding:14px 16px 16px;display:grid;gap:4px}
+.meta .nm{font-weight:700;font-size:16px}
+.meta .role{color:var(--mist);font-size:13px;line-height:1.45}
+.codes{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+button.cp{font-family:var(--mono);font-size:12px;color:var(--frost);background:var(--navy-800);border:1px solid var(--navy-700);border-radius:8px;padding:5px 9px;cursor:pointer;font-variant-numeric:tabular-nums}
+button.cp:hover{border-color:var(--cyan);color:var(--white)}
+button.cp:focus-visible{outline:2px solid var(--ice);outline-offset:2px}
+button.cp.ok{border-color:#22D3A6;color:#22D3A6}
+/* ---------- neutral scale ---------- */
+.scale{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));border-radius:18px;overflow:hidden;border:1px solid var(--navy-700)}
+.scale .st{min-height:190px;padding:12px 10px;display:flex;flex-direction:column;justify-content:space-between;gap:10px}
+.scale .st .t{font-weight:700;font-size:13px}
+.scale .st .h{font-family:var(--mono);font-size:11.5px}
+.scale .st .u{font-size:11.5px;opacity:.85;line-height:1.35}
+/* ---------- status ---------- */
+.g-status{grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+.stat{background:var(--navy-850);border:1px solid var(--navy-700);border-radius:16px;padding:16px;display:grid;gap:12px}
+.pill{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:13.5px;padding:7px 12px;border-radius:999px;width:max-content}
+.pill i{width:8px;height:8px;border-radius:50%;display:block}
+/* ---------- gradients ---------- */
+.g-grad{grid-template-columns:repeat(auto-fill,minmax(min(420px,100%),1fr))}
+.gr{background:var(--navy-850);border:1px solid var(--navy-700);border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
+.gr .fill{height:170px;position:relative}
+.gr .fill .tag{position:absolute;left:14px;top:12px;font-family:var(--mono);font-size:12px;padding:3px 8px;border-radius:6px;background:rgba(1,4,19,.55);color:#F4F6FB}
+.gr .stops{display:flex;height:8px}
+.gr .body{padding:14px 16px 16px;display:grid;gap:6px}
+.gr code{display:block;font-family:var(--mono);font-size:11.5px;color:var(--frost);background:var(--navy);border:1px solid var(--navy-700);border-radius:10px;padding:10px 12px;overflow-x:auto;white-space:nowrap}
+.gr .row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.demo-text{font-weight:800;font-size:54px;letter-spacing:-.02em;line-height:1;background:var(--zeta);-webkit-background-clip:text;background-clip:text;color:transparent;position:absolute;left:18px;bottom:18px}
+.demo-btn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-weight:700;font-size:15px;padding:14px 26px;border-radius:999px;border:0}
+.glass{position:absolute;inset:26px 40px;border-radius:18px;background:rgba(8,18,46,.72);backdrop-filter:blur(14px);border:1.5px solid transparent;
+  background-clip:padding-box;box-shadow:0 0 0 1.5px rgba(26,132,253,.55) inset,0 18px 40px rgba(0,0,0,.4);padding:18px;display:grid;gap:8px;align-content:start}
+.glass b{font-size:14px}.glass span{font-size:12px;color:var(--mist)}
+.glass .ln{height:8px;border-radius:4px;background:#16224A}
+/* ---------- pixels ---------- */
+.pix{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:28px;align-items:center}
+.cluster{position:relative;aspect-ratio:1;max-width:300px;width:100%;margin:0 auto}
+.cluster div{position:absolute;border-radius:14%;box-shadow:0 0 40px rgba(8,198,253,.25)}
+.g-pix{grid-template-columns:repeat(2,minmax(0,1fr))}
+.pc{background:var(--navy-850);border:1px solid var(--navy-700);border-radius:16px;padding:16px;display:grid;gap:10px}
+.pc .sq{width:56px;height:56px;border-radius:12px}
+.pc .svc{font-weight:700}
+.pc .hx{font-family:var(--mono);font-size:12px;color:var(--mist)}
+/* ---------- contrast ---------- */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--navy-700);border-radius:16px}
+table{border-collapse:collapse;width:100%;min-width:640px;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--navy-700);font-size:13.5px;vertical-align:middle}
+th{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--slate);font-weight:500;background:var(--navy-900)}
+tr:last-child td{border-bottom:0}
+.sample{font-weight:700;font-size:15px;padding:6px 12px;border-radius:8px;display:inline-block}
+.badge{font-family:var(--mono);font-size:11.5px;padding:3px 8px;border-radius:999px;font-weight:500;white-space:nowrap}
+.pass{background:rgba(34,211,166,.14);color:#22D3A6}.large{background:rgba(255,181,71,.14);color:#FFB547}.fail{background:rgba(255,90,110,.14);color:#FF5A6E}
+.btns{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-top:20px}
+.bx{background:var(--navy-850);border:1px solid var(--navy-700);border-radius:16px;padding:18px;display:grid;gap:12px;justify-items:start}
+.bx .b{font-weight:700;font-size:14.5px;padding:12px 22px;border-radius:999px;border:0}
+.bx .note{font-size:12.5px;color:var(--mist)}
+/* ---------- preview ---------- */
+.site{border:1px solid var(--navy-700);border-radius:22px;overflow:hidden;background:var(--navy)}
+.site .bar{display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--navy-900);border-bottom:1px solid var(--navy-700)}
+.site .bar i{width:10px;height:10px;border-radius:50%;display:block}
+.site .url{margin-left:10px;font-family:var(--mono);font-size:11.5px;color:var(--slate);background:var(--navy-850);padding:4px 12px;border-radius:999px}
+.site .pg{position:relative;padding:26px clamp(18px,4vw,48px) 40px;
+  background:radial-gradient(ellipse 60% 70% at 70% 30%,rgba(24,70,210,.45),rgba(1,4,19,0) 70%),linear-gradient(rgba(26,132,253,.06) 1px,transparent 1px) 0 0/60px 60px,linear-gradient(90deg,rgba(26,132,253,.06) 1px,transparent 1px) 0 0/60px 60px,var(--navy)}
+.site nav{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.site nav .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px}
+.site nav .brand .mk{width:28px;height:28px;border-radius:8px;background:var(--sig)}
+.site nav ul{display:flex;gap:18px;list-style:none;margin:0;padding:0;font-size:13px;color:var(--frost);flex-wrap:wrap}
+.site .h{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:28px;align-items:center;margin-top:40px}
+.site h3{font-size:clamp(28px,4vw,46px);line-height:1.05;margin:10px 0 12px;font-weight:800;letter-spacing:-.02em;text-wrap:balance}
+.site h3 .z{background:var(--zeta);-webkit-background-clip:text;background-clip:text;color:transparent}
+.site p{color:var(--mist);margin:0 0 20px;max-width:46ch}
+.site .ctas{display:flex;gap:12px;flex-wrap:wrap}
+.site .ctas .p{background:linear-gradient(90deg,#08C6FD,#2F6BFF);color:#010413;font-weight:700;border:0;border-radius:999px;padding:13px 22px;font-size:14px}
+.site .ctas .s{background:transparent;color:var(--white);font-weight:600;border:1.5px solid var(--border);border-radius:999px;padding:12px 20px;font-size:14px}
+.site .cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.site .card{background:rgba(8,18,46,.8);border:1px solid rgba(26,132,253,.35);border-radius:16px;padding:14px;display:grid;gap:6px}
+.site .card .i{width:30px;height:30px;border-radius:9px}
+.site .card b{font-size:13.5px}.site .card span{font-size:12px;color:var(--mist)}
+.site .kpi{font-family:var(--mono);font-size:12px;color:var(--cyan)}
+/* ---------- css block ---------- */
+pre.css{margin:0;background:var(--navy-850);border:1px solid var(--navy-700);border-radius:16px;padding:18px 20px;overflow-x:auto;font-family:var(--mono);font-size:12.5px;line-height:1.7;color:var(--frost)}
+pre.css .c{color:var(--slate)}pre.css .k{color:var(--sky)}
+.cssbar{display:flex;justify-content:flex-end;margin-bottom:10px}
+footer{margin-top:64px;padding-top:18px;border-top:1px solid var(--navy-700);color:var(--slate);font-size:12.5px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+@media (max-width:860px){
+  .hero,.pix,.site .h{grid-template-columns:1fr}
+  .hero .logo{max-width:320px;order:-1}
+  .scale{grid-template-columns:repeat(5,minmax(0,1fr))}
+}
+@media (max-width:520px){
+  .g-pix{grid-template-columns:1fr}
+}
+@media (max-width:460px){
+  .scale{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .g-grad{grid-template-columns:1fr}.g-core{grid-template-columns:1fr}
+  .demo-text{font-size:42px}
+  .site .cards{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:no-preference){
+  .sw,.gr{transition:transform .25s cubic-bezier(.16,1,.3,1),border-color .25s}
+  .sw:hover,.gr:hover{transform:translateY(-3px);border-color:var(--border)}
+}
+</style>
+
+<div class="wrap">
+  <header class="hero">
+    <div>
+      <div class="eyebrow">Brand colour system · v1 · for the website build</div>
+      <h1>The Deep<span class="z">zeta</span> palette</h1>
+      <p class="lead">Every colour here is sampled from the final logo file. Swatches show the hex, RGB and how readable each colour is as text on our Midnight Navy background. Click any code to copy it.</p>
+      <div class="ratio" aria-label="Colour balance 70 20 10">
+        <div class="bar"><span></span><span></span><span></span></div>
+        <div class="legend"><span><b>70%</b> navy surfaces</span><span><b>20%</b> white &amp; grey text</span><span><b>10%</b> brand colour &amp; gradients</span></div>
+      </div>
+    </div>
+    <div class="logo" aria-label="DeepZeta logo"><svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+     xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+     viewBox="195 250 865 710" role="img" aria-label="DeepZeta AI Digital Solutions logo" version="1.1" id="DeepZeta_Logo">
+  <title>Deepzeta · AI Digital Solutions</title>
+  <defs id="defs_main">
+    <linearGradient id="grad_front_loop" inkscape:label="Front Loop · cyan → vibrant blue" gradientUnits="userSpaceOnUse" x1="607.77" y1="265.98" x2="701.51" y2="554.47">
+      <stop offset="0" stop-color="#10D9FE"/>
+      <stop offset="0.17" stop-color="#08C6FD"/>
+      <stop offset="0.33" stop-color="#12A8FD"/>
+      <stop offset="0.5" stop-color="#1A84FD"/>
+      <stop offset="0.67" stop-color="#1E5AFC"/>
+      <stop offset="0.83" stop-color="#2139F6"/>
+      <stop offset="1" stop-color="#1927DD"/>
+    </linearGradient>
+    <linearGradient id="grad_back_crescent" inkscape:label="Back Crescent · cyan-blue → deep blue" gradientUnits="userSpaceOnUse" x1="878.37" y1="471.44" x2="718.01" y2="615.84">
+      <stop offset="0" stop-color="#26D1FD"/>
+      <stop offset="0.17" stop-color="#33A3FD"/>
+      <stop offset="0.33" stop-color="#417DFD"/>
+      <stop offset="0.5" stop-color="#4F5CFC"/>
+      <stop offset="0.67" stop-color="#4440FD"/>
+      <stop offset="0.83" stop-color="#242FF7"/>
+      <stop offset="1" stop-color="#111DCB"/>
+    </linearGradient>
+    <linearGradient id="grad_back_bar" inkscape:label="Back Bottom Bar · deep blue → blue" gradientUnits="userSpaceOnUse" x1="536.61" y1="576.7" x2="748.61" y2="714.37">
+      <stop offset="0" stop-color="#04057E"/>
+      <stop offset="0.17" stop-color="#1023D0"/>
+      <stop offset="0.33" stop-color="#1C4EFD"/>
+      <stop offset="0.5" stop-color="#1D6FFC"/>
+      <stop offset="0.67" stop-color="#1E88FD"/>
+      <stop offset="0.83" stop-color="#2E8DFD"/>
+      <stop offset="1" stop-color="#6861FD"/>
+    </linearGradient>
+    <linearGradient id="grad_diag_fold" inkscape:label="Diagonal Fold · deep blue → purple" gradientUnits="userSpaceOnUse" x1="604.55" y1="381.54" x2="515.66" y2="713.3">
+      <stop offset="0" stop-color="#000022"/>
+      <stop offset="0.17" stop-color="#006DE5"/>
+      <stop offset="0.33" stop-color="#16C5FF"/>
+      <stop offset="0.5" stop-color="#3DA9FC"/>
+      <stop offset="0.67" stop-color="#516CFC"/>
+      <stop offset="0.83" stop-color="#7946FC"/>
+      <stop offset="1" stop-color="#AD26FD"/>
+    </linearGradient>
+    <linearGradient id="grad_diag_overlay_1" inkscape:label="Diagonal light sheen" gradientUnits="userSpaceOnUse" x1="505.65" y1="502.04" x2="628.55" y2="588.1">
+      <stop offset="0" stop-color="#00FFFC" stop-opacity="0.27"/>
+      <stop offset="0.25" stop-color="#00FFFC" stop-opacity="0.12"/>
+      <stop offset="0.5" stop-color="#00FFFC" stop-opacity="0.03"/>
+      <stop offset="0.75" stop-color="#00FFFC" stop-opacity="0"/>
+      <stop offset="1" stop-color="#00FFFC" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="grad_diag_overlay_2" inkscape:label="Diagonal edge shade" gradientUnits="userSpaceOnUse" x1="505.65" y1="502.04" x2="628.55" y2="588.1">
+      <stop offset="0" stop-color="#0C00FF" stop-opacity="0"/>
+      <stop offset="0.25" stop-color="#0C00FF" stop-opacity="0.14"/>
+      <stop offset="0.5" stop-color="#0C00FF" stop-opacity="0.24"/>
+      <stop offset="0.75" stop-color="#0C00FF" stop-opacity="0.34"/>
+      <stop offset="1" stop-color="#0C00FF" stop-opacity="0.38"/>
+    </linearGradient>
+    <linearGradient id="grad_zeta" inkscape:label="Wordmark zeta · cyan → purple" gradientUnits="userSpaceOnUse" x1="798.17" y1="707.14" x2="923.48" y2="924.18">
+      <stop offset="0" stop-color="#09E8FE"/>
+      <stop offset="0.25" stop-color="#00B5FC"/>
+      <stop offset="0.5" stop-color="#147BFC"/>
+      <stop offset="0.75" stop-color="#4639F9"/>
+      <stop offset="1" stop-color="#602CFA"/>
+    </linearGradient>
+    <linearGradient id="grad_line_left" inkscape:label="Left line · cyan → blue" gradientUnits="userSpaceOnUse" x1="211.5" y1="931" x2="292.8" y2="931">
+      <stop offset="0" stop-color="#00D8EE"/>
+      <stop offset="0.5" stop-color="#058FEE"/>
+      <stop offset="1" stop-color="#0D48E6"/>
+    </linearGradient>
+    <linearGradient id="grad_line_right" inkscape:label="Right line · blue-violet → purple" gradientUnits="userSpaceOnUse" x1="962.8" y1="931" x2="1042.5" y2="931">
+      <stop offset="0" stop-color="#4A22EA"/>
+      <stop offset="0.5" stop-color="#662DE8"/>
+      <stop offset="1" stop-color="#A040F2"/>
+    </linearGradient>
+    <linearGradient id="grad_square_1_purple" inkscape:label="Square 1 Purple" gradientUnits="userSpaceOnUse" x1="878.2" y1="367.6" x2="859.58" y2="399.85">
+      <stop offset="0" stop-color="#6430FA"/>
+      <stop offset="0.5" stop-color="#592BFD"/>
+      <stop offset="1" stop-color="#4C27FB"/>
+    </linearGradient>
+    <linearGradient id="grad_square_2_cyanblue" inkscape:label="Square 2 CyanBlue" gradientUnits="userSpaceOnUse" x1="838.99" y1="307.97" x2="835.06" y2="352.95">
+      <stop offset="0" stop-color="#21BEFC"/>
+      <stop offset="0.5" stop-color="#3092FD"/>
+      <stop offset="1" stop-color="#4264FD"/>
+    </linearGradient>
+    <linearGradient id="grad_square_3_lightcyan" inkscape:label="Square 3 LightCyan" gradientUnits="userSpaceOnUse" x1="889.78" y1="273.39" x2="887.22" y2="302.61">
+      <stop offset="0" stop-color="#03D4FC"/>
+      <stop offset="0.5" stop-color="#04C1FD"/>
+      <stop offset="1" stop-color="#09A5FC"/>
+    </linearGradient>
+    <linearGradient id="grad_square_4_royalblue" inkscape:label="Square 4 RoyalBlue" gradientUnits="userSpaceOnUse" x1="907.45" y1="336.66" x2="899.55" y2="358.34">
+      <stop offset="0" stop-color="#3166FB"/>
+      <stop offset="0.5" stop-color="#2A4DFC"/>
+      <stop offset="1" stop-color="#3741FD"/>
+    </linearGradient>
+    <filter id="filter_front_shadow" inkscape:label="Soft Drop Shadow · front loop over back loop" x="-0.1" y="-0.1" width="1.2" height="1.25" color-interpolation-filters="sRGB">
+      <feFlood flood-color="#00031A" flood-opacity="0.5" result="flood"/>
+      <feComposite in="flood" in2="SourceAlpha" operator="in" result="shadowShape"/>
+      <feGaussianBlur in="shadowShape" stdDeviation="3.5" result="shadowBlur"/>
+      <feOffset in="shadowBlur" dx="1.5" dy="3.5" result="shadowOffset"/>
+    </filter>
+    <clipPath id="clip_shadow_to_back_diagonal" clipPathUnits="userSpaceOnUse" inkscape:label="Shadow falls only on the diagonal fold">
+      <path id="clip_diagonal_shape" d="M 380.2,685.7 C 388.32,660.37 416.29,622.16 434.62,605 C 498.97,544.75 563.22,484.76 627.86,425 C 634.41,418.95 661.21,396 679.04,396 L 700,393.2 L 799.01,388 C 693.02,478.96 588.61,571.4 482.46,662 C 476.4,667.18 455.54,685.7 435.41,685.7 Z"/>
+    </clipPath>
+  </defs>
+  <g inkscape:groupmode="layer" id="layer_tagline" inkscape:label="Tagline_And_Lines">
+    <rect id="Line_Left_Cyan" inkscape:label="Line_Left_Cyan" x="211.5" y="928.5" width="81.3" height="5" rx="2.5" ry="2.5" fill="url(#grad_line_left)"/>
+    <rect id="Line_Right_Purple" inkscape:label="Line_Right_Purple" x="962.8" y="928.5" width="79.7" height="5" rx="2.5" ry="2.5" fill="url(#grad_line_right)"/>
+    <g id="Tagline_Text" inkscape:label="AI DIGITAL SOLUTIONS" fill="#F5F6FA">
+      <path id="Tag_01_A" inkscape:label="A" d="M322 941 330.64 919H333.34L342 941H339.14L337.04 935.5H326.9L324.81 941ZM336.09 932.99 331.97 922.21 327.86 932.99Z"/>
+      <path id="Tag_02_I" inkscape:label="I" d="M360 941V919H364V941Z"/>
+      <path id="Tag_03_D" inkscape:label="D" d="M405 941V919H413.77Q417.1 919 419.64 920.38Q422.18 921.77 423.59 924.25Q425 926.73 425 930Q425 933.27 423.59 935.75Q422.18 938.23 419.64 939.62Q417.1 941 413.77 941ZM407.97 938.27H413.59Q416.17 938.27 418.06 937.23Q419.95 936.19 420.99 934.32Q422.03 932.45 422.03 930Q422.03 927.52 420.99 925.66Q419.95 923.81 418.06 922.77Q416.17 921.73 413.59 921.73H407.97Z"/>
+      <path id="Tag_04_I" inkscape:label="I" d="M444 941V919H447V941Z"/>
+      <path id="Tag_05_G" inkscape:label="G" d="M477.16 941.5Q474.52 941.5 472.3 940.65Q470.09 939.8 468.46 938.24Q466.83 936.68 465.91 934.59Q465 932.51 465 930Q465 927.49 465.91 925.41Q466.83 923.32 468.47 921.76Q470.12 920.2 472.34 919.35Q474.55 918.5 477.23 918.5Q479.93 918.5 482.18 919.37Q484.43 920.23 486 921.97L483.98 923.96Q482.58 922.61 480.93 921.99Q479.28 921.36 477.36 921.36Q475.4 921.36 473.72 922Q472.04 922.64 470.82 923.8Q469.6 924.96 468.93 926.55Q468.26 928.14 468.26 930Q468.26 931.83 468.93 933.42Q469.6 935.01 470.82 936.18Q472.04 937.36 473.71 938Q475.37 938.64 477.33 938.64Q479.15 938.64 480.85 938.06Q481.79 937.74 482.67 937.2V929.87H485.8V938.64Q484.11 940.05 481.84 940.78Q479.58 941.5 477.16 941.5Z"/>
+      <path id="Tag_06_I" inkscape:label="I" d="M506 941V919H509V941Z"/>
+      <path id="Tag_07_T" inkscape:label="T" d="M533.88 941V921.73H526V919H545V921.73H537.12V941Z"/>
+      <path id="Tag_08_A" inkscape:label="A" d="M559 941 568.07 919H570.9L580 941H577L574.79 935.5H564.15L561.95 941ZM573.79 932.99 569.47 922.21 565.15 932.99Z"/>
+      <path id="Tag_09_L" inkscape:label="L" d="M598 941V919H601.13V938.27H613V941Z"/>
+      <path id="Tag_10_S" inkscape:label="S" d="M662.45 941.5Q659.93 941.5 657.63 940.71Q655.32 939.93 654 938.67L655.17 936.17Q656.43 937.29 658.38 938.03Q660.34 938.77 662.45 938.77Q664.38 938.77 665.58 938.32Q666.77 937.87 667.34 937.08Q667.91 936.3 667.91 935.3Q667.91 934.14 667.17 933.44Q666.43 932.73 665.24 932.3Q664.06 931.86 662.64 931.54Q661.22 931.22 659.79 930.79Q658.35 930.35 657.17 929.68Q655.99 929 655.26 927.86Q654.54 926.72 654.54 924.92Q654.54 923.19 655.44 921.73Q656.33 920.27 658.21 919.38Q660.09 918.5 662.99 918.5Q664.91 918.5 666.81 919.01Q668.7 919.53 670.09 920.49L669.04 923.06Q667.63 922.1 666.05 921.66Q664.47 921.23 662.99 921.23Q661.13 921.23 659.93 921.71Q658.73 922.19 658.18 923Q657.63 923.8 657.63 924.8Q657.63 925.98 658.37 926.69Q659.11 927.4 660.29 927.82Q661.47 928.23 662.89 928.57Q664.31 928.91 665.75 929.33Q667.18 929.74 668.37 930.42Q669.55 931.09 670.27 932.22Q671 933.34 671 935.11Q671 936.81 670.09 938.27Q669.17 939.73 667.26 940.62Q665.35 941.5 662.45 941.5Z"/>
+      <path id="Tag_11_O" inkscape:label="O" d="M698.53 941.5Q696.06 941.5 693.94 940.63Q691.82 939.77 690.28 938.21Q688.73 936.65 687.87 934.56Q687 932.47 687 930Q687 927.53 687.87 925.44Q688.73 923.35 690.28 921.79Q691.82 920.23 693.92 919.37Q696.03 918.5 698.53 918.5Q701 918.5 703.09 919.35Q705.18 920.2 706.74 921.76Q708.3 923.32 709.15 925.41Q710 927.49 710 930Q710 932.51 709.15 934.59Q708.3 936.68 706.74 938.24Q705.18 939.8 703.09 940.65Q701 941.5 698.53 941.5ZM698.53 938.64Q700.32 938.64 701.85 938Q703.38 937.36 704.51 936.18Q705.64 935.01 706.27 933.44Q706.91 931.86 706.91 930Q706.91 928.14 706.27 926.56Q705.64 924.99 704.51 923.82Q703.38 922.64 701.85 922Q700.32 921.36 698.53 921.36Q696.71 921.36 695.18 922Q693.65 922.64 692.5 923.82Q691.36 924.99 690.73 926.56Q690.09 928.14 690.09 930Q690.09 931.86 690.73 933.44Q691.36 935.01 692.5 936.18Q693.65 937.36 695.18 938Q696.71 938.64 698.53 938.64Z"/>
+      <path id="Tag_12_L" inkscape:label="L" d="M726 941V919H729.34V938.27H742V941Z"/>
+      <path id="Tag_13_U" inkscape:label="U" d="M766.5 941Q762.07 941 759.54 938.55Q757 936.09 757 931.37V919H760.21V931.24Q760.21 934.88 761.86 936.56Q763.52 938.23 766.53 938.23Q769.58 938.23 771.23 936.56Q772.89 934.88 772.89 931.24V919H776V931.37Q776 936.09 773.48 938.55Q770.96 941 766.5 941Z"/>
+      <path id="Tag_14_T" inkscape:label="T" d="M799.46 941V921.73H792V919H810V921.73H802.54V941Z"/>
+      <path id="Tag_15_I" inkscape:label="I" d="M826 941V919H829V941Z"/>
+      <path id="Tag_16_O" inkscape:label="O" d="M856.53 941.5Q854.06 941.5 851.94 940.63Q849.82 939.77 848.28 938.21Q846.73 936.65 845.87 934.56Q845 932.47 845 930Q845 927.53 845.87 925.44Q846.73 923.35 848.28 921.79Q849.82 920.23 851.92 919.37Q854.03 918.5 856.53 918.5Q859 918.5 861.09 919.35Q863.18 920.2 864.74 921.76Q866.3 923.32 867.15 925.41Q868 927.49 868 930Q868 932.51 867.15 934.59Q866.3 936.68 864.74 938.24Q863.18 939.8 861.09 940.65Q859 941.5 856.53 941.5ZM856.53 938.64Q858.32 938.64 859.85 938Q861.38 937.36 862.51 936.18Q863.64 935.01 864.27 933.44Q864.91 931.86 864.91 930Q864.91 928.14 864.27 926.56Q863.64 924.99 862.51 923.82Q861.38 922.64 859.85 922Q858.32 921.36 856.53 921.36Q854.71 921.36 853.18 922Q851.65 922.64 850.5 923.82Q849.36 924.99 848.73 926.56Q848.09 928.14 848.09 930Q848.09 931.86 848.73 933.44Q849.36 935.01 850.5 936.18Q851.65 937.36 853.18 938Q854.71 938.64 856.53 938.64Z"/>
+      <path id="Tag_17_N" inkscape:label="N" d="M884 941V919H886.59L899.84 935.41V919H903V941H900.41L887.16 924.59V941Z"/>
+      <path id="Tag_18_S" inkscape:label="S" d="M927.45 941.5Q924.93 941.5 922.63 940.71Q920.32 939.93 919 938.67L920.17 936.17Q921.43 937.29 923.38 938.03Q925.34 938.77 927.45 938.77Q929.38 938.77 930.58 938.32Q931.77 937.87 932.34 937.08Q932.91 936.3 932.91 935.3Q932.91 934.14 932.17 933.44Q931.43 932.73 930.24 932.3Q929.06 931.86 927.64 931.54Q926.22 931.22 924.79 930.79Q923.35 930.35 922.17 929.68Q920.99 929 920.26 927.86Q919.54 926.72 919.54 924.92Q919.54 923.19 920.44 921.73Q921.33 920.27 923.21 919.38Q925.09 918.5 927.99 918.5Q929.91 918.5 931.81 919.01Q933.7 919.53 935.09 920.49L934.04 923.06Q932.63 922.1 931.05 921.66Q929.47 921.23 927.99 921.23Q926.13 921.23 924.93 921.71Q923.73 922.19 923.18 923Q922.63 923.8 922.63 924.8Q922.63 925.98 923.37 926.69Q924.11 927.4 925.29 927.82Q926.47 928.23 927.89 928.57Q929.31 928.91 930.75 929.33Q932.18 929.74 933.37 930.42Q934.55 931.09 935.27 932.22Q936 933.34 936 935.11Q936 936.81 935.09 938.27Q934.17 939.73 932.26 940.62Q930.35 941.5 927.45 941.5Z"/>
+    </g>
+  </g>
+  <g inkscape:groupmode="layer" id="layer_wordmark" inkscape:label="Wordmark_Deepzeta">
+    <g id="Word_Deep" inkscape:label="Deep (white)" fill="#F4F6FB">
+      <path id="Deep_D" inkscape:label="D" d="M222 863V747H273.49Q291.95 747 306.04 754.21Q320.13 761.42 328.07 774.34Q336 787.27 336 805Q336 822.57 328.07 835.57Q320.13 848.58 306.04 855.79Q291.95 863 273.49 863ZM248.23 840.96H272.2Q283.53 840.96 291.87 836.57Q300.21 832.18 304.83 824.06Q309.44 815.94 309.44 805Q309.44 793.9 304.83 785.86Q300.21 777.82 291.87 773.43Q283.53 769.04 272.2 769.04H248.23Z"/>
+      <path id="Deep_e1" inkscape:label="e" d="M398.14 865Q381.92 865 369.66 858.83Q357.4 852.65 350.7 841.94Q344 831.22 344 817.5Q344 803.61 350.61 792.89Q357.23 782.18 368.69 776.09Q380.16 770 394.62 770Q408.55 770 419.75 775.74Q430.95 781.49 437.47 792.21Q444 802.92 444 817.84Q444 819.39 443.82 821.36Q443.65 823.33 443.47 825.05H371.69Q372.57 828.65 374.51 831.73Q377.86 837.56 384.12 840.56Q390.38 843.56 398.85 843.56Q406.43 843.56 412.17 841.34Q417.9 839.11 422.66 834.65L437.3 850.08Q430.77 857.28 420.9 861.14Q411.02 865 398.14 865ZM371.34 809.44H418.07Q417.37 805.15 415.43 801.55Q412.43 796.24 407.14 793.24Q401.85 790.23 394.79 790.23Q387.74 790.23 382.36 793.24Q376.98 796.24 373.98 801.55Q372.04 805.15 371.34 809.44Z"/>
+      <path id="Deep_e2" inkscape:label="e" d="M506.14 865Q489.92 865 477.66 858.83Q465.4 852.65 458.7 841.94Q452 831.22 452 817.5Q452 803.61 458.61 792.89Q465.23 782.18 476.69 776.09Q488.16 770 502.62 770Q516.55 770 527.75 775.74Q538.95 781.49 545.47 792.21Q552 802.92 552 817.84Q552 819.39 551.82 821.36Q551.65 823.33 551.47 825.05H479.69Q480.57 828.65 482.51 831.73Q485.86 837.56 492.12 840.56Q498.38 843.56 506.85 843.56Q514.43 843.56 520.17 841.34Q525.9 839.11 530.66 834.65L545.3 850.08Q538.77 857.28 528.9 861.14Q519.02 865 506.14 865ZM479.34 809.44H526.07Q525.37 805.15 523.43 801.55Q520.43 796.24 515.14 793.24Q509.85 790.23 502.79 790.23Q495.74 790.23 490.36 793.24Q484.98 796.24 481.98 801.55Q480.04 805.15 479.34 809.44Z"/>
+      <path id="Deep_p" inkscape:label="p" d="M618.98 864.33Q606.8 864.33 597.66 859.22Q593.36 856.84 589.95 853.26V896H562V771.36H588.7V781.92Q592.28 777.83 597.12 775.11Q606.26 770 618.98 770Q632.6 770 643.44 775.87Q654.28 781.75 660.64 792.31Q667 802.86 667 817.16Q667 831.64 660.64 842.19Q654.28 852.75 643.44 858.54Q632.6 864.33 618.98 864.33ZM614.14 842.54Q621.13 842.54 626.59 839.47Q632.06 836.41 635.37 830.7Q638.69 825 638.69 817.16Q638.69 809.16 635.37 803.54Q632.06 797.92 626.59 794.86Q621.13 791.79 614.14 791.79Q607.15 791.79 601.6 794.86Q596.04 797.92 592.82 803.54Q589.59 809.16 589.59 817.16Q589.59 825 592.82 830.7Q596.04 836.41 601.6 839.47Q607.15 842.54 614.14 842.54Z"/>
+    </g>
+    <g id="Word_zeta" inkscape:label="zeta (gradient)" fill="url(#grad_zeta)">
+      <path id="zeta_z" inkscape:label="z" d="M676 863V847.1L724.52 792.3H677.24V772H759.41V787.9L710.89 842.7H761V863Z"/>
+      <path id="zeta_e" inkscape:label="e" d="M820.06 865Q804.16 865 792.15 858.83Q780.14 852.65 773.57 841.94Q767 831.22 767 817.5Q767 803.61 773.48 792.89Q779.96 782.18 791.2 776.09Q802.43 770 816.6 770Q830.26 770 841.23 775.74Q852.21 781.49 858.6 792.21Q865 802.92 865 817.84Q865 819.39 864.83 821.36Q864.65 823.33 864.48 825.05H794.14Q795 828.65 796.9 831.73Q800.19 837.56 806.32 840.56Q812.46 843.56 820.75 843.56Q828.19 843.56 833.8 841.34Q839.42 839.11 844.09 834.65L858.43 850.08Q852.04 857.28 842.36 861.14Q832.68 865 820.06 865ZM793.79 809.44H839.59Q838.9 805.15 837 801.55Q834.06 796.24 828.88 793.24Q823.69 790.23 816.78 790.23Q809.86 790.23 804.59 793.24Q799.32 796.24 796.38 801.55Q794.48 805.15 793.79 809.44Z"/>
+      <path id="zeta_t" inkscape:label="t" d="M930 858.97Q926.13 861.98 920.5 863.49Q914.86 865 908.81 865Q892.49 865 883.75 856.31Q875 847.61 875 830.75V747H901.24V770.25H923.61V791.54H901.24V830.4Q901.24 836.43 904.1 839.71Q906.96 843 912.34 843Q918.39 843 923.1 839.45Z"/>
+      <path id="zeta_a" inkscape:label="a" d="M1038 771.37V863.63H1011.81V853Q1001.62 865 982.28 865Q968.92 865 958.11 859.17Q947.3 853.34 941.15 842.54Q935 831.73 935 817.5Q935 803.27 941.15 792.46Q947.3 781.66 958.11 775.83Q968.92 770 982.28 770Q1000.39 770 1010.58 781.15V771.37ZM1011.11 817.5Q1011.11 805.84 1004.25 798.89Q997.4 791.95 987.03 791.95Q976.48 791.95 969.63 798.89Q962.77 805.84 962.77 817.5Q962.77 829.16 969.63 836.11Q976.48 843.05 987.03 843.05Q997.4 843.05 1004.25 836.11Q1011.11 829.16 1011.11 817.5Z"/>
+    </g>
+  </g>
+  <g inkscape:groupmode="layer" id="layer_ribbon_back" inkscape:label="Ribbon_Back_Loop">
+    <path id="Back_Crescent" inkscape:label="Back_Crescent (outer fold)" d="M 770.85,352.04 C 788.67,364.17 804.23,380.12 817.9,400 C 837.87,429.04 852.5,470.06 852.5,502 C 852.5,547.89 840.83,584.62 812.6,620 C 810.3,622.88 807.98,625.65 805.62,628.32 L 704,642 L 664,612.5 C 695.67,612.5 723.8,600.83 747.6,580 C 770.65,559.83 782.5,542.13 782.5,509 C 782.5,486.39 773.07,464.33 758.59,445.97 Z" fill="url(#grad_back_crescent)"/>
+    <path id="Back_Bottom_Bar" inkscape:label="Back_Bottom_Bar" d="M 562,612.5 L 692,612.3 C 748.75,612.3 836.12,616.85 849.86,537.25 C 845.01,567.59 833.22,594.16 812.6,620 C 774.43,667.83 729.22,685.7 664,685.7 L 458,685.7 L 531.21,621 C 538.43,614.77 550.62,612.5 562,612.5 Z" fill="url(#grad_back_bar)"/>
+    <g id="Back_Diagonal_Fold" inkscape:label="Diagonal_Fold">
+      <path id="Diagonal_Base" inkscape:label="Diagonal_Base" d="M 380.2,685.7 C 388.32,660.37 416.29,622.16 434.62,605 C 498.97,544.75 563.22,484.76 627.86,425 C 634.41,418.95 661.21,396 679.04,396 L 700,393.2 L 799.01,388 C 693.02,478.96 588.61,571.4 482.46,662 C 476.4,667.18 455.54,685.7 435.41,685.7 Z" fill="url(#grad_diag_fold)"/>
+      <path id="Diagonal_Sheen" inkscape:label="Diagonal_Sheen" d="M 380.2,685.7 C 388.32,660.37 416.29,622.16 434.62,605 C 498.97,544.75 563.22,484.76 627.86,425 C 634.41,418.95 661.21,396 679.04,396 L 700,393.2 L 799.01,388 C 693.02,478.96 588.61,571.4 482.46,662 C 476.4,667.18 455.54,685.7 435.41,685.7 Z" fill="url(#grad_diag_overlay_1)"/>
+      <path id="Diagonal_Shade" inkscape:label="Diagonal_Shade" d="M 380.2,685.7 C 388.32,660.37 416.29,622.16 434.62,605 C 498.97,544.75 563.22,484.76 627.86,425 C 634.41,418.95 661.21,396 679.04,396 L 700,393.2 L 799.01,388 C 693.02,478.96 588.61,571.4 482.46,662 C 476.4,667.18 455.54,685.7 435.41,685.7 Z" fill="url(#grad_diag_overlay_2)"/>
+    </g>
+  </g>
+  <g inkscape:groupmode="layer" id="layer_ribbon_front" inkscape:label="Ribbon_Front_Loop">
+    <g id="Front_Loop_Shadow_Clip" inkscape:label="Front_Loop_Shadow" clip-path="url(#clip_shadow_to_back_diagonal)">
+      <path id="Front_Loop_Shadow" inkscape:label="Front_Loop_Shadow (soft drop shadow)" d="M 412.8,322.6 L 664,322.6 C 717.27,322.6 758.71,337.62 791.39,368.65 C 804.57,383.95 816.03,404.62 815.7,438 C 817.33,467.63 795.61,522.86 773.88,549 C 779.6,537.99 782.5,525.38 782.5,509 C 782.5,474.21 760.18,440.74 731.5,420 C 705.05,400.87 677.53,393.4 645,393.4 L 494,393.4 C 437.03,392.22 417.78,350.5 412.8,322.6 Z" fill="#000000" filter="url(#filter_front_shadow)"/>
+    </g>
+    <path id="Front_Loop" inkscape:label="Front_Loop" d="M 412.8,322.6 L 664,322.6 C 717.27,322.6 758.71,337.62 791.39,368.65 C 804.57,383.95 816.03,404.62 815.7,438 C 817.33,467.63 795.61,522.86 773.88,549 C 779.6,537.99 782.5,525.38 782.5,509 C 782.5,474.21 760.18,440.74 731.5,420 C 705.05,400.87 677.53,393.4 645,393.4 L 494,393.4 C 437.03,392.22 417.78,350.5 412.8,322.6 Z" fill="url(#grad_front_loop)"/>
+  </g>
+  <g inkscape:groupmode="layer" id="layer_pixels" inkscape:label="Digital_Pixels">
+    <g id="Pixel_Cluster" inkscape:label="Pixel_Cluster">
+      <path id="Square_1_Purple" inkscape:label="Square 1 · bottom · deep purple" d="M 856.5,366 H 881.7 C 884.46,366 886.7,368.24 886.7,371 V 396.2 C 886.7,398.96 884.46,401.2 881.7,401.2 H 856.5 C 853.74,401.2 851.5,398.96 851.5,396.2 V 371 C 851.5,368.24 853.74,366 856.5,366 Z" fill="url(#grad_square_1_purple)"/>
+      <path id="Square_2_CyanBlue" inkscape:label="Square 2 · middle · bright cyan-blue" d="M 819,305.8 H 855.4 C 858.99,305.8 861.9,308.71 861.9,312.3 V 348.7 C 861.9,352.29 858.99,355.2 855.4,355.2 H 819 C 815.41,355.2 812.5,352.29 812.5,348.7 V 312.3 C 812.5,308.71 815.41,305.8 819,305.8 Z" fill="url(#grad_square_2_cyanblue)"/>
+      <path id="Square_3_LightCyan" inkscape:label="Square 3 · top right · light cyan" d="M 874.3,270.2 H 902.3 C 904.4,270.2 906.1,271.9 906.1,274 V 302 C 906.1,304.1 904.4,305.8 902.3,305.8 H 874.3 C 872.2,305.8 870.5,304.1 870.5,302 V 274 C 870.5,271.9 872.2,270.2 874.3,270.2 Z" fill="url(#grad_square_3_lightcyan)"/>
+      <path id="Square_4_RoyalBlue" inkscape:label="Square 4 · small right · royal blue" d="M 894,335 H 913.5 C 915.16,335 916.5,336.34 916.5,338 V 357.5 C 916.5,359.16 915.16,360.5 913.5,360.5 H 894 C 892.34,360.5 891,359.16 891,357.5 V 338 C 891,336.34 892.34,335 894,335 Z" fill="url(#grad_square_4_royalblue)"/>
+    </g>
+  </g>
+</svg></div>
+  </header>
+
+  <nav class="toc" aria-label="Sections">
+    <a href="#core">Core</a><a href="#support">Support</a><a href="#neutrals">Neutrals</a><a href="#status">Status</a><a href="#gradients">Gradients</a><a href="#pixels">Pixels</a><a href="#contrast">Readability</a><a href="#preview">In use</a><a href="#css">CSS</a>
+  </nav>
+
+  <section id="core">
+    <div class="sh"><h2><small>1 · Core brand colours</small>From the logo</h2><p>The six colours that make up the mark and wordmark. Navy and white carry the page; the four blues and violet carry the brand.</p></div>
+    <div class="grid g-core" data-set="core"></div>
+  </section>
+
+  <section id="support">
+    <div class="sh"><h2><small>2 · Support tones</small>Secondary shades</h2><p>Lighter and more readable versions of the core hues, for glows, links, button fills and violet text.</p></div>
+    <div class="grid g-sup" data-set="support"></div>
+  </section>
+
+  <section id="neutrals">
+    <div class="sh"><h2><small>3 · Neutral scale</small>Navy to white</h2><p>Every surface, border and text colour on the site comes from this one ramp, tinted toward the brand blue.</p></div>
+    <div class="scale" id="scale"></div>
+  </section>
+
+  <section id="status">
+    <div class="sh"><h2><small>4 · Status colours</small>Feedback and alerts</h2><p>Kept separate from the brand accents so success, warnings and errors are never confused with a call to action.</p></div>
+    <div class="grid g-status" id="status-grid"></div>
+  </section>
+
+  <section id="gradients">
+    <div class="sh"><h2><small>5 · Gradients</small>Ten signature blends</h2><p>G1 and G2 come straight from the logo ribbon and the "zeta" wordmark. Copy the CSS under each one.</p></div>
+    <div class="grid g-grad" id="grads"></div>
+  </section>
+
+  <section id="pixels">
+    <div class="sh"><h2><small>6 · The four pixels</small>One colour per service</h2><p>The four squares in the logo can stand for the four services, and work as icons and category colours across the site.</p></div>
+    <div class="pix">
+      <div class="cluster" id="cluster" aria-hidden="true"></div>
+      <div class="grid g-pix" id="pix"></div>
+    </div>
+  </section>
+
+  <section id="contrast">
+    <div class="sh"><h2><small>7 · Readability</small>What can carry text</h2><p>WCAG contrast measured live. 4.5 or more passes for body text; 3 to 4.5 is only for large headings of 24px or more.</p></div>
+    <div class="tbl-wrap"><table id="ctable"><thead><tr><th>Colour</th><th>Sample on Navy</th><th>On Navy</th><th>On card #08122E</th><th>Verdict</th></tr></thead><tbody></tbody></table></div>
+    <div class="btns" id="btns"></div>
+  </section>
+
+  <section id="preview">
+    <div class="sh"><h2><small>8 · In use</small>A website hero with the palette</h2><p>A quick check of how the palette behaves together at the 70 / 20 / 10 balance, before the real design starts.</p></div>
+    <div class="site">
+      <div class="bar"><i style="background:#7946FC"></i><i style="background:#1A84FD"></i><i style="background:#08C6FD"></i><span class="url">your-domain</span></div>
+      <div class="pg">
+        <nav><div class="brand"><span class="mk"></span>Deepzeta</div><ul><li>Services</li><li>Work</li><li>About</li><li>Contact</li></ul></nav>
+        <div class="h">
+          <div>
+            <div class="eyebrow">AI digital solutions · Dubai</div>
+            <h3>Your business, running <span class="z">itself</span>.</h3>
+            <p>AI automation, websites, software and search ranking, built as one system for UAE businesses.</p>
+            <div class="ctas"><button class="p" type="button">Book a free call</button><button class="s" type="button">See our work</button></div>
+          </div>
+          <div class="cards">
+            <div class="card"><span class="i" style="background:linear-gradient(135deg,#03D4FC,#09A5FC)"></span><b>AI Automation</b><span>Workflows that run 24/7</span></div>
+            <div class="card"><span class="i" style="background:linear-gradient(135deg,#21BEFC,#4264FD)"></span><b>Web Development</b><span>Fast, conversion-ready sites</span></div>
+            <div class="card"><span class="i" style="background:linear-gradient(135deg,#3166FB,#3741FD)"></span><b>Software</b><span>Custom tools that scale</span></div>
+            <div class="card"><span class="i" style="background:linear-gradient(135deg,#6430FA,#4C27FB)"></span><b>Business Ranking</b><span class="kpi">Page 1 · #1</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="css">
+    <div class="sh"><h2><small>9 · Developer handoff</small>CSS variables</h2><p>Paste into the site's root stylesheet. The same names map one-to-one to Figma or Tailwind tokens.</p></div>
+    <div class="cssbar"><button class="cp" type="button" id="copycss">Copy all CSS</button></div>
+    <pre class="css" id="cssblock"></pre>
+  </section>
+
+  <footer><span>DeepZeta AI Digital Solutions · Brand colour system v1</span><span>Type: Montserrat · JetBrains Mono</span></footer>
+</div>
+
+<script>
+const CORE=[
+ ['Midnight Navy','#010413','Logo background','Main page background'],
+ ['Electric Cyan','#08C6FD','Ribbon top-left, "z", top pixel','Highlights, links, icons, glow'],
+ ['Azure Blue','#1A84FD','Ribbon centre, middle of "zeta"','Main brand blue, active states'],
+ ['Royal Blue','#2139F6','Deep shadows of the ribbon fold','Hover fills, depth, gradient ends'],
+ ['Neon Violet','#7946FC','Ribbon tip, "a" of zeta, purple pixel','Accent, second gradient end, badges'],
+ ['Cloud White','#F4F6FB','"Deep" wordmark and tagline','Headings and main text'],
+];
+const SUP=[
+ ['Ice Cyan','#7CF3FF','Brightest ribbon highlight','Glows, focus rings, sparkles'],
+ ['Sky Blue','#3DA9FC','Diagonal fold midtone','Links and chart lines on dark'],
+ ['Signal Blue','#2F6BFF','Tagline left line end','Solid primary button fill'],
+ ['Soft Violet','#A78BFF','Lightened Neon Violet','Violet text on dark'],
+ ['Magenta Violet','#A040F2','Tagline right line end','Rare accent: gradient tails, tags'],
+];
+const NEU=[['Navy 950','#010413','Page background'],['Navy 900','#050A1C','Alternate sections'],['Navy 850','#08122E','Cards, navbar'],['Navy 800','#0B1C4A','Inputs, card hover'],['Navy 700','#16224A','Chips, search fields'],['Navy 500','#33457F','Borders, dividers'],['Slate 400','#5D73B8','Placeholders, large captions'],['Mist 300','#9FB0E0','Body text'],['Frost 200','#C9D4FF','Subheadings'],['Cloud 50','#F4F6FB','Headings']];
+const STATUS=[['Success','#22D3A6','Payment received'],['Warning','#FFB547','Renewal due in 3 days'],['Error','#FF5A6E','Card was declined'],['Info','#3DA9FC','New feature available']];
+const GRADS=[
+ ['G1','Signature Ribbon','linear-gradient(135deg, #08C6FD 0%, #1A84FD 50%, #7946FC 100%)','Main brand gradient: hero accents, borders, logo-style shapes'],
+ ['G2','Zeta Text','linear-gradient(150deg, #09E8FE 0%, #00B5FC 25%, #147BFC 50%, #4639F9 75%, #602CFA 100%)','The exact "zeta" wordmark blend, for one gradient word per headline','text'],
+ ['G3','Action','linear-gradient(90deg, #08C6FD 0%, #2F6BFF 100%)','Primary CTA buttons, with navy text','btn-dark'],
+ ['G4','Deep Action','linear-gradient(90deg, #1A84FD 0%, #2139F6 100%)','Button hover, or a CTA with white text','btn-light'],
+ ['G5','Deep Fold','linear-gradient(160deg, #006DE5 0%, #16C5FF 33%, #516CFC 67%, #7946FC 100%)','Feature cards, illustrations, large shapes'],
+ ['G6','Tagline Line · Cyan','linear-gradient(90deg, #00D8EE 0%, #058FEE 50%, #0D48E6 100%)','Dividers and underlines (pair with G7)','line'],
+ ['G7','Tagline Line · Violet','linear-gradient(90deg, #4A22EA 0%, #662DE8 50%, #A040F2 100%)','Dividers and underlines (pair with G6)','line'],
+ ['G8','Hero Glow','radial-gradient(ellipse 48% 55% at 50% 40%, rgba(24,70,210,.55) 0%, rgba(12,34,120,.26) 45%, rgba(1,4,19,0) 78%), #010413','The soft blue glow behind the logo, for hero sections'],
+ ['G9','Glass Card','background: rgba(8,18,46,.82); backdrop-filter: blur(20px); border: 1.5px solid (G1 at 80%)','Service cards, pricing, forms','glass'],
+ ['G10','Grid Texture','linear-gradient(rgba(26,132,253,.07) 1px, transparent 1px) 0 0 / 80px 80px, linear-gradient(90deg, rgba(26,132,253,.07) 1px, transparent 1px) 0 0 / 80px 80px, #010413','Tech background texture, as in the services film'],
+];
+const PIX=[['AI Automation','Top · light cyan','#03D4FC','#09A5FC',[.64,.00,.24]],['Web Development','Middle · cyan-blue','#21BEFC','#4264FD',[.00,.29,.34]],['Software Development','Small · royal','#3166FB','#3741FD',[.77,.53,.17]],['Business Ranking','Bottom · purple','#6430FA','#4C27FB',[.34,.79,.24]]];
+const TEXT=[['Cloud White','#F4F6FB'],['Frost 200','#C9D4FF'],['Mist 300','#9FB0E0'],['Slate 400','#5D73B8'],['Electric Cyan','#08C6FD'],['Ice Cyan','#7CF3FF'],['Sky Blue','#3DA9FC'],['Azure Blue','#1A84FD'],['Soft Violet','#A78BFF'],['Neon Violet','#7946FC'],['Royal Blue','#2139F6']];
+// ---------- helpers ----------
+const rgb=h=>{h=h.replace('#','');return [0,2,4].map(i=>parseInt(h.slice(i,i+2),16));};
+const L=h=>{const c=rgb(h).map(v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)});return .2126*c[0]+.7152*c[1]+.0722*c[2];};
+const CR=(a,b)=>{const x=L(a),y=L(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05);};
+const ink=h=>CR(h,'#010413')>CR(h,'#F4F6FB')?'#010413':'#F4F6FB';
+const el=(t,c,html)=>{const e=document.createElement(t);if(c)e.className=c;if(html!=null)e.innerHTML=html;return e;};
+function copyBtn(label,text){const b=el('button','cp',label);b.type='button';b.addEventListener('click',()=>{const done=()=>{b.classList.add('ok');const o=b.textContent;b.textContent='Copied';setTimeout(()=>{b.textContent=o;b.classList.remove('ok');},1200);};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(done).catch(()=>sel(text,b));}else sel(text,b);});return b;}
+function sel(text,b){const t=document.createElement('textarea');t.value=text;t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);t.select();try{document.execCommand('copy');b.classList.add('ok');b.textContent='Copied';}catch(e){b.textContent='Select & copy: '+text;}t.remove();}
+const verdict=r=>r>=4.5?['pass','AA text']:r>=3?['large','Large only']:['fail','Decor only'];
+// ---------- swatches ----------
+function sw(list,target){list.forEach(([n,h,src,role])=>{const c=el('article','sw');const r=CR(h,'#010413');const[v,lab]=verdict(r);
+  const chip=el('div','chip');chip.style.background=h;if(h==='#010413')chip.style.boxShadow='inset 0 0 0 1px #16224A';
+  chip.innerHTML=`<span class="aa" title="Contrast as text on Midnight Navy">${h==='#010413'?'Background':r.toFixed(1)+' on navy · '+lab}</span>`;
+  c.appendChild(chip);const m=el('div','meta',`<div class="nm">${n}</div><div class="role"><b style="color:var(--frost);font-weight:600">${role}.</b> From: ${src}</div>`);
+  const cd=el('div','codes');const[R,G,B]=rgb(h);cd.append(copyBtn(h,h),copyBtn(`rgb(${R}, ${G}, ${B})`,`rgb(${R}, ${G}, ${B})`));m.appendChild(cd);c.appendChild(m);target.appendChild(c);});}
+sw(CORE,document.querySelector('[data-set=core]'));sw(SUP,document.querySelector('[data-set=support]'));
+// ---------- neutrals ----------
+const sc=document.getElementById('scale');NEU.forEach(([n,h,u])=>{const d=el('div','st');d.style.background=h;d.style.color=ink(h);d.innerHTML=`<div><div class="t">${n}</div><div class="u">${u}</div></div>`;const b=copyBtn(h,h);const lt=ink(h)==='#010413';b.style.background=lt?'rgba(255,255,255,.55)':'rgba(1,4,19,.45)';b.style.color=ink(h);b.style.borderColor=lt?'rgba(1,4,19,.25)':'rgba(127,160,232,.35)';d.appendChild(b);sc.appendChild(d);});
+// ---------- status ----------
+const sg=document.getElementById('status-grid');STATUS.forEach(([n,h,msg])=>{const[R,G,B]=rgb(h);const d=el('div','stat',`<div style="display:flex;justify-content:space-between;align-items:center"><b>${n}</b><span class="badge pass">${CR(h,'#010413').toFixed(1)} on navy</span></div>
+  <span class="pill" style="background:rgba(${R},${G},${B},.14);color:${h}"><i style="background:${h}"></i>${msg}</span>`);d.appendChild(copyBtn(h,h));sg.appendChild(d);});
+// ---------- gradients ----------
+const gg=document.getElementById('grads');GRADS.forEach(([id,n,css,use,kind])=>{const d=el('article','gr');const f=el('div','fill');
+  if(kind==='glass'){f.style.background='radial-gradient(ellipse 60% 80% at 30% 30%,rgba(24,70,210,.6),rgba(1,4,19,0) 70%),linear-gradient(135deg,#08C6FD22,#7946FC33),#010413';f.innerHTML='<div class="glass"><b>AI Automation</b><span>Frosted card over the page</span><div class="ln" style="width:80%"></div><div class="ln" style="width:55%"></div></div>';}
+  else if(kind==='text'){f.style.background='#010413';f.innerHTML='<div class="demo-text">zeta</div>';f.style.backgroundImage='radial-gradient(ellipse 60% 80% at 20% 90%,rgba(24,70,210,.35),rgba(1,4,19,0) 70%)';}
+  else if(kind==='btn-dark'||kind==='btn-light'){f.style.background='#050A1C';const b=el('button','demo-btn',kind==='btn-dark'?'Book a free call':'Start your project');b.type='button';b.style.background=css;b.style.color=kind==='btn-dark'?'#010413':'#FFFFFF';f.appendChild(b);}
+  else if(kind==='line'){f.style.background='#050A1C';f.innerHTML=`<div style="position:absolute;left:10%;right:10%;top:50%;height:6px;border-radius:3px;background:${css}"></div><div style="position:absolute;left:10%;right:10%;top:calc(50% + 22px);height:40px;border-radius:10px;background:${css};opacity:.9"></div>`;}
+  else if(id==='G10'){f.style.background='linear-gradient(rgba(26,132,253,.22) 1px,transparent 1px) 0 0/40px 40px,linear-gradient(90deg,rgba(26,132,253,.22) 1px,transparent 1px) 0 0/40px 40px,#010413';f.insertAdjacentHTML('beforeend','<span class="tag" style="left:auto;right:14px">preview at 3x strength</span>');}
+  else f.style.background=css;
+  f.insertAdjacentHTML('beforeend',`<span class="tag">${id}</span>`);d.appendChild(f);
+  const stops=(css.match(/#[0-9A-Fa-f]{6}/g)||[]);const st=el('div','stops');stops.forEach(s=>{const x=el('span');x.style.flex='1';x.style.background=s;st.appendChild(x);});if(kind!=='glass'&&kind!=='text')d.appendChild(st);
+  const b=el('div','body');const hdr=el('div','row',`<b>${n}</b>`);hdr.appendChild(copyBtn('Copy CSS',kind==='glass'?css:(kind==='text'?`background: ${css}; -webkit-background-clip: text; background-clip: text; color: transparent;`:`background: ${css};`)));b.appendChild(hdr);
+  b.appendChild(el('div','',`<span style="color:var(--mist);font-size:13px">${use}</span>`));const code=el('code');code.textContent=css;b.appendChild(code);d.appendChild(b);gg.appendChild(d);});
+// ---------- pixels ----------
+const cl=document.getElementById('cluster'),pg=document.getElementById('pix');PIX.forEach(([svc,pos,a,b,[x,y,s]])=>{const q=el('div');q.style.cssText=`left:${x*100}%;top:${y*100}%;width:${s*100}%;height:${s*100}%;background:linear-gradient(135deg,${a},${b})`;cl.appendChild(q);
+  const c=el('div','pc',`<div class="sq" style="background:linear-gradient(135deg,${a},${b})"></div><div class="svc">${svc}</div><div class="hx">${pos}</div>`);const cd=el('div','codes');cd.append(copyBtn(a,a),copyBtn(b,b));c.appendChild(cd);pg.appendChild(c);});
+// ---------- contrast table ----------
+const tb=document.querySelector('#ctable tbody');TEXT.forEach(([n,h])=>{const a=CR(h,'#010413'),c=CR(h,'#08122E');const[v,lab]=verdict(Math.min(a,c));
+  const tr=el('tr');tr.innerHTML=`<td><b>${n}</b><br><span style="font-family:var(--mono);font-size:12px;color:var(--slate)">${h}</span></td><td><span class="sample" style="color:${h};background:#010413;border:1px solid #16224A">Grow with AI</span></td><td>${a.toFixed(1)}</td><td>${c.toFixed(1)}</td><td><span class="badge ${v}">${lab}</span></td>`;tb.appendChild(tr);});
+const BT=[['Do','linear-gradient(90deg,#08C6FD,#2F6BFF)','#010413','Navy text on the Action gradient (G3)'],['Do','#2F6BFF','#FFFFFF','White text on solid Signal Blue'],['Do','linear-gradient(90deg,#1A84FD,#2139F6)','#FFFFFF','White text on Deep Action (G4)'],['Avoid','#1A84FD','#FFFFFF','White text on Azure Blue'],['Avoid','#08C6FD','#FFFFFF','White text on Electric Cyan']];
+const bx=document.getElementById('btns');BT.forEach(([dd,bg,fg,note])=>{const solid=bg.startsWith('#');const r=solid?CR(bg,fg):null;const good=dd==='Do';
+  const d=el('div','bx',`<span class="badge ${good?'pass':'fail'}">${dd}${r?' · '+r.toFixed(1):''}</span>`);const b=el('button','b','Get started');b.type='button';b.style.background=bg;b.style.color=fg;d.appendChild(b);d.appendChild(el('div','note',note));bx.appendChild(d);});
+// ---------- css ----------
+const CSS=`:root {
+  /* Core */
+  --dz-navy: #010413;
+  --dz-cyan: #08C6FD;
+  --dz-azure: #1A84FD;
+  --dz-royal: #2139F6;
+  --dz-violet: #7946FC;
+  --dz-white: #F4F6FB;
+  /* Support */
+  --dz-ice: #7CF3FF;
+  --dz-sky: #3DA9FC;
+  --dz-signal: #2F6BFF;
+  --dz-violet-soft: #A78BFF;
+  --dz-magenta: #A040F2;
+  /* Neutrals */
+  --dz-navy-900: #050A1C;
+  --dz-navy-850: #08122E;
+  --dz-navy-800: #0B1C4A;
+  --dz-navy-700: #16224A;
+  --dz-border: #33457F;
+  --dz-slate: #5D73B8;
+  --dz-mist: #9FB0E0;
+  --dz-frost: #C9D4FF;
+  /* Status */
+  --dz-success: #22D3A6;
+  --dz-warning: #FFB547;
+  --dz-error: #FF5A6E;
+  --dz-info: #3DA9FC;
+  /* Gradients */
+  --dz-grad-signature: ${GRADS[0][2]};
+  --dz-grad-zeta: ${GRADS[1][2]};
+  --dz-grad-action: ${GRADS[2][2]};
+  --dz-grad-action-deep: ${GRADS[3][2]};
+  --dz-grad-fold: ${GRADS[4][2]};
+  --dz-grad-line-cyan: ${GRADS[5][2]};
+  --dz-grad-line-violet: ${GRADS[6][2]};
+  --dz-glow-hero: radial-gradient(ellipse 48% 55% at 50% 40%, rgba(24,70,210,.55) 0%, rgba(12,34,120,.26) 45%, rgba(1,4,19,0) 78%);
+  /* Pixels (services) */
+  --dz-pixel-ai: linear-gradient(135deg, #03D4FC, #09A5FC);
+  --dz-pixel-web: linear-gradient(135deg, #21BEFC, #4264FD);
+  --dz-pixel-software: linear-gradient(135deg, #3166FB, #3741FD);
+  --dz-pixel-ranking: linear-gradient(135deg, #6430FA, #4C27FB);
+}`;
+const pre=document.getElementById('cssblock');pre.innerHTML=CSS.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/(\/\*.*?\*\/)/g,'<span class="c">$1</span>').replace(/(--dz-[a-z0-9-]+)/g,'<span class="k">$1</span>');
+const cc=document.getElementById('copycss');const cb=copyBtn('Copy all CSS',CSS);cc.replaceWith(cb);
+</script>

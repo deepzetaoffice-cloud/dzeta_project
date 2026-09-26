@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>deepzeta · Icon Directions · Concept Sheet v1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* Brand world: same tokens as the Website Blueprint (70/20/10 navy/white/brand). */
+:root{
+ color-scheme:dark;
+ --navy:#010413; --navy-900:#050A1C; --navy-850:#08122E; --navy-800:#0B1C4A; --navy-700:#16224A;
+ --border:#33457F; --slate:#5D73B8; --mist:#9FB0E0; --frost:#C9D4FF; --white:#F4F6FB;
+ --cyan:#08C6FD; --ice:#7CF3FF; --sky:#3DA9FC; --violet:#7946FC; --warn:#FFB547; --ok:#22D3A6;
+ --sig:linear-gradient(135deg,#08C6FD 0%,#1A84FD 50%,#7946FC 100%);
+ --zeta:linear-gradient(150deg,#09E8FE 0%,#00B5FC 25%,#147BFC 50%,#4639F9 75%,#602CFA 100%);
+ --px-ai:linear-gradient(180deg,#03D4FC,#09A5FC);
+ --px-web:linear-gradient(180deg,#21BEFC,#4264FD);
+ --px-sw:linear-gradient(180deg,#3166FB,#3741FD);
+ --px-rank:linear-gradient(180deg,#6430FA,#4C27FB);
+ --sans:'Montserrat',system-ui,-apple-system,'Segoe UI',sans-serif;
+ --mono:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace;
+ --ease-out:cubic-bezier(.2,.8,.2,1);
+ --ease-pop:cubic-bezier(.2,.9,.3,1.35);
+}
+*{box-sizing:border-box}
+html{background:var(--navy)}
+body{margin:0;background:var(--navy);color:var(--white);font-family:var(--sans);font-size:15.5px;line-height:1.6;
+ background-image:linear-gradient(rgba(26,132,253,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(26,132,253,.055) 1px,transparent 1px);
+ background-size:80px 80px;padding:0 clamp(16px,4vw,56px) 96px}
+.wrap{max-width:1140px;margin:0 auto}
+p{margin:0}
+h1,h2,h3{margin:0;text-wrap:balance}
+.z{background:var(--zeta);-webkit-background-clip:text;background-clip:text;color:transparent}
+.muted{color:var(--mist)}
+.mono{font-family:var(--mono)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--ice);outline-offset:3px}
+
+/* hero */
+.hero{position:relative;padding:56px 0 28px;display:grid;gap:18px}
+.hero::before{content:"";position:absolute;inset:-40px -12vw auto;height:480px;z-index:-1;
+ background:radial-gradient(ellipse 50% 60% at 22% 40%,rgba(24,70,210,.45) 0%,rgba(12,34,120,.2) 45%,rgba(1,4,19,0) 78%)}
+.tag{font-family:var(--mono);font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--mist);display:flex;align-items:center;gap:10px}
+.tag::before,.tag::after{content:"";width:28px;height:3px;border-radius:2px;background:linear-gradient(90deg,#00D8EE,#0D48E6)}
+.tag::after{background:linear-gradient(90deg,#4A22EA,#A040F2)}
+h1{font-size:clamp(32px,5vw,56px);line-height:1.05;font-weight:800;letter-spacing:-.025em;max-width:18ch}
+.lead{font-size:17px;color:var(--frost);max-width:66ch}
+.controls{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+.btn{cursor:pointer;border:1px solid var(--navy-700);background:rgba(8,18,46,.8);border-radius:999px;padding:8px 16px;font-size:13px;font-weight:600;color:var(--frost);transition:border-color .2s,color .2s}
+.btn:hover{border-color:var(--cyan);color:var(--white)}
+.btn[aria-pressed="true"]{border-color:var(--cyan);color:var(--white);background:rgba(8,198,253,.1)}
+
+/* sections */
+section{padding-top:64px}
+.sh{display:grid;gap:10px;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--navy-700)}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--cyan)}
+h2{font-size:clamp(24px,3vw,34px);line-height:1.12;font-weight:800;letter-spacing:-.015em}
+.sh p{color:var(--mist);max-width:70ch}
+.panel{background:var(--navy-850);border:1px solid var(--navy-700);border-radius:18px;padding:20px}
+
+/* logo geometry */
+.geo{display:grid;grid-template-columns:minmax(0,220px) 1fr;gap:24px;align-items:center}
+.geo svg{width:100%;max-width:200px;height:auto;display:block;margin:auto}
+.facts{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.facts li{display:grid;grid-template-columns:150px 1fr;gap:12px;font-size:14.5px;color:var(--mist);padding-bottom:10px;border-bottom:1px dashed var(--navy-700)}
+.facts li:last-child{border-bottom:0;padding-bottom:0}
+.facts b{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--frost)}
+@media (max-width:640px){.geo{grid-template-columns:1fr}.facts li{grid-template-columns:1fr;gap:2px}}
+
+/* direction block */
+.dir-head{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start}
+.dir-letter{width:56px;height:56px;border-radius:14px;display:grid;place-items:center;font-weight:800;font-size:26px;
+ background:linear-gradient(var(--navy-850),var(--navy-850)) padding-box,var(--sig) border-box;border:1.5px solid transparent}
+.rec{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--navy);background:var(--zeta);padding:3px 10px;border-radius:999px;margin-inline-start:8px;vertical-align:middle}
+.proscons{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:12px;margin-top:6px}
+.proscons ul{margin:0;padding-inline-start:18px;display:grid;gap:3px;font-size:14px;color:var(--mist)}
+.proscons h4{margin:0 0 4px;font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.14em;text-transform:uppercase}
+.pro h4{color:var(--ok)} .con h4{color:var(--warn)}
+.stats{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.chip{font-family:var(--mono);font-size:12px;padding:5px 11px;border-radius:999px;border:1px solid var(--navy-700);color:var(--frost);background:rgba(8,18,46,.7)}
+.chip b{color:var(--cyan);font-weight:500}
+
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(100%,168px),1fr));margin-top:20px}
+.card{cursor:pointer;text-align:start;background:var(--navy-850);border:1px solid var(--navy-700);border-radius:18px;padding:22px 18px 18px;display:grid;gap:12px;align-content:start;
+ color:var(--frost);transition:border-color .2s var(--ease-out),background-color .2s var(--ease-out)}
+.card:hover,.card:focus-visible{border-color:var(--border);background:var(--navy-800);color:var(--white)}
+.ico{width:64px;height:64px;display:block}
+.ico svg{width:100%;height:100%;display:block;overflow:visible}
+.nm{font-weight:700;font-size:14.5px;line-height:1.3;color:var(--white)}
+.stg{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--slate)}
+.stg i{width:9px;height:9px;border-radius:2px;flex:none}
+.idea{font-size:13px;color:var(--mist);line-height:1.5}
+
+.ramp{margin-top:18px;display:flex;flex-wrap:wrap;align-items:flex-end;gap:22px;padding:18px 20px;border:1px dashed var(--navy-700);border-radius:16px}
+.ramp figure{margin:0;display:grid;justify-items:center;gap:8px;color:var(--frost)}
+.ramp figcaption{font-family:var(--mono);font-size:11px;color:var(--slate)}
+.ramp svg{display:block;overflow:visible}
+.ramp-label{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--slate);width:100%}
+
+/* comparison */
+.tbl{overflow-x:auto;border:1px solid var(--navy-700);border-radius:16px;background:var(--navy-900)}
+table{border-collapse:collapse;width:100%;min-width:640px}
+th,td{text-align:start;padding:12px 14px;border-bottom:1px solid var(--navy-700);font-size:14px;vertical-align:top}
+th{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--slate);font-weight:500}
+td{color:var(--mist)} td b{color:var(--white);font-weight:600}
+tr:last-child td{border-bottom:0}
+.dots{font-family:var(--mono);letter-spacing:2px;color:var(--cyan);white-space:nowrap}
+.dots s{color:var(--navy-700);text-decoration:none}
+.thesis{border-radius:20px;padding:24px;background:linear-gradient(var(--navy-850),var(--navy-850)) padding-box,var(--sig) border-box;border:1.5px solid transparent;display:grid;gap:12px}
+.thesis p,.thesis li{color:var(--frost)}
+.thesis ol{margin:0;padding-inline-start:20px;display:grid;gap:6px}
+.note{border-inline-start:3px solid var(--warn);background:rgba(255,181,71,.07);padding:14px 16px;border-radius:0 12px 12px 0;color:var(--frost);font-size:14px;margin-top:16px}
+.note b{color:var(--warn)}
+
+/* ================= ICON SYSTEM ================= */
+/* Shared line style (Direction A): 1.5 stroke on a 24 grid, square caps echo the pixel, round joins echo the Z ribbon. */
+.ln{fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:round}
+.ln.soft{opacity:.42}
+.fl{fill:currentColor}
+/* Everything that moves uses transform/opacity only, pivoting on its own box. */
+.ico svg *,.ramp svg *{transform-box:fill-box}
+.px,.pxr,.halo,.ac,.cl{transform-origin:center}
+.halo{opacity:0;transition:opacity .2s var(--ease-out)}
+.card:hover .halo,.card:focus-visible .halo{opacity:.6}
+.dx{transform-origin:left center}
+.sp-l{transform-origin:right center}
+.sp-r{transform-origin:left center}
+
+/* --- A · Zeta Pixel --- */
+.run .dx{animation:drawX .45s var(--dl,0ms) var(--ease-out) backwards}
+.run .px.pop{animation:pxPop .5s var(--pd,.28s) var(--ease-pop) backwards}
+.run .px.drop{animation:drop .6s .08s var(--ease-pop) backwards}
+.run .px.stamp{animation:stamp .6s .38s var(--ease-out) backwards}
+.run .px.travel{animation:travel .95s cubic-bezier(.65,0,.3,1) backwards}
+.run .px .halo{animation:haloPulse 1s var(--hd,.45s) ease-out backwards}
+.run .px.travel .halo{--hd:.8s}
+.run .brl{animation:nudgeL .6s var(--ease-out)}
+.run .brr{animation:nudgeR .6s var(--ease-out)}
+.run .blink{animation:blink .8s var(--dl,0ms) ease-in-out}
+.run .sp-l,.run .sp-r{animation:spread .45s .45s var(--ease-out) backwards}
+
+/* --- B · Pixel-Built --- */
+.cl{fill:currentColor}
+.run .cl{animation:cellIn .38s var(--d) var(--ease-out) backwards}
+.run .ac{animation:pxPop .45s var(--d) var(--ease-pop) backwards}
+.run .b-halo{animation:haloPulse 1s var(--d) ease-out backwards}
+
+/* --- C · Glass Gradient --- */
+.c-depth{opacity:.62;transform:translate(1.3px,1.5px)}
+.c-glass{fill:rgba(201,212,255,.09);stroke:url(#glass-stroke);stroke-width:.9;stroke-linejoin:round}
+.c-det{fill:none;stroke:var(--white);stroke-width:1.15;stroke-linecap:square;stroke-linejoin:round}
+.c-dot{fill:var(--white)}
+.c-sweep{opacity:0}
+.run .c-depth{animation:depth .9s var(--ease-out)}
+.run .c-sweep{animation:sweep .9s .1s ease-in-out}
+.run .px.lift{animation:lift .9s var(--ease-out)}
+
+/* Small sizes: gradients turn to solid colour so edges stay crisp. */
+.sm .pxr,.sm .ac{fill:var(--solid)}
+.sm .halo,.sm .b-halo{display:none}
+
+@keyframes drawX{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes pxPop{0%{opacity:0;transform:scale(.3)}60%{opacity:1;transform:scale(1.18)}100%{transform:scale(1)}}
+@keyframes haloPulse{0%{opacity:0;transform:scale(.5)}45%{opacity:1;transform:scale(1.05)}100%{opacity:0;transform:scale(1.35)}}
+@keyframes drop{0%{opacity:0;transform:translateY(-7px)}60%{opacity:1;transform:translateY(.6px)}100%{transform:translateY(0)}}
+@keyframes stamp{0%{opacity:0;transform:translateY(-5px) scale(1.6)}55%{opacity:1;transform:translateY(0) scale(.86)}78%{transform:scale(1.07)}100%{transform:scale(1)}}
+@keyframes travel{0%{opacity:0;transform:translate(-12px,-12px)}12%{opacity:1}50%{transform:translate(0,-12px)}100%{transform:translate(0,0)}}
+@keyframes nudgeL{0%,100%{transform:translateX(0)}40%{transform:translateX(-1px)}}
+@keyframes nudgeR{0%,100%{transform:translateX(0)}40%{transform:translateX(1px)}}
+@keyframes blink{0%,100%{opacity:1}35%{opacity:.15}}
+@keyframes spread{from{opacity:0;transform:scaleX(0)}to{opacity:1;transform:scaleX(1)}}
+@keyframes cellIn{from{opacity:.06;transform:scale(.35)}to{opacity:1;transform:scale(1)}}
+@keyframes depth{0%{transform:translate(0,0)}50%{transform:translate(2.2px,2.6px)}100%{transform:translate(1.3px,1.5px)}}
+@keyframes sweep{0%{opacity:0;transform:translateX(-12px)}25%{opacity:1}100%{opacity:0;transform:translateX(26px)}}
+@keyframes lift{0%,100%{transform:translateY(0)}45%{transform:translateY(-1.6px)}}
+
+/* Reduced motion: static icon, pixel already lit. */
+@media (prefers-reduced-motion:reduce){
+ .run *{animation:none!important}
+ .halo,.b-halo{opacity:.45}
+}
+.rm .run *{animation:none!important}
+.rm .halo,.rm .b-halo{opacity:.45}
+</style>
+</head>
+<body>
+<!-- Shared definitions: the four pixel gradients are copied from the logo's own pixel squares. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+ <defs>
+  <linearGradient id="px-rank" x1=".6" y1="0" x2=".4" y2="1"><stop offset="0" stop-color="#6430FA"/><stop offset=".5" stop-color="#592BFD"/><stop offset="1" stop-color="#4C27FB"/></linearGradient>
+  <linearGradient id="px-web" x1=".55" y1="0" x2=".45" y2="1"><stop offset="0" stop-color="#21BEFC"/><stop offset=".5" stop-color="#3092FD"/><stop offset="1" stop-color="#4264FD"/></linearGradient>
+  <linearGradient id="px-sw" x1=".65" y1="0" x2=".35" y2="1"><stop offset="0" stop-color="#3166FB"/><stop offset=".5" stop-color="#2A4DFC"/><stop offset="1" stop-color="#3741FD"/></linearGradient>
+  <linearGradient id="px-ai" x1=".55" y1="0" x2=".45" y2="1"><stop offset="0" stop-color="#03D4FC"/><stop offset=".5" stop-color="#04C1FD"/><stop offset="1" stop-color="#09A5FC"/></linearGradient>
+  <radialGradient id="halo-rank"><stop offset="0" stop-color="#7946FC" stop-opacity=".85"/><stop offset="1" stop-color="#7946FC" stop-opacity="0"/></radialGradient>
+  <radialGradient id="halo-web"><stop offset="0" stop-color="#3092FD" stop-opacity=".85"/><stop offset="1" stop-color="#3092FD" stop-opacity="0"/></radialGradient>
+  <radialGradient id="halo-sw"><stop offset="0" stop-color="#2F6BFF" stop-opacity=".85"/><stop offset="1" stop-color="#2F6BFF" stop-opacity="0"/></radialGradient>
+  <radialGradient id="halo-ai"><stop offset="0" stop-color="#08C6FD" stop-opacity=".85"/><stop offset="1" stop-color="#08C6FD" stop-opacity="0"/></radialGradient>
+  <linearGradient id="glass-stroke" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F4F6FB" stop-opacity=".85"/><stop offset="1" stop-color="#F4F6FB" stop-opacity=".12"/></linearGradient>
+  <linearGradient id="sweep" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".45"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+ </defs>
+</svg>
+
+<div class="wrap">
+ <header class="hero">
+  <div class="tag">deepzeta · Icon System</div>
+  <h1>Three icon directions, <span class="z">side by side</span></h1>
+  <p class="lead">The same six service icons drawn in three styles, on the real navy background with the real brand gradients. Hover or tab onto any card to replay its animation. Judge them here, in context, not in theory.</p>
+  <div class="controls">
+   <button class="btn" type="button" id="playAll">Replay all animations</button>
+   <button class="btn" type="button" id="rmToggle" aria-pressed="false">Simulate reduced motion</button>
+  </div>
+ </header>
+
+ <section id="geometry">
+  <div class="sh">
+   <div class="eyebrow">00 · Source geometry</div>
+   <h2>What the icons inherit from the logo</h2>
+   <p>Measured directly from the coded logo SVG. These numbers become the rules every icon follows, so the icons and the logo clearly belong together.</p>
+  </div>
+  <div class="panel geo">
+   <svg viewBox="840 262 86 150" role="img" aria-label="The four pixels of the deepzeta logo">
+    <defs>
+     <linearGradient id="lg1" gradientUnits="userSpaceOnUse" x1="878.2" y1="367.6" x2="859.58" y2="399.85"><stop offset="0" stop-color="#6430FA"/><stop offset=".5" stop-color="#592BFD"/><stop offset="1" stop-color="#4C27FB"/></linearGradient>
+     <linearGradient id="lg2" gradientUnits="userSpaceOnUse" x1="838.99" y1="307.97" x2="835.06" y2="352.95"><stop offset="0" stop-color="#21BEFC"/><stop offset=".5" stop-color="#3092FD"/><stop offset="1" stop-color="#4264FD"/></linearGradient>
+     <linearGradient id="lg3" gradientUnits="userSpaceOnUse" x1="889.78" y1="273.39" x2="887.22" y2="302.61"><stop offset="0" stop-color="#03D4FC"/><stop offset=".5" stop-color="#04C1FD"/><stop offset="1" stop-color="#09A5FC"/></linearGradient>
+     <linearGradient id="lg4" gradientUnits="userSpaceOnUse" x1="907.45" y1="336.66" x2="899.55" y2="358.34"><stop offset="0" stop-color="#3166FB"/><stop offset=".5" stop-color="#2A4DFC"/><stop offset="1" stop-color="#3741FD"/></linearGradient>
+    </defs>
+    <path d="M 856.5,366 H 881.7 C 884.46,366 886.7,368.24 886.7,371 V 396.2 C 886.7,398.96 884.46,401.2 881.7,401.2 H 856.5 C 853.74,401.2 851.5,398.96 851.5,396.2 V 371 C 851.5,368.24 853.74,366 856.5,366 Z" fill="url(#lg1)"/>
+    <path d="M 819,305.8 H 855.4 C 858.99,305.8 861.9,308.71 861.9,312.3 V 348.7 C 861.9,352.29 858.99,355.2 855.4,355.2 H 819 C 815.41,355.2 812.5,352.29 812.5,348.7 V 312.3 C 812.5,308.71 815.41,305.8 819,305.8 Z" fill="url(#lg2)" transform="translate(30 0)"/>
+    <path d="M 874.3,270.2 H 902.3 C 904.4,270.2 906.1,271.9 906.1,274 V 302 C 906.1,304.1 904.4,305.8 902.3,305.8 H 874.3 C 872.2,305.8 870.5,304.1 870.5,302 V 274 C 870.5,271.9 872.2,270.2 874.3,270.2 Z" fill="url(#lg3)"/>
+    <path d="M 894,335 H 913.5 C 915.16,335 916.5,336.34 916.5,338 V 357.5 C 916.5,359.16 915.16,360.5 913.5,360.5 H 894 C 892.34,360.5 891,359.16 891,357.5 V 338 C 891,336.34 892.34,335 894,335 Z" fill="url(#lg4)"/>
+   </svg>
+   <ul class="facts">
+    <li><b>Corner radius</b><span>11–14% of the side on every logo pixel. <strong>Rule: pixel radius = 12.5% of its size.</strong></span></li>
+    <li><b>Size ratio</b><span>49.4 · 35.6 · 35.2 · 25.5 → about <strong>2 : 1.4 : 1.4 : 1</strong>. Signature icons may use a cluster of up to three pixels in this ratio.</span></li>
+    <li><b>Orientation</b><span>Pixels are upright squares, never rotated.</span></li>
+    <li><b>Gradient</b><span>Each pixel runs light at the top to deep at the bottom. Icon pixels use the exact same stops.</span></li>
+    <li><b>Ribbon angle</b><span>The Z fold runs at about <strong>35°</strong>. Reserved for motion paths and signature icons.</span></li>
+    <li><b>Stage colours</b><span>Purple = Get Found · Cyan-blue = Win Customers · Royal blue = Run Operations · Light cyan = Get Paid &amp; Keep. (Proposed mapping, not yet approved.)</span></li>
+   </ul>
+  </div>
+  <p class="panel muted" style="margin-top:14px;font-size:14px">Note: in this reference drawing the cyan-blue pixel is shifted sideways so all four are visible. The logo file itself is unchanged.</p>
+ </section>
+
+ <section id="dirA">
+  <div class="sh">
+   <div class="dir-head">
+    <div class="dir-letter">A</div>
+    <div style="display:grid;gap:8px">
+     <div class="eyebrow">Direction A</div>
+     <h2>Zeta Pixel <span class="rec">Recommended</span></h2>
+     <p>Clean frost lines with one glowing logo pixel placed where deepzeta's work happens. At rest the pixel is lit; on hover it tells a tiny story.</p>
+     <div class="proscons">
+      <div class="pro"><h4>Strengths</h4><ul><li>Unmistakably ours: the logo pixel inside every icon</li><li>Reads clearly from 16px up</li><li>Lightest code, easiest to extend to 60+ icons</li></ul></div>
+      <div class="con"><h4>Watch-outs</h4><ul><li>Needs strict discipline: exactly one pixel, always meaningful</li><li>Calmer at rest than C; the story appears on interaction</li></ul></div>
+     </div>
+     <div class="stats" data-stats="A"></div>
+    </div>
+   </div>
+  </div>
+  <div class="grid" data-grid="A"></div>
+  <div class="ramp" data-ramp="A"></div>
+ </section>
+
+ <section id="dirB">
+  <div class="sh">
+   <div class="dir-head">
+    <div class="dir-letter">B</div>
+    <div style="display:grid;gap:8px">
+     <div class="eyebrow">Direction B</div>
+     <h2>Pixel-Built</h2>
+     <p>Every icon is made entirely of logo-style pixels on a 12×12 grid. Brand-coloured pixels mark the moment of value, and the icon assembles itself in a diagonal wave.</p>
+     <div class="proscons">
+      <div class="pro"><h4>Strengths</h4><ul><li>The strongest visual link to the logo</li><li>Very memorable at large sizes and in heroes</li></ul></div>
+      <div class="con"><h4>Watch-outs</h4><ul><li>Blurs below 32px (see size ramp)</li><li>Curved shapes (lens, bubble, pin) look jagged</li><li>Many small shapes per icon, so heavier code</li><li>Reads as "retro 8-bit" if overused</li></ul></div>
+     </div>
+     <div class="stats" data-stats="B"></div>
+    </div>
+   </div>
+  </div>
+  <div class="grid" data-grid="B"></div>
+  <div class="ramp" data-ramp="B"></div>
+ </section>
+
+ <section id="dirC">
+  <div class="sh">
+   <div class="dir-head">
+    <div class="dir-letter">C</div>
+    <div style="display:grid;gap:8px">
+     <div class="eyebrow">Direction C</div>
+     <h2>Glass Gradient</h2>
+     <p>Layered shapes: a brand-colour depth layer, a frosted glass layer and a light sweep on hover. The same logo pixel sits on top.</p>
+     <div class="proscons">
+      <div class="pro"><h4>Strengths</h4><ul><li>The most eye-catching at rest</li><li>Feels premium and "3D" without 3D files</li></ul></div>
+      <div class="con"><h4>Watch-outs</h4><ul><li>Glass-and-gradient icons are the 2024–26 trend; many competitors use them</li><li>Busy when 20+ sit together in a mega-menu</li><li>Colour layer competes with the pixel at small sizes</li></ul></div>
+     </div>
+     <div class="stats" data-stats="C"></div>
+    </div>
+   </div>
+  </div>
+  <div class="grid" data-grid="C"></div>
+  <div class="ramp" data-ramp="C"></div>
+ </section>
+
+ <section id="compare">
+  <div class="sh">
+   <div class="eyebrow">04 · Comparison</div>
+   <h2>How the three directions score</h2>
+   <p>Five dots is best. Performance is measured from the real code on this page; the rest is my judgement as design lead.</p>
+  </div>
+  <div class="tbl">
+   <table>
+    <thead><tr><th>Factor</th><th>A · Zeta Pixel</th><th>B · Pixel-Built</th><th>C · Glass Gradient</th></tr></thead>
+    <tbody>
+     <tr><td><b>Uniqueness</b></td><td class="dots">●●●●●</td><td class="dots">●●●●●</td><td class="dots">●●<s>●●●</s></td></tr>
+     <tr><td><b>Clarity at 16–24px</b></td><td class="dots">●●●●●</td><td class="dots">●●<s>●●●</s></td><td class="dots">●●●<s>●●</s></td></tr>
+     <tr><td><b>Link to the logo</b></td><td class="dots">●●●●●</td><td class="dots">●●●●●</td><td class="dots">●●●<s>●●</s></td></tr>
+     <tr><td><b>Performance (code size)</b></td><td class="dots">●●●●●</td><td class="dots">●●<s>●●●</s></td><td class="dots">●●●●<s>●</s></td></tr>
+     <tr><td><b>Calm in large groups (menus)</b></td><td class="dots">●●●●●</td><td class="dots">●●●<s>●●</s></td><td class="dots">●●<s>●●●</s></td></tr>
+     <tr><td><b>Wow at hero size</b></td><td class="dots">●●●<s>●●</s></td><td class="dots">●●●●●</td><td class="dots">●●●●●</td></tr>
+    </tbody>
+   </table>
+  </div>
+ </section>
+
+ <section id="recommendation">
+  <div class="sh">
+   <div class="eyebrow">05 · Recommendation</div>
+   <h2>Use A as the system, and borrow the best of B and C for the top tier</h2>
+  </div>
+  <div class="thesis">
+   <p><strong>Direction A for all service and UI icons</strong>: it's clear at every size, calm in menus, and the pixel makes every icon unmistakably deepzeta.</p>
+   <p><strong>For the ~10 signature icons</strong> (the 6 Systems and 4 stages), extend A with two borrowed ideas:</p>
+   <ol>
+    <li>From <strong>B</strong>: a cluster of up to three pixels in the logo's 2 : 1.4 : 1 ratio that assembles on scroll, as a nod to the logo itself.</li>
+    <li>From <strong>C</strong>: one light sweep and a soft depth layer, used only at 64px and larger.</li>
+   </ol>
+   <p>This gives one consistent family: simple where people need to scan, rich where you want them to stop and look.</p>
+  </div>
+  <div class="note"><b>Next step after you choose:</b> I write the Icon Master Rules document (grid, stroke, pixel, colour, motion, RTL, accessibility and code rules, with final values), then design one signature icon to prove the top tier before full production.</div>
+ </section>
+</div>
+
+<script>
+/* Concept-sheet renderer. In production every icon is a static, optimised SVG in one sprite; no JavaScript is needed to draw them. */
+const STAGES={
+ found:{name:'Get Found',px:'px-rank',halo:'halo-rank',css:'var(--px-rank)',solid:'#5A2CFB'},
+ win:{name:'Win Customers',px:'px-web',halo:'halo-web',css:'var(--px-web)',solid:'#3092FD'},
+ run:{name:'Run Operations',px:'px-sw',halo:'halo-sw',css:'var(--px-sw)',solid:'#2F55FC'},
+ keep:{name:'Get Paid & Keep',px:'px-ai',halo:'halo-ai',css:'var(--px-ai)',solid:'#04C1FD'}
+};
+/* One pixel: radius is 12.5% of its size (from the logo). The halo is a radial gradient, not a blur filter, so it costs nothing to animate. */
+function px(stage,x,y,s,cls){
+ const st=STAGES[stage],h=s*3.2,cx=x+s/2,cy=y+s/2;
+ return `<g class="px ${cls}"><rect class="halo" x="${cx-h/2}" y="${cy-h/2}" width="${h}" height="${h}" fill="url(#${st.halo})"/><rect class="pxr" x="${x}" y="${y}" width="${s}" height="${s}" rx="${(s*.125).toFixed(3)}" fill="url(#${st.px})"/></g>`;
+}
+const ICONS=[
+ {id:'search',name:'AI Search Visibility',stage:'found',idea:'The pixel is your business, cited inside the AI answer.',
+  A:s=>`<circle class="ln" cx="10.5" cy="10.5" r="6.75"/><path class="ln" d="M15.5 15.5l5 5"/><path class="ln dx" d="M7.25 9h6.5"/><path class="ln dx" style="--dl:120ms" d="M7.25 12.25h2.75"/>${px(s,11.5,10.9,2.7,'pop')}`,
+  main:'M10.5 3.75a6.75 6.75 0 1 1 0 13.5a6.75 6.75 0 1 1 0-13.5z',det:['M15.5 15.5l5 5','M7.25 9h6.5','M7.25 12.25h2.75'],p:[11.5,10.9,2.7],
+  B:['............','...####.....','..#....#....','.#......#...','.#.**##.#...','.#.**#..#...','.#......#...','..#....#....','...####.#...','.........#..','..........#.','...........#']},
+ {id:'web',name:'Custom-Coded Website',stage:'win',idea:'Hand-written code producing a pixel-perfect result.',
+  A:s=>`<rect class="ln" x="2.75" y="4" width="18.5" height="16" rx="2.25"/><path class="ln" d="M2.75 8.25h18.5"/><circle class="fl" cx="5.5" cy="6.15" r=".7"/><circle class="fl" cx="7.75" cy="6.15" r=".7"/><path class="ln brl" d="M9 11.25l-2.25 2.5L9 16.25"/><path class="ln brr" d="M15 11.25l2.25 2.5L15 16.25"/>${px(s,10.7,12.45,2.6,'pop')}`,
+  main:'M5 4h14a2.25 2.25 0 0 1 2.25 2.25v11.5A2.25 2.25 0 0 1 19 20H5a2.25 2.25 0 0 1-2.25-2.25V6.25A2.25 2.25 0 0 1 5 4z',det:['M2.75 8.25h18.5','M9 11.25l-2.25 2.5L9 16.25','M15 11.25l2.25 2.5L15 16.25'],p:[10.7,12.45,2.6],
+  B:['............','############','#.#.#......#','############','#..........#','#..#....#..#','#.#..**..#.#','#.#..**..#.#','#..#....#..#','#..........#','############','............']},
+ {id:'chat',name:'WhatsApp AI Agent',stage:'win',idea:'The AI is typing; the pixel is the instant reply.',
+  A:s=>`<path class="ln" d="M7 4.25h10a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3h-5.5l-4.75 3.75v-3.8A3 3 0 0 1 4 13.25v-6a3 3 0 0 1 3-3z"/><circle class="fl blink" cx="8.5" cy="10.25" r="1"/><circle class="fl blink" style="--dl:150ms" cx="11.5" cy="10.25" r="1"/>${px(s,13.8,8.95,2.6,'pop')}`,
+  main:'M7 4.25h10a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3h-5.5l-4.75 3.75v-3.8A3 3 0 0 1 4 13.25v-6a3 3 0 0 1 3-3z',det:[],dots:[[8.5,10.25],[11.5,10.25]],p:[13.8,8.95,2.6],
+  B:['............','.##########.','#..........#','#..........#','#.##.##.**.#','#.##.##.**.#','#..........#','#..........#','.##########.','.##.........','.#..........','............']},
+ {id:'agent',name:'Custom AI Agents',stage:'run',idea:'The pixel is the agent, carrying a task from start to done.',
+  A:s=>`<rect class="ln" x="3.25" y="3.25" width="5.5" height="5.5" rx="1.25"/><rect class="ln" x="15.25" y="15.25" width="5.5" height="5.5" rx="1.25"/><path class="ln" d="M8.75 6H16a2 2 0 0 1 2 2v7.25"/><path class="ln soft" d="M6 8.75V16a2 2 0 0 0 2 2h7.25"/>${px(s,16.7,16.7,2.6,'travel')}`,
+  main:'M4.5 3.25h3a1.25 1.25 0 0 1 1.25 1.25v3a1.25 1.25 0 0 1-1.25 1.25h-3A1.25 1.25 0 0 1 3.25 7.5v-3A1.25 1.25 0 0 1 4.5 3.25zM16.5 15.25h3a1.25 1.25 0 0 1 1.25 1.25v3a1.25 1.25 0 0 1-1.25 1.25h-3a1.25 1.25 0 0 1-1.25-1.25v-3a1.25 1.25 0 0 1 1.25-1.25z',det:['M8.75 6H16a2 2 0 0 1 2 2v7.25','M6 8.75V16a2 2 0 0 0 2 2h7.25'],p:[16.7,16.7,2.6],
+  B:['............','.###........','.#.#######..','.###.....#..','..#......#..','..#......#..','..#......#..','..#....####.','..#....#**#.','..######**#.','.......####.','............']},
+ {id:'invoice',name:'Invoicing & Payment Collection',stage:'keep',idea:'The pixel lands like a "paid" stamp.',
+  A:s=>`<path class="ln" d="M5.75 2.75h8.5l4 4v14.5H5.75z"/><path class="ln" d="M14.25 2.75v4h4"/><path class="ln dx" d="M8.5 11h7"/><path class="ln dx" style="--dl:120ms" d="M8.5 14h4.5"/>${px(s,13.6,16.4,2.8,'stamp')}`,
+  main:'M5.75 2.75h8.5l4 4v14.5H5.75z',det:['M14.25 2.75v4h4','M8.5 11h7','M8.5 14h4.5'],p:[13.6,16.4,2.8],
+  B:['............','..#####.....','..#...##....','..#....###..','..#......#..','..#.####.#..','..#......#..','..#.###..#..','..#...**.#..','..#...**.#..','..########..','............']},
+ {id:'pin',name:'Local AI Dominance',stage:'found',idea:'The pixel drops into place: you, on the map.',
+  A:s=>`<path class="ln" d="M12 19.5s-6.25-5.2-6.25-10.25a6.25 6.25 0 0 1 12.5 0C18.25 14.3 12 19.5 12 19.5z"/><path class="ln sp-l" d="M4.5 21.25h4.25"/><path class="ln sp-r" d="M15.25 21.25h4.25"/>${px(s,10.3,7.55,3.4,'drop')}`,
+  main:'M12 19.5s-6.25-5.2-6.25-10.25a6.25 6.25 0 0 1 12.5 0C18.25 14.3 12 19.5 12 19.5z',det:['M4.5 21.25h4.25','M15.25 21.25h4.25'],p:[10.3,7.55,3.4],
+  B:['....####....','...#....#...','..#......#..','..#..**..#..','..#..**..#..','..#......#..','...#....#...','....#..#....','.....##.....','............','.###....###.','............']}
+];
+const svgOpen=(size,stage,extra='')=>`<svg viewBox="0 0 24 24" width="${size||''}" height="${size||''}" style="--solid:${STAGES[stage].solid}" ${extra} aria-hidden="true" focusable="false">`;
+const R={
+ A:(ic,size,sm)=>svgOpen(size,ic.stage,sm?'class="sm"':'')+ic.A(ic.stage)+'</svg>',
+ B:(ic,size,sm)=>{
+  let cells='',acc=[];
+  ic.B.forEach((row,r)=>[...row].forEach((ch,c)=>{
+   if(ch==='.')return;
+   const x=c*2+.18,y=r*2+.18,d=(r+c)*22;
+   if(ch==='*'){acc.push([x,y]);cells+=`<rect class="ac" x="${x}" y="${y}" width="1.64" height="1.64" rx=".2" fill="url(#${STAGES[ic.stage].px})" style="--d:${d+260}ms"/>`;}
+   else cells+=`<rect class="cl" x="${x}" y="${y}" width="1.64" height="1.64" rx=".2" style="--d:${d}ms"/>`;
+  }));
+  const xs=acc.map(a=>a[0]),ys=acc.map(a=>a[1]),cx=(Math.min(...xs)+Math.max(...xs))/2+.82,cy=(Math.min(...ys)+Math.max(...ys))/2+.82;
+  const halo=`<rect class="halo b-halo" x="${cx-5}" y="${cy-5}" width="10" height="10" fill="url(#${STAGES[ic.stage].halo})" style="--d:600ms"/>`;
+  return svgOpen(size,ic.stage,sm?'class="sm"':'')+halo+cells+'</svg>';
+ },
+ C:(ic,size,sm)=>{
+  const st=STAGES[ic.stage],[x,y,s]=ic.p,uid=ic.id+(size||'');
+  return svgOpen(size,ic.stage,sm?'class="sm"':'')+
+   `<defs><clipPath id="cl-${uid}"><path d="${ic.main}"/></clipPath></defs>`+
+   `<path class="c-depth" d="${ic.main}" fill="url(#${st.px})"/><path class="c-glass" d="${ic.main}"/>`+
+   `<g clip-path="url(#cl-${uid})"><g transform="rotate(20 12 12)"><rect class="c-sweep" x="-6" y="-4" width="6" height="32" fill="url(#sweep)"/></g></g>`+
+   ic.det.map(d=>`<path class="c-det" d="${d}"/>`).join('')+
+   (ic.dots||[]).map(([a,b])=>`<circle class="c-dot" cx="${a}" cy="${b}" r="1"/>`).join('')+
+   px(ic.stage,x,y,s,'lift')+'</svg>';
+ }
+};
+
+function replay(el){el.classList.remove('run');void el.getBoundingClientRect();el.classList.add('run');}
+
+['A','B','C'].forEach(dir=>{
+ const grid=document.querySelector(`[data-grid="${dir}"]`);
+ grid.innerHTML=ICONS.map(ic=>{
+  const st=STAGES[ic.stage];
+  return `<button class="card" type="button" aria-label="${ic.name}, ${st.name}. Replay animation">
+   <span class="ico">${R[dir](ic)}</span>
+   <span class="nm">${ic.name}</span>
+   <span class="stg"><i style="background:${st.css}"></i>${st.name}</span>
+   <span class="idea">${ic.idea}</span></button>`;
+ }).join('');
+ /* Size ramp: the flagship icon at every allowed size. Below 20px the pixel turns solid. */
+ const ramp=document.querySelector(`[data-ramp="${dir}"]`),web=ICONS[1];
+ ramp.innerHTML=`<div class="ramp-label">Size ramp · Custom-Coded Website</div>`+[16,20,24,32,48,64,96].map(sz=>`<figure class="run-host">${R[dir](web,sz,sz<20)}<figcaption>${sz}px</figcaption></figure>`).join('');
+ /* Real code size of each icon (before gzip; shared gradients not counted). */
+ const sizes=[...grid.querySelectorAll('svg')].map(s=>new Blob([s.outerHTML]).size),avg=sizes.reduce((a,b)=>a+b,0)/sizes.length;
+ document.querySelector(`[data-stats="${dir}"]`).innerHTML=`<span class="chip">Avg code size <b>${(avg/1024).toFixed(2)} KB</b> / icon</span><span class="chip">JavaScript to animate <b>0 KB</b> (CSS only)</span><span class="chip">Animates <b>transform + opacity</b> only</span>`;
+});
+
+document.querySelectorAll('.card,.ramp figure').forEach(el=>{
+ el.addEventListener('pointerenter',()=>replay(el));
+ el.addEventListener('focus',()=>replay(el));
+});
+/* Each card plays once when it first scrolls into view. */
+const io=new IntersectionObserver(entries=>entries.forEach(e=>{
+ if(!e.isIntersecting)return;
+ const els=[...e.target.querySelectorAll('.card')];
+ els.forEach((c,i)=>setTimeout(()=>replay(c),i*110));
+ io.unobserve(e.target);
+}),{threshold:.35});
+document.querySelectorAll('.grid').forEach(g=>io.observe(g));
+
+document.getElementById('playAll').addEventListener('click',()=>{
+ document.querySelectorAll('.grid').forEach(g=>[...g.querySelectorAll('.card')].forEach((c,i)=>setTimeout(()=>replay(c),i*110)));
+});
+const rm=document.getElementById('rmToggle');
+rm.addEventListener('click',()=>{const on=rm.getAttribute('aria-pressed')!=='true';rm.setAttribute('aria-pressed',on);document.body.classList.toggle('rm',on);});
+</script>
+</body>
+</html>

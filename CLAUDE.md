@@ -1,0 +1,40 @@
+# deepzeta website: Claude Code instructions
+
+**North Star:** *A fast, custom-coded, AI-search-ready site that turns UAE business owners into booked AI audits, and proves every claim it makes.*
+
+This is deepzeta's own website and its first case study. Speed, custom code, SEO/GEO built in, and honesty are not negotiable. Details: `docs/ai/00-project-master-rules.md`.
+
+## Always-loaded core rules
+
+@docs/ai/00-project-master-rules.md
+@docs/ai/01-ai-agent-roles.md
+@docs/ai/02-anti-hallucination-and-edit-safety.md
+
+## Read before working in an area
+
+| If the task touches… | Read first |
+|---|---|
+| Any code change (which gates, what evidence) | `docs/ai/03-verification-gates.md` |
+| Planning, phases, the plan template | `docs/ai/04-build-sequence.md` |
+| Styling, tokens, components, icons, motion | `docs/ai/05-design-system.md` + `Planning Folder/For Ai/DeepZeta Icon Master Rules.md` |
+| TypeScript, Next.js, dependencies, security | `docs/ai/06-code-standards.md` |
+| Images, fonts, scripts, animation, anything that affects speed | `docs/ai/07-performance-budget.md` |
+| Metadata, headings, schema, robots, sitemap, `llms.txt` | `docs/ai/08-seo-geo-aeo-schema.md` |
+| Analytics, consent, forms, CRM | `docs/ai/09-analytics-tracking.md` |
+| Any website copy | `docs/ai/10-content-voice.md` + `docs/facts/company-facts.md` + the Services Catalogue |
+| Layout direction, URLs, locale, Arabic | `docs/ai/11-i18n-rtl-readiness.md` |
+| Branches, commits, PRs | `docs/ai/12-git-workflow.md` |
+| Something the sources disagree on | `docs/ai/conflict-register.md` |
+| Before writing any plan | `docs/ai/lessons-learned.md` |
+
+## Current state
+
+- **Phase:** P-1 Pre-build (rule system). No application code exists yet. Node.js is **not installed** on this machine; npm gates can't run until Phase 0.
+- **Open decisions** that block related work: domain (D1), company entity (D2), service structure pillars vs stages (C6), JS budget (C8). See `docs/decisions/README.md`.
+
+## Working agreement
+
+1. Non-trivial work: write a plan (`/plan-task`), wait for the owner's approval, then implement.
+2. Only touch the plan's allowed files. Read before editing. Verify APIs against installed versions.
+3. Finish with the report format in `docs/ai/02` §5, including real gate output (`/verify`).
+4. Never edit the rule system, the logo, `.env*` or lockfiles. Propose changes instead.

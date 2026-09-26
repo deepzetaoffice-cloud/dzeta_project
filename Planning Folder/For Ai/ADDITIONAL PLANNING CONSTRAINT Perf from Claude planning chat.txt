@@ -1,0 +1,80 @@
+ADDITIONAL PLANNING CONSTRAINT: Performance vs. Design Ambition
+
+Apply this as a standing rule across all website planning and design 
+recommendations in this project — not background reading, an actual 
+constraint on every answer you give.
+
+THE CORE TENSION
+Our brand promise is "fast, custom-coded, zero-bloat, built for the AI 
+era." Many of the most visually striking 2026 web design trends 
+(interactive 3D/WebGL, scroll-jacked animation, oversized variable 
+fonts, autoplay video heroes) work directly against that promise if 
+implemented carelessly. As of 2026, roughly 43% of live websites fail 
+Google's Interaction to Next Paint (INP) threshold of 200 milliseconds, 
+and the richer a site's animation/interaction layer, the more likely it 
+is to miss that threshold. Scroll-jacking — the page hijacking scroll 
+to choreograph an animation — is a specifically named anti-pattern 
+because it competes with the browser's ability to respond to real user 
+input.
+
+This website is also our own flagship proof-of-work case study. A slow 
+site here is not a minor flaw — it directly contradicts the single 
+claim our entire business is built on. Resolve this tension in every 
+recommendation; do not ignore it or treat it as a later cleanup step.
+
+RESOLUTION PRINCIPLE
+The answer is not "no animation" — it is deliberate, sparse, purposeful 
+motion. This is itself the correct 2026 design approach, not a 
+compromise of it. Apply these rules to every interactive or animated 
+element you propose:
+
+- Prefer ONE well-placed 3D/WebGL moment over many — a single 
+  interactive hero element, never WebGL used throughout the site. 
+  Always specify progressive enhancement so the page fully works if 
+  WebGL fails to load.
+- Favor micro-interactions over spectacle — hover states, button 
+  feedback, smooth section transitions. These read as "alive and 
+  responsive"; heavy, constant motion reads as distracting and costs 
+  real performance.
+- Use scroll storytelling, never scroll-jacking — content may reveal 
+  naturally as the user scrolls, but the page must never hijack or 
+  override the user's own scroll input to force a timeline.
+- Deploy glassmorphism strategically only (navigation, modals, feature 
+  cards), never as a blanket effect across a full page — 
+  backdrop-filter: blur() is computationally expensive.
+- Use kinetic typography only when it can be built lightly — animated, 
+  scroll-revealed headlines are acceptable; heavy JavaScript animation 
+  libraries to achieve them are not.
+
+For every animated or interactive element you propose, state explicitly: 
+(a) the performance cost it carries, and (b) how that cost is 
+mitigated. Never present a visual effect as free.
+
+NON-NEGOTIABLE REQUIREMENTS (apply to every recommendation)
+- Bilingual Arabic + English with genuine right-to-left (RTL) layout 
+  support, built natively into the layout system — not a translated 
+  overlay bolted onto an English-first design.
+- Technical SEO/GEO foundation designed in from the architecture stage: 
+  Organization/Service/LocalBusiness/FAQ schema, clean semantic HTML, 
+  fast server response, and a heading/content hierarchy an AI engine 
+  (ChatGPT, Gemini, Perplexity, Google AI Overviews) can parse and cite 
+  accurately.
+- Mobile-first, and specifically validated against low-end devices — 
+  our market's mobile traffic skews toward exactly the 
+  budget-Android-on-slow-network conditions where INP failures are most 
+  visible, not high-end devices in a studio demo.
+- Dark mode as a genuine default option, not an afterthought or premium 
+  add-on.
+- The site itself must function as demonstrable proof-of-work: every 
+  technical claim we plan to make to future clients (page speed, 
+  AI-citation readiness, structured data quality) should be visibly 
+  demonstrable on this site itself — ideally through a real, live proof 
+  element, not just a written claim.
+
+TARGET STANDARD
+Every page must be designed to meet: Largest Contentful Paint under 2.5 
+seconds, Interaction to Next Paint under 200 milliseconds, and 
+Cumulative Layout Shift under 0.1. Treat these three numbers as hard 
+constraints equal in priority to visual quality on every design 
+decision in this project — never a secondary concern addressed after 
+the design is finalized.

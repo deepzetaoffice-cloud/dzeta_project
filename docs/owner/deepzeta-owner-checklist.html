@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>deepzeta Owner Checklist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Print-first checklist. Black-and-white safe: priority is shown by shape AND label, colour is only a bonus. */
+:root{
+  --ink:#010413; --ink-2:#16224A; --muted:#4A5783; --rule:#C9D4FF; --soft:#F2F5FD; --paper:#FFFFFF;
+  --cyan:#08C6FD; --azure:#1A84FD; --violet:#7946FC;
+  --start:#D62839; --phase:#E07A00; --launch:#12946F;
+  --sans:'Montserrat','Segoe UI',Arial,sans-serif;
+  --mono:'JetBrains Mono',Consolas,'Courier New',monospace;
+}
+@page{size:A4;margin:13mm 13mm 15mm;
+  @bottom-left{content:"deepzeta · Owner checklist";font:500 7.5pt 'Montserrat','Segoe UI',sans-serif;color:#4A5783}
+  @bottom-right{content:"Page " counter(page) " of " counter(pages);font:500 7.5pt 'Montserrat','Segoe UI',sans-serif;color:#4A5783}}
+*{box-sizing:border-box}
+html{background:#E6EAF5}
+body{margin:0;font-family:var(--sans);color:var(--ink);font-size:9.6pt;line-height:1.45;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.sheet{background:var(--paper);max-width:210mm;margin:24px auto;padding:13mm}
+@media print{html{background:none}.sheet{margin:0;padding:0;max-width:none}}
+@media (max-width:700px){.sheet{margin:0;padding:16px}}
+
+/* header */
+.top{display:grid;grid-template-columns:1fr auto;gap:10px 20px;align-items:end;padding-bottom:10px;border-bottom:2px solid var(--ink)}
+.brand{font-weight:800;font-size:11pt;letter-spacing:-.01em}
+.brand span{color:var(--azure)}
+h1{margin:2px 0 0;font-size:22pt;line-height:1.05;font-weight:800;letter-spacing:-.02em}
+.sub{margin:4px 0 0;color:var(--muted);font-size:9.5pt;max-width:95ch}
+.who{display:grid;gap:6px;font-size:8.5pt;color:var(--muted);min-width:58mm}
+.who div{display:flex;gap:6px;align-items:flex-end}
+.who i{flex:1;border-bottom:1px solid var(--ink-2);height:12px}
+.accent{height:3px;background:linear-gradient(90deg,var(--cyan),var(--azure),var(--violet));margin-top:-2px}
+
+/* legend */
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center;margin:10px 0 4px;font-size:8.5pt}
+.legend b{font-weight:700}
+.howto{font-size:8.5pt;color:var(--muted);margin:0 0 4px}
+
+/* priority markers: solid = start, half = phase, outline = launch */
+.pri{display:inline-flex;align-items:center;gap:4px;font-family:var(--mono);font-size:6.8pt;font-weight:500;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;vertical-align:middle}
+.pri::before{content:"";width:9px;height:9px;border-radius:50%;border:1.6px solid currentColor;flex:none}
+.pri.s{color:var(--start)} .pri.s::before{background:currentColor}
+.pri.p{color:var(--phase)} .pri.p::before{background:linear-gradient(90deg,currentColor 50%,transparent 50%)}
+.pri.l{color:var(--launch)}
+
+/* parts */
+.part{margin-top:14px;break-inside:auto}
+.ph{display:flex;align-items:baseline;gap:10px;border-bottom:1.5px solid var(--ink);padding-bottom:3px;margin-bottom:6px;break-after:avoid}
+.ph .n{font-family:var(--mono);font-size:8pt;color:var(--azure);font-weight:500;white-space:nowrap}
+h2{margin:0;font-size:13pt;font-weight:800;letter-spacing:-.01em;flex:1}
+.ph .count{font-family:var(--mono);font-size:7.5pt;color:var(--muted);white-space:nowrap}
+h3{margin:9px 0 3px;font-size:10pt;font-weight:700;display:flex;gap:8px;align-items:center;break-after:avoid}
+h3 small{font-weight:500;color:var(--muted);font-size:8.3pt}
+.note{font-size:8.3pt;color:var(--muted);margin:2px 0 5px;padding:4px 8px;background:var(--soft);border-radius:4px}
+.note b{color:var(--ink)}
+
+/* checklist rows */
+ul.ck{list-style:none;margin:0;padding:0}
+ul.ck > li{display:grid;grid-template-columns:15px 1fr auto;gap:0 8px;align-items:start;padding:4px 0;border-bottom:1px dotted var(--rule);break-inside:avoid}
+ul.ck > li:last-child{border-bottom:0}
+.box{width:12px;height:12px;border:1.5px solid var(--ink);border-radius:2px;margin-top:1px;display:grid;place-items:center;font-size:9pt;line-height:1;font-weight:800;background:#fff}
+.box.done::after{content:"✓"}
+.box.sm{width:10px;height:10px;border-width:1.3px;margin-top:2px}
+li .t b{font-weight:700}
+li .d{display:block;color:var(--muted);font-size:8.3pt}
+ul.sub{list-style:none;margin:3px 0 0;padding:0;display:grid;gap:2px}
+ul.sub li{display:grid;grid-template-columns:12px 1fr;gap:6px;align-items:start;font-size:8.8pt}
+.line{display:inline-block;min-width:38mm;border-bottom:1px solid var(--ink-2);height:11px;vertical-align:baseline}
+.line.w{min-width:70mm}
+.line.full{display:block;width:100%;margin-top:6px}
+.opt{display:inline-flex;align-items:center;gap:4px;margin-inline-end:12px;white-space:nowrap}
+.opt .box{margin-top:0}
+.opts{display:flex;flex-wrap:wrap;gap:3px 0;margin-top:3px;font-size:8.8pt}
+
+/* decision cards */
+.dec{display:grid;grid-template-columns:1fr 1fr;gap:6px 10px}
+.card{border:1.3px solid var(--ink-2);border-radius:6px;padding:6px 8px 7px;break-inside:avoid;display:grid;gap:2px;align-content:start}
+.card .hd{display:flex;align-items:center;gap:6px}
+.card .num{font-family:var(--mono);font-size:7.5pt;color:#fff;background:var(--ink);border-radius:3px;padding:1px 5px}
+.card .ttl{font-weight:700;font-size:9.4pt;flex:1}
+.card .bl{font-size:7.8pt;color:var(--muted);margin-top:3px}
+.card .bl b{color:var(--ink-2);font-weight:600}
+.card.wide{grid-column:1 / -1}
+
+/* tables */
+table{width:100%;border-collapse:collapse;font-size:8.8pt;break-inside:auto}
+th,td{border:1px solid var(--rule);padding:4px 6px;text-align:start;vertical-align:middle}
+th{background:var(--soft);font-family:var(--mono);font-size:7pt;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2)}
+td.c,th.c{text-align:center;width:13mm}
+td.c .box{margin:0 auto}
+tr{break-inside:avoid}
+td .d{color:var(--muted);font-size:7.8pt}
+.slug{font-family:var(--mono);font-size:8pt}
+
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+.rules{border:1.3px solid var(--ink-2);border-radius:6px;padding:6px 10px;margin:4px 0 6px;break-inside:avoid}
+.rules h3{margin-top:0}
+.rules ul{margin:0;padding-inline-start:16px;font-size:8.6pt;display:grid;gap:1px}
+
+ol.road{list-style:none;margin:0;padding:0;counter-reset:r;display:grid;gap:4px}
+ol.road li{counter-increment:r;display:grid;grid-template-columns:15px 20px 1fr;gap:8px;align-items:start;padding:5px 0;border-bottom:1px dotted var(--rule);break-inside:avoid}
+ol.road li::after{content:none}
+ol.road .k{font-family:var(--mono);font-size:8pt;font-weight:500;color:#fff;background:var(--azure);border-radius:3px;text-align:center;padding:1px 0}
+ol.road .k::before{content:counter(r)}
+
+.pagebreak{break-before:page}
+@media (max-width:700px){.dec,.cols2{grid-template-columns:1fr}.top{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+<header>
+  <div class="top">
+    <div>
+      <div class="brand">deep<span>zeta</span> · AI Digital Solutions</div>
+      <h1>Website owner checklist</h1>
+      <p class="sub">Everything Claude needs from you to build the website. Tick each box when it's done. Most items are only needed before a later phase, so you can start with Part 1.</p>
+    </div>
+    <div class="who">
+      <div>Name <i></i></div>
+      <div>Started <i></i></div>
+      <div>Updated <i></i></div>
+    </div>
+  </div>
+  <div class="accent"></div>
+  <div class="legend">
+    <b>Priority:</b>
+    <span class="pri s">Before start</span><span>Needed before Claude can start</span>
+    <span class="pri p">Before phase</span><span>Needed before a specific build phase</span>
+    <span class="pri l">Before launch</span><span>Needed before the site goes live</span>
+  </div>
+  <p class="howto">✓ in a box = already done. Write IDs and answers on the lines. Never write passwords or secret keys on this sheet.</p>
+</header>
+
+<!-- PART 1 -->
+<section class="part" data-part>
+  <div class="ph"><span class="n">PART 1</span><h2>Needed before Claude can start (Phase 0)</h2><span class="count"></span></div>
+  <ul class="ck">
+    <li><span class="box"></span><span class="t"><b>Install Node.js LTS</b><span class="d">Windows installer from nodejs.org. Keep "Add to PATH" ticked. Git is already installed (2.55).</span></span><span class="pri s">Start</span></li>
+    <li><span class="box"></span><span class="t"><b>Approve the rule system</b> (last step of the pre-build phase)
+      <ul class="sub"><li><span class="box sm"></span><span>Fix the index table in <span class="slug">docs/decisions/README.md</span>: 0004 and 0005 should say ACCEPTED, not PROPOSED</span></li></ul></span><span class="pri s">Start</span></li>
+    <li><span class="box"></span><span class="t"><b>Apply the rule-changes plan</b><span class="d"><span class="slug">docs/plans/2026-09-26-stack-rule-changes.md</span>. It changes protected rule files, so either edit them yourself or tell Claude explicitly to apply it.</span></span><span class="pri s">Start</span></li>
+    <li><span class="box"></span><span class="t"><b>Create the GitHub repository</b>
+      <ul class="sub">
+        <li><span class="box sm"></span><span>Private and empty (no README, no .gitignore)</span></li>
+        <li><span class="box sm"></span><span>Turn on 2FA for the deepzetaoffice-cloud account</span></li>
+        <li><span class="box sm"></span><span>Send the repo URL to Claude: <span class="line w"></span></span></li>
+        <li><span class="box sm"></span><span>Protect <span class="slug">main</span> after the first commit (Claude sends click-by-click steps)</span></li>
+      </ul></span><span class="pri s">Start</span></li>
+    <li><span class="box"></span><span class="t"><b>Check your Vercel account</b>
+      <ul class="sub">
+        <li><span class="box sm"></span><span>Confirm which account to use: <span class="line"></span></span></li>
+        <li><span class="box sm"></span><span>Check the current terms. The free Hobby plan may be for non-commercial use only, so plan for Pro.</span></li>
+        <li><span class="box sm"></span><span>Don't import the repo yet. That happens in Phase 0.</span></li>
+      </ul></span><span class="pri s">Start</span></li>
+  </ul>
+</section>
+
+<!-- PART 2 -->
+<section class="part" data-part>
+  <div class="ph"><span class="n">PART 2</span><h2>Decisions only you can make</h2><span class="count"></span></div>
+  <p class="note">Tick the option you choose, then tick the card's main box when the decision is final.</p>
+  <div class="dec">
+    <div class="card"><div class="hd"><span class="box"></span><span class="num">D1</span><span class="ttl">Domain</span><span class="pri s">Start</span></div>
+      <div class="opts">Name: <span class="line w"></span></div>
+      <div class="opts"><span class="opt"><span class="box sm"></span>.com</span><span class="opt"><span class="box sm"></span>.ae</span><span class="opt"><span class="box sm"></span>Asked registrar if I qualify for .ae</span></div>
+      <div class="bl"><b>Blocks:</b> business email, Search Console, site address in schema and links, spam protection, booking branding</div></div>
+
+    <div class="card"><div class="hd"><span class="box"></span><span class="num">D2</span><span class="ttl">Company entity</span><span class="pri s">Start</span></div>
+      <div class="opts"><span class="opt"><span class="box sm"></span>Own licence</span><span class="opt"><span class="box sm"></span>Brand of an existing company</span></div>
+      <div class="opts"><span class="opt"><span class="box sm"></span>Free zone</span><span class="opt"><span class="box sm"></span>Mainland</span></div>
+      <div class="bl"><b>Blocks:</b> legal name in footer and legal pages, Meta and WhatsApp verification, Google Business Profile</div></div>
+
+    <div class="card"><div class="hd"><span class="box"></span><span class="num">C6</span><span class="ttl">Site structure</span><span class="pri s">Start</span></div>
+      <div class="opts"><span class="opt"><span class="box sm"></span>4 pillars: AI / Websites / Software / Growth</span></div>
+      <div class="opts"><span class="opt"><span class="box sm"></span>4 buyer stages: Get Found / Win / Run / Get Paid &amp; Keep</span></div>
+      <div class="bl"><b>Blocks:</b> navigation, service page addresses, icon colours</div></div>
+
+    <div class="card"><div class="hd"><span class="box"></span><span class="num">4</span><span class="ttl">Design direction</span><span class="pri p">Phase</span></div>
+      <div class="opts"><span class="opt"><span class="box sm"></span>A Signal Grid</span><span class="opt"><span class="box sm"></span>B Control Room</span><span class="opt"><span class="box sm"></span>C Daylight</span><span class="opt"><span class="box sm"></span>Mix A + B (recommended)</span></div>
+      <div class="opts">Dark by default with a light-mode switch? <span class="opt" style="margin-inline-start:8px"><span class="box sm"></span>Yes</span><span class="opt"><span class="box sm"></span>No</span></div>
+      <div class="bl"><b>Blocks:</b> brand work, header and footer</div></div>
+
+    <div class="card"><div class="hd"><span class="box"></span><span class="num">D4</span><span class="ttl">Business model</span><span class="pri p">Phase</span></div>
+      <div class="opts"><span class="opt"><span class="box sm"></span>Confirm hybrid model (custom projects + packages)</span></div>
+      <div class="opts">Public "starting from" prices? <span class="opt" style="margin-inline-start:8px"><span class="box sm"></span>Yes</span><span class="opt"><span class="box sm"></span>No</span></div>
+      <div class="bl"><b>Blocks:</b> the pricing page</div></div>
+
+    <div class="card"><div class="hd"><span class="box"></span><span class="num">6</span><span class="ttl">Service pages at launch</span><span class="pri p">Phase</span></div>
+      <div class="opts" style="display:block">Confirm the list by <b>Services Catalogue name</b> (see Part 8). The catalogue names win over the blueprint's page addresses.</div>
+      <span class="line full"></span>
+      <div class="bl"><b>Blocks:</b> service pages</div></div>
+
+    <div class="card"><div class="hd"><span class="box"></span><span class="num">7</span><span class="ttl">6 industries at launch</span><span class="pri p">Phase</span></div>
+      <div class="opts"><span class="opt"><span class="box sm"></span>Real Estate</span><span class="opt"><span class="box sm"></span>Healthcare / Clinics</span><span class="opt"><span class="box sm"></span>E-commerce</span></div>
+      <div class="opts"><span class="opt"><span class="box sm"></span>Education</span><span class="opt"><span class="box sm"></span>Technical &amp; Facility Services</span><span class="opt"><span class="box sm"></span>Hospitality</span></div>
+      <div class="opts">Other: <span class="line"></span></div>
+      <div class="bl"><b>Blocks:</b> industry pages</div></div>
+
+    <div class="card"><div class="hd"><span class="box"></span><span class="num">8</span><span class="ttl">Starter offer pages</span><span class="pri p">Phase</span></div>
+      <div class="opts">AI Readiness Assessment page? <span class="opt" style="margin-inline-start:8px"><span class="box sm"></span>Yes</span><span class="opt"><span class="box sm"></span>No</span></div>
+      <div class="opts">Website &amp; AI Search Health Check page? <span class="opt" style="margin-inline-start:8px"><span class="box sm"></span>Yes</span><span class="opt"><span class="box sm"></span>No</span></div>
+      <div class="bl"><b>Blocks:</b> page map</div></div>
+
+    <div class="card"><div class="hd"><span class="box"></span><span class="num">9</span><span class="ttl">n8n hosting</span><span class="pri p">Phase</span></div>
+      <div class="opts"><span class="opt"><span class="box sm"></span>n8n Cloud (recommended)</span><span class="opt"><span class="box sm"></span>Self-hosted</span></div>
+      <div class="bl"><b>Blocks:</b> all automations</div></div>
+
+    <div class="card"><div class="hd"><span class="box"></span><span class="num">10</span><span class="ttl">AI chat agent language</span><span class="pri p">Phase</span></div>
+      <div class="opts"><span class="opt"><span class="box sm"></span>English only at launch</span><span class="opt"><span class="box sm"></span>English + Arabic</span></div>
+      <div class="bl"><b>Blocks:</b> the chat demo</div></div>
+
+    <div class="card"><div class="hd"><span class="box"></span><span class="num">11</span><span class="ttl">Newsletter at launch</span><span class="pri p">Phase</span></div>
+      <div class="opts"><span class="opt"><span class="box sm"></span>No</span><span class="opt"><span class="box sm"></span>Yes. Tool:</span><span class="line"></span></div>
+      <div class="bl"><b>Blocks:</b> newsletter form</div></div>
+
+    <div class="card"><div class="hd"><span class="box"></span><span class="num">12</span><span class="ttl">Blog at launch</span><span class="pri p">Phase</span></div>
+      <div class="opts"><span class="opt"><span class="box sm"></span>No</span><span class="opt"><span class="box sm"></span>Yes</span></div>
+      <div class="opts">Who writes: <span class="line"></span>&nbsp; How often: <span class="line" style="min-width:22mm"></span></div>
+      <div class="bl"><b>Blocks:</b> resources section</div></div>
+
+    <div class="card"><div class="hd"><span class="box"></span><span class="num">13</span><span class="ttl">Wasleen case study</span><span class="pri p">Phase</span></div>
+      <div class="opts"><span class="opt"><span class="box sm"></span>Not allowed</span><span class="opt"><span class="box sm"></span>Allowed, and I'll confirm the real numbers</span></div>
+      <div class="bl"><b>Note:</b> none of Wasleen's company data is reused. <b>Blocks:</b> case studies</div></div>
+
+    <div class="card"><div class="hd"><span class="box"></span><span class="num">14</span><span class="ttl">AI crawler policy</span><span class="pri l">Launch</span></div>
+      <div class="opts"><span class="opt"><span class="box sm"></span>Keep: AI training bots read only llms.txt</span></div>
+      <div class="opts"><span class="opt"><span class="box sm"></span>Allow all</span><span class="opt"><span class="box sm"></span>Block all</span></div>
+      <div class="bl"><b>Blocks:</b> robots.txt</div></div>
+
+    <div class="card wide"><div class="hd"><span class="box"></span><span class="num">15</span><span class="ttl">Brand spelling</span><span class="pri l">Launch</span></div>
+      <div class="opts"><span class="opt"><span class="box sm"></span>Always lowercase "deepzeta", even at the start of a sentence</span><span class="opt"><span class="box sm"></span>"deepZeta" (as in the logo folder)</span><span class="opt"><span class="box sm"></span>Other:</span><span class="line"></span></div>
+      <div class="bl"><b>Blocks:</b> all website copy</div></div>
+  </div>
+</section>
+
+<!-- PART 3 -->
+<section class="part pagebreak" data-part>
+  <div class="ph"><span class="n">PART 3</span><h2>Company information</h2><span class="count"></span></div>
+  <p class="note">This fills <b>docs/facts/company-facts.md</b>. Only you edit that file. You can paste your answers to Claude, who prepares the update for you to approve.</p>
+
+  <h3>Identity <span class="pri p">Phase</span></h3>
+  <ul class="ck">
+    <li><span class="box"></span><span class="t">Legal company name, exactly as on the licence <span class="line full"></span></span><span></span></li>
+    <li><span class="box"></span><span class="t">Entity type and licensing authority <span class="line full"></span></span><span></span></li>
+    <li><span class="box"></span><span class="t">Trade licence number <span class="line"></span></span><span></span></li>
+    <li><span class="box"></span><span class="t">Founding date (month and year) <span class="line"></span></span><span></span></li>
+    <li><span class="box"></span><span class="t">VAT registration number, if registered <span class="line"></span><span class="opts">Show it on the site? <span class="opt" style="margin-inline-start:8px"><span class="box sm"></span>Yes</span><span class="opt"><span class="box sm"></span>No</span></span></span><span></span></li>
+  </ul>
+
+  <h3>Contact details <span class="pri p">Phase</span> <small>Must be identical everywhere, character for character</small></h3>
+  <ul class="ck">
+    <li><span class="box"></span><span class="t">Street address (exact format), emirate, P.O. Box <span class="line full"></span><span class="line full"></span></span><span></span></li>
+    <li><span class="box"></span><span class="t">Google Maps pin link <span class="line w"></span></span><span></span></li>
+    <li><span class="box"></span><span class="t">Phone number (+971…) <span class="line"></span></span><span></span></li>
+    <li><span class="box"></span><span class="t">WhatsApp number <span class="opt" style="margin-inline-start:8px"><span class="box sm"></span>Same as phone</span><span class="opt"><span class="box sm"></span>Different:</span><span class="line"></span></span><span></span></li>
+    <li><span class="box"></span><span class="t">Public email address(es), e.g. hello@, audit@ <span class="line full"></span></span><span></span></li>
+    <li><span class="box"></span><span class="t">Opening days and hours <span class="line w"></span></span><span></span></li>
+    <li><span class="box"></span><span class="t">Service area <span class="opt" style="margin-inline-start:8px"><span class="box sm"></span>UAE only</span><span class="opt"><span class="box sm"></span>GCC countries:</span><span class="line"></span></span><span></span></li>
+    <li><span class="box"></span><span class="t">Languages the team speaks with clients <span class="line w"></span></span><span></span></li>
+  </ul>
+
+  <div class="cols2">
+    <div>
+      <h3>People <span class="pri p">Phase</span> <small>About page and authors</small></h3>
+      <ul class="ck">
+        <li><span class="box"></span><span class="t">Name, role and 80–150 word bio for each person shown</span><span></span></li>
+        <li><span class="box"></span><span class="t">Credentials and certifications, with proof</span><span></span></li>
+        <li><span class="box"></span><span class="t">LinkedIn profile URLs</span><span></span></li>
+        <li><span class="box"></span><span class="t">Professional headshots in one consistent style, <b>or</b> a decision not to show the team</span><span></span></li>
+      </ul>
+    </div>
+    <div>
+      <h3>Story <span class="pri p">Phase</span></h3>
+      <ul class="ck">
+        <li><span class="box"></span><span class="t">Why deepzeta started, in your own words</span><span></span></li>
+        <li><span class="box"></span><span class="t">Your mission</span><span></span></li>
+        <li><span class="box"></span><span class="t">What makes you different</span><span></span></li>
+        <li><span class="box"></span><span class="t">What can be said publicly about the link to Wasleen</span><span></span></li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Offer details <span class="pri p">Phase</span></h3>
+  <ul class="ck">
+    <li><span class="box"></span><span class="t">"Starting from" price per package <span class="opt" style="margin-inline-start:8px"><span class="box sm"></span>In AED</span><span class="opt"><span class="box sm"></span>Incl. VAT</span><span class="opt"><span class="box sm"></span>Excl. VAT</span></span><span></span></li>
+    <li><span class="box"></span><span class="t">Free audit details
+      <ul class="sub">
+        <li><span class="box sm"></span><span>How long it takes <span class="line"></span></span></li>
+        <li><span class="box sm"></span><span><span class="opt"><span class="box sm"></span>Online</span><span class="opt"><span class="box sm"></span>In person</span><span class="opt"><span class="box sm"></span>Both</span></span></li>
+        <li><span class="box sm"></span><span>What the client receives</span></li>
+        <li><span class="box sm"></span><span>Who qualifies</span></li>
+      </ul></span><span></span></li>
+    <li><span class="box"></span><span class="t">Real timeframes for each step: Audit → Build → Launch → Improve</span><span></span></li>
+    <li><span class="box"></span><span class="t">Contract, payment and ownership terms <span class="d">Does the client own the code and accounts?</span></span><span></span></li>
+    <li><span class="box"></span><span class="t">Guarantee or support / retainer terms <span class="d">Only if they're real</span></span><span></span></li>
+  </ul>
+
+  <h3>FAQ answers <span class="pri p">Phase</span> <small>8 real buyer questions</small></h3>
+  <ul class="ck cols2">
+    <li><span class="box"></span><span class="t">Cost</span><span></span></li>
+    <li><span class="box"></span><span class="t">Contract length</span><span></span></li>
+    <li><span class="box"></span><span class="t">Timeline</span><span></span></li>
+    <li><span class="box"></span><span class="t">Tools used</span><span></span></li>
+    <li><span class="box"></span><span class="t">Data safety (where data is stored)</span><span></span></li>
+    <li><span class="box"></span><span class="t">What happens after launch</span><span></span></li>
+    <li><span class="box"></span><span class="t">Arabic support</span><span></span></li>
+    <li><span class="box"></span><span class="t">Ownership</span><span></span></li>
+  </ul>
+
+  <h3>Proof <span class="pri p">Phase</span> <small>Nothing here can be invented, so start early</small></h3>
+  <table>
+    <thead><tr><th>Case study item</th><th class="c">CS 1</th><th class="c">CS 2</th><th class="c">CS 3</th></tr></thead>
+    <tbody>
+      <tr><td>Client name, or permission to anonymise</td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td></tr>
+      <tr><td>Industry</td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td></tr>
+      <tr><td>The problem</td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td></tr>
+      <tr><td>What you built</td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td></tr>
+      <tr><td>Before / after numbers <span class="d">with how and when they were measured</span></td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td></tr>
+      <tr><td>Screenshots</td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td></tr>
+      <tr><td>Client's written permission</td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td></tr>
+    </tbody>
+  </table>
+  <ul class="ck" style="margin-top:4px">
+    <li><span class="box"></span><span class="t"><b>Client logos</b>, with written permission for each one</span><span></span></li>
+    <li><span class="box"></span><span class="t"><b>Testimonials and reviews</b>, with real name, role and permission</span><span></span></li>
+    <li><span class="box"></span><span class="t"><b>Partner statuses</b> (Google Partner, Meta Partner, n8n…), only current ones, with proof <span class="d">Tools you only use (OpenAI, Anthropic, Make) appear as "tools we work with", not as partner badges.</span></span><span></span></li>
+  </ul>
+</section>
+
+<!-- PART 4 -->
+<section class="part pagebreak" data-part>
+  <div class="ph"><span class="n">PART 4</span><h2>Accounts and dashboards</h2><span class="count"></span></div>
+  <div class="rules">
+    <h3>Ground rules for every account</h3>
+    <ul>
+      <li>Open every account under the <b>business</b> Google / Workspace account, never a personal one.</li>
+      <li>Use a password manager and turn on 2FA everywhere.</li>
+      <li>Never paste secret keys into chat or any file Claude edits. Send only public IDs (GTM-…, G-…, Pixel ID, Turnstile site key).</li>
+      <li>Secret keys go into Vercel's environment variables or your own <span class="slug">.env.local</span>.</li>
+    </ul>
+  </div>
+
+  <div class="cols2">
+  <div>
+  <h3>4.1 Domain and email <small>after D1</small></h3>
+  <ul class="ck">
+    <li><span class="box"></span><span class="t">Buy the domain(s)</span><span class="pri p">Phase</span></li>
+    <li><span class="box"></span><span class="t">DNS managed at <span class="opt" style="margin-inline-start:4px"><span class="box sm"></span>Registrar</span><span class="opt"><span class="box sm"></span>Cloudflare</span></span><span class="pri p">Phase</span></li>
+    <li><span class="box"></span><span class="t">Google Workspace on the domain</span><span class="pri p">Phase</span></li>
+    <li><span class="box"></span><span class="t">Mailboxes / aliases: <span class="opt"><span class="box sm"></span>hello@</span><span class="opt"><span class="box sm"></span>leads@</span><span class="opt"><span class="box sm"></span>noreply@</span><span class="d">n8n sends email from noreply@</span></span><span class="pri p">Phase</span></li>
+    <li><span class="box"></span><span class="t">SPF, DKIM and DMARC records <span class="d">Claude sends the steps</span></span><span class="pri p">Phase</span></li>
+  </ul>
+
+  <h3>4.3 Meta <small>start early, verification takes time</small></h3>
+  <ul class="ck">
+    <li><span class="box"></span><span class="t">Meta Business Portfolio, details matching your contact details exactly</span><span class="pri p">Phase</span></li>
+    <li><span class="box"></span><span class="t">Facebook Page + Instagram Professional account, connected</span><span class="pri p">Phase</span></li>
+    <li><span class="box"></span><span class="t">Business verification <span class="d">Needs the legal documents from D2</span></span><span class="pri p">Phase</span></li>
+    <li><span class="box"></span><span class="t">Pixel (dataset) in Events Manager. ID: <span class="line"></span><span class="d">The server-side (CAPI) token comes later and is a secret.</span></span><span class="pri p">Phase</span></li>
+    <li><span class="box"></span><span class="t"><b>WhatsApp Business Platform</b> (Cloud API)
+      <ul class="sub">
+        <li><span class="box sm"></span><span>Dedicated number not active in the WhatsApp app (or migrate it)</span></li>
+        <li><span class="box sm"></span><span>Display name "deepzeta" approved</span></li>
+        <li><span class="box sm"></span><span>Payment method added</span></li>
+        <li><span class="box sm"></span><span>Message template submitted (Claude drafts the text)</span></li>
+      </ul></span><span class="pri p">Phase</span></li>
+  </ul>
+
+  <h3>4.4 LinkedIn</h3>
+  <ul class="ck">
+    <li><span class="box"></span><span class="t">Company page</span><span class="pri p">Phase</span></li>
+    <li><span class="box"></span><span class="t">Campaign Manager ad account</span><span class="pri p">Phase</span></li>
+    <li><span class="box"></span><span class="t">Insight Tag. Partner ID: <span class="line"></span></span><span class="pri p">Phase</span></li>
+  </ul>
+  </div>
+
+  <div>
+  <h3>4.2 Google <small>before Phase 3</small></h3>
+  <ul class="ck">
+    <li><span class="box"></span><span class="t">Tag Manager: account "deepzeta", Web container <span class="d">Don't add tags or publish yet.</span>ID: <span class="line"></span></span><span class="pri p">Phase</span></li>
+    <li><span class="box"></span><span class="t">GA4 property
+      <ul class="sub">
+        <li><span class="box sm"></span><span>Time zone Dubai, currency AED</span></li>
+        <li><span class="box sm"></span><span>Web data stream on the final domain</span></li>
+        <li><span class="box sm"></span><span>Data retention: 14 months</span></li>
+        <li><span class="box sm"></span><span>ID G-: <span class="line"></span></span></li>
+        <li><span class="box sm"></span><span>Don't paste the gtag snippet anywhere (it goes through GTM)</span></li>
+      </ul></span><span class="pri p">Phase</span></li>
+    <li><span class="box"></span><span class="t">Google Ads account (even with no ads yet), linked to GA4. Customer ID: <span class="line"></span></span><span class="pri p">Phase</span></li>
+    <li><span class="box"></span><span class="t">Search Console: Domain property, verified by DNS TXT, linked to GA4</span><span class="pri l">Launch</span></li>
+    <li><span class="box"></span><span class="t">Bing Webmaster Tools: import from Search Console</span><span class="pri l">Launch</span></li>
+    <li><span class="box"></span><span class="t">Google Business Profile (after D1 + D2): exact name, address, phone (or service area), then verify</span><span class="pri l">Launch</span></li>
+  </ul>
+
+  <h3>4.5 Booking: Cal.com <small>before Phase 7</small></h3>
+  <ul class="ck">
+    <li><span class="box"></span><span class="t">Account created, Workspace Google Calendar connected</span><span class="pri p">Phase</span></li>
+    <li><span class="box"></span><span class="t">Event type "Free AI Automation Audit"
+      <ul class="sub">
+        <li><span class="box sm"></span><span>Duration, buffer, minimum notice</span></li>
+        <li><span class="box sm"></span><span>Dubai-time availability, Google Meet</span></li>
+        <li><span class="box sm"></span><span>Questions: name, email, company, WhatsApp, industry, biggest time-waster</span></li>
+      </ul><span class="d">The webhook to n8n comes later.</span></span><span class="pri p">Phase</span></li>
+  </ul>
+
+  <h3>4.6 Automation and AI</h3>
+  <ul class="ck">
+    <li><span class="box"></span><span class="t">n8n Cloud account (check current pricing first)</span><span class="pri p">Phase</span></li>
+    <li><span class="box"></span><span class="t">Anthropic Console
+      <ul class="sub">
+        <li><span class="box sm"></span><span>Organisation and billing set up</span></li>
+        <li><span class="box sm"></span><span>Monthly spend limit set</span></li>
+        <li><span class="box sm"></span><span>API key created, kept only in the password manager</span></li>
+      </ul></span><span class="pri p">Phase</span></li>
+    <li><span class="box"></span><span class="t">Google Sheet CRM, later, from a guide <span class="d">Named accounts only, never "anyone with the link" (UAE PDPL)</span></span><span class="pri p">Phase</span></li>
+  </ul>
+
+  <h3>4.7 Spam protection</h3>
+  <ul class="ck">
+    <li><span class="box"></span><span class="t">Cloudflare account</span><span class="pri p">Phase</span></li>
+    <li><span class="box"></span><span class="t">Turnstile widget for the domain <span class="d">Site key public, secret key private</span></span><span class="pri p">Phase</span></li>
+    <li><span class="box"></span><span class="t">Upstash account (direct or via Vercel Marketplace)</span><span class="pri p">Phase</span></li>
+    <li><span class="box"></span><span class="t">Redis database in the region closest to the Vercel functions</span><span class="pri p">Phase</span></li>
+  </ul>
+  </div>
+  </div>
+</section>
+
+<!-- PART 5 -->
+<section class="part" data-part>
+  <div class="ph"><span class="n">PART 5</span><h2>Social media handles</h2><span class="count"></span></div>
+  <ul class="ck">
+    <li><span class="box"></span><span class="t"><b>Pick one handle</b> and check it's free on every platform <b>before</b> buying the domain. Handle: <span class="line w"></span></span><span class="pri p">Phase</span></li>
+  </ul>
+  <table style="margin-top:4px">
+    <thead><tr><th>Platform</th><th class="c">Claimed</th><th class="c">Will post</th><th>Profile URL</th></tr></thead>
+    <tbody>
+      <tr><td><b>Instagram</b></td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td><td></td></tr>
+      <tr><td><b>Facebook</b></td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td><td></td></tr>
+      <tr><td><b>LinkedIn</b> (company page)</td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td><td></td></tr>
+      <tr><td><b>X</b></td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td><td></td></tr>
+      <tr><td><b>YouTube</b></td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td><td></td></tr>
+      <tr><td><b>TikTok</b></td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td><td></td></tr>
+      <tr><td><b>Threads</b> <span class="d">comes with Instagram</span></td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td><td></td></tr>
+      <tr><td>GitHub organisation <span class="d">optional</span></td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td><td></td></tr>
+      <tr><td>Clutch / GoodFirms <span class="d">optional, helps AI-search mentions</span></td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td><td></td></tr>
+    </tbody>
+  </table>
+  <ul class="ck" style="margin-top:4px">
+    <li><span class="box"></span><span class="t">Every profile filled the same way: same bio (from the positioning line), website link, identical contact details <span class="d">Claude makes the avatar and cover images in Phase 1. The logo file stays untouched.</span></span><span class="pri p">Phase</span></li>
+    <li><span class="box"></span><span class="t">Sent Claude the final URLs and which profiles are active <span class="d">Only active profiles go in the footer and schema.</span></span><span class="pri p">Phase</span></li>
+  </ul>
+</section>
+
+<!-- PART 6 + 7 -->
+<div class="cols2">
+<section class="part" data-part>
+  <div class="ph"><span class="n">PART 6</span><h2>Legal and compliance</h2><span class="count"></span></div>
+  <ul class="ck">
+    <li><span class="box"></span><span class="t"><b>Privacy policy, terms, cookie wording</b> <span class="d">Claude drafts them from UAE PDPL rules. Give Claude:</span>
+      <ul class="sub">
+        <li><span class="box sm"></span><span>Data controller (legal entity from D2)</span></li>
+        <li><span class="box sm"></span><span>Where data is stored (n8n region, Google, Vercel)</span></li>
+        <li><span class="box sm"></span><span>How long leads are kept <span class="line" style="min-width:20mm"></span></span></li>
+        <li><span class="box sm"></span><span>Email for data requests</span></li>
+        <li><span class="box sm"></span><span>Reviewed by a UAE lawyer</span></li>
+      </ul></span><span class="pri l">Launch</span></li>
+    <li><span class="box"></span><span class="t">WhatsApp marketing consent wording approved</span><span class="pri l">Launch</span></li>
+    <li><span class="box"></span><span class="t">Free zone data law? <span class="opts"><span class="opt"><span class="box sm"></span>DIFC</span><span class="opt"><span class="box sm"></span>ADGM</span><span class="opt"><span class="box sm"></span>Neither</span></span></span><span class="pri l">Launch</span></li>
+    <li><span class="box"></span><span class="t">Trademark check on "deepzeta" <span class="d">Optional, but wise before spending on the brand</span></span><span class="pri l">Launch</span></li>
+    <li><span class="box"></span><span class="t">Signed permission for every case study, logo and testimonial</span><span class="pri l">Launch</span></li>
+  </ul>
+</section>
+
+<section class="part" data-part>
+  <div class="ph"><span class="n">PART 7</span><h2>Brand and media</h2><span class="count"></span></div>
+  <ul class="ck">
+    <li><span class="box done"></span><span class="t"><b>Logo</b> <span class="d">Done and locked</span></span><span></span></li>
+    <li><span class="box"></span><span class="t">Approve the favicon and app icon <span class="d">Made in Phase 1</span></span><span class="pri p">Phase</span></li>
+    <li><span class="box"></span><span class="t">Real photos (founder, team, workspace), <b>or</b> a decision to use none <span class="d">No stock photos of fake teams</span></span><span class="pri p">Phase</span></li>
+    <li><span class="box"></span><span class="t">Screenshots of real work for the case studies</span><span class="pri p">Phase</span></li>
+    <li><span class="box"></span><span class="t">Short founder intro video <span class="d">Optional</span></span><span class="pri p">Phase</span></li>
+    <li><span class="box done"></span><span class="t"><b>Fonts</b> <span class="d">Montserrat, Readex Pro, JetBrains Mono are free. No action needed.</span></span><span></span></li>
+  </ul>
+</section>
+</div>
+
+<!-- PART 8 -->
+<section class="part pagebreak" data-part>
+  <div class="ph"><span class="n">PART 8</span><h2>Main pages: confirm or cut</h2><span class="count"></span></div>
+  <p class="note">From the blueprint. Tick <b>Keep</b> or <b>Cut</b> for each row. About <b>42–47 English pages</b> at launch. Arabic (<span class="slug">/ar/</span>) and industry × city pages (e.g. "AI automation for dental clinics in Dubai") come after launch.</p>
+  <div class="cols2">
+  <div>
+  <table>
+    <thead><tr><th>Core page</th><th>Address</th><th class="c">Keep</th><th class="c">Cut</th></tr></thead>
+    <tbody>
+      <tr><td>Home</td><td class="slug">/</td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td></tr>
+      <tr><td>Book a free AI audit</td><td class="slug">/audit</td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td></tr>
+      <tr><td>Pricing</td><td class="slug">/pricing</td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td></tr>
+      <tr><td>About + team</td><td class="slug">/about</td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td></tr>
+      <tr><td>Contact</td><td class="slug">/contact</td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td></tr>
+      <tr><td>Privacy</td><td class="slug">/privacy</td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td></tr>
+      <tr><td>Terms</td><td class="slug">/terms</td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td></tr>
+      <tr><td>Thank-you (hidden from search) + 404</td><td>—</td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td></tr>
+    </tbody>
+  </table>
+
+  <table style="margin-top:8px">
+    <thead><tr><th>Solutions (buyer problem)</th><th class="c">Keep</th><th class="c">Cut</th></tr></thead>
+    <tbody>
+      <tr><td class="slug">lead-follow-up</td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td></tr>
+      <tr><td class="slug">appointment-booking</td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td></tr>
+      <tr><td class="slug">customer-support</td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td></tr>
+      <tr><td class="slug">invoice-processing</td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td></tr>
+      <tr><td class="slug">review-management</td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td></tr>
+    </tbody>
+  </table>
+
+  <table style="margin-top:8px">
+    <thead><tr><th>Industries, case studies</th><th class="c">Keep</th><th class="c">Cut</th></tr></thead>
+    <tbody>
+      <tr><td>6 industry pages <span class="d">(decision 7)</span></td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td></tr>
+      <tr><td><span class="slug">/work</span> hub</td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td></tr>
+      <tr><td>3 real case studies</td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td></tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div>
+  <table>
+    <thead><tr><th>Services</th><th class="c">Keep</th><th class="c">Cut</th></tr></thead>
+    <tbody>
+      <tr><td><span class="slug">/services</span> hub</td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td></tr>
+      <tr><td>4 pillar or stage pages <span class="d">(depends on C6)</span></td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td></tr>
+      <tr><td>AI automation hub</td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td></tr>
+      <tr><td class="slug">whatsapp-ai-agent</td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td></tr>
+      <tr><td class="slug">ai-voice-agent</td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td></tr>
+      <tr><td class="slug">ai-chatbots</td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td></tr>
+      <tr><td class="slug">crm-automation</td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td></tr>
+      <tr><td class="slug">web-development</td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td></tr>
+      <tr><td class="slug">web-applications</td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td></tr>
+      <tr><td class="slug">software-development</td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td></tr>
+      <tr><td class="slug">performance-marketing</td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td></tr>
+      <tr><td class="slug">seo-geo-aeo</td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td></tr>
+      <tr><td class="slug">local-ai-dominance</td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td></tr>
+      <tr><td class="slug">social-media</td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td></tr>
+    </tbody>
+  </table>
+  <p class="note" style="margin-top:4px">Service page addresses must be re-mapped to exact Services Catalogue names (decision 6).</p>
+
+  <table style="margin-top:8px">
+    <thead><tr><th>Resources</th><th class="c">Keep</th><th class="c">Cut</th></tr></thead>
+    <tbody>
+      <tr><td><span class="slug">/resources</span> hub</td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td></tr>
+      <tr><td>ROI calculator</td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td></tr>
+      <tr><td>What is an AI agent</td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td></tr>
+      <tr><td>n8n vs Make vs Zapier</td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td></tr>
+      <tr><td>AI agent vs RPA</td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td></tr>
+      <tr><td>Glossary</td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td></tr>
+      <tr><td>Blog</td><td class="c"><span class="box"></span></td><td class="c"><span class="box"></span></td></tr>
+    </tbody>
+  </table>
+  </div>
+  </div>
+</section>
+
+<!-- ORDER -->
+<section class="part" data-part>
+  <div class="ph"><span class="n">ROADMAP</span><h2>Suggested order</h2><span class="count"></span></div>
+  <ol class="road">
+    <li><span class="box"></span><span class="k"></span><span><b>Part 1</b>: Node.js, GitHub, Vercel, approvals. Claude can start Phase 0 as soon as this is done.</span></li>
+    <li><span class="box"></span><span class="k"></span><span><b>D1 domain + D2 entity + handle check + C6 + design direction.</b> These unlock most of the rest.</span></li>
+    <li><span class="box"></span><span class="k"></span><span>Domain → Workspace → GTM, GA4, Cloudflare, before Phase 3.</span></li>
+    <li><span class="box"></span><span class="k"></span><span>Company facts, contact details, people and photos, before the homepage and core pages.</span></li>
+    <li><span class="box"></span><span class="k"></span><span>Start Meta and WhatsApp verification early.</span></li>
+    <li><span class="box"></span><span class="k"></span><span>Prices, FAQ answers and case studies, before the service and case-study pages.</span></li>
+    <li><span class="box"></span><span class="k"></span><span>n8n, Anthropic, Cal.com and Upstash, before the live demos.</span></li>
+    <li><span class="box"></span><span class="k"></span><span>Legal review, Google Business Profile, Search Console and Bing, before launch.</span></li>
+  </ol>
+</section>
+
+</div>
+<script>
+// Show "N items" on each part header (main boxes only, not option or sub-boxes).
+document.querySelectorAll('[data-part]').forEach(function(p){
+  var n=p.querySelectorAll('ul.ck > li > .box, .card > .hd > .box, ol.road > li > .box, td.c:nth-of-type(1) > .box').length;
+  var c=p.querySelector('.count'); if(c) c.textContent=n+' items  ·  ____ done';
+});
+</script>
+</body>
+</html>
