@@ -21,12 +21,13 @@ Status: PROPOSED | ACCEPTED (owner, date) | SUPERSEDED by NNNN
 | [0003](0003-plan-first-workflow.md) | Plan first, then execute; Git + GitHub with protected `main` | ACCEPTED |
 | [0004](0004-tech-stack.md) | Tech stack: native-first frontend, n8n automation backbone, Google Sheets CRM v0 | PROPOSED |
 | [0005](0005-performance-tiers.md) | Performance tiers: Home ≥ 95 · money pages ≥ 90 · experience pages ≥ 70; Core Web Vitals everywhere | PROPOSED |
+| [0006](0006-domain-deepzeta-ai.md) | Domain: `deepzeta.ai` is canonical; `www` redirects to it | ACCEPTED |
 
 ## Open business decisions (from the blueprint)
 
 | ID | Decision | Status |
 |---|---|---|
-| D1 | Domain (new domain for deepzeta) | OPEN |
+| D1 | Domain (new domain for deepzeta) | Decided: [0006](0006-domain-deepzeta-ai.md) (`deepzeta.ai`) |
 | D2 | Company entity (own legal company or brand of an existing one) | OPEN |
 | D3 | Market: UAE first, then GCC | Confirmed in facts file |
 | D4 | Business model: hybrid projects + packages | PROPOSED |
