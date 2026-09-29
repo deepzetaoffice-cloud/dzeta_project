@@ -45,6 +45,8 @@
 
 1. **Reuse → extend → create.** Before building, search for an existing component and say so in the plan. Extend with a prop/variant if it's ~80% right. Create new only if nothing close exists.
 2. **Props-driven, zero hardcoded copy.** Content comes from `src/content/` as typed props.
+   - Business facts (brand and legal name, NAP, hours, social URLs, the Cal.com link) come from one typed site config, `src/lib/site-config.ts`, built from the facts file.
+   - A fact that isn't CONFIRMED yet is `null` there, and every component that uses it hides itself while it's `null`.
 3. **Naming:** PascalCase by role (`HeroSignal`, `PillarCards`, `RoiCalculator`), never `Section2` or `NewHero`. One component per file; export its `Props` type.
 4. **Folders:** `ui/` (atoms), `sections/` (page sections), `layout/` (header, footer, shell), `icons/`, `demos/`.
 5. **Accessibility:** semantic elements first (`header`, `nav`, `main`, `section`, `article`, `footer`, `button`, `a`); `aria-*` only when semantics can't express it; icon-only buttons have `aria-label`; never `role="menu"` for site navigation.
@@ -61,12 +63,17 @@
 - **Security:**
   - Secrets only in environment variables; `NEXT_PUBLIC_` only for values safe in the browser.
   - Validate env at startup.
-  - Security headers: CSP, HSTS, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `X-Frame-Options: DENY` or CSP `frame-ancestors`, `Permissions-Policy`.
+  - **Security headers** are set once, centrally (`next.config` `headers()`), and asserted by e2e:
+    - CSP, HSTS, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `X-Frame-Options: DENY` or CSP `frame-ancestors`, `Permissions-Policy`
+    - no deprecated `X-XSS-Protection`
+    - CSP ships as `Content-Security-Policy-Report-Only` in P0. The enforcement mode is decided in P3, after GTM is in, because nonce-based CSP forces dynamic rendering (verify on the installed Next.js).
+  - `images.dangerouslyAllowSVG` stays off.
+  - **Absolute URLs** are built only with `siteUrl()` / `absoluteUrl(path, locale)` from `src/lib/url.ts`, fed by the validated `NEXT_PUBLIC_SITE_URL`. There are no hostname literals in code ([08](08-seo-geo-aeo-schema.md) §1, C27).
   - `dangerouslySetInnerHTML` only for JSON-LD produced by our schema builders, with `<` escaped (see [08](08-seo-geo-aeo-schema.md)).
   - Rate-limit form endpoints with a store that works on serverless (not in-memory).
   - **Tools that fetch a visitor-supplied URL** guard against SSRF. They allow only public `http(s)` hosts, block private, link-local and metadata IP ranges after DNS resolution, and cap redirects, response size and time.
   - **AI-powered tools** cap tokens per request and per visitor, and treat visitor input and fetched page content as untrusted (prompt-injection handling).
-  - **Masked report data** (deepzeta Tools, `docs/design/tools.md`) is never serialised to the client. It never appears in HTML or in client-component props (the RSC payload), until the server sends the full report after the visitor asks for it.
+  - **Masked report data** (Deepzeta Sync tools, `docs/design/tools.md`) is never serialised to the client. It never appears in HTML or in client-component props (the RSC payload), until the server sends the full report after the visitor asks for it.
 
 ---
 

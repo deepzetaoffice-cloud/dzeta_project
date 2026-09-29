@@ -1,6 +1,6 @@
 # Header: "Proof Bar"
 
-Status: CONFIRMED (column grouping OPEN: C6) · Page tier: all pages · Decision 0008 · Effects: [13](../ai/13-experience-design.md)
+Status: CONFIRMED · Page tier: all pages · Decision 0008 · Effects: [13](../ai/13-experience-design.md)
 
 ## Idea
 
@@ -15,14 +15,14 @@ The header is a dashboard of proof. Besides navigation and the CTA, it carries t
   - speed chip
   - AI View toggle
   - CTA
-- **Nav** (proposed; the final list is set with C6):
+- **Nav** (C6 resolved: the four pillars):
 
   | Item | Shown |
   |---|---|
   | Services ▾ | Always |
   | Automation | Always |
   | Studio | Always |
-  | Tools | Always |
+  | Deepzeta Sync (the tools hub, `/tools`) | Only once the page ships |
   | Work | Only once a real case study exists |
   | Pricing | Only once prices are confirmed |
 
@@ -53,11 +53,11 @@ The header is a dashboard of proof. Besides navigation and the CTA, it carries t
 
 - **Surface:** a `glass-live` sheet that drops from the pill (Drop motion).
 - **Four columns**, one per pixel colour:
-  - The grouping (pillars or stages) is OPEN until C6.
+  - One column per pillar (C6): AI Automation · Websites · Software · Growth & Ranking, in the catalogue order.
   - Column heads use Tier 3 icons.
   - Items use Tier 2 icons plus a one-line outcome.
 - **The 6 Systems** (catalogue §5) in one row.
-- **A side rail:** a `glass-liquid` "Try a live demo" card, plus Tools, Studio, About, Contact and Resources.
+- **A side rail:** a `glass-liquid` "Try a live demo" card, plus Deepzeta Sync (once it ships), Studio, About, Contact and Resources.
 - **Behaviour:**
   - It opens on click; hover-intent opening is allowed on desktop.
   - It is a disclosure button with `aria-expanded`, and Esc closes it.
@@ -67,8 +67,8 @@ The header is a dashboard of proof. Besides navigation and the CTA, it carries t
 
 - **A compact bar:** logo · CTA · menu button. The menu icon morphs into close.
 - **A full-screen sheet**, containing:
-  - statement-size items with `type-word-stagger`
-  - stage-colour bars
+  - statement-size items with `type-word-stagger`: the nav items above, including Deepzeta Sync once it ships
+  - pillar-colour bars
   - the speed chip, AI View, and the Reduce effects switch
   - a thumb zone with the CTA and WhatsApp
 - **Focus** is trapped in the open sheet. Esc and the close button both close it.

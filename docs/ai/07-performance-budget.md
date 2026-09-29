@@ -83,7 +83,7 @@ The site is deepzeta's proof of work. **A page that fails a hard limit does not 
 | The Assembly (Home hero) | ~0 KB beyond the shared observer (CSS 3D) | Starts on first scroll; static cluster under Reduce effects |
 | `glass-live` / `glass-liquid` | GPU cost while content scrolls behind | Capped count per viewport; falls back to `glass-frost` |
 | Designer Studio: Device Stage and concept sites | Each concept's full weight | Loads only on open, inside a sandboxed iframe; concepts are T3 with Core Web Vitals hard limits |
-| deepzeta Tools | Server-side checks and AI calls; small client wizard | Server work only; rate limit + Turnstile; the report renders after results |
+| Deepzeta Sync (tools) | Server-side checks and AI calls; small client wizard | Server work only; rate limit + Turnstile; the report renders after results |
 | App demo | The app shell | Loads only on "Launch"; its budget is set in its plan |
 
 ---

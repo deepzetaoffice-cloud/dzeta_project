@@ -1,10 +1,8 @@
 # Automation: "Control Room"
 
-Status: CONFIRMED (URL OPEN: C6) · Page tier: T2 · Decision 0008 · Effects: [13](../ai/13-experience-design.md)
+Status: CONFIRMED · Page tier: T2 · Decision 0008 · Effects: [13](../ai/13-experience-design.md)
 
-This is one page, never two competing ones. Its URL depends on C6:
-- if the pillars stay, it is `/services/ai-automation`
-- if the stages are chosen, it is the `/automation` hub
+This is one page, never two competing ones: the AI Automation pillar page at `/services/ai-automation` (C6 resolved to the pillars). The header's "Automation" item links here.
 
 ## Idea
 

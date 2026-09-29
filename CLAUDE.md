@@ -32,7 +32,7 @@ This is deepzeta's own website and its first case study. Speed, custom code, SEO
 ## Current state
 
 - **Phase:** P-1 Pre-build (rule system and design direction). No application code exists yet. Node.js v24 is installed, but there is no `package.json` until Phase 0: run `node scripts/check-rules.mjs` directly; the npm gates start in P0.
-- **Open decisions** that block related work: company entity (D2), service structure pillars vs stages (C6), JS budget (C8). The domain is decided: `deepzeta.ai` (0006). See `docs/decisions/README.md`.
+- **Open decisions** that block related work: JS budget (C8). Decided on 2026-09-29: the company entity (D2, Deepzeta Digital Solutions L.L.C.), the service structure (C6, the four pillars) and the brand name "Deepzeta AI" (C29). The domain is `deepzeta.ai` (0006). See `docs/decisions/README.md`.
 - **Stack and performance tiers** accepted in decisions 0004 and 0005 (`docs/decisions/`). Motion is native-first; GSAP only on T2/T3 pages; automation runs on n8n.
 - **Design Direction v2 "Signal & Depth"** accepted in decision 0008: responsive-only motion; effects in `docs/ai/13-experience-design.md`; surface specs in `docs/design/`. Parked for owner sessions: the 15+ Studio concepts, the Tools sales automation, the App demo. Next: the Design Lab prototype (its own plan).
 

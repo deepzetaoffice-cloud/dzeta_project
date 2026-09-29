@@ -31,11 +31,11 @@ Status: PROPOSED | ACCEPTED (owner, date) | SUPERSEDED by NNNN
 | ID | Decision | Status |
 |---|---|---|
 | D1 | Domain (new domain for deepzeta) | Decided: [0006](0006-domain-deepzeta-ai.md) (`deepzeta.ai`) |
-| D2 | Company entity (own legal company or brand of an existing one) | OPEN |
+| D2 | Company entity (own legal company or brand of an existing one) | Decided: own company, Deepzeta Digital Solutions L.L.C., licensed by Dubai DET (owner, 2026-09-29; facts file §1) |
 | D3 | Market: UAE first, then GCC | Confirmed in facts file |
 | D4 | Business model: hybrid projects + packages | PROPOSED |
 | D5 | Main CTA: "Book a free AI automation audit" + floating WhatsApp | Confirmed in facts file |
 | D6 | Languages | Decided: [0002](0002-english-first-arabic-after-launch.md) |
-| — | Service structure: pillars vs buyer stages (conflict C6) | OPEN |
+| — | Service structure: pillars vs buyer stages (conflict C6) | Decided: the four pillars (owner, 2026-09-29; C6) |
 | — | Hosting region on Vercel | OPEN (P0) |
 | — | CRM | Google Sheets v0 via n8n; HubSpot/Zoho later: [0004](0004-tech-stack.md) (ACCEPTED) |

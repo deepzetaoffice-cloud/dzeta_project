@@ -120,7 +120,7 @@ tests/            unit/ · e2e/
 | **Gate** | A command that must pass before work counts as done |
 | **Allowed files** | The exact list of files a plan permits an agent to create or change |
 | **North Star** | Section 1 of this file |
-| **Stage** | One of the four buyer stages: Get Found / Win Customers / Run Operations / Get Paid & Keep (proposed, pending approval) |
+| **Pillar** | One of the four service pillars: AI Automation · Websites · Software · Growth & Ranking. They structure the menu, the services, and the pixel colour code (C6, resolved 2026-09-29; the buyer-stage proposal was dropped) |
 | **Zeta Pixel** | The logo-derived square used in icons (see Icon Master Rules) and, sitewide, as the marker of value, progress or the current place ([13](13-experience-design.md) §8) |
 | **Page tier** | T1 Home · T2 money pages · T3 experience pages: the Lighthouse floor and motion toolkit per page (decision 0005). Not the icon tiers |
 | **Effect ID** | A kebab-case name from the effects library in [13](13-experience-design.md) §4 (e.g. `glass-frost`, `story-flow`), cited in every plan that uses the effect |

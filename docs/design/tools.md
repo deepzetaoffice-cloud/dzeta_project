@@ -1,4 +1,4 @@
-# deepzeta Tools
+# Deepzeta Sync (the tools hub, `/tools`)
 
 Status: CONFIRMED (frame and the two tools); the sales automation behind them is LATER · Page tier: T2 · Decision 0008 · Effects: [13](../ai/13-experience-design.md)
 

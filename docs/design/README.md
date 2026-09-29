@@ -34,14 +34,14 @@ Decision: [0008](../decisions/0008-design-language-signal-and-depth.md). These f
 
 | Spec | Surface | Page tier | Status |
 |---|---|---|---|
-| [header.md](header.md) | Header "Proof Bar", mega menu, mobile sheet, AI View | All pages | CONFIRMED (column grouping: OPEN C6) |
+| [header.md](header.md) | Header "Proof Bar", mega menu, mobile sheet, AI View | All pages | CONFIRMED |
 | [footer.md](footer.md) | Footer "The Landing", Page Nutrition Label | All pages | CONFIRMED |
 | [conversion-path.md](conversion-path.md) | Book-audit flow, floating elements, sticky CTA | All pages | CONFIRMED |
-| [home.md](home.md) | Home, 12 sections | T1 | CONFIRMED (doors grouping: OPEN C6) |
+| [home.md](home.md) | Home, 12 sections | T1 | CONFIRMED |
 | [service-page.md](service-page.md) | Service page visual treatment | T2 | CONFIRMED |
-| [automation.md](automation.md) | Automation "Control Room" | T2 | CONFIRMED (URL: OPEN C6) |
+| [automation.md](automation.md) | Automation "Control Room" | T2 | CONFIRMED |
 | [studio.md](studio.md) | Designer Studio index + concept frame | T2 / T3 | CONFIRMED frame; concepts LATER |
-| [tools.md](tools.md) | deepzeta Tools + tool page anatomy | T2 | CONFIRMED frame and two tools; sales flow LATER |
+| [tools.md](tools.md) | Deepzeta Sync (tools hub, `/tools`) + tool page anatomy | T2 | CONFIRMED frame and two tools; sales flow LATER |
 | [app-demo.md](app-demo.md) | App demo | T3 | LATER (frame proposed) |
 
 ## How builders use a spec
@@ -56,3 +56,5 @@ Decision: [0008](../decisions/0008-design-language-signal-and-depth.md). These f
 |---|---|---|
 | 2026-09-29 | Design Direction v2 "Signal & Depth": all specs created | Owner (plan `docs/plans/2026-09-29-design-direction-v2.md`) |
 | 2026-09-29 | Lab v1 verdicts: header nav marker is the mini cluster; Studio hero word; terminal window; system map | Owner (decision 0009) |
+| 2026-09-29 | C6 resolved to the four pillars: mega-menu columns, Home doors, footer columns and pillar colours; Automation page URL `/services/ai-automation` | Owner (conflict C6) |
+| 2026-09-29 | The tools hub is named **Deepzeta Sync** (URL stays `/tools`); it joins the header nav, mega-menu rail, mobile sheet and footer Company links once the page ships | Owner (conflict C31) |

@@ -55,7 +55,7 @@ Google Ads ◄── scheduled offline-conversion import from the Sheet
 | `agent_message_sent` | Visitor sends a message to the AI agent demo | engagement | `turn` (number) |
 | `calculator_complete` | ROI calculator result shown | engagement | `industry` |
 | `speed_test_request` | 60-second speed-to-lead test submitted | lead | `source_page` |
-| `view_service` | Service/solution page viewed | content | `service_slug`, `stage` |
+| `view_service` | Service/solution page viewed | content | `service_slug`, `pillar` |
 | `pricing_view` | Pricing page viewed | content | — |
 | `case_study_view` | Case study scrolled to 75% | content | `case_slug` |
 | `faq_expand` | FAQ item opened | engagement | `faq_id` |

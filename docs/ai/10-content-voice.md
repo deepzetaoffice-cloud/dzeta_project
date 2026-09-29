@@ -15,8 +15,10 @@
 ## 2. Naming
 
 - Service names come from `Planning Folder/For Ai/DeepZeta Services Catalogue.md` and are used **exactly**.
-- Brand: **deepzeta** (lowercase in running text as in the logo), "deepzeta · AI Digital Solutions" in formal contexts.
+- Brand: **Deepzeta AI** in running text, titles and schema `name` (owner, 2026-09-29; C29). The logo's lowercase wordmark is artwork, not a spelling guide.
+- Legal and formal contexts (the footer's legal line, privacy policy, terms, invoices) use the legal name **Deepzeta Digital Solutions L.L.C.** The descriptor "AI Digital Solutions" stays the logo tagline.
 - Always write **AI** (never "Ai" or "ai").
+- Brand and legal names come from the site config (06 §3), never typed into copy by hand, so a change lands everywhere at once.
 
 ## 3. Claims
 
@@ -26,7 +28,7 @@
 4. Partner/certification badges (Google Partner, Meta Partner, n8n, etc.) only if the owner confirms the status is real and current.
 5. Legal/regulatory statements (UAE PDPL, e-invoicing dates, health-data rules) cite the official source and are re-checked before publishing.
 6. **Showcase content** (decision 0008, conflict C18):
-   - **Labels.** Concept sites carry "Concept by deepzeta · fictional business". Demo data carries "Demo · sample data". Conversations, flows and logs that aren't real carry "Example".
+   - **Labels.** Concept sites carry "Concept by Deepzeta AI · fictional business". Demo data carries "Demo · sample data". Conversations, flows and logs that aren't real carry "Example".
    - **Concepts.** Fictional business names are checked against real UAE businesses and trademarks. Concepts contain no named testimonials, reviews, ratings, client logos or statistics.
    - **Tools.** Visible results are real computations. No invented findings, no fake urgency. Money figures come only from the visitor's own inputs, with the formula shown.
    - **Terminal and log content** is real (our build, our Lighthouse CI, a tool's real steps) or labelled "Example".

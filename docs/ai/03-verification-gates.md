@@ -17,7 +17,8 @@ A gate is a **command with a pass condition**. Work is done only when the requir
 | `npm run format:check` | Prettier | no unformatted files |
 | `npm run check:tokens` | No raw hex/rgb colours or arbitrary px values outside `src/styles/tokens.css`; no physical direction classes/properties (`ml-`, `mr-`, `pl-`, `pr-`, `left-`, `right-`, `text-left`, `text-right`, `margin-left`…) | 0 hits |
 | `npm run check:facts` | Every number in `src/content/**` is in the facts allowlist; no `[[TODO` markers in content that ships | 0 unlisted numbers, 0 TODO markers |
-| `npm run check:schema` | JSON-LD on built pages parses; every `@id` reference resolves; `#organization` and `#website` emitted exactly once per page; no empty/placeholder values | all pages pass |
+| `npm run check:schema` | On built pages ([08](08-seo-geo-aeo-schema.md) §3): <br>• JSON-LD parses <br>• each `@id` is defined at most once per document <br>• every reference resolves in the document or to a registered node that its home page defines <br>• `#organization` and `#website` appear exactly once <br>• one primary entity per template, matching the matrix <br>• NAP equals the site config <br>• every URL is absolute on the canonical host with no trailing slash <br>• breadcrumb positions are contiguous and each item is a built route <br>• visible-parity fields appear in the page text <br>• no empty or placeholder values | all pages pass |
+| `npm run check:seo` | On built HTML ([08](08-seo-geo-aeo-schema.md) §1, §6): <br>• one `<title>` with the brand suffix once, 50–60 characters in total <br>• description 140–160 characters <br>• one H1 <br>• absolute self-canonical with no trailing slash <br>• `og:image` returns 200 <br>• no `keywords` meta <br>• sitemap URLs equal the indexable built routes <br>• `noindex` routes are absent from the sitemap and the `llms` files | 0 failures |
 | `npm run check:links` | Every internal link resolves to a built route; nav/footer hrefs equal canonicals | 0 broken links |
 | `npm run check:rules` | Rule system integrity: every file referenced by `CLAUDE.md`, `AGENTS.md` and `.claude/**/*.md` exists; every `docs/ai` file has its header. It can't see paths that contain spaces (`Planning Folder/…`), so check those by hand | pass |
 | `npm run check:effects` *(planned, P0)* | Every effect ID in a plan's effect register exists in [13](13-experience-design.md) §4 | 0 unknown IDs |
@@ -36,9 +37,9 @@ A gate is a **command with a pass condition**. Work is done only when the requir
 |---|---|
 | Any code change (after every implementation step) | `verify:fast` |
 | Component or section | `verify:fast` + `test` (if logic) + `build` |
-| New or changed page/route | `verify:fast` + `build` + `check:schema` + `check:links` + `test:e2e` (that page) + `lhci` (that page) |
-| Content change | `check:facts` + `check:links` + `build` |
-| Schema / SEO / `llms.txt` change | `test` + `build` + `check:schema` + SEO/GEO Auditor review |
+| New or changed page/route | `verify:fast` + `build` + `check:schema` + `check:seo` + `check:links` + `test:e2e` (that page) + `lhci` (that page) |
+| Content change | `check:facts` + `check:links` + `build` + `check:seo` |
+| Schema / SEO / `llms.txt` change | `test` + `build` + `check:schema` + `check:seo` + SEO/GEO Auditor review; for a new template, Google's Rich Results Test and the Schema Markup Validator (the owner runs them on the deployed preview) |
 | Analytics / consent change | `test` + `build` + `test:e2e` (tracking) + manual GTM Preview checklist for the owner |
 | Dependency added | `verify` + bundle check in `lhci` + one-line justification in the plan |
 | Phase exit | `verify` (all gates) + owner review |

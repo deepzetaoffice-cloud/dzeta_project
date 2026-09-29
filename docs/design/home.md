@@ -1,6 +1,6 @@
 # Home
 
-Status: CONFIRMED (doors grouping OPEN: C6) · Decision 0008 · Effects: [13](../ai/13-experience-design.md)
+Status: CONFIRMED · Decision 0008 · Effects: [13](../ai/13-experience-design.md)
 
 **Page tier: T1** (≥ 95). At first load only native CSS plus ≤ 10 KB of first-party effect JS (decision 0008).
 
@@ -17,7 +17,7 @@ Hook (H1 + direct answer) → Pain (§03) → System (§04) → Show (§05) → 
 | 01 | Hero | Primary CTA: `hover-charge` + `pointer-magnet`. "Try our AI agent": `hover-outline`. Background: `pointer-grid-wake`. **Signature:** `story-chat` in a `glass-liquid` proof card, then **The Assembly** (13 §5) on first scroll | See "Hero details" below. |
 | 02 | Proof strip | `scroll-drift` | Tool names as plain text. Client logos and partner badges appear only once confirmed (facts §5). |
 | 03 | Problem → outcome | `story-before-after` rows; the pixel travels each connector | Outcomes use allowlisted design targets until measured results exist (facts §6). |
-| 04 | Four doors | `glass-frost` cards, Tier 3 icon stories, `hover-card`, `pointer-tilt` | Grouping follows C6 (pillars or stages). |
+| 04 | Four doors | `glass-frost` cards, Tier 3 icon stories, `hover-card`, `pointer-tilt` | The four pillars (C6), each linking to its pillar page; AI Automation and Websites lead. |
 | 05 | Workflow explorer (demo 3) | Accessible tabs that switch a `story-flow` (CSS/SVG only) | Tabs use roving tabindex, arrow keys and `aria-controls` (v1 lesson). |
 | 06 | Proof | Until real case-study figures exist: **"Watch this page build itself"** (13 §5), a `scroll-pinned-scene` with a `depth-css` laptop | The final stamp shows this visit's real LCP. Real figures replace the scene once they exist. |
 | 07 | How we work | Tier 2 step icons (Audit, Build, Launch, Improve), a journey-line segment, `scroll-reveal` | Timeframes appear only once confirmed. |

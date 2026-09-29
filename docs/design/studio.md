@@ -32,7 +32,7 @@ The heavy experiences load only when the visitor opens one ("wow on demand"), so
 
 - **Own design:** scoped design tokens and fonts, with their own budget within T3. deepzeta tokens don't apply inside.
 - **Search:** `noindex, follow`; not in the sitemap or the `llms` files; no business schema (08).
-- **Chrome:** a small "Concept by deepzeta · fictional business" bar with a back link. The deepzeta header instruments don't appear.
+- **Chrome:** a small "Concept by Deepzeta AI · fictional business" bar with a back link. The deepzeta header instruments don't appear.
 - **Honesty:** fictional names are checked against real UAE businesses and trademarks. No fake reviews or stats (10 §3).
 - **Speed:** Core Web Vitals hard limits still apply.
 

@@ -22,20 +22,24 @@
 
 ## 2. Arabic architecture (P11, after launch; decided by decision record then)
 
-- **Additive, not a migration.** English URLs stay unchanged (no `/en/` prefix, no redirects of existing URLs). Arabic lives under `/ar/`.
-- A separate root layout for Arabic with `lang="ar"` `dir="rtl"` and Readex Pro, sharing all logic from `src/lib`.
-- No automatic language redirects (no Accept-Language or cookie redirects); a visible switch links each page to its counterpart.
-- hreflang pairs (`en`, `ar`, `x-default` → English), generated from the same builder, reciprocity checked.
-- Schema generated per locale; Arabic pages never carry English schema text; `@id`s are locale-aware.
+- **Additive, not a migration.** English URLs stay unchanged (no `/en/` prefix, no redirects of existing URLs). Arabic lives under `/ar`.
+- **Prepared in P0:** English routes live in a route group with their own root layout (`src/app/(en)/…`; public URLs unchanged). P11 then adds `src/app/(ar)/ar/…`, so English files never move. Verify multiple-root-layout and not-found behaviour against the installed Next.js docs in P0.
+- **`/ar` is the Arabic home**, with no trailing slash and no middleware redirect, like every other URL (08 §2.10, C28).
+- A separate root layout for Arabic with `lang="ar"` `dir="rtl"` and Readex Pro, sharing all logic from `src/lib`. Both root layouts render the sitewide head (schema, analytics init, consent) from **one shared builder that takes `locale`**.
+- No automatic language redirects (no Accept-Language or cookie redirects, no language banners); a visible switch links each page to its counterpart.
+- hreflang with language-only codes (`en`, `ar`, `x-default` → English), generated from the same builder, reciprocity checked (08 §1).
+- Schema is generated per locale. Arabic pages never carry English schema text. Page `@id`s carry the locale through the page URL; `#organization` and `#website` stay single entities shared by both locales (08 §3 rule 6).
 - Arabic body links point to Arabic pages.
 - **English regression gate:** Arabic work must not change English titles, canonicals, content or Lighthouse scores (> 2-point drop blocks).
+- **Lighthouse per locale:** Arabic pages meet the same page-tier floors as their English partners (decision 0005).
 - **Parity gate:** every English content entry has an Arabic partner by stable id (or is explicitly marked English-only).
+- **Slugs under `/ar`** (Arabic script or English) are decided in P11 from Arabic keyword research.
 
 ---
 
 ## 3. Arabic content standard (native GCC quality)
 
-1. **Transcreation, not translation.** The Arabic Writer works from the English **brief** (goal, audience, key facts, call to action), not from the English sentences. The result must read as if written first in Arabic.
+1. **Transcreation, not translation.** The Arabic Writer works from the English **brief** (goal, audience, key facts, call to action), not from the English sentences. The result must read as if written first in Arabic. Machine translation is never the source of Arabic copy.
 2. **Register:** modern standard Arabic suited to Gulf business audiences: professional, warm, direct. Gulf colloquial only where the owner approves (e.g. WhatsApp-style demo messages).
 3. **Terminology:** keep a shared glossary (`src/content/ar/glossary.md`, created in P11) for service names and technical terms, including when to keep an English term (e.g. brand/product names like WhatsApp, n8n) and when to use the Arabic term.
 4. **Numbers, dates, currency:** one consistent digit style (decided in P11), AED/درهم usage consistent, dates in formats familiar in the UAE.

@@ -4,7 +4,7 @@ Status: CONFIRMED · Page tier: all pages · Decision 0008 · Effects: [13](../a
 
 ## The one goal
 
-Every surface leads to **Book a free AI audit** (facts §3). Every showcase ends with an audit offer: Studio, Tools, the Automation builder, the App demo.
+Every surface leads to **Book a free AI audit** (facts §3). Every showcase ends with an audit offer: Studio, Deepzeta Sync (the tools hub), the Automation builder, the App demo.
 
 ## Book-audit flow
 
@@ -41,7 +41,7 @@ Stacking uses the `--dz-layer-*` token scale (05 §4). It is separate from the v
 | Surface | Exit |
 |---|---|
 | Designer Studio | "Want a site built like this? Book a free AI audit" |
-| Tools | After "Get the full report": an audit offer, with the tool's findings as context |
+| Deepzeta Sync tools | After "Get the full report": an audit offer, with the tool's findings as context |
 | Automation builder | "Send this to our team": an audit request prefilled with the chosen trigger and actions |
 | App demo | The end of the tour: the audit CTA |
 

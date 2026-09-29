@@ -27,8 +27,8 @@ Every page ends with a landing. The journey line that followed the visitor down 
 ## Body
 
 - **Links:**
-  - link columns in the four pixel colours (the grouping follows C6)
-  - Company, Resources, Legal
+  - link columns in the four pixel colours, one per pillar (C6)
+  - Company, Resources, Legal. Company includes Deepzeta Sync (`/tools`) once the page ships.
 - **Social links:** official monochrome marks from facts §2.1 (never redrawn), linked per the rules in the facts file.
 - **Controls:** a language switch placeholder (hidden until Arabic) and the Reduce effects switch.
 - **Business name, address and phone:** shown only once CONFIRMED in `docs/facts/company-facts.md`. Until then the block is omitted, never filled with placeholders.

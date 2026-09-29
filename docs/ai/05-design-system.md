@@ -54,14 +54,14 @@
 | `--dz-grad-line-violet` | `linear-gradient(90deg,#4A22EA 0%,#662DE8 50%,#A040F2 100%)` | Dividers and underlines (pairs with the cyan line) |
 | `--dz-glow-hero` | `radial-gradient(ellipse 48% 55% at 50% 40%, rgba(24,70,210,.55) 0%, rgba(12,34,120,.26) 45%, rgba(1,4,19,0) 78%)` | Static signal glow on the Z0 plane (hero, chapter openers) |
 | `--dz-grid` | 1px lines `rgba(26,132,253,.07)` every 80px | The Z0 blueprint grid |
-| `--dz-pixel-ai` | `#03D4FC → #04C1FD → #09A5FC` | Stage/pillar colour (see icon rules) |
-| `--dz-pixel-web` | `#21BEFC → #3092FD → #4264FD` | Stage/pillar colour |
-| `--dz-pixel-software` | `#3166FB → #2A4DFC → #3741FD` | Stage/pillar colour |
-| `--dz-pixel-ranking` | `#6430FA → #592BFD → #4C27FB` | Stage/pillar colour |
+| `--dz-pixel-ai` | `#03D4FC → #04C1FD → #09A5FC` | Pillar colour (see icon rules) |
+| `--dz-pixel-web` | `#21BEFC → #3092FD → #4264FD` | Pillar colour |
+| `--dz-pixel-software` | `#3166FB → #2A4DFC → #3741FD` | Pillar colour |
+| `--dz-pixel-ranking` | `#6430FA → #592BFD → #4C27FB` | Pillar colour |
 
 **Rules**
 - **One primary CTA style per view:** `--dz-grad-action` is reserved for the main action ("Book a free AI audit"). A second action uses an outline style.
-- Pixel colours are the colour code for the four stages/pillars across menus, icons and page headers. One stage colour per component.
+- Pixel colours are the colour code for the four pillars (C6) across menus, icons and page headers. One pillar colour per component.
 - Text contrast: WCAG AA (4.5:1 body, 3:1 large text and UI graphics). Check light mode separately.
 - The logo's ribbon and wordmark gradients live only in the logo component; never re-create the logo from tokens. The four pixel gradients are tokens (`--dz-pixel-*`) used by icons, The Assembly and The Landing (decision 0008).
 

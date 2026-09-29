@@ -134,7 +134,7 @@ Hover effects run 150–250 ms and use the easing tokens. `:focus-visible` trigg
 | `hover-card` | Service card | `pointer-spotlight` + the Tier 2 icon story + a 4 px lift |
 | `hover-window` | Showcase card | The image scales inside a fixed frame + `pointer-tilt` + the caption rises |
 | `hover-pixel-hop` | Nav item | The current-place marker is a miniature of the logo's four-pixel cluster (upright, exact gradients). It travels to the hovered item, and its small pixels settle a beat later |
-| `hover-guide-line` | List or table row | A stage-colour line grows at inline-start |
+| `hover-guide-line` | List or table row | A pillar-colour line grows at inline-start |
 | `hover-glow` | Icon-only button | The icon plays its own micro-story and its pixel glows 0 → 0.6 (Icon Master Rules §4.4 and §7; drawn to the approved icon prototype) |
 | `hover-peek` | Editorial image | Shifts ≤ 8 px toward the pointer |
 
@@ -237,7 +237,7 @@ Hover effects run 150–250 ms and use the easing tokens. `:focus-visible` trigg
 | **AI View** | Header | X-ray mode (`docs/design/header.md`) |
 | **Page Nutrition Label** | Footer | `story-data` from this visit's real measurements (`docs/design/footer.md`) |
 | **Device Stage** | Studio | A `glass-liquid` device frame around a sandboxed iframe |
-| **Control Room board** | Automation, Tools | `story-flow` / `story-terminal` in direction-B styling |
+| **Control Room board** | Automation, Deepzeta Sync | `story-flow` / `story-terminal` in direction-B styling |
 
 **How The Assembly works**
 - The four cluster pixels fly in on 35° paths on the first scroll and lock beside the headline.
@@ -296,7 +296,7 @@ The files in `Planning Folder/Components references/` are **visual references on
 | Reference | Native rebuild |
 |---|---|
 | Compare | `story-before-after`: "Code ↔ Page" on the Websites page; Home §03; Automation |
-| Mac-style terminal | `story-terminal`: Websites page, Automation, the Tools live log |
+| Mac-style terminal | `story-terminal`: Websites page, Automation, the Deepzeta Sync live log |
 | Apple card carousel | The Studio gallery + Device Stage |
 | Macbook Scroll | The `depth-css` laptop in "Watch this page build itself" |
 | Text Hover Effect | `type-outline-spotlight` (Studio hero) |
