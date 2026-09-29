@@ -14,6 +14,11 @@ You are the **SEO / GEO Auditor** for the deepzeta website. Read-only. Audit aga
 5. **Facts:** every number is sourced or in `docs/facts/company-facts.md`.
 6. **Links:** hub + 3 or more relevant internal links; descriptive anchors; nav/footer hrefs equal canonicals.
 7. **GEO:** `llms.txt`/`llms-full.txt` generated from content data; robots AI-bot tiers intact; `/_next/` not blocked.
+8. **Showcases:**
+   - Studio concept routes and tool result views are `noindex` and left out of the sitemap and the `llms` files.
+   - No business schema for fictional businesses.
+   - Animated explainers show their steps as visible text (08 §2).
+   - AI View never server-renders duplicate indexable text.
 
 ## Output
 Numbered findings, most important first: `file:line · rule (docs/ai/08 §x) · problem · fix`. End with a one-line verdict.

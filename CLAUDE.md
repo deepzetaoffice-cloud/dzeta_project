@@ -17,6 +17,8 @@ This is deepzeta's own website and its first case study. Speed, custom code, SEO
 | Any code change (which gates, what evidence) | `docs/ai/03-verification-gates.md` |
 | Planning, phases, the plan template | `docs/ai/04-build-sequence.md` |
 | Styling, tokens, components, icons, motion | `docs/ai/05-design-system.md` + `Planning Folder/For Ai/DeepZeta Icon Master Rules.md` |
+| Any effect, animation, hover, scroll, 3D, glass or animated explainer | `docs/ai/13-experience-design.md` (effects only by ID) |
+| Building a page, the header, the footer or a demo surface | Its spec in `docs/design/` (index: `docs/design/README.md`) |
 | TypeScript, Next.js, dependencies, security | `docs/ai/06-code-standards.md` |
 | Images, fonts, scripts, animation, anything that affects speed | `docs/ai/07-performance-budget.md` |
 | Metadata, headings, schema, robots, sitemap, `llms.txt` | `docs/ai/08-seo-geo-aeo-schema.md` |
@@ -29,13 +31,14 @@ This is deepzeta's own website and its first case study. Speed, custom code, SEO
 
 ## Current state
 
-- **Phase:** P-1 Pre-build (rule system). No application code exists yet. Node.js is **not installed** on this machine; npm gates can't run until Phase 0.
-- **Open decisions** that block related work: domain (D1), company entity (D2), service structure pillars vs stages (C6), JS budget (C8). See `docs/decisions/README.md`.
+- **Phase:** P-1 Pre-build (rule system and design direction). No application code exists yet. Node.js v24 is installed, but there is no `package.json` until Phase 0: run `node scripts/check-rules.mjs` directly; the npm gates start in P0.
+- **Open decisions** that block related work: company entity (D2), service structure pillars vs stages (C6), JS budget (C8). The domain is decided: `deepzeta.ai` (0006). See `docs/decisions/README.md`.
 - **Stack and performance tiers** accepted in decisions 0004 and 0005 (`docs/decisions/`). Motion is native-first; GSAP only on T2/T3 pages; automation runs on n8n.
+- **Design Direction v2 "Signal & Depth"** accepted in decision 0008: responsive-only motion; effects in `docs/ai/13-experience-design.md`; surface specs in `docs/design/`. Parked for owner sessions: the 15+ Studio concepts, the Tools sales automation, the App demo. Next: the Design Lab prototype (its own plan).
 
 ## Working agreement
 
 1. Non-trivial work: write a plan (`/plan-task`), wait for the owner's approval, then implement.
 2. Only touch the plan's allowed files. Read before editing. Verify APIs against installed versions.
 3. Finish with the report format in `docs/ai/02` §5, including real gate output (`/verify`).
-4. Never edit the rule system, the logo, `.env*` or lockfiles. Propose changes instead.
+4. Never edit the logo, `.env*` or lockfiles. Edit the rule system and the design specs only when the owner explicitly asks in the current request (`docs/ai/00-project-master-rules.md` §5); otherwise propose the change.
