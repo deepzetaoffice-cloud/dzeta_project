@@ -55,3 +55,4 @@ Decision: [0008](../decisions/0008-design-language-signal-and-depth.md). These f
 | Date | Change | Approved by |
 |---|---|---|
 | 2026-09-29 | Design Direction v2 "Signal & Depth": all specs created | Owner (plan `docs/plans/2026-09-29-design-direction-v2.md`) |
+| 2026-09-29 | Lab v1 verdicts: header nav marker is the mini cluster; Studio hero word; terminal window; system map | Owner (decision 0009) |

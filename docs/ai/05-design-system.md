@@ -91,7 +91,7 @@ The header, the CTA band and the footer stay navy in both themes, because the lo
 
 - Self-hosted via `next/font`, **variable files, subset**, `display: swap`. Never a Google Fonts `<link>`.
 - Fluid type scale with `clamp()`, defined once as tokens (`--dz-text-display`, `--dz-text-h1`…`--dz-text-caption`). Final values set in Phase 0.
-- **Statement type:** `--dz-text-statement`, a size above `--dz-text-display` for the one statement headline per page ([13](13-experience-design.md) §2). Montserrat 800–900, tight leading and tracking. Arabic statements use Readex Pro with no letter-spacing ([11](11-i18n-rtl-readiness.md) §1). Value set in P0 / the Design Lab.
+- **Statement type:** `--dz-text-statement`, a size above `--dz-text-display` for the one statement headline per page ([13](13-experience-design.md) §2). Montserrat 800–900, tight leading and tracking. Arabic statements use Readex Pro with no letter-spacing ([11](11-i18n-rtl-readiness.md) §1). Maximum size 9rem (Lab-confirmed, 0009); the fluid minimum is set in P0.
 - Long headings use `text-wrap: balance`; body measure 60–70 characters.
 
 ---
@@ -103,6 +103,7 @@ The header, the CTA band and the footer stay navy in both themes, because the lo
 - Elevation is expressed with surface steps (navy-900 → 850 → 800) and borders, not heavy shadows. Glow effects use radial gradients, not `box-shadow` animation.
 - **Breathing room:** `--dz-space-section` < `--dz-space-chapter` < `--dz-space-statement`, for the loud/quiet rhythm ([13](13-experience-design.md) §2). Values set in P0 / the Design Lab.
 - **Glass tokens** (used by the glass ladder, 13 §4.1): `--dz-glass-tint`, `--dz-glass-tint-min` (the minimum tint behind text that keeps AA contrast whatever passes behind it), `--dz-glass-edge` (hairline), `--dz-glass-highlight` (top-edge light), `--dz-glass-blur` (`glass-live` only), `--dz-grain` (the shared `glass-frost` texture, ≤ 2 KB).
+  - Lab-confirmed values (0009): `--dz-glass-blur` 17px and `--dz-glass-tint-min` 0.62. P0 re-checks contrast in both themes and GPU cost on a budget Android phone.
 - **Stacking:** a `--dz-layer-*` z-index scale (base, raised, sticky, header, overlay, sheet, toast, consent). It is separate from the visual depth planes Z0–Z3.
 
 ---
@@ -118,8 +119,8 @@ The header, the CTA band and the footer stay navy in both themes, because the lo
 | `--dz-dur-base` | 250ms | Small transitions |
 | `--dz-dur-story` | ≤ 900ms (Tier 2), ≤ 1.6s (Tier 3) | Icon/illustration stories |
 | `--dz-dur-flow-step` | set in P0 / the Design Lab | One step of a story graphic (13 §4.8) |
-| `--dz-tilt-max` | ≤ 5deg | `pointer-tilt` |
-| `--dz-magnet-max` | ≤ 6px | `pointer-magnet` |
+| `--dz-tilt-max` | 5deg (Lab-confirmed, 0009) | `pointer-tilt` |
+| `--dz-magnet-max` | 7px (Lab-confirmed, 0009) | `pointer-magnet` |
 
 **Rules (from the performance constraint, enforced)**
 1. Animate **`transform` and `opacity` only** (plus colour transitions).
@@ -136,7 +137,7 @@ The header, the CTA band and the footer stay navy in both themes, because the lo
 
 ## 6. Icons
 
-Follow `Planning Folder/For Ai/DeepZeta Icon Master Rules.md` exactly: three tiers, the Zeta Pixel, the logo's four-pixel cluster for Tier 3, frost lines, CSS-only motion, RTL flip flags. Don't use a generic icon library for brand/service icons. A small set of plain UI icons (Tier 1) may be drawn in-house to the same rules. Outside icons, the four-pixel cluster appears only in The Assembly and The Landing (13 §8); each surface spec in `docs/design/` lists its icons.
+Follow `Planning Folder/For Ai/DeepZeta Icon Master Rules.md` exactly: three tiers, the Zeta Pixel, the logo's four-pixel cluster for Tier 3, frost lines, CSS-only motion, RTL flip flags. Don't use a generic icon library for brand/service icons. A small set of plain UI icons (Tier 1) may be drawn in-house to the same rules. Outside icons, the four-pixel cluster appears only in The Assembly, The Landing and the miniature nav marker (13 §8). Icons are drawn to the approved prototype (`Planning Folder/DeepZeta Signature Icon Prototype.html`, decision 0009). Each surface spec in `docs/design/` lists its icons.
 
 ---
 

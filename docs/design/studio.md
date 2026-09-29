@@ -12,7 +12,12 @@ The heavy experiences load only when the visitor opens one ("wow on demand"), so
 
 ## Index (`/studio`)
 
-1. **Hero:** a giant `type-outline-spotlight` word. On touch devices it shows a static gradient fill.
+1. **Hero:** a giant `type-outline-spotlight` word (decision 0009).
+   - The word is filled with the zeta gradient.
+   - A frosted-glass lens follows the pointer.
+   - The letter edges ripple a few pixels toward the direction the pointer moves (a "water touch"), then settle.
+   - The word underneath drifts its gradient slightly.
+   - On touch devices and with Reduce effects on, it's a static gradient word.
 2. **Gallery:** an expanding card carousel of "worlds".
    - `depth-layered` posters, `hover-window`, `pointer-tilt`.
    - Filters by industry and by style: App-style UI · 3D · Editorial · Luxury · Playful · Data-rich · Minimal.

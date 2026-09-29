@@ -72,6 +72,7 @@ The language combines the blueprint's direction A "Signal Grid" (brand surfaces)
 ## 3. Hard rules for every effect
 
 1. **Animate `transform` and `opacity` only**, plus colour transitions for state changes.
+   - One named exception: the `type-outline-spotlight` ripple, which animates an SVG displacement filter (decision 0009, conflict C26).
 2. **The LCP element** (usually the H1) is visible, unclipped and in its final position at first paint. It has no entrance animation and never starts at `opacity: 0`.
 3. **Hidden start states** are declared only inside `@media (prefers-reduced-motion: no-preference)`, and inside `@supports` for scroll-driven effects. Content can never get stuck invisible.
 4. **Fallbacks:**
@@ -94,7 +95,7 @@ The language combines the blueprint's direction A "Signal Grid" (brand surfaces)
 | `glass-tint` | Translucent navy fill + hairline border | Everywhere | — |
 | `glass-frost` | **Baked frost.** The frosted look comes from a shared grain/pre-blurred texture plus an inner highlight edge; no runtime blur | The default "glass", everywhere | `glass-tint` |
 | `glass-live` | `backdrop-filter` blur + saturation | Header, mega menu, modals and sheets, and ≤ 2 feature panels per viewport; never over long scrolling lists | `glass-frost` |
-| `glass-liquid` | `glass-live` + a specular rim on the top edge + a reflection sheen that follows the pointer or sweeps once on hover + edge refraction via SVG displacement where supported (**verify**: Chromium-only, and `@supports` can't detect it reliably) | One per view: hero proof card, mega-menu demo card, Tools "full report" panel, Studio device frame. Desktop fine-pointer only | `glass-live`, then `glass-frost` |
+| `glass-liquid` | `glass-live` + a specular rim on the top edge + a reflection sheen that follows the pointer or sweeps once on hover + edge refraction via SVG displacement where supported (**verify**: Chromium-only, and `@supports` can't detect it reliably). Refraction is a Lab-confirmed Chromium-only extra (0009) | One per view: hero proof card, mega-menu demo card, Tools "full report" panel, Studio device frame. Desktop fine-pointer only | `glass-live`, then `glass-frost` |
 
 Text on any glass sits on at least the minimum tint (`--dz-glass-tint-min`, 05 §4). That tint keeps WCAG AA contrast whatever passes behind it.
 
@@ -117,7 +118,7 @@ Text on any glass sits on at least the minimum tint (`--dz-glass-tint-min`, 05 �
 | `pointer-spotlight` | A soft light layer follows the pointer inside a card | Service cards, Home doors, tool panels |
 | `pointer-magnet` | Drifts ≤ `--dz-magnet-max` toward the pointer, snaps back with `--dz-ease-pop` | Primary CTA and a few key controls |
 | `pointer-tilt` | 3D tilt ≤ `--dz-tilt-max`, with an opposing glare layer | Showcase and feature cards |
-| `pointer-grid-wake` | The blueprint grid brightens near the pointer (a masked layer moved by counter-transform) | Hero, chapter openers |
+| `pointer-grid-wake` | The blueprint grid brightens near the pointer, and the brightened lines carry the signal gradient (a gradient layer masked to the grid lines, moved by counter-transform) | Hero, chapter openers |
 
 On touch devices none of these run; the static state is complete on its own.
 
@@ -128,13 +129,13 @@ Hover effects run 150–250 ms and use the easing tokens. `:focus-visible` trigg
 | ID | Element | Behaviour |
 |---|---|---|
 | `hover-underline` | Text link | The underline draws from inline-start (`scaleX`; the origin mirrors in RTL) |
-| `hover-charge` | Primary CTA | A sheen crosses once, the arrow nudges, the pixel pops |
-| `hover-outline` | Secondary button | A gradient outline fades in; the label shifts 2 px |
+| `hover-charge` | Primary CTA | A light bead follows the pointer across the inside of the button, an inner rim light fades in, a sheen crosses once, the arrow nudges and the pixel pops. On touch: the sheen on tap |
+| `hover-outline` | Secondary button | A gradient outline fades in; the label shifts 4 px |
 | `hover-card` | Service card | `pointer-spotlight` + the Tier 2 icon story + a 4 px lift |
 | `hover-window` | Showcase card | The image scales inside a fixed frame + `pointer-tilt` + the caption rises |
-| `hover-pixel-hop` | Nav item | The current-page pixel hops to the hovered item |
+| `hover-pixel-hop` | Nav item | The current-place marker is a miniature of the logo's four-pixel cluster (upright, exact gradients). It travels to the hovered item, and its small pixels settle a beat later |
 | `hover-guide-line` | List or table row | A stage-colour line grows at inline-start |
-| `hover-glow` | Icon-only button | Pixel glow 0 → 0.6 (Icon Master Rules §4.4) |
+| `hover-glow` | Icon-only button | The icon plays its own micro-story and its pixel glows 0 → 0.6 (Icon Master Rules §4.4 and §7; drawn to the approved icon prototype) |
 | `hover-peek` | Editorial image | Shifts ≤ 8 px toward the pointer |
 
 ### 4.4 Scroll
@@ -155,7 +156,7 @@ Hover effects run 150–250 ms and use the easing tokens. `:focus-visible` trigg
 | `scroll-pinned-scene` | A native `position: sticky` scene whose story scrubs with scroll | See the pinned-scene rules below |
 | `scroll-drift` | A row moves only while the visitor scrolls | Replaces marquees |
 | `scroll-journey-line` | A page-progress line on the inline-start edge, with a travelling pixel that lands on the footer CTA | Sitewide chrome |
-| `scroll-signal-beams` | Beams run once along the grid lines when a chapter enters | **Lab** (not confirmed) |
+| `scroll-signal-beams` | Beams run once along the grid lines when a chapter enters, then land | Once per chapter, never a loop (confirmed in 0009) |
 
 **`scroll-pinned-scene` rules**
 - At most 1 per page on T1/T2, and ≤ 250vh long.
@@ -180,8 +181,8 @@ Hover effects run 150–250 ms and use the easing tokens. `:focus-visible` trigg
 | `type-word-stagger` | Words arrive in sequence | ≤ 12 words, ≤ 600 ms |
 | `type-letter-assemble` | Letters fly in on 35° paths | One per page, ≤ 24 characters, Latin only |
 | `type-scroll-highlight` | Words brighten from mist to white as they cross the reading line | An opacity cross-fade of two layers, not a colour animation |
-| `type-outline-fill` | Outline text cross-fades to the `--dz-grad-zeta` fill | — |
-| `type-outline-spotlight` | Giant outline letters light up under the pointer | Studio hero; fine pointer only; a static fill otherwise |
+| `type-outline-fill` | Outline text cross-fades to the `--dz-grad-zeta` fill | Built as SVG text, so it stays sharp at any size |
+| `type-outline-spotlight` | The Designer Studio hero word, filled with the zeta gradient. A frosted-glass lens follows the pointer. The letter edges ripple a few pixels toward the direction the pointer moves (a "water touch"), then settle. The word underneath drifts its gradient slightly | Studio hero only; fine pointer only; static gradient word otherwise. The ripple is the one paint-based exception (§3) |
 
 ### 4.6 3D
 
@@ -206,7 +207,7 @@ Hover effects run 150–250 ms and use the easing tokens. `:focus-visible` trigg
 | `touch-stamp` | Success confirmation (form sent, slot booked), with `--dz-ease-pop` |
 | `touch-snap` | Toggles and sliders overshoot slightly |
 | `touch-nudge` | Error: ±4 px over 240 ms; a colour change only when Reduce effects is on |
-| `touch-haptic` | A 10 ms vibration on key confirmations, after a user gesture, where supported (**verify**: Android Chromium). Never the only feedback. **Lab** |
+| `touch-haptic` | A 10 ms vibration on key confirmations, after a user gesture, where supported (**verify**: Android Chromium). Never the only feedback. Confirmed in 0009 |
 
 ### 4.8 Story graphics (animated explainers)
 
@@ -216,8 +217,8 @@ Hover effects run 150–250 ms and use the easing tokens. `:focus-visible` trigg
 | `story-chat` | A conversation plays out: typing → reply pops → a booking card stamps → a calendar drop | deepzeta's own chat styling, never a copy of WhatsApp's interface; the official mark only as a label; labelled "Example conversation" |
 | `story-before-after` | One scenario with and without automation, or "Code ↔ Page" | A keyboard-operable slider (arrow keys), or scroll-scrubbed |
 | `story-data` | Charts and gauges | Only the visitor's own inputs (with the formula shown) or real measurements |
-| `story-system-map` | A bundle's service nodes light up on hover or focus | — |
-| `story-terminal` | A typed terminal of commands and logs | Real commands and output (our build, our Lighthouse CI, a tool's real steps), or labelled "Example" |
+| `story-system-map` | A bundle as a system: its Tier 3 icon sits in a glass hub on depth rings; the services orbit as glass chips with their Tier 2 icons; curved connectors draw in on view. Hover or focus a service: its connector lights in the signal gradient and a pixel travels from the hub to it | Connectors and the travelling pixel are transform/opacity; the draw-in plays once |
+| `story-terminal` | A typed terminal in a macOS-style window (close, minimise, maximise buttons), running longer, multi-step commands | Real commands and output only (our build, our checks, our Lighthouse CI, a tool's real steps), or labelled "Example" |
 
 **Every story has:**
 - a **visible** HTML step list, so HowTo schema stays honest (08 §3)
@@ -281,7 +282,10 @@ The feasibility gate confirms these (04 §2).
 
   It is never decoration and never a cursor follower.
 - The signature motifs (the Z ribbon, the four-pixel cluster, the blueprint grid) follow 05 §1.
-- The four-pixel cluster appears outside Tier 3 icons in exactly two brand moments, **The Assembly** and **The Landing** (decision 0008).
+- The four-pixel cluster appears outside Tier 3 icons in exactly three places:
+  - **The Assembly** (decision 0008)
+  - **The Landing** (decision 0008)
+  - the miniature **current-place marker** in the navigation (decision 0009)
 
 ## 9. Visual references from the owner
 
@@ -296,7 +300,7 @@ The files in `Planning Folder/Components references/` are **visual references on
 | Apple card carousel | The Studio gallery + Device Stage |
 | Macbook Scroll | The `depth-css` laptop in "Watch this page build itself" |
 | Text Hover Effect | `type-outline-spotlight` (Studio hero) |
-| Background Beams With Collision | `scroll-signal-beams`, once per chapter (**Lab**); its endless loop is rejected |
+| Background Beams With Collision | `scroll-signal-beams`, once per chapter; its endless loop is rejected |
 
 ## 10. Effect register (how plans use this file)
 

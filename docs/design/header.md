@@ -27,7 +27,7 @@ The header is a dashboard of proof. Besides navigation and the CTA, it carries t
   | Pricing | Only once prices are confirmed |
 
   Never link to a page that doesn't exist (04 §1.4). About, Contact and Resources live in the mega-menu rail and the footer.
-- **Current page:** the pixel marks it. `hover-pixel-hop` moves the pixel to the hovered item.
+- **Current page:** a miniature of the logo's four-pixel cluster marks it (decision 0009). `hover-pixel-hop` moves the cluster to the hovered item, and its small pixels settle a beat after the main one.
 - **CTA handoff** (keeps one gradient CTA per view, 05 §2):
   - While the hero's primary CTA is on screen, "Book a free AI audit" is an outline button (`hover-outline`).
   - Once the hero CTA leaves the viewport, the header CTA switches to the action gradient (`hover-charge`, `pointer-magnet`, `touch-press`).

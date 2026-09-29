@@ -22,7 +22,11 @@ The visitor sits in an operations control room (blueprint direction B). They pic
    2. The flow assembles (`scroll-assemble` / `story-flow`).
    3. A summary card appears.
    4. "Send this to our team" (with consent) sends an audit request prefilled with their choices (conversion-path.md).
-5. **The 6 Systems** (catalogue §5), each as a `story-system-map`.
+5. **The 6 Systems** (catalogue §5), each as a `story-system-map` (13 §4.8):
+   - a glass hub holding the System's Tier 3 icon, on depth rings
+   - the services orbiting as glass chips with their Tier 2 icons
+   - curved connectors that draw in once
+   - a pixel that travels to whichever service you point at
 6. **Industry rail** (catalogue §7.5): Tier 2 icons, `hover-card`.
 7. **Platforms we connect** (catalogue §8): official monochrome marks, `scroll-drift`.
 8. **ROI calculator** (`story-data`), then the FAQ, then the CTA.

@@ -22,6 +22,8 @@ This is the "Custom-Coded High-Performance Websites" page.
 
 - **"Code ↔ Page" `story-before-after`:** drag it (or use the arrow keys) to reveal the hand-written code behind the rendered page.
 - **`story-terminal`** showing our real build and Lighthouse CI output.
+  - It sits in a macOS-style window with close, minimise and maximise buttons.
+  - It runs longer, real multi-step commands that show real capability (decision 0009).
 
 ## Icons
 
