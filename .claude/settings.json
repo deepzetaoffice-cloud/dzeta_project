@@ -21,6 +21,7 @@
       "Edit(/docs/facts/**)",
       "Edit(/docs/decisions/**)",
       "Edit(/docs/design/*.md)",
+      "Edit(/docs/seo/**)",
       "Edit(/CLAUDE.md)",
       "Edit(/AGENTS.md)",
       "Edit(/.claude/**)",

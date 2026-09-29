@@ -1,6 +1,6 @@
 # 10 · Content & Brand Voice
 
-> **Applies to:** all website copy (English now; Arabic rules in [11](11-i18n-rtl-readiness.md) §3) · **Precedence:** below 00 · **Last reviewed:** 2026-09-29
+> **Applies to:** all website copy (English now; Arabic rules in [11](11-i18n-rtl-readiness.md) §3) · **Precedence:** below 00 · **Last reviewed:** 2026-09-30
 
 ---
 
@@ -48,6 +48,8 @@ leverage (as a verb), utilize, synergy, cutting-edge, revolutionary, game-changi
 7. One clear call to action: **Book a free AI audit**.
 
 This structure is the text layer of the design story arc ([13](13-experience-design.md) §2): the Hook is the H1 plus the direct answer, so the answer still comes first.
+
+**Per page type:** section orders, word ranges, FAQ counts, link budgets and content modules are in the [SEO/GEO Domination Engine](../seo/seo-geo-domination-engine.md) §2–§3. This default applies wherever the engine has no blueprint.
 
 ## 6. Accessibility of content
 

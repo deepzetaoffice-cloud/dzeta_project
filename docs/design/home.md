@@ -22,8 +22,8 @@ Hook (H1 + direct answer) → Pain (§03) → System (§04) → Show (§05) → 
 | 06 | Proof | Until real case-study figures exist: **"Watch this page build itself"** (13 §5), a `scroll-pinned-scene` with a `depth-css` laptop | The final stamp shows this visit's real LCP. Real figures replace the scene once they exist. |
 | 07 | How we work | Tier 2 step icons (Audit, Build, Launch, Improve), a journey-line segment, `scroll-reveal` | Timeframes appear only once confirmed. |
 | 08 | ROI calculator (demo 2) | `story-data`, `touch-snap` sliders, a `glass-live` result panel | Uses the visitor's own inputs; the formula is shown. |
-| 09 | Industries | Calm tiles, `hover-window` | Industry icons in Tier 1 style (Icon Master Rules §14.2 recommendation). |
-| 10 | FAQ | Calm: sticky heading, `<details>` | The most breathing room on the page. |
+| 09 | Industries | Calm tiles, `hover-window` | Four tiles, one per catalogue industry group, each linking to its page (URL registry R101–R104). Industry icons in Tier 1 style (Icon Master Rules §14.2 recommendation). |
+| 10 | FAQ | The FAQ module ([faq.md](faq.md)) | 8 questions (engine §3). The most breathing room on the page. |
 | 11 | Final CTA | The Landing (footer.md), the audit form, and the 60-second WhatsApp test (demo 4) in a `glass-live` panel; `touch-stamp` on success | |
 | 12 | Footer | See footer.md | |
 

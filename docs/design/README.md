@@ -43,6 +43,7 @@ Decision: [0008](../decisions/0008-design-language-signal-and-depth.md). These f
 | [studio.md](studio.md) | Designer Studio index + concept frame | T2 / T3 | CONFIRMED frame; concepts LATER |
 | [tools.md](tools.md) | Deepzeta Sync (tools hub, `/tools`) + tool page anatomy | T2 | CONFIRMED frame and two tools; sales flow LATER |
 | [app-demo.md](app-demo.md) | App demo | T3 | LATER (frame proposed) |
+| [faq.md](faq.md) | FAQ module "Questions, answered" | Every page with a FAQ | LAB (validate in the Design Lab) |
 
 ## How builders use a spec
 
@@ -58,3 +59,4 @@ Decision: [0008](../decisions/0008-design-language-signal-and-depth.md). These f
 | 2026-09-29 | Lab v1 verdicts: header nav marker is the mini cluster; Studio hero word; terminal window; system map | Owner (decision 0009) |
 | 2026-09-29 | C6 resolved to the four pillars: mega-menu columns, Home doors, footer columns and pillar colours; Automation page URL `/services/ai-automation` | Owner (conflict C6) |
 | 2026-09-29 | The tools hub is named **Deepzeta Sync** (URL stays `/tools`); it joins the header nav, mega-menu rail, mobile sheet and footer Company links once the page ships | Owner (conflict C31) |
+| 2026-09-30 | FAQ module spec added (LAB); Home §09 has 4 industry-group tiles; Home and service pages use the FAQ module | Owner (plan approval: SEO/GEO Domination Engine) |

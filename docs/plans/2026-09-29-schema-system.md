@@ -53,7 +53,7 @@ Page tier: n/a
 | Licence | Issuer: Dubai DET. Number: PENDING (issued with the full licence) → no `hasCredential` until it's set. The credential type and the DET verification link are chosen and validated in the P4 plan. | Partial |
 | `priceRange`, `aggregateRating`, `review`, `award`, `numberOfEmployees` | — | Omitted (08 §3 rule 8) |
 | `contactPoint` | Added when a public phone is CONFIRMED: `contactType` "customer service", `availableLanguage` English (Arabic once P11 ships), `areaServed` AE | PENDING |
-| `founder` | → `{SITE_URL}/#person-jamsheed-khalid`: a Person node defined on `/about` (`name` Jamsheed Khalid, `jobTitle` Founder, `worksFor` → `#organization`, `sameAs` his LinkedIn and Gravatar URLs from facts §4). His other companies (facts §4.1) appear on `/about` only, as Organization nodes without an `@id` whose `founder` points to him. | CONFIRMED (bio and photo UNKNOWN) |
+| `founder` | → `{SITE_URL}/#person-jamsheed-khalid`: a Person node whose home page is `/about/jamsheed-khalid` (`name` Jamsheed Khalid, `jobTitle` Founder, `worksFor` → `#organization`, `sameAs` his LinkedIn and Gravatar URLs from facts §4). His other companies (facts §4.1) appear on `/about` only, as Organization nodes without an `@id` whose `founder` points to him. | CONFIRMED (bio and photo UNKNOWN) |
 | Google Business Profile | Added to `sameAs` through facts §2.1 once it exists | PENDING |
 
 ### 2.2 URL contract
@@ -176,7 +176,7 @@ The pillar and service slugs are set in the P6 plans from the blueprint page map
 | `{SITE_URL}/#logo` | ImageObject | every page (sitewide block) | `#organization` `logo` |
 | `{SITE_URL}/services#catalog` | OfferCatalog | `/services` | `#organization` `hasOfferCatalog` |
 | `{page URL}#service` | Service | its own page | `#catalog` offers, pillar ItemLists, industry ItemLists |
-| `{SITE_URL}/#person-jamsheed-khalid` | Person | `/about` | `#organization` `founder`; article `author` once he is confirmed as an author |
+| `{SITE_URL}/#person-jamsheed-khalid` | Person | `/about/jamsheed-khalid` (also emitted on `/about`) | `#organization` `founder`; article `author` once he is confirmed as an author |
 
 ## Allowed files
 The P4 plan lists them when P4 starts; section 3 is the expected list. This plan changes no files itself.

@@ -1,6 +1,6 @@
 # 07 · Performance Budget
 
-> **Applies to:** every page, component, asset and third-party script · **Precedence:** below 00 (N1 makes this a non-negotiable) · **Last reviewed:** 2026-09-29
+> **Applies to:** every page, component, asset and third-party script · **Precedence:** below 00 (N1 makes this a non-negotiable) · **Last reviewed:** 2026-09-30
 
 The site is deepzeta's proof of work. **A page that fails a hard limit does not ship.**
 
@@ -17,7 +17,7 @@ The site is deepzeta's proof of work. **A page that fails a hard limit does not 
 | **CLS** (cumulative layout shift) | ≤ 0.05 | ≤ 0.1 |
 | TTFB | ≤ 200 ms (static/edge) | ≤ 600 ms |
 | TBT (lab proxy for INP) | ≤ 100 ms | ≤ 200 ms |
-| Lighthouse Performance (mobile) | per tier | T1 Home ≥ 95 · T2 money pages ≥ 90 · T3 experience pages ≥ 70 (decision 0005). Unlisted pages = T2. |
+| Lighthouse Performance (mobile) | per tier | T1 Home ≥ 95 · T2 money and content pages ≥ 90 (including About, the founder profile, case studies, resources and legal pages; [decision 0011](../decisions/0011-content-pages-t2.md)) · T3 experience pages ≥ 70 (Studio concepts, the App demo) (decisions 0005, 0011). Unlisted pages = T2. |
 | Lighthouse Accessibility / Best Practices / SEO | 100 | ≥ 95 |
 
 *Tiers:* Core Web Vitals hard limits (LCP, INP, CLS) apply to **every** tier. The tier only changes the Lighthouse score floor and the motion toolkit allowed.

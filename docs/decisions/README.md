@@ -25,6 +25,8 @@ Status: PROPOSED | ACCEPTED (owner, date) | SUPERSEDED by NNNN
 | [0007](0007-roo-code-as-implementer.md) | Roo Code as a second implementer (renumbered from 0006 on 2026-09-29; see conflict C7) | PROPOSED |
 | [0008](0008-design-language-signal-and-depth.md) | Design language "Signal & Depth": responsive-only motion, effects library (`docs/ai/13`), surface specs (`docs/design/`), new pages and tiers, 150 KB = first load | ACCEPTED |
 | [0009](0009-design-lab-v1-verdicts.md) | Design Lab v1 verdicts: token values, Lab decisions, cluster as nav marker, Studio word ripple exception | ACCEPTED |
+| [0010](0010-ai-training-crawlers-allowed.md) | AI training crawlers get full access (same as every crawler) | ACCEPTED |
+| [0011](0011-content-pages-t2.md) | Content pages (About, founder, case studies, resources, legal) move from T3 to T2 | ACCEPTED |
 
 ## Open business decisions (from the blueprint)
 

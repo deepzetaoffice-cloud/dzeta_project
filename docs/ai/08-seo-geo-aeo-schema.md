@@ -1,6 +1,6 @@
 # 08 · SEO, GEO, AEO & Structured Data
 
-> **Applies to:** every page, metadata, content structure, schema, robots, sitemap, llms files · **Precedence:** below 00 · **Last reviewed:** 2026-09-29
+> **Applies to:** every page, metadata, content structure, schema, robots, sitemap, llms files · **Precedence:** below 00 · **Last reviewed:** 2026-09-30
 
 SEO, GEO (AI engines) and AEO (answer engines) are services Deepzeta AI sells. The site must demonstrate them. Every rule here that can be checked by a machine is a gate ([03](03-verification-gates.md)): `check:seo`, `check:schema`, `check:links`.
 
@@ -23,15 +23,22 @@ SEO, GEO (AI engines) and AEO (answer engines) are services Deepzeta AI sells. T
 
 ## 2. Content structure (AEO + GEO)
 
+These are the core rules. The full content system lives in the [SEO/GEO Domination Engine](../seo/seo-geo-domination-engine.md): page-type blueprints, content modules, word ranges, FAQ, the linking budgets and the conversion ladder, E-E-A-T, and pSEO. Every URL lives in the [URL registry](../seo/url-registry.md).
+
 1. **One H1 per page**, plain language, containing the primary topic. Heading levels never skip.
 2. **Direct answer first:** the first 2–3 sentences answer the page's main question and make sense quoted alone.
 3. Each H2 section opens with a 40–75-word answer to that section's question.
 4. **Entity-first writing:** name things explicitly (service names from the catalogue; tools like n8n, Make, Zapier, OpenAI, Anthropic, HubSpot, Zoho by name). Avoid ambiguous "it/they/the platform".
-5. **One quotable, sourced fact every ~150–200 words.** Only real, sourced or owner-confirmed numbers (see [02](02-anti-hallucination-and-edit-safety.md) §1).
+5. **One quotable, sourced fact every ~150–200 words, where a relevant real fact exists; never pad.** Only real, sourced or owner-confirmed numbers (see [02](02-anti-hallucination-and-edit-safety.md) §1). External facts come only from APPROVED rows in the [citation register](../facts/external-sources.md).
 6. **HTML tables** for comparisons, pricing, process and capabilities.
 7. **FAQ blocks** with real buyer questions (cost, timeline, data safety, Arabic support). Visible text and schema text match **word for word**.
-8. **E-E-A-T:** real authors with credentials (owner-provided), visible "last reviewed" with real dates, outbound links to official docs, never to competitors' sales pages.
-9. **Internal links:** every page links to its hub and 3+ relevant pages, with descriptive anchors (never "click here", "learn more", "read more"). Nav and footer hrefs equal canonical URLs.
+8. **E-E-A-T:**
+   - real authors with credentials (owner-provided); Jamsheed Khalid is the byline author of guides
+   - a visible "Last updated" (= `dateModified`, the content changed)
+   - "Reviewed by … · date" only after a recorded review (= `lastReviewed` / `reviewedBy`)
+   - outbound links to official docs, never to competitors' sales pages
+   - details in engine §7
+9. **Internal links:** every page links to its hub and 3+ relevant pages, with descriptive anchors (never "click here", "learn more", "read more"). Nav and footer hrefs equal canonical URLs. Link budgets per page type, the conversion ladder and the checks are in engine §5.
 10. **URLs:** lowercase kebab-case, no trailing slash, no query parameters for content, stable once published (changes need a 301 in the same plan).
 11. **Animated explainers** ([13](13-experience-design.md) §4.8) always show their steps as visible HTML. The animation never replaces the text, so HowTo stays valid (C11).
 
@@ -82,7 +89,7 @@ Schema is an **entity-clarity layer, not a ranking factor**, and AI engines read
    - `Dataset` and `estimatedCost` until real data exists
    - `award` and `numberOfEmployees` unless CONFIRMED in the facts file
    - types that don't exist in schema.org (for example "PrivacyPolicy")
-9. **Deterministic dates** from content metadata; never `new Date()`, never git dates. `dateModified` changes only when the content really changes.
+9. **Deterministic dates** from content metadata; never `new Date()`, never git dates. `dateModified` changes only when the content really changes. `lastReviewed` and `reviewedBy` are emitted only after a recorded review.
 10. **Safe serialisation.** One `<JsonLd>` server component is the only place a schema script is rendered. It escapes `<`, `>`, `&`, U+2028 and U+2029. Server-rendered only; no client-only schema.
 11. **NAP** (name, address, phone) comes from the facts file through the site config, and is byte-for-byte identical in schema, footer, contact page and Google Business Profile.
 12. **Guards in development:** the assembler throws when two nodes share an `@id` with different content, and when a reference doesn't resolve.
@@ -98,7 +105,7 @@ Schema is an **entity-clarity layer, not a ranking factor**, and AI engines read
   - `telephone`, only once it is CONFIRMED
   - `address` (PostalAddress, `addressCountry` `AE`) and `geo`, only once it is CONFIRMED
   - `openingHoursSpecification`, `foundingDate`
-  - `founder` → `{SITE_URL}/#person-jamsheed-khalid` (the Person node's home page is `/about`; a registered reference, rule 5)
+  - `founder` → `{SITE_URL}/#person-jamsheed-khalid` (the Person node's home page is `/about/jamsheed-khalid`; a registered reference, rule 5)
   - `hasCredential` (the DET trade licence), only once the licence number is set
   - `areaServed`: `Country` nodes, each with a Wikidata `sameAs` verified on wikidata.org at build time (never from memory). The UAE now; GCC countries when the owner confirms them.
   - `sameAs`: exactly the profiles in the facts file §2.1, nothing more (the Google Business Profile joins §2.1 when it exists)
@@ -115,7 +122,7 @@ Schema is an **entity-clarity layer, not a ranking factor**, and AI engines read
 | Home | **WebPage** (`about` → `#organization`), ItemList of the four pillars, FAQPage (the FAQ is visible). No BreadcrumbList. |
 | Services hub | **CollectionPage**, ItemList, OfferCatalog `#catalog`, BreadcrumbList |
 | Pillar page (includes Automation, `/services/ai-automation`) | **Service** (the pillar), WebPage, ItemList of its services, BreadcrumbList, FAQPage / HowTo when visible |
-| Service or solution page | **Service** (`provider` → `#organization`, `areaServed`), WebPage (`mainEntity` → `#service`), BreadcrumbList, FAQPage / HowTo when visible |
+| Service or solution page (solutions are the catalogue's bundles) | **Service** (`provider` → `#organization`, `areaServed`), WebPage (`mainEntity` → `#service`), BreadcrumbList, FAQPage / HowTo when visible |
 | Book an audit | **Service** (Free AI Automation Audit, with an `Offer` at price 0 AED), WebPage, BreadcrumbList |
 | Industry | **CollectionPage** + ItemList of services, FAQPage, BreadcrumbList |
 | Case study | **Article** (`about` → the service), BreadcrumbList; only owner-confirmed results |
@@ -124,14 +131,18 @@ Schema is an **entity-clarity layer, not a ranking factor**, and AI engines read
 | Glossary | **DefinedTermSet** + DefinedTerm, BreadcrumbList |
 | Pricing | **WebPage** + OfferCatalog (only real published prices), FAQPage, BreadcrumbList |
 | About | **AboutPage** (`mainEntity` → `#organization`), BreadcrumbList, and Person nodes for CONFIRMED people only. <br>• The founder's node (`#person-jamsheed-khalid`) has `name`, `jobTitle`, `worksFor` → `#organization`, and `sameAs` with his profile URLs from facts §4. It gets `image` only once a photo is confirmed. <br>• Each of his other companies named in the visible bio (facts §4.1) is an Organization node without an `@id`, with `name`, `url` and `founder` → the Person. |
+| Founder profile (`/about/jamsheed-khalid`) | **ProfilePage** (`mainEntity` → `#person-jamsheed-khalid`, his home page), BreadcrumbList |
 | Contact | **ContactPage** (`mainEntity` → `#organization`), BreadcrumbList |
-| Privacy policy, terms | **WebPage**, BreadcrumbList, FAQPage when visible |
+| Hubs: `/solutions`, `/industries`, `/resources`, `/work` | **CollectionPage** + ItemList of the children, BreadcrumbList |
+| Privacy policy, terms, editorial policy | **WebPage**, BreadcrumbList, FAQPage when visible |
 | Designer Studio index, Deepzeta Sync (the tools hub, `/tools`), App demo | OPEN: decided in each page's plan with the SEO / GEO Auditor |
 | Studio concept routes, tool result views, thank-you, 404 | None (`noindex`) |
 
 ---
 
 ## 4. `llms.txt` and `llms-full.txt`
+
+What the files say (their structure and what's included) is in engine §9. **Google Search doesn't use llms.txt** ([Google, 2026](https://developers.google.com/search/docs/fundamentals/ai-optimization-guide)). The files serve AI assistants and agents; they're not a Google ranking lever.
 
 - **Two route handlers:**
   - `/llms.txt`, an index: an H1 with the entity name, a factual summary blockquote, and links grouped by section.
@@ -149,7 +160,7 @@ Schema is an **entity-clarity layer, not a ranking factor**, and AI engines read
 |---|---|---|
 | Search engines | `*` (Googlebot, Bingbot…) | Allow `/`, disallow `/api/` |
 | AI live search / user fetch | OAI-SearchBot, ChatGPT-User, PerplexityBot, Perplexity-User, Claude-SearchBot, Claude-User | Full HTML, disallow `/api/` |
-| AI training | GPTBot, ClaudeBot, Google-Extended, Applebot-Extended, CCBot, Bytespider, Meta-ExternalAgent | `llms.txt` / `llms-full.txt` only (owner can change this tiering by decision record) |
+| AI training | GPTBot, ClaudeBot, Google-Extended, Applebot-Extended, CCBot, Bytespider, Meta-ExternalAgent | Full HTML, disallow `/api/` ([decision 0010](../decisions/0010-ai-training-crawlers-allowed.md); the owner can change any bot by a new decision) |
 
 - **Never** disallow `/_next/` (breaks rendering for Google) or OG image routes.
 - Bot names change. Check each vendor's official documentation before editing this list, and record the check date in a comment.

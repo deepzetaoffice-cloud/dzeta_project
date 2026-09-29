@@ -4,12 +4,13 @@ description: Recipe for adding a page/route to the deepzeta website with metadat
 argument-hint: "[route, e.g. /services/whatsapp-ai-agent]"
 ---
 
-Build the page: $ARGUMENTS. First confirm an **approved plan** lists every file you will touch. If not, stop and run `/plan-task`.
+Build the page: $ARGUMENTS. First confirm an **approved plan** lists every file you will touch, and that the URL has a row in `docs/seo/url-registry.md`. If not, stop and run `/plan-task`.
 
 Read first:
 - `docs/ai/05`, `06`, `07`, `08`, `09`, `10`, `11` §1
 - `docs/ai/13-experience-design.md`
 - the page's spec in `docs/design/`, if it has one (index: `docs/design/README.md`)
+- `docs/seo/seo-geo-domination-engine.md` §3 (the blueprint for this page type), §5 (links) and §6 (FAQ)
 
 ## Checklist
 1. **Route:** `src/app/<route>/page.tsx` as a Server Component. Lowercase kebab-case URL, no trailing slash.
@@ -23,4 +24,5 @@ Read first:
    - No client JS unless required; heavy widgets load on interaction.
    - The page tier and the effect register (IDs from 13) come from the approved plan.
 8. **RTL-ready:** logical CSS only; locale passed to builders.
-9. **Gates:** `verify:fast`, `build`, `check:schema`, `check:links`, `test:e2e` and `lhci` for this page, then report with evidence.
+9. **Gates:** `verify:fast`, `build`, `check:schema`, `check:seo`, `check:content`, `check:links`, `test:e2e` and `lhci` for this page, then report with evidence.
+10. **Registry:** set the page's registry row to `live` in the same plan; it then joins the sitemap and `llms` files automatically.

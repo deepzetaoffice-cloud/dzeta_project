@@ -1,6 +1,6 @@
 # 00 · Project Master Rules
 
-> **Applies to:** every agent, every task, every file · **Precedence:** highest written rule (only the owner's explicit current instruction ranks above it) · **Last reviewed:** 2026-09-29
+> **Applies to:** every agent, every task, every file · **Precedence:** highest written rule (only the owner's explicit current instruction ranks above it) · **Last reviewed:** 2026-09-30
 
 ---
 
@@ -49,7 +49,7 @@ Every plan must name which part of this North Star it serves. If a task serves n
 
 1. The owner's explicit instruction **in the current conversation**
 2. This file (`00-project-master-rules.md`)
-3. Domain rule files `01`–`13` in `docs/ai/`
+3. Domain rule files `01`–`13` in `docs/ai/`, and the SEO/GEO rule files in `docs/seo/` (the Domination Engine and the URL registry)
 4. The approved task plan in `docs/plans/`
 5. Source documents in `Planning Folder/` (blueprint, catalogue, icon rules) and the surface design specs in `docs/design/` (where a spec differs from the blueprint, the conflict register records it)
 6. Code comments
@@ -71,6 +71,9 @@ Every plan must name which part of this North Star it serves. If a task serves n
 | Effects, motion, interaction (effect IDs) | [docs/ai/13-experience-design.md](13-experience-design.md) | Design Direction v2, decision 0008 |
 | Surface designs (header, footer, each page) | [docs/design/](../design/README.md) | Design Direction v2, decision 0008 |
 | Logo | `Planning Folder/For Ai/deepZeta Ai Logo/Coded Logo SVG Do not touch the code.svg` | **Locked, never edited** |
+| Content system, internal links, FAQ, E-E-A-T, robots/llms content, pSEO | [docs/seo/seo-geo-domination-engine.md](../seo/seo-geo-domination-engine.md) | Owner-approved 2026-09-30 |
+| Every URL (planned, live, reserved, retired) | [docs/seo/url-registry.md](../seo/url-registry.md) | APPEND-ONLY |
+| External facts (laws, platform rules, vendor facts) | [docs/facts/external-sources.md](../facts/external-sources.md) | Only APPROVED rows are used |
 | Decisions | [docs/decisions/](../decisions/) | One file per decision |
 
 If two sources disagree, the conflict register decides. If it doesn't cover the case, ask.
@@ -83,6 +86,7 @@ If two sources disagree, the conflict register decides. If it doesn't cover the 
 - The logo SVG (above): never edited, reformatted or "optimised"
 - `docs/ai/**`, `CLAUDE.md`, `AGENTS.md`, `.claude/**`: the rule system itself
 - `docs/design/*.md`: the approved surface design specs (prototypes in `docs/design/prototypes/` are not protected; they are never a source)
+- `docs/seo/*.md`: the SEO/GEO Domination Engine and the URL registry
 - `.env*` (except `.env.example`), lockfiles (`package-lock.json`)
 - Tracking core (once built): `src/lib/analytics.ts`, the `dataLayer` init block in the root layout, consent code (see [09-analytics-tracking.md](09-analytics-tracking.md))
 - Schema core (once built): `src/lib/schema/**` (changes need a plan that names it)
@@ -98,6 +102,7 @@ docs/ai/          rule files (this folder)
 docs/facts/       company facts, the only source for business data
 docs/decisions/   decision records
 docs/design/      surface design specs (prototypes/ holds non-binding prototypes)
+docs/seo/         SEO/GEO Domination Engine, URL registry, schema graph registry (P4)
 docs/plans/       approved task plans
 src/app/          Next.js App Router routes
 src/components/   ui/ · sections/ · layout/ · icons/ · demos/ · fx/ (effect islands)

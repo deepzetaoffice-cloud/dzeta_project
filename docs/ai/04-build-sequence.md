@@ -1,6 +1,6 @@
 # 04 · Build Sequence & Task Plans
 
-> **Applies to:** planning and ordering of all work · **Precedence:** below 00 · **Last reviewed:** 2026-09-29
+> **Applies to:** planning and ordering of all work · **Precedence:** below 00 · **Last reviewed:** 2026-09-30
 
 ---
 
@@ -26,13 +26,13 @@
 | **P3 Analytics & consent** | `trackEvent()` wrapper, event taxonomy, GTM via `@next/third-parties`, Consent Mode v2, click-ID capture | tracking e2e green + owner GTM checklist |
 | **P4 Data & schema engine** | Content types, catalogue data, `src/lib/site-config.ts`, `src/lib/schema/` `@id` graph builders (spec: `docs/plans/2026-09-29-schema-system.md`), the schema registry `docs/seo/schema-graph.md`, `src/lib/geo/` builders, facts allowlist | unit tests + `check:schema` |
 | **P5 Homepage** | Sections per `docs/design/home.md` (blueprint order); demos stubbed behind lightweight triggers | page gates (see [03](03-verification-gates.md) §2) + the effects feasibility gate re-run on the full Home |
-| **P6 Core pages** | Services hub + pilot service page → review → remaining services; the Automation page (`/services/ai-automation`, the AI Automation pillar page); solutions; industries; pricing; about; contact; book-audit; privacy; terms | page gates per page |
+| **P6 Core pages** | Every page follows its row in the [URL registry](../seo/url-registry.md) and its blueprint in the [SEO/GEO Domination Engine](../seo/seo-geo-domination-engine.md) §3, in waves W1 → W2. Services hub + pilot service page → review → remaining services; the Automation page (`/services/ai-automation`, the AI Automation pillar page); solutions; industries; pricing; about; contact; book-audit; privacy; terms | page gates per page |
 | **P7 Live demos & tools** | AI agent (load on tap), ROI calculator, workflow explorer, 60-second test, header speed chip + Page Nutrition Label, AI View; Deepzeta Sync, the tools hub at `/tools` (Website & AI Search Health Check, Social Media Content Planner) | per-demo cost/mitigation stated; `lhci` unchanged |
-| **P8 Resources, case studies & Studio** | Glossary, comparisons, guides; case studies only with owner-confirmed real data; Designer Studio index + one pilot concept → owner review → the other concepts | page gates |
+| **P8 Resources, case studies & Studio** | Registry wave W3 (engine §3). Glossary, comparisons, guides (bylined by the founder); case studies only with owner-confirmed real data; Designer Studio index + one pilot concept → owner review → the other concepts | page gates |
 | **P9 GEO layer** | `llms.txt`, `llms-full.txt`, robots AI-bot tiers, sitemap | `check:schema` + SEO/GEO audit |
 | **P10 Launch readiness** | Full `verify`, manual checklists, redirects, 404, monitoring, Vercel deploy, Search Console | owner sign-off |
 | **P11 Arabic (after launch)** | `/ar` tree, native GCC content, hreflang, Arabic fonts; English must not regress | parity + English regression gates |
-| **P12 pSEO (after launch)** | Industry × city pages in small batches, real data only, fact gate + similarity gate | per-batch gates + owner review |
+| **P12 pSEO (after V1)** | **Reminder:** starts only when every V1 row in the URL registry is live and indexing is stable; then remind the owner and write the pSEO plan from engine §10. Dimensions: industries, industry × emirate, integrations, comparisons. Fact packs, ≤ 30% similarity to siblings, batches of up to 10 a week through pull requests | per-batch gates + owner review |
 
 ---
 

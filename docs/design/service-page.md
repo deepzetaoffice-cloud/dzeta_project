@@ -13,7 +13,7 @@ The page structure is owned by 10 §5 and 08 §2 and is not restated here.
 - **The service story:** one `story-flow`, or `story-chat` for conversational services, with its visible step list (HowTo).
 - **Outcome and feature lists:** `hover-card`, `scroll-reveal`.
 - **Proof or live demo:** the matching demo (07 §4), loaded on tap.
-- **FAQ:** calm.
+- **FAQ:** the FAQ module ([faq.md](faq.md)); the question count per type is in engine §3.
 - **GSAP islands** only where native can't do the job (T2), loaded when visible.
 
 ## Extras for the Websites service page

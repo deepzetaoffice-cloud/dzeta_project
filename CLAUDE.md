@@ -22,8 +22,10 @@ This is deepzeta's own website and its first case study. Speed, custom code, SEO
 | TypeScript, Next.js, dependencies, security | `docs/ai/06-code-standards.md` |
 | Images, fonts, scripts, animation, anything that affects speed | `docs/ai/07-performance-budget.md` |
 | Metadata, headings, schema, robots, sitemap, `llms.txt` | `docs/ai/08-seo-geo-aeo-schema.md` |
+| Page content structure, internal links, FAQ, E-E-A-T, robots/llms content, pSEO | `docs/seo/seo-geo-domination-engine.md` |
+| Adding, naming or linking any page (every URL) | `docs/seo/url-registry.md` |
 | Analytics, consent, forms, CRM | `docs/ai/09-analytics-tracking.md` |
-| Any website copy | `docs/ai/10-content-voice.md` + `docs/facts/company-facts.md` + the Services Catalogue |
+| Any website copy | `docs/ai/10-content-voice.md` + `docs/facts/company-facts.md` + `docs/facts/external-sources.md` + the Services Catalogue + the engine's page blueprint |
 | Layout direction, URLs, locale, Arabic | `docs/ai/11-i18n-rtl-readiness.md` |
 | Branches, commits, PRs | `docs/ai/12-git-workflow.md` |
 | Something the sources disagree on | `docs/ai/conflict-register.md` |
@@ -34,7 +36,8 @@ This is deepzeta's own website and its first case study. Speed, custom code, SEO
 - **Phase:** P-1 Pre-build (rule system and design direction). No application code exists yet. Node.js v24 is installed, but there is no `package.json` until Phase 0: run `node scripts/check-rules.mjs` directly; the npm gates start in P0.
 - **Open decisions** that block related work: JS budget (C8). Decided on 2026-09-29: the company entity (D2, Deepzeta Digital Solutions L.L.C.), the service structure (C6, the four pillars) and the brand name "Deepzeta AI" (C29). The domain is `deepzeta.ai` (0006). See `docs/decisions/README.md`.
 - **Stack and performance tiers** accepted in decisions 0004 and 0005 (`docs/decisions/`). Motion is native-first; GSAP only on T2/T3 pages; automation runs on n8n.
-- **Design Direction v2 "Signal & Depth"** accepted in decision 0008: responsive-only motion; effects in `docs/ai/13-experience-design.md`; surface specs in `docs/design/`. Parked for owner sessions: the 15+ Studio concepts, the Tools sales automation, the App demo. Next: the Design Lab prototype (its own plan).
+- **Design Direction v2 "Signal & Depth"** accepted in decision 0008: responsive-only motion; effects in `docs/ai/13-experience-design.md`; surface specs in `docs/design/`. Parked for owner sessions: the 15+ Studio concepts, the Deepzeta Sync sales automation, the App demo. Next: the Design Lab prototype (its own plan).
+- **SEO/GEO Domination Engine** (`docs/seo/`, 2026-09-30): the content system, the V1 URL registry (about 99 pages), linking, FAQ, E-E-A-T, robots/llms. **Reminder:** pSEO starts only after every V1 registry row is live; then remind the owner (engine §10).
 
 ## Working agreement
 
