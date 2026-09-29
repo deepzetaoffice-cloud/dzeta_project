@@ -19,7 +19,7 @@ A fast, custom-coded, AI-search-ready website for **deepzeta · AI Digital Solut
 - **No approved plan in `docs/plans/`, no code** (except one-file trivial fixes).
 - Edit **only** the files the plan allows. Read each file before editing it.
 - **Never invent** facts, numbers, clients, reviews, packages, APIs, paths or env vars. Unknown → ask or omit.
-- **Never edit:** `docs/ai/**`, `CLAUDE.md`, `AGENTS.md`, `.claude/**`, `Planning Folder/**`, the logo SVG, `.env*`, `package-lock.json`.
+- **Never edit:** `docs/ai/**`, `docs/design/*.md`, `docs/decisions/**`, `docs/facts/**`, `CLAUDE.md`, `AGENTS.md`, `.claude/**`, `Planning Folder/**`, the logo SVG, `.env*`, `package-lock.json`.
 - **Never run:** force push, `git reset --hard`, `git clean`, `rm -rf`, `--no-verify`.
 - Tokens not raw values; logical CSS only (RTL-ready); transform/opacity-only motion; performance budget in `docs/ai/07`.
 - Work is done only when the gates in `docs/ai/03` pass **and their output is in your report**.

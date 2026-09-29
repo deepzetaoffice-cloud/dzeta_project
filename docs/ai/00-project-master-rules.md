@@ -80,6 +80,7 @@ If two sources disagree, the conflict register decides. If it doesn't cover the 
 - `Planning Folder/**`: read-only source material
 - The logo SVG (above): never edited, reformatted or "optimised"
 - `docs/ai/**`, `CLAUDE.md`, `AGENTS.md`, `.claude/**`: the rule system itself
+- `docs/design/*.md`: the approved surface design specs (prototypes in `docs/design/prototypes/` are not protected; they are never a source)
 - `.env*` (except `.env.example`), lockfiles (`package-lock.json`)
 - Tracking core (once built): `src/lib/analytics.ts`, the `dataLayer` init block in the root layout, consent code (see [09-analytics-tracking.md](09-analytics-tracking.md))
 - Schema core (once built): `src/lib/schema/**` (changes need a plan that names it)

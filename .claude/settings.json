@@ -20,6 +20,7 @@
       "Edit(/docs/ai/**)",
       "Edit(/docs/facts/**)",
       "Edit(/docs/decisions/**)",
+      "Edit(/docs/design/*.md)",
       "Edit(/CLAUDE.md)",
       "Edit(/AGENTS.md)",
       "Edit(/.claude/**)",
