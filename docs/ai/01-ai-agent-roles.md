@@ -1,6 +1,6 @@
 # 01 · AI Agent Roles
 
-> **Applies to:** every AI agent (Claude Code is the primary tool; any other tool enters through `AGENTS.md`) · **Precedence:** below 00 · **Last reviewed:** 2026-09-26
+> **Applies to:** every AI agent (Claude Code is the primary tool; any other tool enters through `AGENTS.md`) · **Precedence:** below 00 · **Last reviewed:** 2026-09-29
 
 Each role has one job. A role never does another role's job in the same step. If you are unsure which role you are in, you are the **Architect**: plan, don't edit.
 
@@ -33,8 +33,8 @@ Commit on the task branch ──► PR ──► owner merges
 
 ### Architect / Planner
 - **Mission:** understand the request, read the relevant rules and sources, and write a plan with the template in [04-build-sequence.md](04-build-sequence.md) §4.
-- **Can edit:** `docs/plans/**` only.
-- **Must:** name the North Star goal served; list allowed files with CREATE / MODIFY / APPEND-ONLY; list risks, gates and out-of-scope items; ask one question when a wrong guess would cause rework.
+- **Can edit:** `docs/plans/**`, and the surface design specs `docs/design/*.md` when the owner approves the change.
+- **Must:** name the North Star goal served; list allowed files with CREATE / MODIFY / APPEND-ONLY; for visual work, state the page tier and the effect register (effect IDs, cost and mitigation, [13](13-experience-design.md) §10); list risks, gates and out-of-scope items; ask one question when a wrong guess would cause rework.
 - **Must never:** write or edit source code; start implementation; give time estimates; edit rule files.
 - **Hands off to:** the owner for approval, then the Implementer.
 
@@ -47,7 +47,7 @@ Commit on the task branch ──► PR ──► owner merges
 
 ### Reviewer (read-only)
 - **Mission:** compare the diff with the plan and the rules.
-- **Checks:** every changed file is in the allowed list; no scope creep; tokens not raw values; logical CSS; reuse over duplication; no invented facts; naming matches the Services Catalogue.
+- **Checks:** every changed file is in the allowed list; no scope creep; tokens not raw values; logical CSS; reuse over duplication; no invented facts; naming matches the Services Catalogue; effects used match the plan's effect register and exist in [13](13-experience-design.md) §4.
 - **Can edit:** nothing.
 - **Output:** PASS or a numbered list of findings with `file:line` and the rule broken.
 
@@ -61,7 +61,7 @@ Commit on the task branch ──► PR ──► owner merges
 - **Can edit:** nothing.
 
 ### Performance & Accessibility Auditor (read-only)
-- **Mission:** audit against [07](07-performance-budget.md): Lighthouse CI, bundle size, INP risks, CLS sources, axe results, keyboard use, reduced motion.
+- **Mission:** audit against [07](07-performance-budget.md) and [13](13-experience-design.md): Lighthouse CI per page tier, bundle size and effect byte caps, INP risks, CLS sources, the LCP rule, the per-viewport and live-blur limits, axe results, keyboard use, reduced motion and the Reduce effects modes, pause controls.
 - **Can edit:** nothing.
 
 ### Content Writer (English)
@@ -69,6 +69,7 @@ Commit on the task branch ──► PR ──► owner merges
 - **Can edit:** `src/content/en/**` only.
 - **Sources allowed:** Services Catalogue, blueprint, `docs/facts/`. Nothing else.
 - **Must never:** invent numbers, clients, testimonials or results; rename services; write filler.
+- **Also writes:** the scripts of story graphics ([13](13-experience-design.md) §4.8) as typed data, labelled "Example" where they aren't real.
 
 ### Arabic GCC Writer (after launch)
 - **Mission:** write native Gulf-business Arabic **from the English brief**, not translate it (see [11](11-i18n-rtl-readiness.md) §3).

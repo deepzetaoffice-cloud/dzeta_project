@@ -30,9 +30,10 @@ The site is deepzeta's proof of work. **A page that fails a hard limit does not 
 
 | Budget | Limit | Status |
 |---|---|---|
-| HTML + CSS + JS per page | ≤ 150 KB | Hard limit |
+| HTML + CSS + JS loaded before the first interaction | ≤ 150 KB | Hard limit. Code started by an explicit visitor action ("Launch", "Play", "Open") never loads on first view and is budgeted per feature in its plan (decision 0008) |
 | JavaScript on first load | ≤ 50 KB target | **To be validated in Phase 0** (see below) |
-| Fonts (3 variable, subset) | ≈ 60 KB total | Hard limit 70 KB |
+| First-party effect/UI JS on Home at first load | ≤ 10 KB (provisional) | Validated by the effects feasibility gate ([04](04-build-sequence.md) §2; caps in [13](13-experience-design.md) §7) |
+| Fonts (3 variable, subset) | ≈ 60 KB total | Hard limit 70 KB on deepzeta pages. Studio concept routes load their own fonts within their T3 page budget (decision 0008) |
 | Images per page (above the fold) | ≤ 200 KB, hero ≤ 120 KB | Hard limit |
 | Render-blocking third-party or font files | 0 | Hard limit |
 | Third-party scripts before consent/interaction | GTM only | Hard limit |
@@ -45,7 +46,7 @@ The site is deepzeta's proof of work. **A page that fails a hard limit does not 
 
 **Images and media**
 - AVIF/WebP via `next/image`, explicit dimensions, correct `sizes`. `priority` only on the LCP image.
-- The hero visual is SVG/CSS where possible (the Z ribbon), so it's light and sharp.
+- The hero visual is SVG/CSS (the locked logo's Z mark and the CSS-built Assembly, [13](13-experience-design.md) §5), so it's light and sharp and never competes with the text LCP element.
 - No autoplay video. Video only on interaction, with a poster image.
 
 **Fonts**
@@ -58,7 +59,7 @@ The site is deepzeta's proof of work. **A page that fails a hard limit does not 
 - No blocking work on the main thread in event handlers; break up long tasks.
 
 **CSS and motion**
-- Transform/opacity only; no animating layout properties; no infinite animations; `backdrop-filter` rarely (see [05](05-design-system.md) §5).
+- Transform/opacity only; no animating layout properties; no infinite animations; live `backdrop-filter` only within the glass-ladder limits ([05](05-design-system.md) §5 rule 6, [13](13-experience-design.md) §4.1).
 - Reserve space for anything that loads late (aspect-ratio boxes, min-heights) so CLS stays near 0.
 
 **Third parties**
@@ -67,16 +68,23 @@ The site is deepzeta's proof of work. **A page that fails a hard limit does not 
 
 ---
 
-## 4. Live demo costs (from the blueprint; each demo's plan must confirm them)
+## 4. Live demo and effect costs (targets; each plan must measure and confirm them)
 
-| Demo | Cost | Mitigation |
+| Demo / effect | Cost | Mitigation |
 |---|---|---|
 | deepzeta AI agent | 60–150 KB chat script | Light button first; load chat only on tap |
 | ROI calculator | ~5 KB | Plain JS, only on pages that use it |
-| Workflow explorer | Main-thread animation risk on low-end phones | SVG + CSS only; pause off-screen; static when reduced motion |
+| Workflow explorer (`story-flow`) | Main-thread animation risk on low-end phones | Home: SVG + CSS only (T2 pages may use GSAP islands); plays once, pauses if scrolled away mid-play; static when reduced motion |
 | 60-second speed-to-lead test | ~0 on page (server-side) | Consent wording, rate limits, spam protection |
-| Live speed badge | ~1 KB | Reads browser performance data after load |
-| "See how AI reads this page" | ~0 | Hidden until opened; data already in page |
+| Header speed chip + Page Nutrition Label | ~1 KB chip + `web-vitals`; the label's code on open | Reads browser performance data after load; the chip reserves its space; the label loads when opened |
+| AI View ("See how AI reads this page") | A small script on first use + one `llms.txt` fetch | Built when opened; reads the page's own JSON-LD; no duplicate indexable text |
+| Shared pointer controller | ≤ 1.5 KB | Fine pointers only, while a target is in view; rAF-batched; stops when the tab is hidden |
+| Story graphics (`story-*`) | ≤ 2 KB shared controls + ≤ 6 KB each | CSS/SVG on Home; play once; controls for stories longer than 5 s |
+| The Assembly (Home hero) | ~0 KB beyond the shared observer (CSS 3D) | Starts on first scroll; static cluster under Reduce effects |
+| `glass-live` / `glass-liquid` | GPU cost while content scrolls behind | Capped count per viewport; falls back to `glass-frost` |
+| Designer Studio: Device Stage and concept sites | Each concept's full weight | Loads only on open, inside a sandboxed iframe; concepts are T3 with Core Web Vitals hard limits |
+| deepzeta Tools | Server-side checks and AI calls; small client wizard | Server work only; rate limit + Turnstile; the report renders after results |
+| App demo | The app shell | Loads only on "Launch"; its budget is set in its plan |
 
 ---
 

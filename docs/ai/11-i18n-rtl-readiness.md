@@ -1,6 +1,6 @@
 # 11 · Internationalisation & RTL Readiness
 
-> **Applies to:** layout, CSS, URLs, schema, content structure now; Arabic content after launch · **Precedence:** below 00 · **Last reviewed:** 2026-09-26
+> **Applies to:** layout, CSS, URLs, schema, content structure now; Arabic content after launch · **Precedence:** below 00 · **Last reviewed:** 2026-09-29
 
 **Owner decision (2026-09-26):** English launches first. Arabic follows after launch, written to the standard of a **native GCC Arabic content writer, never a translation**. See `docs/decisions/0002-english-first-arabic-after-launch.md`.
 
@@ -10,11 +10,13 @@
 
 1. **Logical CSS only:** `ms-/me-/ps-/pe-/start-/end-/text-start/text-end`, `margin-inline-*`, `padding-inline-*`, `inset-inline-*`, `border-inline-*`. Physical `left/right` classes and properties are blocked by `check:tokens`.
 2. **Directional icons** carry a `flip` flag and mirror with `[dir="rtl"]` (see Icon Master Rules §9). The logo, pixels, checkmarks, clocks and brand marks never flip.
-3. **No text in images.** Text lives in HTML so it can be written in Arabic later.
+3. **No text in images.** Text lives in HTML so it can be written in Arabic later. The one exception is screenshots and posters of our own UI (Studio posters, device frames, product screens). They carry alt text, any meaningful text also lives in HTML, and their Arabic versions are produced in P11 (conflict C24).
 4. **Content in data files keyed by stable `id`**, never by array position, so each English entry can have an Arabic partner later.
 5. **Locale-aware builders:** URL, canonical, schema `@id` and sitemap builders take a `locale` parameter from the start, even though only `en` exists now.
 6. **Layout must tolerate longer and shorter strings** (Arabic can be longer or shorter than English). No fixed-width text containers.
 7. `<html lang="en" dir="ltr">` is set from the locale, not hardcoded in multiple places.
+8. **Kinetic type in Arabic** ([13](13-experience-design.md) §4.5): split text at word level only, never into letters (split letters are shaped in isolation, so Arabic joining breaks). Arabic display type has no letter-spacing; the negative tracking used on Montserrat is reset to 0.
+9. **Effects mirror through logical properties** (inline-start origins, `scroll-journey-line` on the inline-start edge). Light in the design language comes from above, so lighting and pre-rendered 3D don't need mirrored versions. The pixel and the cluster never mirror.
 
 ---
 

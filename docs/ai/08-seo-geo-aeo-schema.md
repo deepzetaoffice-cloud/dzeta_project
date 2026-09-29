@@ -15,7 +15,7 @@ SEO, GEO (AI engines) and AEO (answer engines) are services deepzeta sells. The 
 | Canonical | Self-referencing absolute URL on every page, built from one `SITE_URL` constant |
 | Open Graph | title, description, url, 1200×630 image, locale, `og:type` (`website`/`article`) |
 | Twitter | `summary_large_image` |
-| Robots | Index/follow for public pages; `noindex` for thank-you, drafts, utility pages; `/api/` disallowed |
+| Robots | Index/follow for public pages; `noindex` for thank-you, drafts, utility pages, Designer Studio concept routes (`/studio/<slug>`) and tool result views; `/api/` disallowed |
 
 ---
 
@@ -31,6 +31,7 @@ SEO, GEO (AI engines) and AEO (answer engines) are services deepzeta sells. The 
 8. **E-E-A-T:** real authors with credentials (owner-provided), visible "last reviewed" with real dates, outbound links to official docs, never to competitors' sales pages.
 9. **Internal links:** every page links to its hub and 3+ relevant pages, with descriptive anchors (never "click here", "learn more", "read more"). Nav and footer hrefs equal canonical URLs.
 10. **URLs:** lowercase kebab-case, no trailing slash, no query parameters for content, stable once published (changes need a 301 in the same plan).
+11. **Animated explainers** ([13](13-experience-design.md) §4.8) always show their steps as visible HTML. The animation never replaces the text, so HowTo stays valid (C11).
 
 ---
 
@@ -45,6 +46,8 @@ SEO, GEO (AI engines) and AEO (answer engines) are services deepzeta sells. The 
 6. **Escaping:** JSON-LD is serialised with `<` escaped as `<` before injection.
 7. **Name, address, phone (NAP)** come from `docs/facts/company-facts.md` via one constants module and must be byte-for-byte identical in schema, footer, contact page and Google Business Profile.
 8. Validate for **correctness**, not rich-result eligibility. Google now shows FAQ rich results only for a narrow set of sites and has retired HowTo rich results, but the types are still used because AI engines parse them.
+9. **Fictional businesses never get schema.** Designer Studio concepts carry no Organization, LocalBusiness or other business nodes (decision 0008, C18).
+10. **AI View** (`docs/design/header.md`) reads the page's own JSON-LD and fetches `llms.txt` when opened. It never server-renders a second copy of indexable text.
 
 **Schema stack by page type**
 | Page type | Stack |
@@ -56,6 +59,8 @@ SEO, GEO (AI engines) and AEO (answer engines) are services deepzeta sells. The 
 | Resource / comparison / glossary | Article or FAQPage/QAPage/DefinedTerm, BreadcrumbList |
 | Pricing | WebPage + Offer/OfferCatalog (only real published prices), FAQPage |
 | About / Contact | AboutPage / ContactPage, Person nodes, `contactPoint` |
+| Designer Studio index, deepzeta Tools, App demo | OPEN: decided in each page's plan with the SEO / GEO Auditor |
+| Studio concept routes | None (`noindex`; rule 9) |
 
 ---
 
@@ -64,6 +69,7 @@ SEO, GEO (AI engines) and AEO (answer engines) are services deepzeta sells. The 
 - Route handlers: `/llms.txt` (index: H1 with entity name, factual summary blockquote, links grouped by section) and `/llms-full.txt` (full plain-text knowledge base built from the same content files).
 - `Content-Type: text/plain; charset=utf-8`; statically generated; cached.
 - Generated from content data, never hand-maintained. New content types are **appended**.
+- Studio concept routes and tool result views are **excluded**.
 - Pronoun-to-entity replacement (if used) must be context-aware and unit-tested; blanket replacement of "it/they" is banned (it corrupts text).
 
 ---
@@ -84,4 +90,4 @@ SEO, GEO (AI engines) and AEO (answer engines) are services deepzeta sells. The 
 
 ## 6. Sitemap
 
-One `src/app/sitemap.ts`, generated from content data, with real `lastModified` values. After launch, add `alternates.languages` for Arabic pages.
+One `src/app/sitemap.ts`, generated from content data, with real `lastModified` values. After launch, add `alternates.languages` for Arabic pages. Studio concept routes and tool result views are excluded.

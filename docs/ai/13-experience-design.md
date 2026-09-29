@@ -55,6 +55,19 @@ The language combines the blueprint's direction A "Signal Grid" (brand surfaces)
       - `glass-frost` instead of live blur
       - no pointer effects
       - no 3D motion
+12. **Story arc.** Every page follows the same arc:
+
+    **Hook → Pain → System → Show → Proof → Plan → Action**
+
+    - The Hook is the H1 plus the direct answer, so the answer still comes first (10 §5, 08 §2).
+    - Calm sections sit between the loud ones.
+13. **Density by page tier:**
+
+    | Tier | Effects allowed |
+    |---|---|
+    | T1 | Native CSS plus first-party JS within the caps in §7, at first load |
+    | T2 | T1 plus GSAP islands, loaded when visible |
+    | T3 | The full toolkit, including `depth-webgl` |
 
 ## 3. Hard rules for every effect
 

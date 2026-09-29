@@ -4,7 +4,7 @@
 
 A gate is a **command with a pass condition**. Work is done only when the required gates pass **and their output is in the report**. "I checked mentally" is not a gate.
 
-> **Status:** the npm scripts below are created in **Phase 0** (see [04](04-build-sequence.md)). Until they exist, a gate that can't run is reported as **NOT RUN (script not yet created)**, never as passed.
+> **Status:** the npm scripts below are created in **Phase 0** (see [04](04-build-sequence.md)). Until they exist, a gate that can't run is reported as **NOT RUN (script not yet created)**, never as passed. Exception: `check:rules` already runs as `node scripts/check-rules.mjs` (Node is installed; there is no `package.json` yet).
 
 ---
 
@@ -19,10 +19,11 @@ A gate is a **command with a pass condition**. Work is done only when the requir
 | `npm run check:facts` | Every number in `src/content/**` is in the facts allowlist; no `[[TODO` markers in content that ships | 0 unlisted numbers, 0 TODO markers |
 | `npm run check:schema` | JSON-LD on built pages parses; every `@id` reference resolves; `#organization` and `#website` emitted exactly once per page; no empty/placeholder values | all pages pass |
 | `npm run check:links` | Every internal link resolves to a built route; nav/footer hrefs equal canonicals | 0 broken links |
-| `npm run check:rules` | Rule system integrity: every file referenced by `CLAUDE.md`/`AGENTS.md` exists; every `docs/ai` file has its header | pass |
+| `npm run check:rules` | Rule system integrity: every file referenced by `CLAUDE.md`, `AGENTS.md` and `.claude/**/*.md` exists; every `docs/ai` file has its header. It can't see paths that contain spaces (`Planning Folder/…`), so check those by hand | pass |
+| `npm run check:effects` *(planned, P0)* | Every effect ID in a plan's effect register exists in [13](13-experience-design.md) §4 | 0 unknown IDs |
 | `npm run test` | Vitest unit tests (schema builders, geo/llms builders, analytics wrapper, utils) | all pass |
 | `npm run build` | `next build` | succeeds, no warnings we haven't accepted in the conflict register |
-| `npm run test:e2e` | Playwright on the production build: key pages render, keyboard navigation, **axe** accessibility, tracking regression (`dataLayer[0]` rule, events fire once) | all pass, 0 serious/critical axe violations |
+| `npm run test:e2e` | Playwright on the production build: key pages render, keyboard navigation, **axe** accessibility, tracking regression (`dataLayer[0]` rule, events fire once), effect modes (reduced motion, Reduce effects, JavaScript off, forced colours, RTL) and the LCP element visible at first paint ([13](13-experience-design.md) §3) | all pass, 0 serious/critical axe violations |
 | `npm run lhci` | Lighthouse CI on the fixed URL sample with per-tier budgets from [07](07-performance-budget.md) (page tiers: decision 0005) | all assertions pass |
 | `npm run verify:fast` | `typecheck` + `lint` + `check:tokens` | pass |
 | `npm run verify` | everything above, in order | pass |

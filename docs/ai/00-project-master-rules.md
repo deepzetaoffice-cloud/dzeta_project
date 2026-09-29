@@ -1,6 +1,6 @@
 # 00 · Project Master Rules
 
-> **Applies to:** every agent, every task, every file · **Precedence:** highest written rule (only the owner's explicit current instruction ranks above it) · **Last reviewed:** 2026-09-26
+> **Applies to:** every agent, every task, every file · **Precedence:** highest written rule (only the owner's explicit current instruction ranks above it) · **Last reviewed:** 2026-09-29
 
 ---
 
@@ -49,9 +49,9 @@ Every plan must name which part of this North Star it serves. If a task serves n
 
 1. The owner's explicit instruction **in the current conversation**
 2. This file (`00-project-master-rules.md`)
-3. Domain rule files `01`–`12` in `docs/ai/`
+3. Domain rule files `01`–`13` in `docs/ai/`
 4. The approved task plan in `docs/plans/`
-5. Source documents in `Planning Folder/` (blueprint, catalogue, icon rules)
+5. Source documents in `Planning Folder/` (blueprint, catalogue, icon rules) and the surface design specs in `docs/design/` (where a spec differs from the blueprint, the conflict register records it)
 6. Code comments
 
 **Conflicts are never resolved silently.** Stop, state the conflict in one line, follow the higher-ranked source, and propose an entry for [conflict-register.md](conflict-register.md).
@@ -68,6 +68,8 @@ Every plan must name which part of this North Star it serves. If a task serves n
 | Performance constraint | `Planning Folder/For Ai/ADDITIONAL PLANNING CONSTRAINT Perf from Claude planning chat.txt` | Standing rule |
 | Portable engineering standard | `Planning Folder/For Ai/AI Automation Company — Pre-Devel.md` | Partly superseded (see conflict register) |
 | Icon system | `Planning Folder/For Ai/DeepZeta Icon Master Rules.md` | Approved direction |
+| Effects, motion, interaction (effect IDs) | [docs/ai/13-experience-design.md](13-experience-design.md) | Design Direction v2, decision 0008 |
+| Surface designs (header, footer, each page) | [docs/design/](../design/README.md) | Design Direction v2, decision 0008 |
 | Logo | `Planning Folder/For Ai/deepZeta Ai Logo/Coded Logo SVG Do not touch the code.svg` | **Locked, never edited** |
 | Decisions | [docs/decisions/](../decisions/) | One file per decision |
 
@@ -95,11 +97,12 @@ Agents that believe a protected file needs a change must **stop and propose the 
 docs/ai/          rule files (this folder)
 docs/facts/       company facts, the only source for business data
 docs/decisions/   decision records
+docs/design/      surface design specs (prototypes/ holds non-binding prototypes)
 docs/plans/       approved task plans
 src/app/          Next.js App Router routes
-src/components/   ui/ · sections/ · layout/ · icons/ · demos/
+src/components/   ui/ · sections/ · layout/ · icons/ · demos/ · fx/ (effect islands)
 src/content/      en/ now, ar/ after launch (copy never hardcoded in components)
-src/lib/          schema/ · analytics.ts · geo/ · seo/ · i18n/ · utils
+src/lib/          schema/ · analytics.ts · geo/ · seo/ · i18n/ · fx/ (shared effect controllers) · utils
 src/styles/       tokens.css (Tailwind v4 @theme)
 scripts/          gate scripts (check-tokens, check-facts, rules-sync…)
 tests/            unit/ · e2e/
@@ -118,4 +121,24 @@ tests/            unit/ · e2e/
 | **Allowed files** | The exact list of files a plan permits an agent to create or change |
 | **North Star** | Section 1 of this file |
 | **Stage** | One of the four buyer stages: Get Found / Win Customers / Run Operations / Get Paid & Keep (proposed, pending approval) |
-| **Zeta Pixel** | The logo-derived square used in icons (see Icon Master Rules) |
+| **Zeta Pixel** | The logo-derived square used in icons (see Icon Master Rules) and, sitewide, as the marker of value, progress or the current place ([13](13-experience-design.md) §8) |
+| **Page tier** | T1 Home · T2 money pages · T3 experience pages: the Lighthouse floor and motion toolkit per page (decision 0005). Not the icon tiers |
+| **Effect ID** | A kebab-case name from the effects library in [13](13-experience-design.md) §4 (e.g. `glass-frost`, `story-flow`), cited in every plan that uses the effect |
+| **Depth plane** | Z0 deep field · Z1 content · Z2 glass · Z3 signal: the visual layers of the design language (13 §1). Not a z-index scale |
+| **Glass ladder** | The four glass levels `glass-tint` → `glass-frost` → `glass-live` → `glass-liquid` (13 §4.1) |
+
+**ID namespaces** (so identifiers never collide):
+
+| Pattern | Meaning | Defined in |
+|---|---|---|
+| N1–N10 | Non-negotiables | This file §2 |
+| C1, C2… | Conflicts | [conflict-register.md](conflict-register.md) |
+| D1–D6 | Open business decisions from the blueprint | `docs/decisions/README.md` |
+| 0001, 0002… | Decision records | `docs/decisions/` |
+| L1… / numbered rows | Lessons | [lessons-learned.md](lessons-learned.md) |
+| P-1, P0…P12 | Build phases | [04](04-build-sequence.md) §2 |
+| T1–T3 | Page tiers | Decision 0005 |
+| Tier 1–3 | Icon tiers | Icon Master Rules §2 |
+| G1–G10 | Colour-system gradients | `Planning Folder/For Ai/deepzeta-colour-system.html` |
+| Z0–Z3 | Depth planes | [13](13-experience-design.md) §1 |
+| kebab-case (`glass-live`) | Effect IDs | [13](13-experience-design.md) §4 |

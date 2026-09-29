@@ -34,7 +34,7 @@
 4. **`next/link`** for internal links. Links must be real `<a href>` (server-rendered, crawlable). No JavaScript-only navigation.
 5. **`next/font`** for fonts (see [05](05-design-system.md) §3).
 6. **Third-party scripts** via `@next/third-parties` or `next/script` with a deliberate strategy (see [09](09-analytics-tracking.md)). Nothing render-blocking in the head.
-7. **Heavy or interactive widgets** (chat agent, booking, WebGL) load **on interaction or when visible**, with a lightweight placeholder that reserves space (no layout shift).
+7. **Heavy or interactive widgets** (chat agent, booking, WebGL) load **on interaction or when visible**, with a lightweight placeholder that reserves space (no layout shift). "Wow on demand" experiences (concept sites, the app demo, the Device Stage, GSAP scenes) load only on an explicit visitor action (decision 0008). WebGL follows 05 §5 rule 5 and [13](13-experience-design.md) §4.6: T3 only, device-gated, started by the first real input.
 8. **Sitewide output only in the root layout** (schema org/website nodes, analytics init, consent, page-view tracker, floating widgets).
 9. **No data fetching in `useEffect`** for content; fetch on the server.
 10. **Route handlers** for `llms.txt`, `llms-full.txt`, `robots`, `sitemap` use static generation where possible.
@@ -64,6 +64,9 @@
   - Security headers: CSP, HSTS, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `X-Frame-Options: DENY` or CSP `frame-ancestors`, `Permissions-Policy`.
   - `dangerouslySetInnerHTML` only for JSON-LD produced by our schema builders, with `<` escaped (see [08](08-seo-geo-aeo-schema.md)).
   - Rate-limit form endpoints with a store that works on serverless (not in-memory).
+  - **Tools that fetch a visitor-supplied URL** guard against SSRF. They allow only public `http(s)` hosts, block private, link-local and metadata IP ranges after DNS resolution, and cap redirects, response size and time.
+  - **AI-powered tools** cap tokens per request and per visitor, and treat visitor input and fetched page content as untrusted (prompt-injection handling).
+  - **Masked report data** (deepzeta Tools, `docs/design/tools.md`) is never serialised to the client. It never appears in HTML or in client-component props (the RSC payload), until the server sends the full report after the visitor asks for it.
 
 ---
 
@@ -73,3 +76,4 @@
 2. Every new package needs, in an approved plan: the package, the **verified** version, and one sentence on why native or hand-rolled code is worse.
 3. **Banned by default:** jQuery, CSS frameworks other than Tailwind, UI kits/templates, page builders, styled-components/Emotion/Sass, Lodash/Moment, `motion`/Framer Motion, Lottie, Lenis or any smooth-scroll/scroll-jacking library, React Hook Form, `lucide-react` and other icon libraries, state libraries where React state suffices, `next-seo`. **GSAP** is allowed only on page tier T2/T3, loaded when its section is visible, never on Home (decision 0005).
 4. Never edit `package-lock.json` by hand; only via npm commands in an approved plan.
+5. **Visual references are never copied.** Snippets collected as inspiration (e.g. `Planning Folder/Components references/`, which depend on `motion/react`, icon libraries and remote assets) are rebuilt natively from the effects library ([13](13-experience-design.md) §9; conflict C23).
