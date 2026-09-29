@@ -1,4 +1,4 @@
-# 0006 · Roo Code as a second implementer
+# 0007 · Roo Code as a second implementer
 
 Status: PROPOSED
 
@@ -64,9 +64,9 @@ customModes:
 **First-use check:** in this mode, ask Roo to add a blank line to `CLAUDE.md`. It must be refused with a file restriction error. If it isn't, the regex path format differs on this machine and must be fixed before real work.
 
 ### 6. Rule files to update after acceptance (protected: owner applies)
-- `docs/ai/01-ai-agent-roles.md` §4: add a row "Roo Code: Implementer only, mode `deepzeta-implementer` (see 0006)".
-- `AGENTS.md`: add one line: "Roo Code: use the `deepzeta-implementer` mode; see `docs/decisions/0006`".
-- `docs/decisions/README.md`: add 0006 to the index.
+- `docs/ai/01-ai-agent-roles.md` §4: add a row "Roo Code: Implementer only, mode `deepzeta-implementer` (see 0007)".
+- `AGENTS.md`: add one line: "Roo Code: use the `deepzeta-implementer` mode; see `docs/decisions/0007`".
+- `docs/decisions/README.md`: add 0007 to the index.
 
 ## Consequences
 - Roo Code can't touch rules, docs, the logo, env files or the lockfile, even by mistake.

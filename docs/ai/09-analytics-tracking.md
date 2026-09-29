@@ -1,6 +1,6 @@
 # 09 · Analytics, Tracking & Consent
 
-> **Applies to:** analytics, pixels, consent, lead forms, CRM hand-off · **Precedence:** below 00 · **Last reviewed:** 2026-09-26
+> **Applies to:** analytics, pixels, consent, lead forms, CRM hand-off · **Precedence:** below 00 · **Last reviewed:** 2026-09-29
 
 Tracking code is fragile and failures are silent. These rules are strict on purpose.
 
@@ -14,8 +14,11 @@ Components ──trackEvent()──► src/lib/analytics.ts ──► window.dat
                                                                            ├─ Google Ads
                                                                            ├─ Meta Pixel (+ server CAPI)
                                                                            └─ LinkedIn Insight (+ CAPI)
-Lead form ──► server route ──► CRM (HubSpot or Zoho) ──► offline conversion import to Ads
-            (PII goes here only, never through GTM)
+Lead form ──► server action ──(signed webhook)──► n8n ──► Google Sheet (CRM v0; HubSpot/Zoho later)
+            (PII goes here only, never through GTM)   ├─► Gmail auto-reply + owner alert
+                                                      ├─► WhatsApp Cloud API
+                                                      └─► server-side CAPI events (Meta, LinkedIn)
+Google Ads ◄── scheduled offline-conversion import from the Sheet
 ```
 
 ---

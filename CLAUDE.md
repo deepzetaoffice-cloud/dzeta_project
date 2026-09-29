@@ -31,6 +31,7 @@ This is deepzeta's own website and its first case study. Speed, custom code, SEO
 
 - **Phase:** P-1 Pre-build (rule system). No application code exists yet. Node.js is **not installed** on this machine; npm gates can't run until Phase 0.
 - **Open decisions** that block related work: domain (D1), company entity (D2), service structure pillars vs stages (C6), JS budget (C8). See `docs/decisions/README.md`.
+- **Stack and performance tiers** accepted in decisions 0004 and 0005 (`docs/decisions/`). Motion is native-first; GSAP only on T2/T3 pages; automation runs on n8n.
 
 ## Working agreement
 

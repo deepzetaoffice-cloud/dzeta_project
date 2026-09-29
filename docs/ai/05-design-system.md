@@ -1,6 +1,6 @@
 # 05 · Design System
 
-> **Applies to:** all styling, components, icons, motion · **Precedence:** below 00 · **Last reviewed:** 2026-09-26
+> **Applies to:** all styling, components, icons, motion · **Precedence:** below 00 · **Last reviewed:** 2026-09-29
 > **Related:** `Planning Folder/For Ai/DeepZeta Icon Master Rules.md` (icons) · [07-performance-budget.md](07-performance-budget.md) (motion cost limits)
 
 ---
@@ -92,10 +92,10 @@
 
 **Rules (from the performance constraint, enforced)**
 1. Animate **`transform` and `opacity` only** (plus colour transitions).
-2. **CSS first.** No heavy animation libraries (no GSAP, no Framer Motion on the critical path, no Lottie).
+2. **Native first.** CSS transitions, CSS scroll-driven animations, View Transitions, `@property`, SVG. GSAP only on page tier T2/T3 (not the icon story tiers above), loaded when visible. No `motion`/Framer Motion, no Lottie (decision 0005).
 3. **Scroll storytelling, never scroll-jacking.** Never override the user's scroll.
 4. **No endless loops** or constant background animation. Stories play once, triggered on view or interaction.
-5. **At most one WebGL/3D moment on the whole site**, loaded late, only on capable devices, with a complete static fallback.
+5. **Real-time 3D (WebGL):** at most one moment on Home, loaded after LCP (or on first scroll or tap) on capable devices, with a static SVG/CSS LCP element, and only while `lhci` still shows ≥ 95; allowed on page tier T3. Always a complete static fallback, gated on device capability, reduced motion and Save-Data (decision 0005). CSS 3D transforms are not "real-time 3D" and follow the normal motion rules.
 6. **Glass blur** (`backdrop-filter`) only on the menu bar, modals and a few feature cards.
 7. **`prefers-reduced-motion: reduce`** shows the final static state for everything.
 8. Every animated or interactive element in a plan states **(a) its performance cost and (b) the mitigation.** Never present an effect as free.

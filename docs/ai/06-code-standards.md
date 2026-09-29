@@ -1,6 +1,6 @@
 # 06 · Code Standards
 
-> **Applies to:** all source code · **Precedence:** below 00 · **Last reviewed:** 2026-09-26
+> **Applies to:** all source code · **Precedence:** below 00 · **Last reviewed:** 2026-09-29
 
 ---
 
@@ -13,6 +13,12 @@
 | Styling | Tailwind CSS v4, CSS-first `@theme` tokens | No `tailwind.config.js`, no CSS-in-JS, no Sass |
 | i18n | English at launch; Arabic routing added in P11 (library chosen by decision record then) | Architecture RTL-ready now |
 | Content | Typed data/MDX in `src/content/` | Copy never hardcoded in components |
+| Motion | Native CSS/SVG/View Transitions first; GSAP only on page tier T2/T3; WebGL/Rive only on T3, plus one post-LCP WebGL moment on Home | Page tiers in decision 0005 |
+| Forms | Native `<form>` + Server Actions + `useActionState`; Zod on the server | No React Hook Form |
+| Spam / rate limit | Cloudflare Turnstile (on form focus) + Upstash Redis rate limit | Serverless-safe store (§4) |
+| Automation | n8n (hosting per decision 0004), called only from the server via signed webhook; workflow JSON in the repo | Decision 0004 |
+| CRM / email | Google Sheets v0 + Gmail (Workspace) via n8n; HubSpot/Zoho later | Swap inside n8n only |
+| AI agent | AI SDK + Claude on a route handler, streaming; UI loaded on tap | Model chosen in P7 plan |
 | Hosting | Vercel (owner already connected); region set by decision | |
 | Tests | Vitest (unit), Playwright + axe (e2e/a11y), Lighthouse CI | |
 
@@ -65,5 +71,5 @@
 
 1. **Native first.** Prefer platform features (`<dialog>`, `:has()`, container queries, `Intl`, CSS animations) when they cover the need.
 2. Every new package needs, in an approved plan: the package, the **verified** version, and one sentence on why native or hand-rolled code is worse.
-3. **Banned by default:** jQuery, CSS frameworks other than Tailwind, UI kits/templates, page builders, styled-components/Emotion/Sass, Lodash/Moment, GSAP, Framer Motion on the critical path, Lottie, state libraries where React state suffices, `next-seo`.
+3. **Banned by default:** jQuery, CSS frameworks other than Tailwind, UI kits/templates, page builders, styled-components/Emotion/Sass, Lodash/Moment, `motion`/Framer Motion, Lottie, Lenis or any smooth-scroll/scroll-jacking library, React Hook Form, `lucide-react` and other icon libraries, state libraries where React state suffices, `next-seo`. **GSAP** is allowed only on page tier T2/T3, loaded when its section is visible, never on Home (decision 0005).
 4. Never edit `package-lock.json` by hand; only via npm commands in an approved plan.

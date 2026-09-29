@@ -1,6 +1,6 @@
 # 03 · Verification Gates
 
-> **Applies to:** every task that changes files · **Precedence:** below 00 · **Last reviewed:** 2026-09-26
+> **Applies to:** every task that changes files · **Precedence:** below 00 · **Last reviewed:** 2026-09-29
 
 A gate is a **command with a pass condition**. Work is done only when the required gates pass **and their output is in the report**. "I checked mentally" is not a gate.
 
@@ -23,7 +23,7 @@ A gate is a **command with a pass condition**. Work is done only when the requir
 | `npm run test` | Vitest unit tests (schema builders, geo/llms builders, analytics wrapper, utils) | all pass |
 | `npm run build` | `next build` | succeeds, no warnings we haven't accepted in the conflict register |
 | `npm run test:e2e` | Playwright on the production build: key pages render, keyboard navigation, **axe** accessibility, tracking regression (`dataLayer[0]` rule, events fire once) | all pass, 0 serious/critical axe violations |
-| `npm run lhci` | Lighthouse CI on the fixed URL sample with budgets from [07](07-performance-budget.md) | all assertions pass |
+| `npm run lhci` | Lighthouse CI on the fixed URL sample with per-tier budgets from [07](07-performance-budget.md) (page tiers: decision 0005) | all assertions pass |
 | `npm run verify:fast` | `typecheck` + `lint` + `check:tokens` | pass |
 | `npm run verify` | everything above, in order | pass |
 

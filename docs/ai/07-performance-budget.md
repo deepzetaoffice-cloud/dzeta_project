@@ -1,6 +1,6 @@
 # 07 · Performance Budget
 
-> **Applies to:** every page, component, asset and third-party script · **Precedence:** below 00 (N1 makes this a non-negotiable) · **Last reviewed:** 2026-09-26
+> **Applies to:** every page, component, asset and third-party script · **Precedence:** below 00 (N1 makes this a non-negotiable) · **Last reviewed:** 2026-09-29
 
 The site is deepzeta's proof of work. **A page that fails a hard limit does not ship.**
 
@@ -17,8 +17,10 @@ The site is deepzeta's proof of work. **A page that fails a hard limit does not 
 | **CLS** (cumulative layout shift) | ≤ 0.05 | ≤ 0.1 |
 | TTFB | ≤ 200 ms (static/edge) | ≤ 600 ms |
 | TBT (lab proxy for INP) | ≤ 100 ms | ≤ 200 ms |
-| Lighthouse Performance (mobile) | ≥ 95 | ≥ 90 |
+| Lighthouse Performance (mobile) | per tier | T1 Home ≥ 95 · T2 money pages ≥ 90 · T3 experience pages ≥ 70 (decision 0005). Unlisted pages = T2. |
 | Lighthouse Accessibility / Best Practices / SEO | 100 | ≥ 95 |
+
+*Tiers:* Core Web Vitals hard limits (LCP, INP, CLS) apply to **every** tier. The tier only changes the Lighthouse score floor and the motion toolkit allowed.
 
 *Reconciliation:* the advisory said LCP < 1.5 s, INP < 100 ms, CLS < 0.05; the performance constraint says < 2.5 s / < 200 ms / < 0.1. We aim for the first and never cross the second (blueprint decision). FID is obsolete; INP replaces it.
 
@@ -80,4 +82,4 @@ The site is deepzeta's proof of work. **A page that fails a hard limit does not 
 
 ## 5. Regression rule
 
-Once a page has a Lighthouse baseline, a change that drops its mobile Performance score by **more than 2 points** or breaks any hard limit **blocks the merge** (`lhci` assertions), unless the owner approves an exception recorded in the conflict register.
+Once a page has a Lighthouse baseline, a change that drops its mobile Performance score by **more than 2 points**, takes it below its **tier floor**, or breaks any hard limit **blocks the merge** (`lhci` assertions), unless the owner approves an exception recorded in the conflict register.

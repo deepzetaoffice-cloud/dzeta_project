@@ -19,9 +19,10 @@ Status: PROPOSED | ACCEPTED (owner, date) | SUPERSEDED by NNNN
 | [0001](0001-ai-rule-system.md) | AI rule system: `docs/ai` as single source; Claude Code primary; `AGENTS.md` for other tools | ACCEPTED |
 | [0002](0002-english-first-arabic-after-launch.md) | English at launch; native GCC Arabic after launch; RTL-ready now | ACCEPTED |
 | [0003](0003-plan-first-workflow.md) | Plan first, then execute; Git + GitHub with protected `main` | ACCEPTED |
-| [0004](0004-tech-stack.md) | Tech stack: native-first frontend, n8n automation backbone, Google Sheets CRM v0 | PROPOSED |
-| [0005](0005-performance-tiers.md) | Performance tiers: Home ≥ 95 · money pages ≥ 90 · experience pages ≥ 70; Core Web Vitals everywhere | PROPOSED |
+| [0004](0004-tech-stack.md) | Tech stack: native-first frontend, n8n automation backbone, Google Sheets CRM v0 | ACCEPTED |
+| [0005](0005-performance-tiers.md) | Performance tiers: Home ≥ 95 · money pages ≥ 90 · experience pages ≥ 70; Core Web Vitals everywhere | ACCEPTED |
 | [0006](0006-domain-deepzeta-ai.md) | Domain: `deepzeta.ai` is canonical; `www` redirects to it | ACCEPTED |
+| [0007](0007-roo-code-as-implementer.md) | Roo Code as a second implementer (renumbered from 0006 on 2026-09-29; see conflict C7) | PROPOSED |
 
 ## Open business decisions (from the blueprint)
 
@@ -35,4 +36,4 @@ Status: PROPOSED | ACCEPTED (owner, date) | SUPERSEDED by NNNN
 | D6 | Languages | Decided: [0002](0002-english-first-arabic-after-launch.md) |
 | — | Service structure: pillars vs buyer stages (conflict C6) | OPEN |
 | — | Hosting region on Vercel | OPEN (P0) |
-| — | CRM | Google Sheets v0 via n8n; HubSpot/Zoho later: [0004](0004-tech-stack.md) (PROPOSED) |
+| — | CRM | Google Sheets v0 via n8n; HubSpot/Zoho later: [0004](0004-tech-stack.md) (ACCEPTED) |
