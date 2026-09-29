@@ -1,11 +1,16 @@
 # Lessons Learned
 
-> **Applies to:** every agent (read before planning) · **Precedence:** informs rule changes; not itself a rule · **Last reviewed:** 2026-09-26
+> **Applies to:** every agent (read before planning) · **Precedence:** informs rule changes; not itself a rule · **Last reviewed:** 2026-09-29
 
 Every AI mistake gets an entry, and every entry ends in a **prevention**: a new rule line, a new gate or a new test. Agents propose entries in their task report; the owner adds them.
 
 | # | Date | What went wrong | Root cause | Prevention (rule / gate / test) |
 |---|---|---|---|---|
+| 1 | 2026-09-29 | Homepage mockup v1 loaded its fonts through a render-blocking Google Fonts `<link>`. | The prototype was written for quick review, not checked against 05 §3 / 07 §2. | 05 §3 already bans it. Planned P0 gate: fail on `fonts.googleapis.com` anywhere in `src/`. Prototypes follow the same font rule. |
+| 2 | 2026-09-29 | Mockup v1's large hero mark was an SVG `<image>` that faded in from opacity 0: a competitor for the LCP element that could delay LCP. | No rule said the LCP region must be visible at first paint. | [13](13-experience-design.md) §3 rule 2 (the LCP element is visible, unclipped and in place at first paint); a planned e2e assertion ([03](03-verification-gates.md)). |
+| 3 | 2026-09-29 | Mockup v1's live proof panel added up every layout shift (wrong CLS) and didn't measure INP. | Hand-rolled metrics instead of the standard library. | All metrics via `web-vitals` (decision 0004). The Page Nutrition Label states its method and never substitutes a metric (`docs/design/footer.md`). |
+| 4 | 2026-09-29 | Mockup v1's industry tabs had no `aria-controls`, roving tabindex or arrow keys; its drawer had no Esc or focus handling; its "WhatsApp" button opened the AI drawer. | Interaction patterns built without an accessibility checklist. | [13](13-experience-design.md) §2 focus parity; e2e keyboard tests for tabs, drawers and sheets ([03](03-verification-gates.md)); the header and footer specs define keyboard behaviour. |
+| 5 | 2026-09-29 | Rule files drifted from accepted decisions: 05 §5 still banned GSAP after 0005; the decisions index said PROPOSED; CLAUDE.md said Node wasn't installed; two decisions used 0006 on different branches. | Accepting a decision didn't include applying its rule edits, and a branch was left unmerged. | A decision is accepted together with its rule edits, in the same change. Proposed small plan: extend `check:rules` to compare index statuses with the decision files and to check paths that contain spaces. |
 
 ## Imported lessons (from earlier projects, technical only)
 

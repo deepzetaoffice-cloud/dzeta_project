@@ -23,6 +23,7 @@ Status: PROPOSED | ACCEPTED (owner, date) | SUPERSEDED by NNNN
 | [0005](0005-performance-tiers.md) | Performance tiers: Home ≥ 95 · money pages ≥ 90 · experience pages ≥ 70; Core Web Vitals everywhere | ACCEPTED |
 | [0006](0006-domain-deepzeta-ai.md) | Domain: `deepzeta.ai` is canonical; `www` redirects to it | ACCEPTED |
 | [0007](0007-roo-code-as-implementer.md) | Roo Code as a second implementer (renumbered from 0006 on 2026-09-29; see conflict C7) | PROPOSED |
+| [0008](0008-design-language-signal-and-depth.md) | Design language "Signal & Depth": responsive-only motion, effects library (`docs/ai/13`), surface specs (`docs/design/`), new pages and tiers, 150 KB = first load | ACCEPTED |
 
 ## Open business decisions (from the blueprint)
 
