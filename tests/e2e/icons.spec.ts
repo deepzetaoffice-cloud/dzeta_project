@@ -205,16 +205,29 @@ test.describe('Icons', () => {
     await expect(host.locator('.dz-halo')).toHaveCSS('opacity', '0');
   });
 
-  test('forced colours and more contrast turn the stories off, like Reduce effects (13 §2.11)', async ({ page }) => {
-    for (const media of [{ forcedColors: 'active' as const }, { contrast: 'more' as const }]) {
-      await page.emulateMedia({ reducedMotion: 'no-preference', ...media });
-      await injectIcons(page);
-      const host = page.locator('[data-host="whatsapp-ai-agent"]');
-      await expect(host.locator('.dz-halo')).toHaveCSS('opacity', '0.45');
-      await host.hover();
-      await expect(host.locator('.dz-px')).toHaveCSS('animation-name', 'none');
-      await page.emulateMedia({ forcedColors: 'none', contrast: 'no-preference' });
-    }
+  test('more contrast turns the stories off, like Reduce effects, with a steady 0.45 glow (13 §2.11)', async ({
+    page,
+  }) => {
+    await page.emulateMedia({ reducedMotion: 'no-preference', contrast: 'more' });
+    await injectIcons(page);
+    const host = page.locator('[data-host="whatsapp-ai-agent"]');
+    await expect(host.locator('.dz-halo')).toHaveCSS('opacity', '0.45');
+    await host.hover();
+    await expect(host.locator('.dz-px')).toHaveCSS('animation-name', 'none');
+    await expect(host.locator('.dz-halo')).toHaveCSS('opacity', '0.45');
+  });
+
+  test('forced colours drop the gradients: a solid pixel in the text colour, no glow, no story (13 §6)', async ({
+    page,
+  }) => {
+    await page.emulateMedia({ reducedMotion: 'no-preference', forcedColors: 'active' });
+    await injectIcons(page);
+    const host = page.locator('[data-host="whatsapp-ai-agent"]');
+    await host.hover();
+    const textColour = await host.locator('svg').evaluate((svg) => getComputedStyle(svg).color);
+    await expect(host.locator('.dz-px')).toHaveCSS('fill', textColour);
+    await expect(host.locator('.dz-halo')).toHaveCSS('opacity', '0');
+    await expect(host.locator('.dz-px')).toHaveCSS('animation-name', 'none');
   });
 
   test('hover plays the story; with reduced motion the pixel is lit and the glow is 0.45', async ({ page }) => {
@@ -231,6 +244,8 @@ test.describe('Icons', () => {
     await host.hover();
     await expect(host.locator('.dz-px')).toHaveCSS('animation-name', 'none');
     await expect(host.locator('.dz-px')).toHaveCSS('opacity', '1');
+    // Static means static: hovering doesn't fade the glow up to 0.6 either.
+    await expect(host.locator('.dz-halo')).toHaveCSS('opacity', '0.45');
   });
 
   test('focus plays the same state as hover (13 §2)', async ({ page }) => {

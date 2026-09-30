@@ -120,11 +120,25 @@
     transform: scaleX(-1);
   }
 
-  /* Static: no story; the pixel lit and the glow at 0.45 (§4.4, §7.1). Reduce effects is on for reduced
-     motion, forced colours and more contrast (13 §2.11); P2 adds the switch's own selector. */
-  @media (prefers-reduced-motion: reduce), (forced-colors: active), (prefers-contrast: more) {
-    .dz-halo {
+  /* Static: no story; the pixel lit and the glow at 0.45, hovered or not (§4.4, §7.1). Reduce effects is
+     on for reduced motion, forced colours and more contrast (13 §2.11); P2 adds the switch's own
+     selector. The hover selector is repeated so this wins over the hover glow above. */
+  @media (prefers-reduced-motion: reduce), (prefers-contrast: more) {
+    .dz-halo,
+    .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible)) .dz-halo {
       opacity: 0.45;
+    }
+  }
+
+  /* Forced colours: gradients drop (13 §6). The pixel takes the system text colour and the glow goes. */
+  @media (forced-colors: active) {
+    .dz-px {
+      fill: currentColor;
+    }
+
+    .dz-halo,
+    .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible)) .dz-halo {
+      opacity: 0;
     }
   }
 

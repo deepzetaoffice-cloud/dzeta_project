@@ -32,11 +32,12 @@ type LogoName = { label: string; decorative?: never } | { decorative: true; labe
 export type LogoProps = LogoName & {
   /** `lockup`: the mark and the wordmark in a row (header). `mark`: the Z and the pixels (hero). */
   variant: 'lockup' | 'mark' | 'wordmark';
-  /** Sets the height (a Tailwind height class); the width follows the logo's ratio. */
-  className?: string;
+  /** Must set the height (a Tailwind height class): the crops fill it, and the width follows the logo's
+      ratio. Without one they'd render at the crop's own size, 552 × 432. */
+  className: string;
 };
 
-export function Logo({ variant, className = '', label }: LogoProps) {
+export function Logo({ variant, className, label }: LogoProps) {
   // Only `decorative` hides it: an empty label is an unnamed image, which the axe checks catch.
   const name = label !== undefined ? { role: 'img', 'aria-label': label } : { 'aria-hidden': true as const };
   return (
