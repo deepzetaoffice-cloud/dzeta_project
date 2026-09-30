@@ -1,6 +1,6 @@
 # 06 · Code Standards
 
-> **Applies to:** all source code · **Precedence:** below 00 · **Last reviewed:** 2026-09-29
+> **Applies to:** all source code · **Precedence:** below 00 · **Last reviewed:** 2026-09-30
 
 ---
 
@@ -64,7 +64,8 @@
   - Secrets only in environment variables; `NEXT_PUBLIC_` only for values safe in the browser.
   - Validate env at startup.
   - **Security headers** are set once, centrally (`next.config` `headers()`), and asserted by e2e:
-    - CSP, HSTS, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `X-Frame-Options: DENY` or CSP `frame-ancestors`, `Permissions-Policy`
+    - CSP, HSTS, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy`
+    - `X-Frame-Options: SAMEORIGIN` plus CSP `frame-ancestors 'self'`. Not `DENY`: Designer Studio concepts load our own pages in a sandboxed iframe (`docs/design/studio.md`).
     - no deprecated `X-XSS-Protection`
     - CSP ships as `Content-Security-Policy-Report-Only` in P0. The enforcement mode is decided in P3, after GTM is in, because nonce-based CSP forces dynamic rendering (verify on the installed Next.js).
   - `images.dangerouslyAllowSVG` stays off.

@@ -33,10 +33,10 @@ This is deepzeta's own website and its first case study. Speed, custom code, SEO
 
 ## Current state
 
-- **Phase:** P-1 Pre-build (rule system and design direction). No application code exists yet. Node.js v24 is installed, but there is no `package.json` until Phase 0: run `node scripts/check-rules.mjs` directly; the npm gates start in P0.
-- **Open decisions** that block related work: JS budget (C8). Decided on 2026-09-29: the company entity (D2, Deepzeta Digital Solutions L.L.C.), the service structure (C6, the four pillars) and the brand name "Deepzeta AI" (C29). The domain is `deepzeta.ai` (0006). See `docs/decisions/README.md`.
+- **Phase:** P0 Foundation (`docs/plans/2026-09-30-p0-foundation.md`, part 1 of 2; part 2 is the design tokens, themes and fonts plan). The app is scaffolded (Next.js 16.3.7, React 19.3, TypeScript 6.0.3, Tailwind 4.3, versions in decision 0012). Every gate is an npm script: `npm run verify:fast` after each step, `npm run verify` before a PR (03). Local runs need `.env.local` (`docs/owner/p0-setup-guide.md`).
+- **Open decisions** that block related work: JS budget (C8), measured in P0 (decision 0014). Decided on 2026-09-29: the company entity (D2, Deepzeta Digital Solutions L.L.C.), the service structure (C6, the four pillars) and the brand name "Deepzeta AI" (C29). The domain is `deepzeta.ai` (0006). See `docs/decisions/README.md`.
 - **Stack and performance tiers** accepted in decisions 0004 and 0005 (`docs/decisions/`). Motion is native-first; GSAP only on T2/T3 pages; automation runs on n8n.
-- **Design Direction v2 "Signal & Depth"** accepted in decision 0008: responsive-only motion; effects in `docs/ai/13-experience-design.md`; surface specs in `docs/design/`. Parked for owner sessions: the 15+ Studio concepts, the Deepzeta Sync sales automation, the App demo. Next: the Design Lab prototype (its own plan).
+- **Design Direction v2 "Signal & Depth"** accepted in decision 0008: responsive-only motion; effects in `docs/ai/13-experience-design.md`; surface specs in `docs/design/`. Parked for owner sessions: the 15+ Studio concepts, the Deepzeta Sync sales automation, the App demo. Design Lab verdicts: decision 0009. Next: P0 part 2 (design tokens, themes and fonts).
 - **SEO/GEO Domination Engine** (`docs/seo/`, 2026-09-30): the content system, the V1 URL registry (about 99 pages), linking, FAQ, E-E-A-T, robots/llms. **Reminder:** pSEO starts only after every V1 registry row is live; then remind the owner (engine §10).
 
 ## Working agreement
