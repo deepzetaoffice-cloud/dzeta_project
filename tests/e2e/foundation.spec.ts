@@ -1,10 +1,13 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 import { parseEnv } from '../../src/lib/env';
-import { isIndexable } from '../../src/lib/seo/indexing';
+import { isIndexable, robotsRules } from '../../src/lib/seo/indexing';
 
 // P0 foundation checks (docs/plans/2026-09-30-p0-foundation.md, allowed-files table).
-const indexable = isIndexable(parseEnv(process.env));
+const currentEnv = parseEnv(process.env);
+const indexable = isIndexable(currentEnv);
+// Only Vercel previews and development builds block crawlers (decision 0013, option 2).
+const blocksCrawlers = robotsRules(currentEnv).disallow === '/';
 const UNKNOWN_URL = '/this-page-does-not-exist';
 
 async function seriousAxeViolations(page: Page) {
@@ -117,19 +120,19 @@ test.describe('Headers and robots (docs/ai/06 §4, docs/ai/08 §1)', () => {
     expect(headers['x-powered-by']).toBeUndefined();
   });
 
-  test(`noindex header and robots.txt match the indexing mode (indexable: ${indexable})`, async ({ request }) => {
+  test(`noindex header and robots.txt match the deployment (indexable: ${indexable})`, async ({ request }) => {
     const home = await request.get('/');
     const robots = await (await request.get('/robots.txt')).text();
+    expect(home.headers()['x-robots-tag']).toBe(indexable ? undefined : 'noindex');
     // Whole-line matches: "Disallow: /" must never pass for "Allow: /" or the other way round.
-    if (indexable) {
-      expect(home.headers()['x-robots-tag']).toBeUndefined();
+    if (blocksCrawlers) {
+      expect(robots).toMatch(/^Disallow: \/$/m);
+      expect(robots).not.toMatch(/^Allow:/m);
+    } else {
+      // Also while the pre-launch lock is on, so crawlers can read the noindex header.
       expect(robots).toMatch(/^Allow: \/$/m);
       expect(robots).toMatch(/^Disallow: \/api\/$/m);
       expect(robots).not.toMatch(/^Disallow: \/$/m);
-    } else {
-      expect(home.headers()['x-robots-tag']).toBe('noindex');
-      expect(robots).toMatch(/^Disallow: \/$/m);
-      expect(robots).not.toMatch(/^Allow:/m);
     }
   });
 });

@@ -1,6 +1,6 @@
 # 0013 · Pre-launch indexing lock
 
-Status: PROPOSED (built in P0 as the plan designed it; the owner chooses the robots.txt behaviour below, or turns the lock off)
+Status: ACCEPTED (owner, 2026-09-30): the lock stays on until launch; `robots.txt` option 2
 
 ## Context
 
@@ -19,7 +19,7 @@ So `Disallow: /` together with `noindex`, which P0 serves today whenever a deplo
 - **One switch, `SITE_INDEXING`** (`on` or `off`; unset means `off`), read by `src/lib/env.ts`.
 - **The rule** (`src/lib/seo/indexing.ts`): a deployment is indexable only when `SITE_INDEXING=on` and it isn't a Vercel preview or development build.
 - **When not indexable:** every response sends `X-Robots-Tag: noindex`.
-- **`robots.txt` while the lock is on: the owner chooses one.**
+- **`robots.txt` while the lock is on: option 2** (owner, 2026-09-30; the owner set this record to approved and asked to continue as planned; 2 is the recommended option).
 
   | Option | Previews | Production before launch | Effect |
   |---|---|---|---|
@@ -38,8 +38,11 @@ So `Disallow: /` together with `noindex`, which P0 serves today whenever a deplo
 ## Consequences
 
 - **Turning the lock off** needs no code change: set `SITE_INDEXING=on` in Vercel Production.
-- **Option 2** changes one function, `robotsRules()` in `src/lib/seo/indexing.ts`, which then needs the deployment type as well as whether it's indexable. Its unit test covers the three cases.
-- **Rule edits, applied when the owner confirms:**
+- **Option 2** changed one function, `robotsRules()` in `src/lib/seo/indexing.ts`. It now reads the deployment type, not whether the deployment is indexable:
+  - Vercel previews and development builds get `Disallow: /`.
+  - Everywhere else (production locked or launched, the owner's machine, CI) gets the launch file, and `noindex` comes from the header.
+  - Its unit tests cover each deployment type and the locked production case.
+- **Rule edits, applied on 2026-09-30:**
   - 08 §1 notes that production stays `noindex` until `SITE_INDEXING=on`, with the chosen `robots.txt` behaviour
   - the P10 row in 04 lists "set `SITE_INDEXING=on` in Vercel Production"
 - **A reminder in every build:** production builds print "Pre-launch lock ON" while the lock is on (`next.config.ts`).
