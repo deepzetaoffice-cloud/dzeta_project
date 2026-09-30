@@ -1,6 +1,6 @@
 # 0020 · The performance exception limit: Performance 86, LCP a little over 2.5 s
 
-Status: PROPOSED. The owner chose this option on 2026-10-01 (in chat, during P2 step 2). It becomes ACCEPTED together with its rule edits (lesson 5): conflict entry C43 and one line in [07](../ai/07-performance-budget.md) §5, which wait for the owner's OK.
+Status: ACCEPTED (owner, 2026-10-01: the option chosen in chat during P2 step 2, then "OK 0020" for its rule edits). Accepted together with those edits (lesson 5): conflict entry C43 and one line in [07](../ai/07-performance-budget.md) §5.
 
 (0019 is reserved for the P2 layout-shell record, named in the P2 plan.)
 
@@ -25,7 +25,7 @@ Status: PROPOSED. The owner chose this option on 2026-10-01 (in chat, during P2 
 
 ## Consequences
 
-- **Rule edits, with the owner's OK** (protected files, 00 §5):
+- **Rule edits, applied with the owner's OK** (protected files, 00 §5):
   - [conflict-register.md](../ai/conflict-register.md), appended: **C43** · the owner's instruction against 07 §1 and 0005 · resolved by this decision.
   - [07](../ai/07-performance-budget.md) §5, one line added: "The owner's exception limit ([decision 0020](../decisions/0020-performance-exception-limit.md)): an exception never takes a T1 or T2 page below Performance 86, and LCP only a little over 2.5 s. Beyond that, the change is reworked, not excepted."
 - **No code changes:** `lighthouserc.cjs` keeps its assertions. An accepted exception is recorded in the conflict register; changing an assertion needs the plan that ships it to name it.

@@ -1,6 +1,6 @@
 # 07 · Performance Budget
 
-> **Applies to:** every page, component, asset and third-party script · **Precedence:** below 00 (N1 makes this a non-negotiable) · **Last reviewed:** 2026-09-30
+> **Applies to:** every page, component, asset and third-party script · **Precedence:** below 00 (N1 makes this a non-negotiable) · **Last reviewed:** 2026-10-01
 
 The site is deepzeta's proof of work. **A page that fails a hard limit does not ship.**
 
@@ -96,3 +96,5 @@ The site is deepzeta's proof of work. **A page that fails a hard limit does not 
 ## 5. Regression rule
 
 Once a page has a Lighthouse baseline, a change that drops its mobile Performance score by **more than 2 points**, takes it below its **tier floor**, or breaks any hard limit **blocks the merge** (`lhci` assertions), unless the owner approves an exception recorded in the conflict register.
+
+The owner's exception limit ([decision 0020](../decisions/0020-performance-exception-limit.md)): an exception never takes a T1 or T2 page below Performance 86, and LCP only a little over 2.5 s. Beyond that, the change is reworked, not excepted.
