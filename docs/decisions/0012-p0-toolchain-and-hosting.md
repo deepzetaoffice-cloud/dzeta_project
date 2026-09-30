@@ -1,6 +1,8 @@
 # 0012 · P0 toolchain versions and hosting facts
 
-Status: ACCEPTED (owner, 2026-09-30, with the approval of `docs/plans/2026-09-30-p0-foundation.md`)
+Status: ACCEPTED in part.
+- **ACCEPTED** (owner, 2026-09-30, with the approval of `docs/plans/2026-09-30-p0-foundation.md`): the versions and the hosting facts.
+- **PROPOSED** until the owner confirms them: accepting the dev-only `npm audit` findings, and the Next.js title-template behaviour recorded during the build. Both came after the plan was approved.
 
 ## Context
 
@@ -33,7 +35,7 @@ Decision [0004](0004-tech-stack.md) asked P0 to verify and record the versions, 
 **Security advisories** (`npm audit`, 2026-09-30):
 - Runtime dependencies (`--omit=dev`): **0 vulnerabilities**.
 - Dev tools: 10 findings (7 high, 1 moderate, 2 low), all inside `@lhci/cli`'s own tree: `tmp`, `uuid`, `inquirer`, and `lighthouse` → `puppeteer-core` → `@puppeteer/browsers` → `extract-zip`. `@lhci/cli` 0.15.1 is the latest release; npm's only "fix" is a downgrade to 0.1.0.
-- These tools run only on our own machine and in CI, against our own local build, and never ship to visitors. **Accepted.** Re-checked in every plan that adds a dependency.
+- These tools run only on our own machine and in CI, against our own local build, and never ship to visitors. **Proposed: accept them**, and re-check in every plan that adds a dependency.
 
 **Hosting facts:**
 - **No Middle East compute region on Vercel.** The regions page (updated 2026-08-11) lists 19 regions; the nearest to the UAE is `bom1` (Mumbai), and the default is `iad1`. Hobby allows one function region.

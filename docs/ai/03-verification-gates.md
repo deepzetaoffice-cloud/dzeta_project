@@ -4,12 +4,12 @@
 
 A gate is a **command with a pass condition**. Work is done only when the required gates pass **and their output is in the report**. "I checked mentally" is not a gate.
 
-> **Status (P0, 2026-09-30):** every script below exists, except those marked *planned*. A gate that can't run is reported as **NOT RUN, reason**, never as passed.
+> **Status (P0, 2026-09-30):** every script below exists except `check:content` (planned, P4). `check:effects` exists too, despite its *planned* label below. A gate that can't run is reported as **NOT RUN, reason**, never as passed.
 >
 > Some gates grow by phase. Each one prints what it doesn't check yet and the phase that adds it, so its output never claims more than it checked (`docs/plans/2026-09-30-p0-foundation.md` §E). Today:
 > - `check:facts` checks `[[TODO` markers; the numbers allowlist comes in P4.
 > - `check:schema` checks that JSON-LD parses, that each `@id` is defined once, and that no value is empty; the rest comes in P4.
-> - `check:seo` checks everything except `og:image` (P4) and sitemap parity (P9).
+> - `check:seo` checks the title (brand once, 50–60 characters), the description (140–160), one H1, the self-canonical, the `keywords` ban, and duplicate titles and descriptions across pages. The Open Graph and Twitter tags and `og:image` come in P4; sitemap parity and the `llms` exclusion come in P9.
 > - `check:links` checks that internal links resolve; the registry rules come in P4.
 > - The HTML gates find pages by following links from `/`; sitemap and registry seeds come in P4/P9.
 

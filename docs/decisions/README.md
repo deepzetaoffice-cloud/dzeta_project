@@ -27,7 +27,7 @@ Status: PROPOSED | ACCEPTED (owner, date) | SUPERSEDED by NNNN
 | [0009](0009-design-lab-v1-verdicts.md) | Design Lab v1 verdicts: token values, Lab decisions, cluster as nav marker, Studio word ripple exception | ACCEPTED |
 | [0010](0010-ai-training-crawlers-allowed.md) | AI training crawlers get full access (same as every crawler) | ACCEPTED |
 | [0011](0011-content-pages-t2.md) | Content pages (About, founder, case studies, resources, legal) move from T3 to T2 | ACCEPTED |
-| [0012](0012-p0-toolchain-and-hosting.md) | P0 toolchain versions (TypeScript 6, ESLint 9 and why), audit result, Vercel region and DNS facts | ACCEPTED |
+| [0012](0012-p0-toolchain-and-hosting.md) | P0 toolchain versions (TypeScript 6, ESLint 9 and why), audit result, Vercel region and DNS facts | ACCEPTED in part (versions, hosting); audit acceptance PROPOSED |
 | [0013](0013-pre-launch-indexing-lock.md) | Pre-launch indexing lock: production stays `noindex` until `SITE_INDEXING=on` at launch | PROPOSED |
 | [0014](0014-empty-page-baseline-and-js-budget.md) | Empty-page baseline and the JavaScript budget (C8) | PROPOSED |
 

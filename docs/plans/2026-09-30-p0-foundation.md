@@ -122,7 +122,7 @@ Those are design decisions the owner reviews visually, and the JavaScript baseli
 | `check:tokens` | Raw hex/rgb/hsl/oklch colours and px values (CSS and Tailwind arbitrary values) outside `src/styles/tokens.css`; physical-direction classes and properties; `fonts.googleapis.com` / `fonts.gstatic.com` anywhere in `src/` (lesson 1) | — |
 | `check:facts` | `[[TODO` markers in `src/content/**` | The numbers allowlist (P4) |
 | `check:schema` | Each JSON-LD block parses; each `@id` is defined at most once per document; no empty or placeholder values | Sitewide nodes exactly once, reference resolution, the matrix, NAP, breadcrumbs, visible parity (P4) |
-| `check:seo` | One `<title>`, brand suffix once, 50–60 characters; description 140–160; one H1; absolute self-canonical on the `NEXT_PUBLIC_SITE_URL` host with no trailing slash; no `keywords` meta; `noindex` pages skipped | `og:image` returns 200 (P4, when OG images exist); sitemap parity (P9) |
+| `check:seo` | One `<title>`, brand named once, 50–60 characters; description 140–160; one H1; absolute self-canonical on the `NEXT_PUBLIC_SITE_URL` host with no trailing slash; no `keywords` meta; titles and descriptions unique across pages (added after review); `noindex` pages skipped and listed | Open Graph and Twitter tags (P4, with the metadata builder; `og:locale` needs a value decision); `og:image` returns 200 (P4); sitemap parity and the `llms` exclusion (P9) |
 | `check:links` | Every internal `<a href>` on every crawled page returns 200 | Registry rules, link budgets, anchors, orphans, click depth (P4) |
 | `check:rules` | The existing `scripts/check-rules.mjs`, now an npm script | Lesson 5 extension (its own small plan) |
 | `check:effects` | Every effect ID in any plan's "Effect register" table exists in 13 §4. If an older plan fails, it's reported to the owner, never silently excluded. | — |
@@ -134,12 +134,14 @@ Those are design decisions the owner reviews visually, and the JavaScript baseli
 
 ### F. Lighthouse CI (`lighthouserc.cjs`)
 - Tests `/` on the production build.
-- 5 runs, median. Lighthouse's default mobile emulation with simulated slow 4G (07 test conditions).
+- 5 runs. Lighthouse's default mobile emulation with simulated slow 4G (07 test conditions).
+- **Aggregation:** category scores use the median score. Audits use the median run. The perf review found that lhci's `median-run` checks category scores on the best run.
 - **Assertions:**
   - Performance ≥ 0.95 (T1)
   - Accessibility, Best Practices and SEO ≥ 0.95
   - LCP ≤ 2500 ms, CLS ≤ 0.1, TBT ≤ 200 ms
-  - total transfer ≤ 150 KB (P0 has no fonts or images; part 2 splits this into per-type budgets)
+  - TTFB ≤ 600 ms and no third-party requests (both added after review, 07 §1–2)
+  - total transfer ≤ 150 KB (KiB of transfer size, headers included; P0 has no fonts or images; part 2 splits this into per-type budgets)
 - Reports are saved to `.lighthouseci/` (git-ignored). CI keeps them as build artifacts. Nothing goes to public storage.
 - The per-page JavaScript assertion is added after the owner's C8 decision (step 10).
 
@@ -181,7 +183,7 @@ Those are design decisions the owner reviews visually, and the JavaScript baseli
 | `src/lib/url.ts` | CREATE | `siteUrl()`, `absoluteUrl()` |
 | `src/lib/seo/indexing.ts` | CREATE | Section A |
 | `src/lib/security-headers.ts` | CREATE | Section B |
-| `src/lib/seo/title.ts` | CREATE | **Added during step 6.** The one title format, used by the layout template and by Home. `check:seo` showed that Next.js doesn't apply a layout's `title.template` to the page in the layout's own segment (docs 16.3.7, `generateMetadata` → `title.template`). |
+| `src/lib/seo/title.ts` | CREATE | **Added during step 6, awaiting the owner's OK** (the plan allowed status edits only). The one title format, used by the layout template and by Home. `check:seo` showed that Next.js doesn't apply a layout's `title.template` to the page in the layout's own segment (docs 16.3.7, `generateMetadata` → `title.template`). |
 | `src/lib/i18n/locales.ts` | CREATE | `en` → `lang="en"`, `dir="ltr"`, ready for `ar` |
 | `src/lib/site-config.ts` | CREATE | CONFIRMED identity facts only |
 | `src/content/en/home.ts` | CREATE | Placeholder copy (section D) |
