@@ -1,0 +1,237 @@
+/* Icons (Icon Master Rules; docs/ai/05 §6; P1 plan, D5). Lines take currentColor, and pixels their
+   pillar gradient from the shared definitions (IconDefs). Colours and motion come from tokens, and SVG
+   units from each icon's viewBox, so there are no raw values here. */
+
+@layer components {
+  .dz-icon {
+    display: inline-block;
+    flex: none;
+    overflow: visible;
+  }
+
+  /* Tier 1 is currentColor only (§2): it takes its parent's colour, like the text beside it. Tier 2
+     lines sit on the semantic text colours, so they work in both themes (conflict C37). */
+  .dz-icon--t2 {
+    color: var(--dz-text);
+    transition: color var(--dz-dur-fast) var(--dz-ease-out);
+  }
+
+  /* The shared gradients' stops, from tokens (IconDefs). Classes rather than style attributes, so a
+     nonce-based style-src (P3) can't blank them. The custom properties inherit from each gradient to
+     its stops. */
+  .dz-grad--ai {
+    --dz-grad-top: var(--dz-pixel-ai-top);
+    --dz-grad-mid: var(--dz-pixel-ai-mid);
+    --dz-grad-bottom: var(--dz-pixel-ai-bottom);
+    --dz-grad-glow: var(--dz-pixel-ai-glow);
+  }
+
+  .dz-grad--web {
+    --dz-grad-top: var(--dz-pixel-web-top);
+    --dz-grad-mid: var(--dz-pixel-web-mid);
+    --dz-grad-bottom: var(--dz-pixel-web-bottom);
+    --dz-grad-glow: var(--dz-pixel-web-glow);
+  }
+
+  .dz-grad--software {
+    --dz-grad-top: var(--dz-pixel-software-top);
+    --dz-grad-mid: var(--dz-pixel-software-mid);
+    --dz-grad-bottom: var(--dz-pixel-software-bottom);
+    --dz-grad-glow: var(--dz-pixel-software-glow);
+  }
+
+  .dz-grad--ranking {
+    --dz-grad-top: var(--dz-pixel-ranking-top);
+    --dz-grad-mid: var(--dz-pixel-ranking-mid);
+    --dz-grad-bottom: var(--dz-pixel-ranking-bottom);
+    --dz-grad-glow: var(--dz-pixel-ranking-glow);
+  }
+
+  .dz-stop--top {
+    stop-color: var(--dz-grad-top);
+  }
+
+  .dz-stop--mid {
+    stop-color: var(--dz-grad-mid);
+  }
+
+  .dz-stop--bottom {
+    stop-color: var(--dz-grad-bottom);
+  }
+
+  /* The glow fades from its colour at 85% to nothing (§4.4). */
+  .dz-stop--glow {
+    stop-color: var(--dz-grad-glow);
+    stop-opacity: 0.85;
+  }
+
+  .dz-stop--glow-end {
+    stop-color: var(--dz-grad-glow);
+    stop-opacity: 0;
+  }
+
+  /* Every part pivots on itself (§7.1). */
+  .dz-icon * {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  /* The stroke (§6). Tier 1 sets it on the outer <svg>, because it inherits into <use> content. */
+  .dz-icon--t1,
+  .dz-ln {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: square;
+    stroke-linejoin: round;
+  }
+
+  /* A secondary line: an alternative route or a background layer (§5.1) */
+  .dz-ln--soft {
+    opacity: 0.42;
+  }
+
+  .dz-dot {
+    fill: currentColor;
+  }
+
+  /* The glow is a radial gradient, never a blur (§4.4). Off at rest; the pixel itself is always lit. */
+  .dz-halo {
+    opacity: 0;
+    transition: opacity var(--dz-dur-fast) var(--dz-ease-out);
+  }
+
+  /* The host is the link or button around an icon, or a card that holds one: focus inside the card
+     counts too, so keyboard focus looks like hover (13 §2). A disabled host stays still (§5.1). */
+  .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible)) .dz-icon--t2 {
+    color: var(--dz-text-strong);
+  }
+
+  .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible)) .dz-halo {
+    opacity: 0.6;
+  }
+
+  .dz-icon-host:is(:disabled, [aria-disabled='true']) .dz-icon--t2 {
+    color: var(--dz-slate);
+  }
+
+  /* Arabic: directional icons mirror; the pixel is symmetric, so it looks the same (§9). */
+  [dir='rtl'] .dz-icon--flip {
+    transform: scaleX(-1);
+  }
+
+  /* Static: no story; the pixel lit and the glow at 0.45, hovered or not (§4.4, §7.1). Reduce effects is
+     on for reduced motion, forced colours and more contrast (13 §2.11); P2 adds the switch's own
+     selector. The hover selector is repeated so this wins over the hover glow above. */
+  @media (prefers-reduced-motion: reduce), (prefers-contrast: more) {
+    .dz-halo,
+    .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible)) .dz-halo {
+      opacity: 0.45;
+    }
+  }
+
+  /* Forced colours: gradients drop (13 §6). The pixel takes the system text colour and the glow goes. */
+  @media (forced-colors: active) {
+    .dz-px {
+      fill: currentColor;
+    }
+
+    .dz-halo,
+    .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible)) .dz-halo {
+      opacity: 0;
+    }
+  }
+
+  /* Tier 2 stories (§7). Each runs once on the --dz-dur-story timeline when the host is hovered or
+     focused, and its last frame is the hover state. Start states exist only here (13 §3.3). */
+  @media (prefers-reduced-motion: no-preference) and (forced-colors: none) and (prefers-contrast: no-preference) {
+    .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible))
+      .dz-icon--pop
+      .dz-px {
+      animation: dz-icon-pop var(--dz-dur-story) var(--dz-ease-pop) both;
+    }
+
+    .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible))
+      .dz-icon--pop
+      .dz-halo {
+      animation: dz-icon-glow var(--dz-dur-story) var(--dz-ease-out) both;
+    }
+
+    .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible))
+      .dz-dot--blink-early {
+      animation: dz-icon-blink-early var(--dz-dur-story) var(--dz-ease-out);
+    }
+
+    .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible))
+      .dz-dot--blink-late {
+      animation: dz-icon-blink-late var(--dz-dur-story) var(--dz-ease-out);
+    }
+  }
+}
+
+/* Pop: the pixel appears, the answer (§7.3). */
+@keyframes dz-icon-pop {
+  0%,
+  25% {
+    opacity: 0;
+    scale: 0.3;
+  }
+  60% {
+    opacity: 1;
+    scale: 1.18;
+  }
+  80%,
+  100% {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+/* The glow pulses with the pop and settles at its hover value. */
+@keyframes dz-icon-glow {
+  0%,
+  40% {
+    opacity: 0;
+    scale: 0.5;
+  }
+  70% {
+    opacity: 1;
+    scale: 1.05;
+  }
+  100% {
+    opacity: 0.6;
+    scale: 1;
+  }
+}
+
+/* The typing dots blink once each, before the reply pops. */
+@keyframes dz-icon-blink-early {
+  0%,
+  30%,
+  100% {
+    opacity: 1;
+  }
+  15% {
+    opacity: 0.15;
+  }
+}
+
+@keyframes dz-icon-blink-late {
+  0%,
+  15%,
+  45%,
+  100% {
+    opacity: 1;
+  }
+  30% {
+    opacity: 0.15;
+  }
+}
+
+/* The shared definitions take no space (IconDefs). */
+.dz-icon-defs {
+  position: absolute;
+  inline-size: 0;
+  block-size: 0;
+  overflow: hidden;
+}

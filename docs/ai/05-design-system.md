@@ -167,7 +167,7 @@ The header, the CTA band and the footer stay navy in both themes, because the lo
 | `--dz-ease-travel` | `cubic-bezier(.65,0,.3,1)` | Movement along a path |
 | `--dz-dur-fast` | 150ms | Hover, focus, state |
 | `--dz-dur-base` | 250ms | Small transitions |
-| `--dz-dur-story` | ≤ 900ms (Tier 2), ≤ 1.6s (Tier 3) | Icon/illustration stories |
+| `--dz-dur-story` | 900ms: the Tier 2 cap, and every Tier 2 story runs on this one timeline (P1, 0018). Tier 3's ≤ 1.6s arrives with the first Tier 3 icon | Icon/illustration stories |
 | `--dz-dur-flow-step` | set in P0 / the Design Lab | One step of a story graphic (13 §4.8) |
 | `--dz-tilt-max` | 5deg (Lab-confirmed, 0009) | `pointer-tilt` |
 | `--dz-magnet-max` | 7px (Lab-confirmed, 0009) | `pointer-magnet` |
@@ -188,6 +188,20 @@ The header, the CTA band and the footer stay navy in both themes, because the lo
 ## 6. Icons
 
 Follow `Planning Folder/For Ai/DeepZeta Icon Master Rules.md` exactly: three tiers, the Zeta Pixel, the logo's four-pixel cluster for Tier 3, frost lines, CSS-only motion, RTL flip flags. Don't use a generic icon library for brand/service icons. A small set of plain UI icons (Tier 1) may be drawn in-house to the same rules. Outside icons, the four-pixel cluster appears only in The Assembly, The Landing and the miniature nav marker (13 §8). Icons are drawn to the approved prototype (`Planning Folder/DeepZeta Signature Icon Prototype.html`, decision 0009). Each surface spec in `docs/design/` lists its icons.
+
+**Delivery** (P1, [decision 0018](../decisions/0018-brand-primitives.md)):
+- **The registry,** `src/components/icons/registry.ts`, holds every icon as typed data. It's the source of truth until a Figma master exists (C36), and `tests/unit/icons.test.ts` checks it against the rules and the Services Catalogue.
+- **`<Icon name size />`** renders an icon: Tier 1 from the sprite, Tier 2 inline. It adds no JavaScript and is always decorative.
+- **`<IconDefs />`** holds the pillar gradients and glows, the knockouts and the Tier 1 sprite. It's mounted once, in the root layout (02 §3.8, from P2), and in any page that bypasses it, such as `global-not-found.tsx`.
+- **The host:** a story plays when the link, button or card around the icon carries `dz-icon-host` and is hovered or has keyboard focus.
+
+**Colour:**
+- **Tier 1** takes its parent's colour.
+- **Tier 2 lines** use `--dz-text` at rest, `--dz-text-strong` on hover and focus, and `--dz-slate` when disabled, so they work in both themes (C37).
+- **Pixels** take their pillar's stop tokens (`--dz-pixel-{pillar}-top|mid|bottom`). The pixel is a supplementary accent: `check:contrast` reports its ratios without failing (C38).
+- **Forced colours:** the pixel is solid in the text colour and has no glow (13 §6).
+
+**Clearance:** a pixel closer than 0.75 to a line gets a knockout (Icon Master Rules §4.2 rule 4). `tests/e2e/icons.spec.ts` measures it in the browser.
 
 ---
 

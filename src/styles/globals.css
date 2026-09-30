@@ -5,6 +5,8 @@
 @import 'tailwindcss' source('..');
 /* The tokens and the Tailwind mapping (decision 0015). Raw values live only there. */
 @import './tokens.css';
+/* Icons: lines, pixel, states and stories (Icon Master Rules; P1 plan, D5) */
+@import './icons.css';
 
 @layer base {
   html {

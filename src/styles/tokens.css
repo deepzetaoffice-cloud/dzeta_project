@@ -60,17 +60,50 @@
   --dz-grid-size: 80px;
 
   /* Pillar pixels: 3 stops, top to bottom; the solid colour below 20 px; the glow colour
-     (Icon Master Rules §5.2, C6, C22) */
-  --dz-pixel-ai: linear-gradient(180deg, #03d4fc 0%, #04c1fd 50%, #09a5fc 100%);
+     (Icon Master Rules §5.2, C6, C22). Each stop is its own token, because SVG gradients take their
+     stops one by one (the icons' shared definitions, P1); the CSS gradients are built from them. */
+  --dz-pixel-ai-top: #03d4fc;
+  --dz-pixel-ai-mid: #04c1fd;
+  --dz-pixel-ai-bottom: #09a5fc;
+  --dz-pixel-ai: linear-gradient(
+    180deg,
+    var(--dz-pixel-ai-top) 0%,
+    var(--dz-pixel-ai-mid) 50%,
+    var(--dz-pixel-ai-bottom) 100%
+  );
   --dz-pixel-ai-solid: #04c1fd;
   --dz-pixel-ai-glow: #08c6fd;
-  --dz-pixel-web: linear-gradient(180deg, #21befc 0%, #3092fd 50%, #4264fd 100%);
+  --dz-pixel-web-top: #21befc;
+  --dz-pixel-web-mid: #3092fd;
+  --dz-pixel-web-bottom: #4264fd;
+  --dz-pixel-web: linear-gradient(
+    180deg,
+    var(--dz-pixel-web-top) 0%,
+    var(--dz-pixel-web-mid) 50%,
+    var(--dz-pixel-web-bottom) 100%
+  );
   --dz-pixel-web-solid: #3092fd;
   --dz-pixel-web-glow: #3092fd;
-  --dz-pixel-software: linear-gradient(180deg, #3166fb 0%, #2a4dfc 50%, #3741fd 100%);
+  --dz-pixel-software-top: #3166fb;
+  --dz-pixel-software-mid: #2a4dfc;
+  --dz-pixel-software-bottom: #3741fd;
+  --dz-pixel-software: linear-gradient(
+    180deg,
+    var(--dz-pixel-software-top) 0%,
+    var(--dz-pixel-software-mid) 50%,
+    var(--dz-pixel-software-bottom) 100%
+  );
   --dz-pixel-software-solid: #2f55fc;
   --dz-pixel-software-glow: #2f6bff;
-  --dz-pixel-ranking: linear-gradient(180deg, #6430fa 0%, #592bfd 50%, #4c27fb 100%);
+  --dz-pixel-ranking-top: #6430fa;
+  --dz-pixel-ranking-mid: #592bfd;
+  --dz-pixel-ranking-bottom: #4c27fb;
+  --dz-pixel-ranking: linear-gradient(
+    180deg,
+    var(--dz-pixel-ranking-top) 0%,
+    var(--dz-pixel-ranking-mid) 50%,
+    var(--dz-pixel-ranking-bottom) 100%
+  );
   --dz-pixel-ranking-solid: #5a2cfb;
   --dz-pixel-ranking-glow: #7946fc;
 
@@ -164,6 +197,9 @@
   --dz-ease-travel: cubic-bezier(0.65, 0, 0.3, 1);
   --dz-dur-fast: 150ms;
   --dz-dur-base: 250ms;
+  /* One Tier 2 icon story (Icon Master Rules §7.1): every story runs on this one timeline, so none
+     can pass the cap. Tier 3's 1.6 s arrives with the first Tier 3 icon (P2). */
+  --dz-dur-story: 900ms;
   --dz-tilt-max: 5deg;
   --dz-magnet-max: 7px;
 }

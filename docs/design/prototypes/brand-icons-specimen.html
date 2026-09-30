@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Deepzeta AI · app icons specimen (P1)</title>
+<!-- A prototype for the owner's review: never shipped, never a source (docs/ai/00 §5).
+     It shows the real generated files (npm run brand:icons, docs/plans/2026-09-30-p1-brand-primitives.md
+     section B), so what you see is what the site serves. Open this file in Chrome or Edge; no server
+     needed. The final check is a real browser tab on the Vercel preview. -->
+<link rel="stylesheet" href="../../../src/styles/tokens.css">
+<style>
+  @font-face { font-family: 'Specimen Montserrat'; src: url('../../../src/styles/fonts/montserrat-latin-wght.woff2') format('woff2'); font-weight: 400 900; font-display: swap; }
+  @font-face { font-family: 'Specimen JetBrains Mono'; src: url('../../../src/styles/fonts/jetbrains-mono-latin-500.woff2') format('woff2'); font-weight: 500; font-display: swap; }
+  html { --font-montserrat: 'Specimen Montserrat'; --font-jetbrains-mono: 'Specimen JetBrains Mono'; }
+
+  /* Specimen chrome only. The icons are the real files. */
+  * { box-sizing: border-box; }
+  html { background: var(--dz-bg); color: var(--dz-text); font-family: var(--dz-font-sans); }
+  body { margin: 0; font-size: var(--dz-text-body); line-height: var(--dz-text-body-leading); }
+  h1, h2, h3 { color: var(--dz-text-strong); text-wrap: balance; margin: 0; }
+  .wrap { max-width: var(--dz-container); margin-inline: auto; padding-inline: var(--dz-gutter); }
+  header.top { padding-block: var(--dz-space-section) 0; }
+  header.top h1 { font-size: var(--dz-text-h1); line-height: var(--dz-text-h1-leading); letter-spacing: var(--dz-text-h1-tracking); }
+  .eyebrow { font-family: var(--dz-font-mono); font-size: var(--dz-text-caption); letter-spacing: var(--dz-text-eyebrow-tracking); text-transform: uppercase; color: var(--dz-text-muted); margin: 0 0 8px; }
+  .lede { color: var(--dz-text-muted); max-width: var(--dz-measure); margin: 12px 0 0; }
+  section.block { padding-block: var(--dz-space-section); border-block-end: 1px solid var(--dz-hairline); }
+  section.block > h2 { font-size: var(--dz-text-h3); line-height: var(--dz-text-h3-leading); margin-block-end: 8px; }
+  code { font-family: var(--dz-font-mono); font-size: var(--dz-text-caption); }
+  .row { display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-end; }
+  figure { margin: 0; display: grid; gap: 8px; justify-items: start; }
+  figcaption { font-size: var(--dz-text-small); color: var(--dz-text-muted); }
+
+  /* Browser tab strips */
+  .tabs { display: flex; gap: 2px; padding: 8px 8px 0; border-radius: 10px 10px 0 0; min-width: 320px; }
+  .tabs.light { background: #dee1e6; }
+  .tabs.dark { background: #202124; }
+  .tab { display: flex; gap: 8px; align-items: center; padding: 8px 12px; border-radius: 8px 8px 0 0; font: 12px/1 system-ui, sans-serif; min-width: 180px; }
+  .light .tab.on { background: #ffffff; color: #202124; }
+  .light .tab { color: #5f6368; }
+  .dark .tab.on { background: #35363a; color: #e8eaed; }
+  .dark .tab { color: #9aa0a6; }
+  .tab img { width: 16px; height: 16px; flex: none; }
+
+  /* Zoomed pixels */
+  .zoom img { image-rendering: pixelated; background: repeating-conic-gradient(#8884 0 25%, transparent 0 50%) 0 0 / 8px 8px; }
+
+  /* Home screens */
+  .screen { display: flex; gap: 20px; padding: 24px; border-radius: 24px; background: linear-gradient(160deg, #5b7fa6, #2f3f5c); }
+  .screen.android { background: linear-gradient(160deg, #3c4a3a, #1d2620); }
+  .app { display: grid; gap: 6px; justify-items: center; font: 11px/1 system-ui, sans-serif; color: #fff; }
+  .app img { width: 60px; height: 60px; }
+  .ios img { border-radius: 22.5%; }
+  .circle img { border-radius: 50%; }
+  .squircle img { border-radius: 30%; }
+
+  /* Maskable safe zone */
+  .safe { position: relative; width: 192px; height: 192px; }
+  .safe img { width: 100%; height: 100%; }
+  .safe::after { content: ''; position: absolute; inset: 10%; border-radius: 50%; outline: 1.5px dashed var(--dz-ok); }
+
+  table { border-collapse: collapse; font-size: var(--dz-text-small); }
+  th, td { text-align: start; padding: 6px 12px 6px 0; border-block-end: 1px solid var(--dz-hairline); }
+</style>
+</head>
+<body>
+<header class="top wrap">
+  <p class="eyebrow">P1 · brand primitives · for the owner's review</p>
+  <h1>App icons from the locked logo</h1>
+  <p class="lede">Every icon is a crop of the locked logo: the D-shaped Z ribbon and the four pixels, on navy. Nothing is redrawn. These are the real files the site serves; re-run <code>npm run brand:icons</code> to change them.</p>
+</header>
+
+<main class="wrap">
+  <section class="block" aria-labelledby="h-tabs">
+    <h2 id="h-tabs">Browser tabs</h2>
+    <p class="lede">The favicon in a light and a dark tab strip, at the size browsers show it.</p>
+    <div class="row">
+      <div class="tabs light"><div class="tab on"><img src="../../../src/app/favicon.ico" alt="">Deepzeta AI</div><div class="tab"><img src="../../../src/app/icon.png" alt="">Deepzeta AI (PNG icon)</div></div>
+      <div class="tabs dark"><div class="tab on"><img src="../../../src/app/favicon.ico" alt="">Deepzeta AI</div><div class="tab"><img src="../../../src/app/icon.png" alt="">Deepzeta AI (PNG icon)</div></div>
+    </div>
+  </section>
+
+  <section class="block zoom" aria-labelledby="h-zoom">
+    <h2 id="h-zoom">Pixel by pixel</h2>
+    <p class="lede">The favicon enlarged so every pixel shows, then at its three real sizes. The browser picks whichever of the ICO's sizes fits best.</p>
+    <div class="row">
+      <figure><img src="../../../src/app/favicon.ico" width="96" height="96" alt=""><figcaption>favicon.ico drawn at 96 px</figcaption></figure>
+      <figure><img src="../../../src/app/favicon.ico" width="16" height="16" alt=""><figcaption>16 px</figcaption></figure>
+      <figure><img src="../../../src/app/favicon.ico" width="32" height="32" alt=""><figcaption>32 px</figcaption></figure>
+      <figure><img src="../../../src/app/favicon.ico" width="48" height="48" alt=""><figcaption>48 px (Google Search)</figcaption></figure>
+      <figure><img src="../../../src/app/icon.png" width="192" height="192" alt=""><figcaption>icon.png, 192 px</figcaption></figure>
+    </div>
+  </section>
+
+  <section class="block" aria-labelledby="h-home">
+    <h2 id="h-home">Phone home screens</h2>
+    <p class="lede">iPhone rounds the apple icon itself. Android cuts the maskable icon into its own shape: a circle or a rounded square.</p>
+    <div class="row">
+      <div class="screen ios"><div class="app"><img src="../../../src/app/apple-icon.png" alt="">Deepzeta AI</div></div>
+      <div class="screen android circle"><div class="app"><img src="../../../public/brand/icon-maskable-512.png" alt="">Deepzeta AI</div></div>
+      <div class="screen android squircle"><div class="app"><img src="../../../public/brand/icon-maskable-512.png" alt="">Deepzeta AI</div></div>
+    </div>
+  </section>
+
+  <section class="block" aria-labelledby="h-safe">
+    <h2 id="h-safe">Maskable safe zone</h2>
+    <p class="lede">Android may cut away anything outside the dashed circle (80% wide). The mark stays inside it.</p>
+    <div class="row">
+      <figure><div class="safe"><img src="../../../public/brand/icon-maskable-512.png" alt=""></div><figcaption>icon-maskable-512.png</figcaption></figure>
+      <figure><img src="../../../public/brand/icon-512.png" width="192" height="192" alt=""><figcaption>icon-512.png (not masked)</figcaption></figure>
+    </div>
+  </section>
+
+  <section class="block" aria-labelledby="h-logo">
+    <h2 id="h-logo">The square logo</h2>
+    <p class="lede">The whole logo on its own canvas and navy page colour. It becomes the schema <code>#logo</code> in P4 (search engines want at least 112 × 112).</p>
+    <figure><img src="../../../public/brand/deepzeta-logo-512.png" width="256" height="256" alt=""><figcaption>deepzeta-logo-512.png, shown at half size</figcaption></figure>
+  </section>
+
+  <section class="block" aria-labelledby="h-files">
+    <h2 id="h-files">The files</h2>
+    <table>
+      <thead><tr><th>File</th><th>Pixels</th><th>Used for</th></tr></thead>
+      <tbody>
+        <tr><td><code>src/app/favicon.ico</code></td><td>16, 32, 48</td><td>Browser tabs, <code>/favicon.ico</code>, Google Search</td></tr>
+        <tr><td><code>src/app/icon.png</code></td><td>192</td><td>The PNG icon link; Android; the manifest</td></tr>
+        <tr><td><code>src/app/apple-icon.png</code></td><td>180</td><td>iPhone and iPad home screen</td></tr>
+        <tr><td><code>public/brand/icon-512.png</code></td><td>512</td><td>The manifest</td></tr>
+        <tr><td><code>public/brand/icon-maskable-512.png</code></td><td>512</td><td>The manifest, Android shapes</td></tr>
+        <tr><td><code>public/brand/deepzeta-logo-512.png</code></td><td>512</td><td>The schema <code>#logo</code> (P4)</td></tr>
+      </tbody>
+    </table>
+  </section>
+</main>
+</body>
+</html>
