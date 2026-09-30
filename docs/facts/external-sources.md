@@ -18,9 +18,11 @@
 | S004 | Google has no special requirements to appear in AI Overviews or AI Mode | — | https://developers.google.com/search/docs/fundamentals/ai-optimization-guide | 2026-09-30 | PROPOSED | the GEO guide (R126) |
 | S005 | Google's scaled content abuse policy | — | https://developers.google.com/search/docs/essentials/spam-policies | 2026-09-30 | PROPOSED | `/services/programmatic-seo` (R069) |
 | S006 | "Good" Core Web Vitals thresholds: LCP 2.5 s, INP 200 ms, CLS 0.1 | 2.5 s / 200 ms / 0.1 | https://web.dev/articles/vitals | — | Listed in facts §6 (CONFIRMED there); official link to be re-checked in P8 | `/resources/core-web-vitals-explained` (R128) |
+| S007 | DeepSeek, our AI provider, stores and processes personal data in the People's Republic of China | China; operated by Hangzhou DeepSeek Artificial Intelligence Co., Ltd. (policy updated 2026-02-10) | https://cdn.deepseek.com/policies/en-US/deepseek-privacy-policy.html | 2026-09-30 | PROPOSED | `/privacy` §8, Q5 (decision 0016) |
 
 ## Change log
 
 | Date | Change | Approved by |
 |---|---|---|
 | 2026-09-30 | Created with the first proposed entries | Owner (plan approval, 2026-09-30); entries await approval one by one |
+| 2026-09-30 | S007 added: DeepSeek's data location, for the privacy policy (decision 0016) | Proposed; awaits the owner's approval |

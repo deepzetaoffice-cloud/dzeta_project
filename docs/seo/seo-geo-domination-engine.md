@@ -560,7 +560,7 @@ Google's [scaled content abuse policy](https://developers.google.com/search/docs
 ### 10.5 The engine
 
 - **The queue** lives in git.
-- **Drafting** uses Claude through the project's AI stack; the model is chosen in the pSEO plan.
+- **Drafting** uses DeepSeek through the project's AI stack (decision 0016); the model is chosen in the pSEO plan.
 - **Output** is typed content files, checked by the same gates as hand-written pages.
 - **Arabic** pSEO follows 11 §3 (native writing, human sign-off), never machine translation.
 
@@ -627,7 +627,7 @@ These were read in full on 2026-09-30:
 - pages with unverified numbers are **held**, not published with a "pending" badge
 - batches go through pull requests, never automatic pushes to `main`
 - velocity follows the share of pages indexed, not a fixed 9 pages a day
-- Claude replaces DeepSeek, and Arabic follows the native-writer rule
+- Arabic follows the native-writer rule, not machine output; drafting keeps DeepSeek as the provider (decision 0016), with the model chosen in the pSEO plan
 - link rules are checked by machine, not by hand
 - entity-first writing is done by the author, not by regex rewriting (08 §4)
 - llms-full carries knowledge fields only, no sales copy

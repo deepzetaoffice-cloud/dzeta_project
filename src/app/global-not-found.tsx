@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFoundContent } from '@/content/en/not-found';
 import { locales } from '@/lib/i18n/locales';
 import { brandedTitle } from '@/lib/seo/title';
+import { fontVariables } from '@/styles/fonts';
 import '@/styles/globals.css';
 
 const locale = locales.en;
@@ -16,13 +17,13 @@ export const metadata: Metadata = {
 
 export default function GlobalNotFound() {
   return (
-    <html lang={locale.lang} dir={locale.dir}>
+    <html lang={locale.lang} dir={locale.dir} className={fontVariables}>
       <body>
-        <main className="mx-auto max-w-prose px-6 py-16">
-          <h1 className="text-3xl font-bold text-balance">{notFoundContent.heading}</h1>
+        <main className="mx-auto max-w-measure px-gutter py-section">
+          <h1 className="text-h1">{notFoundContent.heading}</h1>
           <p className="mt-4">{notFoundContent.body}</p>
           <p className="mt-4">
-            <Link className="underline" href="/">
+            <Link className="text-link underline" href="/">
               {notFoundContent.homeLink}
             </Link>
           </p>

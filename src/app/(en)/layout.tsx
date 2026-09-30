@@ -4,6 +4,7 @@ import { locales } from '@/lib/i18n/locales';
 import { titleTemplate } from '@/lib/seo/title';
 import { siteConfig } from '@/lib/site-config';
 import { siteUrl } from '@/lib/url';
+import { fontVariables } from '@/styles/fonts';
 import '@/styles/globals.css';
 
 const locale = locales.en;
@@ -20,7 +21,7 @@ export const metadata: Metadata = {
 
 export default function EnglishRootLayout({ children }: Readonly<{ children: ReactNode }>) {
   return (
-    <html lang={locale.lang} dir={locale.dir}>
+    <html lang={locale.lang} dir={locale.dir} className={fontVariables}>
       <body>{children}</body>
     </html>
   );

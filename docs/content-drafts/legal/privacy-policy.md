@@ -1,6 +1,6 @@
 # Privacy Policy: content and layout (DRAFT)
 
-> **Status:** Final wording approved by the owner, 2026-09-29. No external legal review (the owner's decision). Values in `{braces}` are variables from the site config; build dependencies are listed in Part 3.
+> **Status:** Final wording approved by the owner, 2026-09-29. **Changed 2026-09-30:** the AI provider is now DeepSeek, which stores data in China (decision 0016; §6, §7, §8, Q4–Q6), so the wording needs the owner's re-approval. Before `/privacy` ships, the P7 check of whether DeepSeek trains on API inputs (0016) must be done, and §6 and Q6 updated if it does. No external legal review (the owner's decision). Values in `{braces}` are variables from the site config; build dependencies are listed in Part 3.
 > **Moves to:** `src/content/en/legal/privacy.ts` (typed content) in P6. The page is `/privacy` (T2).
 > **Adapted from:** the owner's other site's privacy page (`Planning Folder/For Ai/Other project references only/privacy-policy-content-and-layout.md`).
 
@@ -150,7 +150,7 @@ We don't use your data for anything unrelated to these purposes without asking y
 
 ### 6 · `ai-features` · AI features and tools
 
-- **AI agent demo:** a demonstration. What you type is sent to our AI provider (Anthropic) to generate replies. Please don't share personal or sensitive information in it. We don't keep demo conversations in our records.
+- **AI agent demo:** a demonstration. What you type is sent to our AI provider (DeepSeek) to generate replies. Please don't share personal or sensitive information in it. We don't keep demo conversations in our records.
 - **Social Media Content Planner:** your answers about your business are sent to our AI provider to write your plan. If you ask for the full plan, we also receive your email address.
 - **Website & AI Search Health Check:** checks the public page at the address you give, using Google PageSpeed Insights and our own checks. If you ask for the full report, we receive your email address.
 - **No automated decisions:** we don't make decisions about you, with legal or similarly significant effects, based only on automated processing.
@@ -168,7 +168,7 @@ We use a small number of service providers to run this website and our services.
 | Vercel | Hosts this website | Technical data; forms as they pass through |
 | Google | Email and our customer records (Google Workspace); tag management and, with consent, analytics (Google Tag Manager, Google Analytics); speed checks (PageSpeed Insights) | Contact details, requests, conversations; analytics data; the web address you check |
 | n8n | Runs our automations: passes your enquiry to our records and our email | Contact details, your request |
-| Anthropic | Powers the AI agent demo and the Content Planner | What you type into them |
+| DeepSeek | Powers the AI agent demo and the Content Planner | What you type into them |
 | Cloudflare | Spam protection on forms (Turnstile) | Browser and device signals |
 | Upstash | Short-term limits that stop form abuse | IP address, kept briefly |
 | Cal.com | Call booking | Name, email, booking details |
@@ -180,7 +180,7 @@ We may also disclose personal data when UAE law, a court or a competent authorit
 
 ### 8 · `international-transfers` · Where your data is stored
 
-Some of our providers store or process data outside the UAE, for example in the European Union or the United States. When that happens, we transfer it only as the PDPL allows, and we choose providers that commit to protecting it.
+Some of our providers store or process data outside the UAE, for example in the European Union, the United States or China. When that happens, we transfer it only as the PDPL allows, and we choose providers that commit to protecting it.
 
 ### 9 · `cookies` · Cookies and similar technologies
 
@@ -295,13 +295,13 @@ Your name, business name, email, phone or WhatsApp number, the service you're in
 Yes. Essential cookies keep the site secure and working. Analytics and marketing cookies stay off until you allow them, and you can change your choice at any time from "Cookie settings" at the bottom of every page.
 
 **Q4. Which companies process my data for you?**
-Our main service providers are Vercel (hosting), Google (email, customer records and, with consent, analytics), n8n (automation), Anthropic (AI demos), Cloudflare (spam protection), Upstash (abuse limits), Cal.com (booking) and Meta (WhatsApp). Section 7 lists what each one does.
+Our main service providers are Vercel (hosting), Google (email, customer records and, with consent, analytics), n8n (automation), DeepSeek (AI demos), Cloudflare (spam protection), Upstash (abuse limits), Cal.com (booking) and Meta (WhatsApp). Section 7 lists what each one does.
 
 **Q5. Is my data stored in the UAE?**
-Not always. Some of our providers store or process data outside the UAE, for example in the European Union or the United States. We transfer data only as the UAE PDPL allows and choose providers that commit to protecting it.
+Not always. Some of our providers store or process data outside the UAE, for example in the European Union, the United States or China. We transfer data only as the UAE PDPL allows and choose providers that commit to protecting it.
 
 **Q6. What happens to what I type into the AI agent demo?**
-It's sent to our AI provider, Anthropic, to generate the replies you see. The demo is for trying our AI, so please don't share personal or sensitive information in it.
+It's sent to our AI provider, DeepSeek, to generate the replies you see. The demo is for trying our AI, so please don't share personal or sensitive information in it.
 
 **Q7. How long do you keep my data?**
 Only as long as we need it. For example, enquiries that don't become projects are kept for 24 months after our last contact, and billing records for as long as UAE tax and accounting laws require. Section 12 lists every period.

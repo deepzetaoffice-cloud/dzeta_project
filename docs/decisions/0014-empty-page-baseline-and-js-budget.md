@@ -1,6 +1,6 @@
 # 0014 · Empty-page baseline and the JavaScript budget (C8)
 
-Status: PROPOSED (measured 2026-09-30; the owner chooses an option below)
+Status: ACCEPTED (owner, 2026-09-30): option A
 
 ## Context
 
@@ -104,8 +104,22 @@ Which Brotli quality Vercel uses isn't verified. Headers add about 8 KB on top. 
 
 ## Decision
 
-*(The owner's choice goes here. Then this record becomes ACCEPTED, C8 is resolved in the conflict register, 07 §2 gets the chosen numbers and unit, and `lighthouserc.cjs` gets the matching assertions.)*
+**Option A** (owner, 2026-09-30). The owner set this record to approved and asked to continue as planned; A is the recommended option.
+
+- **The framework baseline:** 139,668 bytes (136.4 KB) of JavaScript, the lab measurement above.
+- **Our own JavaScript at first load, on top of the baseline:** ≤ 10 KB on Home (unchanged from 0008), ≤ 25 KB on T2 and T3 pages.
+- **Growth:** `lhci` fails if a page's JavaScript is more than 5 KB above the baseline plus the budget used by our own code on that page.
+- **HTML + CSS + JS before the first interaction:** ≤ baseline + 50 KB (190,868 bytes, 186.4 KB). This replaces 150 KB in 07 §2. What counts as "before the first interaction" is unchanged (0008, C21).
+- **Unit:** KiB of transfer size, as Lighthouse reports it: compressed, response headers included.
+- **Unchanged:** the Lighthouse tier floors, the Core Web Vitals hard limits, the font and image limits, and wow-on-demand loading (0008).
+- **The option C tuning** (inline CSS, a trimmed Tailwind theme, dropping the legacy polyfills) is looked at in part 2, where Next.js supports it.
 
 ## Consequences
 
-To be written with the decision.
+- **`lighthouserc.cjs`** asserts, on Home and on every one of the 5 runs (the largest value counts):
+  - `resource-summary:script:size` ≤ baseline + 5 KB + our own code. Our own code is 0 bytes in P0; each plan that adds client code on Home raises it by that code's measured size, never above 10 KB.
+  - `resource-summary:total:size` ≤ baseline + 50 KB.
+- **Framework upgrades:** a Next.js or React upgrade that grows the runtime by more than 5 KB fails `lhci`. Raising the baseline needs the owner's approval in a new decision.
+- **Other pages:** only Home is tested today. Each new page type adds its URL and tier assertions in its own plan (≤ 25 KB of our own JavaScript on T2 and T3).
+- **Rule edits:** 07 §2 gets these numbers and the unit; C8 is resolved in the conflict register.
+- **The live figure (Brotli on Vercel) isn't measured yet.** The production deployment of the P0 merge (`e9a6ecb`) failed on Vercel, so `deepzeta.ai` still returns `DEPLOYMENT_NOT_FOUND` (checked 2026-09-30). It's measured once the site is live.

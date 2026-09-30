@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Deepzeta AI · tokens specimen (P0, decision 0015)</title>
+<!-- A prototype for the owner's review: never shipped, never a source (docs/ai/00 §5).
+     It links the real tokens and font files, so every value shown is the value the site uses.
+     Values change in src/styles/tokens.css only. Open this file in Chrome or Edge; no server needed. -->
+<link rel="stylesheet" href="../../../src/styles/tokens.css">
+<style>
+  @font-face { font-family: 'Specimen Montserrat'; src: url('../../../src/styles/fonts/montserrat-latin-wght.woff2') format('woff2'); font-weight: 400 900; font-display: swap; }
+  @font-face { font-family: 'Specimen JetBrains Mono'; src: url('../../../src/styles/fonts/jetbrains-mono-latin-500.woff2') format('woff2'); font-weight: 500; font-display: swap; }
+  /* next/font sets these two on the site; the specimen sets them to the same files. */
+  html { --font-montserrat: 'Specimen Montserrat'; --font-jetbrains-mono: 'Specimen JetBrains Mono'; }
+
+  /* Specimen chrome only. Everything it shows comes from tokens.css. */
+  * { box-sizing: border-box; }
+  html { background: var(--dz-bg); color: var(--dz-text); font-family: var(--dz-font-sans); }
+  body { margin: 0; font-size: var(--dz-text-body); line-height: var(--dz-text-body-leading); }
+  h1, h2, h3 { color: var(--dz-text-strong); text-wrap: balance; margin: 0; }
+  a { color: var(--dz-link); }
+  :focus-visible { outline: var(--dz-focus-width) solid var(--dz-focus); outline-offset: var(--dz-focus-offset); }
+  .wrap { max-width: var(--dz-container); margin-inline: auto; padding-inline: var(--dz-gutter); }
+  header.bar { position: sticky; top: 0; z-index: var(--dz-layer-header); background: var(--dz-bg); border-block-end: 1px solid var(--dz-hairline); }
+  header.bar .wrap { display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: center; justify-content: space-between; padding-block: 12px; }
+  .eyebrow { font-family: var(--dz-font-mono); font-size: var(--dz-text-caption); line-height: var(--dz-text-caption-leading); letter-spacing: var(--dz-text-caption-tracking); font-weight: var(--dz-text-caption-weight); color: var(--dz-text-muted); text-transform: uppercase; }
+  .seg { display: inline-flex; border: 1px solid var(--dz-hairline); border-radius: var(--dz-radius-pill); overflow: hidden; }
+  .seg button { font: inherit; font-size: var(--dz-text-small); padding: 8px 16px; min-height: 44px; border: 0; background: transparent; color: var(--dz-text); cursor: pointer; }
+  .seg button[aria-pressed='true'] { background: var(--dz-surface); color: var(--dz-text-strong); font-weight: 700; }
+  section.block { padding-block: var(--dz-space-section); border-block-end: 1px solid var(--dz-hairline); }
+  section.block > h2 { font-size: var(--dz-text-h2); line-height: var(--dz-text-h2-leading); letter-spacing: var(--dz-text-h2-tracking); font-weight: var(--dz-text-h2-weight); margin-block-end: 8px; }
+  .lede { color: var(--dz-text-muted); max-width: var(--dz-measure); margin: 0 0 24px; }
+  .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
+  .chip { border: 1px solid var(--dz-hairline); border-radius: var(--dz-radius-md); overflow: hidden; background: var(--dz-surface); }
+  .chip .sw { height: 72px; }
+  .chip .meta { padding: 10px 12px; font-size: var(--dz-text-small); line-height: 1.4; }
+  .chip code, td code { font-family: var(--dz-font-mono); font-size: var(--dz-text-caption); }
+  .muted { color: var(--dz-text-muted); }
+  table { border-collapse: collapse; width: 100%; font-size: var(--dz-text-small); }
+  th, td { text-align: start; padding: 8px 10px; border-block-end: 1px solid var(--dz-hairline); vertical-align: middle; }
+  th { color: var(--dz-text-muted); font-weight: 500; }
+  .pill { display: inline-block; padding: 2px 10px; border-radius: var(--dz-radius-pill); font-family: var(--dz-font-mono); font-size: var(--dz-text-caption); font-weight: 500; }
+  .pass { background: var(--dz-ok); color: var(--dz-navy); }
+  .fail { background: var(--dz-bad); color: var(--dz-navy); }
+  .sample { padding: 6px 12px; border-radius: var(--dz-radius-sm); display: inline-block; font-weight: 700; }
+  .frame-box { border: 1px solid var(--dz-hairline); border-radius: var(--dz-radius-lg); overflow: auto; background: var(--dz-bg); }
+  iframe { display: block; border: 0; height: 1180px; margin-inline: auto; background: var(--dz-bg); }
+  .controls { display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: center; margin-block-end: 16px; }
+  input[type='range'] { width: min(420px, 70vw); accent-color: var(--dz-signal); }
+  .space-row { display: grid; grid-template-columns: 220px 1fr; gap: 16px; align-items: center; margin-block-end: 12px; }
+  .space-bar { background: var(--dz-grad-signal); border-radius: var(--dz-radius-sm); }
+  .radius-box { height: 96px; background: var(--dz-surface); border: 1px solid var(--dz-border); }
+  .layers { display: grid; gap: 6px; }
+  .layer { display: flex; justify-content: space-between; padding: 8px 12px; border-radius: var(--dz-radius-sm); background: var(--dz-surface); border: 1px solid var(--dz-hairline); }
+  .navy-band { margin-block-start: 16px; padding: 16px; border-radius: var(--dz-radius-lg); }
+  .decide { border: 1px solid var(--dz-border); border-radius: var(--dz-radius-lg); padding: 16px 20px; background: var(--dz-surface); }
+  .decide li { margin-block: 10px; }
+  #font-status { font-size: var(--dz-text-small); }
+
+  /* The type frame (?frame=type): the scale alone, at the width set by the slider. */
+  body.type-frame { padding: 24px var(--dz-gutter); }
+  .type-row { padding-block: 14px; border-block-end: 1px solid var(--dz-hairline); }
+  .type-row .label { display: block; margin-block-end: 6px; }
+</style>
+</head>
+<body>
+<script>
+  // Theme: ?theme= (for the type frame) or the saved choice. Dark, the default, leaves data-theme unset,
+  // as on the site: every first visit is dark (0015).
+  const params = new URLSearchParams(location.search);
+  const saved = params.get('theme') || localStorage.getItem('dz-specimen-theme') || 'dark';
+  if (saved === 'light') document.documentElement.dataset.theme = 'light';
+  if (params.get('frame') === 'type') document.body.classList.add('type-frame');
+</script>
+
+<template id="type-scale">
+  <div class="type-row"><span class="label eyebrow" data-size="--dz-text-statement">statement · one per page</span><div style="font-size:var(--dz-text-statement);line-height:var(--dz-text-statement-leading);letter-spacing:var(--dz-text-statement-tracking);font-weight:var(--dz-text-statement-weight);color:var(--dz-text-strong)">Statement <span style="background:var(--dz-grad-headline);-webkit-background-clip:text;background-clip:text;color:transparent">headline</span></div></div>
+  <div class="type-row"><span class="label eyebrow" data-size="--dz-text-display">display</span><div style="font-size:var(--dz-text-display);line-height:var(--dz-text-display-leading);letter-spacing:var(--dz-text-display-tracking);font-weight:var(--dz-text-display-weight);color:var(--dz-text-strong)">Display heading for a chapter</div></div>
+  <div class="type-row"><span class="label eyebrow" data-size="--dz-text-h1">h1</span><div style="font-size:var(--dz-text-h1);line-height:var(--dz-text-h1-leading);letter-spacing:var(--dz-text-h1-tracking);font-weight:var(--dz-text-h1-weight);color:var(--dz-text-strong)">Heading level one, set in Montserrat</div></div>
+  <div class="type-row"><span class="label eyebrow" data-size="--dz-text-h2">h2</span><div style="font-size:var(--dz-text-h2);line-height:var(--dz-text-h2-leading);letter-spacing:var(--dz-text-h2-tracking);font-weight:var(--dz-text-h2-weight);color:var(--dz-text-strong)">Heading level two for a section</div></div>
+  <div class="type-row"><span class="label eyebrow" data-size="--dz-text-h3">h3</span><div style="font-size:var(--dz-text-h3);line-height:var(--dz-text-h3-leading);letter-spacing:var(--dz-text-h3-tracking);font-weight:var(--dz-text-h3-weight);color:var(--dz-text-strong)">Heading level three, a highlight line</div></div>
+  <div class="type-row"><span class="label eyebrow" data-size="--dz-text-h4">h4</span><div style="font-size:var(--dz-text-h4);line-height:var(--dz-text-h4-leading);font-weight:var(--dz-text-h4-weight);color:var(--dz-text-strong)">Heading level four for a card title</div></div>
+  <div class="type-row"><span class="label eyebrow" data-size="--dz-text-lead">lead</span><p style="margin:0;max-width:var(--dz-measure);font-size:var(--dz-text-lead);line-height:var(--dz-text-lead-leading)">A lead paragraph opens a section. It is a little larger than body text and sits at a comfortable measure of about sixty-five characters per line.</p></div>
+  <div class="type-row"><span class="label eyebrow" data-size="--dz-text-body">body</span><p style="margin:0;max-width:var(--dz-measure);font-size:var(--dz-text-body);line-height:var(--dz-text-body-leading)">Body text is set at 1 rem with a line height of 1.6. <a href="#">A link looks like this</a>, and <span style="color:var(--dz-text-muted)">secondary text looks like this</span>. The measure stays near sixty-five characters, so lines are easy to follow.</p></div>
+  <div class="type-row"><span class="label eyebrow" data-size="--dz-text-small">small</span><p style="margin:0;font-size:var(--dz-text-small);line-height:var(--dz-text-small-leading)">Small text for notes, captions under images and form help.</p></div>
+  <div class="type-row"><span class="label eyebrow" data-size="--dz-text-caption">caption · JetBrains Mono 500</span><div style="font-family:var(--dz-font-mono);font-size:var(--dz-text-caption);line-height:var(--dz-text-caption-leading);letter-spacing:var(--dz-text-caption-tracking);font-weight:var(--dz-text-caption-weight)">Label, stat 1,234 · caption 0.04em &nbsp;|&nbsp; <span style="text-transform:uppercase;letter-spacing:var(--dz-text-eyebrow-tracking)">Eyebrow · eyebrow tracking</span></div></div>
+</template>
+
+<div id="page">
+<header class="bar"><div class="wrap">
+  <div><div class="eyebrow">Deepzeta AI · P0 tokens specimen · decision 0015</div><strong style="color:var(--dz-text-strong)">Every value here comes from <code>src/styles/tokens.css</code></strong></div>
+  <div class="seg" role="group" aria-label="Theme">
+    <button type="button" data-theme-choice="dark">Dark (every first visit)</button>
+    <button type="button" data-theme-choice="light">Light</button>
+  </div>
+</div></header>
+
+<main class="wrap">
+  <section class="block">
+    <h2>Owner verdict (2026-09-30, decision 0015)</h2>
+    <p class="lede">Values change in <code>tokens.css</code> only; reload this page to see them. <span id="font-status" class="muted">Checking fonts…</span></p>
+    <div class="decide"><ol>
+      <li><strong>Light zeta gradient:</strong> first stop <code>#0094D3</code> (3.14:1 on the light page). 05's <code>#0098D8</code> was 2.996:1, under the 3:1 for large text; compare them under "Gradients" in the light theme.</li>
+      <li><strong>First visit:</strong> dark for everyone. Light comes only from the visitor's switch (P2 header). There's no system-light copy of the light block.</li>
+      <li><strong>Heading weights:</strong> h1–h4 at 700, as 05 says. The statement and display sizes stay at 800.</li>
+      <li><strong>Eyebrows:</strong> uppercase eyebrows use <code>--dz-text-eyebrow-tracking</code> (0.16em, as in the Lab). Normal-case labels and stats keep the caption's 0.04em.</li>
+      <li><strong>Type and spacing sizes:</strong> as shown. The statement is 2.6 → 5.58 rem (Q1). Drag the width slider to see each size from 360 to 1536 px.</li>
+    </ol></div>
+  </section>
+
+  <section class="block">
+    <h2>Semantic colours</h2>
+    <p class="lede">These switch with the theme. Components use these, never a primitive whose meaning changes between themes. The ratio is against the page background.</p>
+    <div class="grid" id="semantic"></div>
+    <div class="navy-band" data-theme="dark" style="background:var(--dz-bg);color:var(--dz-text)"><strong style="color:var(--dz-text-strong)">A <code>data-theme="dark"</code> band</strong> stays navy in both themes: the header, the CTA band and the footer (05 §2).</div>
+  </section>
+
+  <section class="block">
+    <h2>Contrast pairs</h2>
+    <p class="lede">A subset of the pairs <code>npm run check:contrast</code> checks, measured live in this theme. Text needs 4.5:1; large text (24 px, or 19 px bold) and UI parts need 3:1. Gradients count their worst stop.</p>
+    <table><thead><tr><th>Text or part</th><th>On</th><th>Sample</th><th>Ratio</th><th>Needs</th><th></th></tr></thead><tbody id="pairs"></tbody></table>
+  </section>
+
+  <section class="block">
+    <h2>Type scale</h2>
+    <p class="lede">Fluid sizes from 360 to 1280 px wide. The frame below is its own small page, so the sizes react to the width you set.</p>
+    <div class="controls"><label for="width">Width <strong id="width-out">390</strong> px</label><input id="width" type="range" min="360" max="1536" step="1" value="390"><span class="muted" id="size-out"></span></div>
+    <div class="frame-box"><iframe id="type-frame" title="Type scale at the chosen width" width="390"></iframe></div>
+  </section>
+
+  <section class="block">
+    <h2>Brand colours</h2>
+    <p class="lede">Primitives, which never switch with the theme.</p>
+    <div class="grid" id="brand"></div>
+  </section>
+
+  <section class="block">
+    <h2>Gradients and pillar pixels</h2>
+    <p class="lede">The action gradient is for the primary CTA only. Pixels: gradient, then the solid used below 20 px, then the glow colour.</p>
+    <div class="grid" id="gradients"></div>
+    <div class="grid" id="pixels" style="margin-block-start:16px"></div>
+  </section>
+
+  <section class="block">
+    <h2>Spacing rhythm</h2>
+    <p class="lede">Section &lt; chapter &lt; statement, for the loud and quiet rhythm (13 §2). Bars show each value at this window's width.</p>
+    <div id="spacing"></div>
+  </section>
+
+  <section class="block">
+    <h2>Radius</h2>
+    <div class="grid" id="radii"></div>
+  </section>
+
+  <section class="block">
+    <h2>Layers</h2>
+    <p class="lede">The stacking order (05 §4). Not the depth planes Z0–Z3.</p>
+    <div class="layers" id="layers"></div>
+  </section>
+</main>
+</div>
+
+<script>
+  const root = document.documentElement;
+  const read = (name) => getComputedStyle(root).getPropertyValue(name).trim();
+  const readAt = (el, name) => getComputedStyle(el).getPropertyValue(name).trim();
+
+  // WCAG 2.x, the same maths as scripts/check-contrast.mjs.
+  function colours(value) {
+    const out = [];
+    for (const m of value.matchAll(/#([0-9a-f]{8}|[0-9a-f]{6}|[0-9a-f]{3,4})\b|rgba?\(([^)]*)\)/gi)) {
+      if (m[1]) {
+        let h = m[1]; if (h.length <= 4) h = [...h].map((c) => c + c).join('');
+        out.push({ r: parseInt(h.slice(0, 2), 16), g: parseInt(h.slice(2, 4), 16), b: parseInt(h.slice(4, 6), 16), a: h.length === 8 ? parseInt(h.slice(6, 8), 16) / 255 : 1 });
+      } else {
+        const p = m[2].replace(/\//g, ' ').split(/[\s,]+/).filter(Boolean).map(parseFloat);
+        out.push({ r: p[0], g: p[1], b: p[2], a: p[3] ?? 1 });
+      }
+    }
+    return out;
+  }
+  const lin = (c) => { c /= 255; return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; };
+  const lum = (c) => 0.2126 * lin(c.r) + 0.7152 * lin(c.g) + 0.0722 * lin(c.b);
+  const over = (f, b) => ({ r: f.a * f.r + (1 - f.a) * b.r, g: f.a * f.g + (1 - f.a) * b.g, b: f.a * f.b + (1 - f.a) * b.b, a: 1 });
+  function ratio(fgValue, bgValue) {
+    let worst = Infinity;
+    for (const f of colours(fgValue)) for (const b of colours(bgValue)) {
+      const [x, y] = [lum(over(f, b)), lum(b)].sort((p, q) => q - p);
+      worst = Math.min(worst, (x + 0.05) / (y + 0.05));
+    }
+    return worst;
+  }
+  const pill = (r, need) => `<span class="pill ${r >= need ? 'pass' : 'fail'}">${r >= need ? 'pass' : 'fail'}</span>`;
+
+  const semantic = ['--dz-bg', '--dz-surface', '--dz-text', '--dz-text-strong', '--dz-text-muted', '--dz-link', '--dz-focus', '--dz-hairline', '--dz-grad-headline'];
+  const brand = ['--dz-navy', '--dz-navy-900', '--dz-navy-850', '--dz-navy-800', '--dz-navy-700', '--dz-border', '--dz-slate', '--dz-mist', '--dz-frost', '--dz-white', '--dz-cyan', '--dz-azure', '--dz-royal', '--dz-violet', '--dz-violet-soft', '--dz-ice', '--dz-sky', '--dz-signal', '--dz-magenta', '--dz-ok', '--dz-warn', '--dz-bad', '--dz-info', '--dz-paper', '--dz-card-light', '--dz-ink', '--dz-ink-muted', '--dz-link-light', '--dz-accent-light'];
+  const gradients = ['--dz-grad-signal', '--dz-grad-zeta', '--dz-grad-zeta-light', '--dz-grad-action', '--dz-grad-action-deep', '--dz-grad-fold', '--dz-grad-line-cyan', '--dz-grad-line-violet', '--dz-glow-hero'];
+  const pairs = [
+    ['--dz-text', '--dz-bg', 'text'], ['--dz-text', '--dz-surface', 'text'], ['--dz-text-strong', '--dz-bg', 'text'], ['--dz-text-muted', '--dz-bg', 'text'],
+    ['--dz-text-muted', '--dz-surface', 'text'], ['--dz-link', '--dz-bg', 'text'], ['--dz-link', '--dz-surface', 'text'], ['--dz-focus', '--dz-bg', 'ui'],
+    ['--dz-focus', '--dz-surface', 'ui'], ['--dz-grad-headline', '--dz-bg', 'large'], ['--dz-navy', '--dz-grad-action', 'text'], ['--dz-white', '--dz-grad-action-deep', 'large'],
+    ['--dz-navy', '--dz-signal', 'text'], ['--dz-white', '--dz-signal', 'large'], ['--dz-slate', '--dz-navy', 'large'], ['--dz-violet-soft', '--dz-navy', 'text'],
+    ['--dz-ok', '--dz-navy', 'text'], ['--dz-warn', '--dz-navy', 'text'], ['--dz-bad', '--dz-navy', 'text'], ['--dz-accent-light', '--dz-paper', 'text'],
+    // For comparison only: the values the gate replaced or rejects.
+    ['#0098d8 (05, before)', '--dz-paper', 'large', '#0098d8'], ['--dz-white', '--dz-signal', 'text'], ['--dz-ice', '--dz-paper', 'ui'],
+  ];
+  const needs = { text: 4.5, large: 3, ui: 3 };
+
+  function render() {
+    const bg = read('--dz-bg');
+    document.getElementById('semantic').innerHTML = semantic.map((t) => {
+      const v = read(t);
+      const r = t === '--dz-bg' || t === '--dz-surface' || t === '--dz-hairline' ? null : ratio(v, bg);
+      return `<div class="chip"><div class="sw" style="background:${v}"></div><div class="meta"><code>${t}</code><br><span class="muted">${v.length > 40 ? 'gradient' : v}</span>${r ? `<br>${r.toFixed(2)}:1 on bg` : ''}</div></div>`;
+    }).join('');
+    document.getElementById('brand').innerHTML = brand.map((t) => `<div class="chip"><div class="sw" style="background:var(${t})"></div><div class="meta"><code>${t}</code><br><span class="muted">${read(t)}</span></div></div>`).join('');
+    document.getElementById('gradients').innerHTML = gradients.map((t) => `<div class="chip"><div class="sw" style="background:var(${t})"></div><div class="meta"><code>${t}</code></div></div>`).join('')
+      + `<div class="chip"><div class="sw" style="background:linear-gradient(150deg,#0098d8,#0a6be0,#4639f9,#602cfa)"></div><div class="meta"><code>05's light zeta</code><br><span class="muted">first stop #0098D8, for comparison</span></div></div>`;
+    document.getElementById('pixels').innerHTML = ['ai', 'web', 'software', 'ranking'].map((p) => `<div class="chip"><div class="sw" style="display:grid;grid-template-columns:2fr 1fr 1fr"><div style="background:var(--dz-pixel-${p})"></div><div style="background:var(--dz-pixel-${p}-solid)"></div><div style="background:var(--dz-pixel-${p}-glow)"></div></div><div class="meta"><code>--dz-pixel-${p}</code><br><span class="muted">solid ${read(`--dz-pixel-${p}-solid`)} · glow ${read(`--dz-pixel-${p}-glow`)}</span></div></div>`).join('');
+    document.getElementById('pairs').innerHTML = pairs.map(([fg, on, kind, literal]) => {
+      const fgValue = literal || read(fg.startsWith('--') ? fg : '');
+      const r = ratio(fgValue, read(on));
+      const sampleFg = literal || `var(${fg})`;
+      const sample = /grad/.test(fg) || literal
+        ? `<span class="sample" style="background:var(${on});"><span style="background:${literal || `var(${fg})`};-webkit-background-clip:text;background-clip:text;color:transparent;font-size:24px">Headline</span></span>`
+        : `<span class="sample" style="background:var(${on});color:${sampleFg}">${kind === 'ui' ? '<span style="display:inline-block;width:40px;height:4px;background:' + sampleFg + '"></span>' : 'Sample'}</span>`;
+      const compare = literal || (fg === '--dz-white' && on === '--dz-signal' && kind === 'text') || fg === '--dz-ice';
+      return `<tr${compare ? ' class="muted"' : ''}><td><code>${fg}</code>${compare ? ' <em>(comparison)</em>' : ''}</td><td><code>${on}</code></td><td>${sample}</td><td>${r.toFixed(2)}:1</td><td>${needs[kind]}:1 ${kind}</td><td>${pill(r, needs[kind])}</td></tr>`;
+    }).join('');
+    const spacing = ['--dz-space-section', '--dz-space-chapter', '--dz-space-statement', '--dz-gutter'];
+    const probe = document.createElement('div'); document.body.append(probe);
+    document.getElementById('spacing').innerHTML = spacing.map((t) => { probe.style.width = `var(${t})`; const px = probe.getBoundingClientRect().width; return `<div class="space-row"><div><code>${t}</code><br><span class="muted">${read(t)} → ${Math.round(px)} px here</span></div><div class="space-bar" style="width:var(${t});height:14px"></div></div>`; }).join('')
+      + `<div class="space-row"><div><code>--dz-container</code> · <code>--dz-measure</code></div><div class="muted">${read('--dz-container')} · ${read('--dz-measure')}</div></div>`;
+    probe.remove();
+    document.getElementById('radii').innerHTML = ['sm', 'md', 'lg', 'xl', 'pill'].map((r) => `<div><div class="radius-box" style="border-radius:var(--dz-radius-${r})"></div><div class="meta"><code>--dz-radius-${r}</code> <span class="muted">${read(`--dz-radius-${r}`)}</span></div></div>`).join('');
+    document.getElementById('layers').innerHTML = ['base', 'raised', 'sticky', 'header', 'overlay', 'sheet', 'toast', 'consent'].map((l) => `<div class="layer"><code>--dz-layer-${l}</code><span>${read(`--dz-layer-${l}`)}</span></div>`).join('');
+    document.querySelectorAll('[data-theme-choice]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.themeChoice === (root.dataset.theme || 'dark'))));
+  }
+
+  function setTheme(choice) {
+    if (choice === 'light') root.dataset.theme = 'light'; else delete root.dataset.theme;
+    localStorage.setItem('dz-specimen-theme', choice);
+    render(); loadFrame();
+  }
+
+  function loadFrame() {
+    const frame = document.getElementById('type-frame');
+    const choice = root.dataset.theme || 'dark';
+    frame.src = `${location.pathname.split('/').pop()}?frame=type&theme=${choice}`;
+  }
+
+  if (document.body.classList.contains('type-frame')) {
+    document.getElementById('page').remove();
+    document.body.append(document.getElementById('type-scale').content.cloneNode(true));
+    const probe = document.createElement('div'); document.body.append(probe);
+    document.querySelectorAll('[data-size]').forEach((label) => { probe.style.width = `var(${label.dataset.size})`; label.textContent += ` · ${(probe.getBoundingClientRect().width / 16).toFixed(2)} rem at ${innerWidth} px`; });
+    probe.remove();
+  } else {
+    document.querySelectorAll('[data-theme-choice]').forEach((b) => b.addEventListener('click', () => setTheme(b.dataset.themeChoice)));
+    const slider = document.getElementById('width');
+    slider.addEventListener('input', () => { document.getElementById('width-out').textContent = slider.value; document.getElementById('type-frame').width = slider.value; });
+    slider.addEventListener('change', loadFrame);
+    render(); loadFrame();
+    document.fonts.ready.then(() => {
+      const ok = document.fonts.check("800 1em 'Specimen Montserrat'") && document.fonts.check("500 1em 'Specimen JetBrains Mono'");
+      document.getElementById('font-status').textContent = ok ? 'Fonts: Montserrat and JetBrains Mono loaded from the repo.' : 'Fonts didn’t load: open this file in Chrome or Edge (Firefox blocks fonts from other folders on file://).';
+    });
+  }
+</script>
+</body>
+</html>

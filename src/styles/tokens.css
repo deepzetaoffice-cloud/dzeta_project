@@ -1,0 +1,301 @@
+/* Design tokens (docs/ai/05; decision 0015). The only file with raw values (05 §1, check:tokens).
+
+   One shape, which scripts/check-contrast.mjs reads and fails loudly on if it changes:
+   - flat blocks only: a selector list, then declarations
+   - declarations end with `;`, and custom properties hold one value each
+   Sections:
+   1. Brand primitives in :root. They never change with the theme.
+   2. Semantic tokens, which switch with the theme. Components use these, never a primitive that
+      changes meaning between themes. Every first visit is dark; light comes only from the visitor's
+      choice, `data-theme='light'` (05 §1, owner decision 2026-09-30, 0015). So there is no
+      prefers-color-scheme block.
+   3. The Tailwind mapping in @theme blocks. Browsers skip @theme, so the tokens specimen
+      (docs/design/prototypes/tokens-specimen.html) can link this file as it is. */
+
+/* 1. Brand primitives */
+:root {
+  /* Colours (05 §2) */
+  --dz-navy: #010413;
+  --dz-navy-900: #050a1c;
+  --dz-navy-850: #08122e;
+  --dz-navy-800: #0b1c4a;
+  --dz-navy-700: #16224a;
+  --dz-border: #33457f;
+  /* 4.48:1 on navy: labels in large text and disabled states only (0015) */
+  --dz-slate: #5d73b8;
+  --dz-mist: #9fb0e0;
+  --dz-frost: #c9d4ff;
+  --dz-white: #f4f6fb;
+  --dz-cyan: #08c6fd;
+  --dz-azure: #1a84fd;
+  --dz-royal: #2139f6;
+  --dz-violet: #7946fc;
+  --dz-ice: #7cf3ff;
+  --dz-sky: #3da9fc;
+  /* Solid fills carry navy text; white only in large text, 4.16:1 (0015) */
+  --dz-signal: #2f6bff;
+  --dz-violet-soft: #a78bff;
+  --dz-magenta: #a040f2;
+  --dz-ok: #22d3a6;
+  --dz-warn: #ffb547;
+  --dz-bad: #ff5a6e;
+  /* The colour system's info tone (C22) */
+  --dz-info: #3da9fc;
+
+  /* Gradients (05 §2) */
+  --dz-grad-signal: linear-gradient(135deg, #08c6fd 0%, #1a84fd 50%, #7946fc 100%);
+  --dz-grad-zeta: linear-gradient(150deg, #09e8fe 0%, #00b5fc 25%, #147bfc 50%, #4639f9 75%, #602cfa 100%);
+  --dz-grad-action: linear-gradient(90deg, #08c6fd, #2f6bff);
+  --dz-grad-action-deep: linear-gradient(90deg, #1a84fd 0%, #2139f6 100%);
+  --dz-grad-fold: linear-gradient(160deg, #006de5 0%, #16c5ff 33%, #516cfc 67%, #7946fc 100%);
+  --dz-grad-line-cyan: linear-gradient(90deg, #00d8ee 0%, #058fee 50%, #0d48e6 100%);
+  --dz-grad-line-violet: linear-gradient(90deg, #4a22ea 0%, #662de8 50%, #a040f2 100%);
+  --dz-glow-hero: radial-gradient(
+    ellipse 48% 55% at 50% 40%,
+    rgba(24, 70, 210, 0.55) 0%,
+    rgba(12, 34, 120, 0.26) 45%,
+    rgba(1, 4, 19, 0) 78%
+  );
+  --dz-grid-line: rgba(26, 132, 253, 0.07);
+  --dz-grid-size: 80px;
+
+  /* Pillar pixels: 3 stops, top to bottom; the solid colour below 20 px; the glow colour
+     (Icon Master Rules §5.2, C6, C22) */
+  --dz-pixel-ai: linear-gradient(180deg, #03d4fc 0%, #04c1fd 50%, #09a5fc 100%);
+  --dz-pixel-ai-solid: #04c1fd;
+  --dz-pixel-ai-glow: #08c6fd;
+  --dz-pixel-web: linear-gradient(180deg, #21befc 0%, #3092fd 50%, #4264fd 100%);
+  --dz-pixel-web-solid: #3092fd;
+  --dz-pixel-web-glow: #3092fd;
+  --dz-pixel-software: linear-gradient(180deg, #3166fb 0%, #2a4dfc 50%, #3741fd 100%);
+  --dz-pixel-software-solid: #2f55fc;
+  --dz-pixel-software-glow: #2f6bff;
+  --dz-pixel-ranking: linear-gradient(180deg, #6430fa 0%, #592bfd 50%, #4c27fb 100%);
+  --dz-pixel-ranking-solid: #5a2cfb;
+  --dz-pixel-ranking-glow: #7946fc;
+
+  /* Light mode, "paper blueprint" (05 §2, 0015) */
+  --dz-paper: #f4f6fb;
+  --dz-card-light: #ffffff;
+  --dz-ink: #16224a;
+  --dz-ink-muted: #34446f;
+  --dz-hairline-light: rgba(22, 34, 74, 0.14);
+  --dz-link-light: #1557c9;
+  --dz-accent-light: #0a6be0;
+  /* First stop #0098d8 → #0094d3: 2.996:1 on paper was below 3:1 for large text (0015) */
+  --dz-grad-zeta-light: linear-gradient(150deg, #0094d3, #0a6be0, #4639f9, #602cfa);
+
+  /* Fonts. next/font sets --font-montserrat and --font-jetbrains-mono on <html>
+     (src/styles/fonts.ts); each already includes a size-matched fallback. */
+  --dz-font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
+  --dz-font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+
+  /* Type scale (05 §3). Fluid sizes run from 360 to 1280 px wide; the rem part keeps browser zoom
+     working (WCAG 1.4.4). */
+  --dz-text-statement: clamp(2.6rem, 1.4339rem + 5.1826vw, 5.58rem);
+  --dz-text-statement-leading: 0.98;
+  --dz-text-statement-tracking: -0.035em;
+  --dz-text-statement-weight: 800;
+  --dz-text-display: clamp(2.2rem, 1.4174rem + 3.4783vw, 4.2rem);
+  --dz-text-display-leading: 1.02;
+  --dz-text-display-tracking: -0.035em;
+  --dz-text-display-weight: 800;
+  --dz-text-h1: clamp(2rem, 1.5304rem + 2.087vw, 3.2rem);
+  --dz-text-h1-leading: 1.05;
+  --dz-text-h1-tracking: -0.03em;
+  --dz-text-h1-weight: 700;
+  --dz-text-h2: clamp(1.6rem, 1.287rem + 1.3913vw, 2.4rem);
+  --dz-text-h2-leading: 1.1;
+  --dz-text-h2-tracking: -0.02em;
+  --dz-text-h2-weight: 700;
+  --dz-text-h3: clamp(1.3rem, 1.0652rem + 1.0435vw, 1.9rem);
+  --dz-text-h3-leading: 1.25;
+  --dz-text-h3-tracking: -0.02em;
+  --dz-text-h3-weight: 700;
+  --dz-text-h4: 1.25rem;
+  --dz-text-h4-leading: 1.3;
+  --dz-text-h4-weight: 700;
+  --dz-text-lead: clamp(1.125rem, 1.0565rem + 0.3043vw, 1.3rem);
+  --dz-text-lead-leading: 1.55;
+  --dz-text-body: 1rem;
+  --dz-text-body-leading: 1.6;
+  --dz-text-small: 0.875rem;
+  --dz-text-small-leading: 1.5;
+  /* Eyebrows and labels, set in JetBrains Mono */
+  --dz-text-caption: 0.75rem;
+  --dz-text-caption-leading: 1.4;
+  --dz-text-caption-tracking: 0.04em;
+  --dz-text-caption-weight: 500;
+  /* Uppercase eyebrows in caption type: the Lab's wider tracking (owner, specimen review, 0015) */
+  --dz-text-eyebrow-tracking: 0.16em;
+
+  /* Spacing and layout (05 §4). The rest of the spacing uses the Tailwind scale. */
+  --dz-space-section: clamp(3rem, 1.8261rem + 5.2174vw, 6rem);
+  --dz-space-chapter: clamp(4.5rem, 2.837rem + 7.3913vw, 8.75rem);
+  --dz-space-statement: clamp(6rem, 3.6522rem + 10.4348vw, 12rem);
+  --dz-gutter: clamp(1rem, 0.413rem + 2.6087vw, 2.5rem);
+  --dz-container: 1140px;
+  --dz-measure: 65ch;
+
+  /* Stacking order (05 §4), used as z-(--dz-layer-header). Not the depth planes Z0–Z3. */
+  --dz-layer-base: 0;
+  --dz-layer-raised: 10;
+  --dz-layer-sticky: 20;
+  --dz-layer-header: 30;
+  --dz-layer-overlay: 40;
+  --dz-layer-sheet: 50;
+  --dz-layer-toast: 60;
+  --dz-layer-consent: 70;
+
+  /* Radius (05 §4) */
+  --dz-radius-sm: 8px;
+  --dz-radius-md: 12px;
+  --dz-radius-lg: 18px;
+  --dz-radius-xl: 22px;
+  --dz-radius-pill: 999px;
+
+  /* Focus ring (05 §7): the colour is the semantic --dz-focus */
+  --dz-focus-width: 2px;
+  --dz-focus-offset: 2px;
+
+  /* Motion (05 §5) */
+  --dz-ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --dz-ease-pop: cubic-bezier(0.2, 0.9, 0.3, 1.35);
+  --dz-ease-travel: cubic-bezier(0.65, 0, 0.3, 1);
+  --dz-dur-fast: 150ms;
+  --dz-dur-base: 250ms;
+  --dz-tilt-max: 5deg;
+  --dz-magnet-max: 7px;
+}
+
+/* 2. Semantic tokens: dark, the default. Any element can carry data-theme='dark' (the header, the
+   CTA band and the footer stay navy in both themes, 05 §2). */
+:root,
+[data-theme='dark'] {
+  color-scheme: dark;
+  --dz-bg: var(--dz-navy);
+  --dz-surface: var(--dz-navy-850);
+  --dz-text: var(--dz-frost);
+  --dz-text-strong: var(--dz-white);
+  --dz-text-muted: var(--dz-mist);
+  --dz-link: var(--dz-sky);
+  --dz-focus: var(--dz-ice);
+  --dz-hairline: var(--dz-navy-700);
+  /* Gradient headline words sit on --dz-bg, never on a card (2.83:1 on navy-850, 0015) */
+  --dz-grad-headline: var(--dz-grad-zeta);
+}
+
+/* Light, chosen by the visitor (the switch comes with the header in P2) */
+[data-theme='light'] {
+  color-scheme: light;
+  --dz-bg: var(--dz-paper);
+  --dz-surface: var(--dz-card-light);
+  --dz-text: var(--dz-ink);
+  --dz-text-strong: var(--dz-navy);
+  --dz-text-muted: var(--dz-ink-muted);
+  --dz-link: var(--dz-link-light);
+  --dz-focus: var(--dz-royal);
+  --dz-hairline: var(--dz-hairline-light);
+  --dz-grad-headline: var(--dz-grad-zeta-light);
+}
+
+/* 3. Tailwind mapping. Tailwind's default colours, fonts, sizes and radii are removed, so an
+   off-brand one can't be written. The spacing scale and the breakpoints stay (05 §4, §7). */
+@theme {
+  --color-*: initial;
+  --font-*: initial;
+  --text-*: initial;
+  --radius-*: initial;
+}
+
+/* `inline`: utilities read the --dz-* variables directly, so they follow the theme. */
+@theme inline {
+  /* Semantic colours: bg-bg, bg-surface, text-fg, text-fg-strong, text-fg-muted, text-link,
+     outline-focus, border-hairline */
+  --color-bg: var(--dz-bg);
+  --color-surface: var(--dz-surface);
+  --color-fg: var(--dz-text);
+  --color-fg-strong: var(--dz-text-strong);
+  --color-fg-muted: var(--dz-text-muted);
+  --color-link: var(--dz-link);
+  --color-focus: var(--dz-focus);
+  --color-hairline: var(--dz-hairline);
+
+  /* Brand colours, for surfaces that never switch */
+  --color-navy: var(--dz-navy);
+  --color-navy-900: var(--dz-navy-900);
+  --color-navy-850: var(--dz-navy-850);
+  --color-navy-800: var(--dz-navy-800);
+  --color-navy-700: var(--dz-navy-700);
+  --color-border: var(--dz-border);
+  --color-slate: var(--dz-slate);
+  --color-mist: var(--dz-mist);
+  --color-frost: var(--dz-frost);
+  --color-white: var(--dz-white);
+  --color-cyan: var(--dz-cyan);
+  --color-azure: var(--dz-azure);
+  --color-royal: var(--dz-royal);
+  --color-violet: var(--dz-violet);
+  --color-violet-soft: var(--dz-violet-soft);
+  --color-ice: var(--dz-ice);
+  --color-sky: var(--dz-sky);
+  --color-signal: var(--dz-signal);
+  --color-magenta: var(--dz-magenta);
+  --color-ok: var(--dz-ok);
+  --color-warn: var(--dz-warn);
+  --color-bad: var(--dz-bad);
+  --color-info: var(--dz-info);
+
+  --font-sans: var(--dz-font-sans);
+  --font-mono: var(--dz-font-mono);
+
+  --text-statement: var(--dz-text-statement);
+  --text-statement--line-height: var(--dz-text-statement-leading);
+  --text-statement--letter-spacing: var(--dz-text-statement-tracking);
+  --text-statement--font-weight: var(--dz-text-statement-weight);
+  --text-display: var(--dz-text-display);
+  --text-display--line-height: var(--dz-text-display-leading);
+  --text-display--letter-spacing: var(--dz-text-display-tracking);
+  --text-display--font-weight: var(--dz-text-display-weight);
+  --text-h1: var(--dz-text-h1);
+  --text-h1--line-height: var(--dz-text-h1-leading);
+  --text-h1--letter-spacing: var(--dz-text-h1-tracking);
+  --text-h1--font-weight: var(--dz-text-h1-weight);
+  --text-h2: var(--dz-text-h2);
+  --text-h2--line-height: var(--dz-text-h2-leading);
+  --text-h2--letter-spacing: var(--dz-text-h2-tracking);
+  --text-h2--font-weight: var(--dz-text-h2-weight);
+  --text-h3: var(--dz-text-h3);
+  --text-h3--line-height: var(--dz-text-h3-leading);
+  --text-h3--letter-spacing: var(--dz-text-h3-tracking);
+  --text-h3--font-weight: var(--dz-text-h3-weight);
+  --text-h4: var(--dz-text-h4);
+  --text-h4--line-height: var(--dz-text-h4-leading);
+  --text-h4--font-weight: var(--dz-text-h4-weight);
+  --text-lead: var(--dz-text-lead);
+  --text-lead--line-height: var(--dz-text-lead-leading);
+  --text-body: var(--dz-text-body);
+  --text-body--line-height: var(--dz-text-body-leading);
+  --text-small: var(--dz-text-small);
+  --text-small--line-height: var(--dz-text-small-leading);
+  --text-caption: var(--dz-text-caption);
+  --text-caption--line-height: var(--dz-text-caption-leading);
+  --text-caption--letter-spacing: var(--dz-text-caption-tracking);
+  --text-caption--font-weight: var(--dz-text-caption-weight);
+  /* tracking-eyebrow, with font-mono text-caption uppercase (a text-* utility doesn't set the font family) */
+  --tracking-eyebrow: var(--dz-text-eyebrow-tracking);
+
+  /* py-section, py-chapter, py-statement, px-gutter; max-w-page, max-w-measure */
+  --spacing-section: var(--dz-space-section);
+  --spacing-chapter: var(--dz-space-chapter);
+  --spacing-statement: var(--dz-space-statement);
+  --spacing-gutter: var(--dz-gutter);
+  --container-page: var(--dz-container);
+  --container-measure: var(--dz-measure);
+
+  --radius-sm: var(--dz-radius-sm);
+  --radius-md: var(--dz-radius-md);
+  --radius-lg: var(--dz-radius-lg);
+  --radius-xl: var(--dz-radius-xl);
+  --radius-pill: var(--dz-radius-pill);
+}

@@ -19,7 +19,7 @@ Status: PROPOSED | ACCEPTED (owner, date) | SUPERSEDED by NNNN
 | [0001](0001-ai-rule-system.md) | AI rule system: `docs/ai` as single source; Claude Code primary; `AGENTS.md` for other tools | ACCEPTED |
 | [0002](0002-english-first-arabic-after-launch.md) | English at launch; native GCC Arabic after launch; RTL-ready now | ACCEPTED |
 | [0003](0003-plan-first-workflow.md) | Plan first, then execute; Git + GitHub with protected `main` | ACCEPTED |
-| [0004](0004-tech-stack.md) | Tech stack: native-first frontend, n8n automation backbone, Google Sheets CRM v0 | ACCEPTED |
+| [0004](0004-tech-stack.md) | Tech stack: native-first frontend, n8n automation backbone, Google Sheets CRM v0 | ACCEPTED (AI-agent row superseded by 0016) |
 | [0005](0005-performance-tiers.md) | Performance tiers: Home ≥ 95 · money pages ≥ 90 · experience pages ≥ 70; Core Web Vitals everywhere | ACCEPTED |
 | [0006](0006-domain-deepzeta-ai.md) | Domain: `deepzeta.ai` is canonical; `www` redirects to it | ACCEPTED |
 | [0007](0007-roo-code-as-implementer.md) | Roo Code as a second implementer (renumbered from 0006 on 2026-09-29; see conflict C7) | PROPOSED |
@@ -28,8 +28,11 @@ Status: PROPOSED | ACCEPTED (owner, date) | SUPERSEDED by NNNN
 | [0010](0010-ai-training-crawlers-allowed.md) | AI training crawlers get full access (same as every crawler) | ACCEPTED |
 | [0011](0011-content-pages-t2.md) | Content pages (About, founder, case studies, resources, legal) move from T3 to T2 | ACCEPTED |
 | [0012](0012-p0-toolchain-and-hosting.md) | P0 toolchain versions (TypeScript 6, ESLint 9 and why), audit result, Vercel region and DNS facts | ACCEPTED in part (versions, hosting); audit acceptance PROPOSED |
-| [0013](0013-pre-launch-indexing-lock.md) | Pre-launch indexing lock: production stays `noindex` until `SITE_INDEXING=on` at launch | PROPOSED |
-| [0014](0014-empty-page-baseline-and-js-budget.md) | Empty-page baseline and the JavaScript budget (C8) | PROPOSED |
+| [0013](0013-pre-launch-indexing-lock.md) | Pre-launch indexing lock: production stays `noindex` until `SITE_INDEXING=on` at launch; its `robots.txt` lets crawlers read the `noindex` | ACCEPTED (option 2) |
+| [0014](0014-empty-page-baseline-and-js-budget.md) | Empty-page baseline and the JavaScript budget (C8): framework baseline 136.4 KB + our own budget per page | ACCEPTED (option A) |
+| [0015](0015-design-tokens-themes-fonts.md) | Design tokens, themes and fonts (P0 part 2): every first visit dark, light by the visitor's choice; self-hosted Montserrat + JetBrains Mono 500; `check:contrast`; per-type page-weight budgets; `inlineCss` not adopted | ACCEPTED |
+| [0016](0016-ai-provider-deepseek.md) | AI provider: DeepSeek through the AI SDK for the agent demo, the Content Planner and pSEO drafting | ACCEPTED |
+| [0017](0017-owner-approved-merges.md) | Owner-approved merges: the agent merges a task branch into `main` after the gates, green CI and the owner's "merge" in chat; pull requests optional | ACCEPTED |
 
 ## Open business decisions (from the blueprint)
 

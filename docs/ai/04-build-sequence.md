@@ -30,7 +30,7 @@
 | **P7 Live demos & tools** | AI agent (load on tap), ROI calculator, workflow explorer, 60-second test, header speed chip + Page Nutrition Label, AI View; Deepzeta Sync, the tools hub at `/tools` (Website & AI Search Health Check, Social Media Content Planner) | per-demo cost/mitigation stated; `lhci` unchanged |
 | **P8 Resources, case studies & Studio** | Registry wave W3 (engine §3). Glossary, comparisons, guides (bylined by the founder); case studies only with owner-confirmed real data; Designer Studio index + one pilot concept → owner review → the other concepts | page gates |
 | **P9 GEO layer** | `llms.txt`, `llms-full.txt`, robots AI-bot tiers, sitemap | `check:schema` + SEO/GEO audit |
-| **P10 Launch readiness** | Full `verify`, manual checklists, redirects, 404, monitoring, Vercel deploy, Search Console | owner sign-off |
+| **P10 Launch readiness** | Full `verify`, manual checklists, redirects, 404, monitoring, Vercel deploy, set `SITE_INDEXING=on` in Vercel Production and redeploy (lifts the pre-launch lock, decision 0013), Search Console | owner sign-off |
 | **P11 Arabic (after launch)** | `/ar` tree, native GCC content, hreflang, Arabic fonts; English must not regress | parity + English regression gates |
 | **P12 pSEO (after V1)** | **Reminder:** starts only when every V1 row in the URL registry is live and indexing is stable; then remind the owner and write the pSEO plan from engine §10. Dimensions: industries, industry × emirate, integrations, comparisons. Fact packs, ≤ 30% similarity to siblings, batches of up to 10 a week through pull requests | per-batch gates + owner review |
 
