@@ -2,7 +2,7 @@ import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { GET } from '@/app/brand/deepzeta-logo.svg/route';
-import { LOCKED_LOGO_PATH } from '@/lib/brand';
+import { LOCKED_LOGO_PATH, LOGO_URL, LOGO_VERSION, LOGO_VERSIONED_URL } from '@/lib/brand';
 
 // P1 plan, section E. The locked logo is recorded by the SHA-256 of its committed (LF) bytes: 23,026 B,
 // git blob 589432ea. Line endings are normalised first, because a Windows working copy can be CRLF
@@ -35,6 +35,13 @@ const PNGS = [
 describe('the locked logo', () => {
   it('is unchanged', () => {
     expect(lfSha256(readFileSync(LOCKED_LOGO_PATH))).toBe(LOCKED_LOGO_SHA256);
+  });
+
+  // P2 plan, E1: the URL pages request carries the file's own hash, so a new logo gets a new URL and
+  // the year-long cache (next.config.ts) can never serve an old one.
+  it('is requested at a URL versioned by its own hash', () => {
+    expect(LOGO_VERSION).toBe(lfSha256(readFileSync(LOCKED_LOGO_PATH)).slice(0, 8));
+    expect(LOGO_VERSIONED_URL).toBe(`${LOGO_URL}?v=${LOGO_VERSION}`);
   });
 
   it('is served byte for byte at /brand/deepzeta-logo.svg', async () => {
