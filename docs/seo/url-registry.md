@@ -224,6 +224,7 @@ A row is never deleted, and an ID is never reused.
 | R176 | `/apple-icon.png` | System | — | iOS home-screen icon (180 px), P1 |
 | R177 | `/manifest.webmanifest` | System | — | Web app manifest, P1 |
 | R178 | `/brand/*` | System | — | Brand files: the byte-identical logo, the manifest's 512 px icons, the square logo PNG (the schema `#logo`, P4) |
+| R165 | `/shell-review` | Utility | noindex | The complete shell (header, mega menu, mobile sheet, footer) for review and tests, P2. Local, CI and preview builds only; 404 in production. Never linked, never in the sitemap or `llms` files |
 
 ---
 
@@ -256,3 +257,4 @@ The blueprint's draft slugs (for example `web-development`, `ai-chatbots`, `/aud
 |---|---|---|
 | 2026-09-30 | Created with the V1 list (99 indexable pages), waves, blocked and reserved rows | Owner (plan approval, 2026-09-30) |
 | 2026-09-30 | R174–R178, system files (P1): favicon, PNG icon, apple icon, manifest, `/brand/*` | Owner (P1 plan approval) |
+| 2026-09-30 | R165, `/shell-review` (P2): the shell review page, never built in production | Owner (P2 plan approval) |
