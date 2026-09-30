@@ -255,3 +255,4 @@ The blueprint's draft slugs (for example `web-development`, `ai-chatbots`, `/aud
 | Date | Change | Approved by |
 |---|---|---|
 | 2026-09-30 | Created with the V1 list (99 indexable pages), waves, blocked and reserved rows | Owner (plan approval, 2026-09-30) |
+| 2026-09-30 | R174–R178, system files (P1): favicon, PNG icon, apple icon, manifest, `/brand/*` | Owner (P1 plan approval) |

@@ -33,6 +33,7 @@ Status: PROPOSED | ACCEPTED (owner, date) | SUPERSEDED by NNNN
 | [0015](0015-design-tokens-themes-fonts.md) | Design tokens, themes and fonts (P0 part 2): every first visit dark, light by the visitor's choice; self-hosted Montserrat + JetBrains Mono 500; `check:contrast`; per-type page-weight budgets; `inlineCss` not adopted | ACCEPTED |
 | [0016](0016-ai-provider-deepseek.md) | AI provider: DeepSeek through the AI SDK for the agent demo, the Content Planner and pSEO drafting | ACCEPTED |
 | [0017](0017-owner-approved-merges.md) | Owner-approved merges: the agent merges a task branch into `main` after the gates, green CI and the owner's "merge" in chat; pull requests optional | ACCEPTED |
+| [0018](0018-brand-primitives.md) | Brand primitives (P1): the locked logo served as it is and shown by crops; app icons and manifest from the logo's mark; the icon registry, `Icon` and `IconDefs` (Tier 1–2); knockouts; the lab LCP cost accepted | ACCEPTED |
 
 ## Open business decisions (from the blueprint)
 

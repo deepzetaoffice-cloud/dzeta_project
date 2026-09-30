@@ -1,5 +1,5 @@
 # Plan: P1 Brand primitives: the logo, app icons and manifest, icon foundations
-Status: APPROVED (owner, 2026-09-30: approved with the protected-file edits it lists; Q1 and Q2 answered (a), answers under Open questions)
+Status: DONE, merge pending the owner's "merge" (APPROVED by the owner 2026-09-30, with the protected-file edits it lists; Q1 and Q2 answered (a), answers under Open questions; steps 9 and 10 approved 2026-09-30)
 Progress (2026-09-30):
 - Steps 0 and 1 are done: the plan (`98a6747`); registry rows R174–R178 and conflict entries C36–C38 (`d1616f6`).
 - Step 2 is done. **Baseline** (local, CI environment, 5 runs): median LCP 2179 ms, FCP 756 ms, Performance 99, Best Practices 96 (`errors-in-console`: the favicon 404), HTML 3,308 B, CSS 4,515 B, JS 139,668 B, fonts 38,823 B, images 0 B; HTML + CSS + JS 147,491 B of 190,868 B.
@@ -24,7 +24,20 @@ Progress (2026-09-30):
     - `tokens.css` is already traced into the server bundles (the `.nft.json` files), so a request-time render won't miss it; 0018 records this instead of the `outputFileTracingIncludes` note.
     - The locked logo's `<title>` predates C29 ("Deepzeta · AI Digital Solutions"); the schema uses the PNG, not the SVG.
     - For later: P4 asserts that the `#logo` URL is 200 without `noindex` on an indexable build; P2/P3 brand the built-in error page; optionally `appleWebApp.title` for the iOS home-screen name (not verified).
-  - **The reviewer and the performance and accessibility auditor:** re-run them in the next session.
+  - **The owner approved steps 9 and 10 (2026-09-30),** which accepts the lab LCP cost. **CI (`bdc9d07`) is green:** median LCP 1957 ms (runs 2320, 1966, 1737, 1372, 1957), Performance median 99, Best Practices 100.
+  - **Checked on Vercel:** the logo SVG is served Brotli-compressed. The icon hrefs' hashes are the same across two Vercel builds (a Windows build differs: the hash follows the build path, not the content).
+  - **Reviewer: no blocking findings.** Fixed (`a84bffe`):
+    - Tier 1 takes its parent's colour
+    - the gradient stops use classes, not style attributes (safe under a nonce CSP)
+    - the lockup is `dir="ltr"`
+    - the §3 corner radii (bubble 2.25, ear cups 1.25)
+    - focus inside a card; disabled hosts; forced colours and more contrast are static
+    - stroke, dot and radius tests; unused exports removed
+    - **Left to the owner:** the §3 line-centre rule (.25/.75) against the prototype's lines (decision 0018).
+  - **Performance and accessibility audit: the LCP stop (accepted) and no other blocking findings.** Fixed (`9fe3661`): forced colours drop the gradients; the static glow stays at 0.45 on hover; the Logo's height class is required. **Moved to P2** in 0018: the logo's cache lifetime (needs `next.config.ts`), and a trace of the later first paint it saw locally.
+- Step 10 is done:
+  - decision 0018 and its index row
+  - the approved protected edits: 05 §5 and §6, 03 §1, the new-icon skill, `CLAUDE.md`, and the registry's change-log row
 Phase: P1
 Branch: `feat/p1-brand-primitives`, from `main` at `9b37e6c`
 Page tier: T1, the placeholder Home (`lhci` floor ≥ 95), which gets the logo. No effect runs on any page (see the Effect register).
