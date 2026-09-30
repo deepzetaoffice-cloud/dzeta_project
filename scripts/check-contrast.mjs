@@ -1,0 +1,392 @@
+#!/usr/bin/env node
+// Contrast gate (docs/ai/03 · check:contrast; docs/ai/05 §2; decision 0015). No dependencies.
+// Reads src/styles/tokens.css, resolves each theme's tokens and checks the colour pairs below against
+// WCAG 2.x: 4.5:1 for text, 3:1 for large text (24 px, or 19 px bold) and for UI parts such as focus
+// rings. Fails on:
+//   - a pair below its threshold, in any theme
+//   - a light block that differs from its first-visit copy in the prefers-color-scheme query
+//   - a semantic token without a value in both themes
+//   - anything in tokens.css outside the documented shape (the file's header), rather than skipping it
+
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { pathToFileURL } from 'node:url';
+
+export const TOKENS_FILE = 'src/styles/tokens.css';
+export const THRESHOLDS = { text: 4.5, large: 3, ui: 3 };
+
+const PRIMITIVES = ':root';
+const DARK = ":root, [data-theme='dark']";
+const LIGHT = "[data-theme='light']";
+const LIGHT_MEDIA = '@media (prefers-color-scheme: light)';
+const LIGHT_MEDIA_SELECTOR = ":root:not([data-theme='dark'])";
+export const THEMES = ['dark', 'light'];
+
+// The pairs, as token names. `themes` lists where a pair is checked: semantic tokens in both themes;
+// brand primitives, which never switch, once, from the primitives alone. Gradients are checked at
+// every stop.
+const both = THEMES;
+const once = ['brand'];
+export const PAIRS = [
+  { fg: '--dz-text', bg: '--dz-bg', kind: 'text', themes: both },
+  { fg: '--dz-text', bg: '--dz-surface', kind: 'text', themes: both },
+  { fg: '--dz-text-strong', bg: '--dz-bg', kind: 'text', themes: both },
+  { fg: '--dz-text-strong', bg: '--dz-surface', kind: 'text', themes: both },
+  { fg: '--dz-text-muted', bg: '--dz-bg', kind: 'text', themes: both },
+  { fg: '--dz-text-muted', bg: '--dz-surface', kind: 'text', themes: both },
+  { fg: '--dz-link', bg: '--dz-bg', kind: 'text', themes: both },
+  { fg: '--dz-link', bg: '--dz-surface', kind: 'text', themes: both },
+  { fg: '--dz-focus', bg: '--dz-bg', kind: 'ui', themes: both },
+  { fg: '--dz-focus', bg: '--dz-surface', kind: 'ui', themes: both },
+  {
+    fg: '--dz-grad-headline',
+    bg: '--dz-bg',
+    kind: 'large',
+    themes: both,
+    note: 'headline words, page background only',
+  },
+  // The raised surface is dark only for now
+  { fg: '--dz-white', bg: '--dz-navy-800', kind: 'text', themes: once },
+  { fg: '--dz-frost', bg: '--dz-navy-800', kind: 'text', themes: once },
+  { fg: '--dz-mist', bg: '--dz-navy-800', kind: 'text', themes: once },
+  // The primary CTA: navy text on the action gradient; white on its hover gradient in large text only (05 §2)
+  { fg: '--dz-navy', bg: '--dz-grad-action', kind: 'text', themes: once, note: 'primary CTA' },
+  { fg: '--dz-white', bg: '--dz-grad-action-deep', kind: 'large', themes: once, note: 'primary CTA hover' },
+  // Solid signal fills: navy text; white in large text only (0015, Q2)
+  { fg: '--dz-navy', bg: '--dz-signal', kind: 'text', themes: once },
+  { fg: '--dz-white', bg: '--dz-signal', kind: 'large', themes: once },
+  // Slate is for large labels and disabled states only (0015)
+  { fg: '--dz-slate', bg: '--dz-navy', kind: 'large', themes: once },
+  { fg: '--dz-slate', bg: '--dz-navy-850', kind: 'large', themes: once },
+  { fg: '--dz-slate', bg: '--dz-navy-800', kind: 'large', themes: once },
+  { fg: '--dz-violet-soft', bg: '--dz-navy', kind: 'text', themes: once },
+  { fg: '--dz-violet-soft', bg: '--dz-navy-850', kind: 'text', themes: once },
+  // Status colours on dark (light variants come with their first use)
+  ...['--dz-ok', '--dz-warn', '--dz-bad', '--dz-info'].flatMap((fg) => [
+    { fg, bg: '--dz-navy', kind: 'text', themes: once },
+    { fg, bg: '--dz-navy-850', kind: 'text', themes: once },
+  ]),
+  { fg: '--dz-accent-light', bg: '--dz-paper', kind: 'text', themes: once },
+  { fg: '--dz-accent-light', bg: '--dz-card-light', kind: 'text', themes: once },
+];
+
+// Printed on every run, so the output never claims more than it checked.
+export const NOT_CHECKED = [
+  'glass surfaces: P2, with the glass tokens (frost text needs a 0.68 tint)',
+  'light-mode status colours, accent surfaces, raised surfaces and shadows: the first plan that uses them',
+  '--dz-border as the only boundary of a form field (2.24:1 on navy): P6 forms',
+  'hairlines: decorative, not a boundary',
+  'pixel colours: the icon plan (P1), against each icon surface',
+];
+
+// ---------------------------------------------------------------------------------------------
+// Parsing
+
+const normaliseSelector = (s) =>
+  s
+    .replace(/"/g, "'")
+    .split(',')
+    .map((part) => part.trim().replace(/\s+/g, ' '))
+    .join(', ');
+
+// Splits `a; b; c` on the semicolons outside parentheses.
+function splitDeclarations(body) {
+  const parts = [];
+  let depth = 0;
+  let current = '';
+  for (const char of body) {
+    if (char === '(') depth++;
+    if (char === ')') depth--;
+    if (char === ';' && depth === 0) {
+      parts.push(current);
+      current = '';
+    } else current += char;
+  }
+  if (current.trim()) parts.push(current);
+  return parts.map((part) => part.trim()).filter(Boolean);
+}
+
+function parseDeclarations(body, where, problems) {
+  const declarations = new Map();
+  let colorScheme;
+  for (const declaration of splitDeclarations(body)) {
+    const colon = declaration.indexOf(':');
+    const name = declaration.slice(0, colon).trim();
+    const value = declaration
+      .slice(colon + 1)
+      .trim()
+      .replace(/\s+/g, ' ');
+    if (colon === -1 || !value) {
+      problems.push(`${where}: can't read the declaration "${declaration}"`);
+    } else if (name === 'color-scheme') {
+      colorScheme = value;
+    } else if (!/^--[a-z0-9-]+$/.test(name)) {
+      problems.push(`${where}: only custom properties and color-scheme belong here, found "${name}"`);
+    } else if (declarations.has(name)) {
+      problems.push(`${where}: ${name} is declared twice`);
+    } else {
+      declarations.set(name, value);
+    }
+  }
+  return { declarations, colorScheme };
+}
+
+// Top-level blocks as { prelude, body }. The body of an @media block is parsed one level deeper.
+function topLevelBlocks(css, where, problems) {
+  const blocks = [];
+  let depth = 0;
+  let prelude = '';
+  let body = '';
+  for (const char of css) {
+    if (char === '{') {
+      if (depth > 0) body += char;
+      depth++;
+    } else if (char === '}') {
+      depth--;
+      if (depth < 0) {
+        problems.push(`${where}: unbalanced "}"`);
+        return blocks;
+      }
+      if (depth === 0) {
+        blocks.push({ prelude: prelude.trim().replace(/\s+/g, ' '), body });
+        prelude = '';
+        body = '';
+      } else body += char;
+    } else if (depth === 0) prelude += char;
+    else body += char;
+  }
+  if (depth !== 0) problems.push(`${where}: unbalanced "{"`);
+  if (prelude.trim()) problems.push(`${where}: text outside a block: "${prelude.trim().slice(0, 60)}"`);
+  return blocks;
+}
+
+// Reads tokens.css into its primitives and the declarations of each theme block.
+export function parseTokens(css) {
+  const problems = [];
+  const source = css.replace(/\/\*[\s\S]*?\*\//g, '');
+  const primitives = new Map();
+  const themes = {};
+
+  const addFlat = (selector, body, where) => {
+    if (body.includes('{')) {
+      problems.push(`${where}: nested blocks aren't part of the tokens shape`);
+      return;
+    }
+    const parsed = parseDeclarations(body, where, problems);
+    if (selector === PRIMITIVES) {
+      for (const [name, value] of parsed.declarations) {
+        if (primitives.has(name)) problems.push(`${where}: ${name} is declared twice`);
+        primitives.set(name, value);
+      }
+    } else {
+      const key = { [DARK]: 'dark', [LIGHT]: 'light', [LIGHT_MEDIA_SELECTOR]: 'lightMedia' }[selector];
+      if (themes[key]) problems.push(`${where}: a second "${selector}" block`);
+      themes[key] = parsed;
+    }
+  };
+
+  for (const block of topLevelBlocks(source, TOKENS_FILE, problems)) {
+    if (/^@theme\b/.test(block.prelude)) continue; // the Tailwind mapping: browsers and this gate skip it
+    if (block.prelude === LIGHT_MEDIA) {
+      for (const inner of topLevelBlocks(block.body, LIGHT_MEDIA, problems)) {
+        const selector = normaliseSelector(inner.prelude);
+        if (selector !== LIGHT_MEDIA_SELECTOR) {
+          problems.push(`${LIGHT_MEDIA}: unexpected block "${inner.prelude}"`);
+          continue;
+        }
+        addFlat(selector, inner.body, `${LIGHT_MEDIA} ${selector}`);
+      }
+      continue;
+    }
+    const selector = normaliseSelector(block.prelude);
+    if (![PRIMITIVES, DARK, LIGHT].includes(selector)) {
+      problems.push(
+        `unexpected block "${block.prelude}": the tokens shape has :root, the two theme blocks, one @media block and @theme`,
+      );
+      continue;
+    }
+    addFlat(selector, block.body, selector);
+  }
+
+  for (const [key, label] of [
+    ['dark', DARK],
+    ['light', LIGHT],
+    ['lightMedia', `${LIGHT_MEDIA} { ${LIGHT_MEDIA_SELECTOR} }`],
+  ]) {
+    if (!themes[key]) problems.push(`missing block: ${label}`);
+  }
+  if (primitives.size === 0) problems.push('missing block: :root with the brand primitives');
+  return { primitives, themes, problems };
+}
+
+// Problems between the theme blocks: the first-visit copy, missing values, color-scheme.
+export function themeProblems({ themes }) {
+  const problems = [];
+  const { dark, light, lightMedia } = themes;
+  if (!dark || !light || !lightMedia) return problems;
+  const keys = new Set([...light.declarations.keys(), ...lightMedia.declarations.keys()]);
+  for (const name of keys) {
+    const a = light.declarations.get(name);
+    const b = lightMedia.declarations.get(name);
+    if (a !== b)
+      problems.push(
+        `the light copies differ at ${name}: "${a ?? 'missing'}" vs "${b ?? 'missing'}" in the media query`,
+      );
+  }
+  if (light.colorScheme !== lightMedia.colorScheme) problems.push('the light copies differ at color-scheme');
+  for (const name of dark.declarations.keys()) {
+    if (!light.declarations.has(name)) problems.push(`${name} has a dark value but no light value`);
+  }
+  for (const name of light.declarations.keys()) {
+    if (!dark.declarations.has(name)) problems.push(`${name} has a light value but no dark value`);
+  }
+  if (dark.colorScheme !== 'dark')
+    problems.push(`the dark block needs color-scheme: dark (found "${dark.colorScheme ?? 'none'}")`);
+  if (light.colorScheme !== 'light')
+    problems.push(`the light block needs color-scheme: light (found "${light.colorScheme ?? 'none'}")`);
+  return problems;
+}
+
+// ---------------------------------------------------------------------------------------------
+// Colour
+
+const HEX = /#(?:[0-9a-f]{8}|[0-9a-f]{6}|[0-9a-f]{3,4})\b/gi;
+const RGB = /rgba?\(([^)]*)\)/gi;
+
+function hexToRgba(hex) {
+  let h = hex.slice(1);
+  if (h.length <= 4) h = [...h].map((c) => c + c).join('');
+  const n = (i) => parseInt(h.slice(i, i + 2), 16);
+  return { r: n(0), g: n(2), b: n(4), a: h.length === 8 ? n(6) / 255 : 1 };
+}
+
+function rgbFunctionToRgba(args) {
+  const parts = args
+    .replace(/\//g, ' ')
+    .split(/[\s,]+/)
+    .filter(Boolean);
+  if (parts.length < 3) return null;
+  const channel = (p) => (p.endsWith('%') ? (parseFloat(p) / 100) * 255 : parseFloat(p));
+  const alpha = parts[3] === undefined ? 1 : parts[3].endsWith('%') ? parseFloat(parts[3]) / 100 : parseFloat(parts[3]);
+  return { r: channel(parts[0]), g: channel(parts[1]), b: channel(parts[2]), a: alpha };
+}
+
+// Every colour in a resolved value, in order: one for a solid colour, each stop for a gradient.
+export function coloursIn(value) {
+  const found = [];
+  for (const m of value.matchAll(HEX)) found.push({ at: m.index, colour: hexToRgba(m[0]) });
+  for (const m of value.matchAll(RGB)) {
+    const colour = rgbFunctionToRgba(m[1]);
+    if (colour) found.push({ at: m.index, colour });
+  }
+  return found.sort((x, y) => x.at - y.at).map((f) => f.colour);
+}
+
+const linear = (c) => {
+  const s = c / 255;
+  return s <= 0.04045 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+};
+const luminance = ({ r, g, b }) => 0.2126 * linear(r) + 0.7152 * linear(g) + 0.0722 * linear(b);
+
+// A colour with alpha, composited over an opaque background, as the browser paints it.
+export const composite = (fg, bg) => ({
+  r: fg.a * fg.r + (1 - fg.a) * bg.r,
+  g: fg.a * fg.g + (1 - fg.a) * bg.g,
+  b: fg.a * fg.b + (1 - fg.a) * bg.b,
+  a: 1,
+});
+
+export function contrastRatio(fg, bg) {
+  const [lighter, darker] = [luminance(composite(fg, bg)), luminance(bg)].sort((x, y) => y - x);
+  return (lighter + 0.05) / (darker + 0.05);
+}
+
+export const toHex = ({ r, g, b }) => '#' + [r, g, b].map((c) => Math.round(c).toString(16).padStart(2, '0')).join('');
+
+// ---------------------------------------------------------------------------------------------
+// The check
+
+// The value of a token in a theme, with every var() resolved.
+export function resolveToken(name, tokens, seen = []) {
+  if (seen.includes(name)) throw new Error(`circular var(): ${[...seen, name].join(' → ')}`);
+  const value = tokens.get(name);
+  if (value === undefined) throw new Error(`${name} isn't defined${seen.length ? ` (used by ${seen.at(-1)})` : ''}`);
+  return value.replace(/var\(\s*(--[a-z0-9-]+)\s*(?:,[^)]*)?\)/g, (_, ref) =>
+    resolveToken(ref, tokens, [...seen, name]),
+  );
+}
+
+export function checkContrast(css, pairs = PAIRS) {
+  const parsed = parseTokens(css);
+  const problems = [...parsed.problems, ...themeProblems(parsed)];
+  const results = [];
+  if (parsed.problems.length > 0) return { results, problems };
+
+  const tokensFor = (theme) =>
+    theme === 'brand' ? parsed.primitives : new Map([...parsed.primitives, ...parsed.themes[theme].declarations]);
+  for (const pair of pairs) {
+    for (const theme of pair.themes) {
+      const tokens = tokensFor(theme);
+      let fgColours;
+      let bgColours;
+      try {
+        fgColours = coloursIn(resolveToken(pair.fg, tokens));
+        bgColours = coloursIn(resolveToken(pair.bg, tokens));
+      } catch (error) {
+        problems.push(`${pair.fg} on ${pair.bg} (${theme}): ${error.message}`);
+        continue;
+      }
+      if (fgColours.length === 0 || bgColours.length === 0) {
+        problems.push(`${pair.fg} on ${pair.bg} (${theme}): no colour found to check`);
+        continue;
+      }
+      if (bgColours.some((c) => c.a < 1)) {
+        problems.push(
+          `${pair.fg} on ${pair.bg} (${theme}): the background isn't opaque, so its contrast depends on what's behind it`,
+        );
+        continue;
+      }
+      // The worst combination of any foreground stop over any background stop.
+      let worst = null;
+      for (const fg of fgColours) {
+        for (const bg of bgColours) {
+          const ratio = contrastRatio(fg, bg);
+          if (!worst || ratio < worst.ratio) worst = { ratio, worstFg: toHex(composite(fg, bg)), worstBg: toHex(bg) };
+        }
+      }
+      const threshold = THRESHOLDS[pair.kind];
+      results.push({ ...pair, theme, ...worst, threshold, pass: worst.ratio >= threshold });
+    }
+  }
+  return { results, problems };
+}
+
+const pairLabel = (r) => `${r.fg} on ${r.bg}`;
+
+function main() {
+  const root = process.cwd();
+  const { results, problems } = checkContrast(readFileSync(join(root, TOKENS_FILE), 'utf8'));
+
+  for (const r of results) {
+    const note = r.note ? ` (${r.note})` : '';
+    console.log(
+      `  ${r.pass ? 'ok  ' : 'FAIL'} ${r.theme.padEnd(5)} ${pairLabel(r).padEnd(44)} ${r.ratio.toFixed(2).padStart(5)}:1` +
+        ` ≥ ${r.threshold} ${r.kind}, worst ${r.worstFg} on ${r.worstBg}${note}`,
+    );
+  }
+  console.log('Not checked yet:');
+  for (const item of NOT_CHECKED) console.log(`  - ${item}`);
+
+  const failures = results.filter((r) => !r.pass);
+  if (problems.length > 0 || failures.length > 0) {
+    console.error(`check:contrast FAILED (${failures.length} pair(s) below threshold, ${problems.length} problem(s)):`);
+    for (const f of failures) {
+      console.error(`  ${pairLabel(f)} (${f.theme}): ${f.ratio.toFixed(2)}:1 < ${f.threshold} (${f.kind})`);
+    }
+    for (const p of problems) console.error(`  ${p}`);
+    process.exit(1);
+  }
+  console.log(`check:contrast passed (${results.length} checks in ${TOKENS_FILE}).`);
+}
+
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) main();
