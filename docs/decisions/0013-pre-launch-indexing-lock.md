@@ -26,6 +26,8 @@ So `Disallow: /` together with `noindex`, which P0 served before this decision w
   | **1 · As built in P0** | `Disallow: /` | `Disallow: /` | Crawlers never fetch pages, so they never see the `noindex`. A linked URL can still appear in Google as a bare link. AI training crawlers stay off the placeholder. |
   | **2 · Recommended** | `Disallow: /` (08 §1, unchanged) | `Allow: /`, `Disallow: /api/` (the same file as after launch) | Google reads the `noindex` header and keeps every page out of its results, as its documentation says; the same page warns that other engines may treat `noindex` differently. AI crawlers use `robots.txt` as their control, so they may read and cite **whatever is live before launch**: the placeholder today, and every page merged to `main` until `SITE_INDEXING=on`. |
 
+- **AI crawlers before launch: no extra block** (owner, 2026-09-30: "Accept that"). The owner accepted that AI engines may read, cite and train on whatever is live before launch. Named AI bots are not disallowed while the lock is on. The AI-bot tiers come in P9 (decision 0010).
+
 - **At launch (P10):** the owner sets `SITE_INDEXING=on` in Vercel → Project → Settings → Environment Variables → **Production only**, then redeploys. No code changes.
 
 | Deployment | Indexable |
