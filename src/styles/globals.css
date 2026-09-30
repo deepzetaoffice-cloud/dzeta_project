@@ -1,6 +1,43 @@
 /* Global stylesheet. Tailwind v4 is CSS-first: there is no tailwind.config.js (docs/ai/05 §1).
-   The design tokens arrive in P0 part 2 as src/styles/tokens.css.
    source('..') limits class detection to src/ (the path is relative to this file). Without it
    Tailwind also scans Planning Folder/ and docs/, and ships their example classes, including raw
    hex values, in the site's CSS. */
 @import 'tailwindcss' source('..');
+/* The tokens and the Tailwind mapping (decision 0015). Raw values live only there. */
+@import './tokens.css';
+
+@layer base {
+  html {
+    background-color: var(--dz-bg);
+    color: var(--dz-text);
+    font-family: var(--dz-font-sans);
+  }
+
+  body {
+    font-size: var(--dz-text-body);
+    line-height: var(--dz-text-body-leading);
+  }
+
+  /* An element that carries a theme paints its own surface, so a navy footer stays navy on a
+     light page (05 §2). */
+  [data-theme] {
+    background-color: var(--dz-bg);
+    color: var(--dz-text);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: var(--dz-text-strong);
+    text-wrap: balance;
+  }
+
+  /* Visible focus in both themes (05 §7): ice on dark, royal on light */
+  :focus-visible {
+    outline: var(--dz-focus-width) solid var(--dz-focus);
+    outline-offset: var(--dz-focus-offset);
+  }
+}
