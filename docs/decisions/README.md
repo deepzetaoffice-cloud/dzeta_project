@@ -32,6 +32,7 @@ Status: PROPOSED | ACCEPTED (owner, date) | SUPERSEDED by NNNN
 | [0014](0014-empty-page-baseline-and-js-budget.md) | Empty-page baseline and the JavaScript budget (C8): framework baseline 136.4 KB + our own budget per page | ACCEPTED (option A) |
 | [0015](0015-design-tokens-themes-fonts.md) | Design tokens, themes and fonts (P0 part 2): every first visit dark, light by the visitor's choice; self-hosted Montserrat + JetBrains Mono 500; `check:contrast`; per-type page-weight budgets; `inlineCss` not adopted | ACCEPTED |
 | [0016](0016-ai-provider-deepseek.md) | AI provider: DeepSeek through the AI SDK for the agent demo, the Content Planner and pSEO drafting | ACCEPTED |
+| [0017](0017-owner-approved-merges.md) | Owner-approved merges: the agent merges a task branch into `main` after the gates, green CI and the owner's "merge" in chat; pull requests optional | ACCEPTED |
 
 ## Open business decisions (from the blueprint)
 

@@ -1,6 +1,6 @@
 # 01 · AI Agent Roles
 
-> **Applies to:** every AI agent (Claude Code is the primary tool; any other tool enters through `AGENTS.md`) · **Precedence:** below 00 · **Last reviewed:** 2026-09-29
+> **Applies to:** every AI agent (Claude Code is the primary tool; any other tool enters through `AGENTS.md`) · **Precedence:** below 00 · **Last reviewed:** 2026-09-30
 
 Each role has one job. A role never does another role's job in the same step. If you are unsure which role you are in, you are the **Architect**: plan, don't edit.
 
@@ -22,7 +22,7 @@ QA Verifier (runs gates) + Reviewer (checks diff vs plan) [+ Auditors when relev
    │            │
    │ fail ──────┴──► back to Implementer with the failing evidence
    ▼ pass
-Commit on the task branch ──► PR ──► owner merges
+Commit on the task branch ──► report ──► owner says "merge" ──► agent merges to main (0017)
 ```
 
 **Small-task shortcut:** a change that touches **one file**, adds **no dependency**, and changes **no protected file** (typo, copy tweak, one class) may skip the written plan. The agent still states a one-line plan before editing and reports gate evidence after.
