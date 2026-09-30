@@ -13,6 +13,18 @@ Progress (2026-09-30):
   - **Clearance (§4.2 rule 4), measured in Chromium** by tracing every line and dot: WhatsApp AI Agent 1.25, Booking Automation System 1.85, AI Voice Receptionist **0.15**, Speed-to-Lead System **−0.55** (the pixel overlaps the dial), CRM Setup & Automation **0.40**. The three approved drawings that fail get the rule's own remedy, a **knockout**: the lines are masked 0.75 around the pixel, and the pixel stays where the prototype put it.
   - **AI Voice Receptionist's pixel moves up 0.45** (y 19.7 → 19.25), more than the 0.1 snap: at 19.7 it crossed the 2-unit padding (§3).
   - **Vitest compiles `.tsx` without a plugin** (verified). **Playwright doesn't:** it compiles JSX with its component-testing runtime, which `react-dom/server` can't render. So one test helper is added, `tests/e2e/icon-gallery.tsx`, which `icons.spec.ts` loads through Vite (already a devDependency), as Vitest does.
+- Step 8 is done: the logo header on the placeholder Home (`6dc0e90`); e2e 35 passed.
+- Step 9 is under way. The branch is pushed (`6dc0e90`), so CI's Lighthouse run is the record.
+  - **Full `verify` passes locally** (CI environment, exit 0). **After** (5 runs): median LCP **2333 ms** (+154 ms), FCP 757 ms, Performance 98, Best Practices **100** (the favicon 404 is gone), images 24,074 B (the logo SVG, which `next start` serves uncompressed), other 7,080 B (the manifest and favicon), HTML + CSS + JS 148,912 B of 190,868 B. The H1 is still the LCP element.
+  - **Stop (Risks, "the logo request slows lab LCP"): +154 ms is over the plan's +100 ms.** The owner decides: accept the logo's cost, or keep the logo off Home until P2's header. Whether Vercel compresses the SVG in production is not verified.
+  - **SEO/GEO audit: PASS** (head, manifest, favicon, registry rows, the `#logo` PNG). Items for close-out:
+    - 0018 quotes Google's current favicon rule ("square, at least 8x8px; we recommend … larger than 48x48px", page updated 2026-08-28), not "a multiple of 48".
+    - Check that the favicon, icon and apple-icon hrefs' query hashes stay the same between builds while the files don't change (Turbopack, not verified); if they change, raise it with the owner.
+    - Append the registry change-log row: "2026-09-30 · R174–R178, system files (P1) · Owner (plan approval)".
+    - `tokens.css` is already traced into the server bundles (the `.nft.json` files), so a request-time render won't miss it; 0018 records this instead of the `outputFileTracingIncludes` note.
+    - The locked logo's `<title>` predates C29 ("Deepzeta · AI Digital Solutions"); the schema uses the PNG, not the SVG.
+    - For later: P4 asserts that the `#logo` URL is 200 without `noindex` on an indexable build; P2/P3 brand the built-in error page; optionally `appleWebApp.title` for the iOS home-screen name (not verified).
+  - **The reviewer and the performance and accessibility auditor:** re-run them in the next session.
 Phase: P1
 Branch: `feat/p1-brand-primitives`, from `main` at `9b37e6c`
 Page tier: T1, the placeholder Home (`lhci` floor ≥ 95), which gets the logo. No effect runs on any page (see the Effect register).
