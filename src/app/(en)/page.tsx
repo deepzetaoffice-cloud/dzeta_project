@@ -14,12 +14,12 @@ export const metadata: Metadata = {
 // Placeholder Home for P0: the empty-page baseline (decision 0014) is measured on this page.
 export default function HomePage() {
   return (
-    <main className="mx-auto max-w-prose px-6 py-16">
-      <h1 className="text-3xl font-bold text-balance">{homeContent.heading}</h1>
+    <main className="mx-auto max-w-measure px-gutter py-section">
+      <h1 className="text-h1">{homeContent.heading}</h1>
       <p className="mt-4">{homeContent.intro}</p>
       <p className="mt-4">
         {homeContent.contactBefore}
-        <a className="underline" href={`mailto:${siteConfig.email}`}>
+        <a className="text-link underline" href={`mailto:${siteConfig.email}`}>
           {siteConfig.email}
         </a>
         {homeContent.contactAfter}
