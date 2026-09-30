@@ -1,0 +1,511 @@
+<title>DeepZeta Website Blueprint</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Readex+Pro:wght@400;600&display=swap">
+<style>
+/* Single deliberate dark theme: this is the DeepZeta brand world (70/20/10 navy/white/brand). */
+:root{
+  color-scheme:dark;
+  --navy:#010413; --navy-900:#050A1C; --navy-850:#08122E; --navy-800:#0B1C4A; --navy-700:#16224A;
+  --border:#33457F; --slate:#5D73B8; --mist:#9FB0E0; --frost:#C9D4FF; --white:#F4F6FB;
+  --cyan:#08C6FD; --azure:#1A84FD; --royal:#2139F6; --violet:#7946FC; --ice:#7CF3FF; --sky:#3DA9FC; --signal:#2F6BFF; --violet-soft:#A78BFF;
+  --ok:#22D3A6; --warn:#FFB547; --bad:#FF5A6E;
+  --sig:linear-gradient(135deg,#08C6FD 0%,#1A84FD 50%,#7946FC 100%);
+  --zeta:linear-gradient(150deg,#09E8FE 0%,#00B5FC 25%,#147BFC 50%,#4639F9 75%,#602CFA 100%);
+  --action:linear-gradient(90deg,#08C6FD,#2F6BFF);
+  --px-ai:linear-gradient(135deg,#03D4FC,#09A5FC);
+  --px-web:linear-gradient(135deg,#21BEFC,#4264FD);
+  --px-sw:linear-gradient(135deg,#3166FB,#3741FD);
+  --px-rank:linear-gradient(135deg,#6430FA,#4C27FB);
+  --sans:'Montserrat',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace;
+  --ar:'Readex Pro','Segoe UI',Tahoma,sans-serif;
+}
+*{box-sizing:border-box}
+html{background:var(--navy);overflow-x:clip}
+body{margin:0;background:var(--navy);color:var(--white);font-family:var(--sans);font-size:15.5px;line-height:1.6;
+  background-image:linear-gradient(rgba(26,132,253,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(26,132,253,.055) 1px,transparent 1px);
+  background-size:80px 80px;padding-inline:clamp(16px,4vw,56px);padding-block:0 96px;overflow-x:clip}
+.wrap{max-width:1140px;margin:0 auto}
+a{color:var(--sky)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--ice);outline-offset:2px}
+p{margin:0}
+.muted{color:var(--mist)}
+.mono{font-family:var(--mono)}
+.z{background:var(--zeta);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* hero */
+.hero{position:relative;padding-block:56px 36px;display:grid;gap:22px}
+.hero::before{content:"";position:absolute;inset:-40px -12vw auto;height:520px;z-index:-1;
+  background:radial-gradient(ellipse 50% 60% at 22% 40%,rgba(24,70,210,.5) 0%,rgba(12,34,120,.22) 45%,rgba(1,4,19,0) 78%)}
+.brandline{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.word{font-weight:800;font-size:22px;letter-spacing:-.01em}
+.tag{font-family:var(--mono);font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--mist);display:flex;align-items:center;gap:10px}
+.tag::before,.tag::after{content:"";width:28px;height:3px;border-radius:2px;background:linear-gradient(90deg,#00D8EE,#0D48E6)}
+.tag::after{background:linear-gradient(90deg,#4A22EA,#A040F2)}
+h1{font-size:clamp(34px,5.4vw,60px);line-height:1.04;font-weight:800;letter-spacing:-.025em;margin:0;text-wrap:balance;max-width:17ch}
+.lead{font-size:17px;color:var(--frost);max-width:64ch}
+.meta-row{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-family:var(--mono);font-size:12px;padding:5px 11px;border-radius:999px;border:1px solid var(--navy-700);color:var(--frost);background:rgba(8,18,46,.7)}
+.chip b{color:var(--cyan);font-weight:500}
+
+/* toc */
+nav.toc{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:12px 0;
+  background:rgba(1,4,19,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--navy-700)}
+nav.toc::-webkit-scrollbar{display:none}
+nav.toc a{flex:none;font-size:12.5px;font-weight:600;color:var(--frost);text-decoration:none;padding:6px 12px;border-radius:999px;border:1px solid var(--navy-700)}
+nav.toc a:hover{border-color:var(--cyan);color:var(--white)}
+
+/* sections */
+section{padding-top:72px;scroll-margin-top:60px}
+.sh{display:grid;gap:10px;margin-bottom:26px;padding-bottom:16px;border-bottom:1px solid var(--navy-700)}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--cyan)}
+h2{font-size:clamp(24px,3vw,34px);line-height:1.12;margin:0;font-weight:800;letter-spacing:-.015em;text-wrap:balance}
+h3{font-size:18px;line-height:1.3;margin:0;font-weight:700;text-wrap:balance}
+h4{font-size:12px;margin:0;font-family:var(--mono);font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--slate)}
+.sh p{color:var(--mist);max-width:68ch}
+.stack{display:grid;gap:14px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr))}
+.card{background:var(--navy-850);border:1px solid var(--navy-700);border-radius:18px;padding:20px;display:grid;gap:10px;align-content:start}
+.card p{color:var(--mist);font-size:14.5px}
+.card ul{margin:0;padding-inline-start:18px;color:var(--mist);font-size:14.5px;display:grid;gap:4px}
+.card li::marker{color:var(--slate)}
+
+/* callout */
+.thesis{border-radius:20px;padding:24px;background:linear-gradient(var(--navy-850),var(--navy-850)) padding-box,var(--sig) border-box;border:1.5px solid transparent;display:grid;gap:10px}
+.thesis p{color:var(--frost);max-width:70ch}
+.note{border-inline-start:3px solid var(--warn);background:rgba(255,181,71,.07);padding:14px 16px;border-radius:0 12px 12px 0;color:var(--frost);font-size:14.5px}
+.note b{color:var(--warn)}
+
+/* tables */
+.tbl{overflow-x:auto;border:1px solid var(--navy-700);border-radius:16px;background:var(--navy-900)}
+table{border-collapse:collapse;width:100%;min-width:680px;font-variant-numeric:tabular-nums}
+th,td{text-align:start;padding:12px 14px;border-bottom:1px solid var(--navy-700);font-size:14px;vertical-align:top}
+th{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--slate);font-weight:500;background:var(--navy-900)}
+td{color:var(--mist)}
+td b,td strong{color:var(--white);font-weight:600}
+tr:last-child td{border-bottom:0}
+.pill{display:inline-block;font-family:var(--mono);font-size:11px;padding:2px 9px;border-radius:999px;white-space:nowrap}
+.p-hi{background:rgba(34,211,166,.14);color:var(--ok)}
+.p-md{background:rgba(61,169,252,.14);color:var(--sky)}
+.p-lo{background:rgba(167,139,255,.14);color:var(--violet-soft)}
+.p-warn{background:rgba(255,181,71,.14);color:var(--warn)}
+
+/* pillars */
+.pillar{position:relative}
+.px{width:34px;height:34px;border-radius:9px;box-shadow:0 0 28px rgba(8,198,253,.22)}
+.pillar .kicker{font-family:var(--mono);font-size:11.5px;color:var(--slate);letter-spacing:.08em}
+
+/* new services */
+.svc{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;align-items:start}
+.svc .pill{grid-row:span 2;margin-top:3px}
+
+/* demos */
+.demo{display:grid;gap:12px}
+.cost{display:grid;grid-template-columns:auto 1fr;gap:6px 10px;font-size:13.5px;border-top:1px dashed var(--navy-700);padding-top:12px}
+.cost dt{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding-top:2px}
+.cost dd{margin:0;color:var(--mist)}
+.cost .c{color:var(--warn)} .cost .m{color:var(--ok)}
+
+/* directions */
+.dir{padding:0;overflow:hidden}
+.dir .body{padding:18px 20px 20px;display:grid;gap:10px}
+.shot{height:190px;position:relative;overflow:hidden;border-bottom:1px solid var(--navy-700)}
+.shot .nav{position:absolute;left:16px;right:16px;top:14px;display:flex;justify-content:space-between;align-items:center}
+.shot .nav i{display:block;height:6px;border-radius:3px}
+.shot .h{position:absolute;left:16px;top:52px;font-weight:800;font-size:22px;line-height:1.05;letter-spacing:-.02em;max-width:62%}
+.shot .btn{position:absolute;left:16px;bottom:18px;height:24px;width:104px;border-radius:999px;background:var(--action)}
+/* A: signal grid */
+.s-a{background:radial-gradient(ellipse 55% 70% at 78% 42%,rgba(24,70,210,.6),rgba(1,4,19,0) 70%),linear-gradient(rgba(26,132,253,.12) 1px,transparent 1px) 0 0/24px 24px,linear-gradient(90deg,rgba(26,132,253,.12) 1px,transparent 1px) 0 0/24px 24px,#010413}
+.s-a .ribbon{position:absolute;right:26px;top:48px;width:120px;height:104px}
+.s-a .ribbon span{position:absolute;border-radius:40px}
+/* B: control room */
+.s-b{background:#050A1C}
+.s-b .tiles{position:absolute;right:14px;top:44px;display:grid;grid-template-columns:repeat(2,64px);gap:7px}
+.s-b .tiles div{height:46px;border-radius:8px;background:#08122E;border:1px solid #16224A;padding:6px;display:grid;align-content:space-between}
+.s-b .tiles em{font-style:normal;font-family:var(--mono);font-size:10px;color:#08C6FD}
+.s-b .tiles i{display:block;height:4px;border-radius:2px;background:#16224A}
+.s-b .flow{position:absolute;left:16px;right:170px;bottom:56px;height:2px;background:linear-gradient(90deg,#08C6FD,#7946FC)}
+.s-b .flow::before,.s-b .flow::after{content:"";position:absolute;top:-4px;width:10px;height:10px;border-radius:3px;background:#08C6FD}
+.s-b .flow::after{right:0;background:#7946FC}
+/* C: daylight */
+.s-c{background:#F4F6FB;color:#010413}
+.s-c .band{position:absolute;left:0;right:0;bottom:0;height:62px;background:#010413}
+.s-c .band i{position:absolute;left:16px;top:18px;width:46%;height:6px;border-radius:3px;background:#33457F}
+.s-c .h{color:#010413}
+.s-c .btn{bottom:84px}
+.s-c .card-l{position:absolute;right:18px;top:48px;width:110px;height:70px;border-radius:12px;background:#fff;box-shadow:0 10px 30px rgba(11,28,74,.18);border:1px solid #C9D4FF}
+.rec{font-family:var(--mono);font-size:11px;color:var(--navy);background:var(--action);padding:3px 10px;border-radius:999px;font-weight:500;width:max-content}
+
+/* type specimen */
+.spec{display:grid;gap:14px}
+.spec .row{display:grid;grid-template-columns:150px 1fr;gap:16px;align-items:baseline;padding-block:12px;border-bottom:1px solid var(--navy-700)}
+.spec .row:last-child{border-bottom:0}
+.spec .lab{font-family:var(--mono);font-size:11.5px;color:var(--slate)}
+.ar{font-family:var(--ar);direction:rtl;text-align:right}
+
+/* sitemap */
+.tree{display:grid;gap:12px}
+.node{background:var(--navy-850);border:1px solid var(--navy-700);border-radius:14px;padding:14px 16px;display:grid;gap:8px}
+.node .path{font-family:var(--mono);font-size:12.5px;color:var(--cyan)}
+.node .kids{display:flex;flex-wrap:wrap;gap:6px}
+.node .kids span{font-family:var(--mono);font-size:11.5px;padding:3px 9px;border-radius:8px;background:var(--navy-800);color:var(--frost)}
+.node .kids span.later{background:transparent;border:1px dashed var(--border);color:var(--slate)}
+
+/* homepage wireframe */
+.wire{display:grid;gap:8px;counter-reset:w}
+.wf{display:grid;grid-template-columns:44px 1fr;gap:14px;align-items:start;padding:14px 16px;border-radius:14px;background:var(--navy-850);border:1px solid var(--navy-700)}
+.wf::before{counter-increment:w;content:counter(w,decimal-leading-zero);font-family:var(--mono);font-size:13px;color:var(--cyan);padding-top:2px}
+.wf h3{font-size:15.5px}
+.wf p{color:var(--mist);font-size:14px;margin-top:4px}
+
+/* gantt */
+.gantt{overflow-x:auto;border:1px solid var(--navy-700);border-radius:16px;background:var(--navy-900)}
+.g-in{min-width:760px;display:grid;grid-template-columns:230px repeat(12,1fr)}
+.g-in > div{border-bottom:1px solid var(--navy-700);padding:9px 0;font-size:13px}
+.g-head{font-family:var(--mono);font-size:11px;color:var(--slate);text-align:center}
+.g-lab{padding-inline:14px !important;color:var(--frost)}
+.g-lab small{display:block;color:var(--slate);font-size:11.5px}
+.bar{height:14px;border-radius:7px;align-self:center;margin-block:auto}
+.g-row{display:contents}
+.gl{border-inline-start:1px solid rgba(51,69,127,.35)}
+
+/* budget */
+.meter{display:grid;gap:14px}
+.m-row{display:grid;grid-template-columns:minmax(0,190px) 1fr auto;gap:14px;align-items:center}
+.m-row .t{height:10px;border-radius:5px;background:var(--navy-700);position:relative;overflow:hidden}
+.m-row .t span{position:absolute;inset:0 auto 0 0;border-radius:5px;background:var(--action)}
+.m-row .v{font-family:var(--mono);font-size:12.5px;color:var(--frost);font-variant-numeric:tabular-nums;white-space:nowrap}
+.m-row .n{font-size:14px}
+
+/* next steps */
+ol.steps{margin:0;padding:0;list-style:none;display:grid;gap:10px;counter-reset:s}
+ol.steps li{counter-increment:s;display:grid;grid-template-columns:36px 1fr;gap:12px;align-items:start;background:var(--navy-850);border:1px solid var(--navy-700);border-radius:14px;padding:14px 16px;color:var(--mist);font-size:14.5px}
+ol.steps li::before{content:counter(s);width:28px;height:28px;border-radius:8px;background:var(--sig);color:var(--navy);font-weight:800;display:grid;place-items:center;font-size:14px}
+ol.steps b{color:var(--white)}
+
+footer{margin-top:72px;padding-top:18px;border-top:1px solid var(--navy-700);color:var(--slate);font-size:12.5px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+@media (max-width:620px){
+  .spec .row{grid-template-columns:1fr;gap:6px}
+  .m-row{grid-template-columns:1fr auto}
+  .m-row .t{grid-column:1 / -1;grid-row:2}
+  .shot .h{font-size:18px}
+}
+@media (prefers-reduced-motion:no-preference){
+  .card,.node{transition:border-color .2s}
+  .card:hover{border-color:var(--border)}
+}
+</style>
+
+<div class="wrap">
+
+<header class="hero">
+  <div class="brandline"><span class="word">Deep<span class="z">zeta</span></span><span class="tag">AI Digital Solutions</span></div>
+  <h1>Website master plan: a site that <span class="z">proves</span> what we sell</h1>
+  <p class="lead">The full plan for deepzeta's own website: positioning, services, live AI demos, design direction, page map, tech stack, SEO and AI search, and a 12-week build schedule. It follows your advisory document, your performance rules and your colour system.</p>
+  <div class="meta-row">
+    <span class="chip">Status <b>Draft for review</b></span>
+    <span class="chip">Market <b>UAE / GCC first</b></span>
+    <span class="chip">Languages <b>EN + AR (RTL)</b></span>
+    <span class="chip">Main goal <b>Booked AI audits</b></span>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Plan sections">
+  <a href="#thesis">Big idea</a><a href="#decisions">Decisions</a><a href="#services">Services</a><a href="#new">New services</a><a href="#demos">Live demos</a><a href="#design">Design</a><a href="#sitemap">Page map</a><a href="#home">Homepage</a><a href="#stack">Tech</a><a href="#seo">SEO &amp; AI search</a><a href="#budget">Speed budget</a><a href="#timeline">Timeline</a><a href="#next">Next steps</a>
+</nav>
+
+<!-- 1 -->
+<section id="thesis">
+  <div class="sh"><span class="eyebrow">The big idea</span><h2>The website is our first case study</h2>
+  <p>Every agency says "we build fast, AI-ready websites". Most of their own sites are slow templates. Ours has to show the proof live, on the page, in the visitor's own browser.</p></div>
+  <div class="grid g3">
+    <div class="thesis"><h4>Who it is for</h4><p>Owners and managers of UAE and GCC businesses (clinics, real estate, e-commerce, schools, service companies) who lose time on repetitive work and lose leads to slow follow-up.</p></div>
+    <div class="thesis"><h4>What it must do</h4><p>Turn visitors into <b>booked free AI automation audits</b>. Everything else (WhatsApp, calls, downloads, newsletter) is a secondary action.</p></div>
+    <div class="thesis"><h4>How it wins</h4><p>Visitors <b>try</b> the automations on the page: chat with our AI agent, calculate their savings, watch their own workflow get automated. Showing beats telling.</p></div>
+  </div>
+</section>
+
+<!-- 2 -->
+<section id="decisions">
+  <div class="sh"><span class="eyebrow">Lock these first</span><h2>Six decisions, with my recommendation</h2>
+  <p>Your advisory document says these must be settled before any design work starts. Here is what I recommend, based on your files. You make the final call.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>#</th><th>Decision</th><th>My recommendation</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">D1</td><td><b>Domain</b></td><td><b>A new domain of its own</b> for deepzeta, separate from Wasleen</td><td>A clean brand and a clean entity record for Google and AI search engines. Never reuse Wasleen's organization data.</td></tr>
+      <tr><td class="mono">D2</td><td><b>Company entity</b></td><td>Decide whether deepzeta is its own legal company or a brand of an existing one</td><td>Name, address and phone must match exactly across the site, schema and Google Business Profile.</td></tr>
+      <tr><td class="mono">D3</td><td><b>Market</b></td><td><b>UAE first, then GCC</b>, with English content that also works globally</td><td>Your services list targets UAE platforms (Yandex, bilingual local ads). Local trust and Google Maps come first.</td></tr>
+      <tr><td class="mono">D4</td><td><b>Business model</b></td><td><b>Hybrid</b>: custom agency projects plus fixed-scope packages with "starting from" prices</td><td>Packages make buying easy and give pricing pages. Custom work keeps the big projects.</td></tr>
+      <tr><td class="mono">D5</td><td><b>Main call to action</b></td><td><b>"Book a free AI automation audit"</b>, with WhatsApp as a floating second option</td><td>Higher intent than "Contact us". WhatsApp is how UAE customers actually reach businesses.</td></tr>
+      <tr><td class="mono">D6</td><td><b>Languages</b></td><td><b>English + Arabic from launch</b>, true right-to-left layout</td><td>Your performance rules make this non-negotiable. It is also a selling point for your "Local AI Dominance" service.</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note" style="margin-top:16px"><b>Two conflicts in your files.</b> The advisory says "launch English only" and "load in under 1.5 s". The newer performance rules say "Arabic + English is non-negotiable" and "under 2.5 s". I followed the newer rules for language. For speed I suggest aiming for 1.5 s internally, with 2.5 s as the limit we must never cross.</p>
+</section>
+
+<!-- 3 -->
+<section id="services">
+  <div class="sh"><span class="eyebrow">Positioning</span><h2>Four pillars, one per pixel in the logo</h2>
+  <p>Your list has 20+ services, which is too many for a visitor to scan. Your colour system already gives each of the four logo pixels to a service family, so the whole offer can be grouped under them. Every service in your file fits.</p></div>
+  <div class="grid g4">
+    <article class="card pillar"><div class="px" style="background:var(--px-ai)"></div><span class="kicker">PILLAR 1</span><h3>AI Automation</h3><p>Make the business run itself.</p>
+      <ul><li>Complete AI automation services</li><li>AI agents and chatbots</li><li>Workflow and CRM automation</li><li>Lead qualification and follow-up</li></ul></article>
+    <article class="card pillar"><div class="px" style="background:var(--px-web)"></div><span class="kicker">PILLAR 2</span><h3>Websites</h3><p>Fast, custom-coded sites that convert.</p>
+      <ul><li>Fully custom-coded websites</li><li>Landing pages and CRO</li><li>E-commerce builds</li></ul></article>
+    <article class="card pillar"><div class="px" style="background:var(--px-sw)"></div><span class="kicker">PILLAR 3</span><h3>Software</h3><p>Custom tools that scale.</p>
+      <ul><li>Web application development</li><li>Software development</li><li>Dashboards, portals and internal tools</li></ul></article>
+    <article class="card pillar"><div class="px" style="background:var(--px-rank)"></div><span class="kicker">PILLAR 4</span><h3>Growth &amp; Ranking</h3><p>Get found, get chosen.</p>
+      <ul><li>Performance marketing (Google, Meta, LinkedIn, TikTok, Microsoft, Pinterest, Snapchat, Yandex)</li><li>pSEO, AEO and AI citation</li><li>Local AI Dominance (bilingual)</li><li>Social media, content, design and influencers</li><li>Branding and strategy</li></ul></article>
+  </div>
+  <div class="thesis" style="margin-top:16px">
+    <h4>Headline options for the homepage</h4>
+    <p>1. "Your business, running itself." (from your colour-system preview)<br>2. "AI that answers, books and follows up while you sleep."<br>3. "More leads. Less busywork. Built with AI in Dubai."</p>
+    <p class="muted">My pick is option 2. It names concrete outcomes, and AI search engines and buyers quote concrete outcomes more often than slogans.</p>
+  </div>
+</section>
+
+<!-- 4 -->
+<section id="new">
+  <div class="sh"><span class="eyebrow">Extra service suggestions</span><h2>Ten services to add, ranked by demand</h2>
+  <p>These build on what you already sell, are in high demand in the UAE, and can be sold as fixed packages. Green means add at launch.</p></div>
+  <div class="grid g2">
+    <div class="card svc"><span class="pill p-hi">Launch</span><h3>WhatsApp AI agent</h3><p>Answers, qualifies and books appointments on WhatsApp Business in Arabic and English. Probably your best-selling automation in the UAE.</p></div>
+    <div class="card svc"><span class="pill p-hi">Launch</span><h3>AI voice receptionist</h3><p>Answers calls 24/7, books appointments and sends call summaries to the CRM. Very strong for clinics, real estate and service companies.</p></div>
+    <div class="card svc"><span class="pill p-hi">Launch</span><h3>Speed-to-lead system</h3><p>Every ad lead gets a reply within 60 seconds by WhatsApp, email or call, and is scored and routed. Links your ads service to your automation service.</p></div>
+    <div class="card svc"><span class="pill p-hi">Launch</span><h3>AI readiness audit</h3><p>A paid or free assessment that maps a company's processes and ranks what to automate first. This is also the main call to action on the site.</p></div>
+    <div class="card svc"><span class="pill p-md">Phase 2</span><h3>Review and reputation automation</h3><p>Automatic review requests, AI-drafted replies and Google Business Profile posting. Fits your healthcare and local clients.</p></div>
+    <div class="card svc"><span class="pill p-md">Phase 2</span><h3>Document and invoice AI</h3><p>Reads invoices, contracts and forms (including Arabic) into accounting and CRM systems. Worth packaging for UAE e-invoicing readiness; confirm the current rollout dates before marketing it.</p></div>
+    <div class="card svc"><span class="pill p-md">Phase 2</span><h3>AI knowledge assistant</h3><p>An internal "ask our company" assistant trained on a company's documents, for staff and HR questions.</p></div>
+    <div class="card svc"><span class="pill p-md">Phase 2</span><h3>Automated reporting dashboards</h3><p>Ads, sales and operations data in one live dashboard with a weekly AI summary. Supports your "attribution you can audit yourself" promise.</p></div>
+    <div class="card svc"><span class="pill p-lo">Later</span><h3>AI Ops retainer</h3><p>Monthly monitoring, fixes and improvements for automations you have built. Turns one-off projects into recurring revenue.</p></div>
+    <div class="card svc"><span class="pill p-lo">Later</span><h3>AI training for teams</h3><p>Workshops that teach staff to use AI tools safely. Easy to sell and it generates automation leads.</p></div>
+  </div>
+</section>
+
+<!-- 5 -->
+<section id="demos">
+  <div class="sh"><span class="eyebrow">Showcase</span><h2>Live demos visitors can try</h2>
+  <p>This is how the site shows your automations instead of describing them. As your performance rules require, each demo lists its speed cost and how we keep that cost low.</p></div>
+  <div class="grid g2">
+    <article class="card demo"><h3>1 · deepzeta AI agent</h3><p>A chat assistant trained on our services, prices and case studies. It answers in Arabic or English, qualifies the visitor and books the audit into the calendar. The same product we sell, working live.</p>
+      <dl class="cost"><dt class="c">Cost</dt><dd>A chat widget can add 60–150 KB of script.</dd><dt class="m">Fix</dt><dd>Show a lightweight button first and load the chat only when someone taps it. It adds nothing to page load.</dd></dl></article>
+    <article class="card demo"><h3>2 · Automation ROI calculator</h3><p>Visitors enter staff hours, lead volume and reply time, and see hours and dirhams saved per month. The result ends in "Book an audit to get this plan".</p>
+      <dl class="cost"><dt class="c">Cost</dt><dd>About 5 KB of script.</dd><dt class="m">Fix</dt><dd>Plain JavaScript, loaded only on pages that use it. No libraries.</dd></dl></article>
+    <article class="card demo"><h3>3 · Workflow explorer</h3><p>Pick an industry (clinic, real estate, shop) and watch an animated diagram: lead arrives → AI replies → CRM updated → appointment booked, with time saved at each step.</p>
+      <dl class="cost"><dt class="c">Cost</dt><dd>Animation can slow low-end phones.</dd><dt class="m">Fix</dt><dd>Animated SVG and CSS only. It pauses when off screen and shows a static diagram when reduced motion is on.</dd></dl></article>
+    <article class="card demo"><h3>4 · 60-second speed-to-lead test</h3><p>The visitor leaves a number and gets a WhatsApp reply from our automation within a minute. This is the strongest proof we can offer, because they feel it on their own phone.</p>
+      <dl class="cost"><dt class="c">Cost</dt><dd>Nothing on the page. The work runs on the server (n8n plus the WhatsApp API).</dd><dt class="m">Fix</dt><dd>Needs consent wording, rate limits and spam protection on the form.</dd></dl></article>
+    <article class="card demo"><h3>5 · Live speed badge</h3><p>A small footer badge showing how fast this page loaded in the visitor's browser, for example "This page loaded in 0.9 s". It proves the "fast website" claim with real data.</p>
+      <dl class="cost"><dt class="c">Cost</dt><dd>About 1 KB.</dd><dt class="m">Fix</dt><dd>Uses the browser's built-in performance data after the page has loaded.</dd></dl></article>
+    <article class="card demo"><h3>6 · "See how AI reads this page"</h3><p>A toggle that shows the structured data and llms.txt that ChatGPT and Google read from the page. It proves the AEO and AI-citation service on our own site.</p>
+      <dl class="cost"><dt class="c">Cost</dt><dd>Close to zero. The data is already in the page.</dd><dt class="m">Fix</dt><dd>Hidden until the visitor opens it.</dd></dl></article>
+  </div>
+</section>
+
+<!-- 6 -->
+<section id="design">
+  <div class="sh"><span class="eyebrow">Design discussion</span><h2>Three design directions</h2>
+  <p>All three use your logo, colours and the 70/20/10 balance (navy, white text, brand colour). They differ in mood and in how much motion they use. Pick one, or mix them.</p></div>
+  <div class="grid g3">
+    <article class="card dir">
+      <div class="shot s-a" aria-hidden="true">
+        <div class="nav"><i style="width:60px;background:#F4F6FB"></i><i style="width:90px;background:#33457F"></i></div>
+        <div class="h" style="color:#F4F6FB">Your business, running <span class="z">itself</span>.</div>
+        <div class="ribbon"><span style="left:0;top:0;width:110px;height:26px;background:linear-gradient(90deg,#10D9FE,#1A84FD)"></span><span style="left:8px;top:36px;width:104px;height:22px;transform:rotate(-36deg);background:linear-gradient(90deg,#AD26FD,#16C5FF)"></span><span style="left:4px;top:76px;width:112px;height:26px;background:linear-gradient(90deg,#04057E,#1E88FD,#6861FD)"></span></div>
+        <div class="btn"></div>
+      </div>
+      <div class="body"><span class="rec">Recommended</span><h3>A · Signal Grid</h3><p>Navy with the faint blue grid from your colour system. The hero is the logo's Z ribbon, drawn in SVG, with a slow light sweep across it. Confident, premium and clearly "AI company".</p>
+      <p><b style="color:var(--white)">Motion:</b> one hero moment only. The ribbon is SVG, so it is also the fast-loading main image. An optional small WebGL shader loads later, only on strong devices.</p></div>
+    </article>
+    <article class="card dir">
+      <div class="shot s-b" aria-hidden="true">
+        <div class="nav"><i style="width:60px;background:#F4F6FB"></i><i style="width:90px;background:#33457F"></i></div>
+        <div class="h" style="color:#F4F6FB;max-width:50%">Automation, <span class="z">live</span>.</div>
+        <div class="tiles"><div><em>−92%</em><i></i></div><div><em>24/7</em><i></i></div><div><em>11 min</em><i></i></div><div><em>+38%</em><i></i></div></div>
+        <div class="flow"></div>
+        <div class="btn"></div>
+      </div>
+      <div class="body"><h3>B · Control Room</h3><p>A dashboard look: live number tiles, workflow lines and a monospace data font. It feels like watching the automations run. Best for showing results and the demos.</p>
+      <p><b style="color:var(--white)">Motion:</b> small counters and flowing lines, all CSS. Risk: it can feel cold. Mix it with A for the demo and case-study sections.</p></div>
+    </article>
+    <article class="card dir">
+      <div class="shot s-c" aria-hidden="true">
+        <div class="nav"><i style="width:60px;background:#010413"></i><i style="width:90px;background:#9FB0E0"></i></div>
+        <div class="h">Grow with <span class="z">AI</span>.</div>
+        <div class="card-l"></div>
+        <div class="btn"></div>
+        <div class="band"><i></i></div>
+      </div>
+      <div class="body"><h3>C · Daylight</h3><p>A light page with navy sections for contrast. Friendlier and more "business consultancy". It suits conservative sectors such as law and finance.</p>
+      <p><b style="color:var(--white)">Motion:</b> the least of the three. Risk: weaker link to your dark logo, and less "tech" feel.</p></div>
+    </article>
+  </div>
+
+  <div class="grid g2" style="margin-top:16px">
+    <div class="card">
+      <h4>My recommendation</h4>
+      <p><b style="color:var(--white)">Signal Grid (A) for the brand, with Control Room (B) for demos and results.</b> Dark is the default look, as your rules ask, with a full light mode built from the same tokens so visitors can switch. The four pixel colours become the colour code for the four pillars across menus, icons and page headers.</p>
+      <h4 style="margin-top:8px">Rules from your performance file</h4>
+      <ul>
+        <li>Only one 3D or WebGL moment on the whole site, and the page must work fully without it</li>
+        <li>Content reveals on scroll using CSS only, and the site never takes over the user's scrolling</li>
+        <li>Glass blur only on the menu bar, pop-ups and a few feature cards</li>
+        <li>Hover and button feedback everywhere, and no constant background animation</li>
+      </ul>
+    </div>
+    <div class="card spec">
+      <h4>Typography</h4>
+      <div class="row"><span class="lab">Display · Montserrat 800</span><span style="font-weight:800;font-size:26px;letter-spacing:-.02em;line-height:1.1">AI that books while you <span class="z">sleep</span></span></div>
+      <div class="row"><span class="lab">Arabic · Readex Pro</span><span class="ar" style="font-size:24px;font-weight:600">أتمتة أعمالك بالذكاء الاصطناعي</span></div>
+      <div class="row"><span class="lab">Data · JetBrains Mono</span><span class="mono" style="color:var(--cyan)">reply time 4h 12m → 58s</span></div>
+      <p style="font-size:13.5px">Montserrat has no Arabic letters. Readex Pro has a similar geometric shape and supports Arabic properly. Load each font as one variable file with only the characters we need, to keep them small.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 7 -->
+<section id="sitemap">
+  <div class="sh"><span class="eyebrow">Information architecture</span><h2>Page map for launch</h2>
+  <p>Buyers search by problem and by industry, not by service name. That is why there are Solutions and Industries sections next to Services. Every page has an Arabic copy under <span class="mono">/ar</span>. Dashed items come after launch.</p></div>
+  <div class="tree grid g2">
+    <div class="node"><span class="path">/services</span><h3>Services · 4 pillar pages + about 12 service pages</h3><div class="kids"><span>ai-automation</span><span>whatsapp-ai-agent</span><span>ai-voice-agent</span><span>ai-chatbots</span><span>crm-automation</span><span>web-development</span><span>web-applications</span><span>software-development</span><span>performance-marketing</span><span>seo-geo-aeo</span><span>local-ai-dominance</span><span>social-media</span></div></div>
+    <div class="node"><span class="path">/solutions</span><h3>Solutions · the problem the buyer has</h3><div class="kids"><span>lead-follow-up</span><span>appointment-booking</span><span>customer-support</span><span class="later">invoice-processing</span><span class="later">review-management</span></div></div>
+    <div class="node"><span class="path">/industries</span><h3>Industries · 6 at launch, from your list of 28</h3><div class="kids"><span>real-estate</span><span>healthcare-clinics</span><span>ecommerce</span><span>education</span><span>technical-facility-services</span><span>hospitality</span><span class="later">+22 more</span></div></div>
+    <div class="node"><span class="path">/work</span><h3>Case studies · at least 3 at launch, with real numbers</h3><div class="kids"><span>wasleen (web + SEO)</span><span>client 2</span><span>client 3</span></div></div>
+    <div class="node"><span class="path">/resources</span><h3>Resources · guides, comparisons, glossary</h3><div class="kids"><span>roi-calculator</span><span>what-is-an-ai-agent</span><span>n8n-vs-make-vs-zapier</span><span>ai-agent-vs-rpa</span><span class="later">blog</span></div></div>
+    <div class="node"><span class="path">/ · /pricing · /about · /contact · /audit</span><h3>Core pages</h3><div class="kids"><span>home</span><span>pricing (packages)</span><span>about + team</span><span>contact</span><span>book-audit</span><span>privacy</span><span>terms</span></div></div>
+  </div>
+  <p class="muted" style="margin-top:14px">That is about <b style="color:var(--white)">42 pages in English and 42 in Arabic</b> at launch. After launch, programmatic SEO adds industry × city pages (for example "AI automation for dental clinics in Dubai") in small batches, each with real, specific content, never thin copies.</p>
+</section>
+
+<!-- 8 -->
+<section id="home">
+  <div class="sh"><span class="eyebrow">Homepage</span><h2>Homepage, section by section</h2>
+  <p>The order follows how a visitor decides: understand, believe, try, then book.</p></div>
+  <div class="wire">
+    <div class="wf"><div><h3>Hero</h3><p>Headline, a two-sentence plain answer (for AI search engines), "Book a free AI audit" and "Try our AI agent" buttons, and the Z-ribbon visual.</p></div></div>
+    <div class="wf"><div><h3>Proof strip</h3><p>Client logos, and platform badges: n8n, Make, OpenAI, Anthropic, Google Partner, Meta Partner.</p></div></div>
+    <div class="wf"><div><h3>Problem → outcome</h3><p>Three pains in the owner's words ("leads wait hours for a reply") paired with measured results.</p></div></div>
+    <div class="wf"><div><h3>Four pillars</h3><p>Cards in the four pixel colours, each linking to its pillar page.</p></div></div>
+    <div class="wf"><div><h3>Workflow explorer</h3><p>Live demo 3: pick your industry and watch it get automated.</p></div></div>
+    <div class="wf"><div><h3>Results in numbers</h3><p>A stats strip with real figures from case studies. AI search engines quote numbers more than anything else.</p></div></div>
+    <div class="wf"><div><h3>How we work</h3><p>A 4-step process: Audit → Build → Launch → Improve, with timeframes.</p></div></div>
+    <div class="wf"><div><h3>ROI calculator</h3><p>Live demo 2, placed just before the main call to action.</p></div></div>
+    <div class="wf"><div><h3>Industries</h3><p>Six industry tiles linking to their pages.</p></div></div>
+    <div class="wf"><div><h3>FAQ</h3><p>Eight real buyer questions (cost, timeline, data safety, Arabic support), marked up as FAQ schema.</p></div></div>
+    <div class="wf"><div><h3>Final call to action</h3><p>Book-an-audit form with the 60-second WhatsApp test (demo 4).</p></div></div>
+    <div class="wf"><div><h3>Footer</h3><p>Address, phone and email identical to the schema data, the live speed badge, the "See how AI reads this page" toggle, and the language switch.</p></div></div>
+  </div>
+</section>
+
+<!-- 9 -->
+<section id="stack">
+  <div class="sh"><span class="eyebrow">Technology</span><h2>Tech stack</h2>
+  <p>Mostly carried over from the proven Wasleen setup, as your advisory suggests, plus the pieces for Arabic and the live demos.</p></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Layer</th><th>Choice</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td><b>Framework</b></td><td>Next.js (latest stable, App Router) + TypeScript</td><td>Same as Wasleen. Pages are rendered on the server so search engines and AI see full content.</td></tr>
+      <tr><td><b>Styling</b></td><td>Tailwind CSS v4 + your <span class="mono">--dz-*</span> colour tokens</td><td>Never hard-coded colours. Uses left/right-neutral CSS so Arabic RTL works automatically.</td></tr>
+      <tr><td><b>Languages</b></td><td>next-intl with <span class="mono">/en</span> and <span class="mono">/ar</span> routes</td><td>Proper hreflang tags. Arabic is written by a native writer, not machine-translated only.</td></tr>
+      <tr><td><b>Content</b></td><td>MDX files in the project at launch</td><td>Fast and free. Add a headless CMS (such as Sanity) later if non-developers need to edit.</td></tr>
+      <tr><td><b>Hosting</b></td><td>Vercel, with a Middle East region for server functions</td><td>You already have Vercel connected.</td></tr>
+      <tr><td><b>Automations</b></td><td>n8n (self-hosted) + OpenAI / Anthropic models</td><td>Runs the demos: chat agent, WhatsApp reply, audit booking.</td></tr>
+      <tr><td><b>CRM</b></td><td>HubSpot or Zoho CRM</td><td>Leads, lead scoring and offline conversion upload to Google and Meta Ads.</td></tr>
+      <tr><td><b>Tracking</b></td><td>Google Tag Manager, GA4, Meta Pixel + CAPI, LinkedIn Insight + CAPI</td><td>Consent Mode v2, UAE PDPL wording, ad click IDs saved with every lead.</td></tr>
+      <tr><td><b>Booking</b></td><td>Cal.com (embedded on demand)</td><td>Loads only when the visitor opens booking.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- 10 -->
+<section id="seo">
+  <div class="sh"><span class="eyebrow">Search &amp; AI visibility</span><h2>SEO, GEO and AEO built in from the start</h2></div>
+  <div class="grid g3">
+    <div class="card"><h3>Structured data</h3><ul><li>One connected schema graph: Organization, LocalBusiness, WebSite, Service, Person</li><li>FAQ, HowTo and Breadcrumb on every service page</li><li>Real authors with LinkedIn profiles</li></ul></div>
+    <div class="card"><h3>AI search engines</h3><ul><li><span class="mono">llms.txt</span> and <span class="mono">llms-full.txt</span> in both languages</li><li>AI search bots get full access; training-only bots are limited</li><li>A short plain answer at the top of every page</li><li>One quotable number every 150–200 words</li></ul></div>
+    <div class="card"><h3>Local &amp; content</h3><ul><li>Google Business Profile in English and Arabic</li><li>Glossary and comparison pages, which AI tools cite often</li><li>Publish our own benchmark data from real projects</li><li>Monthly test: ask ChatGPT, Gemini and Perplexity about us</li></ul></div>
+  </div>
+</section>
+
+<!-- 11 -->
+<section id="budget">
+  <div class="sh"><span class="eyebrow">Speed budget</span><h2>Hard limits for every page</h2>
+  <p>These are tested on a budget Android phone on a slow 4G connection, not on a studio laptop. A page that fails any of them does not ship.</p></div>
+  <div class="grid g2">
+    <div class="card meter">
+      <h4>Core Web Vitals · target vs limit</h4>
+      <div class="m-row"><span class="n">Main content visible (LCP)</span><div class="t"><span style="width:60%"></span></div><span class="v">1.5 s / 2.5 s</span></div>
+      <div class="m-row"><span class="n">Response to taps (INP)</span><div class="t"><span style="width:50%"></span></div><span class="v">100 / 200 ms</span></div>
+      <div class="m-row"><span class="n">Layout shift (CLS)</span><div class="t"><span style="width:50%"></span></div><span class="v">0.05 / 0.1</span></div>
+      <p style="font-size:13px">Bar = our target as a share of Google's "good" limit.</p>
+    </div>
+    <div class="card meter">
+      <h4>Page weight · compressed</h4>
+      <div class="m-row"><span class="n">HTML + CSS + JS total</span><div class="t"><span style="width:100%"></span></div><span class="v">≤ 150 KB</span></div>
+      <div class="m-row"><span class="n">JavaScript on first load</span><div class="t"><span style="width:33%"></span></div><span class="v">≤ 50 KB</span></div>
+      <div class="m-row"><span class="n">Fonts (3 variable, subset)</span><div class="t"><span style="width:40%"></span></div><span class="v">≈ 60 KB</span></div>
+      <div class="m-row"><span class="n">Render-blocking files</span><div class="t"><span style="width:0%"></span></div><span class="v">0</span></div>
+      <p style="font-size:13px">Bars are shown as a share of the 150 KB total. Fonts and images are counted separately from the 150 KB.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 12 -->
+<section id="timeline">
+  <div class="sh"><span class="eyebrow">Schedule</span><h2>12-week build plan</h2>
+  <p>Phases overlap where they can. Each phase ends with a check (clean build, zero TypeScript errors, speed test) before the next one starts, following your advisory's rules.</p></div>
+  <div class="gantt"><div class="g-in" role="table" aria-label="Build schedule by week">
+    <div class="g-head" style="text-align:start;padding-inline:14px">Phase</div>
+    <div class="g-head">W1</div><div class="g-head">W2</div><div class="g-head">W3</div><div class="g-head">W4</div><div class="g-head">W5</div><div class="g-head">W6</div><div class="g-head">W7</div><div class="g-head">W8</div><div class="g-head">W9</div><div class="g-head">W10</div><div class="g-head">W11</div><div class="g-head">W12</div>
+  </div></div>
+  <div class="grid g2" style="margin-top:16px">
+    <div class="card"><h4>What you provide</h4><ul><li>Decisions D1–D6 (week 1)</li><li>Real client results for 3 case studies</li><li>Team photos and bios for author profiles</li><li>Business address, licence and phone details</li><li>An Arabic reviewer for the translation</li></ul></div>
+    <div class="card"><h4>What I build</h4><ul><li>AI rule files and design token file</li><li>All page templates in both languages</li><li>The six live demos and n8n workflows</li><li>Schema engine, sitemap, llms.txt</li><li>Tracking, consent and the launch checks</li></ul></div>
+  </div>
+</section>
+
+<!-- 13 -->
+<section id="next">
+  <div class="sh"><span class="eyebrow">Next steps</span><h2>What happens after you approve</h2></div>
+  <ol class="steps">
+    <li><div><b>Choose the design direction</b> (A, B, C or a mix) and answer decisions D1–D6. Tell me which of the ten new services to add.</div></li>
+    <li><div><b>I write the 8 AI rule files and the master build plan</b> in your project folder, as your advisory requires before any code.</div></li>
+    <li><div><b>I design the homepage as a clickable prototype</b> in your colours, in English and Arabic, so you can review it on your phone.</div></li>
+    <li><div><b>We build phase by phase</b>, and you review at the end of each phase.</div></li>
+  </ol>
+</section>
+
+<footer><span>deepzeta · AI Digital Solutions · Website master plan v1</span><span>Based on: Services list, Pre-Development Advisory, Performance constraint, Colour system v1</span></footer>
+</div>
+
+<script>
+// Build the Gantt rows from one data list so every bar uses the same week scale.
+const PHASES=[
+ ['Decisions + AI rule files','Lock D1–D6, write 8 rule files',1,1,'#08C6FD'],
+ ['Content & copy','EN copy, then Arabic',1,5,'#3DA9FC'],
+ ['Design system + homepage design','Tokens, components, prototype',2,3,'#1A84FD'],
+ ['Foundation build','Next.js, EN/AR routing, header, footer, tracking',3,4,'#2F6BFF'],
+ ['Homepage + core pages','Home, about, pricing, contact, audit',4,6,'#2139F6'],
+ ['Service, solution, industry pages','Templates + schema engine',6,8,'#4639F9'],
+ ['Live demos','AI agent, ROI calc, explorer, WhatsApp test',7,9,'#7946FC'],
+ ['Case studies, resources, GEO','llms.txt, glossary, comparisons',8,10,'#A78BFF'],
+ ['QA on low-end phones','Speed, Arabic review, tracking checks',10,11,'#FFB547'],
+ ['Launch + monitor','Go live, Search Console, first fixes',12,12,'#22D3A6'],
+];
+const g=document.querySelector('.g-in');
+PHASES.forEach(([n,d,s,e,c])=>{
+  const lab=document.createElement('div');lab.className='g-lab';lab.innerHTML=`${n}<small>${d}</small>`;g.appendChild(lab);
+  for(let w=1;w<=12;w++){
+    const cell=document.createElement('div');cell.className='gl';
+    if(w===s){cell.style.gridColumn=`span ${e-s+1}`;cell.style.display='flex';cell.style.alignItems='center';cell.style.paddingInline='4px';
+      const b=document.createElement('div');b.className='bar';b.style.width='100%';b.style.background=c;b.title=`Week ${s}${e>s?'–'+e:''}`;cell.appendChild(b);g.appendChild(cell);w=e;}
+    else g.appendChild(cell);
+  }
+});
+</script>

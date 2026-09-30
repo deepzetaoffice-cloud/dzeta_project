@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+     xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+     width="1254" height="1254" viewBox="0 0 1254 1254" version="1.1" id="DeepZeta_Logo">
+  <title>Deepzeta · AI Digital Solutions</title>
+  <sodipodi:namedview id="namedview_main" pagecolor="#010413" bordercolor="#666666" borderopacity="1" inkscape:pageopacity="1" inkscape:pagecheckerboard="false" inkscape:deskcolor="#0b0f1e" inkscape:document-units="px"/>
+  <defs id="defs_main">
+    <linearGradient id="grad_front_loop" inkscape:label="Front Loop · cyan → vibrant blue" gradientUnits="userSpaceOnUse" x1="607.77" y1="265.98" x2="701.51" y2="554.47">
+      <stop offset="0" stop-color="#10D9FE"/>
+      <stop offset="0.17" stop-color="#08C6FD"/>
+      <stop offset="0.33" stop-color="#12A8FD"/>
+      <stop offset="0.5" stop-color="#1A84FD"/>
+      <stop offset="0.67" stop-color="#1E5AFC"/>
+      <stop offset="0.83" stop-color="#2139F6"/>
+      <stop offset="1" stop-color="#1927DD"/>
+    </linearGradient>
+    <linearGradient id="grad_back_crescent" inkscape:label="Back Crescent · cyan-blue → deep blue" gradientUnits="userSpaceOnUse" x1="878.37" y1="471.44" x2="718.01" y2="615.84">
+      <stop offset="0" stop-color="#26D1FD"/>
+      <stop offset="0.17" stop-color="#33A3FD"/>
+      <stop offset="0.33" stop-color="#417DFD"/>
+      <stop offset="0.5" stop-color="#4F5CFC"/>
+      <stop offset="0.67" stop-color="#4440FD"/>
+      <stop offset="0.83" stop-color="#242FF7"/>
+      <stop offset="1" stop-color="#111DCB"/>
+    </linearGradient>
+    <linearGradient id="grad_back_bar" inkscape:label="Back Bottom Bar · deep blue → blue" gradientUnits="userSpaceOnUse" x1="536.61" y1="576.7" x2="748.61" y2="714.37">
+      <stop offset="0" stop-color="#04057E"/>
+      <stop offset="0.17" stop-color="#1023D0"/>
+      <stop offset="0.33" stop-color="#1C4EFD"/>
+      <stop offset="0.5" stop-color="#1D6FFC"/>
+      <stop offset="0.67" stop-color="#1E88FD"/>
+      <stop offset="0.83" stop-color="#2E8DFD"/>
+      <stop offset="1" stop-color="#6861FD"/>
+    </linearGradient>
+    <linearGradient id="grad_diag_fold" inkscape:label="Diagonal Fold · deep blue → purple" gradientUnits="userSpaceOnUse" x1="604.55" y1="381.54" x2="515.66" y2="713.3">
+      <stop offset="0" stop-color="#000022"/>
+      <stop offset="0.17" stop-color="#006DE5"/>
+      <stop offset="0.33" stop-color="#16C5FF"/>
+      <stop offset="0.5" stop-color="#3DA9FC"/>
+      <stop offset="0.67" stop-color="#516CFC"/>
+      <stop offset="0.83" stop-color="#7946FC"/>
+      <stop offset="1" stop-color="#AD26FD"/>
+    </linearGradient>
+    <linearGradient id="grad_diag_overlay_1" inkscape:label="Diagonal light sheen" gradientUnits="userSpaceOnUse" x1="505.65" y1="502.04" x2="628.55" y2="588.1">
+      <stop offset="0" stop-color="#00FFFC" stop-opacity="0.27"/>
+      <stop offset="0.25" stop-color="#00FFFC" stop-opacity="0.12"/>
+      <stop offset="0.5" stop-color="#00FFFC" stop-opacity="0.03"/>
+      <stop offset="0.75" stop-color="#00FFFC" stop-opacity="0"/>
+      <stop offset="1" stop-color="#00FFFC" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="grad_diag_overlay_2" inkscape:label="Diagonal edge shade" gradientUnits="userSpaceOnUse" x1="505.65" y1="502.04" x2="628.55" y2="588.1">
+      <stop offset="0" stop-color="#0C00FF" stop-opacity="0"/>
+      <stop offset="0.25" stop-color="#0C00FF" stop-opacity="0.14"/>
+      <stop offset="0.5" stop-color="#0C00FF" stop-opacity="0.24"/>
+      <stop offset="0.75" stop-color="#0C00FF" stop-opacity="0.34"/>
+      <stop offset="1" stop-color="#0C00FF" stop-opacity="0.38"/>
+    </linearGradient>
+    <linearGradient id="grad_zeta" inkscape:label="Wordmark zeta · cyan → purple" gradientUnits="userSpaceOnUse" x1="798.17" y1="707.14" x2="923.48" y2="924.18">
+      <stop offset="0" stop-color="#09E8FE"/>
+      <stop offset="0.25" stop-color="#00B5FC"/>
+      <stop offset="0.5" stop-color="#147BFC"/>
+      <stop offset="0.75" stop-color="#4639F9"/>
+      <stop offset="1" stop-color="#602CFA"/>
+    </linearGradient>
+    <linearGradient id="grad_line_left" inkscape:label="Left line · cyan → blue" gradientUnits="userSpaceOnUse" x1="211.5" y1="931" x2="292.8" y2="931">
+      <stop offset="0" stop-color="#00D8EE"/>
+      <stop offset="0.5" stop-color="#058FEE"/>
+      <stop offset="1" stop-color="#0D48E6"/>
+    </linearGradient>
+    <linearGradient id="grad_line_right" inkscape:label="Right line · blue-violet → purple" gradientUnits="userSpaceOnUse" x1="962.8" y1="931" x2="1042.5" y2="931">
+      <stop offset="0" stop-color="#4A22EA"/>
+      <stop offset="0.5" stop-color="#662DE8"/>
+      <stop offset="1" stop-color="#A040F2"/>
+    </linearGradient>
+    <linearGradient id="grad_square_1_purple" inkscape:label="Square 1 Purple" gradientUnits="userSpaceOnUse" x1="878.2" y1="367.6" x2="859.58" y2="399.85">
+      <stop offset="0" stop-color="#6430FA"/>
+      <stop offset="0.5" stop-color="#592BFD"/>
+      <stop offset="1" stop-color="#4C27FB"/>
+    </linearGradient>
+    <linearGradient id="grad_square_2_cyanblue" inkscape:label="Square 2 CyanBlue" gradientUnits="userSpaceOnUse" x1="838.99" y1="307.97" x2="835.06" y2="352.95">
+      <stop offset="0" stop-color="#21BEFC"/>
+      <stop offset="0.5" stop-color="#3092FD"/>
+      <stop offset="1" stop-color="#4264FD"/>
+    </linearGradient>
+    <linearGradient id="grad_square_3_lightcyan" inkscape:label="Square 3 LightCyan" gradientUnits="userSpaceOnUse" x1="889.78" y1="273.39" x2="887.22" y2="302.61">
+      <stop offset="0" stop-color="#03D4FC"/>
+      <stop offset="0.5" stop-color="#04C1FD"/>
+      <stop offset="1" stop-color="#09A5FC"/>
+    </linearGradient>
+    <linearGradient id="grad_square_4_royalblue" inkscape:label="Square 4 RoyalBlue" gradientUnits="userSpaceOnUse" x1="907.45" y1="336.66" x2="899.55" y2="358.34">
+      <stop offset="0" stop-color="#3166FB"/>
+      <stop offset="0.5" stop-color="#2A4DFC"/>
+      <stop offset="1" stop-color="#3741FD"/>
+    </linearGradient>
+    <filter id="filter_front_shadow" inkscape:label="Soft Drop Shadow · front loop over back loop" x="-0.1" y="-0.1" width="1.2" height="1.25" color-interpolation-filters="sRGB">
+      <feFlood flood-color="#00031A" flood-opacity="0.5" result="flood"/>
+      <feComposite in="flood" in2="SourceAlpha" operator="in" result="shadowShape"/>
+      <feGaussianBlur in="shadowShape" stdDeviation="3.5" result="shadowBlur"/>
+      <feOffset in="shadowBlur" dx="1.5" dy="3.5" result="shadowOffset"/>
+    </filter>
+    <clipPath id="clip_shadow_to_back_diagonal" clipPathUnits="userSpaceOnUse" inkscape:label="Shadow falls only on the diagonal fold">
+      <path id="clip_diagonal_shape" d="M 380.2,685.7 C 388.32,660.37 416.29,622.16 434.62,605 C 498.97,544.75 563.22,484.76 627.86,425 C 634.41,418.95 661.21,396 679.04,396 L 700,393.2 L 799.01,388 C 693.02,478.96 588.61,571.4 482.46,662 C 476.4,667.18 455.54,685.7 435.41,685.7 Z"/>
+    </clipPath>
+  </defs>
+  <g inkscape:groupmode="layer" id="layer_tagline" inkscape:label="Tagline_And_Lines">
+    <rect id="Line_Left_Cyan" inkscape:label="Line_Left_Cyan" x="211.5" y="928.5" width="81.3" height="5" rx="2.5" ry="2.5" fill="url(#grad_line_left)"/>
+    <rect id="Line_Right_Purple" inkscape:label="Line_Right_Purple" x="962.8" y="928.5" width="79.7" height="5" rx="2.5" ry="2.5" fill="url(#grad_line_right)"/>
+    <g id="Tagline_Text" inkscape:label="AI DIGITAL SOLUTIONS" fill="#F5F6FA">
+      <path id="Tag_01_A" inkscape:label="A" d="M322 941 330.64 919H333.34L342 941H339.14L337.04 935.5H326.9L324.81 941ZM336.09 932.99 331.97 922.21 327.86 932.99Z"/>
+      <path id="Tag_02_I" inkscape:label="I" d="M360 941V919H364V941Z"/>
+      <path id="Tag_03_D" inkscape:label="D" d="M405 941V919H413.77Q417.1 919 419.64 920.38Q422.18 921.77 423.59 924.25Q425 926.73 425 930Q425 933.27 423.59 935.75Q422.18 938.23 419.64 939.62Q417.1 941 413.77 941ZM407.97 938.27H413.59Q416.17 938.27 418.06 937.23Q419.95 936.19 420.99 934.32Q422.03 932.45 422.03 930Q422.03 927.52 420.99 925.66Q419.95 923.81 418.06 922.77Q416.17 921.73 413.59 921.73H407.97Z"/>
+      <path id="Tag_04_I" inkscape:label="I" d="M444 941V919H447V941Z"/>
+      <path id="Tag_05_G" inkscape:label="G" d="M477.16 941.5Q474.52 941.5 472.3 940.65Q470.09 939.8 468.46 938.24Q466.83 936.68 465.91 934.59Q465 932.51 465 930Q465 927.49 465.91 925.41Q466.83 923.32 468.47 921.76Q470.12 920.2 472.34 919.35Q474.55 918.5 477.23 918.5Q479.93 918.5 482.18 919.37Q484.43 920.23 486 921.97L483.98 923.96Q482.58 922.61 480.93 921.99Q479.28 921.36 477.36 921.36Q475.4 921.36 473.72 922Q472.04 922.64 470.82 923.8Q469.6 924.96 468.93 926.55Q468.26 928.14 468.26 930Q468.26 931.83 468.93 933.42Q469.6 935.01 470.82 936.18Q472.04 937.36 473.71 938Q475.37 938.64 477.33 938.64Q479.15 938.64 480.85 938.06Q481.79 937.74 482.67 937.2V929.87H485.8V938.64Q484.11 940.05 481.84 940.78Q479.58 941.5 477.16 941.5Z"/>
+      <path id="Tag_06_I" inkscape:label="I" d="M506 941V919H509V941Z"/>
+      <path id="Tag_07_T" inkscape:label="T" d="M533.88 941V921.73H526V919H545V921.73H537.12V941Z"/>
+      <path id="Tag_08_A" inkscape:label="A" d="M559 941 568.07 919H570.9L580 941H577L574.79 935.5H564.15L561.95 941ZM573.79 932.99 569.47 922.21 565.15 932.99Z"/>
+      <path id="Tag_09_L" inkscape:label="L" d="M598 941V919H601.13V938.27H613V941Z"/>
+      <path id="Tag_10_S" inkscape:label="S" d="M662.45 941.5Q659.93 941.5 657.63 940.71Q655.32 939.93 654 938.67L655.17 936.17Q656.43 937.29 658.38 938.03Q660.34 938.77 662.45 938.77Q664.38 938.77 665.58 938.32Q666.77 937.87 667.34 937.08Q667.91 936.3 667.91 935.3Q667.91 934.14 667.17 933.44Q666.43 932.73 665.24 932.3Q664.06 931.86 662.64 931.54Q661.22 931.22 659.79 930.79Q658.35 930.35 657.17 929.68Q655.99 929 655.26 927.86Q654.54 926.72 654.54 924.92Q654.54 923.19 655.44 921.73Q656.33 920.27 658.21 919.38Q660.09 918.5 662.99 918.5Q664.91 918.5 666.81 919.01Q668.7 919.53 670.09 920.49L669.04 923.06Q667.63 922.1 666.05 921.66Q664.47 921.23 662.99 921.23Q661.13 921.23 659.93 921.71Q658.73 922.19 658.18 923Q657.63 923.8 657.63 924.8Q657.63 925.98 658.37 926.69Q659.11 927.4 660.29 927.82Q661.47 928.23 662.89 928.57Q664.31 928.91 665.75 929.33Q667.18 929.74 668.37 930.42Q669.55 931.09 670.27 932.22Q671 933.34 671 935.11Q671 936.81 670.09 938.27Q669.17 939.73 667.26 940.62Q665.35 941.5 662.45 941.5Z"/>
+      <path id="Tag_11_O" inkscape:label="O" d="M698.53 941.5Q696.06 941.5 693.94 940.63Q691.82 939.77 690.28 938.21Q688.73 936.65 687.87 934.56Q687 932.47 687 930Q687 927.53 687.87 925.44Q688.73 923.35 690.28 921.79Q691.82 920.23 693.92 919.37Q696.03 918.5 698.53 918.5Q701 918.5 703.09 919.35Q705.18 920.2 706.74 921.76Q708.3 923.32 709.15 925.41Q710 927.49 710 930Q710 932.51 709.15 934.59Q708.3 936.68 706.74 938.24Q705.18 939.8 703.09 940.65Q701 941.5 698.53 941.5ZM698.53 938.64Q700.32 938.64 701.85 938Q703.38 937.36 704.51 936.18Q705.64 935.01 706.27 933.44Q706.91 931.86 706.91 930Q706.91 928.14 706.27 926.56Q705.64 924.99 704.51 923.82Q703.38 922.64 701.85 922Q700.32 921.36 698.53 921.36Q696.71 921.36 695.18 922Q693.65 922.64 692.5 923.82Q691.36 924.99 690.73 926.56Q690.09 928.14 690.09 930Q690.09 931.86 690.73 933.44Q691.36 935.01 692.5 936.18Q693.65 937.36 695.18 938Q696.71 938.64 698.53 938.64Z"/>
+      <path id="Tag_12_L" inkscape:label="L" d="M726 941V919H729.34V938.27H742V941Z"/>
+      <path id="Tag_13_U" inkscape:label="U" d="M766.5 941Q762.07 941 759.54 938.55Q757 936.09 757 931.37V919H760.21V931.24Q760.21 934.88 761.86 936.56Q763.52 938.23 766.53 938.23Q769.58 938.23 771.23 936.56Q772.89 934.88 772.89 931.24V919H776V931.37Q776 936.09 773.48 938.55Q770.96 941 766.5 941Z"/>
+      <path id="Tag_14_T" inkscape:label="T" d="M799.46 941V921.73H792V919H810V921.73H802.54V941Z"/>
+      <path id="Tag_15_I" inkscape:label="I" d="M826 941V919H829V941Z"/>
+      <path id="Tag_16_O" inkscape:label="O" d="M856.53 941.5Q854.06 941.5 851.94 940.63Q849.82 939.77 848.28 938.21Q846.73 936.65 845.87 934.56Q845 932.47 845 930Q845 927.53 845.87 925.44Q846.73 923.35 848.28 921.79Q849.82 920.23 851.92 919.37Q854.03 918.5 856.53 918.5Q859 918.5 861.09 919.35Q863.18 920.2 864.74 921.76Q866.3 923.32 867.15 925.41Q868 927.49 868 930Q868 932.51 867.15 934.59Q866.3 936.68 864.74 938.24Q863.18 939.8 861.09 940.65Q859 941.5 856.53 941.5ZM856.53 938.64Q858.32 938.64 859.85 938Q861.38 937.36 862.51 936.18Q863.64 935.01 864.27 933.44Q864.91 931.86 864.91 930Q864.91 928.14 864.27 926.56Q863.64 924.99 862.51 923.82Q861.38 922.64 859.85 922Q858.32 921.36 856.53 921.36Q854.71 921.36 853.18 922Q851.65 922.64 850.5 923.82Q849.36 924.99 848.73 926.56Q848.09 928.14 848.09 930Q848.09 931.86 848.73 933.44Q849.36 935.01 850.5 936.18Q851.65 937.36 853.18 938Q854.71 938.64 856.53 938.64Z"/>
+      <path id="Tag_17_N" inkscape:label="N" d="M884 941V919H886.59L899.84 935.41V919H903V941H900.41L887.16 924.59V941Z"/>
+      <path id="Tag_18_S" inkscape:label="S" d="M927.45 941.5Q924.93 941.5 922.63 940.71Q920.32 939.93 919 938.67L920.17 936.17Q921.43 937.29 923.38 938.03Q925.34 938.77 927.45 938.77Q929.38 938.77 930.58 938.32Q931.77 937.87 932.34 937.08Q932.91 936.3 932.91 935.3Q932.91 934.14 932.17 933.44Q931.43 932.73 930.24 932.3Q929.06 931.86 927.64 931.54Q926.22 931.22 924.79 930.79Q923.35 930.35 922.17 929.68Q920.99 929 920.26 927.86Q919.54 926.72 919.54 924.92Q919.54 923.19 920.44 921.73Q921.33 920.27 923.21 919.38Q925.09 918.5 927.99 918.5Q929.91 918.5 931.81 919.01Q933.7 919.53 935.09 920.49L934.04 923.06Q932.63 922.1 931.05 921.66Q929.47 921.23 927.99 921.23Q926.13 921.23 924.93 921.71Q923.73 922.19 923.18 923Q922.63 923.8 922.63 924.8Q922.63 925.98 923.37 926.69Q924.11 927.4 925.29 927.82Q926.47 928.23 927.89 928.57Q929.31 928.91 930.75 929.33Q932.18 929.74 933.37 930.42Q934.55 931.09 935.27 932.22Q936 933.34 936 935.11Q936 936.81 935.09 938.27Q934.17 939.73 932.26 940.62Q930.35 941.5 927.45 941.5Z"/>
+    </g>
+  </g>
+  <g inkscape:groupmode="layer" id="layer_wordmark" inkscape:label="Wordmark_Deepzeta">
+    <g id="Word_Deep" inkscape:label="Deep (white)" fill="#F4F6FB">
+      <path id="Deep_D" inkscape:label="D" d="M222 863V747H273.49Q291.95 747 306.04 754.21Q320.13 761.42 328.07 774.34Q336 787.27 336 805Q336 822.57 328.07 835.57Q320.13 848.58 306.04 855.79Q291.95 863 273.49 863ZM248.23 840.96H272.2Q283.53 840.96 291.87 836.57Q300.21 832.18 304.83 824.06Q309.44 815.94 309.44 805Q309.44 793.9 304.83 785.86Q300.21 777.82 291.87 773.43Q283.53 769.04 272.2 769.04H248.23Z"/>
+      <path id="Deep_e1" inkscape:label="e" d="M398.14 865Q381.92 865 369.66 858.83Q357.4 852.65 350.7 841.94Q344 831.22 344 817.5Q344 803.61 350.61 792.89Q357.23 782.18 368.69 776.09Q380.16 770 394.62 770Q408.55 770 419.75 775.74Q430.95 781.49 437.47 792.21Q444 802.92 444 817.84Q444 819.39 443.82 821.36Q443.65 823.33 443.47 825.05H371.69Q372.57 828.65 374.51 831.73Q377.86 837.56 384.12 840.56Q390.38 843.56 398.85 843.56Q406.43 843.56 412.17 841.34Q417.9 839.11 422.66 834.65L437.3 850.08Q430.77 857.28 420.9 861.14Q411.02 865 398.14 865ZM371.34 809.44H418.07Q417.37 805.15 415.43 801.55Q412.43 796.24 407.14 793.24Q401.85 790.23 394.79 790.23Q387.74 790.23 382.36 793.24Q376.98 796.24 373.98 801.55Q372.04 805.15 371.34 809.44Z"/>
+      <path id="Deep_e2" inkscape:label="e" d="M506.14 865Q489.92 865 477.66 858.83Q465.4 852.65 458.7 841.94Q452 831.22 452 817.5Q452 803.61 458.61 792.89Q465.23 782.18 476.69 776.09Q488.16 770 502.62 770Q516.55 770 527.75 775.74Q538.95 781.49 545.47 792.21Q552 802.92 552 817.84Q552 819.39 551.82 821.36Q551.65 823.33 551.47 825.05H479.69Q480.57 828.65 482.51 831.73Q485.86 837.56 492.12 840.56Q498.38 843.56 506.85 843.56Q514.43 843.56 520.17 841.34Q525.9 839.11 530.66 834.65L545.3 850.08Q538.77 857.28 528.9 861.14Q519.02 865 506.14 865ZM479.34 809.44H526.07Q525.37 805.15 523.43 801.55Q520.43 796.24 515.14 793.24Q509.85 790.23 502.79 790.23Q495.74 790.23 490.36 793.24Q484.98 796.24 481.98 801.55Q480.04 805.15 479.34 809.44Z"/>
+      <path id="Deep_p" inkscape:label="p" d="M618.98 864.33Q606.8 864.33 597.66 859.22Q593.36 856.84 589.95 853.26V896H562V771.36H588.7V781.92Q592.28 777.83 597.12 775.11Q606.26 770 618.98 770Q632.6 770 643.44 775.87Q654.28 781.75 660.64 792.31Q667 802.86 667 817.16Q667 831.64 660.64 842.19Q654.28 852.75 643.44 858.54Q632.6 864.33 618.98 864.33ZM614.14 842.54Q621.13 842.54 626.59 839.47Q632.06 836.41 635.37 830.7Q638.69 825 638.69 817.16Q638.69 809.16 635.37 803.54Q632.06 797.92 626.59 794.86Q621.13 791.79 614.14 791.79Q607.15 791.79 601.6 794.86Q596.04 797.92 592.82 803.54Q589.59 809.16 589.59 817.16Q589.59 825 592.82 830.7Q596.04 836.41 601.6 839.47Q607.15 842.54 614.14 842.54Z"/>
+    </g>
+    <g id="Word_zeta" inkscape:label="zeta (gradient)" fill="url(#grad_zeta)">
+      <path id="zeta_z" inkscape:label="z" d="M676 863V847.1L724.52 792.3H677.24V772H759.41V787.9L710.89 842.7H761V863Z"/>
+      <path id="zeta_e" inkscape:label="e" d="M820.06 865Q804.16 865 792.15 858.83Q780.14 852.65 773.57 841.94Q767 831.22 767 817.5Q767 803.61 773.48 792.89Q779.96 782.18 791.2 776.09Q802.43 770 816.6 770Q830.26 770 841.23 775.74Q852.21 781.49 858.6 792.21Q865 802.92 865 817.84Q865 819.39 864.83 821.36Q864.65 823.33 864.48 825.05H794.14Q795 828.65 796.9 831.73Q800.19 837.56 806.32 840.56Q812.46 843.56 820.75 843.56Q828.19 843.56 833.8 841.34Q839.42 839.11 844.09 834.65L858.43 850.08Q852.04 857.28 842.36 861.14Q832.68 865 820.06 865ZM793.79 809.44H839.59Q838.9 805.15 837 801.55Q834.06 796.24 828.88 793.24Q823.69 790.23 816.78 790.23Q809.86 790.23 804.59 793.24Q799.32 796.24 796.38 801.55Q794.48 805.15 793.79 809.44Z"/>
+      <path id="zeta_t" inkscape:label="t" d="M930 858.97Q926.13 861.98 920.5 863.49Q914.86 865 908.81 865Q892.49 865 883.75 856.31Q875 847.61 875 830.75V747H901.24V770.25H923.61V791.54H901.24V830.4Q901.24 836.43 904.1 839.71Q906.96 843 912.34 843Q918.39 843 923.1 839.45Z"/>
+      <path id="zeta_a" inkscape:label="a" d="M1038 771.37V863.63H1011.81V853Q1001.62 865 982.28 865Q968.92 865 958.11 859.17Q947.3 853.34 941.15 842.54Q935 831.73 935 817.5Q935 803.27 941.15 792.46Q947.3 781.66 958.11 775.83Q968.92 770 982.28 770Q1000.39 770 1010.58 781.15V771.37ZM1011.11 817.5Q1011.11 805.84 1004.25 798.89Q997.4 791.95 987.03 791.95Q976.48 791.95 969.63 798.89Q962.77 805.84 962.77 817.5Q962.77 829.16 969.63 836.11Q976.48 843.05 987.03 843.05Q997.4 843.05 1004.25 836.11Q1011.11 829.16 1011.11 817.5Z"/>
+    </g>
+  </g>
+  <g inkscape:groupmode="layer" id="layer_ribbon_back" inkscape:label="Ribbon_Back_Loop">
+    <path id="Back_Crescent" inkscape:label="Back_Crescent (outer fold)" d="M 770.85,352.04 C 788.67,364.17 804.23,380.12 817.9,400 C 837.87,429.04 852.5,470.06 852.5,502 C 852.5,547.89 840.83,584.62 812.6,620 C 810.3,622.88 807.98,625.65 805.62,628.32 L 704,642 L 664,612.5 C 695.67,612.5 723.8,600.83 747.6,580 C 770.65,559.83 782.5,542.13 782.5,509 C 782.5,486.39 773.07,464.33 758.59,445.97 Z" fill="url(#grad_back_crescent)"/>
+    <path id="Back_Bottom_Bar" inkscape:label="Back_Bottom_Bar" d="M 562,612.5 L 692,612.3 C 748.75,612.3 836.12,616.85 849.86,537.25 C 845.01,567.59 833.22,594.16 812.6,620 C 774.43,667.83 729.22,685.7 664,685.7 L 458,685.7 L 531.21,621 C 538.43,614.77 550.62,612.5 562,612.5 Z" fill="url(#grad_back_bar)"/>
+    <g id="Back_Diagonal_Fold" inkscape:label="Diagonal_Fold">
+      <path id="Diagonal_Base" inkscape:label="Diagonal_Base" d="M 380.2,685.7 C 388.32,660.37 416.29,622.16 434.62,605 C 498.97,544.75 563.22,484.76 627.86,425 C 634.41,418.95 661.21,396 679.04,396 L 700,393.2 L 799.01,388 C 693.02,478.96 588.61,571.4 482.46,662 C 476.4,667.18 455.54,685.7 435.41,685.7 Z" fill="url(#grad_diag_fold)"/>
+      <path id="Diagonal_Sheen" inkscape:label="Diagonal_Sheen" d="M 380.2,685.7 C 388.32,660.37 416.29,622.16 434.62,605 C 498.97,544.75 563.22,484.76 627.86,425 C 634.41,418.95 661.21,396 679.04,396 L 700,393.2 L 799.01,388 C 693.02,478.96 588.61,571.4 482.46,662 C 476.4,667.18 455.54,685.7 435.41,685.7 Z" fill="url(#grad_diag_overlay_1)"/>
+      <path id="Diagonal_Shade" inkscape:label="Diagonal_Shade" d="M 380.2,685.7 C 388.32,660.37 416.29,622.16 434.62,605 C 498.97,544.75 563.22,484.76 627.86,425 C 634.41,418.95 661.21,396 679.04,396 L 700,393.2 L 799.01,388 C 693.02,478.96 588.61,571.4 482.46,662 C 476.4,667.18 455.54,685.7 435.41,685.7 Z" fill="url(#grad_diag_overlay_2)"/>
+    </g>
+  </g>
+  <g inkscape:groupmode="layer" id="layer_ribbon_front" inkscape:label="Ribbon_Front_Loop">
+    <g id="Front_Loop_Shadow_Clip" inkscape:label="Front_Loop_Shadow" clip-path="url(#clip_shadow_to_back_diagonal)">
+      <path id="Front_Loop_Shadow" inkscape:label="Front_Loop_Shadow (soft drop shadow)" d="M 412.8,322.6 L 664,322.6 C 717.27,322.6 758.71,337.62 791.39,368.65 C 804.57,383.95 816.03,404.62 815.7,438 C 817.33,467.63 795.61,522.86 773.88,549 C 779.6,537.99 782.5,525.38 782.5,509 C 782.5,474.21 760.18,440.74 731.5,420 C 705.05,400.87 677.53,393.4 645,393.4 L 494,393.4 C 437.03,392.22 417.78,350.5 412.8,322.6 Z" fill="#000000" filter="url(#filter_front_shadow)"/>
+    </g>
+    <path id="Front_Loop" inkscape:label="Front_Loop" d="M 412.8,322.6 L 664,322.6 C 717.27,322.6 758.71,337.62 791.39,368.65 C 804.57,383.95 816.03,404.62 815.7,438 C 817.33,467.63 795.61,522.86 773.88,549 C 779.6,537.99 782.5,525.38 782.5,509 C 782.5,474.21 760.18,440.74 731.5,420 C 705.05,400.87 677.53,393.4 645,393.4 L 494,393.4 C 437.03,392.22 417.78,350.5 412.8,322.6 Z" fill="url(#grad_front_loop)"/>
+  </g>
+  <g inkscape:groupmode="layer" id="layer_pixels" inkscape:label="Digital_Pixels">
+    <g id="Pixel_Cluster" inkscape:label="Pixel_Cluster">
+      <path id="Square_1_Purple" inkscape:label="Square 1 · bottom · deep purple" d="M 856.5,366 H 881.7 C 884.46,366 886.7,368.24 886.7,371 V 396.2 C 886.7,398.96 884.46,401.2 881.7,401.2 H 856.5 C 853.74,401.2 851.5,398.96 851.5,396.2 V 371 C 851.5,368.24 853.74,366 856.5,366 Z" fill="url(#grad_square_1_purple)"/>
+      <path id="Square_2_CyanBlue" inkscape:label="Square 2 · middle · bright cyan-blue" d="M 819,305.8 H 855.4 C 858.99,305.8 861.9,308.71 861.9,312.3 V 348.7 C 861.9,352.29 858.99,355.2 855.4,355.2 H 819 C 815.41,355.2 812.5,352.29 812.5,348.7 V 312.3 C 812.5,308.71 815.41,305.8 819,305.8 Z" fill="url(#grad_square_2_cyanblue)"/>
+      <path id="Square_3_LightCyan" inkscape:label="Square 3 · top right · light cyan" d="M 874.3,270.2 H 902.3 C 904.4,270.2 906.1,271.9 906.1,274 V 302 C 906.1,304.1 904.4,305.8 902.3,305.8 H 874.3 C 872.2,305.8 870.5,304.1 870.5,302 V 274 C 870.5,271.9 872.2,270.2 874.3,270.2 Z" fill="url(#grad_square_3_lightcyan)"/>
+      <path id="Square_4_RoyalBlue" inkscape:label="Square 4 · small right · royal blue" d="M 894,335 H 913.5 C 915.16,335 916.5,336.34 916.5,338 V 357.5 C 916.5,359.16 915.16,360.5 913.5,360.5 H 894 C 892.34,360.5 891,359.16 891,357.5 V 338 C 891,336.34 892.34,335 894,335 Z" fill="url(#grad_square_4_royalblue)"/>
+    </g>
+  </g>
+</svg>

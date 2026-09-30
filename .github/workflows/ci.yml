@@ -1,0 +1,89 @@
+# Every gate on every pull request to main (docs/ai/03 §5). Pushes to other branches run it too, so a
+# branch is checked before its pull request exists. main itself is protected (docs/ai/12 §1).
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches-ignore: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: verify
+    # Pinned, not ubuntu-latest: a silent runner upgrade would shift the Lighthouse baseline (07 §5).
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
+      # CI isn't a Vercel deployment, so it builds as indexable and Lighthouse's SEO audit sees a
+      # real page (plan section A). Vercel previews stay noindex whatever this says.
+      NEXT_PUBLIC_SITE_URL: http://localhost:3000
+      SITE_INDEXING: 'on'
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: npm
+
+      - run: npm ci
+
+      - name: Install the Playwright browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Run every gate
+        run: npm run verify
+
+      # Also posted as annotations: they're public on a public repo, while job logs need admin rights.
+      - name: Print the Lighthouse runs (the baseline record, decision 0014)
+        if: always()
+        run: |
+          node --input-type=module -e "
+          import { existsSync, readdirSync, readFileSync } from 'node:fs';
+          const dir = '.lighthouseci';
+          if (!existsSync(dir)) { console.log('No Lighthouse results: an earlier gate failed before lhci.'); process.exit(0); }
+          const kb = (b) => (b / 1024).toFixed(1) + ' KB';
+          const files = readdirSync(dir).filter((n) => /^lhr-.*\.json$/.test(n));
+          files.forEach((f, i) => {
+            const lhr = JSON.parse(readFileSync(dir + '/' + f, 'utf8'));
+            const a = lhr.audits;
+            const t = Object.fromEntries(a['resource-summary'].details.items.map((i) => [i.resourceType, i.transferSize]));
+            const line = [
+              'perf ' + Math.round(lhr.categories.performance.score * 100),
+              'a11y ' + Math.round(lhr.categories.accessibility.score * 100),
+              'bp ' + Math.round(lhr.categories['best-practices'].score * 100),
+              'seo ' + Math.round(lhr.categories.seo.score * 100),
+              'LCP ' + Math.round(a['largest-contentful-paint'].numericValue) + ' ms',
+              'TBT ' + Math.round(a['total-blocking-time'].numericValue) + ' ms',
+              'CLS ' + a['cumulative-layout-shift'].numericValue.toFixed(3),
+              'JS ' + kb(t.script ?? 0),
+              'CSS ' + kb(t.stylesheet ?? 0),
+              'HTML ' + kb(t.document ?? 0),
+              'total ' + kb(t.total ?? 0),
+              (lhr.environment.hostUserAgent.match(/Chrome\/[\d.]+/) ?? ['Chrome ?'])[0],
+              'benchmarkIndex ' + Math.round(lhr.environment.benchmarkIndex),
+            ].join(' | ');
+            console.log(line);
+            console.log('::notice title=Lighthouse run ' + (i + 1) + ' of ' + files.length + '::' + line);
+          });"
+
+      - name: Keep the reports
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: reports
+          path: |
+            playwright-report/
+            .lighthouseci/
+          if-no-files-found: ignore
+          retention-days: 14

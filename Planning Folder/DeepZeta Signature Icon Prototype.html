@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>deepzeta · Signature Icon Prototype · AI Front Desk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+ color-scheme:dark;
+ --navy:#010413; --navy-900:#050A1C; --navy-850:#08122E; --navy-800:#0B1C4A; --navy-700:#16224A;
+ --border:#33457F; --slate:#5D73B8; --mist:#9FB0E0; --frost:#C9D4FF; --white:#F4F6FB;
+ --cyan:#08C6FD; --ice:#7CF3FF; --warn:#FFB547; --ok:#22D3A6;
+ --sig:linear-gradient(135deg,#08C6FD 0%,#1A84FD 50%,#7946FC 100%);
+ --zeta:linear-gradient(150deg,#09E8FE 0%,#00B5FC 25%,#147BFC 50%,#4639F9 75%,#602CFA 100%);
+ --action:linear-gradient(90deg,#08C6FD,#2F6BFF);
+ --px-web:linear-gradient(180deg,#21BEFC,#4264FD);
+ --sans:'Montserrat',system-ui,-apple-system,'Segoe UI',sans-serif;
+ --mono:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace;
+ --ease-out:cubic-bezier(.2,.8,.2,1);
+ --ease-pop:cubic-bezier(.2,.9,.3,1.35);
+}
+*{box-sizing:border-box}
+html{background:var(--navy)}
+body{margin:0;background:var(--navy);color:var(--white);font-family:var(--sans);font-size:15.5px;line-height:1.6;
+ background-image:linear-gradient(rgba(26,132,253,.055) 1px,transparent 1px),linear-gradient(90deg,rgba(26,132,253,.055) 1px,transparent 1px);
+ background-size:80px 80px;padding:0 clamp(16px,4vw,56px) 96px}
+.wrap{max-width:1140px;margin:0 auto}
+p{margin:0}
+h1,h2,h3{margin:0;text-wrap:balance}
+.z{background:var(--zeta);-webkit-background-clip:text;background-clip:text;color:transparent}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--ice);outline-offset:3px}
+.hero{position:relative;padding:56px 0 28px;display:grid;gap:18px}
+.hero::before{content:"";position:absolute;inset:-40px -12vw auto;height:480px;z-index:-1;
+ background:radial-gradient(ellipse 50% 60% at 22% 40%,rgba(24,70,210,.45) 0%,rgba(12,34,120,.2) 45%,rgba(1,4,19,0) 78%)}
+.tag{font-family:var(--mono);font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--mist);display:flex;align-items:center;gap:10px}
+.tag::before,.tag::after{content:"";width:28px;height:3px;border-radius:2px;background:linear-gradient(90deg,#00D8EE,#0D48E6)}
+.tag::after{background:linear-gradient(90deg,#4A22EA,#A040F2)}
+h1{font-size:clamp(32px,5vw,56px);line-height:1.05;font-weight:800;letter-spacing:-.025em;max-width:18ch}
+.lead{font-size:17px;color:var(--frost);max-width:66ch}
+.controls{display:flex;flex-wrap:wrap;gap:10px}
+.btn{cursor:pointer;border:1px solid var(--navy-700);background:rgba(8,18,46,.8);border-radius:999px;padding:8px 16px;font-size:13px;font-weight:600;color:var(--frost);transition:border-color .2s,color .2s}
+.btn:hover{border-color:var(--cyan);color:var(--white)}
+.btn[aria-pressed="true"]{border-color:var(--cyan);color:var(--white);background:rgba(8,198,253,.1)}
+section{padding-top:64px}
+.sh{display:grid;gap:10px;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--navy-700)}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--cyan)}
+h2{font-size:clamp(24px,3vw,34px);line-height:1.12;font-weight:800;letter-spacing:-.015em}
+h3{font-size:18px;font-weight:700}
+.sh p{color:var(--mist);max-width:70ch}
+.panel{background:var(--navy-850);border:1px solid var(--navy-700);border-radius:18px;padding:24px}
+.muted{color:var(--mist)}
+
+/* showcase */
+.show{display:grid;grid-template-columns:minmax(0,340px) 1fr;gap:28px;align-items:center}
+.stage{cursor:pointer;border:0;padding:0;background:radial-gradient(circle at 60% 45%,rgba(26,132,253,.16),rgba(8,18,46,0) 65%);border-radius:18px;aspect-ratio:1;display:grid;place-items:center;color:var(--frost)}
+.stage svg{width:78%;height:auto;overflow:visible}
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:12px;counter-reset:s}
+.steps li{display:grid;grid-template-columns:92px 1fr;gap:14px;font-size:14.5px;color:var(--mist);padding-bottom:12px;border-bottom:1px dashed var(--navy-700)}
+.steps li:last-child{border-bottom:0;padding-bottom:0}
+.steps b{font-family:var(--mono);font-size:12px;font-weight:500;color:var(--cyan)}
+.steps strong{color:var(--white);font-weight:600}
+@media (max-width:760px){.show{grid-template-columns:1fr}.steps li{grid-template-columns:1fr;gap:2px}}
+
+/* tiers */
+.tiers{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+.tier{cursor:pointer;text-align:start;background:var(--navy-850);border:1px solid var(--navy-700);border-radius:18px;padding:22px;display:grid;gap:12px;align-content:start;color:var(--frost);transition:border-color .2s var(--ease-out),background-color .2s var(--ease-out)}
+.tier:hover,.tier:focus-visible{border-color:var(--border);background:var(--navy-800)}
+.tier .box{height:140px;display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap}
+.tier .box svg{overflow:visible;display:block}
+.tier h3{color:var(--white)}
+.tier p{font-size:14px;color:var(--mist)}
+.lbl{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--slate)}
+
+/* system card mock */
+.sys{display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:start;border-radius:22px;padding:28px;
+ background:linear-gradient(var(--navy-850),var(--navy-850)) padding-box,var(--sig) border-box;border:1.5px solid transparent}
+.sys .art{width:132px;height:132px;color:var(--frost)}
+.sys .art svg{width:100%;height:100%;overflow:visible}
+.sys h3{font-size:24px;font-weight:800;letter-spacing:-.01em}
+.sys .out{color:var(--frost);max-width:58ch;margin-top:6px}
+.inc{list-style:none;margin:18px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:10px 18px}
+.inc li{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;color:var(--white)}
+.inc li svg{flex:none;color:var(--frost);overflow:visible}
+.inc li:hover .halo{opacity:.6}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.chip{font-family:var(--mono);font-size:12px;padding:5px 11px;border-radius:999px;border:1px solid var(--navy-700);color:var(--frost);background:rgba(8,18,46,.7)}
+.cta{display:inline-flex;align-items:center;gap:10px;margin-top:20px;padding:12px 20px;border-radius:999px;border:0;cursor:pointer;font-weight:700;font-size:14px;color:var(--navy);background:var(--action)}
+.cta svg{transition:transform .2s var(--ease-out)}
+.cta:hover svg{transform:translateX(3px)}
+[dir="rtl"] .cta:hover svg{transform:translateX(-3px) scaleX(-1)}
+@media (max-width:640px){.sys{grid-template-columns:1fr}}
+
+/* RTL demo */
+.rtl{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:14px}
+.rtl .row{display:flex;align-items:center;gap:16px;padding:16px 18px;border:1px dashed var(--navy-700);border-radius:14px;color:var(--frost)}
+.rtl .row span{font-family:var(--mono);font-size:12px;color:var(--slate);margin-inline-end:auto}
+
+.note{border-inline-start:3px solid var(--warn);background:rgba(255,181,71,.07);padding:14px 16px;border-radius:0 12px 12px 0;color:var(--frost);font-size:14px;margin-top:16px}
+.note b{color:var(--warn)}
+
+/* ================= ICON SYSTEM (per Icon Master Rules) ================= */
+.ln{fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:round}
+.ln.soft{opacity:.42}
+.sl{fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:square;stroke-linejoin:round}
+.fl{fill:currentColor}
+svg *{transform-box:fill-box}
+.px,.pxr,.halo,.slot,.wv{transform-origin:center}
+.halo{opacity:0;transition:opacity .2s var(--ease-out)}
+.tier:hover .halo,.tier:focus-visible .halo,.stage:hover .halo,.stage:focus-visible .halo{opacity:.6}
+[dir="rtl"] .flip{transform:scaleX(-1)}
+
+/* Tier 2 motion */
+.run .px.pop{animation:pxPop .5s var(--pd,.28s) var(--ease-pop) backwards}
+.run .px .halo{animation:haloPulse 1s .45s ease-out backwards}
+.run .blink{animation:blink .8s var(--dl,0ms) ease-in-out}
+
+/* Tier 3 · AI Front Desk: one story, ≤1.6 s, played once. */
+.s-depth{opacity:.5;transform:translate(1.5px,1.8px)}
+.s-glass{fill:rgba(201,212,255,.06)}
+.s-bub{fill:var(--navy-850)}.s-bub-g{transform-origin:20% 100%}
+.c-sweep{opacity:0}
+.run .s-depth{animation:depth .7s var(--ease-out)}
+.run .s-glass{animation:fade .5s ease-out backwards}
+.run .slot{animation:pxPop .35s var(--dl) var(--ease-out) backwards}
+.run .s-bub-g{animation:bubIn .45s .15s var(--ease-pop) backwards}
+.run .wv{animation:wave .5s var(--dl) var(--ease-out) backwards}
+.run .cl3{animation:clusterIn .6s var(--dl) var(--ease-pop) backwards}
+.run .cl3 .halo{animation:haloPulse 1s 1s ease-out backwards}
+.run .c-sweep{animation:sweep .6s .95s ease-in-out}
+
+@keyframes pxPop{0%{opacity:0;transform:scale(.3)}60%{opacity:1;transform:scale(1.18)}100%{transform:scale(1)}}
+@keyframes haloPulse{0%{opacity:0;transform:scale(.5)}45%{opacity:1;transform:scale(1.05)}100%{opacity:0;transform:scale(1.35)}}
+@keyframes blink{0%,100%{opacity:1}35%{opacity:.15}}
+@keyframes depth{0%{transform:translate(0,0);opacity:0}100%{transform:translate(1.5px,1.8px);opacity:.5}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes bubIn{0%{opacity:0;transform:scale(.55)}100%{opacity:1;transform:scale(1)}}
+@keyframes wave{0%{transform:scaleY(.2)}60%{transform:scaleY(1.35)}100%{transform:scaleY(1)}}
+@keyframes clusterIn{0%{opacity:0;transform:translate(-10px,7px) scale(.4)}100%{opacity:1;transform:translate(0,0) scale(1)}}
+@keyframes sweep{0%{opacity:0;transform:translateX(-14px)}25%{opacity:1}100%{opacity:0;transform:translateX(38px)}}
+
+@media (prefers-reduced-motion:reduce){.run *{animation:none!important}.halo{opacity:.45}}
+.rm .run *{animation:none!important}
+.rm .halo{opacity:.45}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+ <defs>
+  <linearGradient id="px-web" x1=".55" y1="0" x2=".45" y2="1"><stop offset="0" stop-color="#21BEFC"/><stop offset=".5" stop-color="#3092FD"/><stop offset="1" stop-color="#4264FD"/></linearGradient>
+  <radialGradient id="halo-web"><stop offset="0" stop-color="#3092FD" stop-opacity=".85"/><stop offset="1" stop-color="#3092FD" stop-opacity="0"/></radialGradient>
+  <!-- The four logo pixel gradients, converted 1:1 from the logo's userSpaceOnUse vectors to each pixel's own box. -->
+  <linearGradient id="logo-px2" x1=".536" y1=".044" x2=".457" y2=".954"><stop offset="0" stop-color="#21BEFC"/><stop offset=".5" stop-color="#3092FD"/><stop offset="1" stop-color="#4264FD"/></linearGradient>
+  <linearGradient id="logo-px3" x1=".542" y1=".09" x2=".47" y2=".91"><stop offset="0" stop-color="#03D4FC"/><stop offset=".5" stop-color="#04C1FD"/><stop offset="1" stop-color="#09A5FC"/></linearGradient>
+  <linearGradient id="logo-px4" x1=".645" y1=".065" x2=".335" y2=".915"><stop offset="0" stop-color="#3166FB"/><stop offset=".5" stop-color="#2A4DFC"/><stop offset="1" stop-color="#3741FD"/></linearGradient>
+  <linearGradient id="logo-px1" x1=".759" y1=".045" x2=".23" y2=".962"><stop offset="0" stop-color="#6430FA"/><stop offset=".5" stop-color="#592BFD"/><stop offset="1" stop-color="#4C27FB"/></linearGradient>
+  <linearGradient id="sweep" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".4"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+ </defs>
+</svg>
+
+<div class="wrap">
+ <header class="hero">
+  <div class="tag">deepzeta · Icon System · Tier 3</div>
+  <h1>Signature icon: <span class="z">AI Front Desk</span></h1>
+  <p class="lead">The mixed direction in practice. Direction A's lines and pixel form the base, B contributes the logo's four-pixel cluster in its exact colours, and C contributes the depth layer and one light sweep. Click the icon to replay it.</p>
+  <div class="controls">
+   <button class="btn" type="button" id="playAll">Replay all</button>
+   <button class="btn" type="button" id="rmToggle" aria-pressed="false">Simulate reduced motion</button>
+  </div>
+ </header>
+
+ <section>
+  <div class="sh">
+   <div class="eyebrow">01 · The story</div>
+   <h2>Messages and calls come in, and a booking lands in the calendar</h2>
+   <p>The whole story plays once in 1.55 seconds when the icon scrolls into view. Only transform and opacity are animated, with no JavaScript animation library.</p>
+  </div>
+  <div class="panel show">
+   <button class="stage" type="button" data-play aria-label="AI Front Desk signature icon. Replay animation" data-sig></button>
+   <ol class="steps">
+    <li><b>0.00–0.70s</b><span><strong>The calendar settles.</strong> The brand-colour depth layer slides out beneath the glass calendar (from C).</span></li>
+    <li><b>0.15–0.60s</b><span><strong>A message arrives.</strong> The chat bubble pops in and its voice waveform bounces: WhatsApp and phone in one shape.</span></li>
+    <li><b>0.25–0.65s</b><span><strong>The week fills in.</strong> Open time slots appear one by one.</span></li>
+    <li><b>0.55–1.39s</b><span><strong>The booking lands.</strong> The logo's four pixels, in their exact colours, sizes and arrangement, fly in at the ribbon's 35° angle and settle on the booked slot, breaking out of the frame just as the logo pixels break away from the Z (from B).</span></li>
+    <li><b>0.95–1.55s</b><span><strong>Done.</strong> One light sweep crosses the calendar (from C) and the main pixel glows.</span></li>
+   </ol>
+  </div>
+ </section>
+
+ <section>
+  <div class="sh">
+   <div class="eyebrow">02 · One family, three tiers</div>
+   <h2>Rich where you want people to stop, simple where they scan</h2>
+   <p>Hover each tier. All three share the same stroke logic, the same pixel and the same colours, so they read as one family.</p>
+  </div>
+  <div class="tiers">
+   <button class="tier" type="button" data-play>
+    <span class="lbl">Tier 3 · Signature · 64px and up</span>
+    <span class="box" data-sig-sm></span>
+    <h3>AI Front Desk</h3>
+    <p>6 Systems and 4 stages. The logo's four-pixel cluster, depth layer and sweep. A story of 1.6 s or less, played once.</p>
+   </button>
+   <button class="tier" type="button" data-play>
+    <span class="lbl">Tier 2 · Service · 20–64px</span>
+    <span class="box" data-t2="booking" data-size="64"></span>
+    <h3>Booking Automation</h3>
+    <p>About 30 solution icons. Lines plus exactly one pixel. Micro-story of 0.9 s or less on hover.</p>
+   </button>
+   <button class="tier" type="button" data-play>
+    <span class="lbl">Tier 1 · Interface · 16–24px</span>
+    <span class="box" data-t1></span>
+    <h3>Arrows, menu, close, check…</h3>
+    <p>About 25 icons. Plain line, one colour, no pixel, no gradient. Only 150–200ms state changes.</p>
+   </button>
+  </div>
+ </section>
+
+ <section>
+  <div class="sh">
+   <div class="eyebrow">03 · In context</div>
+   <h2>How a System card would look on the site</h2>
+   <p>Signature icon for the System, Tier 2 icons for what's included, and a Tier 1 arrow in the button. Toggle Arabic direction to see the layout and the arrow mirror while the icons stay the same.</p>
+  </div>
+  <div class="controls" style="margin-bottom:14px"><button class="btn" type="button" id="dirToggle" aria-pressed="false">Show right-to-left (Arabic) layout</button></div>
+  <article class="sys" id="sysCard">
+   <div class="art" data-sig-card></div>
+   <div>
+    <div class="eyebrow">System · Win Customers</div>
+    <h3>AI Front Desk</h3>
+    <p class="out">Every WhatsApp message and phone call answered in seconds and booked straight into your calendar, in Arabic and English, 24/7.</p>
+    <ul class="inc" data-inc></ul>
+    <div class="chips"><span class="chip">Clinics</span><span class="chip">Dentists</span><span class="chip">Salons</span><span class="chip">Real estate</span><span class="chip">Car services</span></div>
+    <button class="cta" type="button">See it live <span data-arrow></span></button>
+   </div>
+  </article>
+ </section>
+
+ <section>
+  <div class="sh">
+   <div class="eyebrow">04 · Right-to-left rule</div>
+   <h2>What flips in Arabic, and what doesn't</h2>
+  </div>
+  <div class="rtl" data-rtl></div>
+  <div class="note"><b>Prototype note:</b> this page draws icons with a small script so they're easy to change. On the real site every icon is a static, server-rendered SVG with no JavaScript. The only script is a tiny shared observer (under 0.5 KB) that starts Tier 3 stories when they scroll into view.</div>
+ </section>
+</div>
+
+<script>
+function px(x,y,s,cls=''){
+ const h=s*3.2,cx=x+s/2,cy=y+s/2;
+ return `<g class="px ${cls}"><rect class="halo" x="${cx-h/2}" y="${cy-h/2}" width="${h}" height="${h}" fill="url(#halo-web)"/><rect class="pxr" x="${x}" y="${y}" width="${s}" height="${s}" rx="${(s*.125).toFixed(3)}" fill="url(#px-web)"/></g>`;
+}
+const svg=(vb,size,body,cls='')=>`<svg viewBox="0 0 ${vb} ${vb}" ${size?`width="${size}" height="${size}"`:''} class="${cls}" aria-hidden="true" focusable="false">${body}</svg>`;
+
+/* Tier 3 · AI Front Desk · 48 grid, stroke 1.75.
+   Cluster = all four logo pixels with their exact gradients, corner radii, relative sizes and positions,
+   scaled as one unit from the largest pixel (logo pixel 2, size S). Values measured from the logo SVG, read-only. */
+const LOGO_PX=[ // [gradient, offset x, offset y, size, corner-radius ratio] in units of S
+ ['logo-px2',0,0,1,.1316],
+ ['logo-px3',1.1741,-.7206,.7206,.1067],
+ ['logo-px4',1.5891,.5911,.5162,.1176],
+ ['logo-px1',.7895,1.2186,.7126,.142]
+];
+let sigN=0;
+function signature(size){
+ const id='sigcal'+(sigN++);
+ const slots=[[14,27],[21,27],[21,34]].map(([x,y],i)=>`<circle class="fl slot" cx="${x}" cy="${y}" r="1.1" style="--dl:${250+i*60}ms"/>`).join('');
+ const waves=[['M8.5 36v2',0],['M11 35v4',60],['M13.5 35.5v3',120],['M16 36.25v1.5',180]].map(([d,t])=>`<path class="sl wv" d="${d}" style="--dl:${350+t}ms"/>`).join('');
+ const S=5.5,ox=25.25,oy=24.25; // main pixel sits on the booked slot (28, 27)
+ const cluster=LOGO_PX.map(([g,dx,dy,k,r],i)=>{
+  const x=ox+dx*S,y=oy+dy*S,s=k*S;
+  return `<g class="cl3" style="--dl:${550+i*80}ms">${i===0?`<rect class="halo" x="${x+s/2-s*1.6}" y="${y+s/2-s*1.6}" width="${s*3.2}" height="${s*3.2}" fill="url(#halo-web)"/>`:''}<rect x="${x.toFixed(3)}" y="${y.toFixed(3)}" width="${s.toFixed(3)}" height="${s.toFixed(3)}" rx="${(s*r).toFixed(3)}" fill="url(#${g})"/></g>`;
+ }).join('');
+ return svg(48,size,
+  `<defs><clipPath id="${id}"><rect x="8" y="14" width="26" height="26" rx="4"/></clipPath></defs>
+   <rect class="s-depth" x="8" y="14" width="26" height="26" rx="4" fill="url(#px-web)"/>
+   <rect class="s-glass sl" x="8" y="14" width="26" height="26" rx="4"/>
+   <path class="sl" d="M8 21h26"/><path class="sl" d="M15 11v5M27 11v5"/>
+   <g clip-path="url(#${id})"><g transform="rotate(20 21 27)"><rect class="c-sweep" x="0" y="-6" width="8" height="66" fill="url(#sweep)"/></g></g>
+   ${slots}
+   <g class="s-bub-g"><path class="sl s-bub" d="M7 32h9a3 3 0 0 1 3 3v4a3 3 0 0 1-3 3h-4.5L8 45.5V42H7a3 3 0 0 1-3-3v-4a3 3 0 0 1 3-3z"/>${waves}</g>
+   ${cluster}`);
+}
+
+/* Tier 2 · 24 grid, stroke 1.5, exactly one pixel. */
+const T2={
+ chat:['WhatsApp AI Agent',`<path class="ln" d="M7 4.25h10a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3h-5.5l-4.75 3.75v-3.8A3 3 0 0 1 4 13.25v-6a3 3 0 0 1 3-3z"/><circle class="fl blink" cx="8.5" cy="10.25" r="1"/><circle class="fl blink" style="--dl:150ms" cx="11.5" cy="10.25" r="1"/>${px(13.8,8.95,2.6,'pop')}`],
+ voice:['AI Voice Receptionist',`<path class="ln" d="M5 13v-1a7 7 0 0 1 14 0v1"/><rect class="ln" x="3.75" y="12.5" width="3.5" height="5.5" rx="1.5"/><rect class="ln" x="16.75" y="12.5" width="3.5" height="5.5" rx="1.5"/><path class="ln" d="M18.5 18v.25a2.75 2.75 0 0 1-2.75 2.75H14.5"/>${px(10.9,19.7,2.6,'pop')}`],
+ booking:['Booking Automation',`<rect class="ln" x="3.75" y="5" width="16.5" height="15.25" rx="2.25"/><path class="ln" d="M3.75 9.5h16.5M8.5 3v3.5M15.5 3v3.5"/><circle class="fl" cx="8" cy="13.5" r=".9"/><circle class="fl" cx="12" cy="13.5" r=".9"/><circle class="fl" cx="8" cy="17" r=".9"/><circle class="fl" cx="12" cy="17" r=".9"/>${px(14.7,12.2,2.6,'pop')}`],
+ speed:['Speed-to-Lead',`<circle class="ln" cx="12" cy="13.5" r="7"/><path class="ln" d="M10 3.25h4M12 3.25v3.25M12 13.5l2-2"/>${px(14.6,8.9,2.6,'pop')}`],
+ crm:['CRM Setup & Automation',`<rect class="ln" x="3.75" y="6.5" width="16.5" height="12" rx="2.25"/><path class="ln soft" d="M6.5 3.75h11"/><circle class="ln" cx="8.5" cy="11" r="1.75"/><path class="ln" d="M5.75 15.75a2.75 2.75 0 0 1 5.5 0M13.5 10.5h3.5M13.5 13.5h1.5"/>${px(16.4,12.2,2.6,'pop')}`]
+};
+const t2=(k,size)=>svg(24,size,T2[k][1]);
+
+/* Tier 1 · plain line, currentColor, no pixel. "flip" marks icons that mirror in Arabic. */
+const T1={
+ arrow:['Arrow','M5 12h14M13 6l6 6-6 6',true],
+ send:['Send','M4 12h9M4 5l16 7-16 7 3-7',true],
+ check:['Check','M5 12.5l4.5 4.5L19 7.5',false],
+ menu:['Menu','M4 7h16M4 12h16M4 17h16',false],
+ close:['Close','M6 6l12 12M18 6L6 18',false],
+ globe:['Language','M12 3.5a8.5 8.5 0 1 1 0 17a8.5 8.5 0 1 1 0-17zM3.5 12h17M12 3.5c2.4 2.3 3.5 5.2 3.5 8.5s-1.1 6.2-3.5 8.5M12 3.5C9.6 5.8 8.5 8.7 8.5 12s1.1 6.2 3.5 8.5',false]
+};
+const t1=(k,size)=>svg(24,size,`<path class="ln" d="${T1[k][1]}"/>`,T1[k][2]?'flip':'');
+
+document.querySelector('[data-sig]').innerHTML=signature();
+document.querySelector('[data-sig-sm]').innerHTML=signature(128);
+document.querySelector('[data-sig-card]').innerHTML=signature();
+document.querySelector('[data-t2="booking"]').innerHTML=t2('booking',64);
+document.querySelector('[data-t1]').innerHTML=['arrow','menu','close','check','globe'].map(k=>t1(k,24)).join('');
+document.querySelector('[data-inc]').innerHTML=['chat','voice','booking','speed','crm'].map(k=>`<li>${t2(k,20)}${T2[k][0]}</li>`).join('');
+document.querySelector('[data-arrow]').innerHTML=t1('arrow',18);
+document.querySelector('[data-rtl]').innerHTML=
+ `<div class="row"><span>Flips · arrow, send</span>${t1('arrow',24)}${t1('send',24)}<b dir="rtl" style="display:flex;gap:16px">${t1('arrow',24)}${t1('send',24)}</b></div>`+
+ `<div class="row"><span>Never flips · check, close, globe, pixel</span>${t1('check',24)}${t1('close',24)}${t1('globe',24)}</div>`;
+
+function replay(el){el.classList.remove('run');void el.getBoundingClientRect();el.classList.add('run');}
+const players=[...document.querySelectorAll('[data-play],.sys .art')];
+players.forEach(el=>{
+ el.addEventListener('pointerenter',()=>replay(el));
+ el.addEventListener('focus',()=>replay(el));
+ el.addEventListener('click',()=>replay(el));
+});
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){replay(e.target);io.unobserve(e.target);}}),{threshold:.4});
+players.forEach(el=>io.observe(el));
+document.getElementById('playAll').addEventListener('click',()=>players.forEach((el,i)=>setTimeout(()=>replay(el),i*120)));
+const rm=document.getElementById('rmToggle');
+rm.addEventListener('click',()=>{const on=rm.getAttribute('aria-pressed')!=='true';rm.setAttribute('aria-pressed',on);document.body.classList.toggle('rm',on);});
+const dt=document.getElementById('dirToggle');
+dt.addEventListener('click',()=>{const on=dt.getAttribute('aria-pressed')!=='true';dt.setAttribute('aria-pressed',on);document.getElementById('sysCard').dir=on?'rtl':'ltr';});
+</script>
+</body>
+</html>

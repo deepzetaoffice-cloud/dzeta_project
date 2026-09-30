@@ -1,0 +1,13 @@
+# The rule system, planning sources and owner documents are never reformatted by tools
+# (docs/ai/00 section 5). The post-edit hook runs Prettier on every edited file, so these
+# paths must stay listed here.
+docs/
+Planning Folder/
+Mockups fo reference only/
+.claude/
+CLAUDE.md
+AGENTS.md
+LICENSE
+
+# Changed only by npm commands (docs/ai/06 section 5).
+package-lock.json
