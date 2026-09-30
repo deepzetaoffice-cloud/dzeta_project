@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { libraryIds, registerCitations } from '../../scripts/check-effects.mjs';
+import { libraryIds, registerCitations, unknownCitations } from '../../scripts/check-effects.mjs';
 
 const library = [
   '## 3. Hard rules',
@@ -36,5 +36,21 @@ describe('check:effects', () => {
   it('flags a register table without an Effect ID column', () => {
     const plan = ['## Effect register', '| Section | Effect |', '|---|---|', '| Hero | `glass-frost` |'].join('\n');
     expect(registerCitations(plan).problems).toHaveLength(1);
+  });
+
+  it('flags an Effect ID cell without a backticked kebab-case ID', () => {
+    const plan = ['## Effect register', '| Section | Effect ID |', '|---|---|', '| Hero | glass frost |'].join('\n');
+    const { citations, problems } = registerCitations(plan);
+    expect(citations).toEqual([]);
+    expect(problems).toHaveLength(1);
+  });
+
+  it('fails citations that are not in the library', () => {
+    const known = libraryIds(library);
+    const citations = [
+      { id: 'glass-frost', line: 4 },
+      { id: 'hover-charged', line: 4 },
+    ];
+    expect(unknownCitations(known, citations)).toEqual([{ id: 'hover-charged', line: 4 }]);
   });
 });

@@ -19,11 +19,20 @@ export type PageData = {
 
 // Printed with every run so the output never claims more than it checked (plan section E).
 export const SKIPPED = {
-  seo: ['og:image returns 200 (enabled in P4, with OG images)', 'sitemap parity (enabled in P9, with the sitemap)'],
+  seo: [
+    'Open Graph and Twitter tags: og:title, og:description, og:url, og:locale, og:type, twitter:card (enabled in P4, with the metadata builder)',
+    'og:image returns 200 (enabled in P4, with OG images)',
+    'sitemap parity (enabled in P9, with the sitemap)',
+    'noindex routes absent from the llms files (enabled in P9, with the llms files)',
+  ],
   schema: [
     '#organization and #website exactly once, reference resolution, the page-type matrix, NAP, breadcrumbs, visible parity (enabled in P4)',
+    'every URL absolute on the canonical host with no trailing slash (enabled in P4)',
   ],
-  links: ['URL-registry rules, link budgets, anchors, orphans, click depth (enabled in P4)'],
+  links: [
+    'nav and footer hrefs equal canonicals, duplicate targets (enabled in P2, with the layout shell)',
+    'URL-registry rules, link budgets, anchors, orphans, click depth (enabled in P4)',
+  ],
   crawl: ['pages are found by following links from /; sitemap and registry seeds are added in P4/P9'],
 } as const;
 
@@ -31,8 +40,28 @@ export function isHtml(page: PageData): boolean {
   return page.contentType.includes('text/html');
 }
 
+// `none` means noindex + nofollow. robotsMeta also holds `googlebot` meta values (crawl.ts).
 export function isNoindex(page: PageData): boolean {
-  return [page.xRobotsTag ?? '', ...page.robotsMeta].some((value) => /noindex/i.test(value));
+  return [page.xRobotsTag ?? '', ...page.robotsMeta].some((value) => /\bnoindex\b|\bnone\b/i.test(value));
+}
+
+// docs/ai/08 §1: titles and descriptions are unique across the site.
+export function duplicateMetaProblems(pages: PageData[]): string[] {
+  const problems: string[] = [];
+  for (const [label, pick] of [
+    ['title', (page: PageData) => page.titles[0]],
+    ['description', (page: PageData) => page.descriptions[0]],
+  ] as const) {
+    const urlsByValue = new Map<string, string[]>();
+    for (const page of pages) {
+      const value = pick(page);
+      if (value) urlsByValue.set(value, [...(urlsByValue.get(value) ?? []), page.url]);
+    }
+    for (const [value, urls] of urlsByValue) {
+      if (urls.length > 1) problems.push(`the same ${label} on ${urls.join(', ')}: "${value}"`);
+    }
+  }
+  return problems;
 }
 
 type SeoOptions = { siteUrl: string; brandName: string };
@@ -44,8 +73,10 @@ export function seoProblems(page: PageData, { siteUrl, brandName }: SeoOptions):
 
   if (page.titles.length !== 1) problems.push(`expected one <title>, found ${page.titles.length}`);
   const title = page.titles[0] ?? '';
-  // The root template adds the suffix; page titles never include the brand themselves (08 §1).
-  if (!title.endsWith(suffix) || title.split(brandName).length !== 2) {
+  // The one title format adds the suffix; page titles never name the brand themselves (08 §1).
+  // The brand's first word is also counted case-insensitively, to catch variants like "Deepzeta".
+  const brandWord = (brandName.split(' ')[0] ?? brandName).toLowerCase();
+  if (!title.endsWith(suffix) || title.toLowerCase().split(brandWord).length !== 2) {
     problems.push(`title must end with "${suffix}" and name the brand exactly once: "${title}"`);
   }
   if (title.length < 50 || title.length > 60) problems.push(`title is ${title.length} characters (50–60): "${title}"`);
@@ -97,7 +128,9 @@ export function schemaProblems(page: PageData): string[] {
       // A node with only "@id" is a reference; anything more is a definition.
       if (typeof id === 'string' && Object.keys(node).length > 1) defined.set(id, (defined.get(id) ?? 0) + 1);
       for (const [key, value] of Object.entries(node)) {
-        if (value === null || value === '' || (typeof value === 'string' && /\[\[TODO|lorem ipsum/i.test(value))) {
+        // A missing value means the property is omitted (02 §1.4), never sent empty.
+        const empty = value === null || value === '' || (Array.isArray(value) && value.length === 0);
+        if (empty || (typeof value === 'string' && /\[\[TODO|lorem ipsum/i.test(value))) {
           problems.push(`empty or placeholder value for "${key}"${typeof id === 'string' ? ` in ${id}` : ''}`);
         }
       }

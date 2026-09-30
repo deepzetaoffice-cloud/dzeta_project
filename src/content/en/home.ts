@@ -7,6 +7,7 @@ export const homeContent = {
   description: `${siteConfig.brandName} builds custom-coded websites, SEO and AI search visibility, and AI automation for UAE businesses. The full site is coming: email ${siteConfig.email}.`,
   heading: 'AI automation and custom-coded websites for UAE businesses',
   intro: siteConfig.positioningLine,
-  // Rendered as: "<contactLead> <email link>."
-  contactLead: 'The full website is being built. To talk now, email',
+  // Rendered as: "<contactBefore><email link><contactAfter>"
+  contactBefore: 'The full website is being built. To talk now, email ',
+  contactAfter: '.',
 } as const;

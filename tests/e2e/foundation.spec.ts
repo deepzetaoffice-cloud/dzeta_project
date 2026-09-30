@@ -24,19 +24,65 @@ test.describe('Home', () => {
     await expect(page.locator('h1')).toHaveCount(1);
   });
 
-  test('works with JavaScript off, and the H1 is visible and in place at first paint', async ({ browser }) => {
+  test('works with JavaScript off: the H1 and the copy are in the server HTML', async ({ browser }) => {
     const context = await browser.newContext({ javaScriptEnabled: false });
     const page = await context.newPage();
+    await page.goto('/');
+    await expect(page.locator('h1')).toBeVisible();
+    await expect(page.locator('main p')).toHaveCount(2);
+    await context.close();
+  });
+
+  // docs/ai/13 §3 rule 2: the LCP element is visible, unclipped and in its final position at first
+  // paint. It has no entrance animation and never starts hidden, not even through an ancestor.
+  test('the LCP element is the H1, and it is visible and in place from first paint', async ({ page }) => {
     await page.goto('/', { waitUntil: 'commit' });
     const h1 = page.locator('h1');
-    await expect(h1).toBeVisible();
-    // docs/ai/13 §3 rule 2: the LCP element never starts hidden or animates in.
-    const style = await h1.evaluate((el) => {
+    await h1.waitFor({ state: 'attached' });
+    const boxAtFirstPaint = await h1.boundingBox();
+
+    const firstPaintStyle = await h1.evaluate((el) => {
+      let opacity = 1;
+      for (let node: Element | null = el; node; node = node.parentElement) {
+        opacity *= Number(getComputedStyle(node).opacity);
+      }
       const s = getComputedStyle(el);
-      return { opacity: s.opacity, visibility: s.visibility, animation: s.animationName };
+      return {
+        opacity,
+        visibility: s.visibility,
+        animation: s.animationName,
+        transform: s.transform,
+        translate: s.translate,
+        scale: s.scale,
+        rotate: s.rotate,
+        clipPath: s.clipPath,
+      };
     });
-    expect(style).toEqual({ opacity: '1', visibility: 'visible', animation: 'none' });
-    await context.close();
+    expect(firstPaintStyle).toEqual({
+      opacity: 1,
+      visibility: 'visible',
+      animation: 'none',
+      transform: 'none',
+      translate: 'none',
+      scale: 'none',
+      rotate: 'none',
+      clipPath: 'none',
+    });
+
+    await page.waitForLoadState('load');
+    expect(await h1.boundingBox()).toEqual(boxAtFirstPaint);
+
+    const lcpTag = await page.evaluate(
+      () =>
+        new Promise<string>((resolve) => {
+          setTimeout(() => resolve('no LCP entry within 3 s'), 3000);
+          new PerformanceObserver((list) => {
+            const entries = list.getEntries() as (PerformanceEntry & { element?: Element | null })[];
+            resolve(entries.at(-1)?.element?.tagName ?? 'unknown');
+          }).observe({ type: 'largest-contentful-paint', buffered: true });
+        }),
+    );
+    expect(lcpTag).toBe('H1');
   });
 
   test('logs no console errors or CSP report-only violations', async ({ page }) => {
@@ -74,13 +120,16 @@ test.describe('Headers and robots (docs/ai/06 §4, docs/ai/08 §1)', () => {
   test(`noindex header and robots.txt match the indexing mode (indexable: ${indexable})`, async ({ request }) => {
     const home = await request.get('/');
     const robots = await (await request.get('/robots.txt')).text();
+    // Whole-line matches: "Disallow: /" must never pass for "Allow: /" or the other way round.
     if (indexable) {
       expect(home.headers()['x-robots-tag']).toBeUndefined();
-      expect(robots).toMatch(/Allow: \/\s/);
-      expect(robots).toContain('Disallow: /api/');
+      expect(robots).toMatch(/^Allow: \/$/m);
+      expect(robots).toMatch(/^Disallow: \/api\/$/m);
+      expect(robots).not.toMatch(/^Disallow: \/$/m);
     } else {
       expect(home.headers()['x-robots-tag']).toBe('noindex');
-      expect(robots).toMatch(/Disallow: \/\s*$/);
+      expect(robots).toMatch(/^Disallow: \/$/m);
+      expect(robots).not.toMatch(/^Allow:/m);
     }
   });
 });

@@ -4,7 +4,12 @@ import { securityHeaders } from './src/lib/security-headers.ts';
 import { isIndexable, noindexHeaders } from './src/lib/seo/indexing.ts';
 
 // Stops at once when the environment is missing or malformed (docs/ai/02 §2.5, .env.example).
-const indexable = isIndexable(env());
+const currentEnv = env();
+const indexable = isIndexable(currentEnv);
+if (currentEnv.vercelEnv === 'production' && !indexable) {
+  // Visible in every production build log until launch, so the lock can't be forgotten.
+  console.warn('Pre-launch lock ON: production sends noindex until SITE_INDEXING=on (decision 0013).');
+}
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,

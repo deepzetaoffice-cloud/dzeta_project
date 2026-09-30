@@ -45,6 +45,18 @@ const PHYSICAL_CLASS = new RegExp(
       'origin-top-right',
       'origin-bottom-left',
       'origin-bottom-right',
+      'bg-left',
+      'bg-right',
+      'bg-left-top',
+      'bg-left-bottom',
+      'bg-right-top',
+      'bg-right-bottom',
+      'object-left',
+      'object-right',
+      'object-left-top',
+      'object-left-bottom',
+      'object-right-top',
+      'object-right-bottom',
     ].join('|') +
     String.raw`)(?:-|(?=[\s"'\x60]|$))`,
 );
@@ -76,14 +88,31 @@ const RULES = [
   },
   {
     id: 'physical-css-property',
-    pattern:
-      /(?<![\w-])(?:margin-left|margin-right|padding-left|padding-right|border-left|border-right|left|right)\s*:|(?:text-align|float|clear)\s*:\s*(?:left|right)\b/,
+    pattern: new RegExp(
+      [
+        String.raw`(?<![\w-])(?:scroll-)?(?:margin|padding)-(?:left|right)\s*:`,
+        String.raw`(?<![\w-])border-(?:left|right)(?:-(?:width|style|color))?\s*:`,
+        String.raw`(?<![\w-])border-(?:top|bottom)-(?:left|right)-radius\s*:`,
+        String.raw`(?<![\w-])(?:left|right)\s*:`,
+        String.raw`(?:text-align|float|clear)\s*:\s*(?:left|right)\b`,
+      ].join('|'),
+    ),
     appliesTo: ({ isCss }) => isCss,
     message: 'Physical-direction CSS property: use margin-inline-*, padding-inline-*, inset-inline-* (docs/ai/11 §1).',
   },
   {
     id: 'physical-style-prop',
-    pattern: /\b(?:marginLeft|marginRight|paddingLeft|paddingRight|borderLeft\w*|borderRight\w*)\s*:/,
+    // React style objects. `left:`/`right:` only count with a value that looks like CSS, so plain
+    // data keys named "left" don't match.
+    pattern: new RegExp(
+      [
+        String.raw`\b(?:scroll)?(?:margin|padding|Margin|Padding)(?:Left|Right)\s*:`,
+        String.raw`\bborder(?:Left|Right)\w*\s*:`,
+        String.raw`\bborder(?:Top|Bottom)(?:Left|Right)Radius\s*:`,
+        String.raw`\b(?:left|right)\s*:\s*['"\d-]`,
+        String.raw`\b(?:textAlign|float|clear)\s*:\s*['"](?:left|right)['"]`,
+      ].join('|'),
+    ),
     appliesTo: ({ isCss, isContent }) => !isCss && !isContent,
     message: 'Physical-direction style property: use marginInlineStart/End, paddingInlineStart/End (docs/ai/11 §1).',
   },

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isIndexable, noindexHeaders } from '@/lib/seo/indexing';
+import { isIndexable, noindexHeaders, robotsRules } from '@/lib/seo/indexing';
 
 describe('isIndexable (plan section A, decision 0013)', () => {
   it.each([
@@ -18,5 +18,17 @@ describe('noindexHeaders', () => {
   it('sends X-Robots-Tag: noindex only when the deployment is not indexable', () => {
     expect(noindexHeaders(false)).toEqual([{ key: 'X-Robots-Tag', value: 'noindex' }]);
     expect(noindexHeaders(true)).toEqual([]);
+  });
+});
+
+describe('robotsRules (docs/ai/08 §1 and §5)', () => {
+  it('blocks everything when the deployment is not indexable', () => {
+    expect(robotsRules(false)).toEqual({ userAgent: '*', disallow: '/' });
+  });
+
+  it('allows the site and blocks only /api/ when indexable, never /_next/', () => {
+    const rules = robotsRules(true);
+    expect(rules).toEqual({ userAgent: '*', allow: '/', disallow: '/api/' });
+    expect(JSON.stringify(rules)).not.toContain('_next');
   });
 });

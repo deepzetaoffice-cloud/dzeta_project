@@ -1,3 +1,6 @@
 /* Global stylesheet. Tailwind v4 is CSS-first: there is no tailwind.config.js (docs/ai/05 §1).
-   The design tokens arrive in P0 part 2 as src/styles/tokens.css. */
-@import 'tailwindcss';
+   The design tokens arrive in P0 part 2 as src/styles/tokens.css.
+   source('..') limits class detection to src/ (the path is relative to this file). Without it
+   Tailwind also scans Planning Folder/ and docs/, and ships their example classes, including raw
+   hex values, in the site's CSS. */
+@import 'tailwindcss' source('..');

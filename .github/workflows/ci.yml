@@ -49,8 +49,9 @@ jobs:
         if: always()
         run: |
           node --input-type=module -e "
-          import { readdirSync, readFileSync } from 'node:fs';
+          import { existsSync, readdirSync, readFileSync } from 'node:fs';
           const dir = '.lighthouseci';
+          if (!existsSync(dir)) { console.log('No Lighthouse results: an earlier gate failed before lhci.'); process.exit(0); }
           const kb = (b) => (b / 1024).toFixed(1) + ' KB';
           const files = readdirSync(dir).filter((n) => /^lhr-.*\.json$/.test(n));
           files.forEach((f, i) => {
@@ -69,6 +70,8 @@ jobs:
               'CSS ' + kb(t.stylesheet ?? 0),
               'HTML ' + kb(t.document ?? 0),
               'total ' + kb(t.total ?? 0),
+              (lhr.environment.hostUserAgent.match(/Chrome\/[\d.]+/) ?? ['Chrome ?'])[0],
+              'benchmarkIndex ' + Math.round(lhr.environment.benchmarkIndex),
             ].join(' | ');
             console.log(line);
             console.log('::notice title=Lighthouse run ' + (i + 1) + ' of ' + files.length + '::' + line);

@@ -7,5 +7,6 @@ import { siteConfig } from '../site-config.ts';
 export const titleTemplate = `%s | ${siteConfig.brandName}`;
 
 export function brandedTitle(pageTitle: string): string {
-  return titleTemplate.replace('%s', pageTitle);
+  // A function replacer, so "$&" or "$1" in a title is kept as text, not treated as a pattern.
+  return titleTemplate.replace('%s', () => pageTitle);
 }

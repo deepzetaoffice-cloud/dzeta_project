@@ -2,14 +2,16 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFoundContent } from '@/content/en/not-found';
 import { locales } from '@/lib/i18n/locales';
+import { brandedTitle } from '@/lib/seo/title';
 import '@/styles/globals.css';
 
 const locale = locales.en;
 
 // Every unmatched URL lands here, whichever root layout it would have used (English now, Arabic in
-// P11). It bypasses the layouts, so it imports its own styles. Next.js adds `noindex` to 404s.
+// P11). It bypasses the layouts (and their title template), so it imports its own styles and formats
+// its own title. Next.js adds `noindex` to 404s.
 export const metadata: Metadata = {
-  title: notFoundContent.title,
+  title: brandedTitle(notFoundContent.title),
 };
 
 export default function GlobalNotFound() {

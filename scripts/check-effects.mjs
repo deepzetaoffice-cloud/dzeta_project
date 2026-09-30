@@ -49,15 +49,26 @@ export function registerCitations(markdown) {
       .map((cell) => cell.trim());
     if (expectHeader) {
       idColumn = cells.findIndex((cell) => /^effect id/i.test(cell));
-      if (idColumn === -1)
+      if (idColumn === -1) {
         problems.push({ line: index + 1, message: 'Effect register table without an "Effect ID" column' });
+      }
       expectHeader = false;
       return;
     }
     if (idColumn === -1 || /^[-:\s|]+$/.test(line)) return;
-    for (const match of (cells[idColumn] ?? '').matchAll(EFFECT_ID)) citations.push({ id: match[1], line: index + 1 });
+    const matches = [...(cells[idColumn] ?? '').matchAll(EFFECT_ID)];
+    // A row whose Effect ID cell holds no backticked kebab-case ID would otherwise pass unchecked.
+    if (matches.length === 0) {
+      problems.push({ line: index + 1, message: `no \`effect-id\` in the Effect ID cell: "${cells[idColumn] ?? ''}"` });
+    }
+    for (const match of matches) citations.push({ id: match[1], line: index + 1 });
   });
   return { citations, problems };
+}
+
+// Citations whose ID isn't in the library.
+export function unknownCitations(known, citations) {
+  return citations.filter((citation) => !known.has(citation.id));
 }
 
 function main() {
@@ -76,7 +87,7 @@ function main() {
     const { citations, problems: tableProblems } = registerCitations(readFileSync(join(root, file), 'utf8'));
     cited += citations.length;
     for (const p of tableProblems) problems.push(`${file}:${p.line} ${p.message}`);
-    for (const c of citations) if (!known.has(c.id)) problems.push(`${file}:${c.line} unknown effect ID "${c.id}"`);
+    for (const c of unknownCitations(known, citations)) problems.push(`${file}:${c.line} unknown effect ID "${c.id}"`);
   }
 
   if (problems.length > 0) {

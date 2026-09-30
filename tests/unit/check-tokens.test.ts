@@ -33,6 +33,38 @@ describe('check:tokens', () => {
     expect(rulesFound('src/components/ui/Card.tsx', 'style={{ paddingLeft: 0 }}')).toContain('physical-style-prop');
   });
 
+  it.each([
+    '.x { border-left-width: 1px; }',
+    '.x { border-right-color: red; }',
+    '.x { border-top-left-radius: 0; }',
+    '.x { scroll-margin-left: 0; }',
+    '.x { scroll-padding-right: 0; }',
+    '.x { left: 0; }',
+    '.x { float: left; }',
+  ])('fails the physical CSS property in %s', (css) => {
+    expect(rulesFound('src/styles/globals.css', css)).toContain('physical-css-property');
+  });
+
+  it.each([
+    'style={{ borderTopLeftRadius: 4 }}',
+    'style={{ scrollMarginLeft: 0 }}',
+    'style={{ left: 0 }}',
+    `style={{ right: '1rem' }}`,
+    `style={{ textAlign: 'right' }}`,
+    `style={{ float: 'left' }}`,
+  ])('fails the physical style prop in %s', (code) => {
+    expect(rulesFound('src/components/ui/Card.tsx', code)).toContain('physical-style-prop');
+  });
+
+  it.each(['bg-left', 'bg-right-top', 'object-right', 'object-left-bottom'])('fails the class %s', (name) => {
+    expect(rulesFound('src/components/ui/Card.tsx', `className="${name} p-4"`)).toContain('physical-class');
+  });
+
+  it('passes logical properties and plain data keys named left or right', () => {
+    expect(rulesFound('src/styles/globals.css', '.x { inset-inline-start: 0; margin-inline-end: 0; }')).toEqual([]);
+    expect(rulesFound('src/lib/tree.ts', 'const node = { left: child, right: sibling };')).toEqual([]);
+  });
+
   it('leaves prose in content files alone but still catches Google Fonts there', () => {
     expect(rulesFound('src/content/en/offer.ts', `body: 'Only a few spots left-over this month.'`)).toEqual([]);
     expect(rulesFound('src/content/en/offer.ts', 'https://fonts.googleapis.com/css2')).toEqual(['google-fonts']);

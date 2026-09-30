@@ -5,7 +5,9 @@ const MAX_PAGES = 500;
 
 // Crawls the built site from "/" by following same-origin links, with JavaScript off, so the gates
 // read the raw server HTML that search and AI crawlers read (plan section E).
-export async function crawlSite(browser: Browser, origin: string): Promise<PageData[]> {
+// `baseUrl` may be any URL on the site; only its origin is used.
+export async function crawlSite(browser: Browser, baseUrl: string): Promise<PageData[]> {
+  const origin = new URL(baseUrl).origin;
   const context = await browser.newContext({ javaScriptEnabled: false });
   const page = await context.newPage();
   const queue = [new URL('/', origin).href];
@@ -43,7 +45,7 @@ export async function crawlSite(browser: Browser, origin: string): Promise<PageD
           titles: all('head > title').map((el) => el.textContent ?? ''),
           descriptions: attr('meta[name="description"]', 'content'),
           canonicals: attr('link[rel="canonical"]', 'href'),
-          robotsMeta: attr('meta[name="robots"]', 'content'),
+          robotsMeta: attr('meta[name="robots"], meta[name="googlebot"]', 'content'),
           keywordsMetaCount: all('meta[name="keywords"]').length,
           h1Count: all('h1').length,
           links: attr('a[href]', 'href'),

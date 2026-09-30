@@ -18,11 +18,11 @@ export default function HomePage() {
       <h1 className="text-3xl font-bold text-balance">{homeContent.heading}</h1>
       <p className="mt-4">{homeContent.intro}</p>
       <p className="mt-4">
-        {homeContent.contactLead}{' '}
+        {homeContent.contactBefore}
         <a className="underline" href={`mailto:${siteConfig.email}`}>
           {siteConfig.email}
         </a>
-        .
+        {homeContent.contactAfter}
       </p>
     </main>
   );
