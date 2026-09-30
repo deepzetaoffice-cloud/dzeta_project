@@ -6,13 +6,15 @@
      (96.8%) and descent (25.1%) divided by it, so the line boxes match too.
    - Two families: Arial (Windows, macOS) and Roboto (Android, which has no Arial). Each has a Regular
      and a Bold only, so 400 and 500 use Regular and 700 and 800 use Bold, each with its own size.
+   - The Arial faces also name Liberation Sans, Linux's metric-compatible twin of Arial (the same
+     advance widths by design), so the same sizes hold on Linux and on the CI runner.
    - A device without the font skips the face and uses the next family in --dz-font-sans.
    - Safari ignores the ascent and descent overrides; every line has an explicit line-height, so its
      layout is the same. */
 
 @font-face {
   font-family: 'dz-sans-fallback-arial';
-  src: local('Arial'), local('ArialMT');
+  src: local('Arial'), local('ArialMT'), local('Liberation Sans'), local('LiberationSans');
   font-weight: 400;
   size-adjust: 111.91%;
   ascent-override: 86.5%;
@@ -22,7 +24,7 @@
 
 @font-face {
   font-family: 'dz-sans-fallback-arial';
-  src: local('Arial'), local('ArialMT');
+  src: local('Arial'), local('ArialMT'), local('Liberation Sans'), local('LiberationSans');
   font-weight: 500;
   size-adjust: 113.78%;
   ascent-override: 85.07%;
@@ -32,7 +34,7 @@
 
 @font-face {
   font-family: 'dz-sans-fallback-arial';
-  src: local('Arial Bold'), local('Arial-BoldMT');
+  src: local('Arial Bold'), local('Arial-BoldMT'), local('Liberation Sans Bold'), local('LiberationSans-Bold');
   font-weight: 700;
   size-adjust: 109.59%;
   ascent-override: 88.33%;
@@ -42,7 +44,7 @@
 
 @font-face {
   font-family: 'dz-sans-fallback-arial';
-  src: local('Arial Bold'), local('Arial-BoldMT');
+  src: local('Arial Bold'), local('Arial-BoldMT'), local('Liberation Sans Bold'), local('LiberationSans-Bold');
   font-weight: 800;
   size-adjust: 111.84%;
   ascent-override: 86.55%;

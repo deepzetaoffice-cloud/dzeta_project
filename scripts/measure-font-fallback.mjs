@@ -34,12 +34,17 @@ const WEIGHTS = [400, 500, 700, 800];
 // The platform font behind each weight: Regular up to 500, Bold above.
 const sourceStyle = (weight) => (weight <= 500 ? 'regular' : 'bold');
 
-// Arial and Roboto by their full and PostScript names, as local() matches them.
+// Arial and Roboto by their full and PostScript names, as local() matches them. The Arial faces also
+// name Liberation Sans, Linux's metric-compatible twin of Arial (the same advance widths by design),
+// so Linux visitors and the CI runner get the same sizes.
 const FALLBACKS = {
   arial: {
     family: 'dz-sans-fallback-arial',
-    local: { regular: ['Arial', 'ArialMT'], bold: ['Arial Bold', 'Arial-BoldMT'] },
-    postScript: { regular: 'ArialMT', bold: 'Arial-BoldMT' },
+    local: {
+      regular: ['Arial', 'ArialMT', 'Liberation Sans', 'LiberationSans'],
+      bold: ['Arial Bold', 'Arial-BoldMT', 'Liberation Sans Bold', 'LiberationSans-Bold'],
+    },
+    postScript: { regular: ['ArialMT', 'LiberationSans'], bold: ['Arial-BoldMT', 'LiberationSans-Bold'] },
   },
   roboto: {
     family: 'dz-sans-fallback-roboto',
@@ -108,8 +113,8 @@ async function platformFont(id) {
 for (const style of ['regular', 'bold']) {
   const fonts = await platformFont(`arial-${style}`);
   const expected = FALLBACKS.arial.postScript[style];
-  if (fonts.length !== 1 || fonts[0].postScriptName !== expected) {
-    throw new Error(`arial-${style} rendered with ${JSON.stringify(fonts)}, not ${expected}`);
+  if (fonts.length !== 1 || !expected.includes(fonts[0].postScriptName)) {
+    throw new Error(`arial-${style} rendered with ${JSON.stringify(fonts)}, not ${expected.join(' or ')}`);
   }
 }
 for (const id of ['montserrat-400', 'roboto-regular']) {

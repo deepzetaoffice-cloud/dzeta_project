@@ -10,10 +10,12 @@ import { expect, test, type Page } from '@playwright/test';
 // 2. A sweep over fixed site copy in each text style: the swap changes a block's line count at no
 //    more than 8% of the widths. Measured 2026-10-01: these faces 1.0–6.9%; next/font's single Arial
 //    face, before the fix, 10.7–19.7% at 360 px.
-// It runs with the Arial family (this machine). The Roboto family is checked on an Android phone
-// (the owner checklist).
+// It runs with the Arial family: Arial on Windows and macOS, Liberation Sans (its metric twin) on
+// Linux and the CI runner. The Roboto family is checked on an Android phone (the owner checklist).
+// Each test prints its measurements as a GitHub `::notice` line: a plain line locally, and a public
+// annotation on CI, where the job logs need admin rights.
 const MONTSERRAT = /montserrat[^/]*\.woff2/;
-const ARIAL = { regular: 'ArialMT', bold: 'Arial-BoldMT' };
+const ARIAL = { regular: ['ArialMT', 'LiberationSans'], bold: ['Arial-BoldMT', 'LiberationSans-Bold'] };
 const MAX_CHANGE_RATE = 0.08;
 
 // Fixed site copy: service names from the Services Catalogue for the headings, and paragraphs from
@@ -125,7 +127,10 @@ async function holdMontserrat(page: Page) {
   return () => release();
 }
 
-// The platform fonts Chromium used for an element's text, by PostScript name.
+// The platform font Chromium used for an element's text, by PostScript name ("a+b" if it used more
+// than one), so a check can ask for exactly one of the expected faces.
+const platformFont = async (page: Page, selector: string) => (await platformFonts(page, selector)).join('+');
+
 async function platformFonts(page: Page, selector: string) {
   const cdp = await page.context().newCDPSession(page);
   await cdp.send('DOM.enable');
@@ -176,14 +181,16 @@ test.describe('Fonts: the fallback swap (plan D3)', () => {
       expect(await montserratLoaded(page), 'Montserrat is still held back').toBe(false);
       // Arial Bold for the 700 heading and Arial for the 400 body, never a synthesised bold. Soft, so a
       // wrong face still reports what the swap did.
-      expect.soft(await platformFonts(page, 'main h1')).toEqual([ARIAL.bold]);
-      expect.soft(await platformFonts(page, 'main p')).toEqual([ARIAL.regular]);
+      const faces = { h1: await platformFont(page, 'main h1'), p: await platformFont(page, 'main p') };
+      expect.soft(ARIAL.bold, 'main h1: fallback face').toContain(faces.h1);
+      expect.soft(ARIAL.regular, 'main p: fallback face').toContain(faces.p);
 
       await swapMontserrat(page, release);
       expect(await platformFonts(page, 'main h1')).toEqual(['web font']);
       const cls = await page.evaluate(() =>
         (window as unknown as { __shifts: number[] }).__shifts.reduce((sum, value) => sum + value, 0),
       );
+      console.log(`::notice title=Fonts, Home swap at ${width}px::h1 ${faces.h1}, p ${faces.p}, CLS ${cls.toFixed(4)}`);
       expect(cls).toBeLessThan(0.01);
       await context.close();
     });
@@ -213,8 +220,11 @@ test.describe('Fonts: the fallback swap (plan D3)', () => {
         document.body.append(lab);
       }, STYLES);
       await settle(page);
-      for (const [name, style] of Object.entries(STYLES))
-        expect(await platformFonts(page, `#font-lab [data-style="${name}"]`), name).toEqual([style.face]);
+      const faces: Record<string, string> = {};
+      for (const [name, style] of Object.entries(STYLES)) {
+        faces[name] = await platformFont(page, `#font-lab [data-style="${name}"]`);
+        expect.soft(style.face, `${name}: fallback face`).toContain(faces[name]);
+      }
 
       const { from, to, step } = SWEEP[width];
       const widths = Array.from({ length: Math.floor((to - from) / step) + 1 }, (_, i) => from + i * step);
@@ -239,7 +249,7 @@ test.describe('Fonts: the fallback swap (plan D3)', () => {
       await swapMontserrat(page, release);
       const after = await sweep();
 
-      for (const name of Object.keys(STYLES)) {
+      const rates = Object.keys(STYLES).map((name) => {
         let samples = 0;
         let changed = 0;
         before.forEach((block, i) => {
@@ -249,10 +259,13 @@ test.describe('Fonts: the fallback swap (plan D3)', () => {
             if (after[i]?.lines[j] !== lines) changed += 1;
           });
         });
+        return { name, samples, rate: changed / samples };
+      });
+      const summary = rates.map(({ name, rate }) => `${name} ${faces[name]} ${(rate * 100).toFixed(1)}%`);
+      console.log(`::notice title=Fonts, copy sweep at ${width}px::${summary.join(' · ')}`);
+      for (const { name, samples, rate } of rates) {
         expect(samples, name).toBeGreaterThan(0);
-        expect
-          .soft(changed / samples, `${name}: share of widths where the line count changed`)
-          .toBeLessThanOrEqual(MAX_CHANGE_RATE);
+        expect.soft(rate, `${name}: share of widths where the line count changed`).toBeLessThanOrEqual(MAX_CHANGE_RATE);
       }
       await context.close();
     });
