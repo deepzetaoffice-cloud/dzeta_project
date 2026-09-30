@@ -121,9 +121,12 @@ test.describe('Headers and robots (docs/ai/06 §4, docs/ai/08 §1)', () => {
   });
 
   test(`noindex header and robots.txt match the deployment (indexable: ${indexable})`, async ({ request }) => {
-    const home = await request.get('/');
+    // The header covers every response, so a later change to the headers' `source` is caught.
+    for (const path of ['/', '/robots.txt', UNKNOWN_URL]) {
+      const response = await request.get(path);
+      expect(response.headers()['x-robots-tag'], path).toBe(indexable ? undefined : 'noindex');
+    }
     const robots = await (await request.get('/robots.txt')).text();
-    expect(home.headers()['x-robots-tag']).toBe(indexable ? undefined : 'noindex');
     // Whole-line matches: "Disallow: /" must never pass for "Allow: /" or the other way round.
     if (blocksCrawlers) {
       expect(robots).toMatch(/^Disallow: \/$/m);

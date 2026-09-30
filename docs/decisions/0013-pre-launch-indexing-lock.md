@@ -4,7 +4,7 @@ Status: ACCEPTED (owner, 2026-09-30): the lock stays on until launch; `robots.tx
 
 ## Context
 
-[08](../ai/08-seo-geo-aeo-schema.md) §1 makes every **non-production** deployment `noindex` and gives it a disallow-all `robots.txt`. It says nothing about production **before launch**.
+[08](../ai/08-seo-geo-aeo-schema.md) §1 makes every **non-production** deployment `noindex` and gives it a disallow-all `robots.txt`. Before this decision, it said nothing about production **before launch**.
 
 `deepzeta.ai` is already attached to Vercel and its DNS points there, so the first successful production deploy (the P0 placeholder) is public at once. Search engines and AI crawlers find sites through links anywhere on the web (social profiles, directories, other sites), not only through Google Search Console. A half-built site that gets indexed early can keep placeholder titles in search results for weeks.
 
@@ -12,7 +12,7 @@ Status: ACCEPTED (owner, 2026-09-30): the lock stays on until launch; `robots.tx
 
 > "For the `noindex` rule to be effective, the page or resource **must not** be blocked by a robots.txt file … If the page is blocked by a robots.txt file or the crawler can't access the page, the crawler will never see the `noindex` rule, and the page can still appear in search results, for example if other pages link to it."
 
-So `Disallow: /` together with `noindex`, which P0 serves today whenever a deployment isn't indexable, can still let a linked URL appear in Google as a bare link.
+So `Disallow: /` together with `noindex`, which P0 served before this decision whenever a deployment wasn't indexable, can still let a linked URL appear in Google as a bare link.
 
 ## Decision
 
@@ -24,7 +24,7 @@ So `Disallow: /` together with `noindex`, which P0 serves today whenever a deplo
   | Option | Previews | Production before launch | Effect |
   |---|---|---|---|
   | **1 · As built in P0** | `Disallow: /` | `Disallow: /` | Crawlers never fetch pages, so they never see the `noindex`. A linked URL can still appear in Google as a bare link. AI training crawlers stay off the placeholder. |
-  | **2 · Recommended** | `Disallow: /` (08 §1, unchanged) | `Allow: /`, `Disallow: /api/` (the same file as after launch) | Crawlers read the `noindex` header and keep every page out of results, as Google's documentation says. AI crawlers may read the placeholder, whose copy is approved and harmless. |
+  | **2 · Recommended** | `Disallow: /` (08 §1, unchanged) | `Allow: /`, `Disallow: /api/` (the same file as after launch) | Google reads the `noindex` header and keeps every page out of its results, as its documentation says; the same page warns that other engines may treat `noindex` differently. AI crawlers use `robots.txt` as their control, so they may read and cite **whatever is live before launch**: the placeholder today, and every page merged to `main` until `SITE_INDEXING=on`. |
 
 - **At launch (P10):** the owner sets `SITE_INDEXING=on` in Vercel → Project → Settings → Environment Variables → **Production only**, then redeploys. No code changes.
 
@@ -38,7 +38,7 @@ So `Disallow: /` together with `noindex`, which P0 serves today whenever a deplo
 ## Consequences
 
 - **Turning the lock off** needs no code change: set `SITE_INDEXING=on` in Vercel Production.
-- **Option 2** changed one function, `robotsRules()` in `src/lib/seo/indexing.ts`. It now reads the deployment type, not whether the deployment is indexable:
+- **Option 2** changed `robotsRules()` in `src/lib/seo/indexing.ts` and its one caller, `src/app/robots.ts`. It now reads the deployment type, not whether the deployment is indexable:
   - Vercel previews and development builds get `Disallow: /`.
   - Everywhere else (production locked or launched, the owner's machine, CI) gets the launch file, and `noindex` comes from the header.
   - Its unit tests cover each deployment type and the locked production case.

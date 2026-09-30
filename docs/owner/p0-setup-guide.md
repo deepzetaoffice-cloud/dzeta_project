@@ -39,7 +39,7 @@ Until this is set, every Vercel build stops with the message *"Invalid environme
    - **Value:** `https://deepzeta.ai` (no slash at the end)
    - **Environments:** tick **Production** and **Preview**
    - Save.
-3. **Don't add `SITE_INDEXING` yet.** Leaving it out keeps the live site hidden from Google and AI crawlers until launch (decision 0013). At launch you'll add it with the value `on`, for **Production only**.
+3. **Don't add `SITE_INDEXING` yet.** Leaving it out keeps the live site out of Google's search results until launch (decision 0013). AI crawlers can still read whatever is live. At launch you'll add it with the value `on`, for **Production only**, then redeploy.
 4. **Settings → Build and Deployment:**
    - check that **Framework Preset** is **Next.js**
    - check that **Node.js Version** is **24.x** (the project asks for 24.x in `package.json`)
