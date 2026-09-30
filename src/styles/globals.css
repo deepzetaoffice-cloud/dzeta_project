@@ -1,0 +1,3 @@
+/* Global stylesheet. Tailwind v4 is CSS-first: there is no tailwind.config.js (docs/ai/05 §1).
+   The design tokens arrive in P0 part 2 as src/styles/tokens.css. */
+@import 'tailwindcss';
