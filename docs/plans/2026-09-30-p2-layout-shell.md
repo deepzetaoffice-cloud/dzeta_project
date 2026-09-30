@@ -36,6 +36,7 @@ Progress:
 - 2026-10-01 · **The owner's decisions after part A:**
   - **Keep `next/link`** on the error page. Its ~3.3 KB is in `OWN_JS_HOME` and paid once for the whole site; part B's header links use `Link` too, so step 9's `next/link` measurement is settled (the header adds no second copy).
   - **`tests/gates/links.spec.ts` joins part B** (the owner left the choice to me). The gate already prints "nav and footer hrefs equal canonicals, duplicate targets (enabled in P2, with the layout shell)", and part B builds the nav, so the check arrives with what it checks; part C's footer links fall under it without another change. Added to part B's table.
+- 2026-10-01 · **Part A merged** on the owner's "merge": `34a7f59` on `main` (the conflict register keeps C39, C40–C42, C43 in order). CI was green on the branch head (`71f5db1`); the Vercel production deployment succeeded, and `www.deepzeta.ai` serves the versioned logo with `public, max-age=31536000, immutable` and the `apple-mobile-web-app-title` meta. Part B starts on `feat/p2b-header`, from `main`, at step 6.
 Phase: P2
 Branch: three parts, one merge each (Q5): `feat/p2a-shell-foundations`, `feat/p2b-header`, `feat/p2c-footer` (each from `main` after the previous merge)
 Page tier: T1. The shell renders on every page. It's measured on Home (`lhci` ≥ 95) and, from part B, on the review page (A3), which shows the complete shell.
