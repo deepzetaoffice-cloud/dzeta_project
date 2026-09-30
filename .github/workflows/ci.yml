@@ -69,6 +69,7 @@ jobs:
               'JS ' + kb(t.script ?? 0),
               'CSS ' + kb(t.stylesheet ?? 0),
               'HTML ' + kb(t.document ?? 0),
+              'fonts ' + kb(t.font ?? 0),
               'total ' + kb(t.total ?? 0),
               (lhr.environment.hostUserAgent.match(/Chrome\/[\d.]+/) ?? ['Chrome ?'])[0],
               'benchmarkIndex ' + Math.round(lhr.environment.benchmarkIndex),

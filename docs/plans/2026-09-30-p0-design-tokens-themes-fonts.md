@@ -6,6 +6,11 @@ Progress (2026-09-30):
   - **Baseline:** CI `fbb904d` median LCP 1513 ms; locally, with the CI environment, 2031 ms. HTML + CSS + JS is 145,472 B.
   - **Fonts, following Risks "Fonts over budget":** Montserrat's latin file is the same 37,956 B for any weight range. JetBrains Mono 400–600 is 31,432 B, which puts the pair at 69,388 B, over the ≈ 60 KB target. So the mono is a single 500 weight (21,832 B), and the pair is 59,788 B.
   - **Filename:** the allowed file `jetbrains-mono-latin-wght.woff2` is therefore `jetbrains-mono-latin-500.woff2`, because a static file has no `wght` axis.
+- Steps 2–4 are done: see the branch commits.
+- Step 5 is done:
+  - **`scripts/page-weight-budget.cjs` isn't created.** The lint gate forbids `require()`, also in `.cjs` files, and `lighthouserc.cjs` can't read a module any other way.
+  - **What replaces it:** the budget stays in `lighthouserc.cjs` and is exported next to `ci` as `budget` (lhci reads only `ci`). `check-page-weight.mjs` imports it, so both checks still use the same numbers.
+  - **After the fonts,** locally with the CI environment: LCP 2180 ms (+149 ms, all render delay: the preloaded font shares the simulated bandwidth with the scripts), CLS 0, fonts 38,823 B (1 file), HTML + CSS + JS 147,507 B.
 Phase: P0
 Branch: `feat/p0-tokens-themes-fonts`, from `main` after the close-out PR (`chore/p0-close-out`) is merged (stacked on `docs/deepseek-ai-provider` until then, see Progress)
 Page tier: T1 for the placeholder Home (`lhci` floor ≥ 95). No effects.
