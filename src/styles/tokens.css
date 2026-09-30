@@ -1,13 +1,14 @@
 /* Design tokens (docs/ai/05; decision 0015). The only file with raw values (05 §1, check:tokens).
 
    One shape, which scripts/check-contrast.mjs reads and fails loudly on if it changes:
-   - flat blocks: a selector list, then declarations; the only nesting is the one @media block
+   - flat blocks only: a selector list, then declarations
    - declarations end with `;`, and custom properties hold one value each
    Sections:
    1. Brand primitives in :root. They never change with the theme.
    2. Semantic tokens, which switch with the theme. Components use these, never a primitive that
-      changes meaning between themes. The light block is written twice: for `data-theme='light'`, and
-      for a first visit whose system is set to light (05 §1). The two copies must match.
+      changes meaning between themes. Every first visit is dark; light comes only from the visitor's
+      choice, `data-theme='light'` (05 §1, owner decision 2026-09-30, 0015). So there is no
+      prefers-color-scheme block.
    3. The Tailwind mapping in @theme blocks. Browsers skip @theme, so the tokens specimen
       (docs/design/prototypes/tokens-specimen.html) can link this file as it is. */
 
@@ -125,6 +126,8 @@
   --dz-text-caption-leading: 1.4;
   --dz-text-caption-tracking: 0.04em;
   --dz-text-caption-weight: 500;
+  /* Uppercase eyebrows in caption type: the Lab's wider tracking (owner, specimen review, 0015) */
+  --dz-text-eyebrow-tracking: 0.16em;
 
   /* Spacing and layout (05 §4). The rest of the spacing uses the Tailwind scale. */
   --dz-space-section: clamp(3rem, 1.8261rem + 5.2174vw, 6rem);
@@ -182,7 +185,7 @@
   --dz-grad-headline: var(--dz-grad-zeta);
 }
 
-/* Light, chosen by the visitor */
+/* Light, chosen by the visitor (the switch comes with the header in P2) */
 [data-theme='light'] {
   color-scheme: light;
   --dz-bg: var(--dz-paper);
@@ -194,22 +197,6 @@
   --dz-focus: var(--dz-royal);
   --dz-hairline: var(--dz-hairline-light);
   --dz-grad-headline: var(--dz-grad-zeta-light);
-}
-
-/* Light on a first visit, from the system setting. Must match the block above (check:contrast). */
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme='dark']) {
-    color-scheme: light;
-    --dz-bg: var(--dz-paper);
-    --dz-surface: var(--dz-card-light);
-    --dz-text: var(--dz-ink);
-    --dz-text-strong: var(--dz-navy);
-    --dz-text-muted: var(--dz-ink-muted);
-    --dz-link: var(--dz-link-light);
-    --dz-focus: var(--dz-royal);
-    --dz-hairline: var(--dz-hairline-light);
-    --dz-grad-headline: var(--dz-grad-zeta-light);
-  }
 }
 
 /* 3. Tailwind mapping. Tailwind's default colours, fonts, sizes and radii are removed, so an
@@ -295,6 +282,8 @@
   --text-caption--line-height: var(--dz-text-caption-leading);
   --text-caption--letter-spacing: var(--dz-text-caption-tracking);
   --text-caption--font-weight: var(--dz-text-caption-weight);
+  /* tracking-eyebrow, with text-caption and uppercase */
+  --tracking-eyebrow: var(--dz-text-eyebrow-tracking);
 
   /* py-section, py-chapter, py-statement, px-gutter; max-w-page, max-w-measure */
   --spacing-section: var(--dz-space-section);

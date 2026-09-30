@@ -3,14 +3,19 @@ import { expect, test, type Browser, type Page } from '@playwright/test';
 
 // Themes and fonts (docs/plans/2026-09-30-p0-design-tokens-themes-fonts.md; docs/ai/05 §1–§3).
 // Colours are compared with the tokens' own resolved values, so the tests follow tokens.css.
-// There's no "no preference" case: Media Queries 5 folds it into `prefers-color-scheme: light`, and
-// Chromium reports it as light.
+// Every first visit is dark, whatever the system setting; light comes only from data-theme, which the
+// visitor's switch sets from P2 (owner decision 2026-09-30, decision 0015).
 type Scheme = 'light' | 'dark';
+type Theme = 'light' | 'dark';
 
-async function openHome(browser: Browser, colorScheme: Scheme, path = '/') {
+async function openPage(
+  browser: Browser,
+  { colorScheme, theme, path = '/' }: { colorScheme: Scheme; theme?: Theme; path?: string },
+) {
   const context = await browser.newContext({ colorScheme });
   const page = await context.newPage();
   await page.goto(path);
+  if (theme) await page.locator('html').evaluate((el, value) => el.setAttribute('data-theme', value), theme);
   return { page, close: () => context.close() };
 }
 
@@ -38,32 +43,24 @@ async function seriousAxeViolations(page: Page) {
 }
 
 test.describe('Themes', () => {
-  for (const [scheme, token] of [
-    ['dark', '--dz-navy'],
-    ['light', '--dz-paper'],
-  ] as const) {
-    test(`a first visit with the system set to ${scheme} gets the ${scheme} theme`, async ({ browser }) => {
-      const { page, close } = await openHome(browser, scheme);
-      expect(await backgroundOf(page, 'html')).toBe(await tokenColour(page, token));
-      expect(await page.locator('html').evaluate((el) => getComputedStyle(el).colorScheme)).toBe(scheme);
+  for (const colorScheme of ['dark', 'light'] as const) {
+    test(`a first visit is dark, also when the system is set to ${colorScheme}`, async ({ browser }) => {
+      const { page, close } = await openPage(browser, { colorScheme });
+      expect(await backgroundOf(page, 'html')).toBe(await tokenColour(page, '--dz-navy'));
+      expect(await page.locator('html').evaluate((el) => getComputedStyle(el).colorScheme)).toBe('dark');
+      await close();
+    });
+
+    test(`data-theme="light" gives the light theme (system set to ${colorScheme})`, async ({ browser }) => {
+      const { page, close } = await openPage(browser, { colorScheme, theme: 'light' });
+      expect(await backgroundOf(page, 'html')).toBe(await tokenColour(page, '--dz-paper'));
+      expect(await page.locator('html').evaluate((el) => getComputedStyle(el).colorScheme)).toBe('light');
       await close();
     });
   }
 
-  test("the visitor's data-theme wins over the system setting", async ({ browser }) => {
-    const light = await openHome(browser, 'dark');
-    await light.page.locator('html').evaluate((el) => el.setAttribute('data-theme', 'light'));
-    expect(await backgroundOf(light.page, 'html')).toBe(await tokenColour(light.page, '--dz-paper'));
-    await light.close();
-
-    const dark = await openHome(browser, 'light');
-    await dark.page.locator('html').evaluate((el) => el.setAttribute('data-theme', 'dark'));
-    expect(await backgroundOf(dark.page, 'html')).toBe(await tokenColour(dark.page, '--dz-navy'));
-    await dark.close();
-  });
-
   test('a data-theme="dark" part of a light page stays navy, with its own text colour', async ({ browser }) => {
-    const { page, close } = await openHome(browser, 'light');
+    const { page, close } = await openPage(browser, { colorScheme: 'light', theme: 'light' });
     await page.locator('main').evaluate((main) => {
       const band = document.createElement('section');
       band.id = 'navy-band';
@@ -80,33 +77,17 @@ test.describe('Themes', () => {
     await close();
   });
 
-  for (const scheme of ['dark', 'light'] as const) {
+  // The LCP check (the H1, visible and in place at first paint) is in foundation.spec.ts, which runs
+  // in the dark theme every first visit gets.
+  for (const theme of ['dark', 'light'] as const) {
     for (const path of ['/', '/this-page-does-not-exist']) {
-      test(`${path} has no serious or critical axe violations in the ${scheme} theme`, async ({ browser }) => {
-        const { page, close } = await openHome(browser, scheme, path);
+      test(`${path} has no serious or critical axe violations in the ${theme} theme`, async ({ browser }) => {
+        const { page, close } = await openPage(browser, { colorScheme: 'light', theme, path });
         expect(await seriousAxeViolations(page)).toEqual([]);
         await close();
       });
     }
   }
-
-  test('the H1 is still the LCP element in the dark theme', async ({ browser }) => {
-    const context = await browser.newContext({ colorScheme: 'dark' });
-    const page = await context.newPage();
-    await page.goto('/');
-    const lcpTag = await page.evaluate(
-      () =>
-        new Promise<string>((resolve) => {
-          setTimeout(() => resolve('no LCP entry within 3 s'), 3000);
-          new PerformanceObserver((list) => {
-            const entries = list.getEntries() as (PerformanceEntry & { element?: Element | null })[];
-            resolve(entries.at(-1)?.element?.tagName ?? 'unknown');
-          }).observe({ type: 'largest-contentful-paint', buffered: true });
-        }),
-    );
-    expect(lcpTag).toBe('H1');
-    await context.close();
-  });
 });
 
 test.describe('Fonts (docs/ai/05 §3, docs/ai/07 §2)', () => {

@@ -4,8 +4,9 @@
 // WCAG 2.x: 4.5:1 for text, 3:1 for large text (24 px, or 19 px bold) and for UI parts such as focus
 // rings. Fails on:
 //   - a pair below its threshold, in any theme
-//   - a light block that differs from its first-visit copy in the prefers-color-scheme query
 //   - a semantic token without a value in both themes
+//   - an @media block: every first visit is dark, and light comes only from the visitor's choice
+//     (05 §1, decision 0015), so a prefers-color-scheme block must not come back unnoticed
 //   - anything in tokens.css outside the documented shape (the file's header), rather than skipping it
 
 import { readFileSync } from 'node:fs';
@@ -18,8 +19,6 @@ export const THRESHOLDS = { text: 4.5, large: 3, ui: 3 };
 const PRIMITIVES = ':root';
 const DARK = ":root, [data-theme='dark']";
 const LIGHT = "[data-theme='light']";
-const LIGHT_MEDIA = '@media (prefers-color-scheme: light)';
-const LIGHT_MEDIA_SELECTOR = ":root:not([data-theme='dark'])";
 export const THEMES = ['dark', 'light'];
 
 // The pairs, as token names. `themes` lists where a pair is checked: semantic tokens in both themes;
@@ -179,7 +178,7 @@ export function parseTokens(css) {
         primitives.set(name, value);
       }
     } else {
-      const key = { [DARK]: 'dark', [LIGHT]: 'light', [LIGHT_MEDIA_SELECTOR]: 'lightMedia' }[selector];
+      const key = { [DARK]: 'dark', [LIGHT]: 'light' }[selector];
       if (themes[key]) problems.push(`${where}: a second "${selector}" block`);
       themes[key] = parsed;
     }
@@ -187,22 +186,15 @@ export function parseTokens(css) {
 
   for (const block of topLevelBlocks(source, TOKENS_FILE, problems)) {
     if (/^@theme\b/.test(block.prelude)) continue; // the Tailwind mapping: browsers and this gate skip it
-    if (block.prelude === LIGHT_MEDIA) {
-      for (const inner of topLevelBlocks(block.body, LIGHT_MEDIA, problems)) {
-        const selector = normaliseSelector(inner.prelude);
-        if (selector !== LIGHT_MEDIA_SELECTOR) {
-          problems.push(`${LIGHT_MEDIA}: unexpected block "${inner.prelude}"`);
-          continue;
-        }
-        addFlat(selector, inner.body, `${LIGHT_MEDIA} ${selector}`);
-      }
+    if (/^@media\b/.test(block.prelude)) {
+      problems.push(
+        `"${block.prelude}": every first visit is dark and light comes only from data-theme (05 §1, 0015), so tokens.css has no @media block`,
+      );
       continue;
     }
     const selector = normaliseSelector(block.prelude);
     if (![PRIMITIVES, DARK, LIGHT].includes(selector)) {
-      problems.push(
-        `unexpected block "${block.prelude}": the tokens shape has :root, the two theme blocks, one @media block and @theme`,
-      );
+      problems.push(`unexpected block "${block.prelude}": the tokens shape has :root, the two theme blocks and @theme`);
       continue;
     }
     addFlat(selector, block.body, selector);
@@ -211,7 +203,6 @@ export function parseTokens(css) {
   for (const [key, label] of [
     ['dark', DARK],
     ['light', LIGHT],
-    ['lightMedia', `${LIGHT_MEDIA} { ${LIGHT_MEDIA_SELECTOR} }`],
   ]) {
     if (!themes[key]) problems.push(`missing block: ${label}`);
   }
@@ -219,21 +210,11 @@ export function parseTokens(css) {
   return { primitives, themes, problems };
 }
 
-// Problems between the theme blocks: the first-visit copy, missing values, color-scheme.
+// Problems between the theme blocks: missing values and color-scheme.
 export function themeProblems({ themes }) {
   const problems = [];
-  const { dark, light, lightMedia } = themes;
-  if (!dark || !light || !lightMedia) return problems;
-  const keys = new Set([...light.declarations.keys(), ...lightMedia.declarations.keys()]);
-  for (const name of keys) {
-    const a = light.declarations.get(name);
-    const b = lightMedia.declarations.get(name);
-    if (a !== b)
-      problems.push(
-        `the light copies differ at ${name}: "${a ?? 'missing'}" vs "${b ?? 'missing'}" in the media query`,
-      );
-  }
-  if (light.colorScheme !== lightMedia.colorScheme) problems.push('the light copies differ at color-scheme');
+  const { dark, light } = themes;
+  if (!dark || !light) return problems;
   for (const name of dark.declarations.keys()) {
     if (!light.declarations.has(name)) problems.push(`${name} has a dark value but no light value`);
   }

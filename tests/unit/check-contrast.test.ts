@@ -11,14 +11,12 @@ import {
 
 interface Parts {
   lightFocus?: string;
-  mediaFocus?: string;
   darkExtra?: string;
   extra?: string;
 }
 
 // A tokens file in the documented shape, with the parts each test changes.
-function tokens({ lightFocus = 'var(--dz-royal)', mediaFocus, darkExtra = '', extra = '' }: Parts = {}) {
-  mediaFocus ??= lightFocus;
+function tokens({ lightFocus = 'var(--dz-royal)', darkExtra = '', extra = '' }: Parts = {}) {
   return `
 /* primitives */
 :root {
@@ -42,13 +40,6 @@ function tokens({ lightFocus = 'var(--dz-royal)', mediaFocus, darkExtra = '', ex
   color-scheme: light;
   --dz-bg: var(--dz-paper);
   --dz-focus: ${lightFocus};
-}
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme='dark']) {
-    color-scheme: light;
-    --dz-bg: var(--dz-paper);
-    --dz-focus: ${mediaFocus};
-  }
 }
 @theme {
   --color-*: initial;
@@ -99,9 +90,12 @@ describe('check:contrast', () => {
     expect(results[1]?.ratio).toBeCloseTo(1.2, 1);
   });
 
-  it('fails when the first-visit light copy differs from the light block', () => {
-    const { problems } = checkContrast(tokens({ mediaFocus: 'var(--dz-ice)' }), [focusPair]);
-    expect(problems).toContainEqual(expect.stringContaining('the light copies differ at --dz-focus'));
+  it('fails a prefers-color-scheme block, because every first visit is dark (0015)', () => {
+    const media =
+      "@media (prefers-color-scheme: light) { :root:not([data-theme='dark']) { --dz-bg: var(--dz-paper); } }";
+    expect(checkContrast(tokens({ extra: media }), [focusPair]).problems).toContainEqual(
+      expect.stringContaining('every first visit is dark'),
+    );
   });
 
   it('fails a semantic token that has no light value', () => {
@@ -150,7 +144,7 @@ describe('check:contrast', () => {
   });
 
   it('fails when a theme block is missing', () => {
-    const withoutMedia = tokens().replace(/@media[\s\S]*?\n}\n/, '');
-    expect(checkContrast(withoutMedia, []).problems).toContainEqual(expect.stringContaining('missing block: @media'));
+    const withoutLight = tokens().replace(/\[data-theme='light'\] \{[^}]*\}/, '');
+    expect(checkContrast(withoutLight, []).problems).toContainEqual("missing block: [data-theme='light']");
   });
 });

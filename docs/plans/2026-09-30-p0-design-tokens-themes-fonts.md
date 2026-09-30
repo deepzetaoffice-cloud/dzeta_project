@@ -14,7 +14,15 @@ Progress (2026-09-30):
 - Steps 6 and 7 are done:
   - **G1, `inlineCss`: not adopted.** Median LCP 2176 ms against 2180 ms, 4 ms better (the rule needs ≥ 100 ms). FCP improved from 756 to 620 ms. `next.config.ts` is unchanged.
   - **G2, polyfills:** measured only. Lighthouse flags 13,697 B of `legacy-javascript` in one framework chunk (`Array.prototype.at`, `flat`, `flatMap`, `Object.fromEntries`, `Object.hasOwn`, `trimEnd`), which the default targets already support.
-- Step 8: the specimen is written, and the owner's review is next.
+- Step 8 is done. **The owner's specimen verdict (2026-09-30):**
+  - **Light zeta gradient:** first stop `#0094D3` (3.14:1). 05's `#0098D8` was 2.996:1, under 3:1 for large text.
+  - **First visit:** **dark for everyone.** Light comes only from the visitor's switch (`data-theme='light'`, P2).
+    - **Why this changed:** browsers report "no preference" as light (Media Queries 5), so following the system would have shown most first visits the light theme.
+    - **What changes:** the `prefers-color-scheme` copy is removed; `check:contrast` fails on any `@media` block in `tokens.css`; the theme tests expect dark on every first visit.
+    - **05 §1 changes with it** (the owner approved that with this answer).
+  - **Headings:** h1–h4 at 700, as 05 says.
+  - **Eyebrows:** one new token, `--dz-text-eyebrow-tracking` 0.16em (`tracking-eyebrow`), for uppercase eyebrows. Captions keep 0.04em.
+  - **All other type and spacing values:** as proposed.
 Phase: P0
 Branch: `feat/p0-tokens-themes-fonts`, from `main` after the close-out PR (`chore/p0-close-out`) is merged (stacked on `docs/deepseek-ai-provider` until then, see Progress)
 Page tier: T1 for the placeholder Home (`lhci` floor ≥ 95). No effects.

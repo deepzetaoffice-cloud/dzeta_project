@@ -67,10 +67,11 @@
 </head>
 <body>
 <script>
-  // Theme: ?theme= (for the type frame) or the saved choice; "system" leaves data-theme unset.
+  // Theme: ?theme= (for the type frame) or the saved choice. Dark, the default, leaves data-theme unset,
+  // as on the site: every first visit is dark (0015).
   const params = new URLSearchParams(location.search);
-  const saved = params.get('theme') || localStorage.getItem('dz-specimen-theme') || 'system';
-  if (saved !== 'system') document.documentElement.dataset.theme = saved;
+  const saved = params.get('theme') || localStorage.getItem('dz-specimen-theme') || 'dark';
+  if (saved === 'light') document.documentElement.dataset.theme = 'light';
   if (params.get('frame') === 'type') document.body.classList.add('type-frame');
 </script>
 
@@ -84,29 +85,28 @@
   <div class="type-row"><span class="label eyebrow" data-size="--dz-text-lead">lead</span><p style="margin:0;max-width:var(--dz-measure);font-size:var(--dz-text-lead);line-height:var(--dz-text-lead-leading)">A lead paragraph opens a section. It is a little larger than body text and sits at a comfortable measure of about sixty-five characters per line.</p></div>
   <div class="type-row"><span class="label eyebrow" data-size="--dz-text-body">body</span><p style="margin:0;max-width:var(--dz-measure);font-size:var(--dz-text-body);line-height:var(--dz-text-body-leading)">Body text is set at 1 rem with a line height of 1.6. <a href="#">A link looks like this</a>, and <span style="color:var(--dz-text-muted)">secondary text looks like this</span>. The measure stays near sixty-five characters, so lines are easy to follow.</p></div>
   <div class="type-row"><span class="label eyebrow" data-size="--dz-text-small">small</span><p style="margin:0;font-size:var(--dz-text-small);line-height:var(--dz-text-small-leading)">Small text for notes, captions under images and form help.</p></div>
-  <div class="type-row"><span class="label eyebrow" data-size="--dz-text-caption">caption · JetBrains Mono 500</span><div style="font-family:var(--dz-font-mono);font-size:var(--dz-text-caption);line-height:var(--dz-text-caption-leading);letter-spacing:var(--dz-text-caption-tracking);font-weight:var(--dz-text-caption-weight)">EYEBROW LABEL · 0.04em &nbsp;|&nbsp; <span style="letter-spacing:.16em">EYEBROW LABEL · 0.16em (the Lab)</span> &nbsp;|&nbsp; stat 1,234</div></div>
+  <div class="type-row"><span class="label eyebrow" data-size="--dz-text-caption">caption · JetBrains Mono 500</span><div style="font-family:var(--dz-font-mono);font-size:var(--dz-text-caption);line-height:var(--dz-text-caption-leading);letter-spacing:var(--dz-text-caption-tracking);font-weight:var(--dz-text-caption-weight)">Label, stat 1,234 · caption 0.04em &nbsp;|&nbsp; <span style="text-transform:uppercase;letter-spacing:var(--dz-text-eyebrow-tracking)">Eyebrow · eyebrow tracking</span></div></div>
 </template>
 
 <div id="page">
 <header class="bar"><div class="wrap">
   <div><div class="eyebrow">Deepzeta AI · P0 tokens specimen · decision 0015</div><strong style="color:var(--dz-text-strong)">Every value here comes from <code>src/styles/tokens.css</code></strong></div>
   <div class="seg" role="group" aria-label="Theme">
-    <button type="button" data-theme-choice="system">System</button>
-    <button type="button" data-theme-choice="dark">Dark</button>
+    <button type="button" data-theme-choice="dark">Dark (every first visit)</button>
     <button type="button" data-theme-choice="light">Light</button>
   </div>
 </div></header>
 
 <main class="wrap">
   <section class="block">
-    <h2>For your review</h2>
-    <p class="lede">Tell me in chat what to keep or change. Values change in <code>tokens.css</code> only; reload this page to see them. <span id="font-status" class="muted">Checking fonts…</span></p>
+    <h2>Owner verdict (2026-09-30, decision 0015)</h2>
+    <p class="lede">Values change in <code>tokens.css</code> only; reload this page to see them. <span id="font-status" class="muted">Checking fonts…</span></p>
     <div class="decide"><ol>
-      <li><strong>Light zeta gradient.</strong> 05's first stop <code>#0098D8</code> is 2.996:1 on the light page, just under the 3:1 that large text needs. The tokens use <code>#0094D3</code> (3.14:1). Compare them under "Gradients" in the light theme.</li>
-      <li><strong>First visit, light or dark.</strong> Browsers report every system without a dark setting as "light", so most first-time visitors, on default Windows and Mac settings, get the light theme (05 §1: the system setting is respected on the first visit). Switch between System, Dark and Light above to compare.</li>
-      <li><strong>Heading weights.</strong> h1–h4 are 700 (05: "headings 700"). The Lab's chapter heading was 800.</li>
-      <li><strong>Eyebrow tracking.</strong> The caption token is 0.04em. The Lab's uppercase eyebrows used 0.16em: both are shown under "Type scale".</li>
-      <li><strong>Type and spacing sizes.</strong> The statement is 2.6 → 5.58 rem (your Q1 answer). The others are the plan's proposals. Drag the width slider to see each size from 360 to 1536 px.</li>
+      <li><strong>Light zeta gradient:</strong> first stop <code>#0094D3</code> (3.14:1 on the light page). 05's <code>#0098D8</code> was 2.996:1, under the 3:1 for large text; compare them under "Gradients" in the light theme.</li>
+      <li><strong>First visit:</strong> dark for everyone. Light comes only from the visitor's switch (P2 header). There's no system-light copy of the light block.</li>
+      <li><strong>Heading weights:</strong> h1–h4 at 700, as 05 says. The statement and display sizes stay at 800.</li>
+      <li><strong>Eyebrows:</strong> uppercase eyebrows use <code>--dz-text-eyebrow-tracking</code> (0.16em, as in the Lab). Normal-case labels and stats keep the caption's 0.04em.</li>
+      <li><strong>Type and spacing sizes:</strong> as shown. The statement is 2.6 → 5.58 rem (Q1). Drag the width slider to see each size from 360 to 1536 px.</li>
     </ol></div>
   </section>
 
@@ -236,18 +236,18 @@
     probe.remove();
     document.getElementById('radii').innerHTML = ['sm', 'md', 'lg', 'xl', 'pill'].map((r) => `<div><div class="radius-box" style="border-radius:var(--dz-radius-${r})"></div><div class="meta"><code>--dz-radius-${r}</code> <span class="muted">${read(`--dz-radius-${r}`)}</span></div></div>`).join('');
     document.getElementById('layers').innerHTML = ['base', 'raised', 'sticky', 'header', 'overlay', 'sheet', 'toast', 'consent'].map((l) => `<div class="layer"><code>--dz-layer-${l}</code><span>${read(`--dz-layer-${l}`)}</span></div>`).join('');
-    document.querySelectorAll('[data-theme-choice]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.themeChoice === (root.dataset.theme || 'system'))));
+    document.querySelectorAll('[data-theme-choice]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.themeChoice === (root.dataset.theme || 'dark'))));
   }
 
   function setTheme(choice) {
-    if (choice === 'system') delete root.dataset.theme; else root.dataset.theme = choice;
+    if (choice === 'light') root.dataset.theme = 'light'; else delete root.dataset.theme;
     localStorage.setItem('dz-specimen-theme', choice);
     render(); loadFrame();
   }
 
   function loadFrame() {
     const frame = document.getElementById('type-frame');
-    const choice = root.dataset.theme || 'system';
+    const choice = root.dataset.theme || 'dark';
     frame.src = `${location.pathname.split('/').pop()}?frame=type&theme=${choice}`;
   }
 
@@ -262,7 +262,6 @@
     const slider = document.getElementById('width');
     slider.addEventListener('input', () => { document.getElementById('width-out').textContent = slider.value; document.getElementById('type-frame').width = slider.value; });
     slider.addEventListener('change', loadFrame);
-    matchMedia('(prefers-color-scheme: light)').addEventListener('change', render);
     render(); loadFrame();
     document.fonts.ready.then(() => {
       const ok = document.fonts.check("800 1em 'Specimen Montserrat'") && document.fonts.check("500 1em 'Specimen JetBrains Mono'");
