@@ -217,6 +217,21 @@ test.describe('Icons', () => {
     await expect(host.locator('.dz-halo')).toHaveCSS('opacity', '0.45');
   });
 
+  test('the Reduce effects choice turns the stories off too, with a steady 0.45 glow (P2 plan, C3)', async ({
+    page,
+  }) => {
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    await page.goto('/');
+    await page.evaluate(() => localStorage.setItem('dz-effects', 'reduced'));
+    await injectIcons(page);
+    await expect(page.locator('html')).toHaveAttribute('data-effects', 'reduced');
+    const host = page.locator('[data-host="whatsapp-ai-agent"]');
+    await expect(host.locator('.dz-halo')).toHaveCSS('opacity', '0.45');
+    await host.hover();
+    await expect(host.locator('.dz-px')).toHaveCSS('animation-name', 'none');
+    await expect(host.locator('.dz-halo')).toHaveCSS('opacity', '0.45');
+  });
+
   test('forced colours drop the gradients: a solid pixel in the text colour, no glow, no story (13 §6)', async ({
     page,
   }) => {
@@ -224,8 +239,14 @@ test.describe('Icons', () => {
     await injectIcons(page);
     const host = page.locator('[data-host="whatsapp-ai-agent"]');
     await host.hover();
-    const textColour = await host.locator('svg').evaluate((svg) => getComputedStyle(svg).color);
-    await expect(host.locator('.dz-px')).toHaveCSS('fill', textColour);
+    // The line colour eases to its hover value, so the fill is compared with it at the same moment.
+    await expect
+      .poll(() =>
+        host
+          .locator('svg')
+          .evaluate((svg) => getComputedStyle(svg.querySelector('.dz-px')!).fill === getComputedStyle(svg).color),
+      )
+      .toBe(true);
     await expect(host.locator('.dz-halo')).toHaveCSS('opacity', '0');
     await expect(host.locator('.dz-px')).toHaveCSS('animation-name', 'none');
   });

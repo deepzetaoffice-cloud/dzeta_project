@@ -1,0 +1,47 @@
+/* Effects (docs/ai/13; P2 plan, C3 and F4), cited by their IDs (13 §4). Each effect rests in its
+   static final state; motion, live glass and pointer effects are added only inside the fx variant
+   (globals.css). Colours, sizes and timings come from tokens (05 §1). */
+
+@layer components {
+  /* The glass ladder (13 §4.1). Every glass surface rests as glass-frost: the minimum tint, which
+     keeps text at AA whatever passes behind it (check:contrast), a hairline edge, a top-edge highlight
+     and the baked grain. The grain downloads only when a frost surface shows. */
+  .dz-glass {
+    background-color: var(--dz-glass-tint-min);
+    background-image: var(--dz-grain);
+    border: var(--dz-glass-edge-width) solid var(--dz-glass-edge);
+    box-shadow: inset 0 var(--dz-glass-edge-width) 0 var(--dz-glass-highlight);
+  }
+
+  /* Panels with mist text: the mega menu and the sheet (P2 plan, F1) */
+  .dz-glass--muted {
+    background-color: var(--dz-glass-tint-muted);
+  }
+
+  /* glass-live: the header, the mega menu and the sheet only (05 §5 rule 6). The live blur replaces
+     the grain; Reduce effects and the low-end hints fall back to glass-frost. */
+  .dz-glass--live {
+    @variant fx {
+      background-image: none;
+      backdrop-filter: blur(var(--dz-glass-blur)) saturate(var(--dz-glass-saturate));
+    }
+  }
+
+  /* glass-tint as a solid surface (13 §6): more contrast gets an opaque one. */
+  @media (prefers-contrast: more) {
+    .dz-glass {
+      background-color: var(--dz-surface);
+      background-image: none;
+    }
+  }
+
+  /* Forced colours: a solid system surface. Chromium keeps an author colour's alpha when it forces a
+     background, so the colour is set here, opaque. */
+  @media (forced-colors: active) {
+    .dz-glass {
+      background-color: Canvas;
+      background-image: none;
+      border-color: CanvasText;
+    }
+  }
+}

@@ -7,8 +7,24 @@
 @import './tokens.css';
 /* Montserrat's size-matched fallback faces, one per weight (P2 plan, section D) */
 @import './font-fallbacks.css';
+/* Effects: the glass ladder and each effect's CSS, static by default (docs/ai/13; P2 plan, C3) */
+@import './effects.css';
 /* Icons: lines, pixel, states and stories (Icon Master Rules; P1 plan, D5) */
 @import './icons.css';
+
+/* The fx variant (P2 plan, C3). Motion, live glass, pointer effects and hidden start states exist only
+   inside it, so every effect rests in its static final state (13 §3.3). It holds while no device
+   setting asks for less (this media condition is FX_MEDIA in src/lib/fx/preferences.ts; a unit test
+   keeps the two equal) and Reduce effects is off (data-effects on <html>: the init script and
+   preferences.ts). Write `@variant fx` inside a rule: at the top level, Tailwind 4.3.3 writes a
+   `:scope` selector, which never matches. */
+@custom-variant fx {
+  @media (prefers-reduced-motion: no-preference) and (prefers-contrast: no-preference) and (forced-colors: none) {
+    &:where(:root:not([data-effects='reduced']) *) {
+      @slot;
+    }
+  }
+}
 
 @layer base {
   html {

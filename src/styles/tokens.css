@@ -206,6 +206,15 @@
   --dz-dur-story: 900ms;
   --dz-tilt-max: 5deg;
   --dz-magnet-max: 7px;
+
+  /* Glass (05 §4; 13 §4.1). The tints and edges switch with the theme (section 2). */
+  --dz-glass-edge-width: 1px;
+  /* glass-live and glass-liquid only: 17px is the Lab-confirmed blur (0009), the saturations the Lab's */
+  --dz-glass-blur: 17px;
+  --dz-glass-saturate: 1.4;
+  --dz-glass-saturate-liquid: 1.6;
+  /* glass-frost's baked grain: white specks at 6% at most, which check:contrast reads from the file */
+  --dz-grain: url('/brand/glass-grain.svg');
 }
 
 /* 2. Semantic tokens: dark, the default. Any element can carry data-theme='dark' (the header, the
@@ -223,6 +232,13 @@
   --dz-hairline: var(--dz-navy-700);
   /* Gradient headline words sit on --dz-bg, never on a card (2.83:1 on navy-850, 0015) */
   --dz-grad-headline: var(--dz-grad-zeta);
+  /* Glass tints: navy-850 at the lowest alpha that keeps text at 4.5:1 (and the focus ring at 3:1) over
+     the brightest surface that can pass behind, a white card, with the grain's brightest speck on top
+     (check:contrast). -min is the least any text sits on (13 §4.1); -muted carries mist text. */
+  --dz-glass-tint-min: rgba(8, 18, 46, 0.73);
+  --dz-glass-tint-muted: rgba(8, 18, 46, 0.84);
+  --dz-glass-edge: rgba(201, 212, 255, 0.14);
+  --dz-glass-highlight: rgba(255, 255, 255, 0.1);
 }
 
 /* Light, chosen by the visitor (the switch comes with the header in P2) */
@@ -237,6 +253,11 @@
   --dz-focus: var(--dz-royal);
   --dz-hairline: var(--dz-hairline-light);
   --dz-grad-headline: var(--dz-grad-zeta-light);
+  /* Frosted white glass (13 §6), checked over the darkest surface, navy */
+  --dz-glass-tint-min: rgba(255, 255, 255, 0.66);
+  --dz-glass-tint-muted: rgba(255, 255, 255, 0.7);
+  --dz-glass-edge: rgba(22, 34, 74, 0.14);
+  --dz-glass-highlight: rgba(255, 255, 255, 0.9);
 }
 
 /* 3. Tailwind mapping. Tailwind's default colours, fonts, sizes and radii are removed, so an

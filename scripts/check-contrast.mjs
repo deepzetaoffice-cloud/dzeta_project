@@ -10,12 +10,15 @@
 //   - anything in tokens.css outside the documented shape (the file's header), rather than skipping it
 //   - colour syntax it can't read in a checked value (hsl(), oklch(), color-mix(), transparent, a named
 //     colour…), rather than dropping that colour or gradient stop
+// Glass tints are translucent, so each glass pair is checked over the worst backdrop that can pass
+// behind it, and again with the frost grain's brightest speck on top (read from the grain file itself).
 
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 export const TOKENS_FILE = 'src/styles/tokens.css';
+export const GRAIN_FILE = 'public/brand/glass-grain.svg';
 export const THRESHOLDS = { text: 4.5, large: 3, ui: 3 };
 
 const PRIMITIVES = ':root';
@@ -28,6 +31,9 @@ export const THEMES = ['dark', 'light'];
 // every stop.
 const both = THEMES;
 const once = ['brand'];
+// What can pass behind glass, at its worst: the brightest surface under the dark tint, the darkest
+// under the light one.
+const GLASS_BACKDROP = { dark: '--dz-card-light', light: '--dz-navy' };
 export const PAIRS = [
   { fg: '--dz-text', bg: '--dz-bg', kind: 'text', themes: both },
   { fg: '--dz-text', bg: '--dz-surface', kind: 'text', themes: both },
@@ -73,6 +79,15 @@ export const PAIRS = [
   // --dz-text-strong, checked above in both themes; slate on the dark surfaces is checked above too.
   { fg: '--dz-slate', bg: '--dz-paper', kind: 'ui', themes: once, note: 'disabled icon lines' },
   { fg: '--dz-slate', bg: '--dz-card-light', kind: 'ui', themes: once, note: 'disabled icon lines' },
+  // Glass (13 §4.1; P2 plan, F3): text on at least the minimum tint, mist on the muted one. Blur and
+  // saturation only average the backdrop, so a flat white card (behind dark glass) or navy (behind
+  // light glass) is the worst case for glass-live too.
+  ...[
+    { fg: '--dz-text', bg: '--dz-glass-tint-min', kind: 'text' },
+    { fg: '--dz-text-strong', bg: '--dz-glass-tint-min', kind: 'text' },
+    { fg: '--dz-focus', bg: '--dz-glass-tint-min', kind: 'ui' },
+    { fg: '--dz-text-muted', bg: '--dz-glass-tint-muted', kind: 'text' },
+  ].map((pair) => ({ ...pair, themes: both, backdrop: GLASS_BACKDROP, note: 'glass, worst backdrop and grain' })),
 ];
 
 // Measured and printed on every run, but never failing (conflict C38). The pillar pixels are the
@@ -85,7 +100,7 @@ export const REPORTED = ['--dz-pixel-ai', '--dz-pixel-web', '--dz-pixel-software
 
 // Printed on every run, so the output never claims more than it checked.
 export const NOT_CHECKED = [
-  'glass surfaces: P2, with the glass tokens (frost text needs a 0.68 tint)',
+  'glass-liquid: its tint and rim come with the mega-menu demo card (P2 step 10)',
   'light-mode status colours, accent surfaces, raised surfaces and shadows: the first plan that uses them',
   '--dz-border as the only boundary of a form field (2.24:1 on navy): P6 forms',
   'hairlines: decorative, not a boundary',
@@ -308,6 +323,34 @@ export function contrastRatio(fg, bg) {
 
 export const toHex = ({ r, g, b }) => '#' + [r, g, b].map((c) => Math.round(c).toString(16).padStart(2, '0')).join('');
 
+const clamp01 = (n) => Math.min(Math.max(n, 0), 1);
+
+// The frost grain's brightest speck. Its one feColorMatrix must paint a constant colour, and the
+// alpha is at most the alpha row's positive noise coefficients plus its offset (every noise channel
+// at 1). A matrix this can't bound fails, so a stronger grain can't slip past the glass pairs.
+export function grainSpeck(svg) {
+  const matrices = [...svg.matchAll(/<feColorMatrix\b([^>]*)>/g)];
+  if (matrices.length !== 1) throw new Error(`${GRAIN_FILE}: expected one feColorMatrix, found ${matrices.length}`);
+  const attributes = matrices[0][1];
+  const type = /\btype="([^"]*)"/.exec(attributes)?.[1] ?? 'matrix';
+  const values = /\bvalues="([^"]*)"/
+    .exec(attributes)?.[1]
+    .trim()
+    .split(/[\s,]+/)
+    .map(Number);
+  if (type !== 'matrix' || values?.length !== 20 || values.some(Number.isNaN)) {
+    throw new Error(`${GRAIN_FILE}: the feColorMatrix must be a 20-value matrix`);
+  }
+  const [r, g, b] = [0, 5, 10].map((row) => {
+    if (values.slice(row, row + 4).some((v) => v !== 0)) {
+      throw new Error(`${GRAIN_FILE}: the grain's colour must be constant (row ${row / 5 + 1} reads the noise)`);
+    }
+    return clamp01(values[row + 4]) * 255;
+  });
+  const alpha = values.slice(15, 19).reduce((sum, v) => sum + Math.max(v, 0), 0) + values[19];
+  return { r, g, b, a: clamp01(alpha) };
+}
+
 // ---------------------------------------------------------------------------------------------
 // The check
 
@@ -321,7 +364,8 @@ export function resolveToken(name, tokens, seen = []) {
   );
 }
 
-export function checkContrast(css, pairs = PAIRS) {
+// `grain` is the frost grain's brightest speck (grainSpeck), needed by the glass pairs.
+export function checkContrast(css, pairs = PAIRS, { grain } = {}) {
   const parsed = parseTokens(css);
   const problems = [...parsed.problems, ...themeProblems(parsed)];
   const results = [];
@@ -332,32 +376,49 @@ export function checkContrast(css, pairs = PAIRS) {
   for (const pair of pairs) {
     for (const theme of pair.themes) {
       const tokens = tokensFor(theme);
+      const where = `${pair.fg} on ${pair.bg} (${theme})`;
       let fgValue;
       let bgValue;
+      let backdropValue;
       try {
         fgValue = resolveToken(pair.fg, tokens);
         bgValue = resolveToken(pair.bg, tokens);
+        if (pair.backdrop) {
+          if (!pair.backdrop[theme]) throw new Error(`no backdrop for the ${theme} theme`);
+          backdropValue = resolveToken(pair.backdrop[theme], tokens);
+        }
       } catch (error) {
-        problems.push(`${pair.fg} on ${pair.bg} (${theme}): ${error.message}`);
+        problems.push(`${where}: ${error.message}`);
         continue;
       }
-      const unread = [...unreadColourSyntax(fgValue), ...unreadColourSyntax(bgValue)];
+      const unread = [fgValue, bgValue, backdropValue ?? ''].flatMap(unreadColourSyntax);
       if (unread.length > 0) {
-        problems.push(
-          `${pair.fg} on ${pair.bg} (${theme}): can't read "${unread.join('", "')}", so a colour would go unchecked`,
-        );
+        problems.push(`${where}: can't read "${unread.join('", "')}", so a colour would go unchecked`);
         continue;
       }
       const fgColours = coloursIn(fgValue);
-      const bgColours = coloursIn(bgValue);
+      let bgColours = coloursIn(bgValue);
       if (fgColours.length === 0 || bgColours.length === 0) {
-        problems.push(`${pair.fg} on ${pair.bg} (${theme}): no colour found to check`);
+        problems.push(`${where}: no colour found to check`);
         continue;
       }
-      if (bgColours.some((c) => c.a < 1)) {
-        problems.push(
-          `${pair.fg} on ${pair.bg} (${theme}): the background isn't opaque, so its contrast depends on what's behind it`,
-        );
+      if (pair.backdrop) {
+        // Glass: the tint over its worst backdrop, then the same with the grain's brightest speck on top.
+        const backdrop = coloursIn(backdropValue);
+        if (backdrop.length !== 1 || backdrop[0].a < 1) {
+          problems.push(`${where}: the backdrop ${pair.backdrop[theme]} must be one opaque colour`);
+          continue;
+        }
+        if (!grain) {
+          problems.push(`${where}: a glass pair needs the grain's brightest speck (${GRAIN_FILE})`);
+          continue;
+        }
+        bgColours = bgColours.flatMap((tint) => {
+          const flat = composite(tint, backdrop[0]);
+          return [flat, composite(grain, flat)];
+        });
+      } else if (bgColours.some((c) => c.a < 1)) {
+        problems.push(`${where}: the background isn't opaque, so its contrast depends on what's behind it`);
         continue;
       }
       // The worst combination of any foreground stop over any background stop.
@@ -380,7 +441,16 @@ const pairLabel = (r) => `${r.fg} on ${r.bg}`;
 function main() {
   const root = process.cwd();
   const css = readFileSync(join(root, TOKENS_FILE), 'utf8');
-  const { results, problems } = checkContrast(css);
+  let grain;
+  const problems = [];
+  try {
+    grain = grainSpeck(readFileSync(join(root, GRAIN_FILE), 'utf8'));
+  } catch (error) {
+    problems.push(error.message);
+  }
+  const checked = checkContrast(css, PAIRS, { grain });
+  const { results } = checked;
+  problems.push(...checked.problems);
   // A reported pair never fails on its ratio, but a missing or unreadable token still does.
   const reported = checkContrast(css, REPORTED);
   problems.push(...reported.problems.filter((p) => !problems.includes(p)));

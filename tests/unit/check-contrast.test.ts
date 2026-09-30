@@ -5,12 +5,16 @@ import {
   coloursIn,
   composite,
   contrastRatio,
+  GRAIN_FILE,
+  grainSpeck,
   NOT_CHECKED,
   PAIRS,
   REPORTED,
   TOKENS_FILE,
   unreadColourSyntax,
 } from '../../scripts/check-contrast.mjs';
+
+const realGrain = () => grainSpeck(readFileSync(GRAIN_FILE, 'utf8'));
 
 interface Parts {
   lightFocus?: string;
@@ -64,7 +68,7 @@ describe('check:contrast', () => {
   });
 
   it('passes the real tokens, and checks every listed pair', () => {
-    const { results, problems } = checkContrast(readFileSync(TOKENS_FILE, 'utf8'));
+    const { results, problems } = checkContrast(readFileSync(TOKENS_FILE, 'utf8'), PAIRS, { grain: realGrain() });
     expect(problems).toEqual([]);
     expect(results.filter((r) => !r.pass)).toEqual([]);
     expect(results).toHaveLength(PAIRS.reduce((sum, pair) => sum + pair.themes.length, 0));
@@ -172,6 +176,57 @@ describe('check:contrast', () => {
     const ranking = results.find((r) => r.fg === '--dz-pixel-ranking' && r.bg === '--dz-navy-800');
     expect(ranking?.ratio).toBeCloseTo(2.34, 2);
     expect(ranking?.worstFg).toBe('#4c27fb');
+  });
+
+  // P2 plan, F3: glass is translucent, so its pairs are composited over the worst backdrop, with and
+  // without the frost grain's brightest speck.
+  it('reads the grain file: white specks at 6% at most', () => {
+    expect(realGrain()).toEqual({ r: 255, g: 255, b: 255, a: 0.06 });
+  });
+
+  it('fails a grain it cannot bound: noise in the colour rows, or no single matrix', () => {
+    const matrix = (values: string) => `<svg><filter><feColorMatrix values="${values}"/></filter></svg>`;
+    expect(() => grainSpeck(matrix('1 0 0 0 0 0 0 0 0 1 0 0 0 0 1 0 0 0 .06 0'))).toThrow(/constant/);
+    expect(() => grainSpeck(matrix('0 0 0 0 1'))).toThrow(/20-value/);
+    expect(() => grainSpeck('<svg></svg>')).toThrow(/one feColorMatrix/);
+    // Every positive noise coefficient counts toward the brightest speck.
+    expect(grainSpeck(matrix('0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 .1 0 0 .06 .02')).a).toBeCloseTo(0.18, 5);
+  });
+
+  it('checks glass over the worst backdrop, and again with the grain on top', () => {
+    const css = tokens({
+      extra: ':root { --dz-frost: #c9d4ff; --dz-card-light: #ffffff; --dz-tint: rgba(8, 18, 46, 0.73); }',
+    });
+    const glass = {
+      fg: '--dz-frost',
+      bg: '--dz-tint',
+      kind: 'text',
+      themes: ['dark'],
+      backdrop: { dark: '--dz-card-light' },
+    };
+    const withGrain = checkContrast(css, [glass], { grain: realGrain() }).results[0];
+    const noGrain = checkContrast(css, [glass], { grain: { r: 0, g: 0, b: 0, a: 0 } }).results[0];
+    expect(withGrain?.ratio).toBeCloseTo(4.53, 2);
+    expect(withGrain?.pass).toBe(true);
+    // The white speck lightens the tint behind light text, so it's the worst case.
+    expect(noGrain!.ratio).toBeGreaterThan(withGrain!.ratio);
+    expect(checkContrast(css, [glass]).problems).toContainEqual(expect.stringContaining('needs the grain'));
+    // A translucent backdrop would leave the result depending on what's behind the backdrop.
+    const seeThrough = { ...glass, backdrop: { dark: '--dz-hairline-light' } };
+    expect(checkContrast(css, [seeThrough], { grain: realGrain() }).problems).toContainEqual(
+      expect.stringContaining('must be one opaque colour'),
+    );
+  });
+
+  it('gates text, strong text and focus on the minimum glass tint, and mist on the muted one, in both themes', () => {
+    const glass = PAIRS.filter((pair) => 'backdrop' in pair);
+    expect(glass.map((pair) => `${pair.fg} ${pair.bg} ${pair.themes.join(',')}`)).toEqual([
+      '--dz-text --dz-glass-tint-min dark,light',
+      '--dz-text-strong --dz-glass-tint-min dark,light',
+      '--dz-focus --dz-glass-tint-min dark,light',
+      '--dz-text-muted --dz-glass-tint-muted dark,light',
+    ]);
+    expect(NOT_CHECKED.join(' ')).not.toMatch(/glass surfaces/);
   });
 
   it('keeps the reported pixel pairs out of the gated pairs, and no longer lists pixels as unchecked', () => {

@@ -121,11 +121,22 @@
   }
 
   /* Static: no story; the pixel lit and the glow at 0.45, hovered or not (§4.4, §7.1). Reduce effects is
-     on for reduced motion, forced colours and more contrast (13 §2.11); P2 adds the switch's own
-     selector. The hover selector is repeated so this wins over the hover glow above. */
+     on for reduced motion, forced colours and more contrast (13 §2.11), and when the visitor or a
+     low-end hint turns it on (data-effects, P2 plan C3). The hover selector is repeated so this wins
+     over the hover glow above. */
   @media (prefers-reduced-motion: reduce), (prefers-contrast: more) {
     .dz-halo,
     .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible)) .dz-halo {
+      opacity: 0.45;
+    }
+  }
+
+  /* Forced colours set data-effects too, and have no glow at all (below). */
+  @media (forced-colors: none) {
+    [data-effects='reduced'] .dz-halo,
+    [data-effects='reduced']
+      .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible))
+      .dz-halo {
       opacity: 0.45;
     }
   }
@@ -143,27 +154,33 @@
   }
 
   /* Tier 2 stories (§7). Each runs once on the --dz-dur-story timeline when the host is hovered or
-     focused, and its last frame is the hover state. Start states exist only here (13 §3.3). */
-  @media (prefers-reduced-motion: no-preference) and (forced-colors: none) and (prefers-contrast: no-preference) {
-    .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible))
-      .dz-icon--pop
-      .dz-px {
+     focused, and its last frame is the hover state. Start states exist only inside fx (13 §3.3). */
+  .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible))
+    .dz-icon--pop
+    .dz-px {
+    @variant fx {
       animation: dz-icon-pop var(--dz-dur-story) var(--dz-ease-pop) both;
     }
+  }
 
-    .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible))
-      .dz-icon--pop
-      .dz-halo {
+  .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible))
+    .dz-icon--pop
+    .dz-halo {
+    @variant fx {
       animation: dz-icon-glow var(--dz-dur-story) var(--dz-ease-out) both;
     }
+  }
 
-    .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible))
-      .dz-dot--blink-early {
+  .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible))
+    .dz-dot--blink-early {
+    @variant fx {
       animation: dz-icon-blink-early var(--dz-dur-story) var(--dz-ease-out);
     }
+  }
 
-    .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible))
-      .dz-dot--blink-late {
+  .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible))
+    .dz-dot--blink-late {
+    @variant fx {
       animation: dz-icon-blink-late var(--dz-dur-story) var(--dz-ease-out);
     }
   }
