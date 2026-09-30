@@ -11,6 +11,10 @@ Progress (2026-09-30):
   - **`scripts/page-weight-budget.cjs` isn't created.** The lint gate forbids `require()`, also in `.cjs` files, and `lighthouserc.cjs` can't read a module any other way.
   - **What replaces it:** the budget stays in `lighthouserc.cjs` and is exported next to `ci` as `budget` (lhci reads only `ci`). `check-page-weight.mjs` imports it, so both checks still use the same numbers.
   - **After the fonts,** locally with the CI environment: LCP 2180 ms (+149 ms, all render delay: the preloaded font shares the simulated bandwidth with the scripts), CLS 0, fonts 38,823 B (1 file), HTML + CSS + JS 147,507 B.
+- Steps 6 and 7 are done:
+  - **G1, `inlineCss`: not adopted.** Median LCP 2176 ms against 2180 ms, 4 ms better (the rule needs ≥ 100 ms). FCP improved from 756 to 620 ms. `next.config.ts` is unchanged.
+  - **G2, polyfills:** measured only. Lighthouse flags 13,697 B of `legacy-javascript` in one framework chunk (`Array.prototype.at`, `flat`, `flatMap`, `Object.fromEntries`, `Object.hasOwn`, `trimEnd`), which the default targets already support.
+- Step 8: the specimen is written, and the owner's review is next.
 Phase: P0
 Branch: `feat/p0-tokens-themes-fonts`, from `main` after the close-out PR (`chore/p0-close-out`) is merged (stacked on `docs/deepseek-ai-provider` until then, see Progress)
 Page tier: T1 for the placeholder Home (`lhci` floor ≥ 95). No effects.
