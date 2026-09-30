@@ -2,6 +2,10 @@
 Status: APPROVED (owner, 2026-09-30: approved with the protected-file edits it lists; Q1–Q5 answered with the recommended options; answers under Open questions)
 Progress (2026-09-30):
 - Step 0: the close-out and DeepSeek branches aren't merged yet (no PR was opened for them). So that the work can start, `docs/deepseek-ai-provider` (which contains `chore/p0-close-out`) is merged into this branch. This PR's diff shrinks to this plan's files once the owner merges those two. The Vercel setting is fixed: the DeepSeek branch's preview built (`fbb904d`, "Deployment has completed").
+- Step 1 is done:
+  - **Baseline:** CI `fbb904d` median LCP 1513 ms; locally, with the CI environment, 2031 ms. HTML + CSS + JS is 145,472 B.
+  - **Fonts, following Risks "Fonts over budget":** Montserrat's latin file is the same 37,956 B for any weight range. JetBrains Mono 400–600 is 31,432 B, which puts the pair at 69,388 B, over the ≈ 60 KB target. So the mono is a single 500 weight (21,832 B), and the pair is 59,788 B.
+  - **Filename:** the allowed file `jetbrains-mono-latin-wght.woff2` is therefore `jetbrains-mono-latin-500.woff2`, because a static file has no `wght` axis.
 Phase: P0
 Branch: `feat/p0-tokens-themes-fonts`, from `main` after the close-out PR (`chore/p0-close-out`) is merged (stacked on `docs/deepseek-ai-provider` until then, see Progress)
 Page tier: T1 for the placeholder Home (`lhci` floor ≥ 95). No effects.
