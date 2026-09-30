@@ -48,6 +48,12 @@ Progress:
   - **The switches' markup contract** (`data-dz-switch`, `aria-checked`, `aria-disabled`) is tested with injected buttons until `Switch` ships at step 10.
   - **JavaScript:** the runtime chunk (FxRuntime, preferences, observer, pointer) is 1,443 B gzip. Home's scripts at level 6 went from 177,574 to 179,345 B (+1,771). `OWN_JS_HOME` is set from lhci at step 12.
   - **Gates:** `verify:fast` exit 0; `test` 181 passed; `build` exit 0; `test:e2e` 68 passed (20 new in `preferences.spec.ts`, 1 in `icons.spec.ts`); `check:schema`, `check:seo`, `check:links` passed. `lhci` wasn't run (step 12).
+  - **CI** green on `70c50be`: Lighthouse on Home, Performance 100 in 4 of 5 runs (98 in one), LCP 1585–2348 ms (median run 1813), CLS 0, JS 143.1 KB, HTML 4.6 KB, CSS 6.3 KB.
+- 2026-10-01 · **Step 7 (routes and content) is done.**
+  - **`src/lib/routes.ts`** seeds 43 registry rows: every row the header, the mega menu and the footer will link to (the footer's Company, Resources and Legal rows are in it already, because part C's table doesn't list this file). Only R001 is live.
+  - **`routes.test.ts`:** each path equals its registry row; `live` is true exactly when the page file exists (route groups and private folders don't add a segment); each column's name, promise and pillar equal the catalogue's pillar table; every service and solution name equals its catalogue heading, found through the row's catalogue number; outcomes are at most 8 words, with no digits, and distinct; no list links the same row twice.
+  - **The copy** (`navigation.ts`, `shell.ts`) is by the Content Writer. The 19 outcomes each come from a phrase in the service's catalogue entry. It left out the e-invoicing mandate and dates (no approved source in `external-sources.md`), "60 seconds" (no digits; "in seconds"), and 1D.3's routing of unhappy customers before they post (it reads like review gating). You approve the outcomes on the review page (N). `shell.ts` adds one accessible name not in N: the header nav's label, "Main", so it stays distinct from the footer's nav.
+  - **Gates:** `verify:fast` exit 0; `test` 229 passed; `check:facts` and `format:check` passed.
 Phase: P2
 Branch: three parts, one merge each (Q5): `feat/p2a-shell-foundations`, `feat/p2b-header`, `feat/p2c-footer` (each from `main` after the previous merge)
 Page tier: T1. The shell renders on every page. It's measured on Home (`lhci` ≥ 95) and, from part B, on the review page (A3), which shows the complete shell.
