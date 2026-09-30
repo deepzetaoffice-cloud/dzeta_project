@@ -1,5 +1,12 @@
 # Plan: P1 Brand primitives: the logo, app icons and manifest, icon foundations
 Status: APPROVED (owner, 2026-09-30: approved with the protected-file edits it lists; Q1 and Q2 answered (a), answers under Open questions)
+Progress (2026-09-30):
+- Steps 0 and 1 are done: the plan (`98a6747`); registry rows R174–R178 and conflict entries C36–C38 (`d1616f6`).
+- Step 2 is done. **Baseline** (local, CI environment, 5 runs): median LCP 2179 ms, FCP 756 ms, Performance 99, Best Practices 96 (`errors-in-console`: the favicon 404), HTML 3,308 B, CSS 4,515 B, JS 139,668 B, fonts 38,823 B, images 0 B; HTML + CSS + JS 147,491 B of 190,868 B.
+- Step 4, **the owner's verdict: the app icons are approved as shown** (the specimen, 2026-09-30).
+- **A1 changed, by the owner's choice at the step 4 stop.** The command guard blocks any command that writes near the locked logo, so the planned `git show … > public/brand/deepzeta-logo.svg` copy can't run. Instead a static route, `src/app/brand/deepzeta-logo.svg/route.ts` (`dynamic = 'force-static'`), reads the locked file at build and serves it unchanged at the same URL. There's no copy in the repo, so nothing can drift, and the icon script reads the locked file too.
+  - `public/brand/deepzeta-logo.svg` and the `.prettierignore` change are dropped.
+  - One file is added: `src/lib/brand.ts`, the locked logo's path, URL, canvas and crops, shared by the route, `Logo.tsx`, the icon script and the tests, so none of them repeats a value.
 Phase: P1
 Branch: `feat/p1-brand-primitives`, from `main` at `9b37e6c`
 Page tier: T1, the placeholder Home (`lhci` floor ≥ 95), which gets the logo. No effect runs on any page (see the Effect register).
