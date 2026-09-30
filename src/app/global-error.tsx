@@ -38,7 +38,7 @@ export default function GlobalError({ retry }: GlobalErrorProps) {
             <button
               type="button"
               onClick={() => retry()}
-              className="min-h-11 rounded-pill border border-border px-6 text-fg-strong hover:border-frost"
+              className="min-h-11 rounded-pill border border-mist px-6 text-fg-strong hover:border-frost"
             >
               {errorContent.retry}
             </button>

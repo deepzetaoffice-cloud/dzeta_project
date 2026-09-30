@@ -48,7 +48,8 @@ const FALLBACKS = {
   },
   roboto: {
     family: 'dz-sans-fallback-roboto',
-    local: { regular: ['Roboto', 'Roboto-Regular'], bold: ['Roboto Bold', 'Roboto-Bold'] },
+    // Android 12 and later ship Roboto as one variable font, which may answer only to 'Roboto'.
+    local: { regular: ['Roboto', 'Roboto-Regular'], bold: ['Roboto Bold', 'Roboto-Bold', 'Roboto'] },
   },
 };
 
@@ -88,7 +89,9 @@ const probes = [
   { id: 'roboto-bold', family: 'probe-roboto', weight: 700 },
 ];
 
-const browser = await chromium.launch();
+// Headless Chromium hints fonts fully by default, which changes glyph widths on Linux; "none" measures
+// the fonts' own widths on any machine (tests/e2e/fonts.spec.ts does the same).
+const browser = await chromium.launch({ args: ['--font-render-hinting=none'] });
 const page = await browser.newPage();
 const spans = probes
   .map((p) => `<span id="${p.id}" style="font-family:'${p.family}';font-weight:${p.weight}">${SAMPLE}</span>`)

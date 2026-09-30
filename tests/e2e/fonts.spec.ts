@@ -1,4 +1,4 @@
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type BrowserContext, type Page } from '@playwright/test';
 
 // The fallback swap (docs/plans/2026-09-30-p2-layout-shell.md, section D3; decision 0015 §5).
 // Montserrat uses display: swap, so a slow connection first paints the text in a local fallback,
@@ -122,8 +122,7 @@ const STYLES = {
 };
 // The block widths swept at each viewport (the viewport sets the fluid type sizes), and its device
 // scale: the phone viewport at Lighthouse's mobile scale (1.75; 07's test conditions), the desktop one
-// at 1. At scale 1 Chromium on Linux rounds each glyph's advance to a whole pixel, which says more
-// about the runner than about the faces (small text: 14.7% on CI, 5.1% on Windows, 2026-10-01).
+// at 1.
 const SWEEP = {
   360: { from: 240, to: 340, step: 2, scale: 1.75 },
   1280: { from: 400, to: 1140, step: 8, scale: 1 },
@@ -173,11 +172,19 @@ async function swapMontserrat(page: Page, release: () => void) {
 }
 
 test.describe('Fonts: the fallback swap (plan D3)', () => {
+  // Every context a test opens, closed after it even when an assertion fails midway, so no held
+  // Montserrat request is left pending.
+  const contexts: BrowserContext[] = [];
+  test.afterEach(async () => {
+    await Promise.all(contexts.splice(0).map((context) => context.close()));
+  });
+
   for (const width of [360, 1280] as const) {
     test(`at ${width}px, Home paints the per-weight fallbacks first and the swap moves nothing`, async ({
       browser,
     }) => {
       const context = await browser.newContext({ viewport: { width, height: 800 } });
+      contexts.push(context);
       const page = await context.newPage();
       await page.addInitScript(() => {
         const shifts: number[] = [];
@@ -205,7 +212,6 @@ test.describe('Fonts: the fallback swap (plan D3)', () => {
       );
       console.log(`::notice title=Fonts Home swap ${width}px::h1 ${faces.h1}, p ${faces.p}, CLS ${cls.toFixed(4)}`);
       expect(cls).toBeLessThan(0.01);
-      await context.close();
     });
 
     test(`at ${width}px, the swap changes the line count of site copy at no more than 8% of widths`, async ({
@@ -215,6 +221,7 @@ test.describe('Fonts: the fallback swap (plan D3)', () => {
         viewport: { width, height: 800 },
         deviceScaleFactor: SWEEP[width].scale,
       });
+      contexts.push(context);
       const page = await context.newPage();
       const release = await holdMontserrat(page);
       await page.goto('/', { waitUntil: 'domcontentloaded' });
@@ -303,7 +310,6 @@ test.describe('Fonts: the fallback swap (plan D3)', () => {
         expect(samples, name).toBeGreaterThan(0);
         expect.soft(rate, `${name}: share of widths where the line count changed`).toBeLessThanOrEqual(MAX_CHANGE_RATE);
       }
-      await context.close();
     });
   }
 });

@@ -8,6 +8,9 @@
      and a Bold only, so 400 and 500 use Regular and 700 and 800 use Bold, each with its own size.
    - The Arial faces also name Liberation Sans, Linux's metric-compatible twin of Arial (the same
      advance widths by design), so the same sizes hold on Linux and on the CI runner.
+   - The Roboto bold faces end with plain 'Roboto': Android 12 and later ship Roboto as one variable
+     font, which may not answer to 'Roboto Bold' (not verified; the owner checklist checks it). Without
+     it, headings would fall back to the unsized system font.
    - A device without the font skips the face and uses the next family in --dz-font-sans.
    - Safari ignores the ascent and descent overrides; every line has an explicit line-height, so its
      layout is the same. */
@@ -74,7 +77,7 @@
 
 @font-face {
   font-family: 'dz-sans-fallback-roboto';
-  src: local('Roboto Bold'), local('Roboto-Bold');
+  src: local('Roboto Bold'), local('Roboto-Bold'), local('Roboto');
   font-weight: 700;
   size-adjust: 116.18%;
   ascent-override: 83.32%;
@@ -84,7 +87,7 @@
 
 @font-face {
   font-family: 'dz-sans-fallback-roboto';
-  src: local('Roboto Bold'), local('Roboto-Bold');
+  src: local('Roboto Bold'), local('Roboto-Bold'), local('Roboto');
   font-weight: 800;
   size-adjust: 118.56%;
   ascent-override: 81.65%;
