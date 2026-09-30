@@ -7,6 +7,12 @@ Progress (2026-09-30):
 - **A1 changed, by the owner's choice at the step 4 stop.** The command guard blocks any command that writes near the locked logo, so the planned `git show … > public/brand/deepzeta-logo.svg` copy can't run. Instead a static route, `src/app/brand/deepzeta-logo.svg/route.ts` (`dynamic = 'force-static'`), reads the locked file at build and serves it unchanged at the same URL. There's no copy in the repo, so nothing can drift, and the icon script reads the locked file too.
   - `public/brand/deepzeta-logo.svg` and the `.prettierignore` change are dropped.
   - One file is added: `src/lib/brand.ts`, the locked logo's path, URL, canvas and crops, shared by the route, `Logo.tsx`, the icon script and the tests, so none of them repeats a value.
+- Step 5 is done. **Verified on the built site:** `global-not-found.tsx` honours `viewport` and gets the icon and manifest links; `app/icon.png` is served at `/icon.png`. Next writes `sizes="48x48"` for the ICO (its largest entry), not the `sizes="any"` its docs describe. The logo route opts out of Turbopack's file tracing (`turbopackIgnore`): it's read only at build, and without the opt-out Turbopack traced the whole project (a build warning).
+- Step 6 is done: the pixel gradients are measured and reported on every run (24 pairs, C38), and disabled icon lines on the light page are gated (46 checks).
+- Step 7 is done. What the checks found:
+  - **Clearance (§4.2 rule 4), measured in Chromium** by tracing every line and dot: WhatsApp AI Agent 1.25, Booking Automation System 1.85, AI Voice Receptionist **0.15**, Speed-to-Lead System **−0.55** (the pixel overlaps the dial), CRM Setup & Automation **0.40**. The three approved drawings that fail get the rule's own remedy, a **knockout**: the lines are masked 0.75 around the pixel, and the pixel stays where the prototype put it.
+  - **AI Voice Receptionist's pixel moves up 0.45** (y 19.7 → 19.25), more than the 0.1 snap: at 19.7 it crossed the 2-unit padding (§3).
+  - **Vitest compiles `.tsx` without a plugin** (verified). **Playwright doesn't:** it compiles JSX with its component-testing runtime, which `react-dom/server` can't render. So one test helper is added, `tests/e2e/icon-gallery.tsx`, which `icons.spec.ts` loads through Vite (already a devDependency), as Vitest does.
 Phase: P1
 Branch: `feat/p1-brand-primitives`, from `main` at `9b37e6c`
 Page tier: T1, the placeholder Home (`lhci` floor ≥ 95), which gets the logo. No effect runs on any page (see the Effect register).
