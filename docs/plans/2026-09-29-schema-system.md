@@ -1,5 +1,5 @@
 # Plan: Schema system (JSON-LD), specification for P4
-Status: DRAFT. The rules it needs are already in [08](../ai/08-seo-geo-aeo-schema.md) §3 (owner instruction, 2026-09-29, C30); the build steps wait for P4.
+Status: Approved. The rules it needs are already in [08](../ai/08-seo-geo-aeo-schema.md) §3 (owner instruction, 2026-09-29, C30); the build steps wait for P4.
 Phase: P4 (Data & schema engine), with its foundation in P0
 Branch: feat/schema-system (when P4 starts)
 Page tier: n/a
