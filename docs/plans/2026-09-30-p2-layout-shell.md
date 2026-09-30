@@ -33,6 +33,9 @@ Progress:
   - **For part B:** `check:contrast` gains the error button's `mist` on navy pair; long words in grid or flex items may need `overflow-wrap: anywhere` or `min-w-0`; the error page could move focus to its heading.
   - **Open for the owner:** `next/link` on every page (3.3 KB of the 10 KB Home cap), or a plain `<a>` with a recorded lint exception; and `tests/gates/links.spec.ts` (step 1's note).
   - Scratch files deleted (02 §4). The trace script is written again for step 9.
+- 2026-10-01 · **The owner's decisions after part A:**
+  - **Keep `next/link`** on the error page. Its ~3.3 KB is in `OWN_JS_HOME` and paid once for the whole site; part B's header links use `Link` too, so step 9's `next/link` measurement is settled (the header adds no second copy).
+  - **`tests/gates/links.spec.ts` joins part B** (the owner left the choice to me). The gate already prints "nav and footer hrefs equal canonicals, duplicate targets (enabled in P2, with the layout shell)", and part B builds the nav, so the check arrives with what it checks; part C's footer links fall under it without another change. Added to part B's table.
 Phase: P2
 Branch: three parts, one merge each (Q5): `feat/p2a-shell-foundations`, `feat/p2b-header`, `feat/p2c-footer` (each from `main` after the previous merge)
 Page tier: T1. The shell renders on every page. It's measured on Home (`lhci` ≥ 95) and, from part B, on the review page (A3), which shows the complete shell.
@@ -495,6 +498,7 @@ A file listed in an earlier part may be modified again in a later part only wher
 | `tests/e2e/icons.spec.ts` | MODIFY | (K7) |
 | `tests/e2e/preferences.spec.ts` | CREATE | (O) |
 | `tests/e2e/shell.spec.ts` | CREATE | (O) |
+| `tests/gates/links.spec.ts` | MODIFY | Nav and footer hrefs equal canonicals; no duplicate targets (the gate's "enabled in P2" line; the owner's decision after part A) |
 
 **Part C · `feat/p2c-footer`**
 
