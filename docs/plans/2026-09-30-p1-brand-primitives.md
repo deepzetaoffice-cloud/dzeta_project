@@ -1,5 +1,5 @@
 # Plan: P1 Brand primitives: the logo, app icons and manifest, icon foundations
-Status: DONE, merge pending the owner's "merge" (APPROVED by the owner 2026-09-30, with the protected-file edits it lists; Q1 and Q2 answered (a), answers under Open questions; steps 9 and 10 approved 2026-09-30)
+Status: DONE, merged to `main` on the owner's "merge" (2026-09-30). APPROVED by the owner 2026-09-30, with the protected-file edits it lists; Q1 and Q2 answered (a), answers under Open questions; steps 9 and 10 approved 2026-09-30; the line-centre question answered "record an exception" (C39)
 Progress (2026-09-30):
 - Steps 0 and 1 are done: the plan (`98a6747`); registry rows R174–R178 and conflict entries C36–C38 (`d1616f6`).
 - Step 2 is done. **Baseline** (local, CI environment, 5 runs): median LCP 2179 ms, FCP 756 ms, Performance 99, Best Practices 96 (`errors-in-console`: the favicon 404), HTML 3,308 B, CSS 4,515 B, JS 139,668 B, fonts 38,823 B, images 0 B; HTML + CSS + JS 147,491 B of 190,868 B.
