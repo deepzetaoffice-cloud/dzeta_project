@@ -1,10 +1,9 @@
 # Plan: P0 Foundation, part 1 of 2: scaffold, gates, CI, SEO and security base, empty-page baseline
 Status: APPROVED (owner, 2026-09-30: "Approved"; Q1 and Q2 approved; answers under Open questions)
 Progress (2026-09-30):
-- Steps 1–9 are done, with CI `verify` green on GitHub.
-- Step 10 waits for the owner's C8 choice (decision 0014).
-- Step 11 is done, except the 08 §1 and 04 P10 edits, which wait for the owner to confirm Q3 (decision 0013).
-- Step 12 follows.
+- Steps 1–9 are done, with CI `verify` green on GitHub. The owner merged them to `main` (PR #1, `e9a6ecb`).
+- Steps 10 and 11 are done on the branch `chore/p0-close-out`: the owner approved 0013 and 0014 with the recommended options (0014 option A, 0013 `robots.txt` option 2).
+- Step 12 (the phase exit) runs on the same branch.
 Phase: P0
 Branch: `chore/p0-foundation`, from the docs stack's head `06a25d2`. That's the same code `main` has once the docs PR is merged, so the P0 PR diff shows P0 only.
 Page tier: T1 for the placeholder Home (`lhci` floor ≥ 95). No effects.
