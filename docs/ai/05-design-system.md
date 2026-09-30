@@ -49,12 +49,12 @@
 | `--dz-grad-signal` | `linear-gradient(135deg,#08C6FD 0%,#1A84FD 50%,#7946FC 100%)` | Borders of feature cards, highlights |
 | `--dz-grad-zeta` | `linear-gradient(150deg,#09E8FE 0%,#00B5FC 25%,#147BFC 50%,#4639F9 75%,#602CFA 100%)` | Wordmark "zeta", key headline words |
 | `--dz-grad-action` | `linear-gradient(90deg,#08C6FD,#2F6BFF)` | **Primary CTA only** |
-| `--dz-grad-action-deep` | `linear-gradient(90deg,#1A84FD 0%,#2139F6 100%)` | Primary CTA hover state (white text only at large sizes: about 3.6:1) |
+| `--dz-grad-action-deep` | `linear-gradient(90deg,#1A84FD 0%,#2139F6 100%)` | Primary CTA hover state (white text only at large sizes: 3.37:1, 0015) |
 | `--dz-grad-fold` | `linear-gradient(160deg,#006DE5 0%,#16C5FF 33%,#516CFC 67%,#7946FC 100%)` | Feature panels, illustrations, large shapes |
 | `--dz-grad-line-cyan` | `linear-gradient(90deg,#00D8EE 0%,#058FEE 50%,#0D48E6 100%)` | Dividers and underlines (pairs with the violet line) |
 | `--dz-grad-line-violet` | `linear-gradient(90deg,#4A22EA 0%,#662DE8 50%,#A040F2 100%)` | Dividers and underlines (pairs with the cyan line) |
 | `--dz-glow-hero` | `radial-gradient(ellipse 48% 55% at 50% 40%, rgba(24,70,210,.55) 0%, rgba(12,34,120,.26) 45%, rgba(1,4,19,0) 78%)` | Static signal glow on the Z0 plane (hero, chapter openers) |
-| `--dz-grid` | 1px lines `rgba(26,132,253,.07)` every 80px | The Z0 blueprint grid |
+| `--dz-grid-line` / `--dz-grid-size` | 1px lines `rgba(26,132,253,.07)` / every 80px | The Z0 blueprint grid |
 | `--dz-pixel-ai` | `#03D4FC → #04C1FD → #09A5FC` | Pillar colour (see icon rules) |
 | `--dz-pixel-web` | `#21BEFC → #3092FD → #4264FD` | Pillar colour |
 | `--dz-pixel-software` | `#3166FB → #2A4DFC → #3741FD` | Pillar colour |
@@ -65,7 +65,7 @@ Each pixel gradient runs top to bottom and has a `-solid` colour (used below 20 
 **Rules**
 - **One primary CTA style per view:** `--dz-grad-action` is reserved for the main action ("Book a free AI audit"). A second action uses an outline style.
 - Pixel colours are the colour code for the four pillars (C6) across menus, icons and page headers. One pillar colour per component.
-- Text contrast: WCAG AA (4.5:1 body, 3:1 large text and UI graphics), in both themes. `check:contrast` checks every token pair ([03](03-verification-gates.md)).
+- Text contrast: WCAG AA (4.5:1 body, 3:1 large text and UI graphics), in both themes. `check:contrast` checks the listed text, link, focus, CTA, signal, slate and status pairs in both themes, and prints what it doesn't check yet ([03](03-verification-gates.md)).
 - **Gradient headline words** (`--dz-grad-headline`) sit on the page background, never on a card: the zeta gradient's violet stop is 3.13:1 on navy but 2.83:1 on `--dz-navy-850` (0015).
 - The logo's ribbon and wordmark gradients live only in the logo component; never re-create the logo from tokens. The four pixel gradients are tokens (`--dz-pixel-*`) used by icons, The Assembly and The Landing (decision 0008).
 
@@ -116,6 +116,7 @@ The header, the CTA band and the footer stay navy in both themes, because the lo
 | Data / labels | JetBrains Mono, one static 500 weight (0015) | Eyebrows, stats, code-like labels |
 
 - **Self-hosted** through `next/font/local` (`src/styles/fonts.ts`), from the latin files in `src/styles/fonts/` with their OFL licences, `display: swap`, with the size-matched fallback.
+  - The families are `--dz-font-sans` (Montserrat, the base font, `font-sans`) and `--dz-font-mono` (`font-mono`).
   - Only Montserrat is preloaded; the mono loads only on pages that show it.
   - Never a Google Fonts `<link>`, and no request goes to Google.
   - The mono is one static weight, because the variable 400–600 file put the fonts over the ≈ 60 KB target ([07](07-performance-budget.md) §2).
@@ -132,7 +133,7 @@ The header, the CTA band and the footer stay navy in both themes, because the lo
   | `--dz-text-lead` | 1.125 → 1.3rem | 400 / 1.55 | `text-lead` |
   | `--dz-text-body` | 1rem | 400 / 1.6 | `text-body` |
   | `--dz-text-small` | 0.875rem | 400–500 / 1.5 | `text-small` |
-  | `--dz-text-caption` | 0.75rem | JetBrains Mono 500 / 1.4 / 0.04em. Uppercase eyebrows use `--dz-text-eyebrow-tracking`, 0.16em (`tracking-eyebrow`) | `text-caption` |
+  | `--dz-text-caption` | 0.75rem | JetBrains Mono 500 / 1.4 / 0.04em. Uppercase eyebrows use `--dz-text-eyebrow-tracking`, 0.16em (`tracking-eyebrow`) | `font-mono text-caption` (eyebrows add `uppercase tracking-eyebrow`) |
 
 - **Statement type:** `--dz-text-statement`, a size above `--dz-text-display` for the one statement headline per page ([13](13-experience-design.md) §2). Montserrat 800–900, tight leading and tracking. Arabic statements use Readex Pro with no letter-spacing ([11](11-i18n-rtl-readiness.md) §1).
   - Readex Pro stops at weight 700, so the Arabic statement weight is decided in P11.
@@ -193,6 +194,6 @@ Follow `Planning Folder/For Ai/DeepZeta Icon Master Rules.md` exactly: three tie
 ## 7. Components
 
 - Reuse → extend → create (see [06](06-code-standards.md) §3).
-- Every component works at 360, 390, 768, 1024, 1280 and 1536px wide, keyboard-operable, with visible focus (the `--dz-focus` ring: ice on dark, royal on light; a base style, 0015).
+- Every component works at 360, 390, 768, 1024, 1280 and 1536px wide, keyboard-operable, with visible focus (the `--dz-focus` ring: ice on dark, royal on light, `--dz-focus-width` 2px at `--dz-focus-offset` 2px; a base style, 0015).
 - Touch targets ≥ 44×44px.
 - States required where relevant: default, hover, focus-visible, active, disabled, loading, error, empty.

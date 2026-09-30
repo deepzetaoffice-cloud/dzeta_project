@@ -80,7 +80,7 @@ The owner answered the plan's questions and then reviewed every value in the tok
   - The weights the site uses are wider: about 3.4% at 400, 9% at 700 and 11% at 800 (the audit's calculation from the file). So when Montserrat replaces the fallback, lines can re-wrap and content can move.
   - **The lab shows CLS 0 only because no swap happened:** in every run the font finished before the first paint.
   - `--dz-measure` (65ch) changes width with the swap too, because `ch` is measured in whichever font is showing.
-  - **The fix is a separate owner decision:** a re-instanced font file whose default is 400, or hand-written fallback faces per weight, plus an e2e test that delays the font and records layout shifts.
+  - **The owner's decision (P0 exit): fix it in P2, with the content pages.** The options are a re-instanced font file whose default is 400, or hand-written fallback faces per weight. Either way, an e2e test delays the font and records layout shifts, and `--dz-measure` moves to rem.
 
 ### 6. Gates
 - **`check:contrast`** (`scripts/check-contrast.mjs`, part of `verify:fast`):
@@ -131,9 +131,15 @@ The CI figures come from each run's "Lighthouse run" annotations (GitHub Actions
   - 05 §7: the focus ring is `--dz-focus`
   - 03 §1: `check:contrast`, and the page-weight check in `lhci`
   - conflict register: C34 (statement size), and C22 applied
-- **Next, before content pages:** the fallback-font fix and a rem-based `--dz-measure` (the known gap in §5).
+- **Rule corrections at the P0 exit** (owner, 2026-09-30, after the reviews):
+  - 05 §2: the CTA hover contrast (3.37:1), the grid token names, and what `check:contrast` checks
+  - 05 §3: the font family tokens and the caption utilities
+  - 05 §7: the focus ring's width and offset tokens
+  - 07 §2 and §3: fonts can be variable or one static weight
+  - conflict register: C35 (the removed `total:size` check)
 - **P1 (logo, favicon, `themeColor`):** a `viewport` export with `colorScheme: 'dark'`, next to `themeColor`, so a slow first load shows a dark canvas before the stylesheet arrives (check that `global-not-found.tsx` supports it).
 - **P2 (header and glass):**
+  - The fallback-font fix and a rem-based `--dz-measure` (the known gap in §5, the owner's decision). 05 §3's "size-matched fallback" becomes true with it.
   - The theme switch stores the visitor's choice, and a no-flash script sets `data-theme='light'` before the first paint. It also goes into `global-not-found.tsx`, which skips the layout. The script sets the `color-scheme` meta for visitors who choose light.
   - Glass tokens start from this plan's finding: frost text on `--dz-glass-tint-min` 0.62 is 3.74:1 over a white background, so it needs 0.68, and mist needs 0.79.
   - A forced-colours e2e test: the focus ring stays a 2 px solid outline, and axe passes (13 §6).
@@ -148,4 +154,3 @@ The CI figures come from each run's "Lighthouse run" annotations (GitHub Actions
   - The 404's lone "home page" link gets a 44 px target (05 §7); 05 may add WCAG's exception for links inside running text.
   - `check:contrast` samples gradients between their stops (the dark zeta gradient dips to about 3.12:1 between `#4639F9` and `#602CFA`, against 3.13:1 at the stop), and the hero plan adds a pair for headline words over `--dz-glow-hero`.
   - The axe helper shared by `foundation.spec.ts` and `themes.spec.ts` moves to one file.
-- **07 §2 wording:** it reads "Fonts (3 variable, subset)", while the mono is now one static weight. A wording change is proposed to the owner, and 07 isn't edited here.

@@ -38,7 +38,10 @@ Progress (2026-09-30):
       - 0015 records the fallback-font gap and the follow-ups
       - the specimen says "a subset of" the gate's pairs
       - the caption comment in `tokens.css` names `font-mono`
-    - **Waiting for the owner:** the rule-file corrections in 05, 07 and the conflict register (protected), and the fallback-font fix (0015 §5).
+    - **The owner's answers (2026-09-30):**
+      - the rule-file corrections are approved and applied: 05 §2, §3 and §7; 07 §2 and §3; conflict register C35
+      - the extra 05 text stays
+      - the fallback-font fix goes into P2, with the content pages (0015 §5)
 Phase: P0
 Branch: `feat/p0-tokens-themes-fonts`, from `main` after the close-out PR (`chore/p0-close-out`) is merged (stacked on `docs/deepseek-ai-provider` until then, see Progress)
 Page tier: T1 for the placeholder Home (`lhci` floor ≥ 95). No effects.
