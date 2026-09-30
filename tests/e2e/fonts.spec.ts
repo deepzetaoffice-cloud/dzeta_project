@@ -18,6 +18,13 @@ const MONTSERRAT = /montserrat[^/]*\.woff2/;
 const ARIAL = { regular: ['ArialMT', 'LiberationSans'], bold: ['Arial-BoldMT', 'LiberationSans-Bold'] };
 const MAX_CHANGE_RATE = 0.08;
 
+// Headless Chromium hints fonts fully unless told otherwise (`--font-render-hinting`, default "full";
+// Chromium commit 536535), which turns off subpixel glyph positioning, so on the Linux CI runner glyph
+// widths aren't the fonts' own: small text re-wrapped at 14.7% of widths there against 5.1% on Windows
+// (2026-10-01). "none" measures the fonts' own widths, as visitors' browsers lay them out. It changes
+// nothing on Windows.
+test.use({ launchOptions: { args: ['--font-render-hinting=none'] } });
+
 // Fixed site copy: service names from the Services Catalogue for the headings, and paragraphs from
 // the catalogue and the legal drafts for the body text. Fixed, so the rates don't move with edits.
 const HEADINGS: string[] = [
@@ -254,9 +261,25 @@ test.describe('Fonts: the fallback swap (plan D3)', () => {
           }
           return blocks.map(({ style, lines }) => ({ style, lines }));
         }, widths);
+      // Each style's copy on one line, in total. The fallback's width over Montserrat's is the faces'
+      // calibration on this machine (100% is exact), printed with the rates.
+      const oneLineWidths = () =>
+        page.evaluate(() => {
+          const totals: Record<string, number> = {};
+          for (const el of document.querySelectorAll<HTMLElement>('#font-lab > div')) {
+            el.style.width = 'max-content';
+            el.style.whiteSpace = 'nowrap';
+            const style = el.dataset.style ?? '';
+            totals[style] = (totals[style] ?? 0) + el.getBoundingClientRect().width;
+            el.style.whiteSpace = '';
+          }
+          return totals;
+        });
       const before = await sweep();
+      const fallbackWidths = await oneLineWidths();
       await swapMontserrat(page, release);
       const after = await sweep();
+      const montserratWidths = await oneLineWidths();
 
       const rates = Object.keys(STYLES).map((name) => {
         let samples = 0;
@@ -270,7 +293,11 @@ test.describe('Fonts: the fallback swap (plan D3)', () => {
         });
         return { name, samples, rate: changed / samples };
       });
-      const summary = rates.map(({ name, rate }) => `${name} ${faces[name]} ${(rate * 100).toFixed(1)}%`);
+      const calibration = (name: string) =>
+        (((fallbackWidths[name] ?? 0) / (montserratWidths[name] ?? 1)) * 100).toFixed(1);
+      const summary = rates.map(
+        ({ name, rate }) => `${name} ${faces[name]} ${(rate * 100).toFixed(1)}% (width ${calibration(name)}%)`,
+      );
       console.log(`::notice title=Fonts copy sweep ${width}px at scale ${SWEEP[width].scale}::${summary.join(' · ')}`);
       for (const { name, samples, rate } of rates) {
         expect(samples, name).toBeGreaterThan(0);
