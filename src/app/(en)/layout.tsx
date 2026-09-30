@@ -1,8 +1,9 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
 import { locales } from '@/lib/i18n/locales';
 import { titleTemplate } from '@/lib/seo/title';
 import { siteConfig } from '@/lib/site-config';
+import { readToken } from '@/lib/tokens';
 import { siteUrl } from '@/lib/url';
 import { fontVariables } from '@/styles/fonts';
 import '@/styles/globals.css';
@@ -17,6 +18,13 @@ export const metadata: Metadata = {
     template: titleTemplate,
     default: siteConfig.brandName,
   },
+};
+
+// Every first visit is dark (05 §1), so a slow first load shows a dark canvas before the stylesheet
+// arrives (0015). The browser bar is navy in both themes, because the header stays navy (05 §2).
+export const viewport: Viewport = {
+  themeColor: readToken('--dz-navy'),
+  colorScheme: 'dark',
 };
 
 export default function EnglishRootLayout({ children }: Readonly<{ children: ReactNode }>) {

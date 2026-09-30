@@ -7,7 +7,9 @@ import { LOCKED_LOGO_PATH } from '@/lib/brand';
 export const dynamic = 'force-static';
 
 export function GET() {
-  return new Response(readFileSync(join(process.cwd(), LOCKED_LOGO_PATH)), {
+  // Read only at build (force-static), so the file needn't be traced into the server bundle. Without
+  // the ignore, Turbopack can't see through the imported path and traces the whole project.
+  return new Response(readFileSync(join(/*turbopackIgnore: true*/ process.cwd(), LOCKED_LOGO_PATH)), {
     headers: { 'Content-Type': 'image/svg+xml' },
   });
 }

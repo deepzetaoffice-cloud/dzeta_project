@@ -1,8 +1,9 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import Link from 'next/link';
 import { notFoundContent } from '@/content/en/not-found';
 import { locales } from '@/lib/i18n/locales';
 import { brandedTitle } from '@/lib/seo/title';
+import { readToken } from '@/lib/tokens';
 import { fontVariables } from '@/styles/fonts';
 import '@/styles/globals.css';
 
@@ -13,6 +14,12 @@ const locale = locales.en;
 // its own title. Next.js adds `noindex` to 404s.
 export const metadata: Metadata = {
   title: brandedTitle(notFoundContent.title),
+};
+
+// The same as the English layout's: it doesn't reach this page.
+export const viewport: Viewport = {
+  themeColor: readToken('--dz-navy'),
+  colorScheme: 'dark',
 };
 
 export default function GlobalNotFound() {
