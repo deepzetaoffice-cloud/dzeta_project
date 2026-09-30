@@ -69,7 +69,19 @@ export const PAIRS = [
   ]),
   { fg: '--dz-accent-light', bg: '--dz-paper', kind: 'text', themes: once },
   { fg: '--dz-accent-light', bg: '--dz-card-light', kind: 'text', themes: once },
+  // Disabled icon lines on the light page (C37). Icon lines at rest and on hover use --dz-text and
+  // --dz-text-strong, checked above in both themes; slate on the dark surfaces is checked above too.
+  { fg: '--dz-slate', bg: '--dz-paper', kind: 'ui', themes: once, note: 'disabled icon lines' },
+  { fg: '--dz-slate', bg: '--dz-card-light', kind: 'ui', themes: once, note: 'disabled icon lines' },
 ];
+
+// Measured and printed on every run, but never failing (conflict C38). The pillar pixels are the
+// locked logo's own colours, and an icon's meaning is carried by its lines and its text label, so the
+// pixel is a supplementary accent. Each gradient is measured at every stop, on every icon surface.
+const ICON_SURFACES = ['--dz-navy', '--dz-navy-900', '--dz-navy-850', '--dz-navy-800', '--dz-paper', '--dz-card-light'];
+export const REPORTED = ['--dz-pixel-ai', '--dz-pixel-web', '--dz-pixel-software', '--dz-pixel-ranking'].flatMap((fg) =>
+  ICON_SURFACES.map((bg) => ({ fg, bg, kind: 'ui', themes: once })),
+);
 
 // Printed on every run, so the output never claims more than it checked.
 export const NOT_CHECKED = [
@@ -77,7 +89,6 @@ export const NOT_CHECKED = [
   'light-mode status colours, accent surfaces, raised surfaces and shadows: the first plan that uses them',
   '--dz-border as the only boundary of a form field (2.24:1 on navy): P6 forms',
   'hairlines: decorative, not a boundary',
-  'pixel colours: the icon plan (P1), against each icon surface',
 ];
 
 // ---------------------------------------------------------------------------------------------
@@ -368,13 +379,24 @@ const pairLabel = (r) => `${r.fg} on ${r.bg}`;
 
 function main() {
   const root = process.cwd();
-  const { results, problems } = checkContrast(readFileSync(join(root, TOKENS_FILE), 'utf8'));
+  const css = readFileSync(join(root, TOKENS_FILE), 'utf8');
+  const { results, problems } = checkContrast(css);
+  // A reported pair never fails on its ratio, but a missing or unreadable token still does.
+  const reported = checkContrast(css, REPORTED);
+  problems.push(...reported.problems.filter((p) => !problems.includes(p)));
 
   for (const r of results) {
     const note = r.note ? ` (${r.note})` : '';
     console.log(
       `  ${r.pass ? 'ok  ' : 'FAIL'} ${r.theme.padEnd(5)} ${pairLabel(r).padEnd(44)} ${r.ratio.toFixed(2).padStart(5)}:1` +
         ` ≥ ${r.threshold} ${r.kind}, worst ${r.worstFg} on ${r.worstBg}${note}`,
+    );
+  }
+  console.log('Reported, not gated (C38: the pixel is a supplementary accent):');
+  for (const r of reported.results) {
+    console.log(
+      `  ${r.pass ? 'ok  ' : 'low '} ${pairLabel(r).padEnd(50)} ${r.ratio.toFixed(2).padStart(5)}:1` +
+        ` (${r.threshold} ${r.kind}), worst ${r.worstFg} on ${r.worstBg}`,
     );
   }
   console.log('Not checked yet:');

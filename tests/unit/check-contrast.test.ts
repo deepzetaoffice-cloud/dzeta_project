@@ -5,7 +5,9 @@ import {
   coloursIn,
   composite,
   contrastRatio,
+  NOT_CHECKED,
   PAIRS,
+  REPORTED,
   TOKENS_FILE,
   unreadColourSyntax,
 } from '../../scripts/check-contrast.mjs';
@@ -160,5 +162,21 @@ describe('check:contrast', () => {
   it('fails when a theme block is missing', () => {
     const withoutLight = tokens().replace(/\[data-theme='light'\] \{[^}]*\}/, '');
     expect(checkContrast(withoutLight, []).problems).toContainEqual("missing block: [data-theme='light']");
+  });
+
+  // Conflict C38 (P1): the pillar pixels are measured on every icon surface and reported, never gated.
+  it('measures every pillar pixel on every icon surface, at every gradient stop, through the stop tokens', () => {
+    const { results, problems } = checkContrast(readFileSync(TOKENS_FILE, 'utf8'), REPORTED);
+    expect(problems).toEqual([]);
+    expect(results).toHaveLength(4 * 6);
+    const ranking = results.find((r) => r.fg === '--dz-pixel-ranking' && r.bg === '--dz-navy-800');
+    expect(ranking?.ratio).toBeCloseTo(2.34, 2);
+    expect(ranking?.worstFg).toBe('#4c27fb');
+  });
+
+  it('keeps the reported pixel pairs out of the gated pairs, and no longer lists pixels as unchecked', () => {
+    const gated = new Set(PAIRS.map((pair) => `${pair.fg} ${pair.bg}`));
+    expect(REPORTED.filter((pair) => gated.has(`${pair.fg} ${pair.bg}`))).toEqual([]);
+    expect(NOT_CHECKED.join(' ')).not.toMatch(/pixel/i);
   });
 });
