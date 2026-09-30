@@ -1,13 +1,13 @@
 # 05 · Design System
 
-> **Applies to:** all styling, components, icons, motion · **Precedence:** below 00 · **Last reviewed:** 2026-09-29
+> **Applies to:** all styling, components, icons, motion · **Precedence:** below 00 · **Last reviewed:** 2026-09-30
 > **Related:** `Planning Folder/For Ai/DeepZeta Icon Master Rules.md` (icons) · [13-experience-design.md](13-experience-design.md) (effects, motion, interaction: the only home for effect rules) · [07-performance-budget.md](07-performance-budget.md) (motion cost limits) · [docs/design/](../design/README.md) (surface specs)
 
 ---
 
 ## 1. Principles
 
-1. **Brand world:** dark navy is the default look, with a full light mode built from the same tokens (visitor can switch; `prefers-color-scheme` respected on first visit).
+1. **Brand world:** dark navy is the default look, and every first visit is dark, whatever the system setting. A full light mode is built from the same tokens. The visitor switches to it, and the choice is remembered (P2 header). Browsers report "no preference" as light, so following the system would show most first visits the light theme (decision 0015).
 2. **70 / 20 / 10 balance:** 70% navy surfaces, 20% white/frost text, 10% brand colour.
 3. **Tokens, never raw values.** Components use Tailwind classes generated from tokens. Raw hex/rgb/px values are allowed **only** in `src/styles/tokens.css` (enforced by `check:tokens`).
 4. **Tailwind v4 is CSS-first.** Tokens are defined with `@theme` in `src/styles/tokens.css`. **There is no `tailwind.config.js`.** Don't create one.
@@ -17,7 +17,7 @@
 
 ---
 
-## 2. Colour tokens (source values: blueprint v1 and the colour system; where names differ, this file's names win (conflict C22); names final in Phase 0)
+## 2. Colour tokens (source values: blueprint v1 and the colour system; where names differ, this file's names win (conflict C22); names and values final in P0, decision 0015, in `src/styles/tokens.css`)
 
 | Token | Value | Role |
 |---|---|---|
@@ -27,7 +27,7 @@
 | `--dz-navy-800` | `#0B1C4A` | Raised / hover surface |
 | `--dz-navy-700` | `#16224A` | Hairline borders |
 | `--dz-border` | `#33457F` | Emphasised border |
-| `--dz-slate` | `#5D73B8` | Labels, disabled |
+| `--dz-slate` | `#5D73B8` | Large labels and disabled states only (4.48:1 on navy, 0015) |
 | `--dz-mist` | `#9FB0E0` | Secondary text |
 | `--dz-frost` | `#C9D4FF` | Body text on dark, icon lines |
 | `--dz-white` | `#F4F6FB` | Headings / primary text (never pure `#FFF`) |
@@ -37,10 +37,11 @@
 | `--dz-violet` | `#7946FC` | Accent |
 | `--dz-ice` | `#7CF3FF` | Focus ring |
 | `--dz-sky` | `#3DA9FC` | Links |
-| `--dz-signal` | `#2F6BFF` | Solid primary fill (white text sits right at 4.5:1: re-check in P0) |
+| `--dz-signal` | `#2F6BFF` | Solid primary fill: navy text (4.54:1); white text only in large text (4.16:1, 0015) |
 | `--dz-violet-soft` | `#A78BFF` | Violet text on dark |
 | `--dz-magenta` | `#A040F2` | Rare accent: gradient tails, tags |
-| `--dz-ok` / `--dz-warn` / `--dz-bad` | `#22D3A6` / `#FFB547` / `#FF5A6E` | Status only |
+| `--dz-ok` / `--dz-warn` / `--dz-bad` | `#22D3A6` / `#FFB547` / `#FF5A6E` | Status only. On dark only: they fail on the light page, so light variants come with their first use (0015) |
+| `--dz-info` | `#3DA9FC` | Info status: the colour system's info tone (C22) |
 
 **Gradients**
 | Token | Value | Use |
@@ -59,25 +60,50 @@
 | `--dz-pixel-software` | `#3166FB → #2A4DFC → #3741FD` | Pillar colour |
 | `--dz-pixel-ranking` | `#6430FA → #592BFD → #4C27FB` | Pillar colour |
 
+Each pixel gradient runs top to bottom and has a `-solid` colour (used below 20 px) and a `-glow` colour, from the Icon Master Rules §5.2 (for example `--dz-pixel-ai-solid`, `--dz-pixel-ai-glow`).
+
 **Rules**
 - **One primary CTA style per view:** `--dz-grad-action` is reserved for the main action ("Book a free AI audit"). A second action uses an outline style.
 - Pixel colours are the colour code for the four pillars (C6) across menus, icons and page headers. One pillar colour per component.
-- Text contrast: WCAG AA (4.5:1 body, 3:1 large text and UI graphics). Check light mode separately.
+- Text contrast: WCAG AA (4.5:1 body, 3:1 large text and UI graphics), in both themes. `check:contrast` checks every token pair ([03](03-verification-gates.md)).
+- **Gradient headline words** (`--dz-grad-headline`) sit on the page background, never on a card: the zeta gradient's violet stop is 3.13:1 on navy but 2.83:1 on `--dz-navy-850` (0015).
 - The logo's ribbon and wordmark gradients live only in the logo component; never re-create the logo from tokens. The four pixel gradients are tokens (`--dz-pixel-*`) used by icons, The Assembly and The Landing (decision 0008).
 
-**Light mode ("paper blueprint")** · PROPOSED values from homepage mockup v1; contrast-checked in P0 before any effect ships. Semantic tokens that switch between dark and light (background, surface, text…) are named in P0.
+**Light mode ("paper blueprint")** · final (P0, decision 0015), contrast-checked by `check:contrast`
 
-| Role | Light value |
-|---|---|
-| Page background | `#F4F6FB` |
-| Card surface | `#FFFFFF` |
-| Body text | `#16224A` |
-| Headings | `#010413` |
-| Links | `#1557C9` |
-| Accent | `#0A6BE0` |
-| Zeta gradient (light) | `linear-gradient(150deg,#0098D8,#0A6BE0,#4639F9,#602CFA)` |
+| Role | Light value | Token |
+|---|---|---|
+| Page background | `#F4F6FB` | `--dz-paper` |
+| Card surface | `#FFFFFF` | `--dz-card-light` |
+| Body text | `#16224A` | `--dz-ink` |
+| Secondary text | `#34446F` | `--dz-ink-muted` |
+| Headings | `#010413` | `--dz-navy` |
+| Links | `#1557C9` | `--dz-link-light` |
+| Accent | `#0A6BE0` | `--dz-accent-light` |
+| Hairline | `#16224A` at 14% | `--dz-hairline-light` |
+| Focus ring | `#2139F6` | `--dz-royal` |
+| Zeta gradient (light) | `linear-gradient(150deg,#0094D3,#0A6BE0,#4639F9,#602CFA)`: the first stop moved from `#0098D8`, which was 2.996:1 on the page (0015) | `--dz-grad-zeta-light` |
 
 The header, the CTA band and the footer stay navy in both themes, because the logo's white "Deep" needs navy.
+
+**Semantic tokens** (they switch with the theme; components use these, never a primitive that changes meaning between themes)
+
+| Token | Dark | Light | Tailwind |
+|---|---|---|---|
+| `--dz-bg` | `--dz-navy` | `--dz-paper` | `bg-bg` |
+| `--dz-surface` | `--dz-navy-850` | `--dz-card-light` | `bg-surface` |
+| `--dz-text` | `--dz-frost` | `--dz-ink` | `text-fg` |
+| `--dz-text-strong` | `--dz-white` | `--dz-navy` | `text-fg-strong` |
+| `--dz-text-muted` | `--dz-mist` | `--dz-ink-muted` | `text-fg-muted` |
+| `--dz-link` | `--dz-sky` | `--dz-link-light` | `text-link` |
+| `--dz-focus` | `--dz-ice` | `--dz-royal` | `outline-focus` |
+| `--dz-hairline` | `--dz-navy-700` | `--dz-hairline-light` | `border-hairline` |
+| `--dz-grad-headline` | `--dz-grad-zeta` | `--dz-grad-zeta-light` | none (a background-clip text fill) |
+
+- **Dark** is `:root` and `[data-theme='dark']`. **Light** is `[data-theme='light']` only; `tokens.css` has no `prefers-color-scheme` block (§1).
+- **Any element can carry `data-theme`.** It then paints its own `--dz-bg` and `--dz-text`: the header, the CTA band and the footer use `data-theme='dark'`.
+- **Brand primitives are utilities too** (`bg-navy-850`, `text-white`, `bg-signal`…), for surfaces that never switch.
+- **Tailwind's default colours, fonts, sizes and radii are removed,** so an off-brand value can't be written.
 
 ---
 
@@ -87,24 +113,47 @@ The header, the CTA band and the footer stay navy in both themes, because the lo
 |---|---|---|
 | Display & body (Latin) | Montserrat (variable) | Display 800, headings 700, body 400/500 |
 | Arabic (after launch) | Readex Pro (variable) | Geometric match for Montserrat; Arabic subset |
-| Data / labels | JetBrains Mono (variable) | Eyebrows, stats, code-like labels |
+| Data / labels | JetBrains Mono, one static 500 weight (0015) | Eyebrows, stats, code-like labels |
 
-- Self-hosted via `next/font`, **variable files, subset**, `display: swap`. Never a Google Fonts `<link>`.
-- Fluid type scale with `clamp()`, defined once as tokens (`--dz-text-display`, `--dz-text-h1`…`--dz-text-caption`). Final values set in Phase 0.
-- **Statement type:** `--dz-text-statement`, a size above `--dz-text-display` for the one statement headline per page ([13](13-experience-design.md) §2). Montserrat 800–900, tight leading and tracking. Arabic statements use Readex Pro with no letter-spacing ([11](11-i18n-rtl-readiness.md) §1). Maximum size 9rem (Lab-confirmed, 0009); the fluid minimum is set in P0.
-- Long headings use `text-wrap: balance`; body measure 60–70 characters.
+- **Self-hosted** through `next/font/local` (`src/styles/fonts.ts`), from the latin files in `src/styles/fonts/` with their OFL licences, `display: swap`, with the size-matched fallback.
+  - Only Montserrat is preloaded; the mono loads only on pages that show it.
+  - Never a Google Fonts `<link>`, and no request goes to Google.
+  - The mono is one static weight, because the variable 400–600 file put the fonts over the ≈ 60 KB target ([07](07-performance-budget.md) §2).
+- **The type scale** (final, P0, decision 0015). Sizes run fluidly from 360 to 1280 px wide with `clamp(min, rem + vw, max)`; the rem part keeps browser zoom working (WCAG 1.4.4).
+
+  | Token | Size (360 → 1280 px) | Weight / leading / tracking | Tailwind |
+  |---|---|---|---|
+  | `--dz-text-statement` | 2.6 → 5.58rem | 800 / 0.98 / −0.035em | `text-statement` |
+  | `--dz-text-display` | 2.2 → 4.2rem | 800 / 1.02 / −0.035em | `text-display` |
+  | `--dz-text-h1` | 2 → 3.2rem | 700 / 1.05 / −0.03em | `text-h1` |
+  | `--dz-text-h2` | 1.6 → 2.4rem | 700 / 1.1 / −0.02em | `text-h2` |
+  | `--dz-text-h3` | 1.3 → 1.9rem | 700 / 1.25 / −0.02em | `text-h3` |
+  | `--dz-text-h4` | 1.25rem | 700 / 1.3 | `text-h4` |
+  | `--dz-text-lead` | 1.125 → 1.3rem | 400 / 1.55 | `text-lead` |
+  | `--dz-text-body` | 1rem | 400 / 1.6 | `text-body` |
+  | `--dz-text-small` | 0.875rem | 400–500 / 1.5 | `text-small` |
+  | `--dz-text-caption` | 0.75rem | JetBrains Mono 500 / 1.4 / 0.04em. Uppercase eyebrows use `--dz-text-eyebrow-tracking`, 0.16em (`tracking-eyebrow`) | `text-caption` |
+
+- **Statement type:** `--dz-text-statement`, a size above `--dz-text-display` for the one statement headline per page ([13](13-experience-design.md) §2). Montserrat 800–900, tight leading and tracking. Arabic statements use Readex Pro with no letter-spacing ([11](11-i18n-rtl-readiness.md) §1).
+  - Readex Pro stops at weight 700, so the Arabic statement weight is decided in P11.
+  - The maximum is 5.58rem, the largest size the owner saw in the Lab (conflict C34 corrects 0009's 9rem).
+- Headings use `text-wrap: balance` (a base style); body measure 60–70 characters (`--dz-measure`, 65ch).
 
 ---
 
 ## 4. Spacing, radius, elevation
 
-- Spacing uses the Tailwind scale (4px base). Section rhythm and container widths are tokens (`--dz-container: 1140px` from the blueprint; others set in Phase 0).
+- Spacing uses the Tailwind scale (4px base). The layout tokens (P0, 0015):
+  - `--dz-container` 1140px (`max-w-page`, from the blueprint)
+  - `--dz-measure` 65ch (`max-w-measure`)
+  - `--dz-gutter` 1 → 2.5rem (`px-gutter`)
 - Radius tokens: `--dz-radius-sm` 8px, `--dz-radius-md` 12px, `--dz-radius-lg` 18px (cards), `--dz-radius-xl` 22px (feature panels), `--dz-radius-pill` 999px.
 - Elevation is expressed with surface steps (navy-900 → 850 → 800) and borders, not heavy shadows. Glow effects use radial gradients, not `box-shadow` animation.
-- **Breathing room:** `--dz-space-section` < `--dz-space-chapter` < `--dz-space-statement`, for the loud/quiet rhythm ([13](13-experience-design.md) §2). Values set in P0 / the Design Lab.
+- **Breathing room:** `--dz-space-section` < `--dz-space-chapter` < `--dz-space-statement`, for the loud/quiet rhythm ([13](13-experience-design.md) §2): 3 → 6rem, 4.5 → 8.75rem (the Lab's 72 → 140 px) and 6 → 12rem (`py-section`, `py-chapter`, `py-statement`; 0015).
 - **Glass tokens** (used by the glass ladder, 13 §4.1): `--dz-glass-tint`, `--dz-glass-tint-min` (the minimum tint behind text that keeps AA contrast whatever passes behind it), `--dz-glass-edge` (hairline), `--dz-glass-highlight` (top-edge light), `--dz-glass-blur` (`glass-live` only), `--dz-grain` (the shared `glass-frost` texture, ≤ 2 KB).
   - Lab-confirmed values (0009): `--dz-glass-blur` 17px and `--dz-glass-tint-min` 0.62. P0 re-checks contrast in both themes and GPU cost on a budget Android phone.
-- **Stacking:** a `--dz-layer-*` z-index scale (base, raised, sticky, header, overlay, sheet, toast, consent). It is separate from the visual depth planes Z0–Z3.
+  - **P0 finding (0015):** at 0.62, frost text over a white background is 3.74:1. Frost body text needs a tint of 0.68, and mist needs 0.79. The glass tokens arrive with the glass effects in P2.
+- **Stacking:** a `--dz-layer-*` z-index scale: base 0, raised 10, sticky 20, header 30, overlay 40, sheet 50, toast 60, consent 70 (0015), used as `z-(--dz-layer-header)`. It is separate from the visual depth planes Z0–Z3.
 
 ---
 
@@ -144,6 +193,6 @@ Follow `Planning Folder/For Ai/DeepZeta Icon Master Rules.md` exactly: three tie
 ## 7. Components
 
 - Reuse → extend → create (see [06](06-code-standards.md) §3).
-- Every component works at 360, 390, 768, 1024, 1280 and 1536px wide, keyboard-operable, with visible focus (`--dz-ice` ring).
+- Every component works at 360, 390, 768, 1024, 1280 and 1536px wide, keyboard-operable, with visible focus (the `--dz-focus` ring: ice on dark, royal on light; a base style, 0015).
 - Touch targets ≥ 44×44px.
 - States required where relevant: default, hover, focus-visible, active, disabled, loading, error, empty.

@@ -23,6 +23,10 @@ Progress (2026-09-30):
   - **Headings:** h1–h4 at 700, as 05 says.
   - **Eyebrows:** one new token, `--dz-text-eyebrow-tracking` 0.16em (`tracking-eyebrow`), for uppercase eyebrows. Captions keep 0.04em.
   - **All other type and spacing values:** as proposed.
+- Step 9 is done:
+  - decision 0015 and its index row
+  - the approved protected edits: 05 §1, §2, §3, §4 and §7; 03 §1; conflict register C34 and C22; the perf auditor's page-weight line; `CLAUDE.md`
+  - **05 §1 and §7 go beyond the plan's list.** They follow from the owner's first-visit and focus-ring answers.
 Phase: P0
 Branch: `feat/p0-tokens-themes-fonts`, from `main` after the close-out PR (`chore/p0-close-out`) is merged (stacked on `docs/deepseek-ai-provider` until then, see Progress)
 Page tier: T1 for the placeholder Home (`lhci` floor ≥ 95). No effects.

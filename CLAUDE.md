@@ -33,10 +33,14 @@ This is deepzeta's own website and its first case study. Speed, custom code, SEO
 
 ## Current state
 
-- **Phase:** P0 Foundation (`docs/plans/2026-09-30-p0-foundation.md`, part 1 of 2; part 2 is the design tokens, themes and fonts plan). The app is scaffolded (Next.js 16.3.7, React 19.3, TypeScript 6.0.3, Tailwind 4.3, versions in decision 0012). Every gate is an npm script: `npm run verify:fast` after each step, `npm run verify` before a PR (03). Local runs need `.env.local` (`docs/owner/p0-setup-guide.md`).
-- **Decisions.** Decided on 2026-09-30: the JS budget (C8, decision 0014 option A: the 136.4 KB framework baseline plus our own budget per page) and the pre-launch indexing lock (0013). Decided on 2026-09-29: the company entity (D2, Deepzeta Digital Solutions L.L.C.), the service structure (C6, the four pillars) and the brand name "Deepzeta AI" (C29). The domain is `deepzeta.ai` (0006). See `docs/decisions/README.md`.
+- **Phase:** P0 Foundation is done once the owner merges its PRs:
+  - part 1: `docs/plans/2026-09-30-p0-foundation.md`
+  - part 2: `docs/plans/2026-09-30-p0-design-tokens-themes-fonts.md`, the tokens (`src/styles/tokens.css`), the themes (every first visit dark) and the self-hosted fonts, decision 0015
+
+  **Next: P1 Brand primitives** (the logo component, favicon and manifest, icon foundations; 04 §2). The app is scaffolded (Next.js 16.3.7, React 19.3, TypeScript 6.0.3, Tailwind 4.3, versions in decision 0012). Every gate is an npm script: `npm run verify:fast` after each step, `npm run verify` before a PR (03). Local runs need `.env.local` (`docs/owner/p0-setup-guide.md`).
+- **Decisions.** Decided on 2026-09-30: the JS budget (C8, decision 0014 option A: the 136.4 KB framework baseline plus our own budget per page), the pre-launch indexing lock (0013), and the design tokens, themes and fonts (0015). Decided on 2026-09-29: the company entity (D2, Deepzeta Digital Solutions L.L.C.), the service structure (C6, the four pillars) and the brand name "Deepzeta AI" (C29). The domain is `deepzeta.ai` (0006). See `docs/decisions/README.md`.
 - **Stack and performance tiers** accepted in decisions 0004 and 0005 (`docs/decisions/`). Motion is native-first; GSAP only on T2/T3 pages; automation runs on n8n.
-- **Design Direction v2 "Signal & Depth"** accepted in decision 0008: responsive-only motion; effects in `docs/ai/13-experience-design.md`; surface specs in `docs/design/`. Parked for owner sessions: the 15+ Studio concepts, the Deepzeta Sync sales automation, the App demo. Design Lab verdicts: decision 0009. Next: P0 part 2 (design tokens, themes and fonts).
+- **Design Direction v2 "Signal & Depth"** accepted in decision 0008: responsive-only motion; effects in `docs/ai/13-experience-design.md`; surface specs in `docs/design/`. Parked for owner sessions: the 15+ Studio concepts, the Deepzeta Sync sales automation, the App demo. Design Lab verdicts: decision 0009. Tokens specimen: `docs/design/prototypes/tokens-specimen.html` (0015).
 - **SEO/GEO Domination Engine** (`docs/seo/`, 2026-09-30): the content system, the V1 URL registry (about 99 pages), linking, FAQ, E-E-A-T, robots/llms. **Reminder:** pSEO starts only after every V1 registry row is live; then remind the owner (engine §10).
 
 ## Working agreement
