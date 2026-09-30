@@ -1,0 +1,91 @@
+/* Size-matched fallbacks for Montserrat (docs/ai/05 §3; P2 plan, section D; decision 0015 §5).
+   Montserrat uses display: swap, so on a slow connection text first paints in a local font. Each face
+   below makes that font as wide as Montserrat at one weight, so the swap re-wraps no line.
+   - Values from `npm run fonts:fallback` (scripts/measure-font-fallback.mjs, Chromium 153): the
+     size-adjust is the width ratio of the site's own copy; the overrides are Montserrat's ascent
+     (96.8%) and descent (25.1%) divided by it, so the line boxes match too.
+   - Two families: Arial (Windows, macOS) and Roboto (Android, which has no Arial). Each has a Regular
+     and a Bold only, so 400 and 500 use Regular and 700 and 800 use Bold, each with its own size.
+   - A device without the font skips the face and uses the next family in --dz-font-sans.
+   - Safari ignores the ascent and descent overrides; every line has an explicit line-height, so its
+     layout is the same. */
+
+@font-face {
+  font-family: 'dz-sans-fallback-arial';
+  src: local('Arial'), local('ArialMT');
+  font-weight: 400;
+  size-adjust: 111.91%;
+  ascent-override: 86.5%;
+  descent-override: 22.43%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'dz-sans-fallback-arial';
+  src: local('Arial'), local('ArialMT');
+  font-weight: 500;
+  size-adjust: 113.78%;
+  ascent-override: 85.07%;
+  descent-override: 22.06%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'dz-sans-fallback-arial';
+  src: local('Arial Bold'), local('Arial-BoldMT');
+  font-weight: 700;
+  size-adjust: 109.59%;
+  ascent-override: 88.33%;
+  descent-override: 22.9%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'dz-sans-fallback-arial';
+  src: local('Arial Bold'), local('Arial-BoldMT');
+  font-weight: 800;
+  size-adjust: 111.84%;
+  ascent-override: 86.55%;
+  descent-override: 22.44%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'dz-sans-fallback-roboto';
+  src: local('Roboto'), local('Roboto-Regular');
+  font-weight: 400;
+  size-adjust: 112.29%;
+  ascent-override: 86.21%;
+  descent-override: 22.35%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'dz-sans-fallback-roboto';
+  src: local('Roboto'), local('Roboto-Regular');
+  font-weight: 500;
+  size-adjust: 114.17%;
+  ascent-override: 84.78%;
+  descent-override: 21.98%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'dz-sans-fallback-roboto';
+  src: local('Roboto Bold'), local('Roboto-Bold');
+  font-weight: 700;
+  size-adjust: 116.18%;
+  ascent-override: 83.32%;
+  descent-override: 21.6%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'dz-sans-fallback-roboto';
+  src: local('Roboto Bold'), local('Roboto-Bold');
+  font-weight: 800;
+  size-adjust: 118.56%;
+  ascent-override: 81.65%;
+  descent-override: 21.17%;
+  line-gap-override: 0%;
+}

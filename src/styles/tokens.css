@@ -119,8 +119,10 @@
   --dz-grad-zeta-light: linear-gradient(150deg, #0094d3, #0a6be0, #4639f9, #602cfa);
 
   /* Fonts. next/font sets --font-montserrat and --font-jetbrains-mono on <html>
-     (src/styles/fonts.ts); each already includes a size-matched fallback. */
-  --dz-font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
+     (src/styles/fonts.ts). Montserrat's size-matched fallbacks are the two families from
+     font-fallbacks.css, Arial then Roboto (Android); the mono's is built in by next/font. */
+  --dz-font-sans:
+    var(--font-montserrat), 'dz-sans-fallback-arial', 'dz-sans-fallback-roboto', ui-sans-serif, system-ui, sans-serif;
   --dz-font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
 
   /* Type scale (05 §3). Fluid sizes run from 360 to 1280 px wide; the rem part keeps browser zoom
@@ -168,7 +170,9 @@
   --dz-space-statement: clamp(6rem, 3.6522rem + 10.4348vw, 12rem);
   --dz-gutter: clamp(1rem, 0.413rem + 2.6087vw, 2.5rem);
   --dz-container: 1140px;
-  --dz-measure: 65ch;
+  /* The body measure, 65ch of Montserrat 400 in 1rem text, in rem: ch is measured in whichever font
+     is showing, so it changed width when the font swapped (0015). `npm run fonts:fallback` prints it. */
+  --dz-measure: 43rem;
 
   /* Stacking order (05 §4), used as z-(--dz-layer-header). Not the depth planes Z0–Z3. */
   --dz-layer-base: 0;

@@ -19,6 +19,7 @@
     "check:rules": "node scripts/check-rules.mjs",
     "check:effects": "node scripts/check-effects.mjs",
     "brand:icons": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/build-brand-icons.mjs",
+    "fonts:fallback": "node scripts/measure-font-fallback.mjs",
     "check:schema": "playwright test --project=gate-schema",
     "check:seo": "playwright test --project=gate-seo",
     "check:links": "playwright test --project=gate-links",
