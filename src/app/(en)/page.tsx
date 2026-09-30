@@ -1,10 +1,12 @@
 import type { Metadata } from 'next';
 import { homeContent } from '@/content/en/home';
+import { brandedTitle } from '@/lib/seo/title';
 import { siteConfig } from '@/lib/site-config';
 import { absoluteUrl } from '@/lib/url';
 
 export const metadata: Metadata = {
-  title: homeContent.title,
+  // `absolute`: the layout's title template doesn't reach a page in its own segment (see seo/title.ts).
+  title: { absolute: brandedTitle(homeContent.title) },
   description: homeContent.description,
   alternates: { canonical: absoluteUrl('/') },
 };

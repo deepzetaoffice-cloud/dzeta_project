@@ -176,6 +176,7 @@ Those are design decisions the owner reviews visually, and the JavaScript baseli
 | `src/lib/url.ts` | CREATE | `siteUrl()`, `absoluteUrl()` |
 | `src/lib/seo/indexing.ts` | CREATE | Section A |
 | `src/lib/security-headers.ts` | CREATE | Section B |
+| `src/lib/seo/title.ts` | CREATE | **Added during step 6.** The one title format, used by the layout template and by Home. `check:seo` showed that Next.js doesn't apply a layout's `title.template` to the page in the layout's own segment (docs 16.3.7, `generateMetadata` → `title.template`). |
 | `src/lib/i18n/locales.ts` | CREATE | `en` → `lang="en"`, `dir="ltr"`, ready for `ar` |
 | `src/lib/site-config.ts` | CREATE | CONFIRMED identity facts only |
 | `src/content/en/home.ts` | CREATE | Placeholder copy (section D) |

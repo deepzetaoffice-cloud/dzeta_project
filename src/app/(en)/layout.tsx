@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import { locales } from '@/lib/i18n/locales';
+import { titleTemplate } from '@/lib/seo/title';
 import { siteConfig } from '@/lib/site-config';
 import { siteUrl } from '@/lib/url';
 import '@/styles/globals.css';
@@ -12,7 +13,7 @@ const locale = locales.en;
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl()),
   title: {
-    template: `%s | ${siteConfig.brandName}`,
+    template: titleTemplate,
     default: siteConfig.brandName,
   },
 };
