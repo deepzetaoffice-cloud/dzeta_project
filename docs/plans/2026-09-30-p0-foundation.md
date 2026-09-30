@@ -4,6 +4,7 @@ Progress (2026-09-30):
 - Steps 1–9 are done, with CI `verify` green on GitHub. The owner merged them to `main` (PR #1, `e9a6ecb`).
 - Steps 10 and 11 are done on the branch `chore/p0-close-out`: the owner approved 0013 and 0014 with the recommended options (0014 option A, 0013 `robots.txt` option 2).
 - Step 12 (the phase exit) runs on the same branch.
+- Superseded by the accepted decisions: section A's `robots.txt` for production before launch (now the launch file, 0013 option 2) and section F's 150 KB total (now the framework baseline + 50 KB, with a JavaScript assertion, 0014 option A).
 Phase: P0
 Branch: `chore/p0-foundation`, from the docs stack's head `06a25d2`. That's the same code `main` has once the docs PR is merged, so the P0 PR diff shows P0 only.
 Page tier: T1 for the placeholder Home (`lhci` floor ≥ 95). No effects.
