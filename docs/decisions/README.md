@@ -19,7 +19,7 @@ Status: PROPOSED | ACCEPTED (owner, date) | SUPERSEDED by NNNN
 | [0001](0001-ai-rule-system.md) | AI rule system: `docs/ai` as single source; Claude Code primary; `AGENTS.md` for other tools | ACCEPTED |
 | [0002](0002-english-first-arabic-after-launch.md) | English at launch; native GCC Arabic after launch; RTL-ready now | ACCEPTED |
 | [0003](0003-plan-first-workflow.md) | Plan first, then execute; Git + GitHub with protected `main` | ACCEPTED |
-| [0004](0004-tech-stack.md) | Tech stack: native-first frontend, n8n automation backbone, Google Sheets CRM v0 | ACCEPTED |
+| [0004](0004-tech-stack.md) | Tech stack: native-first frontend, n8n automation backbone, Google Sheets CRM v0 | ACCEPTED (AI-agent row superseded by 0016) |
 | [0005](0005-performance-tiers.md) | Performance tiers: Home ≥ 95 · money pages ≥ 90 · experience pages ≥ 70; Core Web Vitals everywhere | ACCEPTED |
 | [0006](0006-domain-deepzeta-ai.md) | Domain: `deepzeta.ai` is canonical; `www` redirects to it | ACCEPTED |
 | [0007](0007-roo-code-as-implementer.md) | Roo Code as a second implementer (renumbered from 0006 on 2026-09-29; see conflict C7) | PROPOSED |
@@ -30,6 +30,7 @@ Status: PROPOSED | ACCEPTED (owner, date) | SUPERSEDED by NNNN
 | [0012](0012-p0-toolchain-and-hosting.md) | P0 toolchain versions (TypeScript 6, ESLint 9 and why), audit result, Vercel region and DNS facts | ACCEPTED in part (versions, hosting); audit acceptance PROPOSED |
 | [0013](0013-pre-launch-indexing-lock.md) | Pre-launch indexing lock: production stays `noindex` until `SITE_INDEXING=on` at launch; its `robots.txt` lets crawlers read the `noindex` | ACCEPTED (option 2) |
 | [0014](0014-empty-page-baseline-and-js-budget.md) | Empty-page baseline and the JavaScript budget (C8): framework baseline 136.4 KB + our own budget per page | ACCEPTED (option A) |
+| [0016](0016-ai-provider-deepseek.md) | AI provider: DeepSeek through the AI SDK for the agent demo, the Content Planner and pSEO drafting (0015 is reserved by the P0 part 2 plan) | ACCEPTED |
 
 ## Open business decisions (from the blueprint)
 

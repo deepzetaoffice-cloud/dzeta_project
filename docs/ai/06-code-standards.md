@@ -18,7 +18,7 @@
 | Spam / rate limit | Cloudflare Turnstile (on form focus) + Upstash Redis rate limit | Serverless-safe store (§4) |
 | Automation | n8n (hosting per decision 0004), called only from the server via signed webhook; workflow JSON in the repo | Decision 0004 |
 | CRM / email | Google Sheets v0 + Gmail (Workspace) via n8n; HubSpot/Zoho later | Swap inside n8n only |
-| AI agent | AI SDK + Claude on a route handler, streaming; UI loaded on tap | Model chosen in P7 plan |
+| AI agent | AI SDK + DeepSeek (`@ai-sdk/deepseek`, decision 0016) on a route handler, streaming; UI loaded on tap | Model chosen in P7 plan |
 | Hosting | Vercel (owner already connected); region set by decision | |
 | Tests | Vitest (unit), Playwright + axe (e2e/a11y), Lighthouse CI | |
 

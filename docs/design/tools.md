@@ -22,7 +22,7 @@ Free, working tools that give a real, partly masked result, and invite the visit
 | Tool | Visitor gives | Visible (real) | Masked, sent after contact |
 |---|---|---|---|
 | **Website & AI Search Health Check** (the free preview of catalogue service 0.3) | A URL | Speed and Core Web Vitals (Google PageSpeed Insights / CrUX, run on the server); AI-readiness checks: title and meta, schema, `llms.txt`, AI-bot rules in robots | Ranked fix list, competitor comparison |
-| **Social Media Content Planner** | Business type, audience, goal, platforms, language | Week 1 of the plan, written by AI (Claude via the AI SDK, 0004) | Weeks 2–4, Arabic captions, hashtags |
+| **Social Media Content Planner** | Business type, audience, goal, platforms, language | Week 1 of the plan, written by AI (DeepSeek via the AI SDK, 0016) | Weeks 2–4, Arabic captions, hashtags |
 
 **Candidates for later** (the owner picks):
 - Automation Opportunity Finder (ends in the audit)
