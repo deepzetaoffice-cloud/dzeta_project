@@ -10,6 +10,12 @@ export const LOCKED_LOGO_PATH = 'Planning Folder/For Ai/deepZeta Ai Logo/Coded L
 // Where the site serves it (URL registry R178).
 export const LOGO_URL = '/brand/deepzeta-logo.svg';
 
+// The first 8 hex digits of the locked file's SHA-256 (its LF bytes; tests/unit/brand-assets.test.ts
+// checks it). Pages request the logo with it as ?v=, so the URL changes if the file ever does, and
+// next.config.ts can let browsers keep that URL for a year (P2 plan, E1; decision 0018).
+export const LOGO_VERSION = '6431c297';
+export const LOGO_VERSIONED_URL = `${LOGO_URL}?v=${LOGO_VERSION}`;
+
 // The logo's own viewBox is 0 0 LOGO_CANVAS LOGO_CANVAS.
 export const LOGO_CANVAS = 1254;
 

@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { readFileSync } from 'node:fs';
-import { LOCKED_LOGO_PATH, LOGO_URL } from '../../src/lib/brand';
+import { LOCKED_LOGO_PATH, LOGO_URL, LOGO_VERSIONED_URL } from '../../src/lib/brand';
 import { siteConfig } from '../../src/lib/site-config';
 import { readToken } from '../../src/lib/tokens';
 
@@ -9,6 +9,7 @@ import { readToken } from '../../src/lib/tokens';
 // doesn't request favicons itself (0014), so the files are fetched directly.
 const NAVY = readToken('--dz-navy');
 const UNKNOWN_URL = '/this-page-does-not-exist';
+const IMMUTABLE = 'public, max-age=31536000, immutable';
 
 // Width and height from a PNG's IHDR chunk.
 const pngSize = (bytes: Buffer) => `${bytes.readUInt32BE(16)}x${bytes.readUInt32BE(20)}`;
@@ -20,6 +21,9 @@ test.describe('The logo on Home', () => {
     const response = await logoResponse;
     expect(response.status()).toBe(200);
     expect(response.headers()['content-type']).toBe('image/svg+xml');
+    // The versioned URL, kept for a year (P2 plan, E1–E2).
+    expect(new URL(response.url()).search).toBe(new URL(LOGO_VERSIONED_URL, response.url()).search);
+    expect(response.headers()['cache-control']).toBe(IMMUTABLE);
 
     const logo = page.getByRole('img', { name: siteConfig.brandName });
     await expect(logo).toBeVisible();
@@ -28,7 +32,14 @@ test.describe('The logo on Home', () => {
     ).toHaveCount(1);
     // Both crops show the same file; nothing is redrawn.
     await expect(logo.locator('image')).toHaveCount(2);
-    for (const image of await logo.locator('image').all()) await expect(image).toHaveAttribute('href', LOGO_URL);
+    for (const image of await logo.locator('image').all())
+      await expect(image).toHaveAttribute('href', LOGO_VERSIONED_URL);
+  });
+
+  test('is kept for a year only at its current versioned URL', async ({ request }) => {
+    expect((await request.get(LOGO_VERSIONED_URL)).headers()['cache-control']).toBe(IMMUTABLE);
+    for (const url of [LOGO_URL, `${LOGO_URL}?v=00000000`])
+      expect((await request.get(url)).headers()['cache-control'], url).not.toContain('immutable');
   });
 
   test('serves the locked file byte for byte', async ({ request }) => {

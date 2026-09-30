@@ -1,14 +1,11 @@
 import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
-import { locales } from '@/lib/i18n/locales';
+import { SiteDocument } from '@/components/layout/SiteDocument';
 import { titleTemplate } from '@/lib/seo/title';
 import { siteConfig } from '@/lib/site-config';
-import { readToken } from '@/lib/tokens';
 import { siteUrl } from '@/lib/url';
-import { fontVariables } from '@/styles/fonts';
+import { siteViewport } from '@/lib/viewport';
 import '@/styles/globals.css';
-
-const locale = locales.en;
 
 // English root layout (docs/ai/11 §2: Arabic gets its own root layout in P11; English never moves).
 // No canonical here: every page sets its own, so a page can't inherit the home URL (docs/ai/08 §1).
@@ -18,19 +15,12 @@ export const metadata: Metadata = {
     template: titleTemplate,
     default: siteConfig.brandName,
   },
+  // The name under the icon when the site is added to an iPhone's home screen (0018).
+  appleWebApp: { title: siteConfig.brandName },
 };
 
-// Every first visit is dark (05 §1), so a slow first load shows a dark canvas before the stylesheet
-// arrives (0015). The browser bar is navy in both themes, because the header stays navy (05 §2).
-export const viewport: Viewport = {
-  themeColor: readToken('--dz-navy'),
-  colorScheme: 'dark',
-};
+export const viewport: Viewport = siteViewport;
 
 export default function EnglishRootLayout({ children }: Readonly<{ children: ReactNode }>) {
-  return (
-    <html lang={locale.lang} dir={locale.dir} className={fontVariables}>
-      <body>{children}</body>
-    </html>
-  );
+  return <SiteDocument locale="en">{children}</SiteDocument>;
 }

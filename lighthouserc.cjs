@@ -25,9 +25,12 @@ const KB = 1024;
 const FRAMEWORK_JS_BASELINE = 139_668;
 // More growth than this fails lhci, so every Next.js upgrade shows its cost.
 const FRAMEWORK_JS_GROWTH = 5 * KB;
-// Our own JavaScript on Home at first load: none in P0. A plan that adds client code on Home raises
-// this by that code's measured size, never above the 10 KB cap (07 §2, 13 §7).
-const OWN_JS_HOME = 0;
+// Our own JavaScript on Home at first load. A plan that adds client code on Home raises this by that
+// code's measured size, never above the 10 KB cap (07 §2, 13 §7).
+// P2 part A: 4,142 B, lhci's script size on Home (143,810 B in all 5 runs, 2026-10-01) minus the
+// baseline. The root error page ships with every page: global-error.tsx itself (about 0.8 KB) and
+// next/link, which it imports (about 3.3 KB; counted here, not as framework growth, because we chose it).
+const OWN_JS_HOME = 4142;
 if (OWN_JS_HOME > 10 * KB) throw new Error('OWN_JS_HOME is above the 10 KB Home cap (07 §2, 13 §7).');
 // HTML + CSS + JS before the first interaction ≤ the framework baseline + 50 KB (07 §2).
 const FIRST_LOAD_LIMIT = FRAMEWORK_JS_BASELINE + 50 * KB;

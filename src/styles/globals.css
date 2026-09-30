@@ -5,6 +5,8 @@
 @import 'tailwindcss' source('..');
 /* The tokens and the Tailwind mapping (decision 0015). Raw values live only there. */
 @import './tokens.css';
+/* Montserrat's size-matched fallback faces, one per weight (P2 plan, section D) */
+@import './font-fallbacks.css';
 /* Icons: lines, pixel, states and stories (Icon Master Rules; P1 plan, D5) */
 @import './icons.css';
 
@@ -35,6 +37,9 @@
   h6 {
     color: var(--dz-text-strong);
     text-wrap: balance;
+    /* A long word (a service name, a URL) breaks instead of pushing the page sideways at large sizes
+       on a narrow screen (WCAG 1.4.10 reflow; 0015). */
+    overflow-wrap: break-word;
   }
 
   /* Visible focus in both themes (05 §7): ice on dark, royal on light */

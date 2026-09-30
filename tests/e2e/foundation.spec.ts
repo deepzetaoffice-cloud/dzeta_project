@@ -1,7 +1,7 @@
-import AxeBuilder from '@axe-core/playwright';
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 import { parseEnv } from '../../src/lib/env';
 import { isIndexable, robotsRules } from '../../src/lib/seo/indexing';
+import { seriousAxeViolations } from './helpers/axe';
 
 // P0 foundation checks (docs/plans/2026-09-30-p0-foundation.md, allowed-files table).
 const currentEnv = parseEnv(process.env);
@@ -9,15 +9,6 @@ const indexable = isIndexable(currentEnv);
 // Only Vercel previews and development builds block crawlers (decision 0013, option 2).
 const blocksCrawlers = robotsRules(currentEnv).disallow === '/';
 const UNKNOWN_URL = '/this-page-does-not-exist';
-
-async function seriousAxeViolations(page: Page) {
-  const results = await new AxeBuilder({ page })
-    .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice'])
-    .analyze();
-  return results.violations
-    .filter((violation) => violation.impact === 'serious' || violation.impact === 'critical')
-    .map((violation) => `${violation.id}: ${violation.help}`);
-}
 
 test.describe('Home', () => {
   test('renders one H1 with lang and dir from the locale', async ({ page }) => {

@@ -1,4 +1,4 @@
-import { LOGO_CANVAS, LOGO_CROPS, LOGO_URL } from '@/lib/brand';
+import { LOGO_CANVAS, LOGO_CROPS, LOGO_VERSIONED_URL } from '@/lib/brand';
 
 // The locked logo, shown through its own bytes (docs/ai/00 §5; P1 plan, section A). The file is never
 // edited or recreated: each variant is a viewBox crop of it, the Design Lab's method. The logo
@@ -20,7 +20,7 @@ function LogoCrop({ crop, className }: { crop: 'mark' | 'wordmark'; className: s
       aria-hidden="true"
       focusable="false"
     >
-      <image href={LOGO_URL} width={LOGO_CANVAS} height={LOGO_CANVAS} />
+      <image href={LOGO_VERSIONED_URL} width={LOGO_CANVAS} height={LOGO_CANVAS} />
     </svg>
   );
 }
