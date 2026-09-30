@@ -1,7 +1,9 @@
 # Plan: P0 Foundation, part 2 of 2: design tokens, themes and fonts
-Status: DRAFT
+Status: APPROVED (owner, 2026-09-30: approved with the protected-file edits it lists; Q1–Q5 answered with the recommended options; answers under Open questions)
+Progress (2026-09-30):
+- Step 0: the close-out and DeepSeek branches aren't merged yet (no PR was opened for them). So that the work can start, `docs/deepseek-ai-provider` (which contains `chore/p0-close-out`) is merged into this branch. This PR's diff shrinks to this plan's files once the owner merges those two. The Vercel setting is fixed: the DeepSeek branch's preview built (`fbb904d`, "Deployment has completed").
 Phase: P0
-Branch: `feat/p0-tokens-themes-fonts`, from `main` after the close-out PR (`chore/p0-close-out`) is merged
+Branch: `feat/p0-tokens-themes-fonts`, from `main` after the close-out PR (`chore/p0-close-out`) is merged (stacked on `docs/deepseek-ai-provider` until then, see Progress)
 Page tier: T1 for the placeholder Home (`lhci` floor ≥ 95). No effects.
 
 ## Goal served
@@ -294,6 +296,13 @@ None. `next/font` is part of `next`. The gates are dependency-free Node scripts.
    - Focus ring: `--dz-ice` is 1.20:1 on light. Choose **`--dz-royal` `#2139F6` (6.52:1, recommended)** or the light accent `#0A6BE0` (4.63:1).
    - Also confirm the Lab's light secondary text, `#34446F` (8.82:1), and its hairline, `#16224A` at 14%.
 5. **Q5 · The `inlineCss` rule.** Do you approve "adopt only if lab LCP improves by ≥ 100 ms and every budget passes"?
+
+**Owner answers (2026-09-30)**
+- **Q1:** (a) 5.58 rem, what the owner saw in the Lab. The correction is recorded as C34.
+- **Q2:** (a) solid signal fills carry navy text; white only for large text.
+- **Q3:** (a) `next/font/local` with the committed latin files and their OFL licences.
+- **Q4:** the focus ring in light mode is `--dz-royal` `#2139F6`. The Lab's light secondary text `#34446F` and hairline `#16224A` at 14% are confirmed.
+- **Q5:** approved: `inlineCss` is adopted only if lab LCP improves by ≥ 100 ms at the median and every budget passes.
 
 **Findings for later plans (no decision needed now):**
 - `--dz-slate` is 4.48:1 on navy, so it's for disabled states and large text only; 05 gets a usage note.
