@@ -116,7 +116,7 @@ Which Brotli quality Vercel uses isn't verified. Headers add about 8 KB on top. 
 
 ## Consequences
 
-- **`lighthouserc.cjs`** asserts, on Home:
+- **`lighthouserc.cjs`** asserts, on Home and on every one of the 5 runs (the largest value counts):
   - `resource-summary:script:size` ≤ baseline + 5 KB + our own code. Our own code is 0 bytes in P0; each plan that adds client code on Home raises it by that code's measured size, never above 10 KB.
   - `resource-summary:total:size` ≤ baseline + 50 KB.
 - **Framework upgrades:** a Next.js or React upgrade that grows the runtime by more than 5 KB fails `lhci`. Raising the baseline needs the owner's approval in a new decision.
