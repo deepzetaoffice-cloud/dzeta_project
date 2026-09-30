@@ -72,14 +72,20 @@ The owner answered the plan's questions and then reviewed every value in the tok
   - The variable JetBrains Mono 400–600 file is 31,432 B; 400–500 is the same file. With Montserrat that's 69,388 B, over the ≈ 60 KB target in 07 §2.
   - The static 500 file makes the pair 59,788 B.
 - **Loading:**
-  - Montserrat is preloaded, because the H1 is the LCP element. The mono isn't preloaded, so a page downloads it only when it shows mono text.
-  - Both use `display: swap` with next/font's size-matched Arial fallback (CLS 0).
-  - No request goes to Google, and every build uses the same bytes.
+  - Montserrat is preloaded, so the fallback period before it replaces the fallback font is short. With `swap`, the H1's LCP is its fallback paint, so the preload doesn't make LCP earlier. The mono isn't preloaded, so a page downloads it only when it shows mono text.
+  - Both use `display: swap` with next/font's Arial fallback. No request goes to Google, and every build uses the same bytes.
+  - **Transfer size:** 07 counts bytes with headers. Montserrat's response is 38,823 B for a 37,956 B file, so a page that also shows mono text would transfer about 61.5 KB (an estimate: no page uses the mono yet). That's at the ≈ 60 KB target and under the 70 KB limit.
+- **Known gap: the fallback is sized for Montserrat Thin** (P0 exit audit, confirmed on the file).
+  - next/font measures the file's default instance, and this variable file's default is weight 100 (`fvar` 100–900, default 100). The built fallback has `size-adjust: 110.19%`, which matches weight 100's average width of 0.5028 em.
+  - The weights the site uses are wider: about 3.4% at 400, 9% at 700 and 11% at 800 (the audit's calculation from the file). So when Montserrat replaces the fallback, lines can re-wrap and content can move.
+  - **The lab shows CLS 0 only because no swap happened:** in every run the font finished before the first paint.
+  - `--dz-measure` (65ch) changes width with the swap too, because `ch` is measured in whichever font is showing.
+  - **The fix is a separate owner decision:** a re-instanced font file whose default is 400, or hand-written fallback faces per weight, plus an e2e test that delays the font and records layout shifts.
 
 ### 6. Gates
 - **`check:contrast`** (`scripts/check-contrast.mjs`, part of `verify:fast`):
-  - checks 44 pairs, both themes, gradients at every stop
-  - fails on a semantic token without a value in both themes, on an `@media` block, and on anything outside the file's documented shape
+  - checks 33 listed pairs (44 checks), both themes, gradients at every stop
+  - fails on a semantic token without a value in both themes, on an `@media` block, on anything outside the file's documented shape, and on colour syntax it can't read (`hsl()`, `oklch()`, `transparent`…) in a checked value
   - prints what it doesn't check yet
 - **Page weight:**
   - `lighthouserc.cjs` drops `total:size` (fonts would break it). It asserts fonts ≤ 70 KB and ≤ 2 files, and images ≤ 200 KB, on every run.
@@ -89,7 +95,8 @@ The owner answered the plan's questions and then reviewed every value in the tok
 ### 7. The option C tuning from 0014
 - **G1 · `experimental.inlineCss`: not adopted.** The rule (Q5) was ≥ 100 ms better lab LCP at the median with every budget passing.
   - Median LCP was 2176 ms against 2180 ms without it, 4 ms better. FCP improved from 756 to 620 ms.
-  - LCP here is set by the framework scripts, not by the stylesheet request.
+  - **Why lab LCP barely moved:** on localhost every request finishes before the first paint, so Lighthouse's simulation counts all of them (about 147 KB, framework scripts included) on the way to LCP. The lab LCP here works like a byte budget and can't see an earlier paint of the H1. The H1 paints at first paint, so the FCP gain is closer to what inlining changes (P0 exit audit).
+  - It stays not adopted: the rule is the owner's (Q5), and the option is experimental, duplicates CSS into the RSC payload and can't be cached. It can be re-measured against field data once the Vercel preview has some.
 - **G2 · Legacy polyfills: measured only.**
   - Lighthouse flags 13,697 B of `legacy-javascript` in one framework chunk: `Array.prototype.at`, `flat`, `flatMap`, `Object.fromEntries`, `Object.hasOwn`, `String.prototype.trimEnd`. Next's default targets (Chrome/Edge/Firefox 111, Safari 16.4) already support all of them.
   - Browserslist is the only documented lever, and it changes which browsers are supported. This code ships in Next's prebuilt runtime, so a Browserslist change may not remove it (not verified).
@@ -97,20 +104,23 @@ The owner answered the plan's questions and then reviewed every value in the tok
 
 ## Measurements (placeholder Home, 5 Lighthouse runs, mobile, simulated slow 4G)
 
+The CI figures come from each run's "Lighthouse run" annotations (GitHub Actions, workflow "CI", job "verify"). "After" is the branch head, `8e99f01`, unless the row says otherwise.
+
 | | Before (no tokens, no fonts) | After (tokens, themes, fonts) |
 |---|---|---|
-| CI median LCP | 1513 ms (`fbb904d`, Chrome 153, benchmark index 2605–3023) | 1709 ms (`c993ae6`, Chrome 153, 2157–2470). A slower runner on `efb41ca` (Chrome 154, 1779–2400) gave 2255 ms, still within the gate |
-| Local median LCP (Windows, Chrome 154, CI environment) | 2031 ms | 2180 ms |
+| CI median LCP | 1513 ms (`fbb904d`, run 36720612524, Chrome 153, benchmark index 2605–3023) | **2216 ms** (`8e99f01`, run 36735955371, Chrome 154, 1774–3073). Earlier runs on this branch: 1709 ms (`c993ae6`, run 36732796940, Chrome 153, 2157–2470) and 2255 ms (`efb41ca`, run 36731693960, Chrome 154, 1779–2400) |
+| Local median LCP (Windows, Chrome 154, CI environment) | 2031 ms | 2180 ms (2179 ms at the head) |
 | CLS | 0 | 0 |
-| Performance (median) | 99–100 | 98–99 |
+| Performance (CI median) | 100 | 99 (98–99 across the three runs above) |
 | JavaScript | 139,668 B | 139,668 B |
-| CSS | 2,667 B | 4,535 B |
-| HTML | 3,137 B | 3,304 B (the font preload link) |
+| CSS | 2,667 B | 4,515 B |
+| HTML | 3,137 B | 3,304–3,306 B (the font preload link; it varies by 2 B between builds) |
 | Fonts | 0 | 38,823 B, 1 file (Montserrat) |
-| HTML + CSS + JS | 145,472 B | 147,507 B of 190,868 B (42.3 KB left) |
+| HTML + CSS + JS | 145,472 B | 147,487–147,489 B of 190,868 B (42.4 KB left) |
 
-- **Why LCP grew, locally +149 ms and on CI about +200 ms at the median:** it's all render delay. On localhost the preloaded font finishes before the first paint, so Lighthouse's simulation puts its download on the way to LCP, and it shares the simulated bandwidth with the scripts.
-- **The limit:** LCP stays under the 2.5 s hard limit. The 1.5 s target was already missed before this change (0014).
+- **Why LCP grew, locally +149 ms:** it's all render delay. On localhost the preloaded font finishes before the first paint, so Lighthouse's simulation puts its download on the way to LCP, and it shares the simulated bandwidth with the scripts.
+- **On CI, single runs of the same commit vary a lot,** so the median moves between runs: `c993ae6` 1667–2118 ms, `efb41ca` 1661–2546 ms, the head 1666–2498 ms. The two Chrome 154 runs have medians near 2.2 s. Runner speed doesn't explain it, because 4 of the head's 5 runs had a faster runner than any of `c993ae6`'s. The cause isn't verified. Every local run (Chrome 154) is near 2.18 s.
+- **The limit:** the head's median is 2216 ms, 284 ms under the 2.5 s hard limit, which the gate asserts on the median run. The slowest single CI run was 2498 ms (the head's run 1, benchmark index 1774, TBT 576 ms). The 1.5 s target was already missed before this change (0014).
 
 ## Consequences
 - **Rule edits** (approved with the plan and the specimen answers):
@@ -121,11 +131,21 @@ The owner answered the plan's questions and then reviewed every value in the tok
   - 05 §7: the focus ring is `--dz-focus`
   - 03 §1: `check:contrast`, and the page-weight check in `lhci`
   - conflict register: C34 (statement size), and C22 applied
+- **Next, before content pages:** the fallback-font fix and a rem-based `--dz-measure` (the known gap in §5).
+- **P1 (logo, favicon, `themeColor`):** a `viewport` export with `colorScheme: 'dark'`, next to `themeColor`, so a slow first load shows a dark canvas before the stylesheet arrives (check that `global-not-found.tsx` supports it).
 - **P2 (header and glass):**
-  - The theme switch stores the visitor's choice, and a no-flash script sets `data-theme='light'` before the first paint.
+  - The theme switch stores the visitor's choice, and a no-flash script sets `data-theme='light'` before the first paint. It also goes into `global-not-found.tsx`, which skips the layout. The script sets the `color-scheme` meta for visitors who choose light.
   - Glass tokens start from this plan's finding: frost text on `--dz-glass-tint-min` 0.62 is 3.74:1 over a white background, so it needs 0.68, and mist needs 0.79.
+  - A forced-colours e2e test: the focus ring stays a 2 px solid outline, and axe passes (13 §6).
+  - `data-theme` goes on non-focusable containers only, because a focusable element's ring would take its own theme's colour but be drawn on its parent's background.
+  - Headings get `overflow-wrap: break-word`, so a long word at the statement size doesn't scroll sideways at 320 px (WCAG 1.4.10).
+  - The statement and display sizes grow about 126% and 134% at 200% zoom on a 1280 px screen. They reach 200% in Chrome and Firefox, but not in Safari (maximum 300%). The type components decide on a smaller `vw` slope or record the gap (WCAG 1.4.4).
 - **Later plans:**
   - Light-mode status colours fail on the light page (`--dz-ok` 1.78:1, `--dz-warn` 1.62:1, `--dz-bad` 2.80:1). They get darker light variants in the first plan that uses them.
   - `--dz-border` (2.24:1 on navy) can't be a form field's only boundary (P6).
   - Readex Pro stops at weight 700, so the Arabic statement weight is decided in P11.
+  - The first dynamic route adds `(en)/not-found.tsx`.
+  - The 404's lone "home page" link gets a 44 px target (05 §7); 05 may add WCAG's exception for links inside running text.
+  - `check:contrast` samples gradients between their stops (the dark zeta gradient dips to about 3.12:1 between `#4639F9` and `#602CFA`, against 3.13:1 at the stop), and the hero plan adds a pair for headline words over `--dz-glow-hero`.
+  - The axe helper shared by `foundation.spec.ts` and `themes.spec.ts` moves to one file.
 - **07 §2 wording:** it reads "Fonts (3 variable, subset)", while the mono is now one static weight. A wording change is proposed to the owner, and 07 isn't edited here.
