@@ -219,6 +219,11 @@ A row is never deleted, and an ID is never reused.
 | R171 | `/sitemap.xml` | System | — | 08 §6 |
 | R172 | `/llms.txt` | System | — | Engine §9.2 |
 | R173 | `/llms-full.txt` | System | — | Engine §9.3 |
+| R174 | `/favicon.ico` | System | — | ICO favicon (16, 32, 48 px), P1 |
+| R175 | `/icon.png` | System | — | PNG icon (192 px), P1 |
+| R176 | `/apple-icon.png` | System | — | iOS home-screen icon (180 px), P1 |
+| R177 | `/manifest.webmanifest` | System | — | Web app manifest, P1 |
+| R178 | `/brand/*` | System | — | Brand files: the byte-identical logo, the manifest's 512 px icons, the square logo PNG (the schema `#logo`, P4) |
 
 ---
 
