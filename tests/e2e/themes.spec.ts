@@ -1,5 +1,5 @@
-import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Browser, type Page } from '@playwright/test';
+import { seriousAxeViolations } from './helpers/axe';
 
 // Themes and fonts (docs/plans/2026-09-30-p0-design-tokens-themes-fonts.md; docs/ai/05 §1–§3).
 // Colours are compared with the tokens' own resolved values, so the tests follow tokens.css.
@@ -32,15 +32,6 @@ const tokenColour = (page: Page, token: string) =>
 
 const backgroundOf = (page: Page, selector: string) =>
   page.locator(selector).evaluate((el) => getComputedStyle(el).backgroundColor);
-
-async function seriousAxeViolations(page: Page) {
-  const results = await new AxeBuilder({ page })
-    .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice'])
-    .analyze();
-  return results.violations
-    .filter((violation) => violation.impact === 'serious' || violation.impact === 'critical')
-    .map((violation) => `${violation.id}: ${violation.help}`);
-}
 
 test.describe('Themes', () => {
   for (const colorScheme of ['dark', 'light'] as const) {

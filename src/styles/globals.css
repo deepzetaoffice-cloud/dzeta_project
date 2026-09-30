@@ -37,6 +37,9 @@
   h6 {
     color: var(--dz-text-strong);
     text-wrap: balance;
+    /* A long word (a service name, a URL) breaks instead of pushing the page sideways at large sizes
+       on a narrow screen (WCAG 1.4.10 reflow; 0015). */
+    overflow-wrap: break-word;
   }
 
   /* Visible focus in both themes (05 §7): ice on dark, royal on light */
