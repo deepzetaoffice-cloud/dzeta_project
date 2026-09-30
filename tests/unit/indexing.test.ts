@@ -21,14 +21,26 @@ describe('noindexHeaders', () => {
   });
 });
 
-describe('robotsRules (docs/ai/08 §1 and §5)', () => {
-  it('blocks everything when the deployment is not indexable', () => {
-    expect(robotsRules(false)).toEqual({ userAgent: '*', disallow: '/' });
+describe('robotsRules (docs/ai/08 §1 and §5, decision 0013 option 2)', () => {
+  it.each([
+    ['a Vercel preview', 'preview'],
+    ['a Vercel development build', 'development'],
+  ] as const)('blocks everything on %s', (_label, vercelEnv) => {
+    expect(robotsRules({ vercelEnv })).toEqual({ userAgent: '*', disallow: '/' });
   });
 
-  it('allows the site and blocks only /api/ when indexable, never /_next/', () => {
-    const rules = robotsRules(true);
+  it.each([
+    ['production', 'production'],
+    ['the owner machine or CI', undefined],
+  ] as const)('serves the launch file on %s and blocks only /api/, never /_next/', (_label, vercelEnv) => {
+    const rules = robotsRules({ vercelEnv });
     expect(rules).toEqual({ userAgent: '*', allow: '/', disallow: '/api/' });
     expect(JSON.stringify(rules)).not.toContain('_next');
+  });
+
+  it('lets crawlers fetch pages while the pre-launch lock is on, so they see the noindex', () => {
+    const locked = { vercelEnv: 'production', siteIndexing: 'off' } as const;
+    expect(noindexHeaders(isIndexable(locked))).toEqual([{ key: 'X-Robots-Tag', value: 'noindex' }]);
+    expect(robotsRules(locked)).toEqual({ userAgent: '*', allow: '/', disallow: '/api/' });
   });
 });
