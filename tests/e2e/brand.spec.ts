@@ -37,6 +37,16 @@ test.describe('The logo on Home', () => {
     expect(Buffer.from(await response.body()).equals(readFileSync(LOCKED_LOGO_PATH))).toBe(true);
   });
 
+  test('never mirrors in Arabic: the mark stays left of the wordmark (11 §1)', async ({ page }) => {
+    await page.goto('/');
+    await page.evaluate(() => document.documentElement.setAttribute('dir', 'rtl'));
+    const [mark, wordmark] = await page
+      .getByRole('img', { name: siteConfig.brandName })
+      .locator('svg')
+      .evaluateAll((svgs) => svgs.map((svg) => svg.getBoundingClientRect().left));
+    expect(mark).toBeLessThan(wordmark ?? 0);
+  });
+
   test('keeps its navy backing in forced-colours mode, so the white "Deep" stays visible', async ({ page }) => {
     await page.emulateMedia({ forcedColors: 'active' });
     await page.goto('/');

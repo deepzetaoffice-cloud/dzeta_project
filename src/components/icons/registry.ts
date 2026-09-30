@@ -4,8 +4,9 @@
 //
 // The drawings come from the approved icon prototype (Planning Folder/DeepZeta Signature Icon
 // Prototype.html, decision 0009). Where it broke a rule, the rule wins (C36): Tier 2 pixels snap to
-// the 0.25 grid (§3), one tail line snaps from 3.8 to 3.75, and a pixel closer than 0.75 to a line
-// gets a knockout (§4.2 rule 4).
+// the 0.25 grid (§3), one tail line snaps from 3.8 to 3.75, corners take the §3 radii (2.25 on the
+// chat bubble, 1.25 on the ear cups), and a pixel closer than 0.75 to a line gets a knockout (§4.2
+// rule 4).
 
 // The four pillars (C6), by their pixel token names (docs/ai/05 §2).
 export type Pillar = 'ai' | 'web' | 'software' | 'ranking';
@@ -68,7 +69,7 @@ export const TIER_2 = {
     shapes: [
       {
         kind: 'path',
-        d: 'M7 4.25h10a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3h-5.5l-4.75 3.75v-3.75A3 3 0 0 1 4 13.25v-6a3 3 0 0 1 3-3z',
+        d: 'M6.25 4.25h11.5a2.25 2.25 0 0 1 2.25 2.25v7.5a2.25 2.25 0 0 1-2.25 2.25h-6.25l-4.75 3.75v-3.75h-.5a2.25 2.25 0 0 1-2.25-2.25v-7.5a2.25 2.25 0 0 1 2.25-2.25z',
       },
       { kind: 'dot', cx: 8.5, cy: 10.25, r: 1, blink: 'early' },
       { kind: 'dot', cx: 11.5, cy: 10.25, r: 1, blink: 'late' },
@@ -84,8 +85,8 @@ export const TIER_2 = {
     flip: false,
     shapes: [
       { kind: 'path', d: 'M5 13v-1a7 7 0 0 1 14 0v1' },
-      { kind: 'rect', x: 3.75, y: 12.5, width: 3.5, height: 5.5, rx: 1.5 },
-      { kind: 'rect', x: 16.75, y: 12.5, width: 3.5, height: 5.5, rx: 1.5 },
+      { kind: 'rect', x: 3.75, y: 12.5, width: 3.5, height: 5.5, rx: 1.25 },
+      { kind: 'rect', x: 16.75, y: 12.5, width: 3.5, height: 5.5, rx: 1.25 },
       { kind: 'path', d: 'M18.5 18v.25a2.75 2.75 0 0 1-2.75 2.75H14.5' },
     ],
     pixel: { x: 11, y: 19.25, size: 2.6 },

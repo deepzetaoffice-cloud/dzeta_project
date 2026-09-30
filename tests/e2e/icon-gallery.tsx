@@ -22,6 +22,14 @@ export function iconGallery(): string {
           <Icon name={name} size={24} />
         </button>
       ))}
+      {/* A card that isn't focusable itself, holding a link: the service-card pattern (hover-card) */}
+      <article className="dz-icon-host" data-host="card">
+        <Icon name="booking-automation-system" size={24} />
+        <a href="#card">Booking Automation System</a>
+      </article>
+      <button type="button" className="dz-icon-host" data-host="disabled" aria-label="disabled" disabled>
+        <Icon name="crm-setup-automation" size={24} />
+      </button>
     </>,
   );
 }

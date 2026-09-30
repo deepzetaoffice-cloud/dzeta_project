@@ -5,13 +5,14 @@
 // Imported by scripts/build-brand-icons.mjs through Node's own TypeScript loader: keep this file free
 // of path aliases and TypeScript-only runtime syntax.
 //
-// Every page is static today, so this runs only at build. A route that renders at request time needs
-// tokens.css in its function bundle (`outputFileTracingIncludes`; P1 plan, Risks).
+// Every page is static today, so this runs at build. A page that renders at request time still finds
+// the file: Next traces tokens.css into each server bundle that imports this (checked in the built
+// .nft.json files, P1).
 
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-export const TOKENS_PATH = join('src', 'styles', 'tokens.css');
+const TOKENS_PATH = join('src', 'styles', 'tokens.css');
 
 // The brand primitives are the first block, the one whose selector is exactly `:root` (the file's
 // documented shape). Comments are dropped first, so a comment can't hide or fake a declaration.

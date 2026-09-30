@@ -37,9 +37,13 @@ export type LogoProps = LogoName & {
 };
 
 export function Logo({ variant, className = '', label }: LogoProps) {
-  const name = label ? { role: 'img', 'aria-label': label } : { 'aria-hidden': true as const };
+  // Only `decorative` hides it: an empty label is an unnamed image, which the axe checks catch.
+  const name = label !== undefined ? { role: 'img', 'aria-label': label } : { 'aria-hidden': true as const };
   return (
+    // dir="ltr": a flex row follows the page direction, so in Arabic the mark and the wordmark would
+    // swap sides. The logo never mirrors (11 §1).
     <span
+      dir="ltr"
       className={`inline-flex items-center gap-0.5 forced-colors:bg-navy forced-colors:forced-color-adjust-none ${className}`}
       {...name}
     >

@@ -116,6 +116,19 @@ describe('Tier 2 icons', () => {
     expect(icon.shapes.flatMap(shapePositions).filter((n) => !onGrid(n))).toEqual([]);
   });
 
+  it.each(tier2)(
+    '%s: dots 0.7–1 in radius (§6), rectangle corners 2.25 when large, 1.25 when small (§3)',
+    (_, icon) => {
+      for (const shape of icon.shapes) {
+        if (shape.kind === 'dot') {
+          expect(shape.r).toBeGreaterThanOrEqual(0.7);
+          expect(shape.r).toBeLessThanOrEqual(1);
+        }
+        if (shape.kind === 'rect') expect(shape.rx).toBe(Math.min(shape.width, shape.height) >= 12 ? 2.25 : 1.25);
+      }
+    },
+  );
+
   it.each(tier2)('%s: within the 1 KB budget, decorative, named dz-2-{pillar}-*', (name, icon) => {
     const html = render({ name: name as keyof typeof TIER_2, size: 24 });
     expect(new TextEncoder().encode(html).length).toBeLessThanOrEqual(BUDGET.tier2);
@@ -139,9 +152,13 @@ describe('IconDefs', () => {
     expect(ids.filter((id) => id?.startsWith('dz-ko-'))).toEqual(knockouts);
   });
 
-  it('takes every colour from tokens: no colour values in the SVG', () => {
+  it('takes every colour from tokens through classes: no colour values or style attributes in the SVG', () => {
     expect(defs).not.toMatch(/#[0-9a-f]{3,8}\b|rgba?\(/i);
-    expect(defs).toContain('stop-color:var(--dz-pixel-ai-top)');
+    expect(defs).not.toContain('style=');
+    expect(defs).toContain('<linearGradient id="dz-px-ai" class="dz-grad--ai"');
+    expect(defs).toContain('<stop offset="0" class="dz-stop--top"></stop>');
+    const css = readFileSync('src/styles/icons.css', 'utf8');
+    for (const pillar of PILLARS) expect(css).toContain(`--dz-grad-top: var(--dz-pixel-${pillar}-top);`);
   });
 
   it('is hidden without display: none, which would stop the gradients painting', () => {

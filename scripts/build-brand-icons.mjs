@@ -10,7 +10,6 @@
 import { chromium } from '@playwright/test';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
-import { pathToFileURL } from 'node:url';
 import { LOCKED_LOGO_PATH, LOGO_CANVAS, LOGO_CROPS } from '../src/lib/brand.ts';
 import { readToken } from '../src/lib/tokens.ts';
 
@@ -18,7 +17,7 @@ import { readToken } from '../src/lib/tokens.ts';
 // share of its side (0 is a full-bleed square). Starting values from the plan, section B1.
 const FAVICON = { crop: 'mark', fill: 0.88, radius: 0.2 };
 const TILE = { crop: 'mark', fill: 0.76, radius: 0.2 };
-export const OUTPUTS = [
+const OUTPUTS = [
   { file: 'src/app/favicon.ico', ico: [16, 32, 48], ...FAVICON },
   { file: 'src/app/icon.png', size: 192, ...TILE },
   // iOS rounds the corners itself and fills transparency with black, so this one is full-bleed.
@@ -47,7 +46,7 @@ function tileHtml({ size, crop, fill, radius }, navy, logoDataUrl) {
 }
 
 // An ICO whose entries are PNGs, which every current browser reads.
-export function packIco(entries) {
+function packIco(entries) {
   const header = Buffer.alloc(6);
   header.writeUInt16LE(0, 0); // reserved
   header.writeUInt16LE(1, 2); // type: icon
@@ -102,4 +101,4 @@ async function main() {
   }
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) await main();
+await main();

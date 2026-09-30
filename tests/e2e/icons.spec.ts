@@ -162,15 +162,59 @@ test.describe('Icons', () => {
     await expect(svg).toHaveCSS('color', 'rgb(244, 246, 251)');
   });
 
-  test('a Tier 1 icon paints its line from the sprite, in currentColor', async ({ page }) => {
+  test("a Tier 1 icon paints its line from the sprite, in its parent's colour (§2)", async ({ page }) => {
     await injectIcons(page);
     const svg = icon(page, 'menu');
     await expect(svg.locator('use')).toHaveAttribute('href', '#dz-1-menu');
+    const hostColour = await page.locator('[data-host="menu"]').evaluate((el) => getComputedStyle(el).color);
+    await expect(svg).toHaveCSS('color', hostColour);
     const box = await svg.boundingBox();
     if (!box) throw new Error('icon not rendered');
     // The middle bar of the menu icon runs through the centre (y = 12 of 24).
     const colour = await paintedColour(page, box.x + box.width / 2, box.y + box.height / 2);
     expect(colour.b).toBeGreaterThan(150);
+  });
+
+  test('every line has the §6 stroke: 1.5 wide, square caps, round joins', async ({ page }) => {
+    await injectIcons(page);
+    for (const line of [icon(page, 'arrow'), icon(page, 'booking-automation-system').locator('.dz-ln').first()]) {
+      await expect(line).toHaveCSS('stroke-width', '1.5px');
+      await expect(line).toHaveCSS('stroke-linecap', 'square');
+      await expect(line).toHaveCSS('stroke-linejoin', 'round');
+    }
+  });
+
+  test('a card that holds a link plays the story when the link has keyboard focus (13 §2)', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    await injectIcons(page);
+    const card = page.locator('[data-host="card"]');
+    await card.getByRole('link').focus();
+    await page.keyboard.press('Shift+Tab');
+    await page.keyboard.press('Tab');
+    await expect(card.locator('svg')).toHaveCSS('color', 'rgb(244, 246, 251)');
+    await expect(card.locator('.dz-px')).toHaveCSS('animation-name', 'dz-icon-pop');
+  });
+
+  test('a disabled host keeps slate lines and plays no story (§5.1)', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    await injectIcons(page);
+    const host = page.locator('[data-host="disabled"]');
+    await host.hover({ force: true });
+    await expect(host.locator('svg')).toHaveCSS('color', 'rgb(93, 115, 184)');
+    await expect(host.locator('.dz-px')).toHaveCSS('animation-name', 'none');
+    await expect(host.locator('.dz-halo')).toHaveCSS('opacity', '0');
+  });
+
+  test('forced colours and more contrast turn the stories off, like Reduce effects (13 §2.11)', async ({ page }) => {
+    for (const media of [{ forcedColors: 'active' as const }, { contrast: 'more' as const }]) {
+      await page.emulateMedia({ reducedMotion: 'no-preference', ...media });
+      await injectIcons(page);
+      const host = page.locator('[data-host="whatsapp-ai-agent"]');
+      await expect(host.locator('.dz-halo')).toHaveCSS('opacity', '0.45');
+      await host.hover();
+      await expect(host.locator('.dz-px')).toHaveCSS('animation-name', 'none');
+      await page.emulateMedia({ forcedColors: 'none', contrast: 'no-preference' });
+    }
   });
 
   test('hover plays the story; with reduced motion the pixel is lit and the glow is 0.45', async ({ page }) => {
@@ -198,6 +242,14 @@ test.describe('Icons', () => {
     await page.keyboard.press('Shift+Tab');
     await expect(host.locator('svg')).toHaveCSS('color', 'rgb(244, 246, 251)');
     await expect(host.locator('.dz-px')).toHaveCSS('animation-name', 'dz-icon-pop');
+  });
+
+  test('the gradient stops take their colours from classes, not style attributes (a nonce CSP in P3)', async ({
+    page,
+  }) => {
+    await injectIcons(page);
+    await expect(page.locator('#dz-px-ai stop').first()).toHaveCSS('stop-color', 'rgb(3, 212, 252)');
+    await expect(page.locator('#icon-test [style]')).toHaveCount(0);
   });
 
   test('directional icons mirror in Arabic; the rest never do (§9)', async ({ page }) => {

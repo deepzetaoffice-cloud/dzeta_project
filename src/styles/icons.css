@@ -7,9 +7,67 @@
     display: inline-block;
     flex: none;
     overflow: visible;
-    /* Lines on the semantic text colours, so they work in both themes (conflict C37) */
+  }
+
+  /* Tier 1 is currentColor only (§2): it takes its parent's colour, like the text beside it. Tier 2
+     lines sit on the semantic text colours, so they work in both themes (conflict C37). */
+  .dz-icon--t2 {
     color: var(--dz-text);
     transition: color var(--dz-dur-fast) var(--dz-ease-out);
+  }
+
+  /* The shared gradients' stops, from tokens (IconDefs). Classes rather than style attributes, so a
+     nonce-based style-src (P3) can't blank them. The custom properties inherit from each gradient to
+     its stops. */
+  .dz-grad--ai {
+    --dz-grad-top: var(--dz-pixel-ai-top);
+    --dz-grad-mid: var(--dz-pixel-ai-mid);
+    --dz-grad-bottom: var(--dz-pixel-ai-bottom);
+    --dz-grad-glow: var(--dz-pixel-ai-glow);
+  }
+
+  .dz-grad--web {
+    --dz-grad-top: var(--dz-pixel-web-top);
+    --dz-grad-mid: var(--dz-pixel-web-mid);
+    --dz-grad-bottom: var(--dz-pixel-web-bottom);
+    --dz-grad-glow: var(--dz-pixel-web-glow);
+  }
+
+  .dz-grad--software {
+    --dz-grad-top: var(--dz-pixel-software-top);
+    --dz-grad-mid: var(--dz-pixel-software-mid);
+    --dz-grad-bottom: var(--dz-pixel-software-bottom);
+    --dz-grad-glow: var(--dz-pixel-software-glow);
+  }
+
+  .dz-grad--ranking {
+    --dz-grad-top: var(--dz-pixel-ranking-top);
+    --dz-grad-mid: var(--dz-pixel-ranking-mid);
+    --dz-grad-bottom: var(--dz-pixel-ranking-bottom);
+    --dz-grad-glow: var(--dz-pixel-ranking-glow);
+  }
+
+  .dz-stop--top {
+    stop-color: var(--dz-grad-top);
+  }
+
+  .dz-stop--mid {
+    stop-color: var(--dz-grad-mid);
+  }
+
+  .dz-stop--bottom {
+    stop-color: var(--dz-grad-bottom);
+  }
+
+  /* The glow fades from its colour at 85% to nothing (§4.4). */
+  .dz-stop--glow {
+    stop-color: var(--dz-grad-glow);
+    stop-opacity: 0.85;
+  }
+
+  .dz-stop--glow-end {
+    stop-color: var(--dz-grad-glow);
+    stop-opacity: 0;
   }
 
   /* Every part pivots on itself (§7.1). */
@@ -43,16 +101,17 @@
     transition: opacity var(--dz-dur-fast) var(--dz-ease-out);
   }
 
-  /* The host is the link, button or card around an icon. Focus looks like hover (13 §2). */
-  .dz-icon-host:is(:hover, :focus-visible) .dz-icon {
+  /* The host is the link or button around an icon, or a card that holds one: focus inside the card
+     counts too, so keyboard focus looks like hover (13 §2). A disabled host stays still (§5.1). */
+  .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible)) .dz-icon--t2 {
     color: var(--dz-text-strong);
   }
 
-  .dz-icon-host:is(:hover, :focus-visible) .dz-halo {
+  .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible)) .dz-halo {
     opacity: 0.6;
   }
 
-  .dz-icon-host:is(:disabled, [aria-disabled='true']) .dz-icon {
+  .dz-icon-host:is(:disabled, [aria-disabled='true']) .dz-icon--t2 {
     color: var(--dz-slate);
   }
 
@@ -61,30 +120,36 @@
     transform: scaleX(-1);
   }
 
-  /* Reduced motion: no story; the pixel lit and the glow at 0.45 (§4.4, §7.1). */
-  @media (prefers-reduced-motion: reduce) {
+  /* Static: no story; the pixel lit and the glow at 0.45 (§4.4, §7.1). Reduce effects is on for reduced
+     motion, forced colours and more contrast (13 §2.11); P2 adds the switch's own selector. */
+  @media (prefers-reduced-motion: reduce), (forced-colors: active), (prefers-contrast: more) {
     .dz-halo {
       opacity: 0.45;
     }
   }
 
   /* Tier 2 stories (§7). Each runs once on the --dz-dur-story timeline when the host is hovered or
-     focused, and its last frame is the hover state. Start states exist only here (13 §3.3). The
-     Reduce effects switch adds its selector in P2. */
-  @media (prefers-reduced-motion: no-preference) {
-    .dz-icon-host:is(:hover, :focus-visible) .dz-icon--pop .dz-px {
+     focused, and its last frame is the hover state. Start states exist only here (13 §3.3). */
+  @media (prefers-reduced-motion: no-preference) and (forced-colors: none) and (prefers-contrast: no-preference) {
+    .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible))
+      .dz-icon--pop
+      .dz-px {
       animation: dz-icon-pop var(--dz-dur-story) var(--dz-ease-pop) both;
     }
 
-    .dz-icon-host:is(:hover, :focus-visible) .dz-icon--pop .dz-halo {
+    .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible))
+      .dz-icon--pop
+      .dz-halo {
       animation: dz-icon-glow var(--dz-dur-story) var(--dz-ease-out) both;
     }
 
-    .dz-icon-host:is(:hover, :focus-visible) .dz-dot--blink-early {
+    .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible))
+      .dz-dot--blink-early {
       animation: dz-icon-blink-early var(--dz-dur-story) var(--dz-ease-out);
     }
 
-    .dz-icon-host:is(:hover, :focus-visible) .dz-dot--blink-late {
+    .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible))
+      .dz-dot--blink-late {
       animation: dz-icon-blink-late var(--dz-dur-story) var(--dz-ease-out);
     }
   }
