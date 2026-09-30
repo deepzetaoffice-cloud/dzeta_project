@@ -9,6 +9,10 @@ describe('check:tokens', () => {
     expect(rulesFound('src/app/page.tsx', clean)).toEqual([]);
   });
 
+  it('ignores the words left and right in code comments', () => {
+    expect(rulesFound('src/lib/x.ts', '// this directive is left out; the right call here')).toEqual([]);
+  });
+
   it('allows raw values in the tokens file only', () => {
     expect(rulesFound(TOKENS_FILE, '--dz-navy: #010413; --dz-radius-sm: 8px;')).toEqual([]);
     expect(rulesFound('src/styles/globals.css', 'body { color: #010413; }')).toContain('raw-colour');
@@ -23,6 +27,7 @@ describe('check:tokens', () => {
   it('fails physical-direction classes, CSS properties and style props', () => {
     expect(rulesFound('src/components/ui/Card.tsx', `className="ml-4 text-right"`)).toContain('physical-class');
     expect(rulesFound('src/components/ui/Card.tsx', `className="md:-left-2"`)).toContain('physical-class');
+    expect(rulesFound('src/components/ui/Card.tsx', `className="border-l rounded-tr-lg"`)).toContain('physical-class');
     expect(rulesFound('src/styles/globals.css', '.x { margin-left: 0; }')).toContain('physical-css-property');
     expect(rulesFound('src/styles/globals.css', '.x { text-align: right; }')).toContain('physical-css-property');
     expect(rulesFound('src/components/ui/Card.tsx', 'style={{ paddingLeft: 0 }}')).toContain('physical-style-prop');

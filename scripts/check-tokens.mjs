@@ -15,16 +15,16 @@ const SCANNED_FILE = /\.(css|ts|tsx|mts|js|jsx|mjs)$/;
 const CSS_FILE = /\.css$/;
 const CONTENT_DIR = /^src\/content\//; // copy, not code: prose like "3 spots left" is fine there
 
-// Physical Tailwind utilities and their logical replacements (ms-/me-/ps-/pe-/start-/end-/text-start…).
+// Physical Tailwind utilities; each has a logical replacement (ms-/me-/ps-/pe-/start-/end-/text-start…).
+// These only exist with a value suffix ("ml-4", "left-0"), so bare English words such as "left out"
+// in a comment don't match.
+const PHYSICAL_PREFIX = new RegExp(
+  String.raw`(?:^|[\s"'\x60:!])-?(?:ml|mr|pl|pr|left|right|scroll-ml|scroll-mr|scroll-pl|scroll-pr)-`,
+);
+// These are also complete classes on their own ("border-l", "text-right").
 const PHYSICAL_CLASS = new RegExp(
   String.raw`(?:^|[\s"'\x60:!])-?(` +
     [
-      'ml',
-      'mr',
-      'pl',
-      'pr',
-      'left',
-      'right',
       'border-l',
       'border-r',
       'rounded-l',
@@ -33,10 +33,6 @@ const PHYSICAL_CLASS = new RegExp(
       'rounded-tr',
       'rounded-bl',
       'rounded-br',
-      'scroll-ml',
-      'scroll-mr',
-      'scroll-pl',
-      'scroll-pr',
       'text-left',
       'text-right',
       'float-left',
@@ -74,7 +70,7 @@ const RULES = [
   },
   {
     id: 'physical-class',
-    pattern: PHYSICAL_CLASS,
+    pattern: { test: (line) => PHYSICAL_PREFIX.test(line) || PHYSICAL_CLASS.test(line) },
     appliesTo: ({ isContent }) => !isContent,
     message: 'Physical-direction class: use the logical one (ms-/me-/ps-/pe-/start-/end-/text-start…, docs/ai/11 §1).',
   },
