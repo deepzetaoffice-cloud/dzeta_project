@@ -282,7 +282,7 @@
   --text-caption--line-height: var(--dz-text-caption-leading);
   --text-caption--letter-spacing: var(--dz-text-caption-tracking);
   --text-caption--font-weight: var(--dz-text-caption-weight);
-  /* tracking-eyebrow, with text-caption and uppercase */
+  /* tracking-eyebrow, with font-mono text-caption uppercase (a text-* utility doesn't set the font family) */
   --tracking-eyebrow: var(--dz-text-eyebrow-tracking);
 
   /* py-section, py-chapter, py-statement, px-gutter; max-w-page, max-w-measure */

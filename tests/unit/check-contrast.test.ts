@@ -7,6 +7,7 @@ import {
   contrastRatio,
   PAIRS,
   TOKENS_FILE,
+  unreadColourSyntax,
 } from '../../scripts/check-contrast.mjs';
 
 interface Parts {
@@ -110,6 +111,19 @@ describe('check:contrast', () => {
     ]).results;
     expect(cta?.worstBg).toBe('#2f6bff');
     expect(cta?.ratio).toBeCloseTo(4.54, 2);
+  });
+
+  it('fails colour syntax it cannot read, rather than dropping that stop', () => {
+    expect(unreadColourSyntax('linear-gradient(150deg, #09e8fe 0%, rgba(22, 34, 74, 0.14) 25%)')).toEqual([]);
+    expect(unreadColourSyntax('linear-gradient(90deg, #08c6fd, oklch(0.2 0.1 250))')).toEqual(['oklch']);
+    expect(unreadColourSyntax('linear-gradient(90deg, #08c6fd, rgb(1 2))')).toEqual(['rgb']);
+    const css = tokens({
+      extra: ':root { --dz-grad-mixed: linear-gradient(90deg, #2f6bff, transparent); --dz-hsl: hsl(230 90% 4%); }',
+    });
+    for (const bg of ['--dz-grad-mixed', '--dz-hsl']) {
+      const pair = { fg: '--dz-white', bg, kind: 'text', themes: ['brand'] };
+      expect(checkContrast(css, [pair]).problems).toContainEqual(expect.stringContaining("can't read"));
+    }
   });
 
   it('composites a translucent foreground over its background', () => {

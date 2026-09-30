@@ -8,6 +8,8 @@
 //   - an @media block: every first visit is dark, and light comes only from the visitor's choice
 //     (05 §1, decision 0015), so a prefers-color-scheme block must not come back unnoticed
 //   - anything in tokens.css outside the documented shape (the file's header), rather than skipping it
+//   - colour syntax it can't read in a checked value (hsl(), oklch(), color-mix(), transparent, a named
+//     colour…), rather than dropping that colour or gradient stop
 
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -263,6 +265,17 @@ export function coloursIn(value) {
   return found.sort((x, y) => x.at - y.at).map((f) => f.colour);
 }
 
+// What may sit around the colours in a checked value: gradient functions, their geometry and the stop
+// positions. Every other word is colour syntax coloursIn() can't read, so the pair fails instead of
+// being checked without that colour.
+const GEOMETRY =
+  /^(?:(?:repeating-)?(?:linear|radial|conic)-gradient|to|top|bottom|left|right|center|at|from|circle|ellipse|closest-side|closest-corner|farthest-side|farthest-corner|-?\d*\.?\d+(?:deg|grad|rad|turn|%|px|rem|em)?)$/i;
+
+export function unreadColourSyntax(value) {
+  const rest = value.replace(HEX, ' ').replace(RGB, (match, args) => (rgbFunctionToRgba(args) ? ' ' : match));
+  return rest.split(/[\s,()/]+/).filter((word) => word && !GEOMETRY.test(word));
+}
+
 const linear = (c) => {
   const s = c / 255;
   return s <= 0.04045 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
@@ -308,15 +321,24 @@ export function checkContrast(css, pairs = PAIRS) {
   for (const pair of pairs) {
     for (const theme of pair.themes) {
       const tokens = tokensFor(theme);
-      let fgColours;
-      let bgColours;
+      let fgValue;
+      let bgValue;
       try {
-        fgColours = coloursIn(resolveToken(pair.fg, tokens));
-        bgColours = coloursIn(resolveToken(pair.bg, tokens));
+        fgValue = resolveToken(pair.fg, tokens);
+        bgValue = resolveToken(pair.bg, tokens);
       } catch (error) {
         problems.push(`${pair.fg} on ${pair.bg} (${theme}): ${error.message}`);
         continue;
       }
+      const unread = [...unreadColourSyntax(fgValue), ...unreadColourSyntax(bgValue)];
+      if (unread.length > 0) {
+        problems.push(
+          `${pair.fg} on ${pair.bg} (${theme}): can't read "${unread.join('", "')}", so a colour would go unchecked`,
+        );
+        continue;
+      }
+      const fgColours = coloursIn(fgValue);
+      const bgColours = coloursIn(bgValue);
       if (fgColours.length === 0 || bgColours.length === 0) {
         problems.push(`${pair.fg} on ${pair.bg} (${theme}): no colour found to check`);
         continue;

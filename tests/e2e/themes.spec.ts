@@ -124,6 +124,12 @@ test.describe('Fonts (docs/ai/05 §3, docs/ai/07 §2)', () => {
     await page.evaluate(() => document.fonts.ready);
     const h1Font = await page.locator('h1').evaluate((el) => getComputedStyle(el).fontFamily);
     expect(h1Font.toLowerCase()).toContain('montserrat');
-    expect(await page.evaluate(() => document.fonts.check('700 1em montserrat'))).toBe(true);
+    // document.fonts.check() is also true when no face matches the family, so look for a loaded face.
+    const montserratLoaded = await page.evaluate(() =>
+      [...document.fonts].some(
+        (face) => /montserrat/i.test(face.family) && !/fallback/i.test(face.family) && face.status === 'loaded',
+      ),
+    );
+    expect(montserratLoaded).toBe(true);
   });
 });
