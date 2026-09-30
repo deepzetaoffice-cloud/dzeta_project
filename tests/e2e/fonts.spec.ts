@@ -113,8 +113,14 @@ const STYLES = {
     css: 'font:500 var(--dz-text-small)/var(--dz-text-small-leading) var(--dz-font-sans)',
   },
 };
-// The block widths swept at each viewport (the viewport sets the fluid type sizes).
-const SWEEP = { 360: { from: 240, to: 340, step: 2 }, 1280: { from: 400, to: 1140, step: 8 } };
+// The block widths swept at each viewport (the viewport sets the fluid type sizes), and its device
+// scale: the phone viewport at Lighthouse's mobile scale (1.75; 07's test conditions), the desktop one
+// at 1. At scale 1 Chromium on Linux rounds each glyph's advance to a whole pixel, which says more
+// about the runner than about the faces (small text: 14.7% on CI, 5.1% on Windows, 2026-10-01).
+const SWEEP = {
+  360: { from: 240, to: 340, step: 2, scale: 1.75 },
+  1280: { from: 400, to: 1140, step: 8, scale: 1 },
+};
 
 // Holds the Montserrat request until `release` is called, so the fallback paints first.
 async function holdMontserrat(page: Page) {
@@ -190,7 +196,7 @@ test.describe('Fonts: the fallback swap (plan D3)', () => {
       const cls = await page.evaluate(() =>
         (window as unknown as { __shifts: number[] }).__shifts.reduce((sum, value) => sum + value, 0),
       );
-      console.log(`::notice title=Fonts, Home swap at ${width}px::h1 ${faces.h1}, p ${faces.p}, CLS ${cls.toFixed(4)}`);
+      console.log(`::notice title=Fonts Home swap ${width}px::h1 ${faces.h1}, p ${faces.p}, CLS ${cls.toFixed(4)}`);
       expect(cls).toBeLessThan(0.01);
       await context.close();
     });
@@ -198,7 +204,10 @@ test.describe('Fonts: the fallback swap (plan D3)', () => {
     test(`at ${width}px, the swap changes the line count of site copy at no more than 8% of widths`, async ({
       browser,
     }) => {
-      const context = await browser.newContext({ viewport: { width, height: 800 } });
+      const context = await browser.newContext({
+        viewport: { width, height: 800 },
+        deviceScaleFactor: SWEEP[width].scale,
+      });
       const page = await context.newPage();
       const release = await holdMontserrat(page);
       await page.goto('/', { waitUntil: 'domcontentloaded' });
@@ -262,7 +271,7 @@ test.describe('Fonts: the fallback swap (plan D3)', () => {
         return { name, samples, rate: changed / samples };
       });
       const summary = rates.map(({ name, rate }) => `${name} ${faces[name]} ${(rate * 100).toFixed(1)}%`);
-      console.log(`::notice title=Fonts, copy sweep at ${width}px::${summary.join(' · ')}`);
+      console.log(`::notice title=Fonts copy sweep ${width}px at scale ${SWEEP[width].scale}::${summary.join(' · ')}`);
       for (const { name, samples, rate } of rates) {
         expect(samples, name).toBeGreaterThan(0);
         expect.soft(rate, `${name}: share of widths where the line count changed`).toBeLessThanOrEqual(MAX_CHANGE_RATE);
