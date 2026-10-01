@@ -258,6 +258,7 @@ Progress:
     - Two lessons from P2: `next dev` writes to the protected `AGENTS.md` in Next.js 16.3, and a `sed` edit with regex characters corrupted a file.
     - `ci.yml` could name each Lighthouse run's page.
   - **Decision 0019** written, with its index row.
+- 2026-10-02 · **CI on `0c7032a` failed in `check:rules`:** `CLAUDE.md` now names the two owner documents, which were committed on `docs/p3-tracking-prep`, not here. Locally they were still in the working tree, untracked, so the check passed. **Fixed** by merging `docs/p3-tracking-prep` into this branch (`2c316cf`); one "merge" now publishes both. **Proposed lesson:** `check:rules` (and any gate that checks that files exist) should read the committed tree (`git ls-files`), or be run on a clean checkout before a push, because untracked files hide a missing commit.
 Phase: P2
 Branch: three parts, one merge each (Q5): `feat/p2a-shell-foundations`, `feat/p2b-header`, `feat/p2c-footer` (each from `main` after the previous merge)
 Page tier: T1. The shell renders on every page. It's measured on Home (`lhci` ≥ 95) and, from part B, on the review page (A3), which shows the complete shell.
