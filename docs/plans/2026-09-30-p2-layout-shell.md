@@ -175,6 +175,37 @@ Progress:
   - **Home in CI:** LCP 1,883–1,888 ms and Performance 100 in four runs. One cold run scored 66 (TBT 2,123 ms; benchmark index 696, against about 2,400 for the others). Every gate before lhci passed in CI, the font notices included (Home's swap CLS 0.0022 at 1280 px and 0 at 360 px).
   - **For the owner:** the options are in the report. The Vercel preview of `1e9f33c` is READY for the review.
 - 2026-10-01 · **The owner's decision: "A, raise it to 2,700 ms".** The review page's lab LCP limit in `lighthouserc.cjs` is 2,700 ms, recorded as **C50**, which raises C48 (the register is append-only, so C48 keeps its row). Home and every real page keep 2.5 s. The page-weight cap is unchanged; the review page's 565 B of room goes to the owner at step 15.
+- 2026-10-01 · **CI green on `5b98465`** (run 36879161442; the public annotations, Chrome 154):
+  - **Home:** LCP 1,883–2,554 ms (median 2,429 ms), Performance 86–100 (median 98), CLS 0. The 86 was one slow-runner run: TBT 441 ms, benchmark index 2,786 against 3,229–3,517 for the others.
+  - **The review page:** LCP 2,033–2,590 ms (median 2,584 ms; C50 allows 2,700), Performance 97–99 (median 97), TBT ≤ 32 ms, CLS 0. The ~2.0 s and ~2.6 s groups are still there.
+  - **Both:** JS 144.2 KB, CSS 12.0 KB, fonts 37.9 KB; HTML 11.5 KB (Home) and 29.6 KB (the review page). The font notices: Home's swap CLS 0.0022 at 1280 px and 0 at 360 px.
+  - The owner hadn't given a verdict on the step 14 preview (the footer, the tiles' hover, the sticky bar) when step 15 started.
+- 2026-10-01 · **Step 15, the effects feasibility gate: the lab half passes. Work stops for the owner's phone checklist and the review page's page weight.**
+  - **Every T1 effect is on where lhci measures.** Lighthouse emulates no media features and no `deviceMemory`. Under its mobile emulation (412 × 823 at 1.75), Chrome 154.0.8037.58 (lhci's) and Playwright's Chromium 153 both show no `data-effects` on Home and the review page: `deviceMemory` 32, no Save-Data, no reduced motion. Not read on the CI runner.
+  - **lhci** (local, 5 runs each, Lighthouse 12.6.1, simulated slow 4G and CPU 4×): passed, and the page-weight check passed.
+    - **Home:** median LCP **2,337 ms** (runs 2,330–2,416; part B's close: 2,336), FCP 754 ms, Performance **98** in every run, the other three categories 100, TBT 12–16 ms, CLS 0, TTFB ≤ 22 ms. The H1 is the LCP element. Bytes: scripts 147,674 · fonts 38,823 · images 25,268 · CSS 12,329 · HTML 11,791; no third-party request. HTML + CSS + JS **171,794 B** of 190,868.
+    - **The review page:** median LCP **2,489 ms** (runs 2,482–2,496; C50 allows 2,700), FCP 904 ms, Performance 98 in every run, Accessibility and Best Practices 100, TBT 13–21 ms, CLS 0. The LCP element is a paragraph (`<p class="mt-4">`), not a heading. HTML 30,300 B; page weight **190,303 B, 565 B left**.
+  - **The 13 §7 caps:**
+    - **First-party JavaScript on Home ≤ 10 KB:** **8,006 B** (lhci's 147,674 B minus the 139,668 B baseline): the error page, `next/link` and the effect runtime.
+    - **Pointer controller ≤ 1.5 KB:** **604 B**.
+    - **Shared observer ≤ 0.5 KB:** **293 B**.
+    - **Glass grain ≤ 2 KB:** **304 B** (239 B gzip). Step 6's note says 285 B; the file is 304 B at HEAD.
+    - **Story controls (≤ 2 KB) and `story-*` (≤ 6 KB each):** none in P2. The Tier 3 icons' stories sit inside each icon's 4 KB budget (`icons.test.ts`).
+    - **Method:** each `src/lib/fx/` module minified on its own (rolldown 1.2.11, its sibling imports external), then gzip level 6. Standalone gzip overstates a module's share: the build merges all five into one module of 2,347 B gzip, against 3,146 B summed (header 960, preferences 945, pointer 604, cta 344, observer 293).
+  - **At runtime** (lab: Playwright's Chromium 153, CPU 4× through CDP, 5 runs). Lighthouse's navigation runs can't measure INP, so each interaction's Event Timing duration is the proxy (rounded to 8 ms by the API):
+    - **On a phone-sized page (412 px, the review page):** Menu 72–80 ms, Reduce effects 56–64, Light theme 72–80, Close menu 88. All under INP's 100 ms target.
+    - **On desktop (1280 px):** Services 72–80 ms. With the menu open, Light theme takes 112–136 ms (72–88 with Reduce effects) and Esc 96–104 ms (24–32): the `glass-live` panel repaints. All under the 200 ms limit; these two are over the 100 ms target.
+    - **Scrolling at 1280 px with the pointer mid-page,** so hover effects fire as content passes under it:
+      - Home: 0 frames over 50 ms.
+      - The review page: 10–13 of about 180 frames over 50 ms, and 5–7 long animation frames per run (51–59 ms: style, layout and paint 16–36 ms; animation updates and rAF 2–25 ms; almost no script). They come only from the icon gallery: its 20 Tier 3 icons (five, at four sizes) start their stories together. With the gallery hidden, or with Reduce effects, there are 0.
+      - Scrolling the review page at 412 px: 1–5 of about 170 frames over 50 ms, with no long animation frames (0 with Reduce effects).
+    - **The pointer:** over the open menu's rows (the four Tier 3 heads and the rows' stories), frames of 17–33 ms, none over 50 ms. Across the CTA (`pointer-magnet`, `hover-charge`), every frame was 17 ms.
+    - **One long frame remains per load** (52–65 ms), with or without effects: a React scheduler task in the framework chunk, not ours.
+    - **Not covered:** CDP throttling slows the main thread only, not GPU raster, where the blur is drawn. The phone covers that (owner checklist 2).
+  - **For 0019:** at CPU 4×, twenty Tier 3 stories starting together drop frames, while the menu's four heads plus a row's story don't. 13 §2.3 counts a playing `story-*` as a signature moment but doesn't name icon stories. Proposed for P5 and P6: a limit on how many Tier 3 stories start in one viewport.
+  - **The review page's 565 B (for the owner).** About 2.8 KB gzip of its HTML is the icon gallery's markup alone; React's page data repeats it (not measured). The options are in the report.
+  - **The owner checklist** runs on the preview of `5b98465`, `dzetaproject-1dlbm6d3c-deep-zeta.vercel.app` (READY; its site code is the same as step 14's).
+  - Scratch files deleted (02 §4).
 Phase: P2
 Branch: three parts, one merge each (Q5): `feat/p2a-shell-foundations`, `feat/p2b-header`, `feat/p2c-footer` (each from `main` after the previous merge)
 Page tier: T1. The shell renders on every page. It's measured on Home (`lhci` ≥ 95) and, from part B, on the review page (A3), which shows the complete shell.
