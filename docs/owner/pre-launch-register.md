@@ -12,12 +12,12 @@
 | ✓ | What | Why | When | How |
 |---|---|---|---|---|
 | ☐ | Tracking guide **Part A**: GTM container, GA4 property and its settings, and the IDs sent to Claude | P3 can't start without the IDs, and the GA4 settings stop events being counted twice | Now, before P3 | Tracking guide, Part A |
-| ☑ | Answer the guide's **questions 8 and 9** (the consent banner; what counts as a conversion) | They decide how P3 is built | Before P3 | **Answered 2026-10-02:** analytics on by default for every visitor, no banner; conversions as proposed |
+| ☑ | Answer the guide's **questions 8 and 9** (the consent banner; what counts as a conversion) | They decide how P3 is built | Before P3 | **Answered 2026-10-02:** a consent banner for Europe only (EEA, UK, Switzerland: nothing runs until Accept; everyone else: tracking on by default); conversions as proposed |
 | ☐ | Tracking guide **Part B**: import the container, test in Preview and DebugView, custom dimensions, key events, publish | The code's event names and the dashboards must match exactly | After P3 is built | Tracking guide, Part B |
 | ☐ | Turn the GA4 **Internal Traffic** filter to Active | Keeps your own visits out of the numbers | A day after Part B | Tracking guide B7 |
 | ☐ | Meta, LinkedIn and Google Ads conversions (only the platforms you use) | Ads need conversions to optimise; one method each, so nothing is counted twice | After Part B | Tracking guide B8 |
 | ☐ | The **privacy and cookie policy names exactly the tools in the GTM container** | A policy that lists different tools from the ones that run is misleading (UAE PDPL) | Before launch, and after any tracking change | Claude compares the two and sends you the list |
-| ☐ | Test the consent setup in Tag Assistant's Consent tab: it must match what P3 builds for your 2026-10-02 answer (analytics on by default for everyone) | The site's consent signals and the tags must agree | Before launch | Tracking guide B2 (P3 updates the step) |
+| ☐ | Test the consent setup in Tag Assistant's Consent tab: it must match what P3 builds for your 2026-10-02 answer (a European visitor sees *denied* until Accept; any other visitor *granted*) | The site's consent signals and the tags must agree | Before launch | Tracking guide B2 (P3 updates the step) |
 | ☐ | Secret server keys (Meta and LinkedIn Conversions API tokens) go into Vercel's environment variables, entered by you | Secrets never pass through chat or the repo | When the lead flow ships (P6–P7) | Claude sends the variable names |
 
 ## 2. Devices (P2 decision 0019, C51)
