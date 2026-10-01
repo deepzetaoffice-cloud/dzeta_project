@@ -3,6 +3,7 @@
 import { Logo } from '@/components/ui/Logo';
 import { errorContent } from '@/content/en/error';
 import { locales } from '@/lib/i18n/locales';
+import { routePath } from '@/lib/routes';
 import { brandedTitle } from '@/lib/seo/title';
 import { siteConfig } from '@/lib/site-config';
 import { fontVariables } from '@/styles/fonts';
@@ -41,9 +42,9 @@ export default function GlobalError({ retry }: GlobalErrorProps) {
             >
               {errorContent.retry}
             </button>
-            {/* A full reload home after an error, and one copy of next/link per page (conflict C46) */}
-            {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-            <a className="inline-flex min-h-11 items-center text-link underline" href="/">
+            {/* A plain <a>: a full reload home after an error, and one copy of next/link per page (conflict
+                C46). The lint rule only reads a typed href, so the route helper needs no exception. */}
+            <a className="inline-flex min-h-11 items-center text-link underline" href={routePath('R001')}>
               {errorContent.homeLink}
             </a>
           </div>

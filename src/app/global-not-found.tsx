@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import Link from 'next/link';
 import { SiteDocument } from '@/components/layout/SiteDocument';
 import { notFoundContent } from '@/content/en/not-found';
+import { routePath } from '@/lib/routes';
 import { brandedTitle } from '@/lib/seo/title';
 import { siteViewport } from '@/lib/viewport';
 import '@/styles/globals.css';
@@ -24,7 +25,7 @@ export default function GlobalNotFound() {
         <p className="mt-4">{notFoundContent.body}</p>
         <p className="mt-4">
           {/* A 44 px tap target (05 §7, WCAG 2.5.5), without changing the line's look. */}
-          <Link className="inline-flex min-h-11 items-center text-link underline" href="/">
+          <Link className="inline-flex min-h-11 items-center text-link underline" href={routePath('R001')}>
             {notFoundContent.homeLink}
           </Link>
         </p>

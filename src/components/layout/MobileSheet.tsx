@@ -44,7 +44,7 @@ export function MobileSheet({ review }: MobileSheetProps) {
       <dialog id={SHEET} aria-label={shellContent.menuOpen} className="dz-sheet">
         <div
           data-theme="dark"
-          className="dz-sheet-panel dz-glass dz-glass--live dz-glass--muted flex min-h-full flex-col gap-8 px-gutter pt-(--dz-header-inset) pb-6"
+          className="dz-sheet-panel dz-glass dz-glass--live dz-glass--muted flex min-h-full flex-col gap-8 px-gutter pt-(--dz-header-inset)"
         >
           <div className="flex h-(--dz-header-height) items-center justify-end pe-2">
             <button

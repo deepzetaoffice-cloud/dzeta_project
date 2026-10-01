@@ -7,6 +7,8 @@ import {
   contrastRatio,
   GRAIN_FILE,
   grainSpeck,
+  isLargeText,
+  lengthPx,
   NOT_CHECKED,
   PAIRS,
   REPORTED,
@@ -263,5 +265,48 @@ describe('check:contrast', () => {
     const gated = new Set(PAIRS.map((pair) => `${pair.fg} ${pair.bg}`));
     expect(REPORTED.filter((pair) => gated.has(`${pair.fg} ${pair.bg}`))).toEqual([]);
     expect(NOT_CHECKED.join(' ')).not.toMatch(/pixel/i);
+  });
+
+  it('calls a pair large text only while its size and weight tokens qualify (P3 plan, A fix 7)', () => {
+    const withTile = (size: string, weight: string) =>
+      tokens().replace(
+        '--dz-navy: #010413;',
+        `--dz-navy: #010413;\n  --dz-x-size: ${size};\n  --dz-x-weight: ${weight};`,
+      );
+    const pair = {
+      fg: '--dz-white',
+      bg: '--dz-signal',
+      kind: 'large',
+      largeText: { size: '--dz-x-size', weight: '--dz-x-weight' },
+      themes: ['brand'],
+    };
+    // White on signal is 4.16:1: large text passes, body text fails.
+    const bold19 = checkContrast(withTile('1.1875rem', '800'), [pair]);
+    expect(bold19.problems).toEqual([]);
+    expect(bold19.results[0]).toMatchObject({ kind: 'large', pass: true });
+    const regular19 = checkContrast(withTile('1.1875rem', '400'), [pair]).results[0];
+    expect(regular19).toMatchObject({ kind: 'text', threshold: 4.5, pass: false });
+    const bold17 = checkContrast(withTile('17px', '800'), [pair]).results[0];
+    expect(bold17).toMatchObject({ kind: 'text', pass: false });
+    expect(checkContrast(withTile('1.5rem', '400'), [pair]).results[0]).toMatchObject({ kind: 'large' });
+    expect(checkContrast(withTile('1em', '800'), [pair]).problems.join(' ')).toMatch(/can't read the length/);
+    expect(checkContrast(withTile('1.1875rem', 'bold'), [pair]).problems.join(' ')).toMatch(/can't read the weight/);
+  });
+
+  it('reads lengths in rem and px, and the WCAG large-text sizes', () => {
+    expect(lengthPx('1.1875rem')).toBe(19);
+    expect(lengthPx(' 24px ')).toBe(24);
+    expect(isLargeText(24, 400)).toBe(true);
+    expect(isLargeText(18.67, 700)).toBe(true);
+    expect(isLargeText(18.5, 800)).toBe(false);
+    expect(isLargeText(19, 600)).toBe(false);
+  });
+
+  it('checks the social tile letters with their own size and weight tokens', () => {
+    const tiles = PAIRS.filter((pair) => pair.note?.startsWith('social tile letter'));
+    expect(tiles).toHaveLength(7);
+    for (const tile of tiles) {
+      expect(tile).toMatchObject({ largeText: { size: '--dz-social-letter', weight: '--dz-social-letter-weight' } });
+    }
   });
 });

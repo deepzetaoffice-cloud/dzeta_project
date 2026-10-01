@@ -32,6 +32,7 @@ Every page ends with a landing. The journey line that followed the visitor down 
 - **Social links:** Deepzeta's own letter tiles (C49), one per profile in facts §2.1: in · Ig · f · YT · T · X · @ · S · P, each filled with its platform's colour inside the signal-gradient edge, linked per the rules in the facts file. Hover: `hover-glow` (13 §4.3); touch: `touch-press`.
 - **Controls:** the display controls (Reduce effects beside the theme switch, 05 §1) and a language switch placeholder (hidden until Arabic).
 - **Business name, address and phone:** an `<address>` from the site config, each line shown only once CONFIRMED in `docs/facts/company-facts.md`. A PENDING value (the phone, WhatsApp) is left out, never filled with a placeholder.
+- **Opening hours** (the owner, 2026-10-02; P3 plan, A): their own line after the `<address>`, "Opening hours: " and the fact from the site config, byte for byte (facts §2).
 - **The legal line:** "© 2026 Deepzeta Digital Solutions L.L.C.".
 - **On mobile,** "See how AI reads this page" also appears here. It shares the same AI View state as the header.
 

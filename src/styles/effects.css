@@ -632,8 +632,11 @@
     background: none;
   }
 
+  /* Its end padding clears an iPhone's home indicator, so the thumb zone's CTA is never under it
+     (viewportFit 'cover'; 0019). */
   .dz-sheet-panel {
     border-radius: 0;
+    padding-block-end: max(--spacing(6), env(safe-area-inset-bottom));
     @variant fx {
       transition:
         opacity var(--dz-dur-base) var(--dz-ease-out),
@@ -971,7 +974,7 @@
     position: relative;
     grid-area: 1 / 1;
     font-size: var(--dz-social-letter);
-    font-weight: 800;
+    font-weight: var(--dz-social-letter-weight);
     line-height: 1;
   }
 

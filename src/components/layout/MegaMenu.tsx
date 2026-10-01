@@ -91,8 +91,10 @@ export function MegaMenu({ review }: MegaMenuProps) {
                         ) : (
                           <span aria-hidden="true" className="dz-mega-pixel" />
                         )}
+                        {/* The space keeps the name and the outcome two words apart for text readers and
+                            crawlers, which read the link's text as one run; the grid doesn't render it. */}
                         <span className="grid gap-0.5 leading-snug">
-                          <span className="font-medium text-fg-strong">{item.name}</span>
+                          <span className="font-medium text-fg-strong">{item.name}</span>{' '}
                           <span className="text-fg-muted">{item.outcome}</span>
                         </span>
                       </Link>

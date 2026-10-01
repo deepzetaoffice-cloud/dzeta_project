@@ -210,6 +210,14 @@ test.describe('Mega menu (Services)', () => {
     });
   }
 
+  test('each service row reads its name and outcome as separate words (P3 plan, A fix 1)', async ({ page }) => {
+    await open(page, REVIEW, 1280);
+    // The first row the menu shows: items marked `mega: false` stay out of it.
+    const item = navigation.columns[0]!.items.find((entry) => !('mega' in entry && entry.mega === false))!;
+    const row = page.locator(`${MEGA} .dz-menu-row`).first();
+    expect(await row.textContent()).toBe(`${item.name} ${item.outcome}`);
+  });
+
   test('a click outside closes it', async ({ page }) => {
     await open(page, REVIEW, 1280);
     await page.getByRole('button', { name: navigation.servicesLabel }).click();
@@ -529,6 +537,7 @@ test.describe('JavaScript off', () => {
 test.describe('The footer, The Landing (footer.md; P2 plan, L)', () => {
   for (const [path, width] of [
     [HOME, 360],
+    [HOME, 768],
     [HOME, 1280],
     [REVIEW, 390],
     [REVIEW, 1280],
@@ -544,6 +553,10 @@ test.describe('The footer, The Landing (footer.md; P2 plan, L)', () => {
       await expect(footer.locator('h1, h2, h3, h4, h5, h6')).toHaveCount(1);
       await expect(footer.locator('[data-cta="primary"]')).toHaveCount(1);
       await expect(footer.locator('address')).toContainText(siteConfig.address);
+      // The opening hours, the fact as it stands (facts §2; P3 plan, A), on their own line
+      await expect(
+        footer.getByText(`${shellContent.hoursLabel}: ${siteConfig.openingHours.display}`, { exact: true }),
+      ).toBeVisible();
       await expect(footer.getByRole('link', { name: siteConfig.email })).toHaveAttribute(
         'href',
         `mailto:${siteConfig.email}`,
@@ -639,6 +652,27 @@ test.describe('The footer, The Landing (footer.md; P2 plan, L)', () => {
     await linkedin.hover();
     await expect(linkedin.locator('.dz-social-glow')).toHaveCSS('opacity', '0.6');
     await expect(linkedin.locator('.dz-social-tile')).toHaveCSS('translate', 'none');
+  });
+
+  test('in forced colours each tile is a bordered system tile with its letter shown (P3 plan, A fix 6)', async ({
+    page,
+  }) => {
+    await page.emulateMedia({ forcedColors: 'active' });
+    await open(page, HOME, 768);
+    for (const profile of siteConfig.social) {
+      const link = page.getByRole('link', { name: socialName(profile.platform), exact: true });
+      await link.scrollIntoViewIfNeeded();
+      const tile = await link.locator('.dz-social-tile').evaluate((el) => {
+        const style = getComputedStyle(el);
+        return { width: parseFloat(style.borderTopWidth), style: style.borderTopStyle, colour: style.borderTopColor };
+      });
+      expect(tile.width, profile.platform).toBeGreaterThan(0);
+      expect(tile.style, profile.platform).toBe('solid');
+      expect(tile.colour, profile.platform).not.toBe('rgba(0, 0, 0, 0)');
+      const letter = link.locator('.dz-social-letter:not(.dz-social-split)');
+      await expect(letter, profile.platform).toBeVisible();
+      await expect(link.locator('.dz-social-glow')).toBeHidden();
+    }
   });
 
   test('in Arabic (RTL) the journey line runs down the right edge and the tiles mirror their order', async ({
