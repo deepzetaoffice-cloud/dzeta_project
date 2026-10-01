@@ -259,6 +259,14 @@ Progress:
     - `ci.yml` could name each Lighthouse run's page.
   - **Decision 0019** written, with its index row.
 - 2026-10-02 · **CI on `0c7032a` failed in `check:rules`:** `CLAUDE.md` now names the two owner documents, which were committed on `docs/p3-tracking-prep`, not here. Locally they were still in the working tree, untracked, so the check passed. **Fixed** by merging `docs/p3-tracking-prep` into this branch (`2c316cf`); one "merge" now publishes both. **Proposed lesson:** `check:rules` (and any gate that checks that files exist) should read the committed tree (`git ls-files`), or be run on a clean checkout before a push, because untracked files hide a missing commit.
+- 2026-10-02 · **CI green on `a28bddf`** (run 36918659085): Home LCP 1,882–2,480 ms (median 1,887), Performance 90–100 (median 100; the 90 was one slow-runner run, TBT 329 ms); the review page 2,032–2,599 ms (median 2,034), Performance 97–99; CLS 0; the font notices unchanged (Home's swap CLS 0 at 360 px, 0.0022 at 1280 px).
+- 2026-10-02 · **The owner's answers:** "merge. 2 yes, 3 approve, 4 yes show hours".
+  - **2, yes:** the seven small fixes outside part C's table (0019 Consequences) become P3's first step.
+  - **3, approve:** the `tests/e2e/icons.spec.ts` row added at step 14 is approved after the fact.
+  - **4, yes:** the footer shows the opening hours from facts §2 (Monday–Saturday 08:00–17:00). This is built in P3's first step, with the site config, its test and a footer.md edit, so P4's `#organization` node can carry them.
+- 2026-10-02 · **P2 merged** on the owner's "merge": `ca3fa0a` on `main` (`--no-ff`; its tree equals the CI-green `a28bddf`). The Vercel production deployment of `ca3fa0a` succeeded ("Deployment has completed"). Checked on `www.deepzeta.ai`: Home returns 200 with the footer's company block, address, email, social tiles, the sticky bar and the journey line; no footer link nav yet (no live rows); `/shell-review` returns 404; `X-Robots-Tag: noindex` (the pre-launch lock, 0013).
+  - **PSI on production with the complete shell** (`www.deepzeta.ai`, mobile; Lighthouse 13.5.0, Moto G Power, slow 4G; 2026-10-02 00:21 GST): Performance **100**, LCP **1.4 s**, FCP 0.9 s, TBT 80 ms, CLS 0, Speed Index 0.9 s; Accessibility and Best Practices 100; SEO 66 (the `noindex` lock). Part B's shell measured Performance 99 and LCP 2.0 s there on 2026-10-01.
+  - **P2 is complete.** P3 starts on `feat/p3-analytics-consent`, from `main`.
 Phase: P2
 Branch: three parts, one merge each (Q5): `feat/p2a-shell-foundations`, `feat/p2b-header`, `feat/p2c-footer` (each from `main` after the previous merge)
 Page tier: T1. The shell renders on every page. It's measured on Home (`lhci` ≥ 95) and, from part B, on the review page (A3), which shows the complete shell.
