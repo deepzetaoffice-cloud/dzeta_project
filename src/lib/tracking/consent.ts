@@ -25,6 +25,14 @@ export const CONSENT_MAX_AGE_MS = 365 * DAY_MS;
 // A clock a little ahead of ours is fine; a choice dated far in the future is not a real one.
 export const CONSENT_CLOCK_SKEW_MS = DAY_MS;
 export const ASK_ATTRIBUTE = 'data-consent';
+// The attribution touches (attribution.ts), kept here because withdrawing Marketing removes them, and
+// this module is always loaded while the capture code loads only when needed.
+export const FIRST_TOUCH_KEY = 'dz-attribution-first';
+export const LAST_TOUCH_KEY = 'dz-attribution-last';
+export const ATTRIBUTION_DAYS = 90;
+// Whether an address carries a click ID or a campaign tag: the runtime checks it before importing the
+// capture code (attribution.test.ts keeps it in step with ATTRIBUTION_KEYS).
+export const HAS_ATTRIBUTION = /[?&](?:gclid|gbraid|wbraid|fbclid|li_fat_id|msclkid|utm_[a-z]+)=/;
 export const ASK = 'ask';
 
 export type Choice = { analytics: boolean; marketing: boolean };
@@ -124,7 +132,9 @@ export function deleteCookies(names: readonly (string | RegExp)[]): void {
 export type WithdrawnCookies = Partial<Record<'analytics' | 'marketing', readonly (string | RegExp)[]>>;
 
 // Applies a visitor's choice: stores it, tells Consent Mode, then reports it (consent_update) so GTM
-// can fire the page's tags a new grant allows; a withdrawn group's cookies are deleted.
+// can fire the page's tags a new grant allows; a withdrawn group's cookies are deleted, and withdrawing
+// Marketing removes the attribution touches. The page hears of it as a dz:consent event (the
+// attribution capture waits for it).
 export function applyChoice(choice: Choice, withdrawnCookies: WithdrawnCookies = {}): void {
   const before = currentConsent().choice;
   try {
@@ -141,5 +151,14 @@ export function applyChoice(choice: Choice, withdrawnCookies: WithdrawnCookies =
   for (const group of ['analytics', 'marketing'] as const) {
     if (before[group] && !choice[group]) deleteCookies(withdrawnCookies[group] ?? []);
   }
+  if (before.marketing && !choice.marketing) {
+    try {
+      localStorage.removeItem(FIRST_TOUCH_KEY);
+      localStorage.removeItem(LAST_TOUCH_KEY);
+    } catch {
+      // Storage blocked: nothing was stored.
+    }
+  }
   document.documentElement.removeAttribute(ASK_ATTRIBUTE);
+  window.dispatchEvent(new CustomEvent('dz:consent', { detail: choice }));
 }

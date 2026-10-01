@@ -82,7 +82,7 @@ describe('in a page', () => {
     const writes: string[] = [];
     const storage = new Map<string, string>(stored ? [[CONSENT_KEY, stored]] : []);
     const attributes = new Map<string, string>([['data-consent', 'ask']]);
-    const win = { dataLayer: [] as unknown[], gtag: vi.fn() };
+    const win = { dataLayer: [] as unknown[], gtag: vi.fn(), dispatchEvent: vi.fn() };
     vi.stubGlobal('window', win);
     vi.stubGlobal('performance', {
       getEntriesByType: () => [{ serverTiming: region ? [{ name: 'dz-region', description: region }] : [] }],
@@ -90,6 +90,7 @@ describe('in a page', () => {
     vi.stubGlobal('localStorage', {
       getItem: (key: string) => storage.get(key) ?? null,
       setItem: (key: string, value: string) => storage.set(key, value),
+      removeItem: (key: string) => storage.delete(key),
     });
     vi.stubGlobal('location', { hostname: 'www.deepzeta.ai' });
     vi.stubGlobal('document', {
@@ -131,6 +132,19 @@ describe('in a page', () => {
     expect([...jar.keys()]).toEqual(['_fbp', 'dz-other']);
     expect(writes).toContain('_ga=; Max-Age=0; Path=/; Domain=deepzeta.ai');
     expect(writes).toContain('_ga_ABC123=; Max-Age=0; Path=/; Domain=www.deepzeta.ai');
+    vi.runAllTimers();
+  });
+
+  it('withdrawing Marketing removes the attribution touches, and every choice is announced as dz:consent', () => {
+    vi.useFakeTimers();
+    const { win, storage } = page({ region: 'row' });
+    storage.set('dz-attribution-first', '{}');
+    storage.set('dz-attribution-last', '{}');
+    applyChoice({ analytics: true, marketing: false });
+    expect(storage.has('dz-attribution-first')).toBe(false);
+    expect(storage.has('dz-attribution-last')).toBe(false);
+    const [event] = win.dispatchEvent.mock.calls[0]! as [CustomEvent];
+    expect([event.type, event.detail]).toEqual(['dz:consent', { analytics: true, marketing: false }]);
     vi.runAllTimers();
   });
 

@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { cleanValue, eventPayload, trackEvent } from '@/lib/analytics';
+import { cleanValue, contentGroup, eventPayload, linkEvent, trackEvent } from '@/lib/analytics';
 
 // trackEvent() (docs/ai/09 §2.3, §2.6, §4; P3 plan, F): the payload's shape, the checks on each value,
 // and the push after a yield. Its types are checked by `typecheck`: the @ts-expect-error lines below
@@ -62,6 +62,43 @@ describe('cleanValue', () => {
     const spec = { kind: 'enum', values: ['granted', 'denied'] } as const;
     expect(cleanValue(spec, 'granted')).toBe('granted');
     expect(cleanValue(spec, 'GRANTED')).toBeUndefined();
+  });
+});
+
+describe('linkEvent', () => {
+  const HOST = 'deepzeta.ai';
+  it('reports email, phone and WhatsApp links as contact_click', () => {
+    expect(linkEvent('mailto:hello@deepzeta.ai?subject=Free%20AI%20audit', HOST)).toEqual({
+      event: 'contact_click',
+      params: { method: 'email' },
+    });
+    expect(linkEvent('tel:+971500000000', HOST)?.params).toEqual({ method: 'phone' });
+    expect(linkEvent('https://wa.me/971500000000', HOST)?.params).toEqual({ method: 'whatsapp' });
+    expect(linkEvent('https://api.whatsapp.com/send?phone=971', HOST)?.params).toEqual({ method: 'whatsapp' });
+  });
+
+  it('reports another site as outbound_click with its domain, without www.', () => {
+    expect(linkEvent('https://www.linkedin.com/company/x/', HOST)).toEqual({
+      event: 'outbound_click',
+      params: { destination_domain: 'linkedin.com' },
+    });
+    expect(linkEvent('https://x.com/Deep_Zeta', HOST)?.params).toEqual({ destination_domain: 'x.com' });
+  });
+
+  it('reports nothing for the site’s own links or anything that isn’t a web or contact link', () => {
+    expect(linkEvent('https://deepzeta.ai/services', HOST)).toBeNull();
+    expect(linkEvent('javascript:void(0)', HOST)).toBeNull();
+    expect(linkEvent('not a url', HOST)).toBeNull();
+  });
+});
+
+describe('contentGroup', () => {
+  it('is the first path segment, "home" for the home page, "other" for anything odd', () => {
+    expect(contentGroup('/')).toBe('home');
+    expect(contentGroup('/services/whatsapp-ai-agent')).toBe('services');
+    expect(contentGroup('/free-ai-audit')).toBe('free-ai-audit');
+    expect(contentGroup('/About')).toBe('about');
+    expect(contentGroup('/%E2%9C%93')).toBe('other');
   });
 });
 

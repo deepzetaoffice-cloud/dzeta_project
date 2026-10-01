@@ -7,7 +7,15 @@ import { consentContent } from '@/content/en/legal/consent';
 import { EFFECTS_KEY, THEME_KEY } from '@/lib/fx/preferences';
 import { siteConfig } from '@/lib/site-config';
 import { accounts } from '@/lib/tracking/accounts';
-import { applyChoice, CONSENT_KEY, currentConsent, type Choice } from '@/lib/tracking/consent';
+import {
+  applyChoice,
+  ATTRIBUTION_DAYS,
+  CONSENT_KEY,
+  currentConsent,
+  FIRST_TOUCH_KEY,
+  LAST_TOUCH_KEY,
+  type Choice,
+} from '@/lib/tracking/consent';
 import { vendorsInUse, withdrawnCookies, type ConsentGroup } from '@/lib/tracking/vendors';
 
 // Cookie settings, the second layer (docs/ai/09 §2.7, conflict C52; P3 plan, E;
@@ -24,6 +32,12 @@ import { vendorsInUse, withdrawnCookies, type ConsentGroup } from '@/lib/trackin
 export const SITE_STORAGE = [
   { keys: [CONSENT_KEY], group: 'essential', purpose: 'consent', lifetime: { months: 12 } },
   { keys: [THEME_KEY, EFFECTS_KEY], group: 'essential', purpose: 'display', lifetime: 'untilCleared' },
+  {
+    keys: [FIRST_TOUCH_KEY, LAST_TOUCH_KEY],
+    group: 'marketing',
+    purpose: 'attribution',
+    lifetime: { days: ATTRIBUTION_DAYS },
+  },
 ] as const;
 
 type Row = { name: string; provider: string; lifetime: string };
@@ -38,7 +52,9 @@ function rowsFor(group: ConsentGroup, gtm: boolean): Row[] {
       lifetime:
         entry.lifetime === 'untilCleared'
           ? settings.lifetime.untilCleared
-          : settings.lifetime.months(entry.lifetime.months),
+          : 'days' in entry.lifetime
+            ? settings.lifetime.days(entry.lifetime.days)
+            : settings.lifetime.months(entry.lifetime.months),
     })),
   );
   const vendors = vendorsInUse({ gtm }, accounts)

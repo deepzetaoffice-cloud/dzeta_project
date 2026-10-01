@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Icon } from '@/components/icons/Icon';
 import { shellContent } from '@/content/en/shell';
 import { isLive, routePath } from '@/lib/routes';
+import type { CTA_IDS } from '@/lib/tracking/taxonomy';
 import { siteConfig } from '@/lib/site-config';
 
 // The CTA, "Book a free AI audit" (P2 plan, H3; docs/ai/05 §2, one gradient CTA per view). The action
@@ -11,6 +12,8 @@ import { siteConfig } from '@/lib/site-config';
 // - header: outline at rest (hover-outline); cta.ts gives it the gradient on desktop while no
 //   in-page primary CTA is on screen. Without JavaScript it stays outline, so a view never shows two.
 // The wrapper is the pointer controller's target (pointer.ts), so the link can drift inside it.
+// Tracking (P3 plan, G): `data-cta-id` names the CTA in the taxonomy (cta_click's cta_id); the tracking
+// runtime reads it, with where the CTA sits, from the click. The component carries no tracking code.
 
 // The CTA's target: the audit page once it ships, an email with a subject until then (Q1).
 export function auditHref(): string {
@@ -25,10 +28,12 @@ export type CtaButtonProps = {
   variant: 'primary' | 'header';
   /** Fill the width of its container: the mobile sheet's thumb zone */
   wide?: boolean;
+  /** Its name in the taxonomy (cta_click's cta_id); every CTA today is the audit's */
+  ctaId?: (typeof CTA_IDS)[number];
   className?: string;
 };
 
-export function CtaButton({ href, label, variant, wide = false, className }: CtaButtonProps) {
+export function CtaButton({ href, label, variant, wide = false, className, ctaId = 'book_audit' }: CtaButtonProps) {
   const classes = [
     'dz-cta',
     `dz-cta--${variant}`,
@@ -57,11 +62,11 @@ export function CtaButton({ href, label, variant, wide = false, className }: Cta
   return (
     <span className={wrapper} data-fx-pointer="">
       {href.startsWith('/') ? (
-        <Link href={href} className={classes} data-cta={variant}>
+        <Link href={href} className={classes} data-cta={variant} data-cta-id={ctaId}>
           {content}
         </Link>
       ) : (
-        <a href={href} className={classes} data-cta={variant}>
+        <a href={href} className={classes} data-cta={variant} data-cta-id={ctaId}>
           {content}
         </a>
       )}
