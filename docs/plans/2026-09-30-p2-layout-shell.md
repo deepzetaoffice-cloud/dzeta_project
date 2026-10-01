@@ -174,6 +174,7 @@ Progress:
   - **The review page in CI:** lab LCP is split in two groups, 2,004–2,017 ms in three runs and 2,601 and 2,672 ms in two, and the run lhci judges by (`median-run`) was over 2,600 ms. Part B's CI had the same split (2,033–2,037 and 2,594–2,602 ms) and passed by a few milliseconds. Its HTML went from 24.2 to 29.6 KB with the full footer; about 3 KB of that is the footer's columns, which production doesn't show until pages ship.
   - **Home in CI:** LCP 1,883–1,888 ms and Performance 100 in four runs. One cold run scored 66 (TBT 2,123 ms; benchmark index 696, against about 2,400 for the others). Every gate before lhci passed in CI, the font notices included (Home's swap CLS 0.0022 at 1280 px and 0 at 360 px).
   - **For the owner:** the options are in the report. The Vercel preview of `1e9f33c` is READY for the review.
+- 2026-10-01 · **The owner's decision: "A, raise it to 2,700 ms".** The review page's lab LCP limit in `lighthouserc.cjs` is 2,700 ms, recorded as **C50**, which raises C48 (the register is append-only, so C48 keeps its row). Home and every real page keep 2.5 s. The page-weight cap is unchanged; the review page's 565 B of room goes to the owner at step 15.
 Phase: P2
 Branch: three parts, one merge each (Q5): `feat/p2a-shell-foundations`, `feat/p2b-header`, `feat/p2c-footer` (each from `main` after the previous merge)
 Page tier: T1. The shell renders on every page. It's measured on Home (`lhci` ≥ 95) and, from part B, on the review page (A3), which shows the complete shell.
@@ -666,9 +667,9 @@ A file listed in an earlier part may be modified again in a later part only wher
 | ~~`public/brand/social/*.svg`~~ | DROPPED | Replaced by the letter tiles (C49); nothing downloaded |
 | `scripts/check-contrast.mjs` | MODIFY | Each tile's letter on its colour, and the signal edge on navy (C49; the owner, step 13) |
 | `tests/unit/check-contrast.test.ts` | MODIFY | Only if the new pairs need a failing example |
-| `docs/ai/conflict-register.md` | APPEND-ONLY (protected) | C49 (the owner, step 13: "Yes, record it") |
+| `docs/ai/conflict-register.md` | APPEND-ONLY (protected) | C49 (the owner, step 13: "Yes, record it"); C50 (the owner, step 14: "A, raise it to 2,700 ms") |
 | `docs/facts/company-facts.md` | MODIFY | §2.1's icon rule line only (C49; the owner, step 13) |
-| `lighthouserc.cjs` | MODIFY | `OWN_JS_HOME` measured |
+| `lighthouserc.cjs` | MODIFY | `OWN_JS_HOME` measured; the review page's LCP limit at 2,700 ms (C50; the owner, step 14) |
 | `tests/unit/site-config.test.ts` | CREATE | (O) |
 | `tests/e2e/shell.spec.ts` | MODIFY | The footer, the sticky bar, the full hand-off |
 | `tests/e2e/preferences.spec.ts` | MODIFY | The footer's switches |

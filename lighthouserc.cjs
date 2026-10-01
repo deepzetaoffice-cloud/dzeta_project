@@ -70,12 +70,12 @@ const t1Assertions = {
 // The review page shows the complete shell (P2 plan, A3; registry R165) and is measured as T1 too, with
 // two differences. It's noindex by design (never linked, 404 in production), so Lighthouse's SEO
 // category, which fails a page that blocks indexing, doesn't apply. And it carries the full mega menu,
-// the sheet and the icon gallery in its HTML, so its lab LCP may reach 2,600 ms (C48, decision 0020);
-// Home keeps the 2.5 s hard limit.
+// the sheet, the full footer and the icon gallery in its HTML, so its lab LCP may reach 2,700 ms (C48,
+// raised by C50; decision 0020); Home keeps the 2.5 s hard limit.
 const reviewAssertions = {
   ...t1Assertions,
   'categories:seo': 'off',
-  'largest-contentful-paint': ['error', { maxNumericValue: 2600, ...medianRun }],
+  'largest-contentful-paint': ['error', { maxNumericValue: 2700, ...medianRun }],
 };
 
 module.exports = {
