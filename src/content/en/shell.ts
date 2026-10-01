@@ -11,8 +11,11 @@ export const shellContent = {
   // The menu button's accessible names, closed and open
   menuOpen: 'Menu',
   menuClose: 'Close menu',
-  // The display switches (docs/ai/13 §2.11; Q2)
+  // The display switches (docs/ai/13 §2.11; Q2), and their group's accessible name
+  displayLabel: 'Display',
   reduceEffects: 'Reduce effects',
   lightTheme: 'Light theme',
   deviceSettingNote: 'Your device settings turn this on.',
+  // The mega menu's rail card (header.md); shown on the review page until P7's demos ship
+  demoCard: 'Try a live demo',
 } as const;

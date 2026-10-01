@@ -100,7 +100,7 @@ export const REPORTED = ['--dz-pixel-ai', '--dz-pixel-web', '--dz-pixel-software
 
 // Printed on every run, so the output never claims more than it checked.
 export const NOT_CHECKED = [
-  'glass-liquid: its tint and rim come with the mega-menu demo card (P2 step 10)',
+  'glass-liquid: its rim and sheen are light over the gated minimum tint, which carries its text',
   'light-mode status colours, accent surfaces, raised surfaces and shadows: the first plan that uses them',
   '--dz-border as the only boundary of a form field (2.24:1 on navy): P6 forms',
   'hairlines: decorative, not a boundary',

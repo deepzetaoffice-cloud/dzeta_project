@@ -1,15 +1,18 @@
 import Link from 'next/link';
 import { ClusterLayers } from '@/components/icons/Cluster';
-import { CtaButton } from '@/components/ui/CtaButton';
+import { megaColumns, MegaMenu } from '@/components/layout/MegaMenu';
+import { MobileSheet } from '@/components/layout/MobileSheet';
+import { auditHref, CtaButton } from '@/components/ui/CtaButton';
 import { Logo } from '@/components/ui/Logo';
 import { navigation } from '@/content/en/navigation';
 import { shellContent } from '@/content/en/shell';
-import { isLive, routePath, ROUTES, type RouteId } from '@/lib/routes';
+import { isLive, ROUTES, type RouteId } from '@/lib/routes';
 import { siteConfig } from '@/lib/site-config';
 
 // The header "Proof Bar" (docs/design/header.md; P2 plan, H). On desktop a floating glass pill: the
-// logo, the nav and the CTA (the speed chip and AI View take their places in P7). On mobile a compact
-// bar: the logo and the CTA; the menu button and its sheet arrive with the mobile sheet (step 10).
+// logo, the nav (Services opens the mega menu) and the CTA; the speed chip and AI View take their
+// places in P7. Below 1024 px a compact bar: the logo, the CTA and the menu button, which opens the
+// mobile sheet.
 // - Only live pages are linked (04 §1.4; plan A). The review page shows every item, each linking to
 //   a fragment of itself, and marks the first as current so the marker can be seen.
 // - The pill carries data-theme="dark": it stays navy in both themes (05 §2), and the header element
@@ -19,15 +22,9 @@ import { siteConfig } from '@/lib/site-config';
 
 export type SiteHeaderProps = { review?: boolean };
 
-// The CTA's target: the audit page once it ships, an email with a subject until then (Q1).
-export function auditHref(): string {
-  return isLive('R002')
-    ? routePath('R002')
-    : `mailto:${siteConfig.email}?subject=${encodeURIComponent(shellContent.ctaEmailSubject)}`;
-}
-
 export function SiteHeader({ review = false }: SiteHeaderProps) {
   const links = navigation.primary.filter((link) => review || isLive(link.route));
+  const services = megaColumns(review).length > 0;
   const href = (route: RouteId) => (review ? `#shell-${route}` : ROUTES[route].path);
   return (
     <header
@@ -36,7 +33,7 @@ export function SiteHeader({ review = false }: SiteHeaderProps) {
     >
       <div
         data-theme="dark"
-        className="dz-header-pill pointer-events-auto relative isolate flex h-(--dz-header-height) items-center gap-4 rounded-pill bg-transparent ps-4 pe-2"
+        className="dz-header-pill pointer-events-auto relative isolate flex h-(--dz-header-height) items-center gap-2 rounded-pill bg-transparent ps-4 pe-2 sm:gap-4"
       >
         <span aria-hidden="true" className="dz-header-bg dz-glass dz-glass--live absolute inset-0 -z-10 rounded-pill" />
         {/* At 360 px the bar holds the logo, the CTA and the menu button, so small screens show the mark. */}
@@ -48,9 +45,14 @@ export function SiteHeader({ review = false }: SiteHeaderProps) {
             <Logo variant="lockup" label={siteConfig.brandName} className="h-9" />
           </span>
         </Link>
-        {links.length > 0 ? (
+        {links.length > 0 || services ? (
           <nav aria-label={shellContent.navLabel} className="relative hidden lg:block" data-fx-nav="">
             <ul className="flex gap-1">
+              {services ? (
+                <li>
+                  <MegaMenu review={review} />
+                </li>
+              ) : null}
               {links.map((link, index) => (
                 <li key={link.route}>
                   <Link
@@ -74,6 +76,7 @@ export function SiteHeader({ review = false }: SiteHeaderProps) {
           label={shellContent.cta}
           className="ms-auto text-small lg:text-body"
         />
+        <MobileSheet review={review} />
       </div>
     </header>
   );

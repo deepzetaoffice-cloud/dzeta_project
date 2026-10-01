@@ -218,6 +218,14 @@
   --dz-dur-sheen: 700ms;
   --dz-nudge: 4px;
   --dz-press-scale: 0.97;
+  /* The Drop vocabulary (Icon Master Rules §7.3) for the mega menu and the sheet: they arrive from this
+     far above */
+  --dz-drop: -0.5rem;
+  /* type-word-stagger (13 §4.5): each whole item rises this far, one step after the last (≤ 600 ms in all) */
+  --dz-stagger-step: 60ms;
+  --dz-stagger-rise: 0.75rem;
+  /* hover-underline (13 §4.3) */
+  --dz-underline-width: 1px;
 
   /* The header (P2; header.md): the pill's height, its inset from the viewport's edge, how far its
      background layer shrinks when the page scrolls (the Lab's 0.86), and the nav marker's height */
@@ -225,6 +233,24 @@
   --dz-header-inset: 0.75rem;
   --dz-header-condense: 0.86;
   --dz-hop-size: 0.875rem;
+  /* The mega menu's gap below the pill */
+  --dz-mega-gap: 0.5rem;
+
+  /* glass-liquid (13 §4.1; the Lab's values): the specular rim on the top edge and the sheen that
+     crosses once on hover. No refraction (P2 plan, finding 9). */
+  --dz-liquid-rim: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.55),
+    rgba(255, 255, 255, 0.04) 30%,
+    rgba(124, 243, 255, 0.25)
+  );
+  --dz-liquid-sheen: linear-gradient(
+    100deg,
+    rgba(255, 255, 255, 0) 30%,
+    rgba(255, 255, 255, 0.16) 50%,
+    rgba(255, 255, 255, 0) 70%
+  );
+  --dz-dur-liquid: 1100ms;
 
   /* The CTA (P2): the outline at rest and its hover gradient's width; hover-charge's bead, rim light
      and sheen (the Lab's values) */

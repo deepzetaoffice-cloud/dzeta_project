@@ -1,7 +1,6 @@
 import { notFound } from 'next/navigation';
 import { Icon, type Tier1Size, type Tier3Size } from '@/components/icons/Icon';
-import { auditHref } from '@/components/layout/SiteHeader';
-import { CtaButton } from '@/components/ui/CtaButton';
+import { auditHref, CtaButton } from '@/components/ui/CtaButton';
 import { TIER_3, type Tier3Name } from '@/components/icons/registry';
 import { shellContent } from '@/content/en/shell';
 import { shellReviewContent } from '@/content/en/shell-review';

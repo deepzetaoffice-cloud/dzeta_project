@@ -1,5 +1,8 @@
 import Link from 'next/link';
 import { Icon } from '@/components/icons/Icon';
+import { shellContent } from '@/content/en/shell';
+import { isLive, routePath } from '@/lib/routes';
+import { siteConfig } from '@/lib/site-config';
 
 // The CTA, "Book a free AI audit" (P2 plan, H3; docs/ai/05 §2, one gradient CTA per view). The action
 // gradient sits on its own layer, so the header's hand-off is a cross-fade with no layout change (C42),
@@ -9,18 +12,28 @@ import { Icon } from '@/components/icons/Icon';
 //   in-page primary CTA is on screen. Without JavaScript it stays outline, so a view never shows two.
 // The wrapper is the pointer controller's target (pointer.ts), so the link can drift inside it.
 
+// The CTA's target: the audit page once it ships, an email with a subject until then (Q1).
+export function auditHref(): string {
+  return isLive('R002')
+    ? routePath('R002')
+    : `mailto:${siteConfig.email}?subject=${encodeURIComponent(shellContent.ctaEmailSubject)}`;
+}
+
 export type CtaButtonProps = {
   href: string;
   label: string;
   variant: 'primary' | 'header';
+  /** Fill the width of its container: the mobile sheet's thumb zone */
+  wide?: boolean;
   className?: string;
 };
 
-export function CtaButton({ href, label, variant, className }: CtaButtonProps) {
+export function CtaButton({ href, label, variant, wide = false, className }: CtaButtonProps) {
   const classes = [
     'dz-cta',
     `dz-cta--${variant}`,
     'relative isolate inline-flex min-h-12 items-center justify-center gap-2.5 overflow-hidden rounded-pill px-5.5 font-bold whitespace-nowrap no-underline',
+    wide ? 'w-full' : '',
   ].join(' ');
   const content = (
     <>
@@ -38,8 +51,9 @@ export function CtaButton({ href, label, variant, className }: CtaButtonProps) {
       ) : null}
     </>
   );
+  const wrapper = ['dz-magnet', wide ? 'block' : 'inline-block', className].filter(Boolean).join(' ');
   return (
-    <span className={['dz-magnet inline-block', className].filter(Boolean).join(' ')} data-fx-pointer="">
+    <span className={wrapper} data-fx-pointer="">
       {href.startsWith('/') ? (
         <Link href={href} className={classes} data-cta={variant}>
           {content}

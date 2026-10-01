@@ -2,9 +2,9 @@ import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 import { seriousAxeViolations } from './helpers/axe';
 
-// Display preferences and the CSS contract (P2 plan, C and F; docs/ai/13 §2.11). Until the switches
-// ship with the menus, choices are set through localStorage, as a switch stores them, and a switch is
-// injected with the markup contract preferences.ts reads (data-dz-switch).
+// Display preferences and the CSS contract (P2 plan, C and F; docs/ai/13 §2.11). Most choices are set
+// through localStorage, as a switch stores them; the switches themselves are tested where they live,
+// in the mobile sheet and the mega menu's rail (DisplayControls).
 
 const HOME = '/';
 const MISSING = '/this-page-does-not-exist';
@@ -243,33 +243,27 @@ test.describe('Reduce effects', () => {
   });
 });
 
-test.describe('Switches (the markup contract the menus will use)', () => {
-  async function addSwitches(page: Page) {
-    await page.evaluate(() => {
-      for (const kind of ['effects', 'effects', 'theme']) {
-        const button = document.createElement('button');
-        button.setAttribute('role', 'switch');
-        button.dataset.dzSwitch = kind;
-        button.textContent = kind === 'theme' ? 'Light theme' : 'Reduce effects';
-        document.body.prepend(button);
-      }
-      // The runtime syncs every switch on a storage event, and at its start if it hadn't started yet.
-      window.dispatchEvent(new StorageEvent('storage', { key: 'dz-effects' }));
-    });
+test.describe('Switches (DisplayControls: the mobile sheet, the mega-menu rail)', () => {
+  // The switches sit in the sheet below 1024 px, so a phone-sized window opens it first.
+  async function openSheet(page: Page) {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto(HOME);
+    await page.waitForLoadState('networkidle');
+    await page.getByRole('button', { name: 'Menu' }).click();
+    const sheet = page.getByRole('dialog', { name: 'Menu' });
+    await expect(sheet).toBeVisible();
     return {
-      effects: page.locator('[data-dz-switch="effects"]'),
-      theme: page.locator('[data-dz-switch="theme"]'),
+      effects: sheet.getByRole('switch', { name: 'Reduce effects' }),
+      theme: sheet.getByRole('switch', { name: 'Light theme' }),
     };
   }
 
-  test('each switch stores its choice and every copy shows the same state', async ({ page }) => {
-    await page.goto(HOME);
-    await page.waitForLoadState('networkidle');
-    const { effects, theme } = await addSwitches(page);
-    await expect(effects.first()).toHaveAttribute('aria-checked', 'false');
+  test('each switch stores its choice, and applies it at once', async ({ page }) => {
+    const { effects, theme } = await openSheet(page);
+    await expect(effects).toHaveAttribute('aria-checked', 'false');
 
-    await effects.first().click();
-    for (const copy of await effects.all()) await expect(copy).toHaveAttribute('aria-checked', 'true');
+    await effects.click();
+    await expect(effects).toHaveAttribute('aria-checked', 'true');
     await expect(html(page)).toHaveAttribute('data-effects', 'reduced');
     expect(await page.evaluate(() => localStorage.getItem('dz-effects'))).toBe('reduced');
 
@@ -280,16 +274,27 @@ test.describe('Switches (the markup contract the menus will use)', () => {
     expect(await page.evaluate(() => localStorage.getItem('dz-theme'))).toBe('light');
   });
 
-  test('a device setting shows Reduce effects on and disabled, and a click changes nothing', async ({ page }) => {
-    await page.emulateMedia({ reducedMotion: 'reduce' });
-    await page.goto(HOME);
+  test('every copy shows the same state: the mega-menu rail and the sheet', async ({ page }) => {
+    await page.goto('/shell-review');
     await page.waitForLoadState('networkidle');
-    const { effects } = await addSwitches(page);
-    await expect(effects.first()).toHaveAttribute('aria-checked', 'true');
-    await expect(effects.first()).toHaveAttribute('aria-disabled', 'true');
+    await page.getByRole('button', { name: 'Services' }).click();
+    await page.locator('#dz-mega').getByRole('switch', { name: 'Light theme' }).click();
+    const copies = page.locator('[data-dz-switch="theme"]');
+    await expect(copies).toHaveCount(2);
+    for (const copy of await copies.all()) await expect(copy).toHaveAttribute('aria-checked', 'true');
+  });
+
+  test('a device setting shows Reduce effects on and disabled, with its note, and a click changes nothing', async ({
+    page,
+  }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    const { effects } = await openSheet(page);
+    await expect(effects).toHaveAttribute('aria-checked', 'true');
+    await expect(effects).toHaveAttribute('aria-disabled', 'true');
+    await expect(page.getByText('Your device settings turn this on.').first()).toBeVisible();
     // Playwright won't click an aria-disabled control, but a visitor can, so the click is dispatched.
-    await effects.first().dispatchEvent('click');
-    await expect(effects.first()).toHaveAttribute('aria-checked', 'true');
+    await effects.dispatchEvent('click');
+    await expect(effects).toHaveAttribute('aria-checked', 'true');
     expect(await page.evaluate(() => localStorage.getItem('dz-effects'))).toBeNull();
   });
 });
