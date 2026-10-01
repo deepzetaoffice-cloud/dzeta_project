@@ -202,8 +202,16 @@
   --dz-dur-fast: 150ms;
   --dz-dur-base: 250ms;
   /* One Tier 2 icon story (Icon Master Rules §7.1): every story runs on this one timeline, so none
-     can pass the cap. Tier 3's 1.6 s arrives with the first Tier 3 icon (P2). */
+     can pass the cap. */
   --dz-dur-story: 900ms;
+  /* One Tier 3 story, the signature icons' cap (§2, §7.1); every part of it runs inside this timeline */
+  --dz-dur-story-signature: 1600ms;
+  /* Tier 3 layers in grid units (1px is one unit in an icon's viewBox): the depth layer's offset down
+     and to the right (§5.3), and where each cluster pixel starts its flight, on the logo's 35° (§3) */
+  --dz-story-depth-x: 1.5px;
+  --dz-story-depth-y: 1.8px;
+  --dz-story-assemble-x: -10px;
+  --dz-story-assemble-y: 7px;
   --dz-tilt-max: 5deg;
   --dz-magnet-max: 7px;
 

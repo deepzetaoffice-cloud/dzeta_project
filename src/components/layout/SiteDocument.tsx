@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { IconDefs } from '@/components/icons/IconDefs';
 import { FxRuntime } from '@/components/layout/FxRuntime';
 import { initScript } from '@/lib/fx/init-script';
 import { locales, type Locale } from '@/lib/i18n/locales';
@@ -10,8 +11,9 @@ import { fontVariables } from '@/styles/fonts';
 // what failed (B5).
 // - The no-flash script is the first thing in <head> (conflict C40). It sets data-theme and
 //   data-effects on <html> before React hydrates, so <html> suppresses the hydration warning.
+// - IconDefs, the icons' shared definitions, is the first thing in <body>, once per page (0018; 02 §3.8).
 // - FxRuntime starts the shared effect controllers after hydration (plan G).
-// Part B adds IconDefs and the shell.
+// Part B adds the shell.
 
 export type SiteDocumentProps = {
   locale: Locale;
@@ -29,6 +31,7 @@ export function SiteDocument({ locale, children }: SiteDocumentProps) {
         <script dangerouslySetInnerHTML={{ __html: initScript }} />
       </head>
       <body>
+        <IconDefs />
         {children}
         <FxRuntime />
       </body>

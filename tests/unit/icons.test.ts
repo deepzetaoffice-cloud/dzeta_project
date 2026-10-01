@@ -4,7 +4,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { Icon, type IconProps } from '@/components/icons/Icon';
 import { IconDefs } from '@/components/icons/IconDefs';
-import { PILLARS, TIER_1, TIER_2, type Pillar, type Shape } from '@/components/icons/registry';
+import { PILLARS, TIER_1, TIER_2, TIER_3, type Pillar, type Shape } from '@/components/icons/registry';
 
 // The Icon Master Rules as tests (P1 plan, section E; conflict C36: the registry is the source of
 // truth, so these checks stand in for the Figma master and SVGO).
@@ -81,7 +81,7 @@ describe('Tier 1 icons', () => {
   });
 
   it('marks exactly the directional icons to flip in Arabic (§9)', () => {
-    expect(tier1.filter(([, icon]) => icon.flip).map(([name]) => name)).toEqual(['arrow', 'send']);
+    expect(tier1.filter(([, icon]) => icon.flip).map(([name]) => name)).toEqual(['arrow', 'send', 'external-link']);
     expect(render({ name: 'arrow', size: 20 })).toContain('dz-icon--flip');
     expect(render({ name: 'close', size: 20 })).not.toContain('dz-icon--flip');
   });
@@ -148,8 +148,14 @@ describe('IconDefs', () => {
     expect(new Set(ids).size).toBe(ids.length);
     for (const pillar of PILLARS) expect(ids).toEqual(expect.arrayContaining([`dz-px-${pillar}`, `dz-halo-${pillar}`]));
     for (const [name] of tier1) expect(ids).toContain(`dz-1-${name}`);
-    const knockouts = tier2.filter(([, icon]) => 'knockout' in icon).map(([name]) => `dz-ko-${name}`);
+    const knockouts = [...tier2, ...Object.entries(TIER_3)]
+      .filter(([, icon]) => 'knockout' in icon)
+      .map(([name]) => `dz-ko-${name}`);
     expect(ids.filter((id) => id?.startsWith('dz-ko-'))).toEqual(knockouts);
+    // One clip per Tier 3 icon, for its sweep (P2 plan, K1)
+    expect(ids.filter((id) => id?.startsWith('dz-clip-'))).toEqual(
+      Object.keys(TIER_3).map((name) => `dz-clip-${name}`),
+    );
   });
 
   it('takes every colour from tokens through classes: no colour values or style attributes in the SVG', () => {

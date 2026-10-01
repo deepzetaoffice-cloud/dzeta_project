@@ -8,6 +8,16 @@ export const shellReviewContent = {
   heading: 'Shell review',
   intro:
     'This page shows the header, the menus, the footer and the display preferences with every item on. Scroll it to see the glass pass over light and dark content.',
+  // The icons drawn in P2, for the owner's verdict (plan K6). Names and "the pixel is" come from the
+  // icon registry.
+  icons: {
+    heading: 'Icons for review',
+    intro:
+      'Signature icons play their story once as they scroll into view. Hover or focus one to play it again. Each is shown at every size it may be used.',
+    pixelIs: 'The pixel is',
+    interfaceHeading: 'Interface icons',
+    interfaceLabels: { chevron: 'Chevron (opens below)', 'external-link': 'External link (new tab)' },
+  },
   // Alternating themes, so the header's glass is seen over both.
   sections: [
     {

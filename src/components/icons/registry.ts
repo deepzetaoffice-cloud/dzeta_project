@@ -44,7 +44,41 @@ export type Tier2Icon = {
   knockout?: true;
 };
 
-// Tier 1: the prototype's interface icons. `flip`: they mirror in Arabic (§9).
+// Tier 3 (signature): the 48 grid, stroke 1.75 (§3, §6). A main shape carries the depth, glass and
+// sweep layers (§5.3); lines are drawn on the glass; parts in front of them play in during the story;
+// and the logo's four-pixel cluster lands with its main pixel on the moment of value (§4.3).
+export type Tier3Motion = 'pop' | 'grow' | 'wave';
+
+export type Tier3Part = {
+  shape: Shape;
+  motion: Tier3Motion;
+  /** Its place in the stagger: parts with the same motion start one step apart */
+  step?: 0 | 1 | 2 | 3;
+  /** Filled with the surface colour, so the lines behind it are hidden (§5.3) */
+  occlude?: true;
+};
+
+export type Tier3Icon = {
+  /** The exact Services Catalogue name and number; a pillar head uses its pillar's section */
+  name: string;
+  catalogue: string;
+  /** The depth layer's colour. The cluster always keeps the logo's four colours (§4.3). */
+  pillar: Pillar;
+  /** "The pixel is …" (§4.2): what the cluster's main pixel marks */
+  pixelIs: string;
+  flip: boolean;
+  /** The main shape: the depth layer, the glass and the sweep's clip follow it (§5.3) */
+  frame: { x: number; y: number; width: number; height: number; rx: number };
+  lines: readonly Shape[];
+  parts: readonly Tier3Part[];
+  /** The main pixel's top-left corner and its size S, 5–6 units (§4.1); the rest follow §4.3 */
+  cluster: { x: number; y: number; size: number };
+  /** Lines within 1.5 of a cluster pixel are cut away (§4.2 rule 4, on the 48 grid); see IconDefs */
+  knockout?: true;
+};
+
+// Tier 1: the prototype's interface icons, then the ones drawn for P2. `flip`: they mirror in Arabic
+// (§9). Icons drawn from P2 on keep horizontal and vertical line centres on .25 or .75 (§3; C39).
 export const TIER_1 = {
   arrow: { flip: true, d: 'M5 12h14M13 6l6 6-6 6' },
   send: { flip: true, d: 'M4 12h9M4 5l16 7-16 7 3-7' },
@@ -54,6 +88,13 @@ export const TIER_1 = {
   globe: {
     flip: false,
     d: 'M12 3.5a8.5 8.5 0 1 1 0 17a8.5 8.5 0 1 1 0-17zM3.5 12h17M12 3.5c2.4 2.3 3.5 5.2 3.5 8.5s-1.1 6.2-3.5 8.5M12 3.5C9.6 5.8 8.5 8.7 8.5 12s1.1 6.2 3.5 8.5',
+  },
+  // A disclosure's "opens below" (the mega menu's button). Points down, so it never mirrors.
+  chevron: { flip: false, d: 'M6.75 9.25l5.25 5.25 5.25-5.25' },
+  // "Opens in a new tab" (the social links). The arrow points to the inline-end, so it mirrors.
+  'external-link': {
+    flip: true,
+    d: 'M14.25 3.75h6v6M20.25 3.75l-8.5 8.5M17.75 13.25v4.75a2.25 2.25 0 0 1-2.25 2.25h-9.5a2.25 2.25 0 0 1-2.25-2.25v-9a2.25 2.25 0 0 1 2.25-2.25h5',
   },
 } as const satisfies Record<string, Tier1Icon>;
 
@@ -141,8 +182,124 @@ export const TIER_2 = {
   },
 } as const satisfies Record<string, Tier2Icon>;
 
+// Tier 3: AI Front Desk from the approved prototype (§8.3), and the four pillar heads, drawn for P2.
+// None mirrors in Arabic: the cluster never mirrors (§9), and its main pixel must stay on the moment
+// of value. The prototype's AI Front Desk moves from the dropped "Win" stage colour to its pillar (C6),
+// and its bubble moves up 1.5 units so the tail stays inside the live area (§3; C36).
+export const TIER_3 = {
+  'ai-front-desk': {
+    name: 'AI Front Desk',
+    catalogue: '5.1',
+    pillar: 'ai',
+    pixelIs: 'the booking landing in the calendar',
+    flip: false, // a calendar never flips (§9)
+    frame: { x: 8, y: 14, width: 26, height: 26, rx: 4 },
+    lines: [{ kind: 'path', d: 'M8 21h26M15 11v5M27 11v5' }],
+    parts: [
+      { shape: { kind: 'dot', cx: 14, cy: 27, r: 1.1 }, motion: 'pop', step: 0 },
+      { shape: { kind: 'dot', cx: 21, cy: 27, r: 1.1 }, motion: 'pop', step: 1 },
+      { shape: { kind: 'dot', cx: 21, cy: 34, r: 1.1 }, motion: 'pop', step: 2 },
+      // The call that became the booking: a speech bubble with a voice in it
+      {
+        shape: {
+          kind: 'path',
+          d: 'M7 30.5h9a3 3 0 0 1 3 3v4a3 3 0 0 1-3 3h-4.5L8 44v-3.5H7a3 3 0 0 1-3-3v-4a3 3 0 0 1 3-3z',
+        },
+        motion: 'grow',
+        occlude: true,
+      },
+      { shape: { kind: 'path', d: 'M8.5 34.5v2' }, motion: 'wave', step: 0 },
+      { shape: { kind: 'path', d: 'M11 33.5v4' }, motion: 'wave', step: 1 },
+      { shape: { kind: 'path', d: 'M13.5 34v3' }, motion: 'wave', step: 2 },
+      { shape: { kind: 'path', d: 'M16 34.75v1.5' }, motion: 'wave', step: 3 },
+    ],
+    // The main pixel sits on the booked slot, (28, 27)
+    cluster: { x: 25.25, y: 24.25, size: 5.5 },
+    knockout: true, // the upper pixel crosses the header rule and the frame, as the logo's pixels break away
+  },
+  'ai-automation': {
+    name: 'AI Automation',
+    catalogue: '1',
+    pillar: 'ai',
+    pixelIs: 'the job finished without anyone touching it',
+    flip: false,
+    frame: { x: 8, y: 9, width: 28, height: 30, rx: 4 },
+    // The request's path: down from the message to the step, then on to done
+    lines: [{ kind: 'path', d: 'M14 25.75v2.5M16.25 30.5h5.75' }],
+    parts: [
+      // The request: a customer's message
+      {
+        shape: {
+          kind: 'path',
+          d: 'M14 14h8a3 3 0 0 1 3 3v2a3 3 0 0 1-3 3h-5l-3 2.5V22a3 3 0 0 1-3-3v-2a3 3 0 0 1 3-3z',
+        },
+        motion: 'pop',
+        step: 0,
+        occlude: true,
+      },
+      // The step it passes through on its own
+      { shape: { kind: 'circle', cx: 14, cy: 30.5, r: 2.25 }, motion: 'pop', step: 1 },
+    ],
+    cluster: { x: 24.5, y: 27.75, size: 5.5 },
+    knockout: true,
+  },
+  websites: {
+    name: 'Websites',
+    catalogue: '2',
+    pillar: 'web',
+    pixelIs: 'the finished page, the result of hand-written code',
+    flip: false,
+    frame: { x: 6, y: 10, width: 32, height: 26, rx: 4 },
+    lines: [{ kind: 'path', d: 'M6 16.25h32' }],
+    parts: [
+      { shape: { kind: 'dot', cx: 10.25, cy: 13.25, r: 1.1 }, motion: 'pop', step: 0 },
+      { shape: { kind: 'dot', cx: 13.75, cy: 13.25, r: 1.1 }, motion: 'pop', step: 1 },
+      { shape: { kind: 'dot', cx: 17.25, cy: 13.25, r: 1.1 }, motion: 'pop', step: 2 },
+      // Hand-written code: </>
+      { shape: { kind: 'path', d: 'M14.5 21.5l-4 4 4 4M21 20.5l-3 10M24.5 21.5l4 4-4 4' }, motion: 'pop', step: 3 },
+    ],
+    cluster: { x: 31, y: 23, size: 5.5 },
+    knockout: true,
+  },
+  software: {
+    name: 'Software',
+    catalogue: '3',
+    pillar: 'software',
+    pixelIs: 'the module that fits how the team works',
+    flip: false,
+    frame: { x: 7, y: 9, width: 30, height: 30, rx: 4 },
+    lines: [],
+    parts: [
+      { shape: { kind: 'rect', x: 11, y: 13, width: 10, height: 7, rx: 3 }, motion: 'pop', step: 0 },
+      { shape: { kind: 'rect', x: 24, y: 13, width: 9, height: 7, rx: 3 }, motion: 'pop', step: 1 },
+      { shape: { kind: 'rect', x: 11, y: 23.5, width: 10, height: 11.5, rx: 3 }, motion: 'pop', step: 2 },
+    ],
+    cluster: { x: 26.25, y: 27, size: 5.5 },
+    knockout: true,
+  },
+  'growth-ranking': {
+    name: 'Growth & Ranking',
+    catalogue: '4',
+    pillar: 'ranking',
+    pixelIs: 'your business, chosen first',
+    flip: false,
+    frame: { x: 6, y: 12, width: 28, height: 28, rx: 4 },
+    lines: [],
+    parts: [
+      { shape: { kind: 'path', d: 'M11 18.5h11' }, motion: 'pop', step: 0 },
+      { shape: { kind: 'path', d: 'M11 27.25h13' }, motion: 'pop', step: 1 },
+      { shape: { kind: 'path', d: 'M11 34.25h9' }, motion: 'pop', step: 2 },
+    ],
+    // The first result
+    cluster: { x: 25.25, y: 15.75, size: 5.5 },
+    knockout: true,
+  },
+} as const satisfies Record<string, Tier3Icon>;
+
 export type Tier1Name = keyof typeof TIER_1;
 export type Tier2Name = keyof typeof TIER_2;
-export type IconName = Tier1Name | Tier2Name;
+export type Tier3Name = keyof typeof TIER_3;
+export type IconName = Tier1Name | Tier2Name | Tier3Name;
 
 export const isTier1 = (name: IconName): name is Tier1Name => Object.hasOwn(TIER_1, name);
+export const isTier3 = (name: IconName): name is Tier3Name => Object.hasOwn(TIER_3, name);
