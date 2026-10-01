@@ -33,7 +33,9 @@ const FRAMEWORK_JS_GROWTH = 5 * KB;
 // P2 part B: 7,968 B (147,636 B in all 5 runs on Home and on the review page, 2026-10-01): the error
 // page, next/link (shipped once since C46, for the header's links) and the effect runtime (FxRuntime
 // and src/lib/fx/).
-const OWN_JS_HOME = 7968;
+// P2 part C: 8,052 B (147,720 B in all 5 runs on Home and on the review page, 2026-10-01): cta.ts's
+// sticky bar, the finale's hand-off and the first state shown without a transition added 84 B.
+const OWN_JS_HOME = 8052;
 if (OWN_JS_HOME > 10 * KB) throw new Error('OWN_JS_HOME is above the 10 KB Home cap (07 §2, 13 §7).');
 // HTML + CSS + JS before the first interaction ≤ the framework baseline + 50 KB (07 §2).
 const FIRST_LOAD_LIMIT = FRAMEWORK_JS_BASELINE + 50 * KB;
@@ -70,12 +72,12 @@ const t1Assertions = {
 // The review page shows the complete shell (P2 plan, A3; registry R165) and is measured as T1 too, with
 // two differences. It's noindex by design (never linked, 404 in production), so Lighthouse's SEO
 // category, which fails a page that blocks indexing, doesn't apply. And it carries the full mega menu,
-// the sheet and the icon gallery in its HTML, so its lab LCP may reach 2,600 ms (C48, decision 0020);
-// Home keeps the 2.5 s hard limit.
+// the sheet, the full footer and the icon gallery in its HTML, so its lab LCP may reach 2,700 ms (C48,
+// raised by C50; decision 0020); Home keeps the 2.5 s hard limit.
 const reviewAssertions = {
   ...t1Assertions,
   'categories:seo': 'off',
-  'largest-contentful-paint': ['error', { maxNumericValue: 2600, ...medianRun }],
+  'largest-contentful-paint': ['error', { maxNumericValue: 2700, ...medianRun }],
 };
 
 module.exports = {

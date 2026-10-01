@@ -122,6 +122,143 @@ Progress:
     - The cluster's 2.1053 S box repeats in `header.ts` and `effects.css`: the client runtime can't import it from the component without risking its bytes.
     - **Proposed (not in any table):** `.github/workflows/ci.yml` could name each Lighthouse run's page in its notice, now that lhci measures two.
   - **Gates** (CI environment): `verify` exit 0: `verify:fast`; `format:check`; `check:facts`, `check:rules`, `check:effects`; `test` 271 passed; `build`; `check:schema`, `check:seo`, `check:links` (1 header link compared with its canonical); `test:e2e` 121 passed; **lhci** passed: Home median LCP 2,336 ms (runs 2,330–2,405), Performance 98, CLS 0, TBT ≤ 17 ms; the review page 2,482–2,490 ms, Performance 98; scripts 147,636 B on both; page weight largest 183,219 B of 190,868 (the review page; Home 167,758 B). `OWN_JS_HOME` was then set to the measured 7,968 B, and `lhci assert` on the saved runs passed.
+- 2026-10-01 · **Part B merged** on the owner's "merge": `55d1086` on `main`. CI was green on the branch head (`09a640f`, run 36809231331); the Vercel production deployment of `55d1086` succeeded ("Deployment has completed"). Checked on `www.deepzeta.ai`: Home returns 200 with the skip link, `<main id="main">`, "Book a free AI audit" and the preferences script (`dz-effects`); `/shell-review` returns 404. Part C starts on `feat/p2c-footer`, from `main`, at step 13.
+- 2026-10-01 · **Step 13, the list (nothing downloaded; sizes from header-only requests).** Seven of the nine marks have an official public download: LinkedIn `in-logo.zip` (47,771 B), Instagram `IG_brand_asset_pack_2023.zip` (34,644,696 B), Facebook `Facebook-Brand-Asset-Pack.zip` (336,747 B), YouTube `youtube-icon.zip` (8,874,149 B), TikTok `logo-pack.zip` (6,588,461 B, TikTok for Developers; the TikTok Brand Hub needs a login), X `x-logo.zip` (175,546 B), Threads `Threads-Brand-Resource-Center.zip` (1,480,355 B).
+  - **Meta's three packs** (Instagram, Facebook, Threads) sit behind a checkbox, "I have read and accept the applicable guidelines and other terms for use"; accepting it needs the owner's yes.
+  - **X:** the English brand toolkit still offers the 2021 Twitter bird (`twitter-logo-01282021.zip`); the French and Japanese toolkit pages link the X pack.
+  - **Snapchat:** snap.com's "official Ghost logo, available for download here" opens Snap's asset vault, which answers "This link is expired" and asks for a login. No public download.
+  - **Pinterest:** the asset library linked from the brand guidelines has the P badge as EPS only (`P-Badge-White.eps`, 3000 × 3000, 1.03 MB); no SVG, and no EPS converter is installed here.
+  - **Waiting for the owner's OK** on the list, the Meta checkbox, and the Snapchat and Pinterest options.
+- 2026-10-01 · **The owner's decision on step 13: letter tiles instead of the official marks (C49).** "create icons for each social media plattform with letter inside … with our gradient brand theme and with effects". Nothing is downloaded; `public/brand/social/*.svg` is dropped.
+  - **Chosen from two chat mockups:** direction A ("Signal edge"): a tile inside the signal-gradient edge (`--dz-grad-signal`, kept "as it is now"), "exact or approximate colour of original platforms" as the fill, and "a good effects accordingly" on hover. The letters: **in · Ig · f · YT · T · X · @ · S · P** (Threads takes its own @, because TikTok has T).
+  - **The colours, read from each platform's own pages:**
+    - LinkedIn `#0A66C2` (brand.linkedin.com)
+    - Instagram: a gradient approximated from instagram.com's own icon, `#FBA012` → `#F82779` → `#D13AA4` → `#771CF1`; Meta's pages publish no values
+    - Facebook Blue `#0866FF` (the logo image on Meta's Facebook logo page)
+    - YouTube Red `#FF0033` (brand.youtube/color)
+    - TikTok `#000000` with `#25F4EE` and `#FE2C55` (TikTok for Developers' logo)
+    - X `#000000` (X's toolkit: black and white)
+    - Threads `#000000`
+    - Snapchat `#FFFC00` (snap.com)
+    - Pinterest `#E60023` (pinterest.com's icon)
+  - **Contrast:** the white letter is 3.78–21:1 on its tile (Instagram's pink centre is the lowest), and Snapchat's black letter is 19.18:1. The black tiles are 1.03:1 against the footer's navy, so the signal edge, at 3.6:1 or more on navy, draws their boundary.
+  - **Hover, as mocked up** (the verdict comes on the review page at step 14): the tile lifts 2 px, glows in its own colour (0 → 0.6), a sheen crosses once and the letter pops; TikTok's T splits into its cyan and red. `touch-press` on touch. Under Reduce effects, the colours stay and nothing moves. It's recorded under `hover-glow` (an icon-only control; the tile's glow stands in for the pixel's), and 13 §4.3 gets that line at step 16.
+  - **Recorded now** (the owner: "Yes, record it"): C49 in the conflict register and facts §2.1's rule line. footer.md and 13 §4.3 change at step 16. The part C table changes below.
+- 2026-10-01 · **Step 14 (the footer and the conversion path) is built.** The owner's "go" on the second mockup.
+  - **`SiteFooter`** (navy, `data-theme="dark"`):
+    - **The finale:** The Landing (`ClusterLayers` at `--dz-landing-size`; the pixels fly in on 35° once `.is-in` arrives, at rest the assembled cluster), the `<h2>` at the display size (C41) and the primary CTA.
+    - **The link columns:** the four pillars (every item, including the three the owner took out of the mega menu, then "All … services"), then Company, Resources and Legal. Only live links render; production shows none yet, so the footer's nav isn't rendered there. Each row is 44 px tall.
+    - **The company block:** an `<address>` from `siteConfig`; the phone appears once it's confirmed.
+    - **The nine letter tiles** (C49), then `DisplayControls` and the legal line, "© 2026 Deepzeta Digital Solutions L.L.C.".
+    - The footer's nav is named "Footer", a new accessible name beside the header's "Main". The language switch isn't mounted (P11, as in the header).
+  - **`JourneyLine`:** the signal-gradient line and the progress pixel on the inline-start edge, on the root scroll timeline. It's drawn only with scroll-driven support and effects on.
+  - **`StickyCta`:** `glass-frost` (no second live blur on a phone), below 1024 px. `cta.ts` shows it while no in-page primary CTA is on screen (C42; the bar's own CTA is left out of the count), it slides with a transform, and it hides while a modal is open. Without JavaScript it never shows. `viewportFit: 'cover'` with safe-area padding on the bar, the body (landscape) and the sheet; the footer's end and `scroll-padding-block-end` keep the last line clear of the bar. Checked on an iPhone through the owner checklist.
+  - **`siteConfig`** gains the address, the nine profiles (with a `key` for each tile) and `phone` and `whatsapp` as `null`. `site-config.test.ts` checks each against the facts file. The address writes its hash as `#`, because `check:tokens` reads "#202" as a raw colour; the string is byte-identical (the test).
+  - **The tiles' colours are tokens**, and `check:contrast` gates each letter on its tile (lowest 3.49:1, Instagram's centre) and the edge on navy (3.98:1).
+  - **The copy** (`shell.ts`, `navigation.ts`) is by the Content Writer, from N.
+  - **Found while testing, fixed:**
+    - **CLS:** on the placeholder Home at 1280 px, the footer now started in the first screen. When Montserrat swapped in, the H1 gained a line (the known step 2 residual) and moved the footer's whole box down 54 px: CLS 0.0209 in `fonts.spec.ts`, against 0.01. A transparent footer made no difference, because Chromium counts a box's area whether it paints or not. **`<main>` now fills at least the first screen below the header**, so the footer starts below the fold on short pages. That also keeps the finale's headline from competing with the H1 for LCP.
+    - **Two test helpers:** `shell.spec.ts`'s hit test scrolled controls to the window's edge, where half its cross fell outside; it now centres them. The waiting helper leaves out the scroll-timeline animations, which finish only at the page's end.
+    - **`icons.spec.ts`:** two colour samples now scroll the injected gallery into view, because the footer puts it below the fold (added to the table).
+  - **Gates** (CI environment):
+    - `verify:fast`, `format:check`, `check:facts`, `check:contrast` (65 checks): passed
+    - `test`: 276 passed (5 new)
+    - `build`: passed
+    - `test:e2e`: 135 passed (14 new; on mobile the hand-off now expects exactly one gradient CTA, and the no-JavaScript test covers the footer)
+    - `check:schema`, `check:seo`, `check:links`: passed
+  - **lhci** (local, 5 runs each): passed.
+    - **Home:** median LCP 2,329 ms (runs 2,328–2,412), FCP 754 ms, Performance 98, CLS 0, TBT 12 ms. Bytes: scripts 147,674 B (+38), CSS 12,329 B, HTML 11,792 B. The H1 is still the LCP element.
+    - **The review page:** median LCP 2,481 ms (C48 allows 2,600), Performance 97–98, HTML 30,300 B.
+    - **Page weight:** Home 171,795 B; the review page **190,303 B of 190,868, 565 B left**. Step 15 records this, and the next byte added to the full shell needs room made first.
+- 2026-10-01 · **CI on `1e9f33c` failed in lhci; work stops on C48** ("If the review page passes 2,600 ms, work stops again").
+  - **The review page in CI:** lab LCP is split in two groups, 2,004–2,017 ms in three runs and 2,601 and 2,672 ms in two, and the run lhci judges by (`median-run`) was over 2,600 ms. Part B's CI had the same split (2,033–2,037 and 2,594–2,602 ms) and passed by a few milliseconds. Its HTML went from 24.2 to 29.6 KB with the full footer; about 3 KB of that is the footer's columns, which production doesn't show until pages ship.
+  - **Home in CI:** LCP 1,883–1,888 ms and Performance 100 in four runs. One cold run scored 66 (TBT 2,123 ms; benchmark index 696, against about 2,400 for the others). Every gate before lhci passed in CI, the font notices included (Home's swap CLS 0.0022 at 1280 px and 0 at 360 px).
+  - **For the owner:** the options are in the report. The Vercel preview of `1e9f33c` is READY for the review.
+- 2026-10-01 · **The owner's decision: "A, raise it to 2,700 ms".** The review page's lab LCP limit in `lighthouserc.cjs` is 2,700 ms, recorded as **C50**, which raises C48 (the register is append-only, so C48 keeps its row). Home and every real page keep 2.5 s. The page-weight cap is unchanged; the review page's 565 B of room goes to the owner at step 15.
+- 2026-10-01 · **CI green on `5b98465`** (run 36879161442; the public annotations, Chrome 154):
+  - **Home:** LCP 1,883–2,554 ms (median 2,429 ms), Performance 86–100 (median 98), CLS 0. The 86 was one slow-runner run: TBT 441 ms, benchmark index 2,786 against 3,229–3,517 for the others.
+  - **The review page:** LCP 2,033–2,590 ms (median 2,584 ms; C50 allows 2,700), Performance 97–99 (median 97), TBT ≤ 32 ms, CLS 0. The ~2.0 s and ~2.6 s groups are still there.
+  - **Both:** JS 144.2 KB, CSS 12.0 KB, fonts 37.9 KB; HTML 11.5 KB (Home) and 29.6 KB (the review page). The font notices: Home's swap CLS 0.0022 at 1280 px and 0 at 360 px.
+  - The owner hadn't given a verdict on the step 14 preview (the footer, the tiles' hover, the sticky bar) when step 15 started.
+- 2026-10-01 · **Step 15, the effects feasibility gate: the lab half passes. Work stops for the owner's phone checklist and the review page's page weight.**
+  - **Every T1 effect is on where lhci measures.** Lighthouse emulates no media features and no `deviceMemory`. Under its mobile emulation (412 × 823 at 1.75), Chrome 154.0.8037.58 (lhci's) and Playwright's Chromium 153 both show no `data-effects` on Home and the review page: `deviceMemory` 32, no Save-Data, no reduced motion. Not read on the CI runner.
+  - **lhci** (local, 5 runs each, Lighthouse 12.6.1, simulated slow 4G and CPU 4×): passed, and the page-weight check passed.
+    - **Home:** median LCP **2,337 ms** (runs 2,330–2,416; part B's close: 2,336), FCP 754 ms, Performance **98** in every run, the other three categories 100, TBT 12–16 ms, CLS 0, TTFB ≤ 22 ms. The H1 is the LCP element. Bytes: scripts 147,674 · fonts 38,823 · images 25,268 · CSS 12,329 · HTML 11,791; no third-party request. HTML + CSS + JS **171,794 B** of 190,868.
+    - **The review page:** median LCP **2,489 ms** (runs 2,482–2,496; C50 allows 2,700), FCP 904 ms, Performance 98 in every run, Accessibility and Best Practices 100, TBT 13–21 ms, CLS 0. The LCP element is a paragraph (`<p class="mt-4">`), not a heading. HTML 30,300 B; page weight **190,303 B, 565 B left**.
+  - **The 13 §7 caps:**
+    - **First-party JavaScript on Home ≤ 10 KB:** **8,006 B** (lhci's 147,674 B minus the 139,668 B baseline): the error page, `next/link` and the effect runtime.
+    - **Pointer controller ≤ 1.5 KB:** **604 B**.
+    - **Shared observer ≤ 0.5 KB:** **293 B**.
+    - **Glass grain ≤ 2 KB:** **304 B** (239 B gzip). Step 6's note says 285 B; the file is 304 B at HEAD.
+    - **Story controls (≤ 2 KB) and `story-*` (≤ 6 KB each):** none in P2. The Tier 3 icons' stories sit inside each icon's 4 KB budget (`icons.test.ts`).
+    - **Method:** each `src/lib/fx/` module minified on its own (rolldown 1.2.11, its sibling imports external), then gzip level 6. Standalone gzip overstates a module's share: the build merges all five into one module of 2,347 B gzip, against 3,146 B summed (header 960, preferences 945, pointer 604, cta 344, observer 293).
+  - **At runtime** (lab: Playwright's Chromium 153, CPU 4× through CDP, 5 runs). Lighthouse's navigation runs can't measure INP, so each interaction's Event Timing duration is the proxy (rounded to 8 ms by the API):
+    - **On a phone-sized page (412 px, the review page):** Menu 72–80 ms, Reduce effects 56–64, Light theme 72–80, Close menu 88. All under INP's 100 ms target.
+    - **On desktop (1280 px):** Services 72–80 ms. With the menu open, Light theme takes 112–136 ms (72–88 with Reduce effects) and Esc 96–104 ms (24–32): the `glass-live` panel repaints. All under the 200 ms limit; these two are over the 100 ms target.
+    - **Scrolling at 1280 px with the pointer mid-page,** so hover effects fire as content passes under it:
+      - Home: 0 frames over 50 ms.
+      - The review page: 10–13 of about 180 frames over 50 ms, and 5–7 long animation frames per run (51–59 ms: style, layout and paint 16–36 ms; animation updates and rAF 2–25 ms; almost no script). They come only from the icon gallery: its 20 Tier 3 icons (five, at four sizes) start their stories together. With the gallery hidden, or with Reduce effects, there are 0.
+      - Scrolling the review page at 412 px: 1–5 of about 170 frames over 50 ms, with no long animation frames (0 with Reduce effects).
+    - **The pointer:** over the open menu's rows (the four Tier 3 heads and the rows' stories), frames of 17–33 ms, none over 50 ms. Across the CTA (`pointer-magnet`, `hover-charge`), every frame was 17 ms.
+    - **One long frame remains per load** (52–65 ms), with or without effects: a React scheduler task in the framework chunk, not ours.
+    - **Not covered:** CDP throttling slows the main thread only, not GPU raster, where the blur is drawn. The phone covers that (owner checklist 2).
+  - **For 0019:** at CPU 4×, twenty Tier 3 stories starting together drop frames, while the menu's four heads plus a row's story don't. 13 §2.3 counts a playing `story-*` as a signature moment but doesn't name icon stories. Proposed for P5 and P6: a limit on how many Tier 3 stories start in one viewport.
+  - **The review page's 565 B (for the owner).** About 2.8 KB gzip of its HTML is the icon gallery's markup alone; React's page data repeats it (not measured). The options are in the report.
+  - **The owner checklist** runs on the preview of `5b98465`, `dzetaproject-1dlbm6d3c-deep-zeta.vercel.app` (READY; its site code is the same as step 14's).
+  - Scratch files deleted (02 §4).
+- 2026-10-01 · **The owner's checklist, first round, and the review page's weight (option a).**
+  - **The share link:** at the owner's request, a 23-hour Vercel share link to the preview (it expires 2026-10-02). Checked: it opens both pages without a login in a client that keeps cookies.
+  - **PSI didn't measure our page.** The owner's PSI results (mobile LCP 3.4 s, CLS 0.03; desktop LCP 2.4 s) came through the share link. A repeat run of the same PSI test reports "Showing results for URL: https://vercel.com/login?…". Vercel answered PSI's request with its login redirect, so PSI measured Vercel's login page: 317 KiB of unused JavaScript, third-party requests and `user-scalable=no`, none of which our page has. The owner's run very likely did the same (not seen; that line is at the top of its report). PSI can't test a protected preview.
+  - **The preview, measured from here instead** (Lighthouse 12.6.1, lhci's mobile settings, 5 runs per case; the share cookie sent as a header, or the share link itself):
+    - **Home:** LCP 1,899–1,923 ms, Performance 100, CLS 0, TBT 17–42 ms. Through the share link: 1,907–1,914 ms in four runs and 2,697 ms in one (Performance 96).
+    - **The review page:** LCP 1,982–1,990 ms, Performance 99, CLS 0.
+    - The H1 is Home's LCP element. Vercel serves Brotli, so the review page's HTML is 23.8 KB against 30.3 KB gzip on `next start`.
+  - **PSI on production** (`www.deepzeta.ai`, part B's shell; Lighthouse 13.5.0, Moto G Power, slow 4G): Performance **99**, LCP **2.0 s**, FCP 0.9 s, TBT 50 ms, CLS 0, Accessibility and Best Practices 100. SEO 66 is the pre-launch `noindex` (0013). Part C's shell is measured there after its merge (step 16).
+  - **The phone** (owner checklist 2): "is ok". No stutter reported.
+  - **Not covered:**
+    - Checklist 3 wasn't run: the owner was on a fast connection. The swap is covered by `fonts.spec.ts` (CLS 0 at 360 px) and PSI's CLS 0 on production.
+    - Checklist 4: there's no iPhone, so iOS `:active`, the safe areas and the grain in Safari aren't verified. The Risks line says `viewportFit: 'cover'` is dropped if it can't be verified; that question is with the owner.
+    - Checklist 5: the phone's model and memory are still to come, for 0019's device class and the `deviceMemory` threshold.
+  - **Option (a), done:** the review page's gallery shows each Tier 3 icon at one size, 128 px, and its intro says so (Content Writer). Both files were added to part C's table.
+    - Page weight: 190,303 → **186,639 B**, now **4,229 B** under the cap. HTML 30,300 → 26,636 B.
+    - The review page: median LCP 2,483 ms (runs 2,479–2,563), Performance 97–98, CLS 0. Home is unchanged: median 2,330 ms, Performance 98.
+    - **Gates** (CI environment): `verify:fast` exit 0; `build` exit 0; `test:e2e` 135 passed; `check:schema`, `check:seo`, `check:links`, `format:check` and `check:facts` passed; `lhci` passed (page weight: "largest run 186639 B of 190868 B (4.1 KB left, 10 runs)").
+- 2026-10-01 · **The owner's answers (checklist 4 and 5):**
+  - **The phone:** a Samsung Galaxy S23 Ultra with 8 GB. It's a flagship, not the budget class that 04 §2 and 07's test conditions name, so the owner's "ok" (checklist 2) isn't the budget-phone result. The lab's CPU 4× covers the main thread; a budget phone's GPU, where the glass blur is drawn, isn't measured yet. The 2 GB `deviceMemory` threshold can't be confirmed on an 8 GB phone and stays as it is. How to close this is with the owner.
+  - **`viewportFit: 'cover'`: (a), keep it,** and check on any iPhone before launch (P10): the sticky bar clear of the home indicator, the safe areas in landscape, iOS `:active` and the grain in Safari. This replaces the Risks line's "dropped if it can't be verified". 0019 records it at step 16.
+- 2026-10-01 · **The owner on step 15 and the build:** "i will check after with a budget android … we will check before launch. now we need to continue the build as planned." Recorded as **C51**. The owner also set a standing rule for P3 onward: tracking names must be identical in the code and in GTM, GA4 and every other tool, and every manual step is recorded for before launch. That's met by two owner documents on their own branch, `docs/p3-tracking-prep` (outside this plan's table): `docs/owner/p3-tracking-setup-guide.md` and `docs/owner/pre-launch-register.md`.
+- 2026-10-01 · **Step 16 (phase exit) is done. Merge on your "merge".**
+  - **The full `verify`** (CI environment, before the audit fixes): exit 0. That's `verify:fast`, `format:check`, `check:facts`, `check:rules`, `check:effects`, 276 unit tests, `build`, `check:schema`, `check:seo`, `check:links`, 135 e2e and lhci, with the page weight at 186,638 B on the review page.
+  - **The audits** (reviewer, SEO/GEO, performance/accessibility): no blocking findings. Fixed within the table:
+    - the footer's address as one block per line
+    - the tiles' names as real text, with no `title`
+    - the tiles' letters at 19 px, large text (`--dz-social-letter`; `check:contrast` gates them as large text)
+    - the hand-off's first state shown without a transition (`data-cta-armed` in `cta.ts` and `effects.css`)
+    - the sticky bar shown while focused, and its scroll reserve plus its edge and the focus ring
+    - the footer's switches hidden in place before the runtime starts
+    - `prefetch={false}` on the footer's page links
+    - the safe-area padding symmetric (RTL)
+    - `OWN_JS_HOME` **8,052 B**
+    - the stale comments in `viewport.ts` and `JourneyLine.tsx`
+    - the sticky bar's `glass-frost` row in the effect register
+  - **Recorded in 0019, not changed:** the journey line's end; its light-theme variant; the review page's jank not re-measured after the gallery change; landmarks and new-tab notices for P6; the forward items for P3–P6; and the small fixes outside the table, proposed to the owner.
+  - **The owner's after-the-fact OK is asked for one table row:** `tests/e2e/icons.spec.ts` (step 14: two colour samples scroll into view).
+  - **After the fixes:** `verify:fast` exit 0; `test` 276 passed; `build` exit 0; `test:e2e` **138 passed** (3 new: the bar at load, and a Tab walk on Home and on the review page); `check:facts`, `check:schema`, `check:seo`, `check:links`, `check:rules`, `check:effects` and `format:check` passed; **lhci** passed (Home median LCP 2,334 ms, runs 2,328–2,414, Performance 98, CLS 0; the review page 2,482 ms; scripts 147,720 B; page weight 186,668 B, 4.1 KB left); `lhci assert` passed with `OWN_JS_HOME` = 8,052.
+  - **The end-of-phase protected edits** (P):
+    - 05 §1, §3, §4, §5, §6
+    - 06 §4 (C40)
+    - 03 §1
+    - 13 §4.3 (the tiles under `hover-glow`; the Lab's longer single passes) and §7 (the caps with their measured sizes)
+    - header.md, footer.md, conversion-path.md and the design change log
+    - the new-icon skill's Tier 3 recipe
+    - `CLAUDE.md` "Current state"
+    - C51 appended
+  - **Proposed, not made** (outside the table):
+    - 07 §2 still calls the 10 KB cap "provisional"; 13 §7 now records it as confirmed.
+    - Two lessons from P2: `next dev` writes to the protected `AGENTS.md` in Next.js 16.3, and a `sed` edit with regex characters corrupted a file.
+    - `ci.yml` could name each Lighthouse run's page.
+  - **Decision 0019** written, with its index row.
+- 2026-10-02 · **CI on `0c7032a` failed in `check:rules`:** `CLAUDE.md` now names the two owner documents, which were committed on `docs/p3-tracking-prep`, not here. Locally they were still in the working tree, untracked, so the check passed. **Fixed** by merging `docs/p3-tracking-prep` into this branch (`2c316cf`); one "merge" now publishes both. **Proposed lesson:** `check:rules` (and any gate that checks that files exist) should read the committed tree (`git ls-files`), or be run on a clean checkout before a push, because untracked files hide a missing commit.
 Phase: P2
 Branch: three parts, one merge each (Q5): `feat/p2a-shell-foundations`, `feat/p2b-header`, `feat/p2c-footer` (each from `main` after the previous merge)
 Page tier: T1. The shell renders on every page. It's measured on Home (`lhci` ≥ 95) and, from part B, on the review page (A3), which shows the complete shell.
@@ -409,7 +546,7 @@ One Client Component, `FxRuntime`, mounted once in `SiteDocument`, starts them a
 3. **The body:**
    - **Link columns** in the four pixel colours (one per pillar), then Company, Resources and Legal. They come from `navigation.ts`, and only live links render (A); a column with no live link isn't shown.
    - **The company block:** `siteConfig.brandName`, the one-line address, and `hello@deepzeta.ai` (facts §2, all CONFIRMED). The phone is omitted while it's PENDING, never filled (footer.md).
-   - **Social links:** the nine profiles from facts §2.1, copied exactly, in a new tab with `rel="noopener noreferrer"`, named "Deepzeta AI on LinkedIn" and so on (facts §2.1 rules). Each link shows the platform's official mark (Q3 (a)), downloaded at step 13 after you approve the list.
+   - **Social links:** the nine profiles from facts §2.1, copied exactly, in a new tab with `rel="noopener noreferrer"`, named "Deepzeta AI on LinkedIn" and so on (facts §2.1 rules). ~~Each link shows the platform's official mark (Q3 (a)), downloaded at step 13 after you approve the list.~~ **Changed at step 13 (C49):** each link shows a letter tile (in · Ig · f · YT · T · X · @ · S · P), filled with its platform's colour inside the signal-gradient edge, the letter `aria-hidden` (the link's name carries the platform). The colours are tokens in `tokens.css`; `check:contrast` gates each letter on its tile and the edge on navy.
    - **Controls:** `DisplayControls`, and the language switch placeholder (hidden).
    - **The legal line:** "© 2026 Deepzeta Digital Solutions L.L.C." The year is the founding year (facts §1), written by hand, never computed at build (02 §1.5).
 4. **No headings but the finale's `<h2>`:** column titles label their lists (`aria-labelledby`), so the footer doesn't add to each page's outline.
@@ -610,16 +747,23 @@ A file listed in an earlier part may be modified again in a later part only wher
 | `src/content/en/navigation.ts` | MODIFY | The footer's Company, Resources and Legal columns |
 | `src/content/en/shell.ts` | MODIFY | The finale, the company block's labels, the legal line (N) |
 | `src/styles/effects.css` | MODIFY | The journey line, The Landing, the sticky bar |
-| `src/styles/tokens.css` | MODIFY | Only if a footer effect needs a new token |
-| `public/brand/social/*.svg` | CREATE | The nine official marks (Q3 (a)), each approved with its source before download |
-| `lighthouserc.cjs` | MODIFY | `OWN_JS_HOME` measured |
+| `src/styles/tokens.css` | MODIFY | The nine platform tile colours (C49); a footer effect's token if one needs it |
+| ~~`public/brand/social/*.svg`~~ | DROPPED | Replaced by the letter tiles (C49); nothing downloaded |
+| `scripts/check-contrast.mjs` | MODIFY | Each tile's letter on its colour, and the signal edge on navy (C49; the owner, step 13) |
+| `tests/unit/check-contrast.test.ts` | MODIFY | Only if the new pairs need a failing example |
+| `docs/ai/conflict-register.md` | APPEND-ONLY (protected) | C49 (the owner, step 13: "Yes, record it"); C50 (the owner, step 14: "A, raise it to 2,700 ms"); C51 (the owner, step 15: the budget-phone check before launch) |
+| `docs/facts/company-facts.md` | MODIFY | §2.1's icon rule line only (C49; the owner, step 13) |
+| `lighthouserc.cjs` | MODIFY | `OWN_JS_HOME` measured; the review page's LCP limit at 2,700 ms (C50; the owner, step 14) |
 | `tests/unit/site-config.test.ts` | CREATE | (O) |
 | `tests/e2e/shell.spec.ts` | MODIFY | The footer, the sticky bar, the full hand-off |
 | `tests/e2e/preferences.spec.ts` | MODIFY | The footer's switches |
+| `tests/e2e/icons.spec.ts` | MODIFY | Two colour samples scroll the injected gallery into view; the footer puts it below the fold (step 14) |
+| `src/app/(review)/shell-review/page.tsx` | MODIFY | The icon gallery shows each Tier 3 icon at one size, 128 px, to make page-weight room (the owner, step 15: option a) |
+| `src/content/en/shell-review.ts` | MODIFY | The gallery's intro, to match (Content Writer; the owner, step 15: option a) |
 | `docs/ai/05-design-system.md` | MODIFY (protected) | End-of-phase edits (P) |
 | `docs/ai/06-code-standards.md` | MODIFY (protected) | The C40 exception (P) |
 | `docs/ai/03-verification-gates.md` | MODIFY (protected) | (P) |
-| `docs/ai/13-experience-design.md` | MODIFY (protected) | §7, the confirmed caps (P) |
+| `docs/ai/13-experience-design.md` | MODIFY (protected) | §7, the confirmed caps (P); §4.3, the social tiles under `hover-glow` (C49) |
 | `docs/design/header.md` | MODIFY (protected) | (P) |
 | `docs/design/footer.md` | MODIFY (protected) | (P) |
 | `docs/design/conversion-path.md` | MODIFY (protected) | (P) |
@@ -651,7 +795,7 @@ Temporary scripts (the first-paint trace) live in `.scratch/` and are deleted be
 12. **Part B close:** `shell.spec.ts`; `lhci` on Home and the review page; `OWN_JS_HOME` set to the measured size; full `verify`; reviewer and performance/accessibility audit; the report. **Merge on your "merge".** → `verify`
 
 **Part C · Footer, conversion path, phase exit**
-13. **The social marks (Q3 (a)):** I list each file (platform, official source page, file, size) and download only after your OK. → `verify:fast`
+13. **The social marks (Q3 (a)):** I list each file (platform, official source page, file, size) and download only after your OK. → `verify:fast`. **Replaced (C49):** the owner chose letter tiles; they're built with the footer at step 14 and shown on the review page for the owner's verdict.
 14. **The footer and the conversion path:** `SiteFooter`, `JourneyLine`, `StickyCta`, `cta.ts` (the finale and the sticky bar), the site config and its test, the footer columns, the copy. → `verify:fast` + `test` + `build` + `test:e2e`
 15. **The effects feasibility gate:** `lhci` on Home and the review page with every T1 effect on (≥ 95, every hard limit, each 13 §7 cap measured), then the owner checklist on the budget Android phone. If a cap or the floor fails, work stops with the numbers and the options. → `lhci`
 16. **Phase exit:** full `verify`; reviewer, performance/accessibility and SEO/GEO audits (the footer's NAP, links and social URLs); the end-of-phase protected edits (P); decision 0019; the report (02 §5). **Merge on your "merge"**, push, and check the Vercel deployment. → `check:rules` + `verify`
@@ -661,6 +805,7 @@ Temporary scripts (the first-paint trace) live in `.scratch/` and are deleted be
 |---|---|---|---|---|
 | Header pill (every page) | `glass-live` | GPU work while content scrolls behind the pill → one live surface in the header; `glass-frost` under Reduce effects and low-end hints; solid in forced colours | none (CSS) | `-webkit-backdrop-filter` in the built CSS |
 | Mega menu panel; mobile sheet | `glass-live` | They cover the page while open, and only one is open at a time → the same fallbacks | none (CSS) | popover and dialog transitions (`@starting-style`) |
+| Sticky CTA bar (below 1024 px; step 14, recorded at step 16) | `glass-frost` | ~0: a phone never runs a second live blur beside the header pill | grain ≤ 2 KB (shared) | safe areas on an iPhone (pre-launch, 0019) |
 | Every glass surface under Reduce effects | `glass-frost` | ~0: a tint, an edge and one cached grain tile, loaded only when shown | grain ≤ 2 KB (planned ≤ 0.5 KB) | the SVG grain in Safari and Firefox (owner checklist) |
 | Glass in forced colours and more contrast | `glass-tint` | 0 | — | — |
 | Mega-menu demo card (review page until P7) | `glass-liquid` | The one per view; desktop fine pointer only; the sheen crosses once on hover; no refraction (finding 9) | none (CSS) | — |
@@ -676,6 +821,8 @@ Temporary scripts (the first-paint trace) live in `.scratch/` and are deleted be
 | Display switches | `touch-snap` | A short transition with `--dz-ease-pop` | — | — |
 | Footer links; mega-menu rail, solutions and "All … services" links | `hover-underline` | CSS `scaleX` from inline-start; the "All … services" arrow nudges `--dz-nudge` toward the inline end, as `hover-charge`'s arrow does (13 §4.3) | — | — |
 | Page edge (sitewide chrome) | `scroll-journey-line` | Native scroll timeline, compositor only, inside `@supports`; not drawn without support or under Reduce effects | 0 JS | scroll-driven support (Chrome, Safari 26; not Firefox) |
+| Footer social tiles (C49) | `hover-glow` | The tile lifts 2 px, its glow in the platform's colour fades 0 → 0.6, a sheen crosses once, the letter pops; TikTok's T splits into cyan and red (two extra letter layers). Transform and opacity only; CSS only; static under Reduce effects | none (CSS) | the owner's verdict on the review page (step 14) |
+| The same, on touch | `touch-press` | CSS `:active` scale | — | iOS `:active` (owner checklist) |
 | Footer finale, The Landing | `scroll-assemble` | The four pixels fly in on 35° paths once when the finale enters (shared observer); the assembled cluster otherwise | observer ≤ 0.5 KB (shared) | — |
 
 **Per viewport** (13 §2.3): the header and the journey line are chrome and don't count. The open mega menu's signature is the `glass-liquid` card; the finale's is The Landing.
@@ -759,6 +906,6 @@ On the part C Vercel preview, on the budget Android phone (Chrome, 4G) and, if y
 **The owner's answers (2026-09-30):**
 - **Q1: (a).** Live links only, plus the review page `/shell-review` (registry row R165). Until `/free-ai-audit` ships, the CTA emails hello@deepzeta.ai.
 - **Q2: (a), with a placement note:** "the switch inside the mobile menu and in desktop also; never display on the first place". Read as: the theme switch and Reduce effects are never shown in the header bar itself. They live inside the mobile sheet, inside the desktop mega menu's rail, and in the footer (C4, I3). Every first visit stays dark.
-- **Q3: (a).** I download each platform's official mark at step 13, after you approve the list (platform, source page, file, size).
+- **Q3: (a).** I download each platform's official mark at step 13, after you approve the list (platform, source page, file, size). **Replaced at step 13 (2026-10-01, C49):** letter tiles in each platform's colour inside the signal-gradient edge; nothing downloaded.
 - **Q4: (a).** Per-weight fallback faces for Arial and Roboto. The Roboto files for measuring are downloaded to `.scratch/` at step 2, after you approve the exact files, source and sizes.
 - **Q5: (a).** Three parts, each merged on your "merge".

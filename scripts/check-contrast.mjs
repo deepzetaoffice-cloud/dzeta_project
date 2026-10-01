@@ -102,6 +102,20 @@ export const PAIRS = [
       note: 'mist on a lit menu row',
     },
   ].map((pair) => ({ ...pair, themes: ['dark'], backdrop: GLASS_BACKDROP })),
+  // The social letter tiles (conflict C49), always on the navy footer: each letter on its platform's
+  // colour (Instagram's on its gradient's centre, where the letter sits), and the signal edge that
+  // bounds every tile, the black ones included. The letter is each link's only visible label, so it's
+  // text: 19 px at weight 800 (--dz-social-letter), large text, held to 3:1 (P2 step 16).
+  ...[
+    ['--dz-white', '--dz-social-linkedin'],
+    ['--dz-white', '--dz-social-instagram-centre'],
+    ['--dz-white', '--dz-social-facebook'],
+    ['--dz-white', '--dz-social-youtube'],
+    ['--dz-white', '--dz-social-black'],
+    ['--dz-social-black', '--dz-social-snapchat'],
+    ['--dz-white', '--dz-social-pinterest'],
+  ].map(([fg, bg]) => ({ fg, bg, kind: 'large', themes: once, note: 'social tile letter (19 px, 800)' })),
+  { fg: '--dz-grad-signal', bg: '--dz-navy', kind: 'ui', themes: once, note: 'social tile edge' },
 ];
 
 // Measured and printed on every run, but never failing (conflict C38). The pillar pixels are the
@@ -120,6 +134,7 @@ export const NOT_CHECKED = [
   'hairlines: decorative, not a boundary',
   "the display switch's signal track on glass: the white thumb's place and the label carry the state",
   "the header CTA's outline edge (--dz-cta-edge): its label identifies the button, so the edge isn't required",
+  "Instagram's tile at its gradient's ends, and TikTok's cyan and red copies: the letter sits on the centre, and the copies are a hover accent under the white T",
 ];
 
 // ---------------------------------------------------------------------------------------------

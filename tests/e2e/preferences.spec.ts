@@ -4,7 +4,7 @@ import { seriousAxeViolations } from './helpers/axe';
 
 // Display preferences and the CSS contract (P2 plan, C and F; docs/ai/13 §2.11). Most choices are set
 // through localStorage, as a switch stores them; the switches themselves are tested where they live,
-// in the mobile sheet and the mega menu's rail (DisplayControls).
+// in the mobile sheet, the mega menu's rail and the footer (DisplayControls).
 
 const HOME = '/';
 const MISSING = '/this-page-does-not-exist';
@@ -243,7 +243,7 @@ test.describe('Reduce effects', () => {
   });
 });
 
-test.describe('Switches (DisplayControls: the mobile sheet, the mega-menu rail)', () => {
+test.describe('Switches (DisplayControls: the mobile sheet, the mega-menu rail, the footer)', () => {
   // The switches sit in the sheet below 1024 px, so a phone-sized window opens it first.
   async function openSheet(page: Page) {
     await page.setViewportSize({ width: 390, height: 844 });
@@ -276,14 +276,36 @@ test.describe('Switches (DisplayControls: the mobile sheet, the mega-menu rail)'
     expect(await page.evaluate(() => localStorage.getItem('dz-theme'))).toBe('light');
   });
 
-  test('every copy shows the same state: the mega-menu rail and the sheet', async ({ page }) => {
+  test('every copy shows the same state: the mega-menu rail, the sheet and the footer', async ({ page }) => {
     await page.goto('/shell-review');
     await page.waitForLoadState('networkidle');
     await page.getByRole('button', { name: 'Services' }).click();
     await page.locator('#dz-mega').getByRole('switch', { name: 'Light theme' }).click();
     const copies = page.locator('[data-dz-switch="theme"]');
-    await expect(copies).toHaveCount(2);
+    await expect(copies).toHaveCount(3);
     for (const copy of await copies.all()) await expect(copy).toHaveAttribute('aria-checked', 'true');
+  });
+
+  // On desktop, production has no live pillar yet, so no mega menu: the footer is where the switches are.
+  test('the footer’s switches work on desktop Home, and the footer stays navy in the light theme', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto(HOME);
+    await page.waitForLoadState('networkidle');
+    const footer = page.locator('footer');
+    const navy = await footer.evaluate((el) => getComputedStyle(el).backgroundColor);
+    const effects = footer.getByRole('switch', { name: 'Reduce effects' });
+    const theme = footer.getByRole('switch', { name: 'Light theme' });
+    await theme.click();
+    await expect(theme).toHaveAttribute('aria-checked', 'true');
+    await expect(html(page)).toHaveAttribute('data-theme', 'light');
+    expect(await footer.evaluate((el) => getComputedStyle(el).backgroundColor)).toBe(navy);
+    await effects.click();
+    await expect(effects).toHaveAttribute('aria-checked', 'true');
+    await expect(html(page)).toHaveAttribute('data-effects', 'reduced');
+    expect(await page.evaluate(() => [localStorage.getItem('dz-theme'), localStorage.getItem('dz-effects')])).toEqual([
+      'light',
+      'reduced',
+    ]);
   });
 
   test('a device setting shows Reduce effects on and disabled, with its note, and a click changes nothing', async ({

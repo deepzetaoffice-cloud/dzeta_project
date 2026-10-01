@@ -10,7 +10,7 @@ The header is a dashboard of proof. Besides navigation and the CTA, it carries t
 
 - **Shape:** a floating pill, inset from the viewport edges, using `glass-live`. On scroll it condenses through a transform only: no height change, no hide-on-scroll jump.
 - **Order**, from inline-start to inline-end:
-  - the logo (the locked logo component)
+  - the logo: `Logo variant="inline"`, two crops of the locked file, the mark set where the D was (its height the D's cap height plus a tenth) followed by "eepzeta" (P2 step 11). Below 640 px, the mark alone
   - nav
   - speed chip
   - AI View toggle
@@ -19,18 +19,20 @@ The header is a dashboard of proof. Besides navigation and the CTA, it carries t
 
   | Item | Shown |
   |---|---|
-  | Services ▾ | Always |
-  | Automation | Always |
-  | Studio | Always |
+  | Services ▾ | Once a pillar's pages ship |
+  | Automation | Once its page ships |
+  | Designer Studio | Once its page ships |
   | Deepzeta Sync (the tools hub, `/tools`) | Only once the page ships |
   | Work | Only once a real case study exists |
   | Pricing | Only once prices are confirmed |
 
-  Never link to a page that doesn't exist (04 §1.4). About, Contact and Resources live in the mega-menu rail and the footer.
+  Never link to a page that doesn't exist (04 §1.4): an item renders only when its registry row is live (`src/lib/routes.ts`), so items appear as their pages ship (P2, Q1). About, Contact and Resources live in the mega menu's strip and the footer.
+- **No display controls in the bar.** The theme switch and Reduce effects live in the mobile sheet, the mega menu's strip and the footer (05 §1).
 - **Current page:** a miniature of the logo's four-pixel cluster marks it (decision 0009). `hover-pixel-hop` moves the cluster to the hovered item, and its small pixels settle a beat after the main one.
-- **CTA handoff** (keeps one gradient CTA per view, 05 §2):
-  - While the hero's primary CTA is on screen, "Book a free AI audit" is an outline button (`hover-outline`).
-  - Once the hero CTA leaves the viewport, the header CTA switches to the action gradient (`hover-charge`, `pointer-magnet`, `touch-press`).
+- **CTA handoff** (C42: at most one gradient CTA in view, 05 §2):
+  - While any in-page primary CTA is on screen (the hero's, the footer finale's), "Book a free AI audit" in the header is an outline button (`hover-outline`).
+  - Once none is on screen, the header CTA switches to the action gradient (`hover-charge`, `pointer-magnet`, `touch-press`) on desktop. On mobile the header CTA stays outline, and the sticky CTA bar takes the gradient instead (conversion-path.md).
+  - Until `/free-ai-audit` ships, the CTA is an email to hello@deepzeta.ai with the subject "Free AI audit".
 
 ## Speed chip
 
@@ -52,26 +54,27 @@ The header is a dashboard of proof. Besides navigation and the CTA, it carries t
 ## Mega menu (Services ▾)
 
 - **Surface:** a `glass-live` sheet that drops from the pill (Drop motion).
-- **Four columns**, one per pixel colour:
+- **Four columns**, one per pixel colour, across the full width (each a subgrid, so heads, rows and "All … services" line up):
   - One column per pillar (C6): AI Automation · Websites · Software · Growth & Ranking, in the catalogue order.
-  - Column heads use Tier 3 icons.
-  - Items use Tier 2 icons plus a one-line outcome.
-- **The 6 Systems** (catalogue §5) in one row.
-- **A side rail:** a `glass-liquid` "Try a live demo" card, plus Deepzeta Sync (once it ships), Studio, About, Contact and Resources.
+  - Column heads use Tier 3 icons beside the pillar's name and promise.
+  - Items use Tier 2 icons plus a one-line outcome (the 19 outcomes approved at P2 step 11). A service without a Tier 2 icon yet shows its pillar pixel.
+  - **Left out of the menu** (the owner, P2 step 11), still in the footer and on their pillar pages: Review & Reputation Automation, UAE E-Invoicing Readiness & Integration, AI Shopping Visibility.
+  - Hover: the row lights, grows a guide line in its pillar's colour (`hover-guide-line`) and plays its icon's story, or pops its pillar pixel. "All … services" draws its underline and nudges its arrow.
+- **A strip below the columns** (P2 step 11): the 6 Systems (catalogue §5) on their own line, then the `glass-liquid` "Try a live demo" card, the links (Deepzeta Sync once it ships, Designer Studio, About, Contact, Resources) and the display controls at the inline end.
 - **Behaviour:**
-  - It opens on click; hover-intent opening is allowed on desktop.
-  - It is a disclosure button with `aria-expanded`, and Esc closes it.
+  - It opens on click only. Hover-intent opening was left out (`interestfor` is experimental).
+  - It's a `popover="auto"` panel opened by a `popovertarget` button. The platform supplies Esc, light dismiss, focus return and the button's expanded state, so no `aria-expanded` is written. It also closes when focus leaves it or a link is followed.
   - Never `role="menu"` (06 §3).
 
 ## Mobile (< 1024 px)
 
 - **A compact bar:** logo · CTA · menu button. The menu icon morphs into close.
-- **A full-screen sheet**, containing:
-  - statement-size items with `type-word-stagger`: the nav items above, including Deepzeta Sync once it ships
+- **A full-screen sheet** (a modal `<dialog>`, opened by invoker commands where supported), containing:
+  - heading-size items (`text-h2`, P2 step 11) with `type-word-stagger`: the live nav items above, including Deepzeta Sync once it ships
   - pillar-colour bars
-  - the speed chip, AI View, and the Reduce effects switch
-  - a thumb zone with the CTA and WhatsApp
-- **Focus** is trapped in the open sheet. Esc and the close button both close it.
+  - the speed chip and AI View (P7), and the display controls (Reduce effects and the theme switch)
+  - a thumb zone with the CTA, and WhatsApp once the number is confirmed
+- **Focus** is trapped in the open sheet and the page behind is inert and doesn't scroll. Esc, the close button, a followed link and a window that grows to desktop width all close it.
 
 ## States
 
@@ -80,7 +83,7 @@ The header is a dashboard of proof. Besides navigation and the CTA, it carries t
 - Mega menu open
 - Mobile sheet open
 - AI View on
-- Reduce effects on (a solid surface, no blur)
+- Reduce effects on: `glass-frost`, no live blur (13 §2.11); forced colours: a solid system surface
 
 ## Icons
 

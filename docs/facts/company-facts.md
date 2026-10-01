@@ -69,7 +69,7 @@ Source: owner, 2026-09-29 (`Planning Folder/Components references/#Deepzeta ai S
 - Code reads these from one typed config (planned: `src/lib/site-config.ts` or similar, named in the plan that builds it). The footer, the contact page and the schema `sameAs` array all use that one source. URLs are never hardcoded in components.
 - Schema: all nine URLs go into the `#organization` node's `sameAs` array. Nothing else goes there, not even the internal links in §2.2.
 - Links open in a new tab with `rel="noopener noreferrer"` and an accessible name that includes the platform (e.g. "Deepzeta AI on LinkedIn").
-- Icons are official monochrome platform marks, never redrawn in deepzeta style (Icon Master Rules §14.3, still listed there as an open decision).
+- Icons are Deepzeta's own letter tiles, not the platforms' marks (owner, 2026-10-01; conflict C49): in · Ig · f · YT · T · X · @ · S · P, each tile in its platform's own colour inside the signal-gradient edge.
 - If a profile is renamed or removed, only the owner updates this table.
 
 ### 2.2 Internal accounts (never shown on the public site)

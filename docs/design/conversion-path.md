@@ -22,9 +22,10 @@ This is the book-audit page from the blueprint's core pages. Its URL is set in i
 ## Always-available contact
 
 - **Floating WhatsApp button** (D5), at the bottom inline-end corner.
-- **Sticky mobile CTA bar:**
-  - It appears after the hero's primary CTA leaves the screen, the same trigger as the header CTA handoff.
-  - It hides while the mobile menu sheet or a modal is open.
+- **Sticky mobile CTA bar** (below 1024 px, `glass-frost`, so a phone runs no second live blur):
+  - **The hand-off (C42):** at most one gradient CTA is in view. The bar shows while no in-page primary CTA (the hero's, the footer finale's) is on screen, and slides out when one is; on mobile the header CTA stays outline. On desktop the header CTA takes the gradient instead.
+  - It hides while the mobile menu sheet or a modal is open, and never shows without JavaScript.
+  - It slides with a transform only. Safe-area padding keeps it clear of an iPhone's home indicator (`viewportFit: 'cover'`; checked on an iPhone before launch, 0019), and `scroll-padding-block-end` keeps focused content clear of it.
 
 ## Floating elements at 360 px
 

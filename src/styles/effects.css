@@ -131,13 +131,21 @@
   .dz-cta--header {
     color: var(--dz-white);
     box-shadow: inset 0 0 0 var(--dz-cta-outline-width) var(--dz-cta-edge);
+  }
+
+  .dz-cta--header .dz-cta-charge {
+    opacity: 0;
+  }
+
+  /* The hand-off's fades run only once cta.ts has laid out the first state (data-cta-armed), so a page
+     never fades its header CTA in at load, before the visitor has done anything (13 §2.1). */
+  :root[data-cta-armed] .dz-cta--header {
     @variant fx {
       transition: color var(--dz-dur-base) var(--dz-ease-out);
     }
   }
 
-  .dz-cta--header .dz-cta-charge {
-    opacity: 0;
+  :root[data-cta-armed] .dz-cta--header .dz-cta-charge {
     @variant fx {
       transition: opacity var(--dz-dur-base) var(--dz-ease-out);
     }
@@ -780,13 +788,395 @@
       display: none;
     }
   }
+
+  /* The mobile sheet keeps its content inside the safe area in landscape (viewportFit 'cover'). Both sides
+     take the larger inset: logical padding would swap a physical left and right inset in RTL. */
+  .dz-sheet {
+    padding-inline: max(env(safe-area-inset-left), env(safe-area-inset-right));
+  }
+
+  /* The footer, "The Landing" (footer.md; P2 plan, L). Below 1024 px its end stays clear of the sticky
+     CTA bar, so the legal line can scroll above it. */
+  .dz-footer {
+    @variant max-lg {
+      padding-block-end: calc(var(--dz-sticky-height) + env(safe-area-inset-bottom));
+    }
+  }
+  /* The Landing (13 §5; scroll-assemble): once the finale enters (.is-in, from the shared observer),
+     the logo's four pixels fly in on the logo's 35° and lock into the cluster, the small ones a beat
+     after the main one. The cluster never mirrors, so the flight is physical. Its rest state is the
+     assembled cluster: without JavaScript, under Reduce effects and after the flight. */
+  .dz-landing .dz-cluster-layers {
+    block-size: var(--dz-landing-size);
+  }
+
+  .dz-landing.is-in svg {
+    @variant fx {
+      animation: dz-land var(--dz-dur-travel) var(--dz-ease-pop) both;
+    }
+  }
+
+  .dz-landing.is-in svg:nth-child(2) {
+    animation-delay: calc(var(--dz-dur-travel) * 0.13);
+  }
+
+  .dz-landing.is-in svg:nth-child(3) {
+    animation-delay: calc(var(--dz-dur-travel) * 0.24);
+  }
+
+  .dz-landing.is-in svg:nth-child(4) {
+    animation-delay: calc(var(--dz-dur-travel) * 0.36);
+  }
+
+  /* scroll-journey-line (13 §4.4): the line grows down the inline-start edge with the page's scroll,
+     the progress pixel (13 §8) at its tip; a native scroll timeline, compositor only. Not drawn without
+     scroll-driven support or under Reduce effects (P2 plan, L2). Under the sticky bar and the header. */
+  .dz-journey {
+    display: none;
+    position: fixed;
+    inset-block: 0;
+    inset-inline-start: 0;
+    z-index: var(--dz-layer-raised);
+    inline-size: var(--dz-journey-pixel);
+    pointer-events: none;
+  }
+
+  .dz-journey-line {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: calc((var(--dz-journey-pixel) - var(--dz-journey-width)) / 2);
+    inline-size: var(--dz-journey-width);
+    background-image: var(--dz-grad-signal);
+    transform-origin: 50% 0;
+  }
+
+  .dz-journey-px {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    inline-size: var(--dz-journey-pixel);
+    block-size: var(--dz-journey-pixel);
+    border-radius: 12.5%;
+    background-image: var(--dz-pixel-web);
+  }
+
+  /* The timeline is declared after the animation shorthand, which resets it (13 §4.4). */
+  @supports (animation-timeline: scroll()) {
+    .dz-journey {
+      @variant fx {
+        display: block;
+      }
+    }
+
+    .dz-journey-line {
+      @variant fx {
+        animation: dz-journey-draw linear both;
+        animation-timeline: scroll(root block);
+      }
+    }
+
+    .dz-journey-px {
+      @variant fx {
+        animation: dz-journey-travel linear both;
+        animation-timeline: scroll(root block);
+      }
+    }
+  }
+
+  /* The social letter tiles (conflict C49; facts §2.1). Each tile is filled with its platform's own
+     colour inside the signal-gradient edge; the letter is white (black on Snapchat's yellow) and
+     decorative, since the link's name carries the platform. The link is the 44 px target (05 §7).
+     hover-glow (13 §4.3, an icon-only control; the tile's own glow stands in for the pixel's): on hover
+     and focus the tile glows in its platform's colour, 0 → 0.6; with effects on it also lifts, a sheen
+     crosses once and the letter pops, and TikTok's T splits into its cyan and red. touch-press on touch
+     (.dz-press). Under Reduce effects the colours and the glow stay, and nothing moves. */
+  .dz-social {
+    --dz-social-fill: linear-gradient(var(--dz-social-black) 0 0);
+    --dz-social-glow-colour: var(--dz-frost);
+    position: relative;
+    display: grid;
+    place-items: center;
+    inline-size: var(--dz-target-min);
+    block-size: var(--dz-target-min);
+    border-radius: var(--dz-radius-md);
+    color: var(--dz-white);
+    text-decoration: none;
+  }
+
+  .dz-social--linkedin {
+    --dz-social-fill: linear-gradient(var(--dz-social-linkedin) 0 0);
+    --dz-social-glow-colour: var(--dz-social-linkedin);
+  }
+
+  .dz-social--instagram {
+    --dz-social-fill: var(--dz-social-instagram);
+    --dz-social-glow-colour: var(--dz-social-instagram-centre);
+  }
+
+  .dz-social--facebook {
+    --dz-social-fill: linear-gradient(var(--dz-social-facebook) 0 0);
+    --dz-social-glow-colour: var(--dz-social-facebook);
+  }
+
+  .dz-social--youtube {
+    --dz-social-fill: linear-gradient(var(--dz-social-youtube) 0 0);
+    --dz-social-glow-colour: var(--dz-social-youtube);
+  }
+
+  .dz-social--tiktok {
+    --dz-social-glow-colour: var(--dz-social-tiktok-cyan);
+  }
+
+  .dz-social--snapchat {
+    --dz-social-fill: linear-gradient(var(--dz-social-snapchat) 0 0);
+    --dz-social-glow-colour: var(--dz-social-snapchat);
+    color: var(--dz-social-black);
+  }
+
+  .dz-social--pinterest {
+    --dz-social-fill: linear-gradient(var(--dz-social-pinterest) 0 0);
+    --dz-social-glow-colour: var(--dz-social-pinterest);
+  }
+
+  .dz-social-glow {
+    position: absolute;
+    inset: calc(var(--dz-social-glow-reach) * -1);
+    border-radius: var(--dz-radius-xl);
+    background-image: radial-gradient(closest-side, var(--dz-social-glow-colour), transparent);
+    opacity: 0;
+    /* It reaches past the link, so it must never take a neighbour's taps. */
+    pointer-events: none;
+  }
+
+  .dz-social-tile {
+    position: absolute;
+    inset: calc((var(--dz-target-min) - var(--dz-social-tile)) / 2);
+    overflow: hidden;
+    border: var(--dz-social-edge) solid transparent;
+    border-radius: var(--dz-radius-md);
+    background:
+      var(--dz-social-fill) padding-box,
+      var(--dz-grad-signal) border-box;
+  }
+
+  .dz-social-sheen {
+    position: absolute;
+    inset: 0;
+    background-image: var(--dz-cta-sheen);
+    translate: -120% 0;
+  }
+
+  /* The letters share one grid cell, so TikTok's split copies sit under its T. */
+  .dz-social-letter {
+    position: relative;
+    grid-area: 1 / 1;
+    font-size: var(--dz-social-letter);
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .dz-social-split {
+    opacity: 0;
+  }
+
+  .dz-social-split--cyan {
+    color: var(--dz-social-tiktok-cyan);
+  }
+
+  .dz-social-split--red {
+    color: var(--dz-social-tiktok-red);
+  }
+
+  .dz-social:is(:hover, :focus-visible) .dz-social-glow {
+    opacity: 0.6;
+  }
+
+  .dz-social-glow {
+    @variant fx {
+      transition: opacity var(--dz-dur-base) var(--dz-ease-out);
+    }
+  }
+
+  .dz-social-tile,
+  .dz-social-letter {
+    @variant fx {
+      transition:
+        translate var(--dz-dur-base) var(--dz-ease-out),
+        scale var(--dz-dur-base) var(--dz-ease-pop);
+    }
+  }
+
+  .dz-social-split {
+    @variant fx {
+      transition:
+        opacity var(--dz-dur-fast) var(--dz-ease-out),
+        translate var(--dz-dur-base) var(--dz-ease-pop),
+        scale var(--dz-dur-base) var(--dz-ease-pop);
+    }
+  }
+
+  .dz-social:is(:hover, :focus-visible) .dz-social-tile {
+    @variant fx {
+      translate: 0 var(--dz-social-lift);
+    }
+  }
+
+  .dz-social:is(:hover, :focus-visible) .dz-social-letter {
+    @variant fx {
+      translate: 0 var(--dz-social-lift);
+      scale: var(--dz-social-pop);
+    }
+  }
+
+  .dz-social:is(:hover, :focus-visible) .dz-social-sheen {
+    @variant fx {
+      translate: 120% 0;
+      transition: translate var(--dz-dur-sheen) var(--dz-ease-out);
+    }
+  }
+
+  /* TikTok's split is physical: the platform's own mark never mirrors (Icon Master Rules §9). */
+  .dz-social:is(:hover, :focus-visible) .dz-social-split--cyan {
+    @variant fx {
+      opacity: 1;
+      translate: calc(var(--dz-social-split) * -1) calc(var(--dz-social-lift) - var(--dz-social-split));
+    }
+  }
+
+  .dz-social:is(:hover, :focus-visible) .dz-social-split--red {
+    @variant fx {
+      opacity: 1;
+      translate: var(--dz-social-split) calc(var(--dz-social-lift) + var(--dz-social-split));
+    }
+  }
+
+  /* More contrast: the brand gradients drop (13 §6); the edge turns solid signal and the glow and sheen
+     go. The platforms' own colours stay. */
+  @media (prefers-contrast: more) {
+    .dz-social-tile {
+      background:
+        var(--dz-social-fill) padding-box,
+        linear-gradient(var(--dz-signal) 0 0) border-box;
+    }
+
+    .dz-social-glow,
+    .dz-social-sheen {
+      display: none;
+    }
+  }
+
+  /* Forced colours: a bordered system tile with the letter in the link colour. */
+  @media (forced-colors: active) {
+    .dz-social {
+      color: LinkText;
+    }
+
+    .dz-social-tile {
+      background: Canvas;
+      border-color: CanvasText;
+    }
+
+    .dz-social-glow,
+    .dz-social-sheen,
+    .dz-social-split {
+      display: none;
+    }
+  }
+
+  /* The sticky CTA bar (conversion-path.md; P2 plan, M), below 1024 px. cta.ts shows it (data-shown)
+     while no in-page primary CTA is on screen (C42); it slides up with a transform, instant under
+     Reduce effects. It sits above the home indicator (safe areas), never shows without JavaScript, and
+     hides while the sheet or any modal is open. glass-frost: no second live blur on a phone. */
+  .dz-sticky {
+    position: fixed;
+    inset-inline: 0;
+    inset-block-end: 0;
+    z-index: var(--dz-layer-sticky);
+    padding-block: --spacing(3) max(--spacing(3), env(safe-area-inset-bottom));
+    padding-inline: max(var(--dz-gutter), env(safe-area-inset-left), env(safe-area-inset-right));
+    border-inline-width: 0;
+    border-block-end-width: 0;
+    translate: 0 100%;
+    visibility: hidden;
+    @variant lg {
+      display: none;
+    }
+  }
+
+  /* It slides only after the first state (cta.ts, data-cta-armed): on a page with no CTA in its first
+     screen, the bar is simply there at load rather than sliding in by itself (13 §2.1). */
+  :root[data-cta-armed] .dz-sticky {
+    @variant fx {
+      transition:
+        translate var(--dz-dur-base) var(--dz-ease-out),
+        visibility var(--dz-dur-base);
+    }
+  }
+
+  /* Shown while it holds focus: scrolling the finale's CTA into view must not hide a focused control. */
+  .dz-sticky[data-shown],
+  .dz-sticky:focus-within {
+    translate: none;
+    visibility: visible;
+  }
+
+  :root:has(dialog:modal) .dz-sticky {
+    translate: 0 100%;
+    visibility: hidden;
+  }
+}
+
+/* viewportFit 'cover' (src/lib/viewport.ts) lets the page reach under an iPhone's notch in landscape,
+   so the body keeps its content inside the safe area; elsewhere the insets are 0. Below 1024 px an
+   anchor or a focused control scrolls clear of the sticky bar. */
+@layer base {
+  body {
+    padding-inline: max(env(safe-area-inset-left), env(safe-area-inset-right));
+  }
+
+  html {
+    @variant max-lg {
+      scroll-padding-block-end: calc(
+        var(--dz-sticky-height) + var(--dz-glass-edge-width) + env(safe-area-inset-bottom) + var(--dz-focus-width) +
+          var(--dz-focus-offset)
+      );
+    }
+  }
+}
+
+/* The Landing: a cluster pixel flies in on the logo's 35° and locks into place. */
+@keyframes dz-land {
+  from {
+    opacity: 0;
+    translate: var(--dz-landing-travel-x) var(--dz-landing-travel-y);
+    scale: 0.4;
+  }
+}
+
+/* The journey line grows from the top as the page scrolls, and its pixel travels down the viewport. */
+@keyframes dz-journey-draw {
+  from {
+    scale: 1 0;
+  }
+}
+
+@keyframes dz-journey-travel {
+  to {
+    translate: 0 calc(100dvh - var(--dz-journey-pixel));
+  }
 }
 
 /* The switches work once the runtime has started (preferences.ts marks <html>). Before that, and
-   without JavaScript, the group isn't shown, so no control offers a change it can't make. Outside the
-   layers, so it wins over the group's own display utility (flex or grid). */
-:root:not([data-prefs='ready']) .dz-display {
+   without JavaScript, the group isn't shown (in the footer it's hidden in place, below), so no control
+   offers a change it can't make. Outside the layers, so it wins over the group's own display utility. */
+:root:not([data-prefs='ready']) .dz-display:not(footer *) {
   display: none;
+}
+
+/* In the footer the group keeps its space instead, so the legal line below doesn't move when the
+   runtime starts (P2 step 16); hidden, it's out of the tab order and the accessibility tree. */
+:root:not([data-prefs='ready']) footer .dz-display {
+  visibility: hidden;
 }
 
 /* The close icon turns in as the sheet opens. */

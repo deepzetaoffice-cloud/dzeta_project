@@ -11,7 +11,9 @@ import { env } from '@/lib/env';
 // visitors never reach it; it's never linked, so it's absent from the sitemap and the llms files.
 // The hero's primary CTA is there so the header's hand-off can be seen (C42).
 
-const TIER_3_SIZES: Tier3Size[] = [64, 96, 128, 160];
+// One size per Tier 3 icon (the owner, step 15): the drawings were approved at every size at step 8,
+// and four copies of each cost the page its weight room and started 20 stories at once.
+const TIER_3_SIZE: Tier3Size = 128;
 const TIER_1_SIZES: Tier1Size[] = [16, 20, 24];
 const NEW_TIER_1 = ['chevron', 'external-link'] as const;
 
@@ -47,9 +49,7 @@ export default function ShellReviewPage() {
             <li key={name} id={`icon-${name}`}>
               {/* A placeholder link, as a mega-menu column head holds its icon (the host, 05 §6) */}
               <a href={`#icon-${name}`} className="dz-icon-host flex flex-wrap items-end gap-6 text-fg-strong">
-                {TIER_3_SIZES.map((size) => (
-                  <Icon key={size} name={name} size={size} />
-                ))}
+                <Icon name={name} size={TIER_3_SIZE} />
                 <span className="basis-full">{TIER_3[name].name}</span>
               </a>
               <p className="mt-2 text-small text-fg-muted">

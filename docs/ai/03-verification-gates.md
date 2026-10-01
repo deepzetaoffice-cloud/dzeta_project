@@ -1,6 +1,6 @@
 # 03 · Verification Gates
 
-> **Applies to:** every task that changes files · **Precedence:** below 00 · **Last reviewed:** 2026-09-30
+> **Applies to:** every task that changes files · **Precedence:** below 00 · **Last reviewed:** 2026-10-01
 
 A gate is a **command with a pass condition**. Work is done only when the required gates pass **and their output is in the report**. "I checked mentally" is not a gate.
 
@@ -10,7 +10,7 @@ A gate is a **command with a pass condition**. Work is done only when the requir
 > - `check:facts` checks `[[TODO` markers; the numbers allowlist comes in P4.
 > - `check:schema` checks that JSON-LD parses, that each `@id` is defined once, and that no value is empty; the rest comes in P4.
 > - `check:seo` checks the title (brand once, 50–60 characters), the description (140–160), one H1, the self-canonical, the `keywords` ban, and duplicate titles and descriptions across pages. The Open Graph and Twitter tags and `og:image` come in P4; sitemap parity and the `llms` exclusion come in P9.
-> - `check:links` checks that internal links resolve; the registry rules come in P4.
+> - `check:links` checks that internal links resolve and (from P2) that every header and footer link equals its target's canonical path, with no list linking a page twice; the registry rules come in P4.
 > - The HTML gates find pages by following links from `/`; sitemap and registry seeds come in P4/P9.
 
 ---
@@ -23,7 +23,7 @@ A gate is a **command with a pass condition**. Work is done only when the requir
 | `npm run lint` | ESLint flat config (`eslint.config.mjs`) incl. Next.js, TypeScript, jsx-a11y rules | 0 errors, 0 warnings |
 | `npm run format:check` | Prettier | no unformatted files |
 | `npm run check:tokens` | No raw hex/rgb colours or arbitrary px values outside `src/styles/tokens.css`; no physical direction classes/properties (`ml-`, `mr-`, `pl-`, `pr-`, `left-`, `right-`, `text-left`, `text-right`, `margin-left`…) | 0 hits |
-| `npm run check:contrast` | The colour pairs in `src/styles/tokens.css`, in both themes, against WCAG 2.x: text 4.5:1; large text and UI parts 3:1; gradients at every stop ([05](05-design-system.md) §2). It also fails on: <br>• a semantic token without a value in both themes <br>• an `@media` block (every first visit is dark, 05 §1) <br>• anything outside the file's documented shape <br>It prints what it doesn't check yet (glass: P2). It also measures the pillar pixels on every icon surface and reports them without failing (C38) | 0 pairs below threshold, 0 problems |
+| `npm run check:contrast` | The colour pairs in `src/styles/tokens.css`, in both themes, against WCAG 2.x: text 4.5:1; large text and UI parts 3:1; gradients at every stop ([05](05-design-system.md) §2). It also fails on: <br>• a semantic token without a value in both themes <br>• an `@media` block (every first visit is dark, 05 §1) <br>• anything outside the file's documented shape <br>From P2 it also gates text on glass: each text colour on `--dz-glass-tint-min` or `--dz-glass-tint-muted` over the worst backdrop (a white card, with the grain's brightest speck composited on top), lit menu rows as an overlay, the focus ring, and each social letter tile (C49). It prints the pairs it doesn't check and why. It also measures the pillar pixels on every icon surface and reports them without failing (C38) | 0 pairs below threshold, 0 problems |
 | `npm run check:facts` | Every number in `src/content/**` is in the facts allowlist; no `[[TODO` markers in content that ships | 0 unlisted numbers, 0 TODO markers |
 | `npm run check:schema` | On built pages ([08](08-seo-geo-aeo-schema.md) §3): <br>• JSON-LD parses <br>• each `@id` is defined at most once per document <br>• every reference resolves in the document or to a registered node that its home page defines <br>• `#organization` and `#website` appear exactly once <br>• one primary entity per template, matching the matrix <br>• NAP equals the site config <br>• every URL is absolute on the canonical host with no trailing slash <br>• breadcrumb positions are contiguous and each item is a built route <br>• visible-parity fields appear in the page text <br>• no empty or placeholder values | all pages pass |
 | `npm run check:seo` | On built HTML ([08](08-seo-geo-aeo-schema.md) §1, §6): <br>• one `<title>` with the brand suffix once, 50–60 characters in total <br>• description 140–160 characters <br>• one H1 <br>• absolute self-canonical with no trailing slash <br>• `og:image` returns 200 <br>• no `keywords` meta <br>• sitemap URLs equal the indexable built routes <br>• `noindex` routes are absent from the sitemap and the `llms` files | 0 failures |
@@ -34,7 +34,7 @@ A gate is a **command with a pass condition**. Work is done only when the requir
 | `npm run test` | Vitest unit tests (schema builders, geo/llms builders, analytics wrapper, utils) | all pass |
 | `npm run build` | `next build` | succeeds, no warnings we haven't accepted in the conflict register |
 | `npm run test:e2e` | Playwright on the production build: key pages render, keyboard navigation, **axe** accessibility, tracking regression (`dataLayer[0]` rule, events fire once), effect modes (reduced motion, Reduce effects, JavaScript off, forced colours, RTL) and the LCP element visible at first paint ([13](13-experience-design.md) §3) | all pass, 0 serious/critical axe violations |
-| `npm run lhci` | Lighthouse CI on the fixed URL sample with per-tier budgets from [07](07-performance-budget.md) (page tiers: decision 0005): scores, Core Web Vitals, and per-type bytes (JavaScript, fonts, images) on every run. Then `scripts/check-page-weight.mjs` checks HTML + CSS + JS ≤ the framework baseline + 50 KB on every run, because lhci can't add resource types together (decisions 0014, 0015) | all assertions pass, and the page-weight check passes |
+| `npm run lhci` | Lighthouse CI on the fixed URL sample with per-tier budgets from [07](07-performance-budget.md) (page tiers: decision 0005): scores, Core Web Vitals, and per-type bytes (JavaScript, fonts, images) on every run. From P2 the sample is Home and the review page `/shell-review` (the complete shell, registry R165), both under the T1 assertions; the review page has SEO off (noindex by design) and a lab LCP limit of 2,700 ms (C48, C50). Then `scripts/check-page-weight.mjs` checks HTML + CSS + JS ≤ the framework baseline + 50 KB on every run, because lhci can't add resource types together (decisions 0014, 0015) | all assertions pass, and the page-weight check passes |
 | `npm run verify:fast` | `typecheck` + `lint` + `check:tokens` + `check:contrast` | pass |
 | `npm run verify` | everything above, in order | pass |
 

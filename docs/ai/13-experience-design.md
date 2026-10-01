@@ -1,6 +1,6 @@
 # 13 · Experience Design: Effects, Motion & Interaction
 
-> **Applies to:** every visual effect, animation, pointer/scroll/hover behaviour, 3D, glass and story graphic · **Precedence:** below 00; tokens live in [05](05-design-system.md), costs in [07](07-performance-budget.md) · **Last reviewed:** 2026-09-29
+> **Applies to:** every visual effect, animation, pointer/scroll/hover behaviour, 3D, glass and story graphic · **Precedence:** below 00; tokens live in [05](05-design-system.md), costs in [07](07-performance-budget.md) · **Last reviewed:** 2026-10-01
 > **Decision:** [0008](../decisions/0008-design-language-signal-and-depth.md) (Design Direction v2 "Signal & Depth") · **Surface specs:** [docs/design/](../design/README.md)
 
 This file is the **only** home for effect definitions, limits, fallbacks and choreography. Other files cite effect IDs from here and never restate these rules.
@@ -124,7 +124,7 @@ On touch devices none of these run; the static state is complete on its own.
 
 ### 4.3 Hover (one behaviour per element type)
 
-Hover effects run 150–250 ms and use the easing tokens. `:focus-visible` triggers the same state.
+Hover effects run 150–250 ms and use the easing tokens. `:focus-visible` triggers the same state. Single passes that travel or sweep may take longer, as the Design Lab set them (0009, recorded in 0019): `hover-pixel-hop` 450 ms plus up to 162 ms of stagger, the `hover-charge` sheen 700 ms, the `glass-liquid` sheen 1,100 ms. None blocks input.
 
 | ID | Element | Behaviour |
 |---|---|---|
@@ -135,7 +135,7 @@ Hover effects run 150–250 ms and use the easing tokens. `:focus-visible` trigg
 | `hover-window` | Showcase card | The image scales inside a fixed frame + `pointer-tilt` + the caption rises |
 | `hover-pixel-hop` | Nav item | The current-place marker is a miniature of the logo's four-pixel cluster (upright, exact gradients). It travels to the hovered item, and its small pixels settle a beat later |
 | `hover-guide-line` | List or table row | A pillar-colour line grows at inline-start |
-| `hover-glow` | Icon-only button | The icon plays its own micro-story and its pixel glows 0 → 0.6 (Icon Master Rules §4.4 and §7; drawn to the approved icon prototype) |
+| `hover-glow` | Icon-only button | The icon plays its own micro-story and its pixel glows 0 → 0.6 (Icon Master Rules §4.4 and §7; drawn to the approved icon prototype). **The social letter tiles** (C49), which have no pixel: the tile lifts 2 px, a glow in the platform's own colour fades 0 → 0.6, a sheen crosses once and the letter pops; TikTok's T splits into its cyan and red. Static under Reduce effects |
 | `hover-peek` | Editorial image | Shifts ≤ 8 px toward the pointer |
 
 ### 4.4 Scroll
@@ -258,20 +258,22 @@ Hover effects run 150–250 ms and use the easing tokens. `:focus-visible` trigg
 | RTL | Logical properties; inline-start origins mirror; the pixel and the cluster never mirror (Icon Master Rules §9) |
 | Light mode | Glass becomes frosted white; depth uses soft shadows instead of glow; darker gradient variants (05 §2) |
 
-## 7. Provisional byte caps (compressed)
+## 7. Byte caps (compressed)
 
-The feasibility gate confirms these (04 §2).
+The P2 effects feasibility gate (04 §2) confirmed these in the lab, with the shell's every T1 effect on ([decision 0019](../decisions/0019-layout-shell.md)). A budget Android phone checks the GPU side before launch (C51), and P5 re-runs the gate on the full Home.
 
-| Item | Cap |
-|---|---|
-| All first-party effect/UI JS on Home at first load (T1 "native", decision 0008) | ≤ 10 KB |
-| Shared pointer controller | ≤ 1.5 KB |
-| Shared IntersectionObserver (reveals, icons, CTA handoff) | ≤ 0.5 KB |
-| Story controls (shared) | ≤ 2 KB |
-| Each `story-*` (data + SVG) | ≤ 6 KB |
-| Glass grain texture | ≤ 2 KB |
-| Speed chip (with `web-vitals`) | Measured in its plan |
-| AI View, Nutrition Label, Device Stage, tools, app demo | Load on open or tap; budgeted in their own plans (07 §2) |
+| Item | Cap | Measured at the end of P2 |
+|---|---|---|
+| All first-party effect/UI JS on Home at first load (T1 "native", decision 0008) | ≤ 10 KB | 8,052 B: the root error page, `next/link` and the effect runtime |
+| Shared pointer controller | ≤ 1.5 KB | 604 B |
+| Shared IntersectionObserver (reveals, icons, CTA handoff) | ≤ 0.5 KB | 293 B |
+| Story controls (shared) | ≤ 2 KB | Not built yet |
+| Each `story-*` (data + SVG) | ≤ 6 KB | Not built yet |
+| Glass grain texture | ≤ 2 KB | 304 B |
+| Speed chip (with `web-vitals`) | Measured in its plan | — |
+| AI View, Nutrition Label, Device Stage, tools, app demo | Load on open or tap; budgeted in their own plans (07 §2) | — |
+
+The controllers are measured each on its own: minified with its sibling imports kept external, then gzip level 6, the compression `next start` serves. The build merges them into one module, which is smaller.
 
 ## 8. The Zeta Pixel as a sitewide marker
 

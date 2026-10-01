@@ -271,6 +271,41 @@
   --dz-tilt-max: 5deg;
   --dz-magnet-max: 7px;
 
+  /* The footer (P2 part C; footer.md). The Landing's cluster and how far each pixel flies in, on the
+     logo's 35° (scroll-assemble); the journey line and its progress pixel (scroll-journey-line); the
+     sticky CTA bar's height above the safe area, which the footer's end keeps clear on mobile. */
+  --dz-landing-size: 3rem;
+  --dz-landing-travel-x: -2.5rem;
+  --dz-landing-travel-y: 1.75rem;
+  --dz-journey-width: 2px;
+  --dz-journey-pixel: 0.5rem;
+  --dz-sticky-height: 4.5rem;
+
+  /* The social letter tiles (conflict C49): each platform's own colour, read from its own pages (P2
+     plan, step 13), inside the signal-gradient edge. Instagram's gradient is approximated from
+     instagram.com's icon; its letter sits on the centre colour, which its glow uses too. TikTok, X and
+     Threads are black, so the edge draws their boundary on navy. */
+  --dz-social-linkedin: #0a66c2;
+  --dz-social-instagram: linear-gradient(35deg, #fba012 0%, #f82779 48%, #d13aa4 72%, #771cf1 100%);
+  --dz-social-instagram-centre: #f82779;
+  --dz-social-facebook: #0866ff;
+  --dz-social-youtube: #ff0033;
+  --dz-social-black: #000000;
+  --dz-social-tiktok-cyan: #25f4ee;
+  --dz-social-tiktok-red: #fe2c55;
+  --dz-social-snapchat: #fffc00;
+  --dz-social-pinterest: #e60023;
+  /* The tile inside its 44 px target, its edge, the letter, the lift and pop on hover, how far the glow
+     reaches past the tile, and TikTok's cyan and red split. The letter is 19 px at weight 800: large
+     text in WCAG terms, so 3:1 is AA for it (P2 step 16; it was 17 px). */
+  --dz-social-tile: 2.5rem;
+  --dz-social-edge: 1.5px;
+  --dz-social-letter: 1.1875rem;
+  --dz-social-lift: -2px;
+  --dz-social-pop: 1.08;
+  --dz-social-glow-reach: 0.5rem;
+  --dz-social-split: 1.5px;
+
   /* Glass (05 §4; 13 §4.1). The tints and edges switch with the theme (section 2). */
   --dz-glass-edge-width: 1px;
   /* glass-live and glass-liquid only: 17px is the Lab-confirmed blur (0009), the saturations the Lab's */
