@@ -1,0 +1,114 @@
+// The tracking vendors (P3 plan, E and K): each one's consent group and the hosts it loads from or
+// sends to. The CSP allows exactly the hosts of the vendors in use (security-headers.ts), the cookie
+// list in Cookie settings names exactly their cookies, and the GTM container holds exactly their tags,
+// so the site, the policy and the container can't name different tools (the pre-launch register's
+// privacy row). A vendor is in use when its ID is set: GTM by NEXT_PUBLIC_GTM_ID, the rest in
+// accounts.ts. Each vendor's cookies are added from its official pages, with external-sources.md rows.
+//
+// Imported by scripts and next.config through Node's own TypeScript loader: keep relative imports with
+// explicit `.ts` extensions and type-only syntax in this file.
+import type { Accounts } from './accounts.ts';
+
+export type ConsentGroup = 'essential' | 'analytics' | 'marketing';
+export type VendorId = 'gtm' | 'gtm_preview' | 'ga4' | 'meta' | 'linkedin';
+export type CspHosts = {
+  script?: readonly string[];
+  style?: readonly string[];
+  img?: readonly string[];
+  font?: readonly string[];
+  connect?: readonly string[];
+  frame?: readonly string[];
+};
+export type Vendor = {
+  id: VendorId;
+  name: string;
+  group: ConsentGroup;
+  hosts: CspHosts;
+  // Where the hosts come from
+  source: string;
+};
+
+const GTM = 'https://www.googletagmanager.com';
+
+export const VENDORS: readonly Vendor[] = [
+  {
+    id: 'gtm',
+    name: 'Google Tag Manager',
+    // It loads the other tags and holds none of a visitor's data itself (07 §2: GTM alone before consent)
+    group: 'essential',
+    hosts: { script: [GTM], img: [GTM], connect: [GTM, 'https://www.google.com'] },
+    source: 'https://developers.google.com/tag-platform/security/guides/csp (Tag Manager without a nonce)',
+  },
+  {
+    // Tag Assistant's preview, used by the owner's Part B tests; it loads only in a preview session.
+    // Google also lists its two Google Fonts hosts, for the preview badge's typeface. They're left out:
+    // no Google Fonts host appears anywhere in src/ (05 §3, lesson 1; check:tokens), and the badge works
+    // in a fallback font, so a preview session logs two blocked font requests and nothing else.
+    id: 'gtm_preview',
+    name: 'Google Tag Manager preview',
+    group: 'essential',
+    hosts: {
+      script: ['https://tagmanager.google.com'],
+      style: [GTM, 'https://tagmanager.google.com'],
+      img: ['https://ssl.gstatic.com', 'https://www.gstatic.com'],
+    },
+    source: 'https://developers.google.com/tag-platform/security/guides/csp (Preview mode)',
+  },
+  {
+    // Without Google signals (the tracking guide A3.9): turning them on adds Google's ads-feature hosts
+    id: 'ga4',
+    name: 'Google Analytics',
+    group: 'analytics',
+    hosts: {
+      script: [GTM],
+      img: [GTM, 'https://*.google-analytics.com'],
+      connect: [GTM, 'https://*.google-analytics.com', 'https://*.google.com'],
+    },
+    source: 'https://developers.google.com/tag-platform/security/guides/csp (Google Analytics without ads features)',
+  },
+  {
+    // Meta publishes no CSP list: these are the hosts its own base code loads from and sends to
+    id: 'meta',
+    name: 'Meta Pixel',
+    group: 'marketing',
+    hosts: {
+      script: ['https://connect.facebook.net'],
+      img: ['https://www.facebook.com'],
+      connect: ['https://www.facebook.com', 'https://connect.facebook.net'],
+    },
+    source: 'https://www.facebook.com/business/help/1021909254506499 (the base code)',
+  },
+  {
+    id: 'linkedin',
+    name: 'LinkedIn Insight Tag',
+    group: 'marketing',
+    hosts: {
+      script: ['https://snap.licdn.com'],
+      img: ['https://px.ads.linkedin.com', 'https://px4.ads.linkedin.com', 'https://dc.ads.linkedin.com'],
+      connect: [
+        'https://px.ads.linkedin.com',
+        'https://px4.ads.linkedin.com',
+        'https://dc.ads.linkedin.com',
+        'https://p.adsymptotic.com',
+        'https://cdn.linkedin.oribi.io',
+        'https://gw.linkedin.oribi.io',
+        'https://sjs.bizographics.com',
+      ],
+    },
+    source: 'https://www.linkedin.com/help/lms/answer/a425696 (the domains not to block)',
+  },
+];
+
+// The vendors in use: GTM (and its preview) when the site loads GTM; the rest when their ID is set and
+// GTM is there to load them.
+export function vendorsInUse({ gtm }: { gtm: boolean }, ids: Accounts): Vendor[] {
+  if (!gtm) return [];
+  const set: Record<VendorId, boolean> = {
+    gtm: true,
+    gtm_preview: true,
+    ga4: ids.ga4MeasurementId !== null,
+    meta: ids.metaDatasetId !== null,
+    linkedin: ids.linkedinPartnerId !== null,
+  };
+  return VENDORS.filter((vendor) => set[vendor.id]);
+}
