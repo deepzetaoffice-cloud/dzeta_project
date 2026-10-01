@@ -1,0 +1,161 @@
+import Link from 'next/link';
+import { ClusterLayers } from '@/components/icons/Cluster';
+import type { Pillar } from '@/components/icons/registry';
+import { DisplayControls } from '@/components/layout/DisplayControls';
+import { auditHref, CtaButton } from '@/components/ui/CtaButton';
+import { navigation, type NavLink } from '@/content/en/navigation';
+import { shellContent } from '@/content/en/shell';
+import { isShown, navHref } from '@/lib/routes';
+import { siteConfig, type SocialKey } from '@/lib/site-config';
+
+// The footer "The Landing" (docs/design/footer.md; P2 plan, L), on every page, navy in both themes.
+// - The finale: The Landing (the logo's four pixels assemble once the finale enters, scroll-assemble;
+//   its rest state is the assembled cluster), the headline at the display size (C41) and the primary
+//   CTA. cta.ts counts that CTA in the hand-off (C42). WhatsApp joins it once the number is confirmed.
+// - The body: the link columns, one per pillar in its pixel colour (C6), then Company, Resources and
+//   Legal; only live links render (04 §1.4), and a column with none isn't shown. The review page shows
+//   every link as a placeholder fragment, as the header does (plan A3).
+// - The company block from siteConfig (facts §1–§2); the phone shows once it's confirmed, never before.
+// - The social links: Deepzeta's letter tiles in each platform's colour (C49), named "Deepzeta AI on
+//   LinkedIn" and so on, in a new tab (facts §2.1 rules). The letters are decorative.
+// - The display controls (Q2) and the legal line, whose year is written by hand (02 §1.5).
+// No heading but the finale's <h2>: column titles label their lists, so the footer adds nothing to a
+// page's outline (plan L4). The language switch is mounted here in P11, with its behaviour.
+
+// The tiles' letters (C49): each platform's best-known short form; Threads takes its own @, as TikTok has T.
+const LETTERS = {
+  linkedin: 'in',
+  instagram: 'Ig',
+  facebook: 'f',
+  youtube: 'YT',
+  tiktok: 'T',
+  x: 'X',
+  threads: '@',
+  snapchat: 'S',
+  pinterest: 'P',
+} as const satisfies Record<SocialKey, string>;
+
+type Column = { id: string; title: string; pillar?: Pillar; links: NavLink[] };
+
+function footerColumns(review: boolean): Column[] {
+  const pillars = navigation.columns.map((column) => ({
+    id: column.pillar,
+    title: column.name,
+    pillar: column.pillar,
+    links: [
+      ...column.items.map((item) => ({ route: item.route, label: item.name })),
+      { route: column.route, label: column.allLabel },
+    ],
+  }));
+  const groups = navigation.footer.map((group) => ({
+    id: group.title.toLowerCase(),
+    title: group.title,
+    links: [...group.links],
+  }));
+  return [...pillars, ...groups]
+    .map((column) => ({ ...column, links: column.links.filter((link) => isShown(link.route, review)) }))
+    .filter((column) => column.links.length > 0);
+}
+
+export type SiteFooterProps = { review?: boolean };
+
+export function SiteFooter({ review = false }: SiteFooterProps) {
+  const columns = footerColumns(review);
+  return (
+    <footer data-theme="dark" className="dz-footer">
+      <div className="mx-auto max-w-page px-gutter pt-chapter pb-section">
+        <span className="dz-landing block" data-fx-once="">
+          <ClusterLayers />
+        </span>
+        <h2 className="mt-8 max-w-measure text-display">{shellContent.finaleHeading}</h2>
+        <p className="mt-6 max-w-measure text-lead">{shellContent.finaleLine}</p>
+        <CtaButton variant="primary" href={auditHref()} label={shellContent.cta} className="mt-8" />
+      </div>
+      <div className="mx-auto grid max-w-page gap-12 px-gutter pb-12">
+        {columns.length > 0 ? (
+          <nav
+            aria-label={shellContent.footerNavLabel}
+            className="grid grid-cols-1 gap-x-8 gap-y-10 border-t border-hairline pt-12 sm:grid-cols-2 lg:grid-cols-4"
+          >
+            {columns.map((column) => (
+              <div key={column.id}>
+                <p id={`dz-footer-${column.id}`} className="flex items-center gap-1 font-medium text-fg-strong">
+                  {column.pillar ? (
+                    <span className={`dz-mega-pixel dz-pillar--${column.pillar}`} aria-hidden="true" />
+                  ) : null}
+                  {column.title}
+                </p>
+                <ul aria-labelledby={`dz-footer-${column.id}`} className="mt-2">
+                  {column.links.map((link) => (
+                    <li key={link.route} className="flex min-h-11 items-center py-1">
+                      <Link
+                        href={navHref(link.route, review)}
+                        className="dz-underline dz-target text-small text-fg hover:text-fg-strong"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </nav>
+        ) : null}
+        <div className="grid gap-10 border-t border-hairline pt-12 md:grid-cols-[minmax(0,1fr)_auto] md:items-start">
+          <div className="grid gap-6">
+            <address className="grid gap-1 text-small not-italic">
+              <span className="font-bold text-fg-strong">{siteConfig.brandName}</span>
+              <span>{siteConfig.address}</span>
+              <a href={`mailto:${siteConfig.email}`} className="dz-underline dz-target w-fit text-link">
+                {siteConfig.email}
+              </a>
+              {siteConfig.phone ? (
+                <a href={`tel:${siteConfig.phone}`} className="dz-underline dz-target w-fit text-link">
+                  {siteConfig.phone}
+                </a>
+              ) : null}
+            </address>
+            <ul className="flex flex-wrap gap-1">
+              {siteConfig.social.map((profile) => (
+                <li key={profile.key}>
+                  <a
+                    href={profile.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={shellContent.socialLinkName(siteConfig.brandName, profile.platform)}
+                    title={profile.platform}
+                    className={`dz-social dz-social--${profile.key} dz-press`}
+                  >
+                    <span className="dz-social-glow" aria-hidden="true" />
+                    <span className="dz-social-tile" aria-hidden="true">
+                      <span className="dz-social-sheen" />
+                    </span>
+                    {profile.key === 'tiktok' ? (
+                      <>
+                        <span className="dz-social-letter dz-social-split dz-social-split--cyan" aria-hidden="true">
+                          {LETTERS.tiktok}
+                        </span>
+                        <span className="dz-social-letter dz-social-split dz-social-split--red" aria-hidden="true">
+                          {LETTERS.tiktok}
+                        </span>
+                      </>
+                    ) : null}
+                    <span className="dz-social-letter" aria-hidden="true">
+                      {LETTERS[profile.key]}
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="w-full md:w-72">
+            <DisplayControls place="footer" />
+          </div>
+        </div>
+        <p className="text-small text-fg-muted">
+          {shellContent.copyright} {siteConfig.legalName}
+        </p>
+      </div>
+    </footer>
+  );
+}

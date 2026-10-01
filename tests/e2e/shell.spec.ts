@@ -5,10 +5,10 @@ import { ROUTES } from '../../src/lib/routes';
 import { siteConfig } from '../../src/lib/site-config';
 import { seriousAxeViolations } from './helpers/axe';
 
-// The shell (P2 plan, O; docs/design/header.md): the skip link, the header, the mega menu and the
-// mobile sheet. Home shows what production shows, live links only; the review page shows every item,
-// each a placeholder link. The exit gate's widths are 360, 390, 768 and 1280 px; 1024 and 1536 are
-// checked for layout. Part C adds the footer, the sticky CTA bar and the rest of the hand-off.
+// The shell (P2 plan, O; docs/design/header.md, footer.md, conversion-path.md): the skip link, the
+// header, the mega menu, the mobile sheet, the footer and the sticky CTA bar. Home shows what
+// production shows, live links only; the review page shows every item, each a placeholder link. The
+// exit gate's widths are 360, 390, 768 and 1280 px; 1024 and 1536 are checked for layout.
 
 const HOME = '/';
 const REVIEW = '/shell-review';
@@ -25,8 +25,19 @@ async function open(page: Page, path: string, width: number) {
   await page.waitForLoadState('networkidle');
 }
 
+// Waits for every time-based animation. The journey line runs on the page's scroll timeline, so it
+// finishes only at the page's end; it's left out.
 const settled = (page: Page) =>
-  page.evaluate(() => Promise.all(document.getAnimations().map((animation) => animation.finished)));
+  page.evaluate(() =>
+    Promise.all(
+      document
+        .getAnimations()
+        .filter((animation) => animation.timeline === document.timeline)
+        .map((animation) => animation.finished),
+    ),
+  );
+
+const socialName = (platform: string) => shellContent.socialLinkName(siteConfig.brandName, platform);
 
 // Numbers the visible tab stops inside `scope` in document order, and returns how many there are.
 const numberStops = (page: Page, scope: string) =>
@@ -44,13 +55,14 @@ const focusedStop = (page: Page) =>
 
 // Each visible control in `scope` whose tap area misses a 42 px cross around its centre (05 §7: 44 ×
 // 44 px). The browser's own hit test decides, so a hit area that a pseudo-element adds counts, and
-// anything covering the control shows up as a miss.
+// anything covering the control shows up as a miss. Each control is scrolled to the middle of the
+// window first, so its whole cross is on screen (at an edge, part of it would be outside).
 const missedTargets = (page: Page, scope: string) =>
   page.locator(scope).evaluate((root) =>
     [...root.querySelectorAll('a[href], button')]
       .filter((el) => el.checkVisibility())
       .flatMap((el) => {
-        el.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+        el.scrollIntoView({ block: 'center', inline: 'nearest' });
         const box = el.getBoundingClientRect();
         const [x, y] = [box.x + box.width / 2, box.y + box.height / 2];
         const points = [
@@ -371,7 +383,7 @@ test.describe('The CTA hand-off (C42)', () => {
     [HOME, 390],
   ] as const) {
     const desktop = width >= 1024;
-    test(`${path} at ${width} px: ${desktop ? 'exactly one' : 'at most one, never the header'} gradient CTA on screen at every scroll position`, async ({
+    test(`${path} at ${width} px: exactly one gradient CTA on screen at every scroll position${desktop ? '' : ', never the header'}`, async ({
       page,
     }) => {
       await open(page, path, width);
@@ -381,13 +393,9 @@ test.describe('The CTA hand-off (C42)', () => {
       }));
       for (let top = 0; top <= scrollable + step; top += step) {
         await page.evaluate((y) => scrollTo(0, y), top);
-        if (desktop) {
-          await expect.poll(() => litCtas(page), { message: `scrolled to ${top}` }).toHaveLength(1);
-        } else {
-          // On mobile the header CTA stays outline: part C's sticky bar carries the gradient.
-          await expect.poll(() => litCtas(page), { message: `scrolled to ${top}` }).not.toContain('header');
-          expect((await litCtas(page)).length).toBeLessThanOrEqual(1);
-        }
+        await expect.poll(() => litCtas(page), { message: `scrolled to ${top}` }).toHaveLength(1);
+        // On mobile the header CTA stays outline: the sticky bar carries the gradient.
+        if (!desktop) expect(await litCtas(page), `scrolled to ${top}`).not.toContain('header');
       }
     });
   }
@@ -411,7 +419,9 @@ test.describe('The desktop header', () => {
     page,
   }) => {
     await open(page, HOME, 1280);
-    await expect(page.getByRole('link', { name: siteConfig.brandName })).toHaveAttribute('aria-current', 'page');
+    await expect(
+      page.locator('[data-fx-header]').getByRole('link', { name: siteConfig.brandName, exact: true }),
+    ).toHaveAttribute('aria-current', 'page');
 
     await open(page, REVIEW, 1280);
     const items = '[data-fx-nav] > ul > li > :is(a, button)';
@@ -501,6 +511,189 @@ test.describe('JavaScript off', () => {
     const sheet = page.getByRole('dialog', { name: shellContent.menuOpen });
     await expect(sheet).toBeVisible();
     await expect(sheet.getByRole('switch')).toHaveCount(0);
+    await page.keyboard.press('Escape');
+
+    // The footer renders in full, its cluster at rest (assembled), and the bar never shows.
+    const footer = page.locator('footer');
+    await expect(footer.getByRole('heading', { level: 2, name: shellContent.finaleHeading })).toBeAttached();
+    await expect(footer.getByRole('link', { name: socialName('LinkedIn'), exact: true })).toBeAttached();
+    await expect(footer.getByRole('switch')).toHaveCount(0);
+    await expect(page.locator('[data-fx-sticky]')).toBeHidden();
+  });
+});
+
+test.describe('The footer, The Landing (footer.md; P2 plan, L)', () => {
+  for (const [path, width] of [
+    [HOME, 360],
+    [HOME, 1280],
+    [REVIEW, 390],
+    [REVIEW, 1280],
+  ] as const) {
+    test(`${path} at ${width} px: the finale, the company block, the nine social links and the legal line; every tap area 44 px`, async ({
+      page,
+    }) => {
+      await open(page, path, width);
+      const footer = page.locator('footer');
+      await expect(footer).toHaveAttribute('data-theme', 'dark');
+      await expect(footer.getByRole('heading', { level: 2, name: shellContent.finaleHeading })).toBeVisible();
+      // No heading but the finale's: column titles label their lists (plan L4).
+      await expect(footer.locator('h1, h2, h3, h4, h5, h6')).toHaveCount(1);
+      await expect(footer.locator('[data-cta="primary"]')).toHaveCount(1);
+      await expect(footer.locator('address')).toContainText(siteConfig.address);
+      await expect(footer.getByRole('link', { name: siteConfig.email })).toHaveAttribute(
+        'href',
+        `mailto:${siteConfig.email}`,
+      );
+      for (const profile of siteConfig.social) {
+        const link = footer.getByRole('link', { name: socialName(profile.platform), exact: true });
+        await expect(link).toHaveAttribute('href', profile.url);
+        await expect(link).toHaveAttribute('target', '_blank');
+        await expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+      }
+      await expect(footer.getByText(`${shellContent.copyright} ${siteConfig.legalName}`)).toBeVisible();
+      // The review page shows every column; production, only columns with a live link (none yet).
+      const nav = footer.getByRole('navigation', { name: shellContent.footerNavLabel });
+      if (path === REVIEW) {
+        await expect(nav.getByRole('list')).toHaveCount(navigation.columns.length + navigation.footer.length);
+      } else {
+        await expect(nav).toHaveCount(0);
+      }
+      expect(await missedTargets(page, 'footer')).toEqual([]);
+      expect(await themedFocusables(page)).toEqual([]);
+    });
+  }
+
+  test('The Landing: the cluster flies in once as the finale enters, and rests assembled', async ({ page }) => {
+    await open(page, REVIEW, 1280);
+    const landing = page.locator('.dz-landing');
+    await expect(landing).not.toHaveClass(/is-in/);
+    await landing.scrollIntoViewIfNeeded();
+    await expect(landing).toHaveClass(/is-in/);
+    const pixels = landing.locator('svg');
+    expect(await pixels.evaluateAll((svgs) => svgs.map((svg) => getComputedStyle(svg).animationName))).toEqual(
+      Array(4).fill('dz-land'),
+    );
+    await settled(page);
+    // At rest, every pixel's layer covers the cluster's box exactly, fully shown.
+    expect(
+      await pixels.evaluateAll((svgs) => {
+        const box = svgs[0]!.parentElement!.getBoundingClientRect();
+        return svgs.every((svg) => {
+          const rect = svg.getBoundingClientRect();
+          return (
+            getComputedStyle(svg).opacity === '1' &&
+            Math.abs(rect.x - box.x) < 0.5 &&
+            Math.abs(rect.y - box.y) < 0.5 &&
+            Math.abs(rect.width - box.width) < 0.5
+          );
+        });
+      }),
+    ).toBe(true);
+  });
+
+  test('the journey line grows with the page’s scroll, its pixel reaching the bottom as the page ends', async ({
+    page,
+  }) => {
+    await open(page, REVIEW, 1280);
+    await expect(page.locator('.dz-journey')).toBeVisible();
+    const pixelBottom = () => page.locator('.dz-journey-px').evaluate((el) => el.getBoundingClientRect().bottom);
+    expect(await pixelBottom()).toBeLessThan(50);
+    await page.evaluate(() => scrollTo(0, document.documentElement.scrollHeight));
+    await expect.poll(pixelBottom).toBeGreaterThan(900 - 2);
+  });
+
+  test('a social tile lifts, glows in its own colour and pops its letter on hover; TikTok’s T splits', async ({
+    page,
+  }) => {
+    await open(page, REVIEW, 1280);
+    const tiktok = page.getByRole('link', { name: socialName('TikTok'), exact: true });
+    await tiktok.scrollIntoViewIfNeeded();
+    await tiktok.hover();
+    const style = (part: string, property: string) =>
+      tiktok
+        .locator(part)
+        .first()
+        .evaluate((el, name) => getComputedStyle(el).getPropertyValue(name), property);
+    await expect.poll(() => style('.dz-social-glow', 'opacity')).toBe('0.6');
+    await expect.poll(() => style('.dz-social-tile', 'translate')).toBe('0px -2px');
+    await expect.poll(() => style('.dz-social-split--cyan', 'opacity')).toBe('1');
+  });
+
+  test('under Reduce effects: no journey line, the cluster rests with no flight, and a tile glows without moving', async ({
+    page,
+  }) => {
+    await open(page, REVIEW, 1280);
+    await store(page, { 'dz-effects': 'reduced' });
+    await expect(page.locator('.dz-journey')).toBeHidden();
+    const landing = page.locator('.dz-landing');
+    await landing.scrollIntoViewIfNeeded();
+    await expect(landing).toHaveClass(/is-in/);
+    expect(
+      await landing.locator('svg').evaluateAll((svgs) => svgs.map((svg) => getComputedStyle(svg).animationName)),
+    ).toEqual(Array(4).fill('none'));
+    const linkedin = page.getByRole('link', { name: socialName('LinkedIn'), exact: true });
+    await linkedin.hover();
+    await expect(linkedin.locator('.dz-social-glow')).toHaveCSS('opacity', '0.6');
+    await expect(linkedin.locator('.dz-social-tile')).toHaveCSS('translate', 'none');
+  });
+
+  test('in Arabic (RTL) the journey line runs down the right edge and the tiles mirror their order', async ({
+    page,
+  }) => {
+    await open(page, REVIEW, 1280);
+    await page.evaluate(() => document.documentElement.setAttribute('dir', 'rtl'));
+    expect(
+      await page
+        .locator('.dz-journey')
+        .evaluate((el) => document.documentElement.clientWidth - el.getBoundingClientRect().right),
+    ).toBeLessThanOrEqual(1);
+    const x = (platform: string) =>
+      page
+        .getByRole('link', { name: socialName(platform), exact: true })
+        .evaluate((el) => el.getBoundingClientRect().x);
+    expect(await x('LinkedIn')).toBeGreaterThan(await x('Pinterest'));
+  });
+});
+
+test.describe('The sticky CTA bar (conversion-path.md; C42)', () => {
+  const bar = (page: Page) => page.locator('[data-fx-sticky]');
+  const shown = (page: Page) =>
+    bar(page).evaluate(
+      (el) => getComputedStyle(el).visibility === 'visible' && el.getBoundingClientRect().top < innerHeight,
+    );
+
+  test('390 px, the review page: hidden while the hero’s CTA shows, up once it leaves, gone as the finale’s arrives', async ({
+    page,
+  }) => {
+    await open(page, REVIEW, 390);
+    await expect.poll(() => shown(page)).toBe(false);
+    await page.evaluate(() => scrollTo(0, innerHeight * 1.5));
+    await expect.poll(() => shown(page)).toBe(true);
+    await page.locator('footer [data-cta="primary"]').scrollIntoViewIfNeeded();
+    await expect.poll(() => shown(page)).toBe(false);
+  });
+
+  test('390 px: it hides while the sheet is open and returns when it closes; the page’s end scrolls clear of it', async ({
+    page,
+  }) => {
+    await open(page, HOME, 390);
+    // Home has no hero CTA yet, so the bar shows from the start.
+    await expect.poll(() => shown(page)).toBe(true);
+    await page.getByRole('button', { name: shellContent.menuOpen }).click();
+    await expect.poll(() => shown(page)).toBe(false);
+    await page.keyboard.press('Escape');
+    await expect.poll(() => shown(page)).toBe(true);
+    await page.evaluate(() => scrollTo(0, document.documentElement.scrollHeight));
+    await expect.poll(() => shown(page)).toBe(true);
+    const legal = page.locator('footer').getByText(`${shellContent.copyright} ${siteConfig.legalName}`);
+    const legalBottom = await legal.evaluate((el) => el.getBoundingClientRect().bottom);
+    const barTop = await bar(page).evaluate((el) => el.getBoundingClientRect().top);
+    expect(legalBottom).toBeLessThanOrEqual(barTop);
+  });
+
+  test('desktop never shows it', async ({ page }) => {
+    await open(page, HOME, 1280);
+    await expect(bar(page)).toBeHidden();
   });
 });
 
@@ -530,6 +723,13 @@ test.describe('No serious or critical axe violations (every state)', () => {
     await open(page, REVIEW, 1280);
     await store(page, { 'dz-theme': 'light' });
     await page.getByRole('button', { name: navigation.servicesLabel }).click();
+    await settled(page);
+    expect(await seriousAxeViolations(page)).toEqual([]);
+  });
+
+  test('Home at 390 px scrolled to the footer, with the sticky bar up', async ({ page }) => {
+    await open(page, HOME, 390);
+    await page.evaluate(() => scrollTo(0, document.documentElement.scrollHeight));
     await settled(page);
     expect(await seriousAxeViolations(page)).toEqual([]);
   });

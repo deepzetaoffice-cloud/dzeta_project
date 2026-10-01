@@ -1,18 +1,25 @@
-// The gradient on one CTA at a time (conflict C42; P2 plan, G and H3). The header CTA takes it on
-// desktop while no in-page primary CTA is on screen (the review page's hero now; P5's heroes and part
-// C's finale later); on mobile it stays outline (effects.css), because the sticky bar carries it (part
-// C). Until every in-page CTA has been seen once, nothing changes, so a hero CTA on screen at load
-// never shares the view with a charged header for a frame. Without JavaScript the header stays outline.
+// The gradient on one CTA at a time (conflict C42; P2 plan, G, H3 and M). While an in-page primary CTA
+// is on screen (a hero's, P5; the footer finale's; the sheet's while it's open), it alone carries the
+// gradient. Otherwise the header CTA takes it on desktop, and the sticky bar shows on mobile; the
+// header CTA stays outline there (effects.css). Until every in-page CTA has been seen once, nothing
+// changes, so a hero CTA on screen at load never shares the view with a charged header or the bar for
+// a frame. Without JavaScript the header stays outline and the bar never shows.
 import { watch } from './observer';
 
 // Returns the function that stops watching, for the next client navigation.
 export function startCta(): () => void {
   const header = document.querySelector<HTMLElement>('[data-cta="header"]');
-  if (!header) return () => {};
-  const primaries = [...document.querySelectorAll('[data-cta="primary"]')];
+  const sticky = document.querySelector<HTMLElement>('[data-fx-sticky]');
+  if (!header && !sticky) return () => {};
+  // The bar's own CTA is never an in-page one, or it would hide itself as it showed.
+  const primaries = [...document.querySelectorAll('[data-cta="primary"]')].filter((cta) => !sticky?.contains(cta));
   const unseen = new Set(primaries);
   const onScreen = new Set<Element>();
-  const update = () => header.toggleAttribute('data-charged', onScreen.size === 0);
+  const update = () => {
+    const none = onScreen.size === 0;
+    header?.toggleAttribute('data-charged', none);
+    sticky?.toggleAttribute('data-shown', none);
+  };
   const stops = primaries.map((cta) =>
     watch(cta, (visible) => {
       unseen.delete(cta);

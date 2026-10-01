@@ -144,6 +144,32 @@ Progress:
   - **Contrast:** the white letter is 3.78–21:1 on its tile (Instagram's pink centre is the lowest), and Snapchat's black letter is 19.18:1. The black tiles are 1.03:1 against the footer's navy, so the signal edge, at 3.6:1 or more on navy, draws their boundary.
   - **Hover, as mocked up** (the verdict comes on the review page at step 14): the tile lifts 2 px, glows in its own colour (0 → 0.6), a sheen crosses once and the letter pops; TikTok's T splits into its cyan and red. `touch-press` on touch. Under Reduce effects, the colours stay and nothing moves. It's recorded under `hover-glow` (an icon-only control; the tile's glow stands in for the pixel's), and 13 §4.3 gets that line at step 16.
   - **Recorded now** (the owner: "Yes, record it"): C49 in the conflict register and facts §2.1's rule line. footer.md and 13 §4.3 change at step 16. The part C table changes below.
+- 2026-10-01 · **Step 14 (the footer and the conversion path) is built.** The owner's "go" on the second mockup.
+  - **`SiteFooter`** (navy, `data-theme="dark"`):
+    - **The finale:** The Landing (`ClusterLayers` at `--dz-landing-size`; the pixels fly in on 35° once `.is-in` arrives, at rest the assembled cluster), the `<h2>` at the display size (C41) and the primary CTA.
+    - **The link columns:** the four pillars (every item, including the three the owner took out of the mega menu, then "All … services"), then Company, Resources and Legal. Only live links render; production shows none yet, so the footer's nav isn't rendered there. Each row is 44 px tall.
+    - **The company block:** an `<address>` from `siteConfig`; the phone appears once it's confirmed.
+    - **The nine letter tiles** (C49), then `DisplayControls` and the legal line, "© 2026 Deepzeta Digital Solutions L.L.C.".
+    - The footer's nav is named "Footer", a new accessible name beside the header's "Main". The language switch isn't mounted (P11, as in the header).
+  - **`JourneyLine`:** the signal-gradient line and the progress pixel on the inline-start edge, on the root scroll timeline. It's drawn only with scroll-driven support and effects on.
+  - **`StickyCta`:** `glass-frost` (no second live blur on a phone), below 1024 px. `cta.ts` shows it while no in-page primary CTA is on screen (C42; the bar's own CTA is left out of the count), it slides with a transform, and it hides while a modal is open. Without JavaScript it never shows. `viewportFit: 'cover'` with safe-area padding on the bar, the body (landscape) and the sheet; the footer's end and `scroll-padding-block-end` keep the last line clear of the bar. Checked on an iPhone through the owner checklist.
+  - **`siteConfig`** gains the address, the nine profiles (with a `key` for each tile) and `phone` and `whatsapp` as `null`. `site-config.test.ts` checks each against the facts file. The address writes its hash as `#`, because `check:tokens` reads "#202" as a raw colour; the string is byte-identical (the test).
+  - **The tiles' colours are tokens**, and `check:contrast` gates each letter on its tile (lowest 3.49:1, Instagram's centre) and the edge on navy (3.98:1).
+  - **The copy** (`shell.ts`, `navigation.ts`) is by the Content Writer, from N.
+  - **Found while testing, fixed:**
+    - **CLS:** on the placeholder Home at 1280 px, the footer now started in the first screen. When Montserrat swapped in, the H1 gained a line (the known step 2 residual) and moved the footer's whole box down 54 px: CLS 0.0209 in `fonts.spec.ts`, against 0.01. A transparent footer made no difference, because Chromium counts a box's area whether it paints or not. **`<main>` now fills at least the first screen below the header**, so the footer starts below the fold on short pages. That also keeps the finale's headline from competing with the H1 for LCP.
+    - **Two test helpers:** `shell.spec.ts`'s hit test scrolled controls to the window's edge, where half its cross fell outside; it now centres them. The waiting helper leaves out the scroll-timeline animations, which finish only at the page's end.
+    - **`icons.spec.ts`:** two colour samples now scroll the injected gallery into view, because the footer puts it below the fold (added to the table).
+  - **Gates** (CI environment):
+    - `verify:fast`, `format:check`, `check:facts`, `check:contrast` (65 checks): passed
+    - `test`: 276 passed (5 new)
+    - `build`: passed
+    - `test:e2e`: 135 passed (14 new; on mobile the hand-off now expects exactly one gradient CTA, and the no-JavaScript test covers the footer)
+    - `check:schema`, `check:seo`, `check:links`: passed
+  - **lhci** (local, 5 runs each): passed.
+    - **Home:** median LCP 2,329 ms (runs 2,328–2,412), FCP 754 ms, Performance 98, CLS 0, TBT 12 ms. Bytes: scripts 147,674 B (+38), CSS 12,329 B, HTML 11,792 B. The H1 is still the LCP element.
+    - **The review page:** median LCP 2,481 ms (C48 allows 2,600), Performance 97–98, HTML 30,300 B.
+    - **Page weight:** Home 171,795 B; the review page **190,303 B of 190,868, 565 B left**. Step 15 records this, and the next byte added to the full shell needs room made first.
 Phase: P2
 Branch: three parts, one merge each (Q5): `feat/p2a-shell-foundations`, `feat/p2b-header`, `feat/p2c-footer` (each from `main` after the previous merge)
 Page tier: T1. The shell renders on every page. It's measured on Home (`lhci` ≥ 95) and, from part B, on the review page (A3), which shows the complete shell.
@@ -642,6 +668,7 @@ A file listed in an earlier part may be modified again in a later part only wher
 | `tests/unit/site-config.test.ts` | CREATE | (O) |
 | `tests/e2e/shell.spec.ts` | MODIFY | The footer, the sticky bar, the full hand-off |
 | `tests/e2e/preferences.spec.ts` | MODIFY | The footer's switches |
+| `tests/e2e/icons.spec.ts` | MODIFY | Two colour samples scroll the injected gallery into view; the footer puts it below the fold (step 14) |
 | `docs/ai/05-design-system.md` | MODIFY (protected) | End-of-phase edits (P) |
 | `docs/ai/06-code-standards.md` | MODIFY (protected) | The C40 exception (P) |
 | `docs/ai/03-verification-gates.md` | MODIFY (protected) | (P) |

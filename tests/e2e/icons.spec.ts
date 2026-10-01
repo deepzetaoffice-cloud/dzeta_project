@@ -162,6 +162,8 @@ test.describe('Icons', () => {
     const pixel = svg.locator('.dz-px');
     await expect(pixel).toHaveCSS('fill', 'url("#dz-px-ai")');
     // The pixel's centre shows a colour from --dz-pixel-ai (cyan-blue), so the hidden definitions paint.
+    // The gallery comes after the footer, so it's scrolled into view to be painted.
+    await pixel.scrollIntoViewIfNeeded();
     const box = await pixel.boundingBox();
     if (!box) throw new Error('pixel not rendered');
     // At 24 px the pixel is 2.6 px wide, so its centre is partly blended with the navy page (1, 4, 19).
@@ -179,6 +181,7 @@ test.describe('Icons', () => {
     await expect(svg.locator('use')).toHaveAttribute('href', '#dz-1-menu');
     const hostColour = await page.locator('[data-host="menu"]').evaluate((el) => getComputedStyle(el).color);
     await expect(svg).toHaveCSS('color', hostColour);
+    await svg.scrollIntoViewIfNeeded();
     const box = await svg.boundingBox();
     if (!box) throw new Error('icon not rendered');
     // The middle bar of the menu icon runs through the centre (y = 12 of 24).

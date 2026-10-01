@@ -22,12 +22,14 @@ export type MenuColumn = {
   allLabel: string;
   items: readonly MenuItem[];
 };
+export type FooterGroup = { title: string; links: readonly NavLink[] };
 export type Navigation = {
   servicesLabel: string;
   primary: readonly NavLink[];
   columns: readonly MenuColumn[];
   solutions: { label: string; route: RouteId; items: readonly { route: RouteId; name: string }[] };
   rail: readonly NavLink[];
+  footer: readonly FooterGroup[];
 };
 
 export const navigation = {
@@ -203,5 +205,32 @@ export const navigation = {
     { route: 'R003', label: 'About' },
     { route: 'R005', label: 'Contact' },
     { route: 'R120', label: 'Resources' },
+  ],
+  // The footer's columns after the four pillars (footer.md; plan N), from the registry rows: each link
+  // renders only while its page is live
+  footer: [
+    {
+      title: 'Company',
+      links: [
+        { route: 'R003', label: 'About' },
+        { route: 'R005', label: 'Contact' },
+        { route: 'R110', label: 'Deepzeta Sync' },
+        { route: 'R008', label: 'Editorial policy' },
+      ],
+    },
+    {
+      title: 'Resources',
+      links: [
+        { route: 'R120', label: 'Resources' },
+        { route: 'R121', label: 'Glossary' },
+      ],
+    },
+    {
+      title: 'Legal',
+      links: [
+        { route: 'R006', label: 'Privacy' },
+        { route: 'R007', label: 'Terms' },
+      ],
+    },
   ],
 } as const satisfies Navigation;
