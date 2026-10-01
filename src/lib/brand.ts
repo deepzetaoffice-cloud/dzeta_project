@@ -26,6 +26,18 @@ export const LOGO_CROPS = {
   mark: [372, 262, 552, 432],
   // "Deepzeta"
   wordmark: [214, 740, 832, 164],
+  // "eepzeta": the wordmark after its D, for the header's inline lockup (owner, 2026-10-01). It starts
+  // halfway between the D (which ends at x 336) and the first e (which starts at 344).
+  tail: [340, 740, 706, 164],
   // The whole canvas, as designed, with its own margins
   full: [0, 0, LOGO_CANVAS, LOGO_CANVAS],
+} as const;
+
+// Shapes the inline lockup is fitted to (x1, y1, x2, y2 in the logo's units), measured with getBBox in
+// Chromium on 2026-10-01: the wordmark's D (its cap height and its baseline, 863), the gap after it
+// (8, to the first e at 344), and the ribbon, the mark's D shape.
+export const LOGO_SHAPES = {
+  wordmarkD: [222, 747, 336, 863],
+  letterGap: 8,
+  ribbon: [380.2, 322.6, 852.5, 685.7],
 } as const;

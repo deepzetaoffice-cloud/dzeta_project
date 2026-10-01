@@ -1,8 +1,12 @@
 import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
+import { createElement } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { GET } from '@/app/brand/deepzeta-logo.svg/route';
-import { LOCKED_LOGO_PATH, LOGO_URL, LOGO_VERSION, LOGO_VERSIONED_URL } from '@/lib/brand';
+import { Logo } from '@/components/ui/Logo';
+import { LOCKED_LOGO_PATH, LOGO_CROPS, LOGO_SHAPES, LOGO_URL, LOGO_VERSION, LOGO_VERSIONED_URL } from '@/lib/brand';
+import { siteConfig } from '@/lib/site-config';
 
 // P1 plan, section E. The locked logo is recorded by the SHA-256 of its committed (LF) bytes: 23,026 B,
 // git blob 589432ea. Line endings are normalised first, because a Windows working copy can be CRLF
@@ -76,5 +80,53 @@ describe('the app icons', () => {
       return width;
     });
     expect(sizes).toEqual([16, 32, 48]);
+  });
+});
+
+// The header's inline lockup (the owner, 2026-10-01): the mark stands in for the wordmark's D.
+describe('the inline lockup', () => {
+  const html = renderToStaticMarkup(
+    createElement(Logo, { variant: 'inline', label: siteConfig.brandName, className: 'h-8' }),
+  );
+  // The two crops: the nested <svg>s, which are the ones placed with x
+  const nested = [...html.matchAll(/<svg (x="[^>]*)>/g)].map(([, attributes = '']) => {
+    const value = (name: string) => new RegExp(`(?:^| )${name}="([^"]*)"`).exec(attributes)?.[1] ?? '';
+    return {
+      x: Number(value('x')),
+      y: Number(value('y')),
+      width: Number(value('width')),
+      height: Number(value('height')),
+      viewBox: value('viewBox').split(' ').map(Number),
+    };
+  });
+  const [mark, tail] = nested;
+
+  it('is two crops of the locked file: the mark, and the wordmark without its D', () => {
+    expect(nested.map((crop) => crop.viewBox)).toEqual([[...LOGO_CROPS.mark], [...LOGO_CROPS.tail]]);
+    expect(html.match(/<image /g)).toHaveLength(2);
+    expect(html.split(`href="${LOGO_VERSIONED_URL}"`)).toHaveLength(3);
+    const [dLeft, , dRight] = LOGO_SHAPES.wordmarkD;
+    // The tail starts after the D and before the first e.
+    expect(LOGO_CROPS.tail[0]).toBeGreaterThan(dRight);
+    expect(LOGO_CROPS.tail[0]).toBeLessThan(dRight + LOGO_SHAPES.letterGap);
+    expect(dLeft).toBeLessThan(dRight);
+  });
+
+  it('sets the ribbon on the baseline where the D began, a tenth taller than the cap, at the D spacing', () => {
+    const [cropX, cropY, , cropHeight] = LOGO_CROPS.mark;
+    const scale = mark!.height / cropHeight;
+    const toX = (x: number) => mark!.x + (x - cropX) * scale;
+    const toY = (y: number) => mark!.y + (y - cropY) * scale;
+    const [ribbonLeft, ribbonTop, ribbonRight, ribbonBottom] = LOGO_SHAPES.ribbon;
+    const [dLeft, capTop, dRight, baseline] = LOGO_SHAPES.wordmarkD;
+    // The tail is drawn at the wordmark's own scale, so the outer units are the wordmark's.
+    expect(tail!.width).toBe(LOGO_CROPS.tail[2]);
+    expect(tail!.y).toBe(LOGO_CROPS.tail[1]);
+    expect(toY(ribbonBottom)).toBeCloseTo(baseline, 1);
+    expect(toX(ribbonLeft)).toBeCloseTo(dLeft, 1);
+    expect(toY(ribbonBottom) - toY(ribbonTop)).toBeCloseTo((baseline - capTop) * 1.1, 1);
+    // The first e (344 in the logo) follows the ribbon by the D's own gap.
+    const firstE = tail!.x + (dRight + LOGO_SHAPES.letterGap - LOGO_CROPS.tail[0]);
+    expect(firstE - toX(ribbonRight)).toBeCloseTo(LOGO_SHAPES.letterGap, 1);
   });
 });

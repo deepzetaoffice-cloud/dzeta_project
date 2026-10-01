@@ -18,6 +18,16 @@ test.describe('Home', () => {
     await expect(page.locator('h1')).toHaveCount(1);
   });
 
+  // The shell renders the page's one <main>, the skip link's target (P2 plan, B2), on Home and the 404.
+  for (const path of ['/', '/this-page-does-not-exist']) {
+    test(`${path} has exactly one <main>, from the shell, the skip link's target`, async ({ page }) => {
+      await page.goto(path);
+      await expect(page.locator('main')).toHaveCount(1);
+      await expect(page.locator('main')).toHaveAttribute('id', 'main');
+      await expect(page.locator('a[href="#main"]')).toHaveCount(1);
+    });
+  }
+
   test('works with JavaScript off: the H1 and the copy are in the server HTML', async ({ browser }) => {
     const context = await browser.newContext({ javaScriptEnabled: false });
     const page = await context.newPage();

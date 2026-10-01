@@ -15,7 +15,9 @@ const IMMUTABLE = 'public, max-age=31536000, immutable';
 const pngSize = (bytes: Buffer) => `${bytes.readUInt32BE(16)}x${bytes.readUInt32BE(20)}`;
 
 test.describe('The logo on Home', () => {
-  test('shows the locked logo, named "Deepzeta AI", in a navy header', async ({ page }) => {
+  test('shows the locked logo, named "Deepzeta AI", in the shell header navy pill, as a link home', async ({
+    page,
+  }) => {
     const logoResponse = page.waitForResponse((response) => new URL(response.url()).pathname === LOGO_URL);
     await page.goto('/');
     const response = await logoResponse;
@@ -27,9 +29,11 @@ test.describe('The logo on Home', () => {
 
     const logo = page.getByRole('img', { name: siteConfig.brandName });
     await expect(logo).toBeVisible();
-    await expect(
-      page.locator('header[data-theme="dark"]').getByRole('img', { name: siteConfig.brandName }),
-    ).toHaveCount(1);
+    // The pill carries the theme, so the header around it stays transparent (P2 plan, H1). At this
+    // width the lockup shows; the mark alone is for small screens and hidden here.
+    const pill = page.locator('header [data-theme="dark"]');
+    await expect(pill.getByRole('img', { name: siteConfig.brandName })).toHaveCount(1);
+    await expect(pill.getByRole('link', { name: siteConfig.brandName })).toHaveAttribute('href', '/');
     // Both crops show the same file; nothing is redrawn.
     await expect(logo.locator('image')).toHaveCount(2);
     for (const image of await logo.locator('image').all())
@@ -48,13 +52,23 @@ test.describe('The logo on Home', () => {
     expect(Buffer.from(await response.body()).equals(readFileSync(LOCKED_LOGO_PATH))).toBe(true);
   });
 
+  // The header shows the inline lockup (the owner, 2026-10-01): one SVG holding two crops, the mark and
+  // "eepzeta".
   test('never mirrors in Arabic: the mark stays left of the wordmark (11 §1)', async ({ page }) => {
     await page.goto('/');
     await page.evaluate(() => document.documentElement.setAttribute('dir', 'rtl'));
+    // Each crop's left edge on screen, through the outer SVG's transform (a nested SVG's own box would
+    // count the whole logo image inside it, not the crop you see).
     const [mark, wordmark] = await page
       .getByRole('img', { name: siteConfig.brandName })
-      .locator('svg')
-      .evaluateAll((svgs) => svgs.map((svg) => svg.getBoundingClientRect().left));
+      .locator('svg svg')
+      .evaluateAll((svgs) =>
+        svgs.map((element) => {
+          const svg = element as SVGSVGElement;
+          const ctm = (svg.ownerSVGElement as SVGSVGElement).getScreenCTM() as DOMMatrix;
+          return ctm.a * svg.x.baseVal.value + ctm.e;
+        }),
+      );
     expect(mark).toBeLessThan(wordmark ?? 0);
   });
 

@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { Logo } from '@/components/ui/Logo';
 import { errorContent } from '@/content/en/error';
 import { locales } from '@/lib/i18n/locales';
@@ -42,9 +41,11 @@ export default function GlobalError({ retry }: GlobalErrorProps) {
             >
               {errorContent.retry}
             </button>
-            <Link className="inline-flex min-h-11 items-center text-link underline" href="/">
+            {/* A full reload home after an error, and one copy of next/link per page (conflict C46) */}
+            {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+            <a className="inline-flex min-h-11 items-center text-link underline" href="/">
               {errorContent.homeLink}
-            </Link>
+            </a>
           </div>
         </main>
       </body>

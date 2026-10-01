@@ -1,0 +1,806 @@
+/* Effects (docs/ai/13; P2 plan, C3 and F4), cited by their IDs (13 §4). Each effect rests in its
+   static final state; motion, live glass and pointer effects are added only inside the fx variant
+   (globals.css). Colours, sizes and timings come from tokens (05 §1). */
+
+@layer components {
+  /* The glass ladder (13 §4.1). Every glass surface rests as glass-frost: the minimum tint, which
+     keeps text at AA whatever passes behind it (check:contrast), a hairline edge, a top-edge highlight
+     and the baked grain. The grain downloads only when a frost surface shows. */
+  .dz-glass {
+    background-color: var(--dz-glass-tint-min);
+    background-image: var(--dz-grain);
+    border: var(--dz-glass-edge-width) solid var(--dz-glass-edge);
+    box-shadow: inset 0 var(--dz-glass-edge-width) 0 var(--dz-glass-highlight);
+  }
+
+  /* Panels with mist text: the mega menu and the sheet (P2 plan, F1) */
+  .dz-glass--muted {
+    background-color: var(--dz-glass-tint-muted);
+  }
+
+  /* glass-live: the header, the mega menu and the sheet only (05 §5 rule 6). The live blur replaces
+     the grain; Reduce effects and the low-end hints fall back to glass-frost. */
+  .dz-glass--live {
+    @variant fx {
+      background-image: none;
+      backdrop-filter: blur(var(--dz-glass-blur)) saturate(var(--dz-glass-saturate));
+    }
+  }
+
+  /* glass-tint as a solid surface (13 §6): more contrast gets an opaque one. */
+  @media (prefers-contrast: more) {
+    .dz-glass {
+      background-color: var(--dz-surface);
+      background-image: none;
+    }
+  }
+
+  /* Forced colours: a solid system surface. Chromium keeps an author colour's alpha when it forces a
+     background, so the colour is set here, opaque. */
+  @media (forced-colors: active) {
+    .dz-glass {
+      background-color: Canvas;
+      background-image: none;
+      border-color: CanvasText;
+    }
+  }
+
+  /* Header condense (P2 plan, H1): the pill's background layer shrinks; the content and the layout stay.
+     Instant under Reduce effects. */
+  .dz-header-bg {
+    @variant fx {
+      transition: scale var(--dz-dur-base) var(--dz-ease-out);
+    }
+  }
+
+  [data-fx-header][data-condensed] .dz-header-bg {
+    scale: 1 var(--dz-header-condense);
+  }
+
+  /* hover-pixel-hop (13 §4.3, §8): the logo's mini cluster marks the current page under the nav and
+     travels to the hovered or focused item; its small pixels settle a beat after the main one. header.ts
+     sets --dz-hop-x (physical px: the cluster never mirrors) and shows it with data-hop. */
+  .dz-hop {
+    position: absolute;
+    inset-block-end: calc(var(--dz-hop-size) / -2);
+    inset-inline-start: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  [data-fx-nav][data-hop] .dz-hop {
+    opacity: 1;
+  }
+
+  .dz-cluster-layers {
+    position: relative;
+    display: block;
+    block-size: var(--dz-hop-size);
+    aspect-ratio: 2.1053 / 2.6518;
+  }
+
+  .dz-cluster-layers svg {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    translate: var(--dz-hop-x, 0) 0;
+    @variant fx {
+      transition: translate var(--dz-dur-travel) var(--dz-ease-travel);
+    }
+  }
+
+  .dz-cluster-layers svg:nth-child(2) {
+    transition-delay: calc(var(--dz-dur-travel) * 0.13);
+  }
+
+  .dz-cluster-layers svg:nth-child(3) {
+    transition-delay: calc(var(--dz-dur-travel) * 0.24);
+  }
+
+  .dz-cluster-layers svg:nth-child(4) {
+    transition-delay: calc(var(--dz-dur-travel) * 0.36);
+  }
+
+  /* The CTA (P2 plan, H3; CtaButton). The action gradient is its own layer, with hover-charge's light
+     inside it: navy text on the gradient (05 §2, 4.54:1). */
+  .dz-cta-charge {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    overflow: hidden;
+    background-image: var(--dz-grad-action);
+  }
+
+  .dz-cta--primary {
+    color: var(--dz-navy);
+  }
+
+  .dz-cta-px {
+    inline-size: --spacing(2);
+    block-size: --spacing(2);
+    border-radius: 12.5%;
+    background-color: currentColor;
+    scale: 0.6;
+  }
+
+  /* The header CTA: an outline at rest, on the header's glass. cta.ts sets data-charged while no
+     in-page primary CTA is on screen; the gradient then fades in, on desktop only (C42). The edge stays:
+     the gradient layer covers it, so only colours and the layer's opacity change (13 §3 rule 1). */
+  .dz-cta--header {
+    color: var(--dz-white);
+    box-shadow: inset 0 0 0 var(--dz-cta-outline-width) var(--dz-cta-edge);
+    @variant fx {
+      transition: color var(--dz-dur-base) var(--dz-ease-out);
+    }
+  }
+
+  .dz-cta--header .dz-cta-charge {
+    opacity: 0;
+    @variant fx {
+      transition: opacity var(--dz-dur-base) var(--dz-ease-out);
+    }
+  }
+
+  .dz-cta--header[data-charged] {
+    @variant lg {
+      color: var(--dz-navy);
+    }
+  }
+
+  .dz-cta--header[data-charged] .dz-cta-charge {
+    @variant lg {
+      opacity: 1;
+    }
+  }
+
+  /* hover-outline (13 §4.3), while the header CTA isn't charged: a gradient outline fades in and the
+     label shifts toward the inline end. */
+  .dz-cta--header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: var(--dz-cta-outline-width);
+    background-image: var(--dz-grad-signal);
+    mask:
+      linear-gradient(var(--dz-navy) 0 0) content-box exclude,
+      linear-gradient(var(--dz-navy) 0 0);
+    opacity: 0;
+  }
+
+  /* The fx variant goes on the element, not the pseudo-element: after ::before, Tailwind 4.3.3 writes
+     an empty :where(), which browsers drop. */
+  .dz-cta--header {
+    @variant fx {
+      &::before {
+        transition: opacity var(--dz-dur-base) var(--dz-ease-out);
+      }
+    }
+  }
+
+  .dz-cta--header:is(:hover, :focus-visible)::before {
+    opacity: 1;
+  }
+
+  .dz-cta--header[data-charged]::before {
+    @variant lg {
+      opacity: 0;
+    }
+  }
+
+  .dz-cta-label {
+    @variant fx {
+      transition: translate var(--dz-dur-base) var(--dz-ease-out);
+    }
+  }
+
+  .dz-cta--header:is(:hover, :focus-visible) .dz-cta-label {
+    @variant fx {
+      translate: var(--dz-nudge) 0;
+    }
+  }
+
+  [dir='rtl'] .dz-cta--header:is(:hover, :focus-visible) .dz-cta-label {
+    @variant fx {
+      translate: calc(var(--dz-nudge) * -1) 0;
+    }
+  }
+
+  .dz-cta--header[data-charged]:is(:hover, :focus-visible) .dz-cta-label {
+    @variant lg {
+      translate: none;
+    }
+  }
+
+  /* hover-charge (13 §4.3), on the gradient: a light bead follows a fine pointer across the button
+     (pointer.ts writes --dz-fx-px), a rim light fades in, a sheen crosses once, the arrow nudges and
+     the pixel pops. On touch, the sheen plays on tap. */
+  .dz-cta-bead {
+    position: absolute;
+    inset-block: -40%;
+    inset-inline-start: 50%;
+    inline-size: var(--dz-cta-bead-size);
+    margin-inline-start: calc(var(--dz-cta-bead-size) / -2);
+    background-image: var(--dz-cta-bead);
+    opacity: 0;
+    translate: var(--dz-fx-px, 0) 0;
+  }
+
+  .dz-cta-rim {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: var(--dz-cta-rim);
+    opacity: 0;
+  }
+
+  .dz-cta-sheen {
+    position: absolute;
+    inset: 0;
+    background-image: var(--dz-cta-sheen);
+    translate: -120% 0;
+  }
+
+  .dz-cta:is(:hover, :focus-visible) .dz-cta-rim {
+    opacity: 1;
+  }
+
+  .dz-cta:is(:hover, :focus-visible, :active) .dz-cta-sheen {
+    @variant fx {
+      translate: 120% 0;
+      transition: translate var(--dz-dur-sheen) var(--dz-ease-out);
+    }
+  }
+
+  .dz-cta:hover .dz-cta-bead {
+    @variant fx {
+      @media (hover: hover) and (pointer: fine) {
+        opacity: 0.9;
+      }
+    }
+  }
+
+  .dz-cta-rim,
+  .dz-cta-bead {
+    @variant fx {
+      transition: opacity var(--dz-dur-base) var(--dz-ease-out);
+    }
+  }
+
+  .dz-cta-arrow,
+  .dz-cta-px {
+    @variant fx {
+      transition:
+        translate var(--dz-dur-base) var(--dz-ease-out),
+        scale var(--dz-dur-travel) var(--dz-ease-pop);
+    }
+  }
+
+  .dz-cta:is(:hover, :focus-visible) .dz-cta-px {
+    scale: 1.15;
+  }
+
+  .dz-cta:is(:hover, :focus-visible) .dz-cta-arrow {
+    @variant fx {
+      translate: var(--dz-nudge) 0;
+    }
+  }
+
+  /* The arrow mirrors in Arabic (it's a Tier 1 flip icon), so it nudges toward the inline end. */
+  [dir='rtl'] .dz-cta:is(:hover, :focus-visible) .dz-cta-arrow {
+    @variant fx {
+      translate: calc(var(--dz-nudge) * -1) 0;
+    }
+  }
+
+  /* pointer-magnet (13 §4.2): the CTA drifts up to --dz-magnet-max toward a fine pointer and snaps back
+     with --dz-ease-pop; pointer.ts writes --dz-fx-x and --dz-fx-y on the wrapper. Only on the gradient,
+     which the header CTA carries on desktop only (C42). */
+  .dz-cta--primary {
+    @variant fx {
+      @media (hover: hover) and (pointer: fine) {
+        translate: calc(var(--dz-fx-x, 0) * var(--dz-magnet-max)) calc(var(--dz-fx-y, 0) * var(--dz-magnet-max));
+        transition: translate var(--dz-dur-travel) var(--dz-ease-pop);
+      }
+    }
+  }
+
+  .dz-cta--header[data-charged] {
+    @variant lg {
+      @variant fx {
+        @media (hover: hover) and (pointer: fine) {
+          translate: calc(var(--dz-fx-x, 0) * var(--dz-magnet-max)) calc(var(--dz-fx-y, 0) * var(--dz-magnet-max));
+          transition: translate var(--dz-dur-travel) var(--dz-ease-pop);
+        }
+      }
+    }
+  }
+
+  /* touch-press (13 §4.7): a short press, on the CTAs and the sheet's menu and close buttons. How iOS
+     shows :active is a verify item: the owner checklist checks it on an iPhone. */
+  .dz-cta:active,
+  .dz-press:active {
+    @variant fx {
+      scale: var(--dz-press-scale);
+    }
+  }
+
+  /* More contrast: the gradients drop (13 §6). The CTA takes the solid signal fill, with navy text
+     (05 §2), and the hover outline is solid too. */
+  @media (prefers-contrast: more) {
+    .dz-cta-charge,
+    .dz-cta--header::before {
+      background-image: none;
+      background-color: var(--dz-signal);
+    }
+  }
+
+  /* Forced colours: the gradient and its light drop (13 §6); the CTA is a bordered system button. */
+  @media (forced-colors: active) {
+    .dz-cta-charge,
+    .dz-cta--header::before {
+      display: none;
+    }
+
+    .dz-cta {
+      border: var(--dz-cta-outline-width) solid ButtonText;
+    }
+  }
+
+  /* glass-liquid (13 §4.1): glass-live with a stronger saturation, a specular rim on the top edge and a
+     sheen that crosses once on hover, on a desktop fine pointer. No refraction (P2 plan, finding 9). Its
+     text sits on the same minimum tint as all glass (check:contrast). */
+  .dz-glass--liquid {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+  }
+
+  .dz-glass--liquid.dz-glass--live {
+    @variant fx {
+      backdrop-filter: blur(var(--dz-glass-blur)) saturate(var(--dz-glass-saturate-liquid));
+    }
+  }
+
+  .dz-glass--liquid::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: var(--dz-glass-edge-width);
+    background-image: var(--dz-liquid-rim);
+    mask:
+      linear-gradient(var(--dz-navy) 0 0) content-box exclude,
+      linear-gradient(var(--dz-navy) 0 0);
+    pointer-events: none;
+  }
+
+  .dz-liquid-sheen {
+    position: absolute;
+    inset-block: -60%;
+    inset-inline-start: 0;
+    z-index: -1;
+    inline-size: 60%;
+    background-image: var(--dz-liquid-sheen);
+    rotate: 8deg;
+    translate: -140% 0;
+    pointer-events: none;
+  }
+
+  .dz-glass--liquid:is(:hover, :focus-visible) .dz-liquid-sheen {
+    @variant fx {
+      @media (hover: hover) and (pointer: fine) {
+        translate: 260% 0;
+        transition: translate var(--dz-dur-liquid) var(--dz-ease-out);
+      }
+    }
+  }
+
+  /* hover-underline (13 §4.3): the underline draws from the inline start. */
+  .dz-underline {
+    position: relative;
+  }
+
+  .dz-underline::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: calc(var(--dz-underline-width) * -2);
+    block-size: var(--dz-underline-width);
+    background-color: currentColor;
+    scale: 0 1;
+    transform-origin: 0 50%;
+  }
+
+  [dir='rtl'] .dz-underline::after {
+    transform-origin: 100% 50%;
+  }
+
+  .dz-underline:is(:hover, :focus-visible)::after {
+    scale: 1 1;
+  }
+
+  .dz-underline {
+    @variant fx {
+      &::after {
+        transition: scale var(--dz-dur-base) var(--dz-ease-out);
+      }
+    }
+  }
+
+  /* A text link smaller than a touch target (05 §7) gets a hit area of at least --dz-target-min,
+     centred on it. A pseudo-element is hit-tested as its element, so the layout and the look stay as
+     they are: the mega menu's "All … services" links, its solutions and its rail links. */
+  .dz-target {
+    position: relative;
+  }
+
+  .dz-target::before {
+    content: '';
+    position: absolute;
+    inset-block: min(0rem, calc((100% - var(--dz-target-min)) / 2));
+    inset-inline: min(0rem, calc((100% - var(--dz-target-min)) / 2));
+  }
+
+  /* The mega menu (P2 plan, I2): a popover below the pill, placed from the header's own tokens (no
+     anchor positioning), as wide as the pill. It drops in and out through @starting-style; instant
+     under Reduce effects and where that isn't supported. */
+  .dz-mega {
+    position: fixed;
+    inset-block-start: calc(var(--dz-header-inset) + var(--dz-header-height) + var(--dz-mega-gap));
+    inset-inline: 0;
+    margin: 0 auto;
+    inline-size: calc(min(var(--dz-container), 100%) - 2 * var(--dz-gutter));
+    max-block-size: calc(100dvh - var(--dz-header-inset) - var(--dz-header-height) - 2 * var(--dz-mega-gap));
+    overflow-y: auto;
+    padding: --spacing(6);
+    border-radius: var(--dz-radius-xl);
+    color: var(--dz-text);
+    @variant fx {
+      transition:
+        opacity var(--dz-dur-base) var(--dz-ease-out),
+        translate var(--dz-dur-base) var(--dz-ease-out),
+        display var(--dz-dur-base) allow-discrete,
+        overlay var(--dz-dur-base) allow-discrete;
+    }
+  }
+
+  /* While it drops out it can't be clicked: the page under it already can. */
+  .dz-mega:not(:popover-open) {
+    @variant fx {
+      opacity: 0;
+      translate: 0 var(--dz-drop);
+      pointer-events: none;
+    }
+  }
+
+  .dz-mega:popover-open {
+    @variant fx {
+      @starting-style {
+        opacity: 0;
+        translate: 0 var(--dz-drop);
+      }
+    }
+  }
+
+  /* The chevron turns while the menu is open (a Tier 1 state change, ≤ 200 ms, Icon Master Rules §7.1). */
+  .dz-mega-button:has(+ .dz-mega:popover-open) .dz-mega-chevron {
+    rotate: 180deg;
+  }
+
+  .dz-mega-chevron {
+    @variant fx {
+      transition: rotate var(--dz-dur-fast) var(--dz-ease-out);
+    }
+  }
+
+  /* An item without its own Tier 2 icon yet: its pillar's pixel, in the icon's place */
+  .dz-mega-pixel {
+    display: grid;
+    flex: none;
+    place-items: center;
+    inline-size: --spacing(6);
+    block-size: --spacing(6);
+  }
+
+  .dz-mega-pixel::before {
+    content: '';
+    inline-size: --spacing(1.5);
+    block-size: --spacing(1.5);
+    border-radius: 12.5%;
+    background-color: var(--dz-pillar-colour);
+  }
+
+  /* A pillar's colour (C6) for whatever sits inside: the menu's guide lines and pixels, the sheet's bars */
+  .dz-pillar--ai {
+    --dz-pillar-colour: var(--dz-pixel-ai-solid);
+  }
+
+  .dz-pillar--web {
+    --dz-pillar-colour: var(--dz-pixel-web-solid);
+  }
+
+  .dz-pillar--software {
+    --dz-pillar-colour: var(--dz-pixel-software-solid);
+  }
+
+  .dz-pillar--ranking {
+    --dz-pillar-colour: var(--dz-pixel-ranking-solid);
+  }
+
+  /* The menu's service rows (the owner asked for the best hover on every menu item, 2026-10-01):
+     hover-guide-line (13 §4.3), a line in the pillar's colour that grows at the inline start, with the
+     row lit and its name at full strength; the row's Tier 2 icon plays its story (hover-glow), or its
+     pillar pixel pops. Keyboard focus shows the same (13 §2.10). Instant under Reduce effects. */
+  .dz-menu-row {
+    position: relative;
+  }
+
+  .dz-menu-row::before {
+    content: '';
+    position: absolute;
+    inset-block: --spacing(2.5);
+    inset-inline-start: 0;
+    inline-size: --spacing(0.75);
+    border-radius: var(--dz-radius-pill);
+    background-color: var(--dz-pillar-colour);
+    scale: 1 0;
+  }
+
+  .dz-menu-row:is(:hover, :focus-visible) {
+    background-color: var(--dz-menu-hover);
+  }
+
+  .dz-menu-row:is(:hover, :focus-visible)::before {
+    scale: 1 1;
+  }
+
+  .dz-menu-row:is(:hover, :focus-visible) .dz-mega-pixel::before {
+    scale: 1.6;
+  }
+
+  .dz-menu-row {
+    @variant fx {
+      transition: background-color var(--dz-dur-fast) var(--dz-ease-out);
+      &::before {
+        transition: scale var(--dz-dur-base) var(--dz-ease-out);
+      }
+    }
+  }
+
+  .dz-mega-pixel {
+    @variant fx {
+      &::before {
+        transition: scale var(--dz-dur-base) var(--dz-ease-pop);
+      }
+    }
+  }
+
+  /* "All … services": the underline draws and the arrow nudges toward the inline end. */
+  .dz-menu-arrow {
+    @variant fx {
+      transition: translate var(--dz-dur-base) var(--dz-ease-out);
+    }
+  }
+
+  .dz-menu-all:is(:hover, :focus-visible) .dz-menu-arrow {
+    @variant fx {
+      translate: var(--dz-nudge) 0;
+    }
+  }
+
+  [dir='rtl'] .dz-menu-all:is(:hover, :focus-visible) .dz-menu-arrow {
+    @variant fx {
+      translate: calc(var(--dz-nudge) * -1) 0;
+    }
+  }
+
+  /* The mobile sheet (P2 plan, J): a full-screen modal dialog, its panel glass; the panel drops in like
+     the mega menu. The panel fades, not the dialog: an ancestor below full opacity becomes the panel's
+     backdrop root, and the blur would show nothing until the fade ended (Filter Effects 2). */
+  .dz-sheet {
+    position: fixed;
+    inset: 0;
+    inline-size: 100%;
+    max-inline-size: 100%;
+    block-size: 100dvh;
+    max-block-size: 100dvh;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--dz-text);
+    overflow-y: auto;
+    @variant fx {
+      transition:
+        display var(--dz-dur-base) allow-discrete,
+        overlay var(--dz-dur-base) allow-discrete;
+    }
+  }
+
+  .dz-sheet::backdrop {
+    background: none;
+  }
+
+  .dz-sheet-panel {
+    border-radius: 0;
+    @variant fx {
+      transition:
+        opacity var(--dz-dur-base) var(--dz-ease-out),
+        translate var(--dz-dur-base) var(--dz-ease-out);
+    }
+  }
+
+  /* While it drops out it can't be clicked: the page under it already can. */
+  .dz-sheet:not([open]) {
+    @variant fx {
+      pointer-events: none;
+    }
+  }
+
+  .dz-sheet:not([open]) .dz-sheet-panel {
+    @variant fx {
+      opacity: 0;
+      translate: 0 var(--dz-drop);
+    }
+  }
+
+  .dz-sheet[open] .dz-sheet-panel {
+    @variant fx {
+      @starting-style {
+        opacity: 0;
+        translate: 0 var(--dz-drop);
+      }
+    }
+  }
+
+  /* Under the open sheet the pill's live blur can't be seen, so it stops: one full-screen blur at a
+     time on a phone. */
+  :root:has(dialog.dz-sheet:modal) .dz-header-bg {
+    backdrop-filter: none;
+  }
+
+  /* The menu icon turns into close: the close button sits where the menu button was (≤ 200 ms). */
+  .dz-sheet[open] .dz-sheet-close {
+    @variant fx {
+      animation: dz-turn-in var(--dz-dur-fast) var(--dz-ease-out) both;
+    }
+  }
+
+  /* type-word-stagger (13 §4.5): whole items rise one after another, once per opening. No word is
+     split, so each link's name stays one piece of text. */
+  .dz-sheet[open] .dz-stagger {
+    @variant fx {
+      animation: dz-rise var(--dz-dur-base) var(--dz-ease-out) both;
+    }
+  }
+
+  .dz-sheet-items li:nth-child(2) .dz-stagger {
+    animation-delay: var(--dz-stagger-step);
+  }
+
+  .dz-sheet-items li:nth-child(3) .dz-stagger {
+    animation-delay: calc(var(--dz-stagger-step) * 2);
+  }
+
+  .dz-sheet-items li:nth-child(4) .dz-stagger {
+    animation-delay: calc(var(--dz-stagger-step) * 3);
+  }
+
+  .dz-sheet-items li:nth-child(5) .dz-stagger {
+    animation-delay: calc(var(--dz-stagger-step) * 4);
+  }
+
+  .dz-sheet-items li:nth-child(n + 6) .dz-stagger {
+    animation-delay: calc(var(--dz-stagger-step) * 5);
+  }
+
+  /* The pillar bars: each pillar's colour at the inline start (C6) */
+  .dz-pillar-bar {
+    border-inline-start: --spacing(3) solid var(--dz-pillar-colour);
+  }
+
+  /* The display switches (P2 plan, C4). Off: a mist outline and thumb; on: the signal fill with a white
+     thumb (4.16:1, 05 §2). touch-snap: the thumb overshoots a little as it moves. The note shows while a
+     device setting decides Reduce effects. */
+  .dz-switch-track {
+    position: relative;
+    flex: none;
+    inline-size: --spacing(11);
+    block-size: --spacing(6);
+    border-radius: var(--dz-radius-pill);
+    box-shadow: inset 0 0 0 var(--dz-cta-outline-width) var(--dz-mist);
+  }
+
+  .dz-switch-thumb {
+    position: absolute;
+    inset-block-start: --spacing(1);
+    inset-inline-start: --spacing(1);
+    inline-size: --spacing(4);
+    block-size: --spacing(4);
+    border-radius: var(--dz-radius-pill);
+    background-color: var(--dz-mist);
+    @variant fx {
+      transition:
+        translate var(--dz-dur-base) var(--dz-ease-pop),
+        background-color var(--dz-dur-fast) var(--dz-ease-out);
+    }
+  }
+
+  .dz-switch[aria-checked='true'] .dz-switch-track {
+    background-color: var(--dz-signal);
+    box-shadow: none;
+  }
+
+  .dz-switch[aria-checked='true'] .dz-switch-thumb {
+    background-color: var(--dz-white);
+    translate: --spacing(5) 0;
+  }
+
+  [dir='rtl'] .dz-switch[aria-checked='true'] .dz-switch-thumb {
+    translate: calc(--spacing(5) * -1) 0;
+  }
+
+  .dz-switch[aria-disabled='true'] {
+    cursor: not-allowed;
+  }
+
+  .dz-switch-note {
+    display: none;
+  }
+
+  .dz-switch[aria-disabled='true'] + .dz-switch-note {
+    display: block;
+  }
+
+  @media (forced-colors: active) {
+    .dz-switch-track {
+      border: var(--dz-cta-outline-width) solid ButtonText;
+    }
+
+    .dz-switch-thumb {
+      background-color: ButtonText;
+    }
+
+    .dz-switch[aria-checked='true'] .dz-switch-thumb {
+      background-color: HighlightText;
+    }
+
+    .dz-switch[aria-checked='true'] .dz-switch-track {
+      background-color: Highlight;
+    }
+  }
+
+  /* glass-liquid's rim and sheen are gradients, so they drop with the others (13 §6). */
+  @media (forced-colors: active), (prefers-contrast: more) {
+    .dz-glass--liquid::before,
+    .dz-liquid-sheen {
+      display: none;
+    }
+  }
+}
+
+/* The switches work once the runtime has started (preferences.ts marks <html>). Before that, and
+   without JavaScript, the group isn't shown, so no control offers a change it can't make. Outside the
+   layers, so it wins over the group's own display utility (flex or grid). */
+:root:not([data-prefs='ready']) .dz-display {
+  display: none;
+}
+
+/* The close icon turns in as the sheet opens. */
+@keyframes dz-turn-in {
+  from {
+    opacity: 0;
+    rotate: -90deg;
+  }
+}
+
+/* A sheet item rises into place. */
+@keyframes dz-rise {
+  from {
+    opacity: 0;
+    translate: 0 var(--dz-stagger-rise);
+  }
+}

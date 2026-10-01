@@ -1,16 +1,23 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 import { createServer } from 'vite';
-import { TIER_1, TIER_2 } from '../../src/components/icons/registry';
+import { clusterBoxes } from '../../src/components/icons/Cluster';
+import { CLEARANCE as CUT } from '../../src/components/icons/IconDefs';
+import { TIER_1, TIER_2, TIER_3 } from '../../src/components/icons/registry';
 
-// The icons in a real browser (P1 plan, section E). No page shows an icon until P2, so the test renders
-// the shared definitions and every icon to markup and injects them into the built Home, where the
-// site's real CSS applies. No route is added, and visitors get none of it.
+// The icons in a real browser (P1 plan, section E; P2 plan, K7). The test renders every icon to markup
+// and injects it into the built Home, where the site's real CSS and the shared definitions (mounted by
+// SiteDocument) apply. The Tier 3 stories need the shared observer, which watches server-rendered
+// icons, so they're tested on the review page (/shell-review), which shows them.
 
 const tier1 = Object.keys(TIER_1) as (keyof typeof TIER_1)[];
 const tier2 = Object.keys(TIER_2) as (keyof typeof TIER_2)[];
+const tier3 = Object.keys(TIER_3) as (keyof typeof TIER_3)[];
 const CLEARANCE = 0.75; // §4.2 rule 4
 const HALF_STROKE = 0.75; // Tier 2 lines are 1.5 wide (§6)
+// The same clearance on the 48 grid, and Tier 3's stroke of 1.75 (§6)
+const TIER_3_CLEARANCE = 1.5;
+const TIER_3_HALF_STROKE = 0.875;
 
 // The markup comes from icon-gallery.tsx, loaded through Vite as Vitest loads components: Playwright
 // compiles JSX with its own component-testing runtime, which react-dom/server can't render.
@@ -47,10 +54,14 @@ async function injectIcons(page: Page, dir: 'ltr' | 'rtl' = 'ltr') {
 
 const icon = (page: Page, name: string) => page.locator(`[data-host="${name}"] svg`);
 
-// The smallest gap between the pixel and any line or dot, in grid units. Lines are traced along their
-// centre and widened by half the stroke; the open ends of a path get their square caps (§6).
-function measureClearance(svg: SVGSVGElement, halfStroke: number) {
-  const pixel = svg.querySelector<SVGRectElement>('.dz-px');
+// The smallest gap between a pixel (the Tier 2 pixel, or one of the four cluster pixels) and any line
+// or dot, in grid units. Lines are traced along their centre and widened by half the stroke; the open
+// ends of a path get their square caps (§6).
+function measureClearance(
+  svg: SVGSVGElement,
+  { halfStroke, selector = '.dz-px', index = 0 }: { halfStroke: number; selector?: string; index?: number },
+) {
+  const pixel = svg.querySelectorAll<SVGRectElement>(selector)[index];
   if (!pixel) throw new Error('no pixel');
   const box = pixel.getBBox();
   const gap = (x: number, y: number) =>
@@ -124,7 +135,7 @@ test.describe('Icons', () => {
     await injectIcons(page);
     const found: Record<string, string> = {};
     for (const name of tier2) {
-      const clearance = await icon(page, name).evaluate(measureClearance, HALF_STROKE);
+      const clearance = await icon(page, name).evaluate(measureClearance, { halfStroke: HALF_STROKE });
       const knockout = 'knockout' in TIER_2[name];
       found[name] = knockout ? 'knockout' : clearance.toFixed(2);
       if (knockout) {
@@ -217,6 +228,21 @@ test.describe('Icons', () => {
     await expect(host.locator('.dz-halo')).toHaveCSS('opacity', '0.45');
   });
 
+  test('the Reduce effects choice turns the stories off too, with a steady 0.45 glow (P2 plan, C3)', async ({
+    page,
+  }) => {
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    await page.goto('/');
+    await page.evaluate(() => localStorage.setItem('dz-effects', 'reduced'));
+    await injectIcons(page);
+    await expect(page.locator('html')).toHaveAttribute('data-effects', 'reduced');
+    const host = page.locator('[data-host="whatsapp-ai-agent"]');
+    await expect(host.locator('.dz-halo')).toHaveCSS('opacity', '0.45');
+    await host.hover();
+    await expect(host.locator('.dz-px')).toHaveCSS('animation-name', 'none');
+    await expect(host.locator('.dz-halo')).toHaveCSS('opacity', '0.45');
+  });
+
   test('forced colours drop the gradients: a solid pixel in the text colour, no glow, no story (13 §6)', async ({
     page,
   }) => {
@@ -224,8 +250,14 @@ test.describe('Icons', () => {
     await injectIcons(page);
     const host = page.locator('[data-host="whatsapp-ai-agent"]');
     await host.hover();
-    const textColour = await host.locator('svg').evaluate((svg) => getComputedStyle(svg).color);
-    await expect(host.locator('.dz-px')).toHaveCSS('fill', textColour);
+    // The line colour eases to its hover value, so the fill is compared with it at the same moment.
+    await expect
+      .poll(() =>
+        host
+          .locator('svg')
+          .evaluate((svg) => getComputedStyle(svg.querySelector('.dz-px')!).fill === getComputedStyle(svg).color),
+      )
+      .toBe(true);
     await expect(host.locator('.dz-halo')).toHaveCSS('opacity', '0');
     await expect(host.locator('.dz-px')).toHaveCSS('animation-name', 'none');
   });
@@ -267,18 +299,133 @@ test.describe('Icons', () => {
     await expect(page.locator('#icon-test [style]')).toHaveCount(0);
   });
 
-  test('directional icons mirror in Arabic; the rest never do (§9)', async ({ page }) => {
+  test('directional icons mirror in Arabic; the rest never do, and no Tier 3 icon ever does (§9)', async ({ page }) => {
     await injectIcons(page, 'rtl');
     for (const name of [...tier1, ...tier2]) {
       const flip = name in TIER_1 ? TIER_1[name as keyof typeof TIER_1].flip : TIER_2[name as keyof typeof TIER_2].flip;
       await expect(icon(page, name)).toHaveCSS('transform', flip ? 'matrix(-1, 0, 0, 1, 0, 0)' : 'none');
     }
+    // The owner, 2026-10-01: no signature icon mirrors in Arabic.
+    for (const name of tier3) await expect(icon(page, name)).toHaveCSS('transform', 'none');
+  });
+
+  test('every Tier 3 cluster pixel keeps 1.5 from every line, or its knockout cuts them (§4.2 rule 4)', async ({
+    page,
+  }) => {
+    await injectIcons(page);
+    const found: Record<string, string[]> = {};
+    for (const name of tier3) {
+      const { cluster } = TIER_3[name];
+      const knockout = 'knockout' in TIER_3[name];
+      const boxes = clusterBoxes(cluster.x, cluster.y, cluster.size);
+      found[name] = [];
+      for (const [index, box] of boxes.entries()) {
+        const clearance = await icon(page, name).evaluate(measureClearance, {
+          halfStroke: TIER_3_HALF_STROKE,
+          selector: '.dz-cluster-px',
+          index,
+        });
+        found[name].push(`${box.part} ${clearance.toFixed(2)}`);
+        if (!knockout) {
+          expect
+            .soft(clearance, `${name}: the ${box.part} pixel is ${clearance.toFixed(2)} from a line`)
+            .toBeGreaterThanOrEqual(TIER_3_CLEARANCE);
+        } else if (clearance < TIER_3_CLEARANCE) {
+          // The knockout's cut-out for this pixel is in the page's shared definitions.
+          const cutOut = page.locator(`#dz-ko-${name} rect[fill="black"]`).nth(index);
+          await expect(cutOut).toHaveAttribute('x', String(box.x - CUT.tier3));
+          await expect(cutOut).toHaveAttribute('width', String(box.size + 2 * CUT.tier3));
+        }
+      }
+      // Both the lines and the parts are cut (Icon.tsx)
+      if (knockout) await expect(icon(page, name).locator(`g[mask="url(#dz-ko-${name})"]`)).toHaveCount(2);
+    }
+    console.log('Cluster clearance before the knockout (grid units):', JSON.stringify(found));
+  });
+
+  test('forced colours drop the Tier 3 layers: a solid cluster in the text colour, no depth, glass or sweep (13 §6)', async ({
+    page,
+  }) => {
+    await page.emulateMedia({ forcedColors: 'active' });
+    await injectIcons(page);
+    const svg = icon(page, 'ai-front-desk');
+    const textColour = await svg.evaluate((el) => getComputedStyle(el).color);
+    for (const pixel of await svg.locator('.dz-cluster-px').all()) await expect(pixel).toHaveCSS('fill', textColour);
+    await expect(svg.locator('.dz-t3-depth')).toHaveCSS('visibility', 'hidden');
+    await expect(svg.locator('.dz-t3-sweep')).toHaveCSS('visibility', 'hidden');
+    await expect(svg.locator('.dz-t3-glass')).toHaveCSS('fill', 'none');
   });
 
   test('no serious or critical axe violations with every icon on the page', async ({ page }) => {
     await injectIcons(page);
     const results = await new AxeBuilder({ page })
       .include('#icon-test')
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice'])
+      .analyze();
+    const serious = results.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical');
+    expect(serious.map((v) => `${v.id}: ${v.help}`)).toEqual([]);
+  });
+});
+
+// Tier 3 stories (P2 plan, K3) on the review page, where the icons are server-rendered and the shared
+// observer watches them. The icon section sits below the fold of the default viewport.
+test.describe('Tier 3 stories', () => {
+  const host = (page: Page) => page.locator('#icon-websites a');
+  const firstIcon = (page: Page) => host(page).locator('svg').first();
+  // The story's CSS animations only: the hover colour change is a transition, which isn't a story.
+  const animations = (page: Page) =>
+    firstIcon(page).evaluate((svg) =>
+      svg
+        .getAnimations({ subtree: true })
+        .filter((a): a is CSSAnimation => a instanceof CSSAnimation)
+        .map((a) => ({ name: a.animationName, state: a.playState })),
+    );
+
+  test('play once when the icon scrolls into view, end on the rest frame, and replay on hover', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    await page.goto('/shell-review');
+    await expect(firstIcon(page)).not.toHaveClass(/is-in/);
+    expect(await animations(page)).toEqual([]);
+
+    await host(page).scrollIntoViewIfNeeded();
+    await expect(firstIcon(page)).toHaveClass(/is-in/);
+    const names = (await animations(page)).map((a) => a.name);
+    for (const part of ['dz-t3-settle', 'dz-t3-fade', 'dz-t3-pop', 'dz-t3-assemble', 'dz-t3-glow', 'dz-t3-sweep']) {
+      expect(names).toContain(part);
+    }
+    // No loop: every part finishes, on the rest frame
+    await firstIcon(page).evaluate((svg) => Promise.all(svg.getAnimations({ subtree: true }).map((a) => a.finished)));
+    expect((await animations(page)).every((a) => a.state === 'finished')).toBe(true);
+    await expect(firstIcon(page).locator('.dz-t3-depth')).toHaveCSS('opacity', '0.5');
+    await expect(firstIcon(page).locator('.dz-t3-sweep')).toHaveCSS('opacity', '0');
+    await expect(firstIcon(page).locator('.dz-halo')).toHaveCSS('opacity', '0');
+
+    // Hover adds the replay twins over the finished story; leaving drops them and replays nothing.
+    await host(page).hover();
+    expect((await animations(page)).filter((a) => a.state === 'running').map((a) => a.name)).toContain(
+      'dz-t3-assemble-again',
+    );
+    await page.mouse.move(0, 0);
+    await expect.poll(async () => (await animations(page)).filter((a) => a.state === 'running')).toEqual([]);
+  });
+
+  test('stay still under Reduce effects: no story, the glow steady at 0.45 (13 §2.11)', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    await page.goto('/shell-review');
+    await page.evaluate(() => localStorage.setItem('dz-effects', 'reduced'));
+    await page.reload();
+    await host(page).scrollIntoViewIfNeeded();
+    await expect(firstIcon(page)).toHaveClass(/is-in/);
+    await host(page).hover();
+    expect(await animations(page)).toEqual([]);
+    await expect(firstIcon(page).locator('.dz-halo')).toHaveCSS('opacity', '0.45');
+    await expect(firstIcon(page).locator('.dz-t3-depth')).toHaveCSS('opacity', '0.5');
+  });
+
+  test('the review page icon section has no serious or critical axe violations', async ({ page }) => {
+    await page.goto('/shell-review');
+    const results = await new AxeBuilder({ page })
+      .include('section[aria-labelledby="review-icons"]')
       .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice'])
       .analyze();
     const serious = results.violations.filter((v) => v.impact === 'serious' || v.impact === 'critical');

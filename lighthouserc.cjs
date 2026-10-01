@@ -30,7 +30,10 @@ const FRAMEWORK_JS_GROWTH = 5 * KB;
 // P2 part A: 4,142 B, lhci's script size on Home (143,810 B in all 5 runs, 2026-10-01) minus the
 // baseline. The root error page ships with every page: global-error.tsx itself (about 0.8 KB) and
 // next/link, which it imports (about 3.3 KB; counted here, not as framework growth, because we chose it).
-const OWN_JS_HOME = 4142;
+// P2 part B: 7,968 B (147,636 B in all 5 runs on Home and on the review page, 2026-10-01): the error
+// page, next/link (shipped once since C46, for the header's links) and the effect runtime (FxRuntime
+// and src/lib/fx/).
+const OWN_JS_HOME = 7968;
 if (OWN_JS_HOME > 10 * KB) throw new Error('OWN_JS_HOME is above the 10 KB Home cap (07 §2, 13 §7).');
 // HTML + CSS + JS before the first interaction ≤ the framework baseline + 50 KB (07 §2).
 const FIRST_LOAD_LIMIT = FRAMEWORK_JS_BASELINE + 50 * KB;
@@ -64,15 +67,29 @@ const t1Assertions = {
   // resource types together, so scripts/check-page-weight.mjs checks it after every lhci run.
 };
 
+// The review page shows the complete shell (P2 plan, A3; registry R165) and is measured as T1 too, with
+// two differences. It's noindex by design (never linked, 404 in production), so Lighthouse's SEO
+// category, which fails a page that blocks indexing, doesn't apply. And it carries the full mega menu,
+// the sheet and the icon gallery in its HTML, so its lab LCP may reach 2,600 ms (C48, decision 0020);
+// Home keeps the 2.5 s hard limit.
+const reviewAssertions = {
+  ...t1Assertions,
+  'categories:seo': 'off',
+  'largest-contentful-paint': ['error', { maxNumericValue: 2600, ...medianRun }],
+};
+
 module.exports = {
   ci: {
     collect: {
       startServerCommand: 'npm run start',
-      url: ['http://localhost:3000/'],
+      url: ['http://localhost:3000/', 'http://localhost:3000/shell-review'],
       numberOfRuns: 5,
     },
     assert: {
-      assertions: t1Assertions,
+      assertMatrix: [
+        { matchingUrlPattern: '^http://localhost:3000/$', assertions: t1Assertions },
+        { matchingUrlPattern: '^http://localhost:3000/shell-review$', assertions: reviewAssertions },
+      ],
     },
     upload: {
       target: 'filesystem',

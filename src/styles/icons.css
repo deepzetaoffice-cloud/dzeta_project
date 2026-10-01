@@ -10,8 +10,9 @@
   }
 
   /* Tier 1 is currentColor only (§2): it takes its parent's colour, like the text beside it. Tier 2
-     lines sit on the semantic text colours, so they work in both themes (conflict C37). */
-  .dz-icon--t2 {
+     and 3 lines sit on the semantic text colours, so they work in both themes (conflict C37). */
+  .dz-icon--t2,
+  .dz-icon--t3 {
     color: var(--dz-text);
     transition: color var(--dz-dur-fast) var(--dz-ease-out);
   }
@@ -70,6 +71,16 @@
     stop-opacity: 0;
   }
 
+  /* The Tier 3 sweep: white, 0 → 40% → 0 (§5.3) */
+  .dz-stop--sweep {
+    stop-color: var(--dz-white);
+    stop-opacity: 0;
+  }
+
+  .dz-stop--sweep-peak {
+    stop-opacity: 0.4;
+  }
+
   /* Every part pivots on itself (§7.1). */
   .dz-icon * {
     transform-box: fill-box;
@@ -84,6 +95,32 @@
     stroke-width: 1.5;
     stroke-linecap: square;
     stroke-linejoin: round;
+  }
+
+  /* Tier 3 is drawn on the 48 grid, one stroke heavier (§6). */
+  .dz-icon--t3 .dz-ln {
+    stroke-width: 1.75;
+  }
+
+  /* Tier 3 layers (§5.3): the depth layer in the pillar gradient, offset down and to the right; the
+     glass, a faint fill under the frame's line; parts that hide the lines behind them; and the sweep,
+     unseen at rest. Before the static and forced-colour rules below, which override them. */
+  .dz-t3-depth {
+    opacity: 0.5;
+    translate: var(--dz-story-depth-x) var(--dz-story-depth-y);
+  }
+
+  .dz-ln.dz-t3-glass {
+    fill: currentColor;
+    fill-opacity: 0.07;
+  }
+
+  .dz-ln.dz-t3-occlude {
+    fill: var(--dz-surface);
+  }
+
+  .dz-t3-sweep {
+    opacity: 0;
   }
 
   /* A secondary line: an alternative route or a background layer (§5.1) */
@@ -102,16 +139,21 @@
   }
 
   /* The host is the link or button around an icon, or a card that holds one: focus inside the card
-     counts too, so keyboard focus looks like hover (13 §2). A disabled host stays still (§5.1). */
-  .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible)) .dz-icon--t2 {
+     counts too, so keyboard focus looks like hover (13 §2). A disabled host stays still (§5.1).
+     dz-t3-host is a card that hosts only the Tier 3 icon in it, never the Tier 2 icons of the links
+     inside it (the mega menu's columns), so one row doesn't play the others. */
+  .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible))
+    :is(.dz-icon--t2, .dz-icon--t3),
+  .dz-t3-host:is(:hover, :has(:focus-visible)) .dz-icon--t3 {
     color: var(--dz-text-strong);
   }
 
-  .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible)) .dz-halo {
+  .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible)) .dz-halo,
+  .dz-t3-host:is(:hover, :has(:focus-visible)) .dz-icon--t3 .dz-halo {
     opacity: 0.6;
   }
 
-  .dz-icon-host:is(:disabled, [aria-disabled='true']) .dz-icon--t2 {
+  .dz-icon-host:is(:disabled, [aria-disabled='true']) :is(.dz-icon--t2, .dz-icon--t3) {
     color: var(--dz-slate);
   }
 
@@ -121,51 +163,190 @@
   }
 
   /* Static: no story; the pixel lit and the glow at 0.45, hovered or not (§4.4, §7.1). Reduce effects is
-     on for reduced motion, forced colours and more contrast (13 §2.11); P2 adds the switch's own
-     selector. The hover selector is repeated so this wins over the hover glow above. */
+     on for reduced motion, forced colours and more contrast (13 §2.11), and when the visitor or a
+     low-end hint turns it on (data-effects, P2 plan C3). The hover selector is repeated so this wins
+     over the hover glow above. */
   @media (prefers-reduced-motion: reduce), (prefers-contrast: more) {
     .dz-halo,
-    .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible)) .dz-halo {
+    .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible)) .dz-halo,
+    .dz-t3-host:is(:hover, :has(:focus-visible)) .dz-icon--t3 .dz-halo {
       opacity: 0.45;
     }
   }
 
-  /* Forced colours: gradients drop (13 §6). The pixel takes the system text colour and the glow goes. */
+  /* Forced colours set data-effects too, and have no glow at all (below). */
+  @media (forced-colors: none) {
+    [data-effects='reduced'] .dz-halo,
+    [data-effects='reduced']
+      .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible))
+      .dz-halo,
+    [data-effects='reduced'] .dz-t3-host:is(:hover, :has(:focus-visible)) .dz-icon--t3 .dz-halo {
+      opacity: 0.45;
+    }
+  }
+
+  /* Forced colours: gradients drop (13 §6). The pixel takes the system text colour and the glow goes.
+     Tier 3 keeps its lines and a solid cluster; the depth, glass and sweep layers go, and an occluding
+     part takes the system background. */
   @media (forced-colors: active) {
-    .dz-px {
+    .dz-px,
+    .dz-cluster-px {
       fill: currentColor;
     }
 
+    .dz-t3-depth,
+    .dz-t3-sweep {
+      visibility: hidden;
+    }
+
+    .dz-ln.dz-t3-glass {
+      fill: none;
+    }
+
+    .dz-ln.dz-t3-occlude {
+      fill: Canvas;
+    }
+
     .dz-halo,
-    .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible)) .dz-halo {
+    .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible)) .dz-halo,
+    .dz-t3-host:is(:hover, :has(:focus-visible)) .dz-icon--t3 .dz-halo {
       opacity: 0;
     }
   }
 
   /* Tier 2 stories (§7). Each runs once on the --dz-dur-story timeline when the host is hovered or
-     focused, and its last frame is the hover state. Start states exist only here (13 §3.3). */
-  @media (prefers-reduced-motion: no-preference) and (forced-colors: none) and (prefers-contrast: no-preference) {
-    .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible))
-      .dz-icon--pop
-      .dz-px {
+     focused, and its last frame is the hover state. Start states exist only inside fx (13 §3.3). */
+  .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible))
+    .dz-icon--pop
+    .dz-px {
+    @variant fx {
       animation: dz-icon-pop var(--dz-dur-story) var(--dz-ease-pop) both;
     }
+  }
 
-    .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible))
-      .dz-icon--pop
-      .dz-halo {
+  .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible))
+    .dz-icon--pop
+    .dz-halo {
+    @variant fx {
       animation: dz-icon-glow var(--dz-dur-story) var(--dz-ease-out) both;
     }
+  }
 
-    .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible))
-      .dz-dot--blink-early {
+  .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible))
+    .dz-dot--blink-early {
+    @variant fx {
       animation: dz-icon-blink-early var(--dz-dur-story) var(--dz-ease-out);
     }
+  }
 
-    .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible))
-      .dz-dot--blink-late {
+  .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible))
+    .dz-dot--blink-late {
+    @variant fx {
       animation: dz-icon-blink-late var(--dz-dur-story) var(--dz-ease-out);
     }
+  }
+
+  /* Tier 3 stories (§7). Every part runs inside one --dz-dur-story-signature timeline: for its share of
+     it (--dz-t3-for), from its start (--dz-t3-at, plus --dz-t3-gap per stagger step). The story plays
+     once when the icon first scrolls into view (.is-in, from the shared observer), and again on hover
+     and focus. The replay is a second animation listed after the first: it plays over the finished
+     one, and leaving removes it without replaying the first, because an animation whose name stays in
+     the list keeps its state (CSS Animations). The glow's replay ends at its hover value. */
+  .dz-t3-part {
+    --dz-t3-time: calc(var(--dz-dur-story-signature) * var(--dz-t3-for)) var(--dz-t3-ease, var(--dz-ease-out))
+      calc(var(--dz-dur-story-signature) * (var(--dz-t3-at) + var(--dz-t3-step, 0) * var(--dz-t3-gap, 0))) both;
+  }
+
+  .dz-icon--t3.is-in .dz-t3-part {
+    @variant fx {
+      animation: var(--dz-t3-name) var(--dz-t3-time);
+    }
+  }
+
+  .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible)) .dz-t3-part,
+  .dz-t3-host:is(:hover, :has(:focus-visible)) .dz-t3-part {
+    @variant fx {
+      animation:
+        var(--dz-t3-name) var(--dz-t3-time),
+        var(--dz-t3-again) var(--dz-t3-time);
+    }
+  }
+
+  /* The parts' timing, as shares of the story: the depth settles and the glass fades in; the details
+     arrive; the cluster assembles; then the glow pulses as the sweep crosses once. */
+  .dz-t3-depth {
+    --dz-t3-name: dz-t3-settle;
+    --dz-t3-again: dz-t3-settle-again;
+    --dz-t3-at: 0;
+    --dz-t3-for: 0.44;
+  }
+
+  .dz-t3-glass {
+    --dz-t3-name: dz-t3-fade;
+    --dz-t3-again: dz-t3-fade-again;
+    --dz-t3-at: 0;
+    --dz-t3-for: 0.31;
+  }
+
+  .dz-t3-pop {
+    --dz-t3-name: dz-t3-pop;
+    --dz-t3-again: dz-t3-pop-again;
+    --dz-t3-at: 0.16;
+    --dz-t3-for: 0.22;
+    --dz-t3-gap: 0.04;
+  }
+
+  .dz-t3-grow {
+    --dz-t3-name: dz-t3-grow;
+    --dz-t3-again: dz-t3-grow-again;
+    --dz-t3-at: 0.09;
+    --dz-t3-for: 0.28;
+    --dz-t3-ease: var(--dz-ease-pop);
+    transform-origin: 20% 100%;
+  }
+
+  .dz-t3-wave {
+    --dz-t3-name: dz-t3-wave;
+    --dz-t3-again: dz-t3-wave-again;
+    --dz-t3-at: 0.22;
+    --dz-t3-for: 0.31;
+    --dz-t3-gap: 0.0375;
+  }
+
+  .dz-t3-assemble {
+    --dz-t3-name: dz-t3-assemble;
+    --dz-t3-again: dz-t3-assemble-again;
+    --dz-t3-at: 0.344;
+    --dz-t3-for: 0.375;
+    --dz-t3-gap: 0.05;
+    --dz-t3-ease: var(--dz-ease-pop);
+  }
+
+  .dz-t3-glow {
+    --dz-t3-name: dz-t3-glow;
+    --dz-t3-again: dz-t3-glow-hover;
+    --dz-t3-at: 0.594;
+    --dz-t3-for: 0.375;
+  }
+
+  .dz-t3-sweep {
+    --dz-t3-name: dz-t3-sweep;
+    --dz-t3-again: dz-t3-sweep-again;
+    --dz-t3-at: 0.594;
+    --dz-t3-for: 0.375;
+    --dz-t3-ease: var(--dz-ease-travel);
+  }
+
+  .dz-t3-step-1 {
+    --dz-t3-step: 1;
+  }
+
+  .dz-t3-step-2 {
+    --dz-t3-step: 2;
+  }
+
+  .dz-t3-step-3 {
+    --dz-t3-step: 3;
   }
 }
 
@@ -225,6 +406,165 @@
   }
   30% {
     opacity: 0.15;
+  }
+}
+
+/* Tier 3 story parts (§7.3), each with a replay twin of the same frames (the stories' comment above).
+   A part ends on its rest state, which a missing `to` frame takes from the part's own style. */
+@keyframes dz-t3-settle {
+  from {
+    opacity: 0;
+    translate: 0 0;
+  }
+}
+
+@keyframes dz-t3-settle-again {
+  from {
+    opacity: 0;
+    translate: 0 0;
+  }
+}
+
+@keyframes dz-t3-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes dz-t3-fade-again {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes dz-t3-pop {
+  0% {
+    opacity: 0;
+    scale: 0.3;
+  }
+  60% {
+    opacity: 1;
+    scale: 1.18;
+  }
+}
+
+@keyframes dz-t3-pop-again {
+  0% {
+    opacity: 0;
+    scale: 0.3;
+  }
+  60% {
+    opacity: 1;
+    scale: 1.18;
+  }
+}
+
+@keyframes dz-t3-grow {
+  from {
+    opacity: 0;
+    scale: 0.55;
+  }
+}
+
+@keyframes dz-t3-grow-again {
+  from {
+    opacity: 0;
+    scale: 0.55;
+  }
+}
+
+@keyframes dz-t3-wave {
+  0% {
+    scale: 1 0.2;
+  }
+  60% {
+    scale: 1 1.35;
+  }
+}
+
+@keyframes dz-t3-wave-again {
+  0% {
+    scale: 1 0.2;
+  }
+  60% {
+    scale: 1 1.35;
+  }
+}
+
+/* Assemble: each cluster pixel flies in on the logo's 35° and locks into place. */
+@keyframes dz-t3-assemble {
+  from {
+    opacity: 0;
+    translate: var(--dz-story-assemble-x) var(--dz-story-assemble-y);
+    scale: 0.4;
+  }
+}
+
+@keyframes dz-t3-assemble-again {
+  from {
+    opacity: 0;
+    translate: var(--dz-story-assemble-x) var(--dz-story-assemble-y);
+    scale: 0.4;
+  }
+}
+
+/* The main pixel's glow pulses once and goes out (rest) or settles at 0.6 (hover, §4.4). */
+@keyframes dz-t3-glow {
+  0% {
+    opacity: 0;
+    scale: 0.5;
+  }
+  45% {
+    opacity: 1;
+    scale: 1.05;
+  }
+  100% {
+    opacity: 0;
+    scale: 1;
+  }
+}
+
+@keyframes dz-t3-glow-hover {
+  0% {
+    opacity: 0;
+    scale: 0.5;
+  }
+  45% {
+    opacity: 1;
+    scale: 1.05;
+  }
+  100% {
+    opacity: 0.6;
+    scale: 1;
+  }
+}
+
+/* The sweep crosses the main shape once, by its own width. */
+@keyframes dz-t3-sweep {
+  0% {
+    opacity: 0;
+    translate: -100% 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    translate: 100% 0;
+  }
+}
+
+@keyframes dz-t3-sweep-again {
+  0% {
+    opacity: 0;
+    translate: -100% 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    translate: 100% 0;
   }
 }
 

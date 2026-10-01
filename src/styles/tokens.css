@@ -194,6 +194,8 @@
   /* Focus ring (05 §7): the colour is the semantic --dz-focus */
   --dz-focus-width: 2px;
   --dz-focus-offset: 2px;
+  /* Touch targets (05 §7): at least 44 × 44 px */
+  --dz-target-min: 2.75rem;
 
   /* Motion (05 §5) */
   --dz-ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -202,10 +204,81 @@
   --dz-dur-fast: 150ms;
   --dz-dur-base: 250ms;
   /* One Tier 2 icon story (Icon Master Rules §7.1): every story runs on this one timeline, so none
-     can pass the cap. Tier 3's 1.6 s arrives with the first Tier 3 icon (P2). */
+     can pass the cap. */
   --dz-dur-story: 900ms;
+  /* One Tier 3 story, the signature icons' cap (§2, §7.1); every part of it runs inside this timeline */
+  --dz-dur-story-signature: 1600ms;
+  /* Tier 3 layers in grid units (1px is one unit in an icon's viewBox): the depth layer's offset down
+     and to the right (§5.3), and where each cluster pixel starts its flight, on the logo's 35° (§3) */
+  --dz-story-depth-x: 1.5px;
+  --dz-story-depth-y: 1.8px;
+  --dz-story-assemble-x: -10px;
+  --dz-story-assemble-y: 7px;
+  /* The nav marker's travel (hover-pixel-hop), the hover-charge sheen, the 4 px nudge of a hover
+     label or arrow (13 §4.3), and touch-press (13 §4.7) */
+  --dz-dur-travel: 450ms;
+  --dz-dur-sheen: 700ms;
+  --dz-nudge: 4px;
+  --dz-press-scale: 0.97;
+  /* The Drop vocabulary (Icon Master Rules §7.3) for the mega menu and the sheet: they arrive from this
+     far above */
+  --dz-drop: -0.5rem;
+  /* type-word-stagger (13 §4.5): each whole item rises this far, one step after the last (≤ 600 ms in all) */
+  --dz-stagger-step: 60ms;
+  --dz-stagger-rise: 0.75rem;
+  /* hover-underline (13 §4.3) */
+  --dz-underline-width: 1px;
+
+  /* The header (P2; header.md): the pill's height, its inset from the viewport's edge, how far its
+     background layer shrinks when the page scrolls (the Lab's 0.86), and the nav marker's height */
+  --dz-header-height: 3.75rem;
+  --dz-header-inset: 0.75rem;
+  --dz-header-condense: 0.86;
+  --dz-hop-size: 0.875rem;
+  /* The mega menu's gap below the pill, and a lit row on its navy glass (frost at 6%) */
+  --dz-mega-gap: 0.5rem;
+  --dz-menu-hover: rgba(201, 212, 255, 0.06);
+
+  /* glass-liquid (13 §4.1; the Lab's values): the specular rim on the top edge and the sheen that
+     crosses once on hover. No refraction (P2 plan, finding 9). */
+  --dz-liquid-rim: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.55),
+    rgba(255, 255, 255, 0.04) 30%,
+    rgba(124, 243, 255, 0.25)
+  );
+  --dz-liquid-sheen: linear-gradient(
+    100deg,
+    rgba(255, 255, 255, 0) 30%,
+    rgba(255, 255, 255, 0.16) 50%,
+    rgba(255, 255, 255, 0) 70%
+  );
+  --dz-dur-liquid: 1100ms;
+
+  /* The CTA (P2): the outline at rest and its hover gradient's width; hover-charge's bead, rim light
+     and sheen (the Lab's values) */
+  --dz-cta-edge: rgba(201, 212, 255, 0.28);
+  --dz-cta-outline-width: 1.5px;
+  --dz-cta-bead-size: 6rem;
+  --dz-cta-bead: radial-gradient(closest-side, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0));
+  --dz-cta-rim: inset 0 0 0 1.5px rgba(255, 255, 255, 0.55), inset 0 10px 18px -10px rgba(255, 255, 255, 0.75);
+  --dz-cta-sheen: linear-gradient(
+    100deg,
+    rgba(255, 255, 255, 0) 30%,
+    rgba(255, 255, 255, 0.55) 50%,
+    rgba(255, 255, 255, 0) 70%
+  );
   --dz-tilt-max: 5deg;
   --dz-magnet-max: 7px;
+
+  /* Glass (05 §4; 13 §4.1). The tints and edges switch with the theme (section 2). */
+  --dz-glass-edge-width: 1px;
+  /* glass-live and glass-liquid only: 17px is the Lab-confirmed blur (0009), the saturations the Lab's */
+  --dz-glass-blur: 17px;
+  --dz-glass-saturate: 1.4;
+  --dz-glass-saturate-liquid: 1.6;
+  /* glass-frost's baked grain: white specks at 6% at most, which check:contrast reads from the file */
+  --dz-grain: url('/brand/glass-grain.svg');
 }
 
 /* 2. Semantic tokens: dark, the default. Any element can carry data-theme='dark' (the header, the
@@ -223,6 +296,14 @@
   --dz-hairline: var(--dz-navy-700);
   /* Gradient headline words sit on --dz-bg, never on a card (2.83:1 on navy-850, 0015) */
   --dz-grad-headline: var(--dz-grad-zeta);
+  /* Glass tints: navy-850 at the lowest alpha that keeps text at 4.5:1 (and the focus ring at 3:1) over
+     the brightest surface that can pass behind, a white card, with the grain's brightest speck on top
+     (check:contrast). -min is the least any text sits on (13 §4.1); -muted carries the panels' mist
+     text, their links, and mist on a lit menu row (0.89: links set it, P2 step 12). */
+  --dz-glass-tint-min: rgba(8, 18, 46, 0.73);
+  --dz-glass-tint-muted: rgba(8, 18, 46, 0.89);
+  --dz-glass-edge: rgba(201, 212, 255, 0.14);
+  --dz-glass-highlight: rgba(255, 255, 255, 0.1);
 }
 
 /* Light, chosen by the visitor (the switch comes with the header in P2) */
@@ -237,6 +318,11 @@
   --dz-focus: var(--dz-royal);
   --dz-hairline: var(--dz-hairline-light);
   --dz-grad-headline: var(--dz-grad-zeta-light);
+  /* Frosted white glass (13 §6), checked over the darkest surface, navy */
+  --dz-glass-tint-min: rgba(255, 255, 255, 0.66);
+  --dz-glass-tint-muted: rgba(255, 255, 255, 0.7);
+  --dz-glass-edge: rgba(22, 34, 74, 0.14);
+  --dz-glass-highlight: rgba(255, 255, 255, 0.9);
 }
 
 /* 3. Tailwind mapping. Tailwind's default colours, fonts, sizes and radii are removed, so an
@@ -246,6 +332,9 @@
   --font-*: initial;
   --text-*: initial;
   --radius-*: initial;
+  /* 05 §7's narrowest width, 360 px. Below it, down to the 320 px reflow width (WCAG 1.4.10), the
+     compact header tightens (max-xs). */
+  --breakpoint-xs: 22.5rem;
 }
 
 /* `inline`: utilities read the --dz-* variables directly, so they follow the theme. */
