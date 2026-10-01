@@ -223,6 +223,9 @@ Progress:
     - Page weight: 190,303 → **186,639 B**, now **4,229 B** under the cap. HTML 30,300 → 26,636 B.
     - The review page: median LCP 2,483 ms (runs 2,479–2,563), Performance 97–98, CLS 0. Home is unchanged: median 2,330 ms, Performance 98.
     - **Gates** (CI environment): `verify:fast` exit 0; `build` exit 0; `test:e2e` 135 passed; `check:schema`, `check:seo`, `check:links`, `format:check` and `check:facts` passed; `lhci` passed (page weight: "largest run 186639 B of 190868 B (4.1 KB left, 10 runs)").
+- 2026-10-01 · **The owner's answers (checklist 4 and 5):**
+  - **The phone:** a Samsung Galaxy S23 Ultra with 8 GB. It's a flagship, not the budget class that 04 §2 and 07's test conditions name, so the owner's "ok" (checklist 2) isn't the budget-phone result. The lab's CPU 4× covers the main thread; a budget phone's GPU, where the glass blur is drawn, isn't measured yet. The 2 GB `deviceMemory` threshold can't be confirmed on an 8 GB phone and stays as it is. How to close this is with the owner.
+  - **`viewportFit: 'cover'`: (a), keep it,** and check on any iPhone before launch (P10): the sticky bar clear of the home indicator, the safe areas in landscape, iOS `:active` and the grain in Safari. This replaces the Risks line's "dropped if it can't be verified". 0019 records it at step 16.
 Phase: P2
 Branch: three parts, one merge each (Q5): `feat/p2a-shell-foundations`, `feat/p2b-header`, `feat/p2c-footer` (each from `main` after the previous merge)
 Page tier: T1. The shell renders on every page. It's measured on Home (`lhci` ≥ 95) and, from part B, on the review page (A3), which shows the complete shell.
