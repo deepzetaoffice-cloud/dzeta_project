@@ -3,6 +3,7 @@ import {
   duplicateMetaProblems,
   isNoindex,
   linkProblems,
+  navLinkProblems,
   schemaProblems,
   seoProblems,
   type PageData,
@@ -24,6 +25,7 @@ function pageData(overrides: Partial<PageData> = {}): PageData {
     keywordsMetaCount: 0,
     h1Count: 1,
     links: [],
+    navLists: [],
     jsonLd: [],
     ...overrides,
   };
@@ -127,5 +129,46 @@ describe('linkProblems (check:links)', () => {
       pageData({ url: `${origin}/services`, status: 404 }),
     ];
     expect(linkProblems(pages, origin)).toEqual([`${origin}/ links to ${origin}/services (404)`]);
+  });
+});
+
+describe('navLinkProblems (check:links, header and footer)', () => {
+  // Home, plus a services page served with and without a trailing slash and with a query, as a
+  // crawl would find them; its canonical has neither.
+  const services = (url: string) => pageData({ url, canonicals: [`${origin}/services`] });
+  const site = (navLists: string[][]) => [
+    pageData({ navLists }),
+    services(`${origin}/services`),
+    services(`${origin}/services/`),
+    services(`${origin}/services?from=nav`),
+  ];
+
+  it('passes links that equal their canonical, and the same page in two lists', () => {
+    expect(navLinkProblems(site([['/', '/services'], ['/services#top'], [`${origin}/services`]]), origin)).toEqual([]);
+  });
+
+  it('skips in-page anchors, mailto: and other sites', () => {
+    const lists = [['#main', '#main', 'mailto:hello@deepzeta.ai', 'https://n8n.io/', 'https://n8n.io/']];
+    expect(navLinkProblems(site(lists), origin)).toEqual([]);
+  });
+
+  it.each([
+    ['a trailing slash', '/services/'],
+    ['a query', '/services?from=nav'],
+  ])('fails a link with %s', (_label, href) => {
+    expect(navLinkProblems(site([[href]]), origin)).toEqual([
+      `${origin}/: "${href}" isn't its target's canonical URL (${origin}/services)`,
+    ]);
+  });
+
+  it('fails a list that links the same page twice, a fragment apart too', () => {
+    expect(navLinkProblems(site([['/services', '/services#pricing']]), origin)).toEqual([
+      `${origin}/: one header or footer list links ${origin}/services twice`,
+    ]);
+  });
+
+  it('fails a link to a page without exactly one canonical', () => {
+    const pages = [pageData({ navLists: [['/about']] }), pageData({ url: `${origin}/about`, canonicals: [] })];
+    expect(navLinkProblems(pages, origin)).toEqual([`${origin}/: "/about" leads to a page with 0 canonicals`]);
   });
 });

@@ -139,13 +139,17 @@
   }
 
   /* The host is the link or button around an icon, or a card that holds one: focus inside the card
-     counts too, so keyboard focus looks like hover (13 §2). A disabled host stays still (§5.1). */
+     counts too, so keyboard focus looks like hover (13 §2). A disabled host stays still (§5.1).
+     dz-t3-host is a card that hosts only the Tier 3 icon in it, never the Tier 2 icons of the links
+     inside it (the mega menu's columns), so one row doesn't play the others. */
   .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible))
-    :is(.dz-icon--t2, .dz-icon--t3) {
+    :is(.dz-icon--t2, .dz-icon--t3),
+  .dz-t3-host:is(:hover, :has(:focus-visible)) .dz-icon--t3 {
     color: var(--dz-text-strong);
   }
 
-  .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible)) .dz-halo {
+  .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible)) .dz-halo,
+  .dz-t3-host:is(:hover, :has(:focus-visible)) .dz-icon--t3 .dz-halo {
     opacity: 0.6;
   }
 
@@ -164,7 +168,8 @@
      over the hover glow above. */
   @media (prefers-reduced-motion: reduce), (prefers-contrast: more) {
     .dz-halo,
-    .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible)) .dz-halo {
+    .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible)) .dz-halo,
+    .dz-t3-host:is(:hover, :has(:focus-visible)) .dz-icon--t3 .dz-halo {
       opacity: 0.45;
     }
   }
@@ -174,7 +179,8 @@
     [data-effects='reduced'] .dz-halo,
     [data-effects='reduced']
       .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible))
-      .dz-halo {
+      .dz-halo,
+    [data-effects='reduced'] .dz-t3-host:is(:hover, :has(:focus-visible)) .dz-icon--t3 .dz-halo {
       opacity: 0.45;
     }
   }
@@ -202,7 +208,8 @@
     }
 
     .dz-halo,
-    .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible)) .dz-halo {
+    .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible)) .dz-halo,
+    .dz-t3-host:is(:hover, :has(:focus-visible)) .dz-icon--t3 .dz-halo {
       opacity: 0;
     }
   }
@@ -256,7 +263,8 @@
     }
   }
 
-  .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible)) .dz-t3-part {
+  .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible)) .dz-t3-part,
+  .dz-t3-host:is(:hover, :has(:focus-visible)) .dz-t3-part {
     @variant fx {
       animation:
         var(--dz-t3-name) var(--dz-t3-time),

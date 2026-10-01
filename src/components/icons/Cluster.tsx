@@ -76,8 +76,8 @@ export function clusterBoxes(x: number, y: number, S: number) {
   }));
 }
 
-// The glow is a square 3.2 × the main pixel, centred on it (§4.4).
-const HALO_SCALE = 3.2;
+// The glow is a square 3.2 × the main pixel, centred on it (§4.4), in every tier.
+export const HALO_SCALE = 3.2;
 
 export type ClusterPixelsProps = {
   x: number;

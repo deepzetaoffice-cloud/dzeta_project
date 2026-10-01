@@ -16,8 +16,6 @@ const locale = locales.en;
 // Error boundaries are Client Components, so there's no `metadata` export (React's <title> instead)
 // and no `viewport` export (the theme colour is read from tokens.css at build, on the server).
 // `retry` re-renders the failed segment (Next.js 16.3; the docs prefer it to `reset`).
-// The home link is a plain <a> (conflict C46): after an error a full reload is the right way home, and
-// next/link here would ship its client code a second time on every page, beside the header's.
 
 export type GlobalErrorProps = {
   error: Error & { digest?: string };

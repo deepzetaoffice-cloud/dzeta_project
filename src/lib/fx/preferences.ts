@@ -64,7 +64,9 @@ function effectsNow() {
 }
 
 // Every copy of a switch shows the same state: the mobile sheet, the mega-menu rail and the footer
-// (plan C4). A switch is a <button role="switch" data-dz-switch="theme|effects">.
+// (plan C4). A switch is a <button role="switch" data-dz-switch="theme|effects">. A locked Reduce
+// effects switch is described by its note (data-note), and only then, so the note is never read out
+// for a switch that works.
 function sync() {
   const light = root().dataset.theme === LIGHT;
   const { reduced, locked } = effectsNow();
@@ -73,7 +75,11 @@ function sync() {
   for (const button of document.querySelectorAll<HTMLElement>('[data-dz-switch]')) {
     const effects = button.dataset.dzSwitch === 'effects';
     button.setAttribute('aria-checked', String(effects ? reduced : light));
-    if (effects) button.setAttribute('aria-disabled', String(locked));
+    if (!effects) continue;
+    button.setAttribute('aria-disabled', String(locked));
+    const note = button.dataset.note;
+    if (locked && note) button.setAttribute('aria-describedby', note);
+    else button.removeAttribute('aria-describedby');
   }
 }
 
@@ -109,6 +115,8 @@ export function startPreferences() {
   if (started) return;
   started = true;
   applyTheme(read(THEME_KEY));
+  // The switches work from here on, so they can be shown (effects.css).
+  root().dataset.prefs = 'ready';
   document.addEventListener('click', onClick);
   for (const query of [FX_MEDIA, REDUCED_TRANSPARENCY]) matchMedia(query).addEventListener('change', sync);
   // A choice made in another tab applies here too.

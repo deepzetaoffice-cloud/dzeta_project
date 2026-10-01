@@ -218,6 +218,32 @@ describe('check:contrast', () => {
     );
   });
 
+  it('paints a lit row over the glass: a light hover fill lowers light text, and a bad overlay is a problem', () => {
+    const css = tokens({
+      extra:
+        ':root { --dz-mist: #9fb0e0; --dz-card-light: #ffffff; --dz-tint: rgba(8, 18, 46, 0.84); --dz-lit: rgba(201, 212, 255, 0.06); --dz-two: linear-gradient(#000, #fff); }',
+    });
+    const row = {
+      fg: '--dz-mist',
+      bg: '--dz-tint',
+      kind: 'text',
+      themes: ['dark'],
+      backdrop: { dark: '--dz-card-light' },
+    };
+    // The gate's pair type is inferred from its own PAIRS, so the overlaid rows are passed as variables.
+    const litRow = { ...row, overlay: '--dz-lit' };
+    const badRow = { ...row, overlay: '--dz-two' };
+    const unlit = checkContrast(css, [row], { grain: realGrain() }).results[0];
+    const lit = checkContrast(css, [litRow], { grain: realGrain() }).results[0];
+    // P2 step 12's finding: mist passed on the bare glass at 0.84 and failed on a lit row.
+    expect(unlit?.pass).toBe(true);
+    expect(lit?.ratio).toBeCloseTo(3.94, 2);
+    expect(lit?.pass).toBe(false);
+    expect(checkContrast(css, [badRow], { grain: realGrain() }).problems).toContainEqual(
+      expect.stringContaining('must be one colour'),
+    );
+  });
+
   it('gates text, strong text and focus on the minimum glass tint, and mist on the muted one, in both themes', () => {
     const glass = PAIRS.filter((pair) => 'backdrop' in pair);
     expect(glass.map((pair) => `${pair.fg} ${pair.bg} ${pair.themes.join(',')}`)).toEqual([
@@ -225,7 +251,11 @@ describe('check:contrast', () => {
       '--dz-text-strong --dz-glass-tint-min dark,light',
       '--dz-focus --dz-glass-tint-min dark,light',
       '--dz-text-muted --dz-glass-tint-muted dark,light',
+      // The always-navy menu panels: their links, and mist on a lit row
+      '--dz-link --dz-glass-tint-muted dark',
+      '--dz-text-muted --dz-glass-tint-muted dark',
     ]);
+    expect(PAIRS.find((pair) => 'overlay' in pair)).toMatchObject({ overlay: '--dz-menu-hover' });
     expect(NOT_CHECKED.join(' ')).not.toMatch(/glass surfaces/);
   });
 

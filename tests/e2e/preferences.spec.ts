@@ -261,6 +261,8 @@ test.describe('Switches (DisplayControls: the mobile sheet, the mega-menu rail)'
   test('each switch stores its choice, and applies it at once', async ({ page }) => {
     const { effects, theme } = await openSheet(page);
     await expect(effects).toHaveAttribute('aria-checked', 'false');
+    // Its note explains a lock, so a switch that works isn't described by it.
+    await expect(effects).toHaveAccessibleDescription('');
 
     await effects.click();
     await expect(effects).toHaveAttribute('aria-checked', 'true');
@@ -292,6 +294,7 @@ test.describe('Switches (DisplayControls: the mobile sheet, the mega-menu rail)'
     await expect(effects).toHaveAttribute('aria-checked', 'true');
     await expect(effects).toHaveAttribute('aria-disabled', 'true');
     await expect(page.getByText('Your device settings turn this on.').first()).toBeVisible();
+    await expect(effects).toHaveAccessibleDescription('Your device settings turn this on.');
     // Playwright won't click an aria-disabled control, but a visitor can, so the click is dispatched.
     await effects.dispatchEvent('click');
     await expect(effects).toHaveAttribute('aria-checked', 'true');

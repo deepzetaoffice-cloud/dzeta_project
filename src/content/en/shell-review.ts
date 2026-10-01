@@ -1,6 +1,6 @@
 // The review page's copy (P2 plan, A3 and N; registry R165). Internal only: the page is built on
 // local, CI and preview builds and returns 404 in production, so it's never indexed or linked.
-// Part B adds the hero CTA and the icon section; the shell's own copy lives in shell.ts.
+// The hero has a CTA and an icon section follows; the shell's own copy lives in shell.ts.
 export const shellReviewContent = {
   title: 'Shell review',
   description: 'The complete site shell for review and tests. Local, CI and preview builds only.',

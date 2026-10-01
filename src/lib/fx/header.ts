@@ -3,14 +3,21 @@
 // and moves the current-place marker, the logo's mini cluster (13 §8), to the hovered or focused nav
 // item (hover-pixel-hop). Layout is read once per hover, focus or resize, never per pointer move.
 // The mobile sheet opens with invoker commands; for browsers without them, the menu and close buttons
-// fall back to showModal() and close() here. A client navigation closes the sheet. Its scroll lock is
-// CSS (globals.css).
+// fall back to showModal() and close() here. Its scroll lock is CSS (globals.css).
+// The menus close once they've done their job or lost their place (P2 step 12): both when a link
+// inside is followed and on a client navigation; the mega menu also when focus leaves it and its
+// button, so focus never moves on behind it (WCAG 2.4.11); the sheet also when the window grows to
+// the desktop width, where its button is hidden.
 import { watch } from './observer';
 
 // The main pixel's centre in the marker's box: 0.5 S of the cluster's 2.1053 S (Cluster.tsx).
 const MAIN_PIXEL_CENTRE = 0.5 / 2.1053;
 // The nav's own items, not the links inside the mega menu's panel
 const ITEM = '[data-fx-nav] > ul > li > :is(a, button)';
+// Tailwind's lg: from here the header shows the desktop nav and hides the sheet's button.
+const DESKTOP = '(min-width: 64rem)';
+const OPEN_MEGA = '#dz-mega:popover-open';
+const OPEN_SHEET = 'dialog.dz-sheet[open]';
 
 const nav = () => document.querySelector<HTMLElement>('[data-fx-nav]');
 
@@ -38,15 +45,33 @@ function onEnter(event: Event) {
 }
 
 function onLeave(event: Event) {
+  const bar = (event.target as Element).closest?.('[data-fx-nav]');
   const next = (event as FocusEvent | PointerEvent).relatedTarget as Element | null;
-  const bar = nav();
-  if (bar && (event.target as Element).closest?.('[data-fx-nav]') && !bar.contains(next)) hopTo(null);
+  if (bar && !bar.contains(next)) hopTo(null);
 }
 
-// Invoker commands open the sheet without JavaScript where they exist (P2 plan, J1).
-function onSheetButton(event: MouseEvent) {
+// Tabbing out of the mega menu, or of its button while it's open, closes it. Focus going nowhere
+// (a click on empty space, another window) leaves it to the popover's own light dismiss.
+function onFocusOut(event: FocusEvent) {
+  const panel = document.querySelector<HTMLElement>(OPEN_MEGA);
+  const next = event.relatedTarget as Element | null;
+  if (!panel || !next) return;
+  const menu = [panel, panel.previousElementSibling];
+  const inside = (element: Element) => menu.some((part) => part?.contains(element));
+  if (inside(event.target as Element) && !inside(next)) panel.hidePopover();
+}
+
+function onClick(event: MouseEvent) {
+  const target = event.target as Element;
+  // A link followed from a menu closes it: a fragment, or a navigation still loading, would leave it open.
+  if (target.closest('a[href]')) {
+    target.closest<HTMLElement>(OPEN_MEGA)?.hidePopover();
+    target.closest<HTMLDialogElement>(OPEN_SHEET)?.close();
+    return;
+  }
+  // Invoker commands open the sheet without JavaScript where they exist (P2 plan, J1).
   if ('commandForElement' in HTMLButtonElement.prototype) return;
-  const button = (event.target as Element).closest('[data-fx-sheet-open], [data-fx-sheet-close]');
+  const button = target.closest('[data-fx-sheet-open], [data-fx-sheet-close]');
   if (!button) return;
   const sheet = document.getElementById(button.getAttribute('commandfor') ?? '');
   if (!(sheet instanceof HTMLDialogElement)) return;
@@ -55,13 +80,14 @@ function onSheetButton(event: MouseEvent) {
 }
 
 // The current page, from the path: the logo on Home, a nav link on its own page. Fragment links (the
-// review page's placeholders) are left as they are. A navigation from the sheet closes it.
+// review page's placeholders) are left as they are. A client navigation closes both menus.
 export function markCurrent(pathname: string) {
   for (const link of document.querySelectorAll<HTMLAnchorElement>('[data-fx-header] a[href^="/"]')) {
     if (new URL(link.href).pathname === pathname) link.setAttribute('aria-current', 'page');
     else link.removeAttribute('aria-current');
   }
-  document.querySelector<HTMLDialogElement>('dialog.dz-sheet[open]')?.close();
+  document.querySelector<HTMLElement>(OPEN_MEGA)?.hidePopover();
+  document.querySelector<HTMLDialogElement>(OPEN_SHEET)?.close();
   hopTo(null);
 }
 
@@ -77,6 +103,11 @@ export function startHeader() {
   document.addEventListener('focusin', onEnter);
   document.addEventListener('pointerout', onLeave);
   document.addEventListener('focusout', onLeave);
-  document.addEventListener('click', onSheetButton);
+  document.addEventListener('focusout', onFocusOut);
+  document.addEventListener('click', onClick);
   addEventListener('resize', () => hopTo(null), { passive: true });
+  // An open sheet would stay modal over a desktop layout that has no button to close it from.
+  matchMedia(DESKTOP).addEventListener('change', (event) => {
+    if (event.matches) document.querySelector<HTMLDialogElement>(OPEN_SHEET)?.close();
+  });
 }

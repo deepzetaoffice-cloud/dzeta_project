@@ -19,9 +19,11 @@ export function DisplayControls({ place, layout = 'stack' }: DisplayControlsProp
     <div
       role="group"
       aria-label={shellContent.displayLabel}
-      className={row ? 'ms-auto flex flex-wrap items-center justify-end gap-x-8 gap-y-1' : 'grid gap-1'}
+      className={
+        row ? 'dz-display ms-auto flex flex-wrap items-center justify-end gap-x-8 gap-y-1' : 'dz-display grid gap-1'
+      }
     >
-      <Switch kind="effects" label={shellContent.reduceEffects} describedBy={note} className={width} />
+      <Switch kind="effects" label={shellContent.reduceEffects} note={note} className={width} />
       <p id={note} className={`dz-switch-note text-small text-fg-muted ${row ? 'order-last basis-full text-end' : ''}`}>
         {shellContent.deviceSettingNote}
       </p>

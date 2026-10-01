@@ -194,6 +194,8 @@
   /* Focus ring (05 §7): the colour is the semantic --dz-focus */
   --dz-focus-width: 2px;
   --dz-focus-offset: 2px;
+  /* Touch targets (05 §7): at least 44 × 44 px */
+  --dz-target-min: 2.75rem;
 
   /* Motion (05 §5) */
   --dz-ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -296,9 +298,10 @@
   --dz-grad-headline: var(--dz-grad-zeta);
   /* Glass tints: navy-850 at the lowest alpha that keeps text at 4.5:1 (and the focus ring at 3:1) over
      the brightest surface that can pass behind, a white card, with the grain's brightest speck on top
-     (check:contrast). -min is the least any text sits on (13 §4.1); -muted carries mist text. */
+     (check:contrast). -min is the least any text sits on (13 §4.1); -muted carries the panels' mist
+     text, their links, and mist on a lit menu row (0.89: links set it, P2 step 12). */
   --dz-glass-tint-min: rgba(8, 18, 46, 0.73);
-  --dz-glass-tint-muted: rgba(8, 18, 46, 0.84);
+  --dz-glass-tint-muted: rgba(8, 18, 46, 0.89);
   --dz-glass-edge: rgba(201, 212, 255, 0.14);
   --dz-glass-highlight: rgba(255, 255, 255, 0.1);
 }
@@ -329,6 +332,9 @@
   --font-*: initial;
   --text-*: initial;
   --radius-*: initial;
+  /* 05 §7's narrowest width, 360 px. Below it, down to the 320 px reflow width (WCAG 1.4.10), the
+     compact header tightens (max-xs). */
+  --breakpoint-xs: 22.5rem;
 }
 
 /* `inline`: utilities read the --dz-* variables directly, so they follow the theme. */

@@ -97,6 +97,31 @@ Progress:
   - **The header logo, `Logo variant="inline"`:** two crops of the locked file, the mark and a new `tail` crop ("eepzeta", from x 340, between the D at 336 and the first e at 344), set in the wordmark's units: the ribbon's bottom on the wordmark's baseline (863) where the D began (222), its height the D's cap height plus a tenth, and "eepzeta" after it at the D's own 8-unit gap; the pixels float just above the first e. Shapes measured with `getBBox` in Chromium. The file is untouched. Small screens keep the mark alone. `brand-assets.test.ts` checks the crops and the geometry; `brand.spec.ts` the RTL order (through the outer SVG's transform: a nested SVG's own box counts the whole logo image).
   - **Spec edits for step 16** (header.md, protected): the rail moves into the strip; the sheet items at heading size; "Designer Studio"; the inline logo; the three services out of the menu.
   - **Gates:** `verify:fast` exit 0; `test` 263 passed; `build` exit 0; `test:e2e` 77 passed; `check:schema`, `check:seo`, `check:links`, `format:check`, `check:facts` passed. **lhci** (local, 5 runs, Home): passed; median LCP 2,335 ms, Performance 98, CLS 0; our own JavaScript 7,761 B; CSS 10,597 B; HTML 9,240 B; page weight 167,266 B of 190,868.
+- 2026-10-01 · **The owner's verdict on the shell (step 11):** "approve", on the `ee511dd` preview (CI green). Step 12 starts.
+  - **The links gate (the owner, step 12):** the nav and footer check is built like the other gates, so `tests/gates/rules.ts`, `tests/gates/crawl.ts` and `tests/unit/gate-rules.test.ts` joined part B's table.
+  - **The review page's LCP (the owner, step 12: "Allow 2,600 ms there"):** lhci measured it at 2,481–2,494 ms in four runs and 2,554 ms in the run it judges by. Its HTML is 24.7 KB against Home's 9.3 KB (the full mega menu, the sheet and the icon gallery, each sent as markup and again as React's page data), so its first paint comes 150 ms later. One icon size instead of four moved it about 5 ms (tried, then reverted). Recorded as **C48** within 0020: up to 2,600 ms on the review page only; Home keeps 2.5 s.
+- 2026-10-01 · **Step 12 (part B close) is done. Merge on your "merge".**
+  - **`shell.spec.ts`** (44 tests, Home and the review page at 320–1536 px): the skip link and the header's Tab order; the mega menu by keyboard (Enter, Space, Tab in order, Esc with focus back; Chromium's accessibility tree shows the expanded state), closed by a click outside, by Tab past its last item and by a followed link; one row's hover plays only its own icon and the column's head; the sheet's focus trap over an inert, unscrolling page, Esc, the close button, a followed link and a desktop-width window all close it; tap areas through the browser's own hit test; no sideways scroll at 320 px; live links only, each a 200, and the CTA's email while R002 isn't live; one gradient CTA per view at every scroll position (C42; the header never on mobile); the condense keeps the pill's box; the marker and RTL; JavaScript off; axe with the menu open, the sheet open, light and Reduce effects. The footer, the sticky bar and the full mobile hand-off are part C's.
+  - **Found by the new tests, fixed:** a 7 px sideways scroll at 320 px (the compact bar; `--breakpoint-xs` and `max-xs:` padding, so 360 px and up are unchanged), and 16 mega-menu text links 21 px tall (`.dz-target`, a 44 px hit area from a pseudo-element; the look unchanged; wrapped lines keep their hit areas apart). Both tests failed on the code without the fix.
+  - **The links gate:** `navLinkProblems` checks that a header or footer link equals its target's canonical path and that no list links a page twice; the crawl groups each link by its list, or the popover or dialog it sits in. On the full shell (the review page) the first grouping would have flagged the CTA (R002) and the AI Automation pillar (R011) once live; the final one flags nothing.
+  - **lhci on Home and the review page** (`assertMatrix`; the review page with SEO off and LCP ≤ 2,600 ms, C48). **`OWN_JS_HOME` = 7,968 B.** `check:contrast` gained part A's error-button edge (mist on navy, 9.49:1).
+  - **Reviewer** (no blocking) **and performance/accessibility audit** (one blocking), fixed:
+    - **Blocking:** the sheet's dialog carried `lg:hidden`, so a sheet opened below 1024 px stayed modal but invisible once the window grew, leaving the page inert. The breakpoint class is gone, and the sheet closes when the window reaches desktop width.
+    - **Contrast:** the panels' links (sky, 3.83:1) and mist on a lit menu row (3.94:1) failed over a white card. `--dz-glass-tint-muted` (dark) goes from 0.84 to **0.89**, the lowest that passes both (4.54 and 4.63:1); `check:contrast` gates both pairs, with an `overlay` for the lit row, and lists the switch track and the header CTA edge as not checked, with the reason.
+    - **The mega menu:** a column hosted every Tier 2 icon in it, so one row's hover played them all (now `dz-t3-host`, Tier 3 only); it closes when focus leaves it (WCAG 2.4.11), on a followed link and on a client navigation; the solutions and the rail are real lists.
+    - **The switches:** the note described the Reduce effects switch even when it worked (now linked only while locked); the group stays hidden until the runtime starts, so without JavaScript no switch offers a change it can't make; forced colours give the checked thumb `HighlightText`.
+    - **Motion:** the header CTA animated `box-shadow` (13 §3 rule 1; the edge now stays under the gradient); the outlined header CTA drifted under the magnet below 1024 px; the sheet's fade sat on the dialog, which made it its panel's backdrop root and hid the blur while it played (the panel fades now), and the pill's blur stops under the open sheet; closing panels take no clicks; the menu and close buttons get `touch-press`; more contrast drops the CTA's and `glass-liquid`'s gradients (13 §6).
+    - **Code:** `isShown` and `navHref` in `routes.ts` replace three copies (the sheet's pillar bars no longer depend on the menu's filter); raw rems in `effects.css` use the spacing scale; `HALO_SCALE` is shared; the pointer and header handlers cache their lookups; stale comments fixed.
+    - **The owner's decisions (step 12):** labels at **medium 500**, not 600, which 05 §3 doesn't have and which has no fallback face; **part B merges now**, with the desktop gap recorded below.
+  - **Recorded, not changed:**
+    - Until part C's footer merges, production has no desktop place for the display switches (the mega menu waits for a live pillar); device settings still turn effects off.
+    - **For P6:** the mega menu's markup is about 3.9 KB gzip and React's page data repeats it, so the first live pillar column adds about 8 KB to every page; at about 10 ms per KB in the lab, Home's LCP would near C47's 2,410 ms and its page-weight room would fall to about 15 KB. P6 re-runs lhci with the first live column, after trimming the panel (Tier 3 heads by `<use>` from `IconDefs`).
+    - The review page's `glass-liquid` card blurs inside the blurred panel, which is its backdrop root, so its own blur shows nothing (P7 builds the real card).
+    - `scrollbar-gutter: stable` applies only while the sheet is open, so a short page in a narrow desktop window with classic scrollbars can shift when the sheet closes; phones overlay their scrollbars.
+    - The sheet's links get `aria-current` with no visual mark yet (a design question for the first live page).
+    - The cluster's 2.1053 S box repeats in `header.ts` and `effects.css`: the client runtime can't import it from the component without risking its bytes.
+    - **Proposed (not in any table):** `.github/workflows/ci.yml` could name each Lighthouse run's page in its notice, now that lhci measures two.
+  - **Gates** (CI environment): `verify` exit 0: `verify:fast`; `format:check`; `check:facts`, `check:rules`, `check:effects`; `test` 271 passed; `build`; `check:schema`, `check:seo`, `check:links` (1 header link compared with its canonical); `test:e2e` 121 passed; **lhci** passed: Home median LCP 2,336 ms (runs 2,330–2,405), Performance 98, CLS 0, TBT ≤ 17 ms; the review page 2,482–2,490 ms, Performance 98; scripts 147,636 B on both; page weight largest 183,219 B of 190,868 (the review page; Home 167,758 B). `OWN_JS_HOME` was then set to the measured 7,968 B, and `lhci assert` on the saved runs passed.
 Phase: P2
 Branch: three parts, one merge each (Q5): `feat/p2a-shell-foundations`, `feat/p2b-header`, `feat/p2c-footer` (each from `main` after the previous merge)
 Page tier: T1. The shell renders on every page. It's measured on Home (`lhci` ≥ 95) and, from part B, on the review page (A3), which shows the complete shell.
@@ -560,7 +585,10 @@ A file listed in an earlier part may be modified again in a later part only wher
 | `tests/e2e/preferences.spec.ts` | CREATE | (O) |
 | `tests/e2e/shell.spec.ts` | CREATE | (O) |
 | `tests/gates/links.spec.ts` | MODIFY | Nav and footer hrefs equal canonicals; no duplicate targets (the gate's "enabled in P2" line; the owner's decision after part A) |
-| `docs/ai/conflict-register.md` | APPEND-ONLY (protected) | C44 (step 6), C45–C47 (step 9), each approved by the owner in chat |
+| `tests/gates/rules.ts` | MODIFY | The nav and footer check as a pure function; its "not checked yet" line goes (the owner, step 12) |
+| `tests/gates/crawl.ts` | MODIFY | Collects the header's and the footer's links per list (the owner, step 12) |
+| `tests/unit/gate-rules.test.ts` | MODIFY | Failing examples for the nav and footer check (the owner, step 12) |
+| `docs/ai/conflict-register.md` | APPEND-ONLY (protected) | C44 (step 6), C45–C47 (step 9), C48 (step 12), each approved by the owner in chat |
 | `src/app/global-error.tsx` | MODIFY | The plain home link, one copy of `next/link` per page (C46; the owner, step 9) |
 | `src/lib/brand.ts` | MODIFY | The `tail` crop and the measured shapes for the header's inline lockup (the owner, step 11) |
 | `src/components/ui/Logo.tsx` | MODIFY | The `inline` variant: the mark as the wordmark's D (the owner, step 11) |
@@ -640,16 +668,19 @@ Temporary scripts (the first-paint trace) live in `.scratch/` and are deleted be
 | Header CTA while another primary CTA is on screen | `hover-outline` | CSS only | — | — |
 | The gradient CTA (header on desktop, sticky bar, finale) | `hover-charge` | Gradient layers and one sheen, transform and opacity; the bead follows the shared pointer controller | pointer ≤ 1.5 KB (shared) | — |
 | The same | `pointer-magnet` | The pointer controller: fine pointers, in view only, rAF-batched, cached rects, stops on a hidden tab; drift ≤ `--dz-magnet-max` | ≤ 1.5 KB (shared) | — |
-| CTAs and the menu button | `touch-press` | CSS `:active` scale | — | iOS `:active` (owner checklist) |
-| Mega-menu items (review page until P6) | `hover-glow` | P1's Tier 2 stories, CSS only | ≤ 1 KB per icon | — |
+| CTAs and the sheet's menu and close buttons | `touch-press` | CSS `:active` scale | — | iOS `:active` (owner checklist) |
+| Mega-menu items (review page until P6) | `hover-glow` | P1's Tier 2 stories, CSS only; each row hosts its own icon, the column only its Tier 3 head (step 12) | ≤ 1 KB per icon | — |
+| Mega-menu service rows (step 11, the owner's "best hover effects") | `hover-guide-line` | A pillar-colour line at inline-start, `scale` only, with the row lit (a colour change); a row without a Tier 2 icon pops its pillar pixel (`scale`) | — (CSS) | mist on the lit row gated (`check:contrast`, step 12) |
 | Mega-menu column heads (Tier 3) | `scroll-assemble` | The Tier 3 story ≤ 1.6 s, once in view (shared observer), replay on hover and focus; static under Reduce effects | ≤ 4 KB per icon; observer ≤ 0.5 KB | — |
 | Mobile sheet items | `type-word-stagger` | CSS delays on whole items (no word is split), ≤ 12 words, ≤ 600 ms, once per open | none (CSS) | screen readers read each link once (no split within an accessible name) |
 | Display switches | `touch-snap` | A short transition with `--dz-ease-pop` | — | — |
-| Footer links; mega-menu rail links | `hover-underline` | CSS `scaleX` from inline-start | — | — |
+| Footer links; mega-menu rail, solutions and "All … services" links | `hover-underline` | CSS `scaleX` from inline-start; the "All … services" arrow nudges `--dz-nudge` toward the inline end, as `hover-charge`'s arrow does (13 §4.3) | — | — |
 | Page edge (sitewide chrome) | `scroll-journey-line` | Native scroll timeline, compositor only, inside `@supports`; not drawn without support or under Reduce effects | 0 JS | scroll-driven support (Chrome, Safari 26; not Firefox) |
 | Footer finale, The Landing | `scroll-assemble` | The four pixels fly in on 35° paths once when the finale enters (shared observer); the assembled cluster otherwise | observer ≤ 0.5 KB (shared) | — |
 
 **Per viewport** (13 §2.3): the header and the journey line are chrome and don't count. The open mega menu's signature is the `glass-liquid` card; the finale's is The Landing.
+
+**Lab timings past 13 §4.3's 150–250 ms hover range** (step 12, recorded; 0019 records them at the phase exit): `hover-pixel-hop` travels 450 ms plus up to 162 ms of stagger (`--dz-dur-travel`), the `hover-charge` sheen crosses in 700 ms (`--dz-dur-sheen`) and the `glass-liquid` sheen in 1,100 ms (`--dz-dur-liquid`). They are the Design Lab's values (0009), each a single pass that never blocks input.
 
 ## State changes (no effect ID; 13 §3 rules apply)
 | Change | How | Reduce effects |
@@ -667,7 +698,7 @@ Temporary scripts (the first-paint trace) live in `.scratch/` and are deleted be
 | Desktop, fine pointer | Everything in the register |
 | Touch | No `pointer-magnet` or bead; `hover-charge` shows its sheen on tap; stories play on focus and tap; `touch-press` |
 | Low-end hint or Save-Data | Reduce effects on (the visitor may turn it off): `glass-frost`, static states |
-| Reduced motion, more contrast, Reduce effects | Static final states; `glass-frost`; the journey line not drawn; the cluster assembled; stories static |
+| Reduced motion, more contrast, Reduce effects | Static final states; `glass-frost`; the journey line not drawn; the cluster assembled; stories static. More contrast also drops the gradients (13 §6): the CTA takes the solid signal fill, and `glass-liquid` loses its rim and sheen (step 12) |
 | No JavaScript | The header, the footer and every live link; the mega menu opens (popover); the sheet opens where invoker commands exist (the footer links cover the rest); the default theme; one-shot effects in their final state |
 | Forced colours | Glass becomes solid system surfaces; gradients drop (the CTA's gradient too); focus rings stay 2 px solid |
 | RTL | Logical properties; the marker travels the mirrored axis; the journey line on the right; the logo, the pixel and the cluster never mirror; chevron doesn't flip, external-link does |

@@ -1,4 +1,4 @@
-import { ClusterPixels } from './Cluster';
+import { ClusterPixels, HALO_SCALE } from './Cluster';
 import {
   isTier1,
   isTier3,
@@ -27,8 +27,6 @@ export type IconProps =
   | { name: Tier2Name; size: Tier2Size; className?: string }
   | { name: Tier3Name; size: Tier3Size; className?: string };
 
-// The glow is a square 3.2 × the pixel, centred on it (§4.4).
-const HALO_SCALE = 3.2;
 // The pixel's corner radius is 12.5% of its size (§4.1).
 const PIXEL_RADIUS = 0.125;
 

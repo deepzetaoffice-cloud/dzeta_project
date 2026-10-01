@@ -2,7 +2,7 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { navigation as content, type Navigation } from '@/content/en/navigation';
-import { ROUTES, type RouteId } from '@/lib/routes';
+import { isShown, navHref, ROUTES, type RouteId } from '@/lib/routes';
 
 // The typed route seed and the navigation that uses it (P2 plan, A1 and O; engine §5.3 rule 5).
 
@@ -102,5 +102,16 @@ describe('the navigation (src/content/en/navigation.ts)', () => {
       for (const id of list) expect(ROUTES).toHaveProperty(id);
       expect(new Set(list).size).toBe(list.length);
     }
+  });
+});
+
+describe("the shell's link helpers", () => {
+  it('show a live route at its path, and every route on the review page as a fragment of itself', () => {
+    expect(isShown('R001', false)).toBe(true);
+    expect(navHref('R001', false)).toBe('/');
+    expect(isShown('R011', false)).toBe(ROUTES.R011.live);
+    expect(isShown('R011', true)).toBe(true);
+    expect(navHref('R011', true)).toBe('#shell-R011');
+    expect(navHref('R011', false)).toBe(ROUTES.R011.path);
   });
 });

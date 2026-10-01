@@ -6,7 +6,7 @@ import { auditHref, CtaButton } from '@/components/ui/CtaButton';
 import { Logo } from '@/components/ui/Logo';
 import { navigation } from '@/content/en/navigation';
 import { shellContent } from '@/content/en/shell';
-import { isLive, ROUTES, type RouteId } from '@/lib/routes';
+import { isShown, navHref } from '@/lib/routes';
 import { siteConfig } from '@/lib/site-config';
 
 // The header "Proof Bar" (docs/design/header.md; P2 plan, H). On desktop a floating glass pill: the
@@ -23,9 +23,8 @@ import { siteConfig } from '@/lib/site-config';
 export type SiteHeaderProps = { review?: boolean };
 
 export function SiteHeader({ review = false }: SiteHeaderProps) {
-  const links = navigation.primary.filter((link) => review || isLive(link.route));
+  const links = navigation.primary.filter((link) => isShown(link.route, review));
   const services = megaColumns(review).length > 0;
-  const href = (route: RouteId) => (review ? `#shell-${route}` : ROUTES[route].path);
   return (
     <header
       className="pointer-events-none sticky top-0 z-(--dz-layer-header) mx-auto w-full max-w-page px-gutter pt-(--dz-header-inset)"
@@ -33,11 +32,12 @@ export function SiteHeader({ review = false }: SiteHeaderProps) {
     >
       <div
         data-theme="dark"
-        className="dz-header-pill pointer-events-auto relative isolate flex h-(--dz-header-height) items-center gap-2 rounded-pill bg-transparent ps-4 pe-2 sm:gap-4"
+        className="dz-header-pill pointer-events-auto relative isolate flex h-(--dz-header-height) items-center gap-2 rounded-pill bg-transparent ps-4 pe-2 max-xs:gap-1 max-xs:ps-3 max-xs:pe-1 sm:gap-4"
       >
         <span aria-hidden="true" className="dz-header-bg dz-glass dz-glass--live absolute inset-0 -z-10 rounded-pill" />
         {/* The mark stands in for the wordmark's D (the owner, 2026-10-01). At 360 px the bar holds the
-            logo, the CTA and the menu button, so small screens show the mark alone. */}
+            logo, the CTA and the menu button, so small screens show the mark alone; below 360 px the
+            pill's padding and gaps tighten, so it still fits at 320 px. */}
         <Link href="/" className="inline-flex min-h-11 shrink-0 items-center rounded-md">
           <span className="flex sm:hidden">
             <Logo variant="mark" label={siteConfig.brandName} className="h-9" />
@@ -57,9 +57,9 @@ export function SiteHeader({ review = false }: SiteHeaderProps) {
               {links.map((link, index) => (
                 <li key={link.route}>
                   <Link
-                    href={href(link.route)}
+                    href={navHref(link.route, review)}
                     aria-current={review && index === 0 ? 'page' : undefined}
-                    className="inline-flex min-h-11 items-center rounded-pill px-2.5 text-small font-semibold text-fg hover:text-fg-strong aria-[current=page]:text-fg-strong xl:px-3"
+                    className="inline-flex min-h-11 items-center rounded-pill px-2.5 text-small font-medium text-fg hover:text-fg-strong aria-[current=page]:text-fg-strong xl:px-3"
                   >
                     {link.label}
                   </Link>

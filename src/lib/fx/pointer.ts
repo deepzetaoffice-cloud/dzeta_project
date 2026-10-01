@@ -9,6 +9,7 @@
 
 const FINE = '(hover: hover) and (pointer: fine)';
 
+let fine: MediaQueryList | undefined;
 let target: HTMLElement | null = null;
 let rect: DOMRect | null = null;
 let frame = 0;
@@ -53,10 +54,9 @@ function leave() {
 
 function onOver(event: PointerEvent) {
   if (target || event.pointerType === 'touch') return;
-  // data-effects is on <html> whenever anything turns effects off (preferences.ts).
-  if (document.documentElement.hasAttribute('data-effects') || !matchMedia(FINE).matches) return;
   const found = (event.target as Element).closest<HTMLElement>('[data-fx-pointer]');
-  if (!found) return;
+  // data-effects is on <html> whenever anything turns effects off (preferences.ts).
+  if (!found || document.documentElement.hasAttribute('data-effects') || !fine?.matches) return;
   target = found;
   rect = null;
   found.addEventListener('pointermove', onMove);
@@ -72,6 +72,7 @@ let started = false;
 export function startPointer() {
   if (started) return;
   started = true;
+  fine = matchMedia(FINE);
   document.addEventListener('pointerover', onOver);
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) leave();

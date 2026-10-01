@@ -33,6 +33,8 @@ export function CtaButton({ href, label, variant, wide = false, className }: Cta
     'dz-cta',
     `dz-cta--${variant}`,
     'relative isolate inline-flex min-h-12 items-center justify-center gap-2.5 overflow-hidden rounded-pill px-5.5 font-bold whitespace-nowrap no-underline',
+    // Below 360 px the compact bar holds the logo, this and the menu button only with less padding
+    variant === 'header' ? 'max-xs:px-3' : '',
     wide ? 'w-full' : '',
   ].join(' ');
   const content = (

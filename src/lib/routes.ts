@@ -64,3 +64,9 @@ export type RouteId = keyof typeof ROUTES;
 export const routePath = (id: RouteId): string => ROUTES[id].path;
 
 export const isLive = (id: RouteId): boolean => ROUTES[id].live;
+
+// The shell's links (P2 plan, A): a route shows once its page is live. The review page shows every
+// route, each a placeholder fragment of the page itself (A3).
+export const isShown = (id: RouteId, review: boolean): boolean => review || isLive(id);
+
+export const navHref = (id: RouteId, review: boolean): string => (review ? `#shell-${id}` : routePath(id));

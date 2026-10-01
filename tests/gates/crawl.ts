@@ -30,6 +30,7 @@ export async function crawlSite(browser: Browser, baseUrl: string): Promise<Page
         keywordsMetaCount: 0,
         h1Count: 0,
         links: [],
+        navLists: [],
         jsonLd: [],
       };
       if (base.status !== 200 || !isHtml(base)) {
@@ -41,6 +42,19 @@ export async function crawlSite(browser: Browser, baseUrl: string): Promise<Page
       const extracted = await page.evaluate(() => {
         const all = (selector: string) => Array.from(document.querySelectorAll(selector));
         const attr = (selector: string, name: string) => all(selector).map((el) => el.getAttribute(name) ?? '');
+        // The site's header and footer (the banner and contentinfo landmarks, so never one inside an
+        // article or a section). Each link belongs to its nearest list, or else to the menu it sits in
+        // (a popover or a dialog), or else to the region: so the mega menu's links aren't counted as
+        // part of the nav list around its button, nor the sheet's CTA beside the header's.
+        const navGroups = new Map<Element, string[]>();
+        const landmark = ':not(:is(article, aside, main, nav, section) *)';
+        for (const region of all(`header${landmark}, footer${landmark}`)) {
+          for (const link of region.querySelectorAll('a[href]')) {
+            const list = link.closest('ul, ol, [popover], dialog');
+            const group = list && region.contains(list) ? list : region;
+            navGroups.set(group, [...(navGroups.get(group) ?? []), link.getAttribute('href') ?? '']);
+          }
+        }
         return {
           titles: all('head > title').map((el) => el.textContent ?? ''),
           descriptions: attr('meta[name="description"]', 'content'),
@@ -49,6 +63,7 @@ export async function crawlSite(browser: Browser, baseUrl: string): Promise<Page
           keywordsMetaCount: all('meta[name="keywords"]').length,
           h1Count: all('h1').length,
           links: attr('a[href]', 'href'),
+          navLists: [...navGroups.values()],
           jsonLd: all('script[type="application/ld+json"]').map((el) => el.textContent ?? ''),
         };
       });

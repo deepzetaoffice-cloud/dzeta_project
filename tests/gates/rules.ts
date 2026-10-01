@@ -14,6 +14,7 @@ export type PageData = {
   keywordsMetaCount: number;
   h1Count: number;
   links: string[]; // absolute, hash removed
+  navLists: string[][]; // raw hrefs in the header and the footer, one array per list (crawl.ts)
   jsonLd: string[]; // raw script contents
 };
 
@@ -30,8 +31,7 @@ export const SKIPPED = {
     'every URL absolute on the canonical host with no trailing slash (enabled in P4)',
   ],
   links: [
-    'nav and footer hrefs equal canonicals, duplicate targets (enabled in P2, with the layout shell)',
-    'URL-registry rules, link budgets, anchors, orphans, click depth (enabled in P4)',
+    'URL-registry rules, link budgets, anchors, duplicate targets in the prose, orphans, click depth (enabled in P4)',
   ],
   crawl: ['pages are found by following links from /; sitemap and registry seeds are added in P4/P9'],
 } as const;
@@ -160,6 +160,40 @@ export function linkProblems(pages: PageData[], origin: string): string[] {
       if (new URL(link).origin !== origin) continue;
       const status = statusByUrl.get(link);
       if (status !== 200) problems.push(`${page.url} links to ${link} (${status ?? 'not crawled'})`);
+    }
+  }
+  return problems;
+}
+
+// docs/ai/03 · check:links; 08 §2 rule 9; engine §5.1: a header or footer link points at its target's
+// canonical URL (no trailing slash, no query), and no list in them links the same page twice. The
+// same page in two lists is fine: the desktop nav and the mobile sheet each list it. In-page anchors,
+// mailto: and other sites are skipped; linkProblems reports a target that isn't a 200.
+export function navLinkProblems(pages: PageData[], origin: string): string[] {
+  const pageByUrl = new Map(pages.map((page) => [page.url, page]));
+  const problems: string[] = [];
+  for (const page of pages) {
+    for (const list of page.navLists) {
+      const seen = new Set<string>();
+      for (const href of list) {
+        if (href.startsWith('#')) continue;
+        const target = new URL(href, page.url);
+        if (target.origin !== origin) continue;
+        target.hash = '';
+        if (seen.has(target.href)) problems.push(`${page.url}: one header or footer list links ${target.href} twice`);
+        seen.add(target.href);
+
+        const linked = pageByUrl.get(target.href);
+        if (!linked || linked.status !== 200 || !isHtml(linked)) continue;
+        if (linked.canonicals.length !== 1) {
+          problems.push(`${page.url}: "${href}" leads to a page with ${linked.canonicals.length} canonicals`);
+          continue;
+        }
+        const canonical = new URL(linked.canonicals[0] ?? '', origin);
+        if (target.pathname + target.search !== canonical.pathname + canonical.search) {
+          problems.push(`${page.url}: "${href}" isn't its target's canonical URL (${linked.canonicals[0]})`);
+        }
+      }
     }
   }
   return problems;

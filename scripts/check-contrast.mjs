@@ -56,6 +56,8 @@ export const PAIRS = [
   { fg: '--dz-white', bg: '--dz-navy-800', kind: 'text', themes: once },
   { fg: '--dz-frost', bg: '--dz-navy-800', kind: 'text', themes: once },
   { fg: '--dz-mist', bg: '--dz-navy-800', kind: 'text', themes: once },
+  // The error page's "Try again" button: its mist edge on navy is its boundary (05 §2, 3:1)
+  { fg: '--dz-mist', bg: '--dz-navy', kind: 'ui', themes: once, note: 'error page button edge' },
   // The primary CTA: navy text on the action gradient; white on its hover gradient in large text only (05 §2)
   { fg: '--dz-navy', bg: '--dz-grad-action', kind: 'text', themes: once, note: 'primary CTA' },
   { fg: '--dz-white', bg: '--dz-grad-action-deep', kind: 'large', themes: once, note: 'primary CTA hover' },
@@ -88,6 +90,18 @@ export const PAIRS = [
     { fg: '--dz-focus', bg: '--dz-glass-tint-min', kind: 'ui' },
     { fg: '--dz-text-muted', bg: '--dz-glass-tint-muted', kind: 'text' },
   ].map((pair) => ({ ...pair, themes: both, backdrop: GLASS_BACKDROP, note: 'glass, worst backdrop and grain' })),
+  // The mega menu and the sheet are always navy (data-theme="dark"): their links, and mist on a lit
+  // menu row, whose hover fill is painted over the glass (P2 step 12).
+  ...[
+    { fg: '--dz-link', bg: '--dz-glass-tint-muted', kind: 'text', note: 'menu links' },
+    {
+      fg: '--dz-text-muted',
+      bg: '--dz-glass-tint-muted',
+      overlay: '--dz-menu-hover',
+      kind: 'text',
+      note: 'mist on a lit menu row',
+    },
+  ].map((pair) => ({ ...pair, themes: ['dark'], backdrop: GLASS_BACKDROP })),
 ];
 
 // Measured and printed on every run, but never failing (conflict C38). The pillar pixels are the
@@ -104,6 +118,8 @@ export const NOT_CHECKED = [
   'light-mode status colours, accent surfaces, raised surfaces and shadows: the first plan that uses them',
   '--dz-border as the only boundary of a form field (2.24:1 on navy): P6 forms',
   'hairlines: decorative, not a boundary',
+  "the display switch's signal track on glass: the white thumb's place and the label carry the state",
+  "the header CTA's outline edge (--dz-cta-edge): its label identifies the button, so the edge isn't required",
 ];
 
 // ---------------------------------------------------------------------------------------------
@@ -417,6 +433,15 @@ export function checkContrast(css, pairs = PAIRS, { grain } = {}) {
           const flat = composite(tint, backdrop[0]);
           return [flat, composite(grain, flat)];
         });
+        // A lit row on the glass (the mega menu's hover): its translucent fill is painted on top.
+        if (pair.overlay) {
+          const overlay = coloursIn(resolveToken(pair.overlay, tokens));
+          if (overlay.length !== 1) {
+            problems.push(`${where}: the overlay ${pair.overlay} must be one colour`);
+            continue;
+          }
+          bgColours = bgColours.map((bg) => composite(overlay[0], bg));
+        }
       } else if (bgColours.some((c) => c.a < 1)) {
         problems.push(`${where}: the background isn't opaque, so its contrast depends on what's behind it`);
         continue;
