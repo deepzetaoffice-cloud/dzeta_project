@@ -170,6 +170,10 @@ Progress:
     - **Home:** median LCP 2,329 ms (runs 2,328–2,412), FCP 754 ms, Performance 98, CLS 0, TBT 12 ms. Bytes: scripts 147,674 B (+38), CSS 12,329 B, HTML 11,792 B. The H1 is still the LCP element.
     - **The review page:** median LCP 2,481 ms (C48 allows 2,600), Performance 97–98, HTML 30,300 B.
     - **Page weight:** Home 171,795 B; the review page **190,303 B of 190,868, 565 B left**. Step 15 records this, and the next byte added to the full shell needs room made first.
+- 2026-10-01 · **CI on `1e9f33c` failed in lhci; work stops on C48** ("If the review page passes 2,600 ms, work stops again").
+  - **The review page in CI:** lab LCP is split in two groups, 2,004–2,017 ms in three runs and 2,601 and 2,672 ms in two, and the run lhci judges by (`median-run`) was over 2,600 ms. Part B's CI had the same split (2,033–2,037 and 2,594–2,602 ms) and passed by a few milliseconds. Its HTML went from 24.2 to 29.6 KB with the full footer; about 3 KB of that is the footer's columns, which production doesn't show until pages ship.
+  - **Home in CI:** LCP 1,883–1,888 ms and Performance 100 in four runs. One cold run scored 66 (TBT 2,123 ms; benchmark index 696, against about 2,400 for the others). Every gate before lhci passed in CI, the font notices included (Home's swap CLS 0.0022 at 1280 px and 0 at 360 px).
+  - **For the owner:** the options are in the report. The Vercel preview of `1e9f33c` is READY for the review.
 Phase: P2
 Branch: three parts, one merge each (Q5): `feat/p2a-shell-foundations`, `feat/p2b-header`, `feat/p2c-footer` (each from `main` after the previous merge)
 Page tier: T1. The shell renders on every page. It's measured on Home (`lhci` ≥ 95) and, from part B, on the review page (A3), which shows the complete shell.
