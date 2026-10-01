@@ -129,6 +129,21 @@ Progress:
   - **Snapchat:** snap.com's "official Ghost logo, available for download here" opens Snap's asset vault, which answers "This link is expired" and asks for a login. No public download.
   - **Pinterest:** the asset library linked from the brand guidelines has the P badge as EPS only (`P-Badge-White.eps`, 3000 × 3000, 1.03 MB); no SVG, and no EPS converter is installed here.
   - **Waiting for the owner's OK** on the list, the Meta checkbox, and the Snapchat and Pinterest options.
+- 2026-10-01 · **The owner's decision on step 13: letter tiles instead of the official marks (C49).** "create icons for each social media plattform with letter inside … with our gradient brand theme and with effects". Nothing is downloaded; `public/brand/social/*.svg` is dropped.
+  - **Chosen from two chat mockups:** direction A ("Signal edge"): a tile inside the signal-gradient edge (`--dz-grad-signal`, kept "as it is now"), "exact or approximate colour of original platforms" as the fill, and "a good effects accordingly" on hover. The letters: **in · Ig · f · YT · T · X · @ · S · P** (Threads takes its own @, because TikTok has T).
+  - **The colours, read from each platform's own pages:**
+    - LinkedIn `#0A66C2` (brand.linkedin.com)
+    - Instagram: a gradient approximated from instagram.com's own icon, `#FBA012` → `#F82779` → `#D13AA4` → `#771CF1`; Meta's pages publish no values
+    - Facebook Blue `#0866FF` (the logo image on Meta's Facebook logo page)
+    - YouTube Red `#FF0033` (brand.youtube/color)
+    - TikTok `#000000` with `#25F4EE` and `#FE2C55` (TikTok for Developers' logo)
+    - X `#000000` (X's toolkit: black and white)
+    - Threads `#000000`
+    - Snapchat `#FFFC00` (snap.com)
+    - Pinterest `#E60023` (pinterest.com's icon)
+  - **Contrast:** the white letter is 3.78–21:1 on its tile (Instagram's pink centre is the lowest), and Snapchat's black letter is 19.18:1. The black tiles are 1.03:1 against the footer's navy, so the signal edge, at 3.6:1 or more on navy, draws their boundary.
+  - **Hover, as mocked up** (the verdict comes on the review page at step 14): the tile lifts 2 px, glows in its own colour (0 → 0.6), a sheen crosses once and the letter pops; TikTok's T splits into its cyan and red. `touch-press` on touch. Under Reduce effects, the colours stay and nothing moves. It's recorded under `hover-glow` (an icon-only control; the tile's glow stands in for the pixel's), and 13 §4.3 gets that line at step 16.
+  - **Recorded now** (the owner: "Yes, record it"): C49 in the conflict register and facts §2.1's rule line. footer.md and 13 §4.3 change at step 16. The part C table changes below.
 Phase: P2
 Branch: three parts, one merge each (Q5): `feat/p2a-shell-foundations`, `feat/p2b-header`, `feat/p2c-footer` (each from `main` after the previous merge)
 Page tier: T1. The shell renders on every page. It's measured on Home (`lhci` ≥ 95) and, from part B, on the review page (A3), which shows the complete shell.
@@ -416,7 +431,7 @@ One Client Component, `FxRuntime`, mounted once in `SiteDocument`, starts them a
 3. **The body:**
    - **Link columns** in the four pixel colours (one per pillar), then Company, Resources and Legal. They come from `navigation.ts`, and only live links render (A); a column with no live link isn't shown.
    - **The company block:** `siteConfig.brandName`, the one-line address, and `hello@deepzeta.ai` (facts §2, all CONFIRMED). The phone is omitted while it's PENDING, never filled (footer.md).
-   - **Social links:** the nine profiles from facts §2.1, copied exactly, in a new tab with `rel="noopener noreferrer"`, named "Deepzeta AI on LinkedIn" and so on (facts §2.1 rules). Each link shows the platform's official mark (Q3 (a)), downloaded at step 13 after you approve the list.
+   - **Social links:** the nine profiles from facts §2.1, copied exactly, in a new tab with `rel="noopener noreferrer"`, named "Deepzeta AI on LinkedIn" and so on (facts §2.1 rules). ~~Each link shows the platform's official mark (Q3 (a)), downloaded at step 13 after you approve the list.~~ **Changed at step 13 (C49):** each link shows a letter tile (in · Ig · f · YT · T · X · @ · S · P), filled with its platform's colour inside the signal-gradient edge, the letter `aria-hidden` (the link's name carries the platform). The colours are tokens in `tokens.css`; `check:contrast` gates each letter on its tile and the edge on navy.
    - **Controls:** `DisplayControls`, and the language switch placeholder (hidden).
    - **The legal line:** "© 2026 Deepzeta Digital Solutions L.L.C." The year is the founding year (facts §1), written by hand, never computed at build (02 §1.5).
 4. **No headings but the finale's `<h2>`:** column titles label their lists (`aria-labelledby`), so the footer doesn't add to each page's outline.
@@ -617,8 +632,12 @@ A file listed in an earlier part may be modified again in a later part only wher
 | `src/content/en/navigation.ts` | MODIFY | The footer's Company, Resources and Legal columns |
 | `src/content/en/shell.ts` | MODIFY | The finale, the company block's labels, the legal line (N) |
 | `src/styles/effects.css` | MODIFY | The journey line, The Landing, the sticky bar |
-| `src/styles/tokens.css` | MODIFY | Only if a footer effect needs a new token |
-| `public/brand/social/*.svg` | CREATE | The nine official marks (Q3 (a)), each approved with its source before download |
+| `src/styles/tokens.css` | MODIFY | The nine platform tile colours (C49); a footer effect's token if one needs it |
+| ~~`public/brand/social/*.svg`~~ | DROPPED | Replaced by the letter tiles (C49); nothing downloaded |
+| `scripts/check-contrast.mjs` | MODIFY | Each tile's letter on its colour, and the signal edge on navy (C49; the owner, step 13) |
+| `tests/unit/check-contrast.test.ts` | MODIFY | Only if the new pairs need a failing example |
+| `docs/ai/conflict-register.md` | APPEND-ONLY (protected) | C49 (the owner, step 13: "Yes, record it") |
+| `docs/facts/company-facts.md` | MODIFY | §2.1's icon rule line only (C49; the owner, step 13) |
 | `lighthouserc.cjs` | MODIFY | `OWN_JS_HOME` measured |
 | `tests/unit/site-config.test.ts` | CREATE | (O) |
 | `tests/e2e/shell.spec.ts` | MODIFY | The footer, the sticky bar, the full hand-off |
@@ -626,7 +645,7 @@ A file listed in an earlier part may be modified again in a later part only wher
 | `docs/ai/05-design-system.md` | MODIFY (protected) | End-of-phase edits (P) |
 | `docs/ai/06-code-standards.md` | MODIFY (protected) | The C40 exception (P) |
 | `docs/ai/03-verification-gates.md` | MODIFY (protected) | (P) |
-| `docs/ai/13-experience-design.md` | MODIFY (protected) | §7, the confirmed caps (P) |
+| `docs/ai/13-experience-design.md` | MODIFY (protected) | §7, the confirmed caps (P); §4.3, the social tiles under `hover-glow` (C49) |
 | `docs/design/header.md` | MODIFY (protected) | (P) |
 | `docs/design/footer.md` | MODIFY (protected) | (P) |
 | `docs/design/conversion-path.md` | MODIFY (protected) | (P) |
@@ -658,7 +677,7 @@ Temporary scripts (the first-paint trace) live in `.scratch/` and are deleted be
 12. **Part B close:** `shell.spec.ts`; `lhci` on Home and the review page; `OWN_JS_HOME` set to the measured size; full `verify`; reviewer and performance/accessibility audit; the report. **Merge on your "merge".** → `verify`
 
 **Part C · Footer, conversion path, phase exit**
-13. **The social marks (Q3 (a)):** I list each file (platform, official source page, file, size) and download only after your OK. → `verify:fast`
+13. **The social marks (Q3 (a)):** I list each file (platform, official source page, file, size) and download only after your OK. → `verify:fast`. **Replaced (C49):** the owner chose letter tiles; they're built with the footer at step 14 and shown on the review page for the owner's verdict.
 14. **The footer and the conversion path:** `SiteFooter`, `JourneyLine`, `StickyCta`, `cta.ts` (the finale and the sticky bar), the site config and its test, the footer columns, the copy. → `verify:fast` + `test` + `build` + `test:e2e`
 15. **The effects feasibility gate:** `lhci` on Home and the review page with every T1 effect on (≥ 95, every hard limit, each 13 §7 cap measured), then the owner checklist on the budget Android phone. If a cap or the floor fails, work stops with the numbers and the options. → `lhci`
 16. **Phase exit:** full `verify`; reviewer, performance/accessibility and SEO/GEO audits (the footer's NAP, links and social URLs); the end-of-phase protected edits (P); decision 0019; the report (02 §5). **Merge on your "merge"**, push, and check the Vercel deployment. → `check:rules` + `verify`
@@ -683,6 +702,8 @@ Temporary scripts (the first-paint trace) live in `.scratch/` and are deleted be
 | Display switches | `touch-snap` | A short transition with `--dz-ease-pop` | — | — |
 | Footer links; mega-menu rail, solutions and "All … services" links | `hover-underline` | CSS `scaleX` from inline-start; the "All … services" arrow nudges `--dz-nudge` toward the inline end, as `hover-charge`'s arrow does (13 §4.3) | — | — |
 | Page edge (sitewide chrome) | `scroll-journey-line` | Native scroll timeline, compositor only, inside `@supports`; not drawn without support or under Reduce effects | 0 JS | scroll-driven support (Chrome, Safari 26; not Firefox) |
+| Footer social tiles (C49) | `hover-glow` | The tile lifts 2 px, its glow in the platform's colour fades 0 → 0.6, a sheen crosses once, the letter pops; TikTok's T splits into cyan and red (two extra letter layers). Transform and opacity only; CSS only; static under Reduce effects | none (CSS) | the owner's verdict on the review page (step 14) |
+| The same, on touch | `touch-press` | CSS `:active` scale | — | iOS `:active` (owner checklist) |
 | Footer finale, The Landing | `scroll-assemble` | The four pixels fly in on 35° paths once when the finale enters (shared observer); the assembled cluster otherwise | observer ≤ 0.5 KB (shared) | — |
 
 **Per viewport** (13 §2.3): the header and the journey line are chrome and don't count. The open mega menu's signature is the `glass-liquid` card; the finale's is The Landing.
@@ -766,6 +787,6 @@ On the part C Vercel preview, on the budget Android phone (Chrome, 4G) and, if y
 **The owner's answers (2026-09-30):**
 - **Q1: (a).** Live links only, plus the review page `/shell-review` (registry row R165). Until `/free-ai-audit` ships, the CTA emails hello@deepzeta.ai.
 - **Q2: (a), with a placement note:** "the switch inside the mobile menu and in desktop also; never display on the first place". Read as: the theme switch and Reduce effects are never shown in the header bar itself. They live inside the mobile sheet, inside the desktop mega menu's rail, and in the footer (C4, I3). Every first visit stays dark.
-- **Q3: (a).** I download each platform's official mark at step 13, after you approve the list (platform, source page, file, size).
+- **Q3: (a).** I download each platform's official mark at step 13, after you approve the list (platform, source page, file, size). **Replaced at step 13 (2026-10-01, C49):** letter tiles in each platform's colour inside the signal-gradient edge; nothing downloaded.
 - **Q4: (a).** Per-weight fallback faces for Arial and Roboto. The Roboto files for measuring are downloaded to `.scratch/` at step 2, after you approve the exact files, source and sizes.
 - **Q5: (a).** Three parts, each merged on your "merge".
