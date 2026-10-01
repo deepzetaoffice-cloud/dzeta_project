@@ -1,0 +1,210 @@
+# deepzeta · Tracking setup guide (GTM, GA4, Meta, LinkedIn, Google Ads)
+
+> **For:** the owner, who does every dashboard step by hand (rule 09 §2.10). Claude never logs in to these accounts.
+> **When:** Part A now, before Phase 3 (P3) starts. Part B after P3 is built, before launch.
+> **Checked against:** Google's, Meta's and LinkedIn's official help pages, read on 2026-10-01 (sources at the end). Menus move: if a label differs, look for the nearest match and tell Claude, who updates this guide.
+
+---
+
+## 0. The golden rule: one list of names, used everywhere
+
+Tracking breaks silently. If the website sends `generate_lead` and GA4 expects `Generate_Lead`, nothing errors: the number just stays at zero, and nobody notices for weeks. So:
+
+1. **There is one list of events**, in the website's code (rule 09 §3, finalised in P3). Every name (event, parameter, trigger, conversion) comes from it.
+2. **Claude generates your GTM setup from that list** as a file you import. You don't build tags by hand, so you can't mistype a name.
+3. **GA4's settings that can't be imported** (custom dimensions, key events) come as a table in Part B, generated from the same list. Copy each name exactly, letter for letter.
+4. **Never invent or rename an event in a dashboard.** In particular, never use GA4's **Create event** or **Modify event**, and never add a tag in GTM that didn't come from Claude's file. Those changes live outside the code, so code and dashboard drift apart.
+5. **A change is always made in the code first** (a plan, a new import file, an updated table), then in the dashboards, never the other way round.
+
+What must match, and where it lives:
+
+| Item | Website code | GTM | GA4 | Meta / LinkedIn / Google Ads |
+|---|---|---|---|---|
+| Event names (`generate_lead`…) | The list (source) | Custom Event triggers (imported) | Event names (arrive by themselves) | Mapped to their standard events (imported) |
+| Parameter names (`cta_id`…) | The list (source) | Data Layer Variables (imported) | Custom dimensions (you create from the table) | — |
+| Key events / conversions | The list marks them | — | Key events (you mark from the table) | Conversion actions (you create from the table) |
+| Consent types | The site's consent code (source) | Each tag's consent settings (imported) | — | — |
+| Account IDs (GTM-…, G-…, pixel, partner) | Site settings (Claude enters what you send) | Inside the imported tags | — | Where you copy them from |
+
+---
+
+## 1. What Claude needs from you before P3 starts
+
+Reply in chat with this list filled in. Send **only public IDs**. Never a password, never a secret key or token (rule: secrets go only into Vercel's settings, by you).
+
+| # | What | Where to find it | Public? |
+|---|---|---|---|
+| 1 | **GTM container ID** (starts `GTM-`) | Part A2, last step | Yes |
+| 2 | **GA4 Measurement ID** (starts `G-`) | Part A3, step 6 | Yes |
+| 3 | **Which ad platforms you'll use in the first months:** Google Ads, Meta (Facebook/Instagram), LinkedIn, Microsoft (Bing) Ads. Yes, no or later for each | Your marketing plan | — |
+| 4 | **Meta dataset (pixel) ID**, if Meta = yes | Part A6 | Yes |
+| 5 | **LinkedIn Insight Tag Partner ID**, if LinkedIn = yes | Part A7 | Yes |
+| 6 | **Google Ads customer ID** (123-456-7890), if Google Ads = yes | Top right in Google Ads | Yes |
+| 7 | **Your office's internet address (IP)**, if it never changes; otherwise say "it changes" | Search "what is my IP" from the office network | Yes |
+| 8 | **The consent choice** (below): (a) or (b) | — | — |
+| 9 | **What counts as a conversion** (below): confirm or change | — | — |
+
+**Question 8, the consent banner** (rule 09 §2.7, UAE PDPL):
+- **(a) Recommended: one banner for every visitor; nothing that measures or advertises runs until they press Accept.** This is what the rules already say. The cost: GA4 sees only visitors who accept, so its numbers are lower than real traffic. Google fills some of the gap with modelling only once a site has about 1,000 events a day from visitors who declined and 1,000 daily visitors who accepted, so expect no modelling at first.
+- **(b) Analytics on by default in the UAE, banner only for Europe.** More data, but it goes against rule 09 as written and needs a legal view of the UAE PDPL first. Google's own consent rules only require consent mode for visitors from the EEA, the UK and Switzerland.
+
+**Question 9, conversions.** The site's one goal is booked audits. Proposed:
+
+| Conversion | When it fires | Counts for ads bidding? |
+|---|---|---|
+| `generate_lead` | The audit form is sent successfully | **Yes, primary** |
+| `book_call_click` | The booking calendar is opened | No (secondary, for insight) |
+| `contact_click` | WhatsApp, phone or email is clicked | No (secondary) |
+| A confirmed booking | Cal.com confirms a booked slot | Later: sent from the server through n8n, because the booking happens on Cal.com's side, which the site's tags can't see reliably |
+
+---
+
+## Part A · Do now (about 45 minutes)
+
+### A1. Before anything
+- [ ] Use the **business Google account** (the Workspace account on deepzeta.ai), never a personal one.
+- [ ] Turn on **2-Step Verification** on that Google account, and on Meta and LinkedIn.
+- [ ] Keep every password in a password manager.
+
+### A2. Google Tag Manager: the container (if not done yet; owner checklist 4.2)
+1. Go to **tagmanager.google.com** → **Create Account**.
+2. Account name `deepzeta`, country United Arab Emirates.
+3. Container name `deepzeta.ai`, target platform **Web**. Click **Create** and accept the terms.
+4. **Close the "Install Google Tag Manager" box without copying anything.** The website loads GTM itself; a pasted snippet would count every visit twice.
+5. **Don't add any tag and don't publish.** Claude's file fills the container in Part B.
+6. Turn on the consent overview: **Admin → Container Settings → Additional Settings → Enable consent overview** → Save.
+7. Protect the account: **Admin → Account Settings →** tick **"Require 2-step login verification for certain operations"** → Save.
+8. Add a second administrator you trust (Google advises two): **Admin → User Management → + → Add users**, give **Administrator** on the account and **Publish** on the container. Never give an outside agency full control.
+9. Copy the **container ID** (`GTM-…`, shown at the top of the workspace) for Claude.
+
+### A3. Google Analytics 4: the property (if not done yet; owner checklist 4.2)
+1. **analytics.google.com → Admin → Create → Property.**
+2. Property name `deepzeta.ai`. **Reporting time zone: United Arab Emirates (Dubai). Currency: UAE Dirham (AED).**
+3. Business details and objectives: choose what fits (they only change which reports GA4 shows first).
+4. Platform **Web**. Website URL `https://deepzeta.ai`, stream name `deepzeta.ai web`.
+5. **Enhanced measurement:** leave it on for now, then fix its settings in step 7.
+6. Click **Create stream**. Copy the **Measurement ID** (`G-…`) from **Stream details** for Claude.
+7. **Enhanced measurement settings**, so GA4's automatic events don't double what the site sends: **Admin → Data collection and modification → Data streams →** your stream **→ Enhanced measurement** (the gear) → set:
+
+   | Setting | Set to | Why |
+   |---|---|---|
+   | Page views | Stays on (it can't be turned off). Open its **advanced settings** and **untick "Page changes based on browser history events"** | The site reports each page itself; leaving this ticked counts page changes twice |
+   | Scrolls | On | No event of ours does the same |
+   | Outbound clicks | **Off** | The site sends `outbound_click`; this would send a second event (`click`) for the same click |
+   | Site search | **Off** | The site has no search |
+   | Form interactions | **Off** | The site sends `audit_start` and `generate_lead`; this would send `form_start` and `form_submit` for the same forms |
+   | Video engagement | **Off** | No YouTube videos at launch (turn on if they're added, after asking Claude) |
+   | File downloads | On | No event of ours does the same |
+
+8. **Data retention:** **Admin → Data collection and modification → Data retention →** Event data retention **14 months** → Save. (It affects explorations, not the standard reports.)
+9. **Google signals: leave it off for now** (**Admin → Data collection and modification → Data collection**). It's for ad remarketing; on a new, small site it hides small numbers in reports. Turn it on later with Claude, when ads start.
+10. **Reporting identity:** **Admin → Data display → Reporting identity →** keep **Blended** (needed for consent modelling later).
+11. **Your own visits** (only if your office IP never changes):
+    - **Admin → Data streams →** your stream **→ Configure tag settings → Show more → Define internal traffic → Create.** Rule name `Office`, `traffic_type` value `internal`, IP address **equals** your office IP → Create.
+    - **Admin → Data collection and modification → Data filters →** the **Internal Traffic** filter is created automatically in **Testing** state. Leave it in Testing; Part B switches it to Active after the tests.
+12. **Don't create custom dimensions or key events yet**, and never use **Create event** or **Modify event**. Part B gives you the exact list.
+
+### A4. Google Ads (if Google Ads = yes)
+- [ ] Create the account (no campaign needed yet). Copy the **customer ID** for Claude.
+- [ ] Don't link it to GA4 yet and don't create conversion actions yet: Part B does both, in one way only, so a lead is never counted twice.
+
+### A5. Search Console (at launch, owner checklist 4.2)
+Nothing now. At launch: a **Domain** property for `deepzeta.ai`, verified by DNS, then linked in GA4 (**Admin → Product links → Search Console links**).
+
+### A6. Meta (if Meta = yes; owner checklist 4.3)
+1. **Events Manager → Data sources →** your dataset (Meta now calls the pixel a "dataset"). If none exists: **Connect data → Web**, name it `deepzeta.ai`.
+2. Copy the **dataset ID** (the number under the name) for Claude.
+3. **Stop there.** Don't choose "Add events with a partner integration", and don't let Meta install anything into GTM: the tags come from Claude's file, so they match the site's names and its consent rules.
+
+### A7. LinkedIn (if LinkedIn = yes; owner checklist 4.4)
+1. **Campaign Manager → Measure → Signals manager → Sources → Insight Tag →** choose **"I will use a tag manager"**.
+2. Copy the **Partner ID** for Claude. Don't create conversions yet.
+
+---
+
+## Part B · After P3 is built (Claude sends the file and the filled-in tables)
+
+You'll receive: the container file (`deepzeta-gtm-container.json`), and in this guide's Part B tables, every custom dimension, key event and conversion with its exact name. Each step below says what you should see.
+
+### B1. Import the container into GTM
+1. **Admin → Import Container → Choose container file** → the JSON file from Claude.
+2. **Choose workspace: New**, name it `P3 tracking v1`.
+3. **Import option: Overwrite.** The container is empty, so nothing of yours is lost, and the result matches the file exactly. (Later imports use the option Claude names in that update.)
+4. Click **View detailed changes**. The numbers of tags, triggers and variables must equal the numbers Claude gives you. If they differ, stop and send Claude a screenshot.
+5. **Confirm.** Don't publish yet.
+
+### B2. Test in Preview (Tag Assistant)
+1. In the workspace, click **Preview**. Enter `https://deepzeta.ai` (or the preview link Claude gives you) → **Connect**.
+2. On the site that opens, follow Claude's **test script** (for example: accept the banner, click "Book a free AI audit", open a form, send a test).
+3. In Tag Assistant, each step must show the expected event and the tags that fired, **once each**. Note anything that fired twice or didn't fire.
+4. Also check the **Consent** tab: before you accept, the consent types show *denied*; after, *granted*.
+
+### B3. Check GA4's DebugView
+1. **GA4 → Admin → Data display → DebugView**, while Preview is still connected.
+2. Each event from the test script appears with its parameters. (Nothing appears while the banner isn't accepted: that's correct.)
+
+### B4. Create the custom dimensions (from Claude's table)
+**Admin → Data display → Custom definitions → Create custom dimension.** For each row: **Dimension name** as given, **Scope: Event** (it can't be changed later), **Event parameter** copied exactly. Data appears after 24–48 hours and isn't backdated, so do this before launch.
+
+### B5. Mark the key events (from Claude's table)
+**Admin → Data display → Events** → the star beside each event in the table. An event appears in that list only after it has been received once (the B2 test sends them).
+
+### B6. Publish
+**Submit → Publish and Create Version.** Version name `P3 tracking v1`, description: what Claude's update says. **Publish.** If anything goes wrong later: **Versions → Actions → Set as Latest Version** on the previous version, then publish it.
+
+### B7. Turn on your filter
+After a day of normal use: **Admin → Data filters → Internal Traffic → Active.** (Active filters can't be undone for past data, which is why it waited.)
+
+### B8. Meta, LinkedIn and Google Ads conversions (only those you said yes to)
+- **Meta:** **Events Manager →** your dataset **→ Test events → Open website**, run the test script, and check that `PageView` and `Lead` arrive. (The browser helper is now called **Meta Ads Data Advisor**.)
+- **LinkedIn:** **Measure → Conversion tracking → Create conversion → Insight Tag conversion → event-specific**, one per row of Claude's table. Send Claude each **conversion ID**; Claude adds them in a small second import.
+- **Google Ads:** follow the single method Claude's P3 update names: either GA4 key events imported into Ads, or Google Ads' own conversion tag, **never both as "primary"** for the same action.
+
+### B9. Tell Claude
+Send: "B1–B8 done", the version number GTM shows, and any screenshot of something unexpected. Claude records it in the pre-launch register.
+
+---
+
+## 2. Mistakes that cause mismatches (and how this setup avoids them)
+
+1. **Two page views per page.** Avoided by the site sending page views itself, GTM's Google tag set not to send its own (`send_page_view` = false, in the file), and the "browser history events" box unticked (A3.7).
+2. **GA4's automatic events doubling ours** (outbound clicks, form interactions). Avoided by A3.7.
+3. **A name typed by hand in a dashboard.** Avoided by importing names, and by never using Create/Modify event.
+4. **Names are case-sensitive and short.** Event names are at most 40 characters, only letters, digits and `_`. GA4 reserves some names (`click`, `scroll`, `form_start`…); the site's list never uses them.
+5. **A parameter that isn't registered is invisible in reports.** B4 registers every one; they aren't backdated.
+6. **Consent set twice.** The site sets the consent defaults before GTM starts. **Never add a consent/cookie-banner template in GTM**: it would set them a second time.
+7. **A tag pasted by hand next to GTM** (a gtag snippet, Meta's or LinkedIn's own code). It counts everything twice. Everything goes through GTM.
+8. **One conversion counted twice in Google Ads** (an imported GA4 key event and an Ads tag both primary). B8 uses one method only.
+9. **Server and browser events not paired.** When the server sends events later (Meta Conversions API, LinkedIn), each event carries the same event ID from both sides so the platform keeps one. Claude's code does this; nothing to set by hand.
+10. **The privacy policy lists other tools than the container uses.** The pre-launch register checks that they match.
+
+---
+
+## 3. Words used here
+
+| Word | Meaning |
+|---|---|
+| **GTM (Google Tag Manager)** | One box on the website that loads every tracking tool. Changes to it are published from its dashboard |
+| **Container / workspace / version** | The box for one website / a draft of changes / a published snapshot you can return to |
+| **Tag** | One piece of tracking (for example "send `generate_lead` to GA4") |
+| **Trigger** | When a tag fires (for example "when the site says `generate_lead` happened") |
+| **Variable / data layer** | A value a tag reads / the list of messages the website hands to GTM |
+| **GA4 property / data stream** | Your analytics account for the site / the connection from the website into it |
+| **Measurement ID** | The `G-…` code that names the GA4 stream |
+| **Key event** | An event GA4 counts as a success (the old name was "conversion") |
+| **Custom dimension** | Lets a GA4 report show an event's detail, such as which button was clicked |
+| **Consent Mode** | Google's way of telling its tags whether the visitor accepted cookies |
+| **Tag Assistant / DebugView** | Testing tools: one shows tags firing on the site, the other shows events arriving in GA4 |
+| **Dataset (pixel) / Insight Tag** | Meta's and LinkedIn's tracking tags |
+| **Conversions API (CAPI)** | Sending an event from the server instead of the browser, so it isn't lost to blockers |
+
+---
+
+## Sources (official, read 2026-10-01)
+
+- GTM: create an account and container: https://support.google.com/tagmanager/answer/6103696 · import and export: https://support.google.com/tagmanager/answer/6106997 · Google tag: https://support.google.com/tagmanager/answer/9442095 · consent settings: https://support.google.com/tagmanager/answer/10718549 · preview: https://support.google.com/tagmanager/answer/6107056 · publish and versions: https://support.google.com/tagmanager/answer/6107163 · users: https://support.google.com/tagmanager/answer/6107011 · 2-step for certain operations: https://support.google.com/tagmanager/answer/4525539
+- GA4: create a property and stream: https://support.google.com/analytics/answer/9304153 · enhanced measurement: https://support.google.com/analytics/answer/9216061 · page views and `send_page_view`: https://developers.google.com/analytics/devguides/collection/ga4/views?client_type=gtm · single-page sites with GTM: https://developers.google.com/analytics/devguides/collection/ga4/single-page-applications?implementation=gtm · data retention: https://support.google.com/analytics/answer/7667196 · Google signals: https://support.google.com/analytics/answer/9445345 · reporting identity: https://support.google.com/analytics/answer/10976610 · internal traffic: https://support.google.com/analytics/answer/10104470 · data filters: https://support.google.com/analytics/answer/13296662 · custom dimensions: https://support.google.com/analytics/answer/14239696 · limits: https://support.google.com/analytics/answer/10075209 · key events: https://support.google.com/analytics/answer/13128484 · create/modify events: https://support.google.com/analytics/answer/10085872 · collection limits: https://support.google.com/analytics/answer/9267744 · reserved names: https://support.google.com/analytics/answer/13316687 · DebugView: https://support.google.com/analytics/answer/7201382 · Search Console link: https://support.google.com/analytics/answer/10737381 · Google Ads link: https://support.google.com/analytics/answer/9379420
+- Consent Mode: https://developers.google.com/tag-platform/security/concepts/consent-mode · setup: https://developers.google.com/tag-platform/security/guides/consent?consentmode=advanced · basic vs advanced: https://support.google.com/google-ads/answer/10000067 · modelling thresholds: https://support.google.com/analytics/answer/11161109 · Google's EU user consent policy: https://www.google.com/about/company/user-consent-policy/ · UAE data protection laws (u.ae): https://u.ae/en/about-the-uae/digital-uae/data/data-protection-laws
+- Meta: Pixel with GTM: https://www.facebook.com/business/help/1021909254506499 · standard events: https://www.facebook.com/business/help/402791146561655 · test events: https://www.facebook.com/business/help/2040882565969969 · deduplication: https://developers.facebook.com/docs/marketing-api/conversions-api/deduplicate-pixel-and-server-events · consent: https://developers.facebook.com/docs/meta-pixel/implementation/gdpr
+- LinkedIn: Insight Tag with GTM: https://www.linkedin.com/help/lms/answer/65628 · Partner ID: https://www.linkedin.com/help/lms/answer/a415868 · conversions: https://www.linkedin.com/help/lms/answer/a425606 · event-specific with GTM: https://www.linkedin.com/help/lms/answer/a417886 · deduplication: https://learn.microsoft.com/en-us/linkedin/marketing/conversions/deduplication
+- Google Ads: conversion tracking in GTM: https://support.google.com/tagmanager/answer/6105160 · Conversion Linker: https://support.google.com/tagmanager/answer/7549390 · primary and secondary conversions: https://support.google.com/google-ads/answer/11461796 · GA4 conversions in Ads: https://support.google.com/google-ads/answer/10632359 · enhanced conversions: https://support.google.com/google-ads/answer/13258081 · offline import: https://support.google.com/google-ads/answer/7012522
