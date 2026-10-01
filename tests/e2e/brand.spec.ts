@@ -15,7 +15,9 @@ const IMMUTABLE = 'public, max-age=31536000, immutable';
 const pngSize = (bytes: Buffer) => `${bytes.readUInt32BE(16)}x${bytes.readUInt32BE(20)}`;
 
 test.describe('The logo on Home', () => {
-  test('shows the locked logo, named "Deepzeta AI", in a navy header', async ({ page }) => {
+  test('shows the locked logo, named "Deepzeta AI", in the shell header navy pill, as a link home', async ({
+    page,
+  }) => {
     const logoResponse = page.waitForResponse((response) => new URL(response.url()).pathname === LOGO_URL);
     await page.goto('/');
     const response = await logoResponse;
@@ -27,9 +29,11 @@ test.describe('The logo on Home', () => {
 
     const logo = page.getByRole('img', { name: siteConfig.brandName });
     await expect(logo).toBeVisible();
-    await expect(
-      page.locator('header[data-theme="dark"]').getByRole('img', { name: siteConfig.brandName }),
-    ).toHaveCount(1);
+    // The pill carries the theme, so the header around it stays transparent (P2 plan, H1). At this
+    // width the lockup shows; the mark alone is for small screens and hidden here.
+    const pill = page.locator('header [data-theme="dark"]');
+    await expect(pill.getByRole('img', { name: siteConfig.brandName })).toHaveCount(1);
+    await expect(pill.getByRole('link', { name: siteConfig.brandName })).toHaveAttribute('href', '/');
     // Both crops show the same file; nothing is redrawn.
     await expect(logo.locator('image')).toHaveCount(2);
     for (const image of await logo.locator('image').all())

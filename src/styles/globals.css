@@ -31,6 +31,8 @@
     background-color: var(--dz-bg);
     color: var(--dz-text);
     font-family: var(--dz-font-sans);
+    /* An anchor's target lands clear of the sticky header (P2 plan, B2). */
+    scroll-padding-block-start: calc(var(--dz-header-height) + 2 * var(--dz-header-inset));
   }
 
   body {

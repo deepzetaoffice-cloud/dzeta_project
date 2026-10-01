@@ -18,5 +18,9 @@ export const metadata: Metadata = {
 export const viewport: Viewport = siteViewport;
 
 export default function ReviewRootLayout({ children }: Readonly<{ children: ReactNode }>) {
-  return <SiteDocument locale="en">{children}</SiteDocument>;
+  return (
+    <SiteDocument locale="en" review>
+      {children}
+    </SiteDocument>
+  );
 }

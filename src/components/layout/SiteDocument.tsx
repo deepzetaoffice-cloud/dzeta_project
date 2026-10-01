@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { IconDefs } from '@/components/icons/IconDefs';
 import { FxRuntime } from '@/components/layout/FxRuntime';
+import { SiteShell } from '@/components/layout/SiteShell';
 import { initScript } from '@/lib/fx/init-script';
 import { locales, type Locale } from '@/lib/i18n/locales';
 import { fontVariables } from '@/styles/fonts';
@@ -9,18 +10,20 @@ import { fontVariables } from '@/styles/fonts';
 // (docs/ai/11 §1; P2 plan, B1). Both root layouts and the 404, which skips the layouts, render it, so
 // they can't drift apart. The error page renders its own document: it has to work when this one is
 // what failed (B5).
-// - The no-flash script is the first thing in <head> (conflict C40). It sets data-theme and
-//   data-effects on <html> before React hydrates, so <html> suppresses the hydration warning.
+// - The no-flash script is in <head> (conflict C40). It sets data-theme and data-effects on <html>
+//   before React hydrates, so <html> suppresses the hydration warning.
 // - IconDefs, the icons' shared definitions, is the first thing in <body>, once per page (0018; 02 §3.8).
+// - SiteShell wraps every page: the skip link, the header and <main> (plan B1). `review` is the review
+//   page's: every nav item shown, as placeholders (plan A3).
 // - FxRuntime starts the shared effect controllers after hydration (plan G).
-// Part B adds the shell.
 
 export type SiteDocumentProps = {
   locale: Locale;
+  review?: boolean;
   children: ReactNode;
 };
 
-export function SiteDocument({ locale, children }: SiteDocumentProps) {
+export function SiteDocument({ locale, review = false, children }: SiteDocumentProps) {
   const { lang, dir } = locales[locale];
   return (
     <html lang={lang} dir={dir} className={fontVariables} suppressHydrationWarning>
@@ -32,7 +35,7 @@ export function SiteDocument({ locale, children }: SiteDocumentProps) {
       </head>
       <body>
         <IconDefs />
-        {children}
+        <SiteShell review={review}>{children}</SiteShell>
         <FxRuntime />
       </body>
     </html>

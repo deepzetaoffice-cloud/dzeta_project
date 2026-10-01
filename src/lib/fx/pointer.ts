@@ -2,9 +2,10 @@
 // bead. It works for a mouse or pen on a device whose pointer is fine and can hover, only while
 // effects are on, and only while the pointer is over a target (data-fx-pointer), so nothing listens to
 // pointermove anywhere else. The target's rect is read on entry and again after a scroll or resize,
-// never per move. Once per frame it writes where the pointer is, as --dz-fx-x and --dz-fx-y from -1 to
-// 1 across the target; CSS turns them into movement (effects.css). Leaving clears them, and the CSS
-// eases back. INP: pointermove isn't counted, but this keeps the work there to two property writes.
+// never per move. Once per frame it writes where the pointer is: --dz-fx-x and --dz-fx-y from -1 to 1
+// across the target (pointer-magnet), and --dz-fx-px, its distance from the centre in px (the
+// hover-charge bead). CSS turns them into movement (effects.css). Leaving clears them, and the CSS
+// eases back. INP: pointermove isn't counted, but this keeps the work there to three property writes.
 
 const FINE = '(hover: hover) and (pointer: fine)';
 
@@ -23,6 +24,7 @@ function paint() {
   rect ??= target.getBoundingClientRect();
   target.style.setProperty('--dz-fx-x', unit(x, rect.x, rect.width).toFixed(3));
   target.style.setProperty('--dz-fx-y', unit(y, rect.y, rect.height).toFixed(3));
+  target.style.setProperty('--dz-fx-px', `${(x - rect.x - rect.width / 2).toFixed(1)}px`);
 }
 
 function onMove(event: PointerEvent) {
@@ -45,6 +47,7 @@ function leave() {
   removeEventListener('resize', forgetRect);
   target.style.removeProperty('--dz-fx-x');
   target.style.removeProperty('--dz-fx-y');
+  target.style.removeProperty('--dz-fx-px');
   target = null;
 }
 

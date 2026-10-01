@@ -336,6 +336,19 @@ test.describe('Forced colours (0015)', () => {
   });
 });
 
+// Two ways the fx variant compiles to selectors that never match, so an effect would silently never
+// run: at the top level (Tailwind writes :scope) and after a pseudo-element (an empty :where()).
+test('the built CSS has no fx rule that can never match', async ({ page }) => {
+  await page.goto(HOME);
+  const css = await page.evaluate(async () => {
+    const links = [...document.querySelectorAll<HTMLLinkElement>('link[rel="stylesheet"]')];
+    return (await Promise.all(links.map(async (link) => (await fetch(link.href)).text()))).join('\n');
+  });
+  expect(css).toContain(':not([data-effects=reduced])');
+  expect(css).not.toContain(':scope:where(');
+  expect(css).not.toContain(':where()');
+});
+
 test('no serious or critical axe violations with glass, in the light theme and with Reduce effects', async ({
   page,
 }) => {

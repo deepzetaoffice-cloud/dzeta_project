@@ -3,8 +3,8 @@ import type { Pillar } from './registry';
 // The logo's four-pixel cluster (Icon Master Rules §4.3; P2 plan, K2): the logo's own four pixels,
 // with its colours, gradient directions, corner radii, sizes and positions, scaled as one unit from
 // the main pixel's size S. Upright, never outlined, never mirrored, and always the logo's four colours,
-// whatever the pillar. Used inside Tier 3 icons (ClusterPixels) and on its own (Cluster): the nav's
-// current-place marker (13 §8) and The Landing. Values were measured from the locked logo, read-only.
+// whatever the pillar. Used inside Tier 3 icons (ClusterPixels) and as the nav's current-place marker
+// (ClusterLayers, 13 §8). Values were measured from the locked logo, read-only.
 
 type ClusterPixel = {
   part: 'main' | 'upper' | 'lower' | 'bottom';
@@ -121,24 +121,31 @@ export function ClusterPixels({ x, y, size, halo = false, pixelClass, haloClass 
   );
 }
 
-// The cluster on its own, fitted to its box: 2.1053 S wide and 2.6518 S tall (§4.3). Decorative.
+// The cluster's own box: 2.1053 S wide and 2.6518 S tall, from the upper pixel's top (§4.3).
 const BOX = { x: 0, y: -0.7206, width: 2.1053, height: 2.6518 };
 const UNIT = 10;
 
-export type ClusterProps = { height: number; className?: string };
+const VIEW_BOX = [BOX.x, BOX.y, BOX.width, BOX.height].map((n) => round(n * UNIT)).join(' ');
 
-export function Cluster({ height, className }: ClusterProps) {
-  const viewBox = [BOX.x, BOX.y, BOX.width, BOX.height].map((n) => round(n * UNIT)).join(' ');
+// The cluster as four stacked layers over the same box, one pixel each, sized by CSS. The nav's
+// current-place marker moves the layers one by one, so the small pixels settle a beat after the main
+// one (hover-pixel-hop, 13 §4.3). Decorative.
+export function ClusterLayers({ className }: { className?: string }) {
   return (
-    <svg
-      viewBox={viewBox}
-      height={height}
-      width={round((height * BOX.width) / BOX.height)}
-      className={['dz-cluster-mark', className].filter(Boolean).join(' ')}
-      aria-hidden="true"
-      focusable="false"
-    >
-      <ClusterPixels x={0} y={0} size={UNIT} />
-    </svg>
+    <span className={['dz-cluster-layers', className].filter(Boolean).join(' ')} aria-hidden="true">
+      {clusterBoxes(0, 0, UNIT).map((box) => (
+        <svg key={box.part} viewBox={VIEW_BOX} focusable="false">
+          <rect
+            className="dz-cluster-px"
+            x={box.x}
+            y={box.y}
+            width={box.size}
+            height={box.size}
+            rx={box.rx}
+            fill={`url(#dz-cl-${box.part})`}
+          />
+        </svg>
+      ))}
+    </span>
   );
 }

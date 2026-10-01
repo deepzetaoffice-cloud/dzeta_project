@@ -44,4 +44,288 @@
       border-color: CanvasText;
     }
   }
+
+  /* Header condense (P2 plan, H1): the pill's background layer shrinks; the content and the layout stay.
+     Instant under Reduce effects. */
+  .dz-header-bg {
+    @variant fx {
+      transition: scale var(--dz-dur-base) var(--dz-ease-out);
+    }
+  }
+
+  [data-fx-header][data-condensed] .dz-header-bg {
+    scale: 1 var(--dz-header-condense);
+  }
+
+  /* hover-pixel-hop (13 §4.3, §8): the logo's mini cluster marks the current page under the nav and
+     travels to the hovered or focused item; its small pixels settle a beat after the main one. header.ts
+     sets --dz-hop-x (physical px: the cluster never mirrors) and shows it with data-hop. */
+  .dz-hop {
+    position: absolute;
+    inset-block-end: calc(var(--dz-hop-size) / -2);
+    inset-inline-start: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  [data-fx-nav][data-hop] .dz-hop {
+    opacity: 1;
+  }
+
+  .dz-cluster-layers {
+    position: relative;
+    display: block;
+    block-size: var(--dz-hop-size);
+    aspect-ratio: 2.1053 / 2.6518;
+  }
+
+  .dz-cluster-layers svg {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    translate: var(--dz-hop-x, 0) 0;
+    @variant fx {
+      transition: translate var(--dz-dur-travel) var(--dz-ease-travel);
+    }
+  }
+
+  .dz-cluster-layers svg:nth-child(2) {
+    transition-delay: calc(var(--dz-dur-travel) * 0.13);
+  }
+
+  .dz-cluster-layers svg:nth-child(3) {
+    transition-delay: calc(var(--dz-dur-travel) * 0.24);
+  }
+
+  .dz-cluster-layers svg:nth-child(4) {
+    transition-delay: calc(var(--dz-dur-travel) * 0.36);
+  }
+
+  /* The CTA (P2 plan, H3; CtaButton). The action gradient is its own layer, with hover-charge's light
+     inside it: navy text on the gradient (05 §2, 4.54:1). */
+  .dz-cta-charge {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    overflow: hidden;
+    background-image: var(--dz-grad-action);
+  }
+
+  .dz-cta--primary {
+    color: var(--dz-navy);
+  }
+
+  .dz-cta-px {
+    inline-size: 0.5rem;
+    block-size: 0.5rem;
+    border-radius: 12.5%;
+    background-color: currentColor;
+    scale: 0.6;
+  }
+
+  /* The header CTA: an outline at rest, on the header's glass. cta.ts sets data-charged while no
+     in-page primary CTA is on screen; the gradient then fades in, on desktop only (C42). */
+  .dz-cta--header {
+    color: var(--dz-white);
+    box-shadow: inset 0 0 0 var(--dz-cta-outline-width) var(--dz-cta-edge);
+    @variant fx {
+      transition:
+        color var(--dz-dur-base) var(--dz-ease-out),
+        box-shadow var(--dz-dur-base) var(--dz-ease-out);
+    }
+  }
+
+  .dz-cta--header .dz-cta-charge {
+    opacity: 0;
+    @variant fx {
+      transition: opacity var(--dz-dur-base) var(--dz-ease-out);
+    }
+  }
+
+  .dz-cta--header[data-charged] {
+    @variant lg {
+      color: var(--dz-navy);
+      box-shadow: none;
+    }
+  }
+
+  .dz-cta--header[data-charged] .dz-cta-charge {
+    @variant lg {
+      opacity: 1;
+    }
+  }
+
+  /* hover-outline (13 §4.3), while the header CTA isn't charged: a gradient outline fades in and the
+     label shifts toward the inline end. */
+  .dz-cta--header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: var(--dz-cta-outline-width);
+    background-image: var(--dz-grad-signal);
+    mask:
+      linear-gradient(var(--dz-navy) 0 0) content-box exclude,
+      linear-gradient(var(--dz-navy) 0 0);
+    opacity: 0;
+  }
+
+  /* The fx variant goes on the element, not the pseudo-element: after ::before, Tailwind 4.3.3 writes
+     an empty :where(), which browsers drop. */
+  .dz-cta--header {
+    @variant fx {
+      &::before {
+        transition: opacity var(--dz-dur-base) var(--dz-ease-out);
+      }
+    }
+  }
+
+  .dz-cta--header:is(:hover, :focus-visible)::before {
+    opacity: 1;
+  }
+
+  .dz-cta--header[data-charged]::before {
+    @variant lg {
+      opacity: 0;
+    }
+  }
+
+  .dz-cta-label {
+    @variant fx {
+      transition: translate var(--dz-dur-base) var(--dz-ease-out);
+    }
+  }
+
+  .dz-cta--header:is(:hover, :focus-visible) .dz-cta-label {
+    @variant fx {
+      translate: var(--dz-nudge) 0;
+    }
+  }
+
+  [dir='rtl'] .dz-cta--header:is(:hover, :focus-visible) .dz-cta-label {
+    @variant fx {
+      translate: calc(var(--dz-nudge) * -1) 0;
+    }
+  }
+
+  .dz-cta--header[data-charged]:is(:hover, :focus-visible) .dz-cta-label {
+    @variant lg {
+      translate: none;
+    }
+  }
+
+  /* hover-charge (13 §4.3), on the gradient: a light bead follows a fine pointer across the button
+     (pointer.ts writes --dz-fx-px), a rim light fades in, a sheen crosses once, the arrow nudges and
+     the pixel pops. On touch, the sheen plays on tap. */
+  .dz-cta-bead {
+    position: absolute;
+    inset-block: -40%;
+    inset-inline-start: 50%;
+    inline-size: var(--dz-cta-bead-size);
+    margin-inline-start: calc(var(--dz-cta-bead-size) / -2);
+    background-image: var(--dz-cta-bead);
+    opacity: 0;
+    translate: var(--dz-fx-px, 0) 0;
+  }
+
+  .dz-cta-rim {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: var(--dz-cta-rim);
+    opacity: 0;
+  }
+
+  .dz-cta-sheen {
+    position: absolute;
+    inset: 0;
+    background-image: var(--dz-cta-sheen);
+    translate: -120% 0;
+  }
+
+  .dz-cta:is(:hover, :focus-visible) .dz-cta-rim {
+    opacity: 1;
+  }
+
+  .dz-cta:is(:hover, :focus-visible, :active) .dz-cta-sheen {
+    @variant fx {
+      translate: 120% 0;
+      transition: translate var(--dz-dur-sheen) var(--dz-ease-out);
+    }
+  }
+
+  .dz-cta:hover .dz-cta-bead {
+    @variant fx {
+      @media (hover: hover) and (pointer: fine) {
+        opacity: 0.9;
+      }
+    }
+  }
+
+  .dz-cta-rim,
+  .dz-cta-bead {
+    @variant fx {
+      transition: opacity var(--dz-dur-base) var(--dz-ease-out);
+    }
+  }
+
+  .dz-cta-arrow,
+  .dz-cta-px {
+    @variant fx {
+      transition:
+        translate var(--dz-dur-base) var(--dz-ease-out),
+        scale var(--dz-dur-travel) var(--dz-ease-pop);
+    }
+  }
+
+  .dz-cta:is(:hover, :focus-visible) .dz-cta-px {
+    scale: 1.15;
+  }
+
+  .dz-cta:is(:hover, :focus-visible) .dz-cta-arrow {
+    @variant fx {
+      translate: var(--dz-nudge) 0;
+    }
+  }
+
+  /* The arrow mirrors in Arabic (it's a Tier 1 flip icon), so it nudges toward the inline end. */
+  [dir='rtl'] .dz-cta:is(:hover, :focus-visible) .dz-cta-arrow {
+    @variant fx {
+      translate: calc(var(--dz-nudge) * -1) 0;
+    }
+  }
+
+  /* pointer-magnet (13 §4.2): the CTA drifts up to --dz-magnet-max toward a fine pointer and snaps back
+     with --dz-ease-pop; pointer.ts writes --dz-fx-x and --dz-fx-y on the wrapper. Only on the gradient. */
+  .dz-cta--primary,
+  .dz-cta--header[data-charged] {
+    @variant fx {
+      @media (hover: hover) and (pointer: fine) {
+        translate: calc(var(--dz-fx-x, 0) * var(--dz-magnet-max)) calc(var(--dz-fx-y, 0) * var(--dz-magnet-max));
+        transition: translate var(--dz-dur-travel) var(--dz-ease-pop);
+      }
+    }
+  }
+
+  /* touch-press (13 §4.7): a short press. How iOS shows :active is a verify item: the owner checklist
+     checks it on an iPhone. */
+  .dz-cta:active {
+    @variant fx {
+      scale: var(--dz-press-scale);
+    }
+  }
+
+  /* Forced colours: the gradient and its light drop (13 §6); the CTA is a bordered system button. */
+  @media (forced-colors: active) {
+    .dz-cta-charge,
+    .dz-cta--header::before {
+      display: none;
+    }
+
+    .dz-cta {
+      border: var(--dz-cta-outline-width) solid ButtonText;
+    }
+  }
 }

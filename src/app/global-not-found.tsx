@@ -19,7 +19,7 @@ export const viewport: Viewport = siteViewport;
 export default function GlobalNotFound() {
   return (
     <SiteDocument locale="en">
-      <main className="mx-auto max-w-measure px-gutter py-section">
+      <div className="mx-auto max-w-measure px-gutter py-section">
         <h1 className="text-h1">{notFoundContent.heading}</h1>
         <p className="mt-4">{notFoundContent.body}</p>
         <p className="mt-4">
@@ -28,7 +28,7 @@ export default function GlobalNotFound() {
             {notFoundContent.homeLink}
           </Link>
         </p>
-      </main>
+      </div>
     </SiteDocument>
   );
 }
