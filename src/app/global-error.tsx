@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { Logo } from '@/components/ui/Logo';
 import { errorContent } from '@/content/en/error';
 import { locales } from '@/lib/i18n/locales';
@@ -17,6 +16,8 @@ const locale = locales.en;
 // Error boundaries are Client Components, so there's no `metadata` export (React's <title> instead)
 // and no `viewport` export (the theme colour is read from tokens.css at build, on the server).
 // `retry` re-renders the failed segment (Next.js 16.3; the docs prefer it to `reset`).
+// The home link is a plain <a> (conflict C46): after an error a full reload is the right way home, and
+// next/link here would ship its client code a second time on every page, beside the header's.
 
 export type GlobalErrorProps = {
   error: Error & { digest?: string };
@@ -42,9 +43,11 @@ export default function GlobalError({ retry }: GlobalErrorProps) {
             >
               {errorContent.retry}
             </button>
-            <Link className="inline-flex min-h-11 items-center text-link underline" href="/">
+            {/* A full reload home after an error, and one copy of next/link per page (conflict C46) */}
+            {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+            <a className="inline-flex min-h-11 items-center text-link underline" href="/">
               {errorContent.homeLink}
-            </Link>
+            </a>
           </div>
         </main>
       </body>

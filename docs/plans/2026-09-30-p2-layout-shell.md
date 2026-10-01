@@ -77,6 +77,12 @@ Progress:
   - **Stop 1, `next/link` is shipped twice:** the same six `next/link` modules sit in the error page's chunk group and in the layout's (the header's links), on every page. The decision after part A assumed "the header adds no second copy"; it does, about 3.3 KB gzip. **lhci (local, 5 runs): scripts 150,186 B against the 148,930 B assertion; our own JavaScript 10,518 B, over the 10 KB cap** (07 §2, 13 §7), so `OWN_JS_HOME` can't be raised to it. The effect runtime itself is about 1.8 KB of the layout chunk.
   - **Stop 2, LCP grew 137 ms:** median 2,410 ms (runs 2,404–2,416) against 2,273 ms at part A's close (the Risks stop is +100 ms). Still under 2.5 s; Performance 98; CLS 0; FCP 754 ms; the H1 is the LCP element; HTML + CSS + JS 167,267 B of 190,868. The new bytes: HTML 8,165 B (was 4,095: `IconDefs` is 1,246 B gzip and the RSC payload repeats it), CSS 8,916 B (was 5,985), JS +6.4 KB. In simulated slow 4G they delay Montserrat, and the H1's LCP is its swap.
   - **Committed locally, not pushed:** CI's lhci would fail on the script assertion until the owner decides.
+- 2026-10-01 · **The owner's decisions on step 9's stops, applied:**
+  - **`next/link`: "Error page: plain link".** `global-error.tsx` links home with a plain `<a href="/">` and one recorded lint exception (**C46**); both files joined part B's table. `next/link` now ships once, with the header.
+  - **LCP: "Accept as an exception"** within 0020, recorded as **C47** (up to 2,410 ms, re-measured after C46 and at each part's close).
+  - **C45** appended: no signature icon mirrors in Arabic.
+  - **Re-measured after C46** (lhci, local, 5 runs): scripts **146,893 B** (−3,293), our own JavaScript **7,225 B** (under the 10 KB cap); median LCP **2,333 ms** (runs 2,328–2,416; +60 ms on part A's close, inside the +100 ms line, so C47's room isn't used now); FCP 754 ms; Performance 98; TBT 11 ms; CLS 0; page weight 163,970 B of 190,868. lhci and the page-weight check pass.
+  - **Gates:** `verify:fast` exit 0; `test` 261 passed; `build` exit 0; `test:e2e` 76 passed; `check:schema`, `check:seo`, `check:links`, `check:rules` and `format:check` passed.
 Phase: P2
 Branch: three parts, one merge each (Q5): `feat/p2a-shell-foundations`, `feat/p2b-header`, `feat/p2c-footer` (each from `main` after the previous merge)
 Page tier: T1. The shell renders on every page. It's measured on Home (`lhci` ≥ 95) and, from part B, on the review page (A3), which shows the complete shell.
@@ -540,6 +546,8 @@ A file listed in an earlier part may be modified again in a later part only wher
 | `tests/e2e/preferences.spec.ts` | CREATE | (O) |
 | `tests/e2e/shell.spec.ts` | CREATE | (O) |
 | `tests/gates/links.spec.ts` | MODIFY | Nav and footer hrefs equal canonicals; no duplicate targets (the gate's "enabled in P2" line; the owner's decision after part A) |
+| `docs/ai/conflict-register.md` | APPEND-ONLY (protected) | C44 (step 6), C45–C47 (step 9), each approved by the owner in chat |
+| `src/app/global-error.tsx` | MODIFY | The plain home link, one copy of `next/link` per page (C46; the owner, step 9) |
 
 **Part C · `feat/p2c-footer`**
 
