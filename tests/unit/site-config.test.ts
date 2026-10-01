@@ -43,6 +43,19 @@ describe('siteConfig equals the facts file', () => {
     expect(siteConfig.address).toBe(confirmed('Full address, one line (display)'));
   });
 
+  it('the opening hours: the fact for display, and the same fact in parts (facts §2; P3 plan, A)', () => {
+    const fact = confirmed('Opening hours');
+    const { display, days, opens, closes } = siteConfig.openingHours;
+    expect(display).toBe(fact);
+    const parts = /^(\w+) to (\w+), (\d\d:\d\d)–(\d\d:\d\d) .*; closed (\w+)$/.exec(fact);
+    expect(parts, `can't read the hours "${fact}"`).not.toBeNull();
+    const [, first, last, from, to, closed] = parts!;
+    const week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    expect(days).toEqual(week.slice(week.indexOf(first!), week.indexOf(last!) + 1));
+    expect(days).not.toContain(closed);
+    expect([opens, closes]).toEqual([from, to]);
+  });
+
   it('a fact that is not confirmed is null, never filled (02 §1)', () => {
     for (const [key, name] of [
       ['phone', 'Phone (international format)'],

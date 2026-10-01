@@ -6,7 +6,7 @@ import { auditHref, CtaButton } from '@/components/ui/CtaButton';
 import { Logo } from '@/components/ui/Logo';
 import { navigation } from '@/content/en/navigation';
 import { shellContent } from '@/content/en/shell';
-import { isShown, navHref } from '@/lib/routes';
+import { isShown, navHref, routePath } from '@/lib/routes';
 import { siteConfig } from '@/lib/site-config';
 
 // The header "Proof Bar" (docs/design/header.md; P2 plan, H). On desktop a floating glass pill: the
@@ -38,7 +38,7 @@ export function SiteHeader({ review = false }: SiteHeaderProps) {
         {/* The mark stands in for the wordmark's D (the owner, 2026-10-01). At 360 px the bar holds the
             logo, the CTA and the menu button, so small screens show the mark alone; below 360 px the
             pill's padding and gaps tighten, so it still fits at 320 px. */}
-        <Link href="/" className="inline-flex min-h-11 shrink-0 items-center rounded-md">
+        <Link href={routePath('R001')} className="inline-flex min-h-11 shrink-0 items-center rounded-md">
           <span className="flex sm:hidden">
             <Logo variant="mark" label={siteConfig.brandName} className="h-9" />
           </span>

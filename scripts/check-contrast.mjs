@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 // Contrast gate (docs/ai/03 · check:contrast; docs/ai/05 §2; decision 0015). No dependencies.
 // Reads src/styles/tokens.css, resolves each theme's tokens and checks the colour pairs below against
-// WCAG 2.x: 4.5:1 for text, 3:1 for large text (24 px, or 19 px bold) and for UI parts such as focus
-// rings. Fails on:
+// WCAG 2.x: 4.5:1 for text, 3:1 for large text (24 px, or 18.67 px at weight 700 or more) and for UI
+// parts such as focus rings. A pair whose size and weight are tokens is called large text only while
+// those tokens still qualify; otherwise it's held to 4.5:1. Fails on:
 //   - a pair below its threshold, in any theme
 //   - a semantic token without a value in both themes
 //   - an @media block: every first visit is dark, and light comes only from the visitor's choice
@@ -20,6 +21,8 @@ import { pathToFileURL } from 'node:url';
 export const TOKENS_FILE = 'src/styles/tokens.css';
 export const GRAIN_FILE = 'public/brand/glass-grain.svg';
 export const THRESHOLDS = { text: 4.5, large: 3, ui: 3 };
+// WCAG 2.x large text: 18 pt (24 px), or 14 pt (18.67 px) bold. A rem is the browser's default 16 px.
+export const LARGE_TEXT = { px: 24, boldPx: 56 / 3, boldWeight: 700, remPx: 16 };
 
 const PRIMITIVES = ':root';
 const DARK = ":root, [data-theme='dark']";
@@ -105,7 +108,8 @@ export const PAIRS = [
   // The social letter tiles (conflict C49), always on the navy footer: each letter on its platform's
   // colour (Instagram's on its gradient's centre, where the letter sits), and the signal edge that
   // bounds every tile, the black ones included. The letter is each link's only visible label, so it's
-  // text: 19 px at weight 800 (--dz-social-letter), large text, held to 3:1 (P2 step 16).
+  // text: 19 px at weight 800 (--dz-social-letter and its weight token), large text, held to 3:1 (P2
+  // step 16), as long as those two tokens keep it large (P3 plan, A fix 7).
   ...[
     ['--dz-white', '--dz-social-linkedin'],
     ['--dz-white', '--dz-social-instagram-centre'],
@@ -114,7 +118,14 @@ export const PAIRS = [
     ['--dz-white', '--dz-social-black'],
     ['--dz-social-black', '--dz-social-snapchat'],
     ['--dz-white', '--dz-social-pinterest'],
-  ].map(([fg, bg]) => ({ fg, bg, kind: 'large', themes: once, note: 'social tile letter (19 px, 800)' })),
+  ].map(([fg, bg]) => ({
+    fg,
+    bg,
+    kind: 'large',
+    largeText: { size: '--dz-social-letter', weight: '--dz-social-letter-weight' },
+    themes: once,
+    note: 'social tile letter, size and weight from its tokens',
+  })),
   { fg: '--dz-grad-signal', bg: '--dz-navy', kind: 'ui', themes: once, note: 'social tile edge' },
 ];
 
@@ -395,6 +406,26 @@ export function resolveToken(name, tokens, seen = []) {
   );
 }
 
+// A length token in px: rem or px only, so nothing unreadable passes as large.
+export function lengthPx(value) {
+  const match = /^\s*(\d*\.?\d+)(rem|px)\s*$/.exec(value);
+  if (!match) throw new Error(`can't read the length "${value.trim()}"`);
+  return Number(match[1]) * (match[2] === 'rem' ? LARGE_TEXT.remPx : 1);
+}
+
+export function isLargeText(px, weight) {
+  return px >= LARGE_TEXT.px || (px >= LARGE_TEXT.boldPx && weight >= LARGE_TEXT.boldWeight);
+}
+
+// A pair's kind: `largeText` names its size and weight tokens, and decides between large and text.
+function kindOf(pair, tokens) {
+  if (!pair.largeText) return pair.kind;
+  const px = lengthPx(resolveToken(pair.largeText.size, tokens));
+  const raw = resolveToken(pair.largeText.weight, tokens).trim();
+  if (!/^\d+$/.test(raw)) throw new Error(`can't read the weight "${raw}"`);
+  return isLargeText(px, Number(raw)) ? 'large' : 'text';
+}
+
 // `grain` is the frost grain's brightest speck (grainSpeck), needed by the glass pairs.
 export function checkContrast(css, pairs = PAIRS, { grain } = {}) {
   const parsed = parseTokens(css);
@@ -411,7 +442,9 @@ export function checkContrast(css, pairs = PAIRS, { grain } = {}) {
       let fgValue;
       let bgValue;
       let backdropValue;
+      let kind;
       try {
+        kind = kindOf(pair, tokens);
         fgValue = resolveToken(pair.fg, tokens);
         bgValue = resolveToken(pair.bg, tokens);
         if (pair.backdrop) {
@@ -469,8 +502,8 @@ export function checkContrast(css, pairs = PAIRS, { grain } = {}) {
           if (!worst || ratio < worst.ratio) worst = { ratio, worstFg: toHex(composite(fg, bg)), worstBg: toHex(bg) };
         }
       }
-      const threshold = THRESHOLDS[pair.kind];
-      results.push({ ...pair, theme, ...worst, threshold, pass: worst.ratio >= threshold });
+      const threshold = THRESHOLDS[kind];
+      results.push({ ...pair, kind, theme, ...worst, threshold, pass: worst.ratio >= threshold });
     }
   }
   return { results, problems };

@@ -20,6 +20,8 @@ export const shellContent = {
   demoCard: 'Try a live demo',
   // The footer nav's accessible name, distinct from the header's "Main" (part C)
   footerNavLabel: 'Footer',
+  // Before the footer's hours (siteConfig.openingHours, facts §2), shown so P4's #organization may carry them (0019)
+  hoursLabel: 'Opening hours',
   // The footer finale's headline, display size (C41); catalogue 0.1 ("shows what to automate first")
   finaleHeading: 'Find out what to automate first.',
   // The finale's line under it; catalogue 0.1, with no numbers

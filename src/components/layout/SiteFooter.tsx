@@ -107,23 +107,30 @@ export function SiteFooter({ review = false }: SiteFooterProps) {
         <div className="grid gap-10 border-t border-hairline pt-12 md:grid-cols-[minmax(0,1fr)_auto] md:items-start">
           <div className="grid gap-6">
             {/* One block per line: inline spans would reach crawlers and text readers that ignore CSS
-                as one run (the brand name glued to the address), which garbles the NAP (P2 step 16). */}
-            <address className="grid gap-1 text-small not-italic">
-              <p className="font-bold text-fg-strong">{siteConfig.brandName}</p>
-              <p>{siteConfig.address}</p>
-              <p>
-                <a href={`mailto:${siteConfig.email}`} className="dz-underline dz-target text-link">
-                  {siteConfig.email}
-                </a>
-              </p>
-              {siteConfig.phone ? (
+                as one run (the brand name glued to the address), which garbles the NAP (P2 step 16).
+                The opening hours follow as their own line, outside <address>, which is for contact
+                details (P3 plan, A; facts §2). */}
+            <div className="grid gap-1 text-small">
+              <address className="grid gap-1 not-italic">
+                <p className="font-bold text-fg-strong">{siteConfig.brandName}</p>
+                <p>{siteConfig.address}</p>
                 <p>
-                  <a href={`tel:${siteConfig.phone}`} className="dz-underline dz-target text-link">
-                    {siteConfig.phone}
+                  <a href={`mailto:${siteConfig.email}`} className="dz-underline dz-target text-link">
+                    {siteConfig.email}
                   </a>
                 </p>
-              ) : null}
-            </address>
+                {siteConfig.phone ? (
+                  <p>
+                    <a href={`tel:${siteConfig.phone}`} className="dz-underline dz-target text-link">
+                      {siteConfig.phone}
+                    </a>
+                  </p>
+                ) : null}
+              </address>
+              <p>
+                {shellContent.hoursLabel}: {siteConfig.openingHours.display}
+              </p>
+            </div>
             <ul className="flex flex-wrap gap-1">
               {siteConfig.social.map((profile) => (
                 <li key={profile.key}>

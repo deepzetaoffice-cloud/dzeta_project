@@ -48,7 +48,9 @@ Reply in chat with this list filled in. Send **only public IDs**. Never a passwo
 - **(a) Recommended: one banner for every visitor; nothing that measures or advertises runs until they press Accept.** This is what the rules already say. The cost: GA4 sees only visitors who accept, so its numbers are lower than real traffic. Google fills some of the gap with modelling only once a site has about 1,000 events a day from visitors who declined and 1,000 daily visitors who accepted, so expect no modelling at first.
 - **(b) Analytics on by default in the UAE, banner only for Europe.** More data, but it goes against rule 09 as written and needs a legal view of the UAE PDPL first. Google's own consent rules only require consent mode for visitors from the EEA, the UK and Switzerland.
 
-**Question 9, conversions.** The site's one goal is booked audits. Proposed:
+> **Your answer (2026-10-02, final): a banner for Europe only.** Visitors from the EEA, the UK and Switzerland see the banner, and nothing that measures or advertises runs until they press Accept. Every other visitor (the UAE, the GCC and the rest of the world) gets analytics and ad tracking on by default, with no banner. (It replaces a first answer the same day: no banner for anyone.) It differs from rule 09 §2.7, so the P3 plan records it as an exception for your approval, and updates this guide's steps that mention the banner (B2 step 4).
+
+**Question 9, conversions.** The site's one goal is booked audits. Proposed (**your answer, 2026-10-02: as proposed**):
 
 | Conversion | When it fires | Counts for ads bidding? |
 |---|---|---|

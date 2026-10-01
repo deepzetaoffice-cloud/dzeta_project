@@ -97,7 +97,10 @@ describe('the navigation (src/content/en/navigation.ts)', () => {
       navigation.rail.map((link) => link.route),
       ...navigation.columns.map((column) => [column.route, ...column.items.map((item) => item.route)]),
       [navigation.solutions.route, ...navigation.solutions.items.map((item) => item.route)],
+      // The footer's Company, Resources and Legal columns (P3 plan, A fix 5)
+      ...navigation.footer.map((group) => group.links.map((link) => link.route)),
     ];
+    expect(navigation.footer.length).toBeGreaterThan(0);
     for (const list of lists) {
       for (const id of list) expect(ROUTES).toHaveProperty(id);
       expect(new Set(list).size).toBe(list.length);

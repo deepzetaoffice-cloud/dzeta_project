@@ -15,6 +15,16 @@ export const siteConfig = {
   // Facts §2, the one-line display. The hash before the office number is written \u0023, because
   // check:tokens reads it as a raw colour; the string is the fact, byte for byte (site-config.test.ts).
   address: 'Office \u0023202, Al Hilal Bank Building, Al Qusais 2, Dubai, United Arab Emirates',
+  // Facts §2, the opening hours. `display` is the fact byte for byte, shown in the footer (the owner,
+  // 2026-10-02), so P4's #organization node may carry them (sitewide markup only states what's
+  // visible, 0019). The other fields are the same fact in parts, for P4's openingHoursSpecification
+  // (schema.org day names); site-config.test.ts checks that both say the same thing.
+  openingHours: {
+    display: 'Monday to Saturday, 08:00–17:00 GST (UTC+4); closed Sunday',
+    days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+    opens: '08:00',
+    closes: '17:00',
+  },
   phone: null as string | null, // facts §2: PENDING, expected around 2026-10-09
   whatsapp: null as string | null, // facts §2: PENDING, with the phone
   social: [

@@ -12,12 +12,12 @@
 | ✓ | What | Why | When | How |
 |---|---|---|---|---|
 | ☐ | Tracking guide **Part A**: GTM container, GA4 property and its settings, and the IDs sent to Claude | P3 can't start without the IDs, and the GA4 settings stop events being counted twice | Now, before P3 | Tracking guide, Part A |
-| ☐ | Answer the guide's **questions 8 and 9** (the consent banner; what counts as a conversion) | They decide how P3 is built | Before P3 | Tracking guide §1 |
+| ☑ | Answer the guide's **questions 8 and 9** (the consent banner; what counts as a conversion) | They decide how P3 is built | Before P3 | **Answered 2026-10-02:** a consent banner for Europe only (EEA, UK, Switzerland: nothing runs until Accept; everyone else: tracking on by default); conversions as proposed |
 | ☐ | Tracking guide **Part B**: import the container, test in Preview and DebugView, custom dimensions, key events, publish | The code's event names and the dashboards must match exactly | After P3 is built | Tracking guide, Part B |
 | ☐ | Turn the GA4 **Internal Traffic** filter to Active | Keeps your own visits out of the numbers | A day after Part B | Tracking guide B7 |
 | ☐ | Meta, LinkedIn and Google Ads conversions (only the platforms you use) | Ads need conversions to optimise; one method each, so nothing is counted twice | After Part B | Tracking guide B8 |
 | ☐ | The **privacy and cookie policy names exactly the tools in the GTM container** | A policy that lists different tools from the ones that run is misleading (UAE PDPL) | Before launch, and after any tracking change | Claude compares the two and sends you the list |
-| ☐ | Test the consent banner: decline → no measuring tag fires; accept → they fire | The rule (09 §2.7) is "nothing non-essential before consent" | Before launch | Tag Assistant's Consent tab (guide B2) |
+| ☐ | Test the consent setup in Tag Assistant's Consent tab: it must match what P3 builds for your 2026-10-02 answer (a European visitor sees *denied* until Accept; any other visitor *granted*) | The site's consent signals and the tags must agree | Before launch | Tracking guide B2 (P3 updates the step) |
 | ☐ | Secret server keys (Meta and LinkedIn Conversions API tokens) go into Vercel's environment variables, entered by you | Secrets never pass through chat or the repo | When the lead flow ships (P6–P7) | Claude sends the variable names |
 
 ## 2. Devices (P2 decision 0019, C51)
@@ -56,7 +56,7 @@
 | ☐ | **Before setting up WhatsApp:** ask Claude to revise the n8n guide first | The guide registers the number in a way that blocks replying from the WhatsApp Business phone app, which you plan to use | Before the number is connected | Chat |
 | ☐ | Cal.com account and the "Free AI Automation Audit" event type | The booking flow (P7) | Before P7 | Accounts checklist 4.5 |
 | ☐ | Trade licence number, map pin | Facts, the footer and the schema | After the full licence is issued | Chat |
-| ☐ | **Decide whether the footer shows the opening hours** (Monday–Saturday 08:00–17:00, already confirmed) | The P2 SEO audit: P4's sitewide company markup may only include hours that are visible on the page | Before P4 | Chat: yes or no |
+| ☑ | **Decide whether the footer shows the opening hours** (Monday–Saturday 08:00–17:00, already confirmed) | The P2 SEO audit: P4's sitewide company markup may only include hours that are visible on the page | Before P4 | **Decided 2026-10-02: yes.** Claude builds it in P3's first step |
 
 ## 6. Sessions still parked (Claude reminds you)
 
@@ -72,3 +72,5 @@
 | Date | Change |
 |---|---|
 | 2026-10-01 | Created at the end of P2 (decision 0019): tracking, devices (C51, the iPhone), domain and hosting, visibility, contact details, parked sessions |
+| 2026-10-02 | The opening hours: decided (show them in the footer) |
+| 2026-10-02 | Questions 8 and 9 answered; the consent test row follows P3's design |
