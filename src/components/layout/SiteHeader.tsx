@@ -36,13 +36,14 @@ export function SiteHeader({ review = false }: SiteHeaderProps) {
         className="dz-header-pill pointer-events-auto relative isolate flex h-(--dz-header-height) items-center gap-2 rounded-pill bg-transparent ps-4 pe-2 sm:gap-4"
       >
         <span aria-hidden="true" className="dz-header-bg dz-glass dz-glass--live absolute inset-0 -z-10 rounded-pill" />
-        {/* At 360 px the bar holds the logo, the CTA and the menu button, so small screens show the mark. */}
+        {/* The mark stands in for the wordmark's D (the owner, 2026-10-01). At 360 px the bar holds the
+            logo, the CTA and the menu button, so small screens show the mark alone. */}
         <Link href="/" className="inline-flex min-h-11 shrink-0 items-center rounded-md">
           <span className="flex sm:hidden">
             <Logo variant="mark" label={siteConfig.brandName} className="h-9" />
           </span>
           <span className="hidden sm:flex">
-            <Logo variant="lockup" label={siteConfig.brandName} className="h-9" />
+            <Logo variant="inline" label={siteConfig.brandName} className="h-8" />
           </span>
         </Link>
         {links.length > 0 || services ? (
@@ -58,7 +59,7 @@ export function SiteHeader({ review = false }: SiteHeaderProps) {
                   <Link
                     href={href(link.route)}
                     aria-current={review && index === 0 ? 'page' : undefined}
-                    className="inline-flex min-h-11 items-center rounded-pill px-3 text-small font-semibold text-fg hover:text-fg-strong aria-[current=page]:text-fg-strong"
+                    className="inline-flex min-h-11 items-center rounded-pill px-2.5 text-small font-semibold text-fg hover:text-fg-strong aria-[current=page]:text-fg-strong xl:px-3"
                   >
                     {link.label}
                   </Link>

@@ -6,7 +6,14 @@ import type { Pillar, Tier2Name } from '@/components/icons/registry';
 import type { RouteId } from '@/lib/routes';
 
 export type NavLink = { route: RouteId; label: string };
-export type MenuItem = { route: RouteId; name: string; outcome: string; icon?: Tier2Name };
+export type MenuItem = {
+  route: RouteId;
+  name: string;
+  outcome: string;
+  icon?: Tier2Name;
+  /** Left out of the mega menu (the owner, 2026-10-01); still in the pillar's list for the footer */
+  mega?: false;
+};
 export type MenuColumn = {
   pillar: Pillar;
   route: RouteId;
@@ -29,7 +36,7 @@ export const navigation = {
   // The header's nav, in header.md's order after Services
   primary: [
     { route: 'R011', label: 'Automation' },
-    { route: 'R140', label: 'Studio' },
+    { route: 'R140', label: 'Designer Studio' },
     { route: 'R110', label: 'Deepzeta Sync' },
     { route: 'R150', label: 'Work' },
     { route: 'R152', label: 'Pricing' },
@@ -77,16 +84,19 @@ export const navigation = {
           route: 'R038',
           name: 'Review & Reputation Automation',
           outcome: 'Review requests go out at the right moment',
+          mega: false,
         },
         {
           route: 'R045',
           name: 'UAE E-Invoicing Readiness & Integration',
           outcome: 'Get your invoicing data and systems ready',
+          mega: false,
         },
         {
           route: 'R051',
           name: 'AI Shopping Visibility (Agentic Commerce Readiness)',
           outcome: 'Your products, ready for AI assistants to recommend',
+          mega: false,
         },
       ],
     },
@@ -189,7 +199,7 @@ export const navigation = {
   // The mega menu's side rail (header.md); "Try a live demo" comes with P7's demos
   rail: [
     { route: 'R110', label: 'Deepzeta Sync' },
-    { route: 'R140', label: 'Studio' },
+    { route: 'R140', label: 'Designer Studio' },
     { route: 'R003', label: 'About' },
     { route: 'R005', label: 'Contact' },
     { route: 'R120', label: 'Resources' },

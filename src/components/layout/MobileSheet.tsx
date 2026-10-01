@@ -13,7 +13,8 @@ import { isLive, ROUTES, type RouteId } from '@/lib/routes';
 // (`commandfor`, `command`), so no JavaScript is needed; header.ts covers browsers without them and
 // closes it on a client navigation. React 19.3 has no props for those two attributes yet, so they're
 // passed as plain attributes, which React writes as they are.
-// Inside: the live nav items at statement size (type-word-stagger, whole items), the pillar bars,
+// Inside: the live nav items at heading size (type-word-stagger, whole items; the owner asked for them
+// smaller than the spec's statement size, 2026-10-01), the pillar bars,
 // the display controls (Q2) and the thumb zone with the CTA. The sticky CTA bar (part C) hides while
 // it's open. The close button sits where the menu button was, so the menu icon seems to turn into it.
 
@@ -63,7 +64,7 @@ export function MobileSheet({ review }: MobileSheetProps) {
                   <li key={link.route}>
                     <Link
                       href={href(link.route)}
-                      className="dz-stagger inline-block text-statement break-words text-fg-strong"
+                      className="dz-stagger inline-flex min-h-11 items-center text-h2 text-fg-strong"
                     >
                       {link.label}
                     </Link>
@@ -78,7 +79,7 @@ export function MobileSheet({ review }: MobileSheetProps) {
                 <li key={column.pillar}>
                   <Link
                     href={href(column.route)}
-                    className={`dz-pillar-bar dz-pillar-bar--${column.pillar} flex min-h-11 items-center ps-4 font-semibold text-fg-strong`}
+                    className={`dz-pillar-bar dz-pillar--${column.pillar} flex min-h-11 items-center ps-4 font-semibold text-fg-strong`}
                   >
                     {column.name}
                   </Link>

@@ -233,8 +233,9 @@
   --dz-header-inset: 0.75rem;
   --dz-header-condense: 0.86;
   --dz-hop-size: 0.875rem;
-  /* The mega menu's gap below the pill */
+  /* The mega menu's gap below the pill, and a lit row on its navy glass (frost at 6%) */
   --dz-mega-gap: 0.5rem;
+  --dz-menu-hover: rgba(201, 212, 255, 0.06);
 
   /* glass-liquid (13 §4.1; the Lab's values): the specular rim on the top edge and the sheen that
      crosses once on hover. No refraction (P2 plan, finding 9). */

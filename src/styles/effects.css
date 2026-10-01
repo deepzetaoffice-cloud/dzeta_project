@@ -477,24 +477,88 @@
     background-color: var(--dz-pillar-colour);
   }
 
-  .dz-mega-pixel--ai,
-  .dz-pillar-bar--ai {
+  /* A pillar's colour (C6) for whatever sits inside: the menu's guide lines and pixels, the sheet's bars */
+  .dz-pillar--ai {
     --dz-pillar-colour: var(--dz-pixel-ai-solid);
   }
 
-  .dz-mega-pixel--web,
-  .dz-pillar-bar--web {
+  .dz-pillar--web {
     --dz-pillar-colour: var(--dz-pixel-web-solid);
   }
 
-  .dz-mega-pixel--software,
-  .dz-pillar-bar--software {
+  .dz-pillar--software {
     --dz-pillar-colour: var(--dz-pixel-software-solid);
   }
 
-  .dz-mega-pixel--ranking,
-  .dz-pillar-bar--ranking {
+  .dz-pillar--ranking {
     --dz-pillar-colour: var(--dz-pixel-ranking-solid);
+  }
+
+  /* The menu's service rows (the owner asked for the best hover on every menu item, 2026-10-01):
+     hover-guide-line (13 §4.3), a line in the pillar's colour that grows at the inline start, with the
+     row lit and its name at full strength; the row's Tier 2 icon plays its story (hover-glow), or its
+     pillar pixel pops. Keyboard focus shows the same (13 §2.10). Instant under Reduce effects. */
+  .dz-menu-row {
+    position: relative;
+  }
+
+  .dz-menu-row::before {
+    content: '';
+    position: absolute;
+    inset-block: 0.625rem;
+    inset-inline-start: 0;
+    inline-size: 0.1875rem;
+    border-radius: var(--dz-radius-pill);
+    background-color: var(--dz-pillar-colour);
+    scale: 1 0;
+  }
+
+  .dz-menu-row:is(:hover, :focus-visible) {
+    background-color: var(--dz-menu-hover);
+  }
+
+  .dz-menu-row:is(:hover, :focus-visible)::before {
+    scale: 1 1;
+  }
+
+  .dz-menu-row:is(:hover, :focus-visible) .dz-mega-pixel::before {
+    scale: 1.6;
+  }
+
+  .dz-menu-row {
+    @variant fx {
+      transition: background-color var(--dz-dur-fast) var(--dz-ease-out);
+      &::before {
+        transition: scale var(--dz-dur-base) var(--dz-ease-out);
+      }
+    }
+  }
+
+  .dz-mega-pixel {
+    @variant fx {
+      &::before {
+        transition: scale var(--dz-dur-base) var(--dz-ease-pop);
+      }
+    }
+  }
+
+  /* "All … services": the underline draws and the arrow nudges toward the inline end. */
+  .dz-menu-arrow {
+    @variant fx {
+      transition: translate var(--dz-dur-base) var(--dz-ease-out);
+    }
+  }
+
+  .dz-menu-all:is(:hover, :focus-visible) .dz-menu-arrow {
+    @variant fx {
+      translate: var(--dz-nudge) 0;
+    }
+  }
+
+  [dir='rtl'] .dz-menu-all:is(:hover, :focus-visible) .dz-menu-arrow {
+    @variant fx {
+      translate: calc(var(--dz-nudge) * -1) 0;
+    }
   }
 
   /* The mobile sheet (P2 plan, J): a full-screen modal dialog, its panel glass; it drops in like the

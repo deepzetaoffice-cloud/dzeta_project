@@ -52,13 +52,23 @@ test.describe('The logo on Home', () => {
     expect(Buffer.from(await response.body()).equals(readFileSync(LOCKED_LOGO_PATH))).toBe(true);
   });
 
+  // The header shows the inline lockup (the owner, 2026-10-01): one SVG holding two crops, the mark and
+  // "eepzeta".
   test('never mirrors in Arabic: the mark stays left of the wordmark (11 §1)', async ({ page }) => {
     await page.goto('/');
     await page.evaluate(() => document.documentElement.setAttribute('dir', 'rtl'));
+    // Each crop's left edge on screen, through the outer SVG's transform (a nested SVG's own box would
+    // count the whole logo image inside it, not the crop you see).
     const [mark, wordmark] = await page
       .getByRole('img', { name: siteConfig.brandName })
-      .locator('svg')
-      .evaluateAll((svgs) => svgs.map((svg) => svg.getBoundingClientRect().left));
+      .locator('svg svg')
+      .evaluateAll((svgs) =>
+        svgs.map((element) => {
+          const svg = element as SVGSVGElement;
+          const ctm = (svg.ownerSVGElement as SVGSVGElement).getScreenCTM() as DOMMatrix;
+          return ctm.a * svg.x.baseVal.value + ctm.e;
+        }),
+      );
     expect(mark).toBeLessThan(wordmark ?? 0);
   });
 
