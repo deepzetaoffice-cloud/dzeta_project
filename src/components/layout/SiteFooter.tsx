@@ -88,8 +88,11 @@ export function SiteFooter({ review = false }: SiteFooterProps) {
                 <ul aria-labelledby={`dz-footer-${column.id}`} className="mt-2">
                   {column.links.map((link) => (
                     <li key={link.route} className="flex min-h-11 items-center py-1">
+                      {/* No prefetch: once the columns are live, some thirty links entering the view
+                          together would each fetch their page data on a slow phone (P2 step 16). */}
                       <Link
                         href={navHref(link.route, review)}
+                        prefetch={false}
                         className="dz-underline dz-target text-small text-fg hover:text-fg-strong"
                       >
                         {link.label}
@@ -103,16 +106,22 @@ export function SiteFooter({ review = false }: SiteFooterProps) {
         ) : null}
         <div className="grid gap-10 border-t border-hairline pt-12 md:grid-cols-[minmax(0,1fr)_auto] md:items-start">
           <div className="grid gap-6">
+            {/* One block per line: inline spans would reach crawlers and text readers that ignore CSS
+                as one run (the brand name glued to the address), which garbles the NAP (P2 step 16). */}
             <address className="grid gap-1 text-small not-italic">
-              <span className="font-bold text-fg-strong">{siteConfig.brandName}</span>
-              <span>{siteConfig.address}</span>
-              <a href={`mailto:${siteConfig.email}`} className="dz-underline dz-target w-fit text-link">
-                {siteConfig.email}
-              </a>
-              {siteConfig.phone ? (
-                <a href={`tel:${siteConfig.phone}`} className="dz-underline dz-target w-fit text-link">
-                  {siteConfig.phone}
+              <p className="font-bold text-fg-strong">{siteConfig.brandName}</p>
+              <p>{siteConfig.address}</p>
+              <p>
+                <a href={`mailto:${siteConfig.email}`} className="dz-underline dz-target text-link">
+                  {siteConfig.email}
                 </a>
+              </p>
+              {siteConfig.phone ? (
+                <p>
+                  <a href={`tel:${siteConfig.phone}`} className="dz-underline dz-target text-link">
+                    {siteConfig.phone}
+                  </a>
+                </p>
               ) : null}
             </address>
             <ul className="flex flex-wrap gap-1">
@@ -122,10 +131,13 @@ export function SiteFooter({ review = false }: SiteFooterProps) {
                     href={profile.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label={shellContent.socialLinkName(siteConfig.brandName, profile.platform)}
-                    title={profile.platform}
                     className={`dz-social dz-social--${profile.key} dz-press`}
                   >
+                    {/* The name is real text, so text readers and crawlers get it too, not only an
+                        aria-label; the tile's letters are a logotype and stay hidden (P2 step 16). */}
+                    <span className="sr-only">
+                      {shellContent.socialLinkName(siteConfig.brandName, profile.platform)}
+                    </span>
                     <span className="dz-social-glow" aria-hidden="true" />
                     <span className="dz-social-tile" aria-hidden="true">
                       <span className="dz-social-sheen" />

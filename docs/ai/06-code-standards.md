@@ -1,6 +1,6 @@
 # 06 · Code Standards
 
-> **Applies to:** all source code · **Precedence:** below 00 · **Last reviewed:** 2026-09-30
+> **Applies to:** all source code · **Precedence:** below 00 · **Last reviewed:** 2026-10-01
 
 ---
 
@@ -70,7 +70,7 @@
     - CSP ships as `Content-Security-Policy-Report-Only` in P0. The enforcement mode is decided in P3, after GTM is in, because nonce-based CSP forces dynamic rendering (verify on the installed Next.js).
   - `images.dangerouslyAllowSVG` stays off.
   - **Absolute URLs** are built only with `siteUrl()` / `absoluteUrl(path, locale)` from `src/lib/url.ts`, fed by the validated `NEXT_PUBLIC_SITE_URL`. There are no hostname literals in code ([08](08-seo-geo-aeo-schema.md) §1, C27).
-  - `dangerouslySetInnerHTML` only for JSON-LD produced by our schema builders, with `<` escaped (see [08](08-seo-geo-aeo-schema.md)).
+  - `dangerouslySetInnerHTML` only for JSON-LD produced by our schema builders, with `<` escaped (see [08](08-seo-geo-aeo-schema.md)). **One named exception (C40):** the no-flash preferences script, the static string in `src/lib/fx/init-script.ts`, built only from our own constants (never request or visitor data) and mounted once per document by `SiteDocument`. P3's CSP allows it by its hash.
   - Rate-limit form endpoints with a store that works on serverless (not in-memory).
   - **Tools that fetch a visitor-supplied URL** guard against SSRF. They allow only public `http(s)` hosts, block private, link-local and metadata IP ranges after DNS resolution, and cap redirects, response size and time.
   - **AI-powered tools** cap tokens per request and per visitor, and treat visitor input and fetched page content as untrusted (prompt-injection handling).

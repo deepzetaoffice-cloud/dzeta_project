@@ -131,13 +131,21 @@
   .dz-cta--header {
     color: var(--dz-white);
     box-shadow: inset 0 0 0 var(--dz-cta-outline-width) var(--dz-cta-edge);
+  }
+
+  .dz-cta--header .dz-cta-charge {
+    opacity: 0;
+  }
+
+  /* The hand-off's fades run only once cta.ts has laid out the first state (data-cta-armed), so a page
+     never fades its header CTA in at load, before the visitor has done anything (13 §2.1). */
+  :root[data-cta-armed] .dz-cta--header {
     @variant fx {
       transition: color var(--dz-dur-base) var(--dz-ease-out);
     }
   }
 
-  .dz-cta--header .dz-cta-charge {
-    opacity: 0;
+  :root[data-cta-armed] .dz-cta--header .dz-cta-charge {
     @variant fx {
       transition: opacity var(--dz-dur-base) var(--dz-ease-out);
     }
@@ -781,9 +789,10 @@
     }
   }
 
-  /* The mobile sheet keeps its content inside the safe area in landscape (viewportFit 'cover'). */
+  /* The mobile sheet keeps its content inside the safe area in landscape (viewportFit 'cover'). Both sides
+     take the larger inset: logical padding would swap a physical left and right inset in RTL. */
   .dz-sheet {
-    padding-inline: env(safe-area-inset-left) env(safe-area-inset-right);
+    padding-inline: max(env(safe-area-inset-left), env(safe-area-inset-right));
   }
 
   /* The footer, "The Landing" (footer.md; P2 plan, L). Below 1024 px its end stays clear of the sticky
@@ -1084,22 +1093,29 @@
     inset-block-end: 0;
     z-index: var(--dz-layer-sticky);
     padding-block: --spacing(3) max(--spacing(3), env(safe-area-inset-bottom));
-    padding-inline: max(var(--dz-gutter), env(safe-area-inset-left)) max(var(--dz-gutter), env(safe-area-inset-right));
+    padding-inline: max(var(--dz-gutter), env(safe-area-inset-left), env(safe-area-inset-right));
     border-inline-width: 0;
     border-block-end-width: 0;
     translate: 0 100%;
     visibility: hidden;
-    @variant fx {
-      transition:
-        translate var(--dz-dur-base) var(--dz-ease-out),
-        visibility var(--dz-dur-base);
-    }
     @variant lg {
       display: none;
     }
   }
 
-  .dz-sticky[data-shown] {
+  /* It slides only after the first state (cta.ts, data-cta-armed): on a page with no CTA in its first
+     screen, the bar is simply there at load rather than sliding in by itself (13 §2.1). */
+  :root[data-cta-armed] .dz-sticky {
+    @variant fx {
+      transition:
+        translate var(--dz-dur-base) var(--dz-ease-out),
+        visibility var(--dz-dur-base);
+    }
+  }
+
+  /* Shown while it holds focus: scrolling the finale's CTA into view must not hide a focused control. */
+  .dz-sticky[data-shown],
+  .dz-sticky:focus-within {
     translate: none;
     visibility: visible;
   }
@@ -1115,12 +1131,15 @@
    anchor or a focused control scrolls clear of the sticky bar. */
 @layer base {
   body {
-    padding-inline: env(safe-area-inset-left) env(safe-area-inset-right);
+    padding-inline: max(env(safe-area-inset-left), env(safe-area-inset-right));
   }
 
   html {
     @variant max-lg {
-      scroll-padding-block-end: calc(var(--dz-sticky-height) + env(safe-area-inset-bottom));
+      scroll-padding-block-end: calc(
+        var(--dz-sticky-height) + var(--dz-glass-edge-width) + env(safe-area-inset-bottom) + var(--dz-focus-width) +
+          var(--dz-focus-offset)
+      );
     }
   }
 }
@@ -1148,10 +1167,16 @@
 }
 
 /* The switches work once the runtime has started (preferences.ts marks <html>). Before that, and
-   without JavaScript, the group isn't shown, so no control offers a change it can't make. Outside the
-   layers, so it wins over the group's own display utility (flex or grid). */
-:root:not([data-prefs='ready']) .dz-display {
+   without JavaScript, the group isn't shown (in the footer it's hidden in place, below), so no control
+   offers a change it can't make. Outside the layers, so it wins over the group's own display utility. */
+:root:not([data-prefs='ready']) .dz-display:not(footer *) {
   display: none;
+}
+
+/* In the footer the group keeps its space instead, so the legal line below doesn't move when the
+   runtime starts (P2 step 16); hidden, it's out of the tab order and the accessibility tree. */
+:root:not([data-prefs='ready']) footer .dz-display {
+  visibility: hidden;
 }
 
 /* The close icon turns in as the sheet opens. */

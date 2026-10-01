@@ -518,6 +518,10 @@ test.describe('JavaScript off', () => {
     await expect(footer.getByRole('heading', { level: 2, name: shellContent.finaleHeading })).toBeAttached();
     await expect(footer.getByRole('link', { name: socialName('LinkedIn'), exact: true })).toBeAttached();
     await expect(footer.getByRole('switch')).toHaveCount(0);
+    // ...but the footer's group keeps its space, so nothing below it moves once the runtime starts.
+    const display = footer.locator('.dz-display');
+    await expect(display).toHaveCSS('visibility', 'hidden');
+    expect((await display.boundingBox())?.height ?? 0).toBeGreaterThan(0);
     await expect(page.locator('[data-fx-sticky]')).toBeHidden();
   });
 });
@@ -695,6 +699,44 @@ test.describe('The sticky CTA bar (conversion-path.md; C42)', () => {
     await open(page, HOME, 1280);
     await expect(bar(page)).toBeHidden();
   });
+
+  test('390 px, Home: it is simply there at load, then slides only after a visitor scrolls (13 §2.1)', async ({
+    page,
+  }) => {
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    await open(page, HOME, 390);
+    await expect.poll(() => shown(page)).toBe(true);
+    const moving = () => bar(page).evaluate((el) => el.getAnimations().length);
+    expect(await moving()).toBe(0);
+    await page.locator('footer [data-cta="primary"]').scrollIntoViewIfNeeded();
+    await expect.poll(() => shown(page)).toBe(false);
+  });
+
+  for (const [path, tabs] of [
+    [HOME, 30],
+    [REVIEW, 90],
+  ] as const) {
+    test(`390 px, ${path}: Tab never leaves a focused control under the bar (WCAG 2.4.11)`, async ({ page }) => {
+      await open(page, path, 390);
+      // How far the focused control's ring reaches under the bar's top edge (0 when the bar is away).
+      const covered = () =>
+        page.evaluate(() => {
+          const el = document.activeElement;
+          const bar = document.querySelector('[data-fx-sticky]');
+          if (!el || el === document.body || !bar || bar.contains(el)) return 0;
+          if (getComputedStyle(bar).visibility !== 'visible') return 0;
+          const root = getComputedStyle(document.documentElement);
+          const ring =
+            parseFloat(root.getPropertyValue('--dz-focus-width')) +
+            parseFloat(root.getPropertyValue('--dz-focus-offset'));
+          return Math.max(0, el.getBoundingClientRect().bottom + ring - bar.getBoundingClientRect().top);
+        });
+      for (let i = 0; i < tabs; i++) {
+        await page.keyboard.press('Tab');
+        await expect.poll(covered).toBe(0);
+      }
+    });
+  }
 });
 
 test.describe('No serious or critical axe violations (every state)', () => {

@@ -8,9 +8,9 @@ Every page ends with a landing. The journey line that followed the visitor down 
 
 ## Finale (pre-footer)
 
-- `scroll-journey-line` lands, then The Landing plays: `scroll-assemble` of the cluster (13 §5).
-- A statement headline follows (optionally with `type-outline-fill`).
-- Then the primary CTA, "Book a free AI audit", with WhatsApp as the secondary action.
+- `scroll-journey-line` lands, then The Landing plays: `scroll-assemble` of the cluster (13 §5). The four pixels fly in on 35° paths once, when the finale enters (the shared observer); otherwise, and under Reduce effects, the cluster is shown assembled.
+- A headline follows, an `<h2>` at the **display size** (`--dz-text-display`, C41): each page's one statement headline is its own (13 §2.6).
+- Then the primary CTA, "Book a free AI audit", with WhatsApp as the secondary action once the number is confirmed. The finale's CTA joins the hand-off (C42, conversion-path.md).
 
 ## Page Nutrition Label
 
@@ -26,12 +26,13 @@ Every page ends with a landing. The journey line that followed the visitor down 
 
 ## Body
 
-- **Links:**
-  - link columns in the four pixel colours, one per pillar (C6)
+- **Links** (in a `<nav>` named "Footer"; only live registry rows render, so the columns appear as pages ship, P2 Q1):
+  - link columns in the four pixel colours, one per pillar (C6): every service in the pillar, including the three left out of the mega menu (header.md), then "All … services"
   - Company, Resources, Legal. Company includes Deepzeta Sync (`/tools`) once the page ships.
-- **Social links:** official monochrome marks from facts §2.1 (never redrawn), linked per the rules in the facts file.
-- **Controls:** a language switch placeholder (hidden until Arabic) and the Reduce effects switch.
-- **Business name, address and phone:** shown only once CONFIRMED in `docs/facts/company-facts.md`. Until then the block is omitted, never filled with placeholders.
+- **Social links:** Deepzeta's own letter tiles (C49), one per profile in facts §2.1: in · Ig · f · YT · T · X · @ · S · P, each filled with its platform's colour inside the signal-gradient edge, linked per the rules in the facts file. Hover: `hover-glow` (13 §4.3); touch: `touch-press`.
+- **Controls:** the display controls (Reduce effects beside the theme switch, 05 §1) and a language switch placeholder (hidden until Arabic).
+- **Business name, address and phone:** an `<address>` from the site config, each line shown only once CONFIRMED in `docs/facts/company-facts.md`. A PENDING value (the phone, WhatsApp) is left out, never filled with a placeholder.
+- **The legal line:** "© 2026 Deepzeta Digital Solutions L.L.C.".
 - **On mobile,** "See how AI reads this page" also appears here. It shares the same AI View state as the header.
 
 ## Light mode
@@ -40,4 +41,4 @@ The finale band and the footer stay navy in both themes, because the logo's whit
 
 ## Icons
 
-Tier 1 arrows and external-link; official platform marks.
+Tier 1 arrows and external-link; the social letter tiles (C49).

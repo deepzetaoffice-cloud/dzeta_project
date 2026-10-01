@@ -226,6 +226,38 @@ Progress:
 - 2026-10-01 · **The owner's answers (checklist 4 and 5):**
   - **The phone:** a Samsung Galaxy S23 Ultra with 8 GB. It's a flagship, not the budget class that 04 §2 and 07's test conditions name, so the owner's "ok" (checklist 2) isn't the budget-phone result. The lab's CPU 4× covers the main thread; a budget phone's GPU, where the glass blur is drawn, isn't measured yet. The 2 GB `deviceMemory` threshold can't be confirmed on an 8 GB phone and stays as it is. How to close this is with the owner.
   - **`viewportFit: 'cover'`: (a), keep it,** and check on any iPhone before launch (P10): the sticky bar clear of the home indicator, the safe areas in landscape, iOS `:active` and the grain in Safari. This replaces the Risks line's "dropped if it can't be verified". 0019 records it at step 16.
+- 2026-10-01 · **The owner on step 15 and the build:** "i will check after with a budget android … we will check before launch. now we need to continue the build as planned." Recorded as **C51**. The owner also set a standing rule for P3 onward: tracking names must be identical in the code and in GTM, GA4 and every other tool, and every manual step is recorded for before launch. That's met by two owner documents on their own branch, `docs/p3-tracking-prep` (outside this plan's table): `docs/owner/p3-tracking-setup-guide.md` and `docs/owner/pre-launch-register.md`.
+- 2026-10-01 · **Step 16 (phase exit) is done. Merge on your "merge".**
+  - **The full `verify`** (CI environment, before the audit fixes): exit 0. That's `verify:fast`, `format:check`, `check:facts`, `check:rules`, `check:effects`, 276 unit tests, `build`, `check:schema`, `check:seo`, `check:links`, 135 e2e and lhci, with the page weight at 186,638 B on the review page.
+  - **The audits** (reviewer, SEO/GEO, performance/accessibility): no blocking findings. Fixed within the table:
+    - the footer's address as one block per line
+    - the tiles' names as real text, with no `title`
+    - the tiles' letters at 19 px, large text (`--dz-social-letter`; `check:contrast` gates them as large text)
+    - the hand-off's first state shown without a transition (`data-cta-armed` in `cta.ts` and `effects.css`)
+    - the sticky bar shown while focused, and its scroll reserve plus its edge and the focus ring
+    - the footer's switches hidden in place before the runtime starts
+    - `prefetch={false}` on the footer's page links
+    - the safe-area padding symmetric (RTL)
+    - `OWN_JS_HOME` **8,052 B**
+    - the stale comments in `viewport.ts` and `JourneyLine.tsx`
+    - the sticky bar's `glass-frost` row in the effect register
+  - **Recorded in 0019, not changed:** the journey line's end; its light-theme variant; the review page's jank not re-measured after the gallery change; landmarks and new-tab notices for P6; the forward items for P3–P6; and the small fixes outside the table, proposed to the owner.
+  - **The owner's after-the-fact OK is asked for one table row:** `tests/e2e/icons.spec.ts` (step 14: two colour samples scroll into view).
+  - **After the fixes:** `verify:fast` exit 0; `test` 276 passed; `build` exit 0; `test:e2e` **138 passed** (3 new: the bar at load, and a Tab walk on Home and on the review page); `check:facts`, `check:schema`, `check:seo`, `check:links`, `check:rules`, `check:effects` and `format:check` passed; **lhci** passed (Home median LCP 2,334 ms, runs 2,328–2,414, Performance 98, CLS 0; the review page 2,482 ms; scripts 147,720 B; page weight 186,668 B, 4.1 KB left); `lhci assert` passed with `OWN_JS_HOME` = 8,052.
+  - **The end-of-phase protected edits** (P):
+    - 05 §1, §3, §4, §5, §6
+    - 06 §4 (C40)
+    - 03 §1
+    - 13 §4.3 (the tiles under `hover-glow`; the Lab's longer single passes) and §7 (the caps with their measured sizes)
+    - header.md, footer.md, conversion-path.md and the design change log
+    - the new-icon skill's Tier 3 recipe
+    - `CLAUDE.md` "Current state"
+    - C51 appended
+  - **Proposed, not made** (outside the table):
+    - 07 §2 still calls the 10 KB cap "provisional"; 13 §7 now records it as confirmed.
+    - Two lessons from P2: `next dev` writes to the protected `AGENTS.md` in Next.js 16.3, and a `sed` edit with regex characters corrupted a file.
+    - `ci.yml` could name each Lighthouse run's page.
+  - **Decision 0019** written, with its index row.
 Phase: P2
 Branch: three parts, one merge each (Q5): `feat/p2a-shell-foundations`, `feat/p2b-header`, `feat/p2c-footer` (each from `main` after the previous merge)
 Page tier: T1. The shell renders on every page. It's measured on Home (`lhci` ≥ 95) and, from part B, on the review page (A3), which shows the complete shell.
@@ -718,7 +750,7 @@ A file listed in an earlier part may be modified again in a later part only wher
 | ~~`public/brand/social/*.svg`~~ | DROPPED | Replaced by the letter tiles (C49); nothing downloaded |
 | `scripts/check-contrast.mjs` | MODIFY | Each tile's letter on its colour, and the signal edge on navy (C49; the owner, step 13) |
 | `tests/unit/check-contrast.test.ts` | MODIFY | Only if the new pairs need a failing example |
-| `docs/ai/conflict-register.md` | APPEND-ONLY (protected) | C49 (the owner, step 13: "Yes, record it"); C50 (the owner, step 14: "A, raise it to 2,700 ms") |
+| `docs/ai/conflict-register.md` | APPEND-ONLY (protected) | C49 (the owner, step 13: "Yes, record it"); C50 (the owner, step 14: "A, raise it to 2,700 ms"); C51 (the owner, step 15: the budget-phone check before launch) |
 | `docs/facts/company-facts.md` | MODIFY | §2.1's icon rule line only (C49; the owner, step 13) |
 | `lighthouserc.cjs` | MODIFY | `OWN_JS_HOME` measured; the review page's LCP limit at 2,700 ms (C50; the owner, step 14) |
 | `tests/unit/site-config.test.ts` | CREATE | (O) |
@@ -772,6 +804,7 @@ Temporary scripts (the first-paint trace) live in `.scratch/` and are deleted be
 |---|---|---|---|---|
 | Header pill (every page) | `glass-live` | GPU work while content scrolls behind the pill → one live surface in the header; `glass-frost` under Reduce effects and low-end hints; solid in forced colours | none (CSS) | `-webkit-backdrop-filter` in the built CSS |
 | Mega menu panel; mobile sheet | `glass-live` | They cover the page while open, and only one is open at a time → the same fallbacks | none (CSS) | popover and dialog transitions (`@starting-style`) |
+| Sticky CTA bar (below 1024 px; step 14, recorded at step 16) | `glass-frost` | ~0: a phone never runs a second live blur beside the header pill | grain ≤ 2 KB (shared) | safe areas on an iPhone (pre-launch, 0019) |
 | Every glass surface under Reduce effects | `glass-frost` | ~0: a tint, an edge and one cached grain tile, loaded only when shown | grain ≤ 2 KB (planned ≤ 0.5 KB) | the SVG grain in Safari and Firefox (owner checklist) |
 | Glass in forced colours and more contrast | `glass-tint` | 0 | — | — |
 | Mega-menu demo card (review page until P7) | `glass-liquid` | The one per view; desktop fine pointer only; the sheen crosses once on hover; no refraction (finding 9) | none (CSS) | — |

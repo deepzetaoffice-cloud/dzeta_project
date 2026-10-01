@@ -1,13 +1,14 @@
 # 05 · Design System
 
-> **Applies to:** all styling, components, icons, motion · **Precedence:** below 00 · **Last reviewed:** 2026-09-30
+> **Applies to:** all styling, components, icons, motion · **Precedence:** below 00 · **Last reviewed:** 2026-10-01
 > **Related:** `Planning Folder/For Ai/DeepZeta Icon Master Rules.md` (icons) · [13-experience-design.md](13-experience-design.md) (effects, motion, interaction: the only home for effect rules) · [07-performance-budget.md](07-performance-budget.md) (motion cost limits) · [docs/design/](../design/README.md) (surface specs)
 
 ---
 
 ## 1. Principles
 
-1. **Brand world:** dark navy is the default look, and every first visit is dark, whatever the system setting. A full light mode is built from the same tokens. The visitor switches to it, and the choice is remembered (P2 header). Browsers report "no preference" as light, so following the system would show most first visits the light theme (decision 0015).
+1. **Brand world:** dark navy is the default look, and every first visit is dark, whatever the system setting. A full light mode is built from the same tokens. The visitor switches to it, and the choice is remembered. Browsers report "no preference" as light, so following the system would show most first visits the light theme (decision 0015).
+   - **The display controls** (the theme switch beside Reduce effects, one "Display" group) live in the mobile sheet, the desktop mega menu's strip and the footer, never in the header bar itself (P2, [decision 0019](../decisions/0019-layout-shell.md)). The header, the sheet and the footer stay navy in the light theme.
 2. **70 / 20 / 10 balance:** 70% navy surfaces, 20% white/frost text, 10% brand colour.
 3. **Tokens, never raw values.** Components use Tailwind classes generated from tokens. Raw hex/rgb/px values are allowed **only** in `src/styles/tokens.css` (enforced by `check:tokens`).
 4. **Tailwind v4 is CSS-first.** Tokens are defined with `@theme` in `src/styles/tokens.css`. **There is no `tailwind.config.js`.** Don't create one.
@@ -115,7 +116,8 @@ The header, the CTA band and the footer stay navy in both themes, because the lo
 | Arabic (after launch) | Readex Pro (variable) | Geometric match for Montserrat; Arabic subset |
 | Data / labels | JetBrains Mono, one static 500 weight (0015) | Eyebrows, stats, code-like labels |
 
-- **Self-hosted** through `next/font/local` (`src/styles/fonts.ts`), from the latin files in `src/styles/fonts/` with their OFL licences, `display: swap`, with the size-matched fallback.
+- **Self-hosted** through `next/font/local` (`src/styles/fonts.ts`), from the latin files in `src/styles/fonts/` with their OFL licences, `display: swap`, with size-matched fallback faces.
+  - **The fallback faces** (P2, 0019): one `@font-face` per weight the site uses (400, 500, 700, 800), each sized to Montserrat at that weight, in two families: Arial (also naming Liberation Sans, its metric twin on Linux) and Roboto (Android's system font). The sizes come from `npm run fonts:fallback` (Chromium measurements), so a font swap re-wraps few lines; `tests/e2e/fonts.spec.ts` gates it. next/font's own fallback (one face sized for Montserrat's Thin default) is off.
   - The families are `--dz-font-sans` (Montserrat, the base font, `font-sans`) and `--dz-font-mono` (`font-mono`).
   - Only Montserrat is preloaded; the mono loads only on pages that show it.
   - Never a Google Fonts `<link>`, and no request goes to Google.
@@ -138,7 +140,7 @@ The header, the CTA band and the footer stay navy in both themes, because the lo
 - **Statement type:** `--dz-text-statement`, a size above `--dz-text-display` for the one statement headline per page ([13](13-experience-design.md) §2). Montserrat 800–900, tight leading and tracking. Arabic statements use Readex Pro with no letter-spacing ([11](11-i18n-rtl-readiness.md) §1).
   - Readex Pro stops at weight 700, so the Arabic statement weight is decided in P11.
   - The maximum is 5.58rem, the largest size the owner saw in the Lab (conflict C34 corrects 0009's 9rem).
-- Headings use `text-wrap: balance` (a base style); body measure 60–70 characters (`--dz-measure`, 65ch).
+- Headings use `text-wrap: balance` and `overflow-wrap: break-word` (base styles); body measure 60–70 characters (`--dz-measure`, 43rem: 65 characters of Montserrat 400, in rem so it doesn't change when the font swaps in).
 
 ---
 
@@ -146,14 +148,25 @@ The header, the CTA band and the footer stay navy in both themes, because the lo
 
 - Spacing uses the Tailwind scale (4px base). The layout tokens (P0, 0015):
   - `--dz-container` 1140px (`max-w-page`, from the blueprint)
-  - `--dz-measure` 65ch (`max-w-measure`)
+  - `--dz-measure` 43rem (`max-w-measure`; it was 65ch until P2)
+  - `--dz-target-min` 2.75rem, the 44 px touch target
   - `--dz-gutter` 1 → 2.5rem (`px-gutter`)
 - Radius tokens: `--dz-radius-sm` 8px, `--dz-radius-md` 12px, `--dz-radius-lg` 18px (cards), `--dz-radius-xl` 22px (feature panels), `--dz-radius-pill` 999px.
 - Elevation is expressed with surface steps (navy-900 → 850 → 800) and borders, not heavy shadows. Glow effects use radial gradients, not `box-shadow` animation.
 - **Breathing room:** `--dz-space-section` < `--dz-space-chapter` < `--dz-space-statement`, for the loud/quiet rhythm ([13](13-experience-design.md) §2): 3 → 6rem, 4.5 → 8.75rem (the Lab's 72 → 140 px) and 6 → 12rem (`py-section`, `py-chapter`, `py-statement`; 0015).
-- **Glass tokens** (used by the glass ladder, 13 §4.1): `--dz-glass-tint`, `--dz-glass-tint-min` (the minimum tint behind text that keeps AA contrast whatever passes behind it), `--dz-glass-edge` (hairline), `--dz-glass-highlight` (top-edge light), `--dz-glass-blur` (`glass-live` only), `--dz-grain` (the shared `glass-frost` texture, ≤ 2 KB).
-  - Lab-confirmed values (0009): `--dz-glass-blur` 17px and `--dz-glass-tint-min` 0.62. P0 re-checks contrast in both themes and GPU cost on a budget Android phone.
-  - **P0 finding (0015):** at 0.62, frost text over a white background is 3.74:1. Frost body text needs a tint of 0.68, and mist needs 0.79. The glass tokens arrive with the glass effects in P2.
+- **Glass tokens** (used by the glass ladder, 13 §4.1; final in P2, [decision 0019](../decisions/0019-layout-shell.md)):
+
+  | Token | Dark | Light | Use |
+  |---|---|---|---|
+  | `--dz-glass-tint-min` | navy 0.73 | white 0.66 | The minimum tint behind text: keeps AA contrast whatever passes behind it, including a white card and the grain's brightest speck |
+  | `--dz-glass-tint-muted` | navy 0.89 | white 0.70 | Behind muted text (mist, sky links) and lit menu rows |
+  | `--dz-glass-edge` / `--dz-glass-edge-width` | frost 0.14 / 1px | navy 0.14 / 1px | The hairline |
+  | `--dz-glass-highlight` | white 0.10 | white 0.90 | The top-edge light |
+  | `--dz-glass-blur` · `--dz-glass-saturate` | 17px · 1.4 | | `glass-live` only (`--dz-glass-saturate-liquid` 1.6 for `glass-liquid`) |
+  | `--dz-grain` | `/brand/glass-grain.svg`, 304 B | | The shared `glass-frost` texture (cap 2 KB), downloaded only when a frost surface shows |
+
+  - The tints come from `check:contrast`, which gates every text pair on glass. They're above 0015's 0.68 / 0.79 finding because the worst backdrop is a white card with the grain on top. The light 0.66 is set by the royal focus ring (3:1).
+  - `glass-live`'s GPU cost on a budget Android phone is checked before launch (P10; C51).
 - **Stacking:** a `--dz-layer-*` z-index scale: base 0, raised 10, sticky 20, header 30, overlay 40, sheet 50, toast 60, consent 70 (0015), used as `z-(--dz-layer-header)`. It is separate from the visual depth planes Z0–Z3.
 
 ---
@@ -167,7 +180,14 @@ The header, the CTA band and the footer stay navy in both themes, because the lo
 | `--dz-ease-travel` | `cubic-bezier(.65,0,.3,1)` | Movement along a path |
 | `--dz-dur-fast` | 150ms | Hover, focus, state |
 | `--dz-dur-base` | 250ms | Small transitions |
-| `--dz-dur-story` | 900ms: the Tier 2 cap, and every Tier 2 story runs on this one timeline (P1, 0018). Tier 3's ≤ 1.6s arrives with the first Tier 3 icon | Icon/illustration stories |
+| `--dz-dur-story` | 900ms: the Tier 2 cap, and every Tier 2 story runs on this one timeline (P1, 0018) | Icon/illustration stories |
+| `--dz-dur-story-signature` | 1600ms: the Tier 3 cap; every part of a Tier 3 story ends inside it (P2, 0019) | Tier 3 stories, The Landing |
+| `--dz-dur-travel` | 450ms | `hover-pixel-hop` (plus up to 162ms of stagger) |
+| `--dz-dur-sheen` · `--dz-dur-liquid` | 700ms · 1100ms | The `hover-charge` sheen · the `glass-liquid` sheen (single passes) |
+| `--dz-stagger-step` · `--dz-stagger-rise` | 60ms · 0.75rem | `type-word-stagger` in the mobile sheet |
+| `--dz-press-scale` | 0.97 | `touch-press` |
+| `--dz-drop` | −0.5rem | The mega menu's and the sheet's open and close (the Drop) |
+| `--dz-nudge` | 4px | Arrows that nudge toward the inline end (`hover-charge`, "All … services") |
 | `--dz-dur-flow-step` | set in P0 / the Design Lab | One step of a story graphic (13 §4.8) |
 | `--dz-tilt-max` | 5deg (Lab-confirmed, 0009) | `pointer-tilt` |
 | `--dz-magnet-max` | 7px (Lab-confirmed, 0009) | `pointer-magnet` |
@@ -193,7 +213,15 @@ Follow `Planning Folder/For Ai/DeepZeta Icon Master Rules.md` exactly: three tie
 - **The registry,** `src/components/icons/registry.ts`, holds every icon as typed data. It's the source of truth until a Figma master exists (C36), and `tests/unit/icons.test.ts` checks it against the rules and the Services Catalogue.
 - **`<Icon name size />`** renders an icon: Tier 1 from the sprite, Tier 2 inline. It adds no JavaScript and is always decorative.
 - **`<IconDefs />`** holds the pillar gradients and glows, the knockouts and the Tier 1 sprite. It's mounted once, in the root layout (02 §3.8, from P2), and in any page that bypasses it, such as `global-not-found.tsx`.
-- **The host:** a story plays when the link, button or card around the icon carries `dz-icon-host` and is hovered or has keyboard focus.
+- **The host:** a story plays when the link, button or card around the icon carries `dz-icon-host` and is hovered or has keyboard focus. A card that holds a Tier 3 head above links with their own Tier 2 icons carries `dz-t3-host`, which plays only the Tier 3 icon, so one row's hover never plays every icon in the card.
+
+**Tier 3** (P2, [decision 0019](../decisions/0019-layout-shell.md)):
+- Drawn on the 48 grid (live area 4–44), at 64, 96, 128 or 160 px, each within 4 KB at 160 px. The registry holds them with the Tier 1 and Tier 2 icons; `tests/unit/icons.test.ts` checks them against the Icon Master Rules' own §4.3 tables.
+- **The cluster** comes from `src/components/icons/Cluster.tsx`: `ClusterPixels` inside an icon, `ClusterLayers` on its own (The Landing, the nav marker).
+- **`IconDefs`** is mounted once, by `SiteDocument`, for both root layouts and the 404. It holds the cluster's four gradients, the sweep, one clip per Tier 3 icon and the Tier 3 knockouts.
+- **The story** is one 1.6 s timeline (`--dz-dur-story-signature`): depth settles, glass fades in, details arrive, the cluster assembles on 35°, the glow pulses as the sweep crosses. It plays once when the shared observer adds `.is-in`, and again on hover and focus (a replay twin of each part). Under Reduce effects it's static, the glow steady at 0.45.
+- **No Tier 3 icon mirrors in Arabic** (C45), whatever it draws; Tier 1 and Tier 2 keep the Icon Master Rules §9.
+- **Rhythm:** at CPU 4×, twenty Tier 3 stories starting together dropped frames, while four plus a row's story didn't (P2 step 15). Plan pages so that few Tier 3 stories start in one viewport.
 
 **Colour:**
 - **Tier 1** takes its parent's colour.

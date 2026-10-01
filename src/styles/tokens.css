@@ -296,10 +296,11 @@
   --dz-social-snapchat: #fffc00;
   --dz-social-pinterest: #e60023;
   /* The tile inside its 44 px target, its edge, the letter, the lift and pop on hover, how far the glow
-     reaches past the tile, and TikTok's cyan and red split */
+     reaches past the tile, and TikTok's cyan and red split. The letter is 19 px at weight 800: large
+     text in WCAG terms, so 3:1 is AA for it (P2 step 16; it was 17 px). */
   --dz-social-tile: 2.5rem;
   --dz-social-edge: 1.5px;
-  --dz-social-letter: 1.0625rem;
+  --dz-social-letter: 1.1875rem;
   --dz-social-lift: -2px;
   --dz-social-pop: 1.08;
   --dz-social-glow-reach: 0.5rem;

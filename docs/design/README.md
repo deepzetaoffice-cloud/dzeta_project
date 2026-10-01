@@ -6,7 +6,7 @@
 >
 > **Rank:** a design source at 00 §3 level 5, alongside the Planning Folder sources. Where a spec differs from the blueprint, the conflict register records it (C16–C24).
 >
-> **Last reviewed:** 2026-09-29
+> **Last reviewed:** 2026-10-01
 
 **Specs never restate rules.** Each topic lives in one place:
 
@@ -60,3 +60,4 @@ Decision: [0008](../decisions/0008-design-language-signal-and-depth.md). These f
 | 2026-09-29 | C6 resolved to the four pillars: mega-menu columns, Home doors, footer columns and pillar colours; Automation page URL `/services/ai-automation` | Owner (conflict C6) |
 | 2026-09-29 | The tools hub is named **Deepzeta Sync** (URL stays `/tools`); it joins the header nav, mega-menu rail, mobile sheet and footer Company links once the page ships | Owner (conflict C31) |
 | 2026-09-30 | FAQ module spec added (LAB); Home §09 has 4 industry-group tiles; Home and service pages use the FAQ module | Owner (plan approval: SEO/GEO Domination Engine) |
+| 2026-10-01 | P2 Layout shell built: header.md (the inline logo, live-only nav, the mega menu's full-width columns and strip, three services out of the menu, "Designer Studio", the popover and the modal sheet, the sheet's heading-size items, the display controls never in the bar, Reduce effects = `glass-frost`), footer.md (the display headline C41, live-only columns, the social letter tiles C49, the display controls, the `<address>`), conversion-path.md (the C42 hand-off, the sticky bar) | Owner (P2 plan approval with its end-of-phase edits; verdicts at steps 8, 11, 13 and 15; decision 0019) |

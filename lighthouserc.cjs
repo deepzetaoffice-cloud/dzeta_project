@@ -33,7 +33,9 @@ const FRAMEWORK_JS_GROWTH = 5 * KB;
 // P2 part B: 7,968 B (147,636 B in all 5 runs on Home and on the review page, 2026-10-01): the error
 // page, next/link (shipped once since C46, for the header's links) and the effect runtime (FxRuntime
 // and src/lib/fx/).
-const OWN_JS_HOME = 7968;
+// P2 part C: 8,052 B (147,720 B in all 5 runs on Home and on the review page, 2026-10-01): cta.ts's
+// sticky bar, the finale's hand-off and the first state shown without a transition added 84 B.
+const OWN_JS_HOME = 8052;
 if (OWN_JS_HOME > 10 * KB) throw new Error('OWN_JS_HOME is above the 10 KB Home cap (07 §2, 13 §7).');
 // HTML + CSS + JS before the first interaction ≤ the framework baseline + 50 KB (07 §2).
 const FIRST_LOAD_LIMIT = FRAMEWORK_JS_BASELINE + 50 * KB;

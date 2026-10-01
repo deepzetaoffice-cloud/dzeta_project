@@ -104,8 +104,8 @@ export const PAIRS = [
   ].map((pair) => ({ ...pair, themes: ['dark'], backdrop: GLASS_BACKDROP })),
   // The social letter tiles (conflict C49), always on the navy footer: each letter on its platform's
   // colour (Instagram's on its gradient's centre, where the letter sits), and the signal edge that
-  // bounds every tile, the black ones included. The letters are decorative (the link's name carries
-  // the platform), so they're held to 3:1, like any UI graphic.
+  // bounds every tile, the black ones included. The letter is each link's only visible label, so it's
+  // text: 19 px at weight 800 (--dz-social-letter), large text, held to 3:1 (P2 step 16).
   ...[
     ['--dz-white', '--dz-social-linkedin'],
     ['--dz-white', '--dz-social-instagram-centre'],
@@ -114,7 +114,7 @@ export const PAIRS = [
     ['--dz-white', '--dz-social-black'],
     ['--dz-social-black', '--dz-social-snapchat'],
     ['--dz-white', '--dz-social-pinterest'],
-  ].map(([fg, bg]) => ({ fg, bg, kind: 'ui', themes: once, note: 'social tile letter' })),
+  ].map(([fg, bg]) => ({ fg, bg, kind: 'large', themes: once, note: 'social tile letter (19 px, 800)' })),
   { fg: '--dz-grad-signal', bg: '--dz-navy', kind: 'ui', themes: once, note: 'social tile edge' },
 ];
 
