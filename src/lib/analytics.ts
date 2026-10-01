@@ -6,7 +6,7 @@
 //   visitor-typed text in the first place; this is the second line.
 // - The push waits for the next task (setTimeout 0): GTM runs its tags synchronously inside
 //   dataLayer.push, and that work must never land inside a click's input delay (INP, 07 §1).
-import { isEventName, TAXONOMY, type EventName, type EventParams, type ParamSpec } from '@/lib/tracking/taxonomy';
+import { EVENT_PARAMS, isEventName, type EventName, type EventParams, type ParamSpec } from '@/lib/tracking/taxonomy';
 
 declare global {
   interface Window {
@@ -69,7 +69,7 @@ export function eventPayload<E extends EventName>(
     if (process.env.NODE_ENV !== 'production') console.warn(`trackEvent: ${String(event)} isn't in the taxonomy`);
     return undefined;
   }
-  const specs: Readonly<Record<string, ParamSpec>> = TAXONOMY[event].params;
+  const specs: Readonly<Record<string, ParamSpec>> = EVENT_PARAMS[event];
   const payload: Record<string, unknown> = { event };
   for (const [key, spec] of Object.entries(specs)) {
     const value = cleanValue(spec, (params as Record<string, unknown>)[key]);

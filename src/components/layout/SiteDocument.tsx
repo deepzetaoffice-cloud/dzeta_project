@@ -2,6 +2,8 @@ import type { ReactNode } from 'react';
 import { IconDefs } from '@/components/icons/IconDefs';
 import { FxRuntime } from '@/components/layout/FxRuntime';
 import { SiteShell } from '@/components/layout/SiteShell';
+import { TrackingRuntime } from '@/components/layout/TrackingRuntime';
+import { env } from '@/lib/env';
 import { initScript } from '@/lib/fx/init-script';
 import { locales, type Locale } from '@/lib/i18n/locales';
 import { consentInitScript } from '@/lib/tracking/consent-init';
@@ -20,6 +22,7 @@ import { fontVariables } from '@/styles/fonts';
 // - SiteShell wraps every page: the skip link, the header and <main> (plan B1). `review` is the review
 //   page's: every nav item shown, as placeholders (plan A3).
 // - FxRuntime starts the shared effect controllers after hydration (plan G).
+// - TrackingRuntime handles consent, page views and the tracked clicks (P3 plan, G), once per document.
 
 export type SiteDocumentProps = {
   locale: Locale;
@@ -42,6 +45,7 @@ export function SiteDocument({ locale, review = false, children }: SiteDocumentP
         <IconDefs />
         <SiteShell review={review}>{children}</SiteShell>
         <FxRuntime />
+        <TrackingRuntime gtm={env().gtm !== null} />
       </body>
     </html>
   );

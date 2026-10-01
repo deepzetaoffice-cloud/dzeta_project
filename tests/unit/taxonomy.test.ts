@@ -1,12 +1,22 @@
 import { describe, expect, it } from 'vitest';
 import { ACCOUNT_FORMATS, accounts } from '@/lib/tracking/accounts';
-import { EVENT_NAMES, GA4_FIELDS, TAXONOMY, type EventSpec } from '@/lib/tracking/taxonomy';
+import {
+  EVENT_DETAILS,
+  EVENT_NAMES,
+  EVENT_PARAMS,
+  GA4_FIELDS,
+  type EventDetails,
+  type ParamSpec,
+} from '@/lib/tracking/taxonomy';
 
 // The taxonomy (docs/ai/09 §3; P3 plan, F): GA4's naming rules and limits, the owner's conversions,
 // and the append-only rule. GA4's reserved names and limits are from its help pages
 // (support.google.com/analytics/answer/13316687, /9267744, /12229528), read 2026-10-02.
 
-const specs = TAXONOMY as Record<string, EventSpec>;
+// Each event with its details and its parameters, as one record for these checks.
+const specs: Record<string, EventDetails & { params: Readonly<Record<string, ParamSpec>> }> = Object.fromEntries(
+  EVENT_NAMES.map((name) => [name, { ...EVENT_DETAILS[name], params: EVENT_PARAMS[name] }]),
+);
 
 // Reserved for the web (13316687). page_view is used as GA4 means it, through Google's manual method.
 const RESERVED_EVENTS = [
@@ -77,6 +87,10 @@ const customDimensions = [...new Set(ga4Events.flatMap((name) => Object.keys(spe
 );
 
 describe('the taxonomy (09 §3)', () => {
+  it('gives every event its parameters and its details, and nothing else', () => {
+    expect(Object.keys(EVENT_DETAILS)).toEqual(Object.keys(EVENT_PARAMS));
+  });
+
   it('is append-only: every approved event keeps its name and its parameters', () => {
     for (const [name, params] of Object.entries(FROZEN)) {
       expect(specs[name], name).toBeDefined();

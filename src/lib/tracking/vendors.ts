@@ -19,6 +19,8 @@ export type CspHosts = {
   connect?: readonly string[];
   frame?: readonly string[];
 };
+// A first-party cookie a vendor sets, as Cookie settings lists it, from the vendor's own page.
+export type VendorCookie = { name: string; lifetimeMonths: number; source: string };
 export type Vendor = {
   id: VendorId;
   name: string;
@@ -26,9 +28,16 @@ export type Vendor = {
   hosts: CspHosts;
   // Where the hosts come from
   source: string;
+  // Listed in Cookie settings while the vendor is in use. A vendor without a checked list shows its
+  // name only, until its cookies are read from its own page (and proposed in external-sources.md).
+  cookies?: readonly VendorCookie[];
+  // Deleted when the visitor switches the vendor's group off (consent.ts). Deleting a cookie that
+  // isn't there does nothing, so this list may be wider than `cookies`.
+  withdraw?: readonly (string | RegExp)[];
 };
 
 const GTM = 'https://www.googletagmanager.com';
+const GA_COOKIES = 'https://support.google.com/analytics/answer/11397207';
 
 export const VENDORS: readonly Vendor[] = [
   {
@@ -65,6 +74,11 @@ export const VENDORS: readonly Vendor[] = [
       connect: [GTM, 'https://*.google-analytics.com', 'https://*.google.com'],
     },
     source: 'https://developers.google.com/tag-platform/security/guides/csp (Google Analytics without ads features)',
+    cookies: [
+      { name: '_ga', lifetimeMonths: 24, source: GA_COOKIES },
+      { name: '_ga_<container-id>', lifetimeMonths: 24, source: GA_COOKIES },
+    ],
+    withdraw: ['_ga', /^_ga_/],
   },
   {
     // Meta publishes no CSP list: these are the hosts its own base code loads from and sends to
@@ -77,6 +91,7 @@ export const VENDORS: readonly Vendor[] = [
       connect: ['https://www.facebook.com', 'https://connect.facebook.net'],
     },
     source: 'https://www.facebook.com/business/help/1021909254506499 (the base code)',
+    withdraw: ['_fbp', '_fbc'],
   },
   {
     id: 'linkedin',
@@ -96,8 +111,13 @@ export const VENDORS: readonly Vendor[] = [
       ],
     },
     source: 'https://www.linkedin.com/help/lms/answer/a425696 (the domains not to block)',
+    withdraw: ['li_fat_id'],
   },
 ];
+
+// A visitor's groups: the cookies to delete when each is switched off (every vendor, used or not).
+export const withdrawnCookies = (group: Exclude<ConsentGroup, 'essential'>) =>
+  VENDORS.filter((vendor) => vendor.group === group).flatMap((vendor) => vendor.withdraw ?? []);
 
 // The vendors in use: GTM (and its preview) when the site loads GTM; the rest when their ID is set and
 // GTM is there to load them.

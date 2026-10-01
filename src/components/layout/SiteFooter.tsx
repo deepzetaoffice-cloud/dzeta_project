@@ -4,6 +4,7 @@ import type { Pillar } from '@/components/icons/registry';
 import { DisplayControls } from '@/components/layout/DisplayControls';
 import { auditHref, CtaButton } from '@/components/ui/CtaButton';
 import { navigation, type NavLink } from '@/content/en/navigation';
+import { consentContent } from '@/content/en/legal/consent';
 import { shellContent } from '@/content/en/shell';
 import { isShown, navHref } from '@/lib/routes';
 import { siteConfig, type SocialKey } from '@/lib/site-config';
@@ -18,7 +19,8 @@ import { siteConfig, type SocialKey } from '@/lib/site-config';
 // - The company block from siteConfig (facts §1–§2); the phone shows once it's confirmed, never before.
 // - The social links: Deepzeta's letter tiles in each platform's colour (C49), named "Deepzeta AI on
 //   LinkedIn" and so on, in a new tab (facts §2.1 rules). The letters are decorative.
-// - The display controls (Q2) and the legal line, whose year is written by hand (02 §1.5).
+// - The display controls (Q2) and the legal line, whose year is written by hand (02 §1.5), with Cookie
+//   settings for every visitor (P3 plan, E): TrackingRuntime opens the panel; hidden in place until it can.
 // No heading but the finale's <h2>: column titles label their lists, so the footer adds nothing to a
 // page's outline (plan L4). The language switch is mounted here in P11, with its behaviour.
 
@@ -171,9 +173,18 @@ export function SiteFooter({ review = false }: SiteFooterProps) {
             <DisplayControls place="footer" />
           </div>
         </div>
-        <p className="text-small text-fg-muted">
-          {shellContent.copyright} {siteConfig.legalName}
-        </p>
+        <div className="flex flex-wrap items-center justify-between gap-x-8 gap-y-2">
+          <p className="text-small text-fg-muted">
+            {shellContent.copyright} {siteConfig.legalName}
+          </p>
+          <button
+            type="button"
+            data-consent-settings=""
+            className="dz-cookie-settings dz-underline dz-target text-small font-medium text-link"
+          >
+            {consentContent.footer.cookieSettings}
+          </button>
+        </div>
       </div>
     </footer>
   );

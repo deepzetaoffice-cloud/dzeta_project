@@ -7,6 +7,7 @@ describe('parseEnv', () => {
       siteUrl: 'http://localhost:3000',
       siteIndexing: 'off',
       vercelEnv: undefined,
+      gtm: null,
     });
   });
 
@@ -16,7 +17,7 @@ describe('parseEnv', () => {
       VERCEL_ENV: 'production',
       SITE_INDEXING: 'on',
     });
-    expect(env).toEqual({ siteUrl: 'https://deepzeta.ai', siteIndexing: 'on', vercelEnv: 'production' });
+    expect(env).toEqual({ siteUrl: 'https://deepzeta.ai', siteIndexing: 'on', vercelEnv: 'production', gtm: null });
   });
 
   it.each([
@@ -38,6 +39,31 @@ describe('parseEnv', () => {
     expect(parseEnv({ NEXT_PUBLIC_SITE_URL: 'https://dzeta.vercel.app', VERCEL_ENV: 'preview' }).siteUrl).toBe(
       'https://dzeta.vercel.app',
     );
+  });
+
+  it('has no GTM until its container ID is set, then takes an optional GTM environment (P3 plan, J)', () => {
+    const local = { NEXT_PUBLIC_SITE_URL: 'http://localhost:3000' };
+    expect(parseEnv(local).gtm).toBeNull();
+    expect(parseEnv({ ...local, NEXT_PUBLIC_GTM_ID: '' }).gtm).toBeNull();
+    expect(parseEnv({ ...local, NEXT_PUBLIC_GTM_ID: 'GTM-AB12CD3' }).gtm).toEqual({ id: 'GTM-AB12CD3' });
+    expect(
+      parseEnv({
+        ...local,
+        NEXT_PUBLIC_GTM_ID: 'GTM-AB12CD3',
+        NEXT_PUBLIC_GTM_AUTH: 'aBcD_123',
+        NEXT_PUBLIC_GTM_PREVIEW: 'env-5',
+      }).gtm,
+    ).toEqual({ id: 'GTM-AB12CD3', auth: 'aBcD_123', preview: 'env-5' });
+  });
+
+  it.each([
+    [{ NEXT_PUBLIC_GTM_ID: 'G-AB12CD3' }, /GTM-XXXXXXX/],
+    [{ NEXT_PUBLIC_GTM_ID: 'gtm-ab12cd3' }, /GTM-XXXXXXX/],
+    [{ NEXT_PUBLIC_GTM_ID: 'GTM-AB12CD3', NEXT_PUBLIC_GTM_AUTH: 'x' }, /set together/],
+    [{ NEXT_PUBLIC_GTM_ID: 'GTM-AB12CD3', NEXT_PUBLIC_GTM_AUTH: 'x', NEXT_PUBLIC_GTM_PREVIEW: '5' }, /env-2/],
+    [{ NEXT_PUBLIC_GTM_AUTH: 'x', NEXT_PUBLIC_GTM_PREVIEW: 'env-5' }, /need NEXT_PUBLIC_GTM_ID/],
+  ])('rejects the GTM variables %j', (gtm, message) => {
+    expect(() => parseEnv({ NEXT_PUBLIC_SITE_URL: 'http://localhost:3000', ...gtm })).toThrow(message);
   });
 
   it('reports every problem at once', () => {
