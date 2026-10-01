@@ -206,6 +206,23 @@ Progress:
   - **The review page's 565 B (for the owner).** About 2.8 KB gzip of its HTML is the icon gallery's markup alone; React's page data repeats it (not measured). The options are in the report.
   - **The owner checklist** runs on the preview of `5b98465`, `dzetaproject-1dlbm6d3c-deep-zeta.vercel.app` (READY; its site code is the same as step 14's).
   - Scratch files deleted (02 §4).
+- 2026-10-01 · **The owner's checklist, first round, and the review page's weight (option a).**
+  - **The share link:** at the owner's request, a 23-hour Vercel share link to the preview (it expires 2026-10-02). Checked: it opens both pages without a login in a client that keeps cookies.
+  - **PSI didn't measure our page.** The owner's PSI results (mobile LCP 3.4 s, CLS 0.03; desktop LCP 2.4 s) came through the share link. A repeat run of the same PSI test reports "Showing results for URL: https://vercel.com/login?…". Vercel answered PSI's request with its login redirect, so PSI measured Vercel's login page: 317 KiB of unused JavaScript, third-party requests and `user-scalable=no`, none of which our page has. The owner's run very likely did the same (not seen; that line is at the top of its report). PSI can't test a protected preview.
+  - **The preview, measured from here instead** (Lighthouse 12.6.1, lhci's mobile settings, 5 runs per case; the share cookie sent as a header, or the share link itself):
+    - **Home:** LCP 1,899–1,923 ms, Performance 100, CLS 0, TBT 17–42 ms. Through the share link: 1,907–1,914 ms in four runs and 2,697 ms in one (Performance 96).
+    - **The review page:** LCP 1,982–1,990 ms, Performance 99, CLS 0.
+    - The H1 is Home's LCP element. Vercel serves Brotli, so the review page's HTML is 23.8 KB against 30.3 KB gzip on `next start`.
+  - **PSI on production** (`www.deepzeta.ai`, part B's shell; Lighthouse 13.5.0, Moto G Power, slow 4G): Performance **99**, LCP **2.0 s**, FCP 0.9 s, TBT 50 ms, CLS 0, Accessibility and Best Practices 100. SEO 66 is the pre-launch `noindex` (0013). Part C's shell is measured there after its merge (step 16).
+  - **The phone** (owner checklist 2): "is ok". No stutter reported.
+  - **Not covered:**
+    - Checklist 3 wasn't run: the owner was on a fast connection. The swap is covered by `fonts.spec.ts` (CLS 0 at 360 px) and PSI's CLS 0 on production.
+    - Checklist 4: there's no iPhone, so iOS `:active`, the safe areas and the grain in Safari aren't verified. The Risks line says `viewportFit: 'cover'` is dropped if it can't be verified; that question is with the owner.
+    - Checklist 5: the phone's model and memory are still to come, for 0019's device class and the `deviceMemory` threshold.
+  - **Option (a), done:** the review page's gallery shows each Tier 3 icon at one size, 128 px, and its intro says so (Content Writer). Both files were added to part C's table.
+    - Page weight: 190,303 → **186,639 B**, now **4,229 B** under the cap. HTML 30,300 → 26,636 B.
+    - The review page: median LCP 2,483 ms (runs 2,479–2,563), Performance 97–98, CLS 0. Home is unchanged: median 2,330 ms, Performance 98.
+    - **Gates** (CI environment): `verify:fast` exit 0; `build` exit 0; `test:e2e` 135 passed; `check:schema`, `check:seo`, `check:links`, `format:check` and `check:facts` passed; `lhci` passed (page weight: "largest run 186639 B of 190868 B (4.1 KB left, 10 runs)").
 Phase: P2
 Branch: three parts, one merge each (Q5): `feat/p2a-shell-foundations`, `feat/p2b-header`, `feat/p2c-footer` (each from `main` after the previous merge)
 Page tier: T1. The shell renders on every page. It's measured on Home (`lhci` ≥ 95) and, from part B, on the review page (A3), which shows the complete shell.
@@ -705,6 +722,8 @@ A file listed in an earlier part may be modified again in a later part only wher
 | `tests/e2e/shell.spec.ts` | MODIFY | The footer, the sticky bar, the full hand-off |
 | `tests/e2e/preferences.spec.ts` | MODIFY | The footer's switches |
 | `tests/e2e/icons.spec.ts` | MODIFY | Two colour samples scroll the injected gallery into view; the footer puts it below the fold (step 14) |
+| `src/app/(review)/shell-review/page.tsx` | MODIFY | The icon gallery shows each Tier 3 icon at one size, 128 px, to make page-weight room (the owner, step 15: option a) |
+| `src/content/en/shell-review.ts` | MODIFY | The gallery's intro, to match (Content Writer; the owner, step 15: option a) |
 | `docs/ai/05-design-system.md` | MODIFY (protected) | End-of-phase edits (P) |
 | `docs/ai/06-code-standards.md` | MODIFY (protected) | The C40 exception (P) |
 | `docs/ai/03-verification-gates.md` | MODIFY (protected) | (P) |

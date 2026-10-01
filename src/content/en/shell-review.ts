@@ -13,7 +13,7 @@ export const shellReviewContent = {
   icons: {
     heading: 'Icons for review',
     intro:
-      'Signature icons play their story once as they scroll into view. Hover or focus one to play it again. Each is shown at every size it may be used.',
+      'Signature icons play their story once as they scroll into view. Hover or focus one to play it again. Each is shown here at one size, 128 px.',
     pixelIs: 'The pixel is',
     interfaceHeading: 'Interface icons',
     interfaceLabels: { chevron: 'Chevron (opens below)', 'external-link': 'External link (new tab)' },
