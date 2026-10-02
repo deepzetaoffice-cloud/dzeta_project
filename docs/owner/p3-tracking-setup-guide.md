@@ -170,6 +170,20 @@ Nothing now. At launch: a **Domain** property for `deepzeta.ai`, verified by DNS
 
 You'll receive: the container file (`deepzeta-gtm-container.json`), and in this guide's Part B tables, every custom dimension, key event and conversion with its exact name. Each step below says what you should see.
 
+### B0. The round-trip test (about 10 minutes; done once, at P3 step C3, before B1)
+
+**Why:** before the real import (B1), Claude's generator is proven against GTM itself. Claude sends you a **test-ID container** (`--test` build: `G-TEST123456` and placeholder digits, never your real IDs). You import it into a **second throwaway container**, export it back, and Claude checks that GTM's own export equals what the generator wrote — the round trip. Both throwaway containers (`dz-reference` from A8 and this one) are deleted after it passes.
+
+1. **Create the second throwaway container.** Tag Manager → **Accounts** tab → **⋮** next to your `deepzeta` account → **Create Container**. Name `dz-roundtrip`, type **Web** → **Create**. Close the "Install Google Tag Manager" box. The container name at the top must say `dz-roundtrip`, never `deepzeta.ai`.
+2. **Import the test file.** **Admin → Import Container → Choose container file** → the `deepzeta-gtm-container.json` Claude sends you (the `--test` one).
+3. **Choose workspace: New**, name it `roundtrip`.
+4. **Import option: Overwrite.** The container is empty, so nothing of yours is lost.
+5. **Click "View detailed changes".** The numbers must equal what Claude's message says (23 tags, 19 triggers, 23 variables, 5 built-in variables). If they differ, stop and send Claude a screenshot.
+6. **Confirm.** Don't publish — nothing in this container ever goes live.
+7. **Export it back.** **Admin → Export Container → Choose a version or workspace →** choose **Default Workspace** → **Download**. The file's name starts with this container's `GTM-` ID.
+8. **Send it:** leave the file in your **Downloads** folder and tell Claude its name. Claude checks it against the generator's output (the round-trip test), then commits it as the round-trip fixture.
+9. **Delete both throwaway containers** when Claude confirms the test passed: **Accounts** tab → **⋮** on each of `dz-reference` and `dz-roundtrip` → **Delete Container** (GTM asks you to type the container ID to confirm). Your real `deepzeta.ai` container stays untouched; B1 imports into it next.
+
 ### B1. Import the container into GTM
 1. **Admin → Import Container → Choose container file** → the JSON file from Claude.
 2. **Choose workspace: New**, name it `P3 tracking v1`.
