@@ -22,6 +22,12 @@ Progress:
   - `tests/unit/env-example.test.ts` (new): (a) every `process.env.X` read in `src/` (minus tests), `next.config.ts` and `scripts/` is listed in `.env.example`, except `NODE_ENV` and `VERCEL_*`; (b) planned-but-unread variables (Turnstile, the webhook, Upstash, DeepSeek, PageSpeed) stay listed — the owner's rule is "nothing lost", not "nothing ahead of its phase"; (c) the closing block names every accounts and siteConfig key, and nothing else; (d) every listed variable stays empty in the file.
   - `scripts/check-facts.mjs` gained the retyped-facts check: a contact fact from the site config (email, address, phone and WhatsApp once set, each social URL — 11 facts today) typed literally in `src/` or `scripts/` outside `site-config.ts` (and its test) fails the gate. The config is imported through Node's TypeScript loader, so the check reads the shipped values, not a copy. `check-facts.test.ts` covers the collection and the finding (4 cases).
   - Gates: `check:facts` passed ("73 scanned files, 11 contact facts, none retyped"); `test` 360 passed (26 suites). Node prints a `MODULE_TYPELESS_PACKAGE_JSON` warning while importing the config (the package is typeless by Next.js convention); harmless, same as `next.config.ts`.
+- 2026-10-02 · **C1d (the protected docs) is done.**
+  - **09:** §1's diagram gains Microsoft Advertising (UET) and marks LinkedIn "after launch"; rule 2.4 gains the retirement sentence (C59); §2.7 gains the UET Basic-consent bullet (C60, with Inherit initial consent); §3's source line names the Meta, Microsoft and LinkedIn mapping; §3.5 rewritten (`generate_lead` and `contact_click` primary, `book_call_click` retired).
+  - **C59 and C60 appended** to the conflict register, both Resolved by the owner's part C approval.
+  - **conversion-path.md line 60:** `book_call_click` out of the booking flow's events, with the C59 note.
+  - **external-sources.md:** PROPOSED rows S008 (UET's `bat.bing.com` host), S009 (UET's four first-party cookies, lifetimes unstated), S010 (GA4's `_ga` cookies, 24 months) and S011 (Meta's `_fbp`/`_fbc`); the change log has the row. They await the owner's approval one by one, as the register's rules say.
+  - Gates: `check:rules` passed (18 entry files).
 Phase: P3
 Branch: `feat/p3c-gtm-container` (from `main` at `2625fb2`; step C0 done there)
 Page tier: T1 (sitewide: the CSP, the cookie list and the container reach every page; measured on Home and the review page, as in parts A and B)
