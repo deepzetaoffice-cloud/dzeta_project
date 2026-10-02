@@ -1,6 +1,6 @@
 # 03 · Verification Gates
 
-> **Applies to:** every task that changes files · **Precedence:** below 00 · **Last reviewed:** 2026-10-01
+> **Applies to:** every task that changes files · **Precedence:** below 00 · **Last reviewed:** 2026-10-02
 
 A gate is a **command with a pass condition**. Work is done only when the required gates pass **and their output is in the report**. "I checked mentally" is not a gate.
 
@@ -34,7 +34,7 @@ A gate is a **command with a pass condition**. Work is done only when the requir
 | `npm run test` | Vitest unit tests (schema builders, geo/llms builders, analytics wrapper, utils) | all pass |
 | `npm run build` | `next build` | succeeds, no warnings we haven't accepted in the conflict register |
 | `npm run test:e2e` | Playwright on the production build: key pages render, keyboard navigation, **axe** accessibility, tracking regression (`dataLayer[0]` rule, events fire once), effect modes (reduced motion, Reduce effects, JavaScript off, forced colours, RTL) and the LCP element visible at first paint ([13](13-experience-design.md) §3) | all pass, 0 serious/critical axe violations |
-| `npm run lhci` | Lighthouse CI on the fixed URL sample with per-tier budgets from [07](07-performance-budget.md) (page tiers: decision 0005): scores, Core Web Vitals, and per-type bytes (JavaScript, fonts, images) on every run. From P2 the sample is Home and the review page `/shell-review` (the complete shell, registry R165), both under the T1 assertions; the review page has SEO off (noindex by design) and a lab LCP limit of 2,700 ms (C48, C50). Then `scripts/check-page-weight.mjs` checks HTML + CSS + JS ≤ the framework baseline + 50 KB on every run, because lhci can't add resource types together (decisions 0014, 0015) | all assertions pass, and the page-weight check passes |
+| `npm run lhci` | Lighthouse CI on the fixed URL sample with per-tier budgets from [07](07-performance-budget.md) (page tiers: decision 0005): scores, Core Web Vitals, and per-type bytes (fonts, images) on every run. From P2 the sample is Home and the review page `/shell-review` (the complete shell, registry R165), both under the T1 assertions; the review page has SEO off (noindex by design) and a lab LCP limit of 2,700 ms (C48, C50). From P3 it runs in two region profiles ([C52](conflict-register.md)): no country (counted as Europe: the consent banner shows) on both pages, and Home as a visitor from the UAE (`lighthouserc.row.cjs`, on 127.0.0.1). Then `scripts/check-page-weight.mjs` counts the page's own origin only, from each run's requests ([C54](conflict-register.md)): first-party HTML + CSS + JS ≤ the framework baseline + 50 KB (the review page alone 192,000 B, C57), and first-party JS ≤ the baseline + 5 KB growth + our own code (decisions 0014, 0021); third-party bytes are printed per run, with their own caps once the owner's GTM container is in | all assertions pass, and the page-weight check passes |
 | `npm run verify:fast` | `typecheck` + `lint` + `check:tokens` + `check:contrast` | pass |
 | `npm run verify` | everything above, in order | pass |
 

@@ -58,7 +58,9 @@ jobs:
             const lhr = JSON.parse(readFileSync(dir + '/' + f, 'utf8'));
             const a = lhr.audits;
             const t = Object.fromEntries(a['resource-summary'].details.items.map((i) => [i.resourceType, i.transferSize]));
+            // Each run's page: 127.0.0.1 is Home as a visitor from the UAE (lighthouserc.row.cjs)
             const line = [
+              lhr.requestedUrl.replace('http://', ''),
               'perf ' + Math.round(lhr.categories.performance.score * 100),
               'a11y ' + Math.round(lhr.categories.accessibility.score * 100),
               'bp ' + Math.round(lhr.categories['best-practices'].score * 100),

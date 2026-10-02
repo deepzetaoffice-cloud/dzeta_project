@@ -43,6 +43,10 @@ const OWN_JS_HOME = 10_884;
 // Home's cap: 10 KB until P3, 11 KB since the tracking runtime (decision 0021).
 const HOME_OWN_JS_CAP = 11 * KB;
 if (OWN_JS_HOME > HOME_OWN_JS_CAP) throw new Error('OWN_JS_HOME is above the 11 KB Home cap (07 §2, 13 §7).');
+// First-party JavaScript ≤ the baseline + its growth allowance + our own code (07 §2; 0014, 0021). It's
+// checked by scripts/check-page-weight.mjs, which counts the page's own origin only: lhci's script size
+// counts every origin, and GTM's tags have their own caps (C54).
+const FIRST_PARTY_JS_LIMIT = FRAMEWORK_JS_BASELINE + FRAMEWORK_JS_GROWTH + OWN_JS_HOME;
 // HTML + CSS + JS before the first interaction ≤ the framework baseline + 50 KB (07 §2).
 const FIRST_LOAD_LIMIT = FRAMEWORK_JS_BASELINE + 50 * KB;
 // The review page alone (conflict C57): it never reaches visitors, and carries the complete shell.
@@ -60,13 +64,10 @@ const t1Assertions = {
   // TTFB hard limit (07 §1). Locally it's the Node server on localhost; the real figure comes from
   // PageSpeed Insights on deepzeta.ai.
   'server-response-time': ['error', { maxNumericValue: 600, ...medianRun }],
-  // 07 §2: no third-party requests before consent. P3 allows GTM here.
+  // 07 §2: no third-party requests before consent. Until the owner's GTM container ID is set, CI builds
+  // without GTM, so there are none at all; GTM's own caps come with the real container (P3 plan, C5).
   'resource-summary:third-party:count': ['error', { maxNumericValue: 0, ...everyRun }],
-  // 07 §2: JavaScript on first load ≤ the framework baseline + its growth allowance + our own code.
-  'resource-summary:script:size': [
-    'error',
-    { maxNumericValue: FRAMEWORK_JS_BASELINE + FRAMEWORK_JS_GROWTH + OWN_JS_HOME, ...everyRun },
-  ],
+  // 07 §2: first-party JavaScript on first load is checked by scripts/check-page-weight.mjs (C54).
   // 07 §2: fonts ≈ 60 KB (the target), hard limit 70 KB; two files at most on an English page
   // (Montserrat and JetBrains Mono, decision 0015).
   'resource-summary:font:size': ['error', { maxNumericValue: 70 * KB, ...everyRun }],
@@ -98,6 +99,9 @@ module.exports = {
     assert: {
       assertMatrix: [
         { matchingUrlPattern: '^http://localhost:3000/$', assertions: t1Assertions },
+        // Home as a visitor from the UAE, collected by lighthouserc.row.cjs on 127.0.0.1 so its runs stay
+        // apart from the European ones (P3 plan, B8; C52)
+        { matchingUrlPattern: '^http://127\\.0\\.0\\.1:3000/$', assertions: t1Assertions },
         { matchingUrlPattern: '^http://localhost:3000/shell-review$', assertions: reviewAssertions },
       ],
     },
@@ -113,6 +117,7 @@ module.exports = {
     FRAMEWORK_JS_GROWTH,
     OWN_JS_HOME,
     HOME_OWN_JS_CAP,
+    FIRST_PARTY_JS_LIMIT,
     FIRST_LOAD_LIMIT,
     REVIEW_FIRST_LOAD_LIMIT,
   },
