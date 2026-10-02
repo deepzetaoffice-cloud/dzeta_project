@@ -47,6 +47,13 @@ Progress:
   - **The guide's B0 section didn't exist** (A8's step 6 referenced "step B0 (Part B)" but Part B had none). Added before B1: the second throwaway container (`dz-roundtrip`), import with Overwrite, the counts to check (23/19/23/5), export, delete both.
   - Gates re-run: `test` **375 passed** (28 suites, vmThreads); `verify:fast` exit 0; `check:rules` passed (18 entry files). The reference fixture is byte-identical to the owner's A8 export (`git diff --no-index` → identical).
   - **C3 is ready for the owner:** the `--test` file sits at `.scratch/tracking-test/deepzeta-gtm-container.json` (gitignored, per 12 §6), test IDs only.
+- 2026-10-02 · **C4 (the guide's Part B, the campaign-link rule, the skill) is done.**
+  - The guide: B1 names the file and the counts (**23 tags, 19 triggers, 23 variables, 5 built-ins**); B5 carries the key-events table inline (`generate_lead`, `contact_click`); B0 was added earlier with the C2 fixes.
+  - 09 §2.8 gains the **campaign-link rule**: three UTMs (`utm_source`, `utm_medium`, `utm_campaign`), values from the campaign table, `snake_case`; click IDs never typed by hand; a mistagged link is replaced, never patched; the Business Profile's link is the named exception (`utm_source=google&utm_medium=organic&utm_campaign=business_profile`).
+  - The register: the Business Profile row now carries the link itself, and the change log has the C4 row (the other session's C58 line stayed out: stashed during the commit, restored after — the C1a pattern).
+  - The skill (`add-tracking-event`): the taxonomy file is the source (C55), `npm run tracking:build` regenerates all four artifacts, retired events (C59), the parity test, and the owner's checklist now says "a new import file", never hand-edited tags.
+  - **Not done (a fact I can't verify offline):** Microsoft's goal setting that makes a conversion "primary" — B8's quote needs Microsoft's help pages read online. It stays as the plan's wording ("both counted as conversions; the primary setting quoted at C5"), to be filled from Microsoft's help during C5's live step.
+  - Gates: `check:rules` passed (18 entry files); `test` **375 passed** (28 suites, vmThreads).
 Phase: P3
 Branch: `feat/p3c-gtm-container` (from `main` at `2625fb2`; step C0 done there)
 Page tier: T1 (sitewide: the CSP, the cookie list and the container reach every page; measured on Home and the review page, as in parts A and B)

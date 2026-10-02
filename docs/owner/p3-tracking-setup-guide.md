@@ -185,10 +185,10 @@ You'll receive: the container file (`deepzeta-gtm-container.json`), and in this 
 9. **Delete both throwaway containers** when Claude confirms the test passed: **Accounts** tab → **⋮** on each of `dz-reference` and `dz-roundtrip` → **Delete Container** (GTM asks you to type the container ID to confirm). Your real `deepzeta.ai` container stays untouched; B1 imports into it next.
 
 ### B1. Import the container into GTM
-1. **Admin → Import Container → Choose container file** → the JSON file from Claude.
+1. **Admin → Import Container → Choose container file** → `docs/owner/tracking/deepzeta-gtm-container.json` (the real-ID build; Claude confirms it's fresh from `npm run tracking:build` when he sends the clicks at C5).
 2. **Choose workspace: New**, name it `P3 tracking v1`.
 3. **Import option: Overwrite.** The container is empty, so nothing of yours is lost, and the result matches the file exactly. (Later imports use the option Claude names in that update.)
-4. Click **View detailed changes**. The numbers of tags, triggers and variables must equal the numbers Claude gives you. If they differ, stop and send Claude a screenshot.
+4. Click **View detailed changes**. The numbers must be **23 tags, 19 triggers, 23 variables, 5 built-in variables** (the generated file's counts; B0 tested the same file's test-ID build). If they differ, stop and send Claude a screenshot.
 5. **Confirm.** Don't publish yet.
 
 ### B2. Test in Preview (Tag Assistant)
@@ -207,7 +207,14 @@ You'll receive: the container file (`deepzeta-gtm-container.json`), and in this 
 **Admin → Data display → Custom definitions → Create custom dimension.** For each row: **Dimension name** as given, **Scope: Event** (it can't be changed later), **Event parameter** copied exactly. Data appears after 24–48 hours and isn't backdated, so do this before launch.
 
 ### B5. Mark the key events (from Claude's table)
-**Admin → Data display → Events** → the star beside each event in the table. An event appears in that list only after it has been received once (the B2 test sends them).
+**Admin → Data display → Events** → the star beside each event in the table. An event appears in that list only after it has been received once (the B2 test sends them). The table is `docs/owner/tracking/ga4-setup.md` (generated with the container); for this build it is:
+
+| Event | Key event |
+|---|---|
+| `generate_lead` | ★ Yes |
+| `contact_click` | ★ Yes |
+
+(`book_call_click` is retired — never sent, no key event. Nothing else in the list gets a star.)
 
 ### B6. Publish
 **Submit → Publish and Create Version.** Version name `P3 tracking v1`, description: what Claude's update says. **Publish.** If anything goes wrong later: **Versions → Actions → Set as Latest Version** on the previous version, then publish it.

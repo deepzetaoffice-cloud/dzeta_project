@@ -27,7 +27,7 @@
 | ☐ | **Confirmed Cal.com booking** conversion (server-side, through n8n) | The booking happens on Cal.com's side; the site's tags can't see it reliably | With the lead flow (P6–P7) | Claude builds it; secrets go into n8n Credentials |
 | ☐ | **GA4 stream URL label**: edit it to `https://deepzeta.ai` (it shows `https://www.deepzeta.ai`) | A label only, doesn't affect collection, but it should match decision 0006 | Any time | GA4 → Admin → Data streams → the stream's pencil icon |
 | ☐ | **Add an `@deepzeta.ai` admin** on GTM, GA4, Meta, Microsoft Ads and the Business Profile | Once Google Workspace is active; today the backup admin is your personal Gmail and Microsoft Ads is signed in with `deepzeta.office@gmail.com` | After Workspace is active | Each platform's user management |
-| ☐ | **Business Profile's website link**: use the tagged link Claude generates from the campaign-link rule (09 §2.8), never a hand-typed UTM | Keeps attribution working from local search | When you set the link | Ask Claude for the link |
+| ☐ | **Business Profile's website link**: use the tagged link Claude generates from the campaign-link rule (09 §2.8), never a hand-typed UTM | Keeps attribution working from local search | When you set the link | The link (from the rule, 2026-10-02): `https://deepzeta.ai/?utm_source=google&utm_medium=organic&utm_campaign=business_profile` |
 
 ## 2. Devices (P2 decision 0019, C51)
 
@@ -84,3 +84,4 @@
 | 2026-10-02 | The opening hours: decided (show them in the footer) |
 | 2026-10-02 | Questions 8 and 9 answered; the consent test row follows P3's design |
 | 2026-10-02 | P3 part C (step C1a): Part A ticked ☑ (GTM, GA4, Meta, Microsoft UET IDs received); conversions changed (`contact_click` primary, `book_call_click` dropped); rows added: the Vercel GTM variable (C5), LinkedIn and Google Ads postponed, the Microsoft payment method, the UET tag verification, the GA4 stream label, the `@deepzeta.ai` admins, the Business Profile link; B7's reason now names previews, CI and local tests (the office IP changes, so the owner's own visits still count) |
+| 2026-10-02 | P3 part C (step C4): the campaign-link rule written into 09 §2.8, and the Business Profile's website link set to `https://deepzeta.ai/?utm_source=google&utm_medium=organic&utm_campaign=business_profile` |
