@@ -131,6 +131,20 @@ Progress:
     - P11: `contentGroup()` takes the first path segment, so Arabic pages under `/ar/` need the locale segment skipped.
     - Pre-launch (part C's register rows): URL Inspection's live test shows Googlebot gets no banner (`serverTiming` read), and a VPN check from the EEA.
   - Gates: `verify:fast` exit 0; `test` 351 passed; `build` exit 0; `test:e2e` 171 passed; `lhci` exit 0 (above); `verify` exit 0 (with CI's three variables).
+- 2026-10-02 · **Part B merged** on your "merge": `2625fb2` on `main` (`--no-ff`, pushed). CI green on `8cfc2d8` (run 36952003657): Home (Europe) LCP 1,884–2,707 ms, median 2,484, Performance 87–100 (one slow-runner run at 87, TBT 373 ms; median 98); the review page median 2,576 ms; CLS 0. The UAE campaign profile's five runs passed lhci's assertions but weren't among the annotations: GitHub shows at most 10 per step (fixed in C0).
+- 2026-10-02 · **Your answers at part B's close** ("all recommendations yes"):
+  - Q2 the privacy draft's four sentences: the suggested wording (below, C0).
+  - Q3 the banner sentence "Nothing optional runs until you choose": kept. Only European visitors see it, and `data-nosnippet` keeps it out of Google's snippets and AI answers.
+  - Q4 a choice outside Europe also lasts 12 months, then the default (on) applies again: kept.
+  - Q5 the settings panel's new strings: approved (consent-copy.md §2).
+  - Q6 the campaign capture on the first action, and a visitor who leaves without one going unrecorded: accepted (09 §2.8).
+  - Q7 the protected edits: made (C0).
+  - Q8 the other session's C58: no recommendation was given; it stays as committed (it reached `main` with part B) and that session's uncommitted files stay untouched.
+- 2026-10-02 · **Step C0 (part B's close) is done** on `feat/p3c-gtm-container`, from `main` at `2625fb2`:
+  - **privacy-policy.md:** §1's "In short", Table C's Google row and ad networks row now name the region; FAQ Q4 drops "with consent," and ends "Section 7 lists what each one does for us and which data it handles." (43 words); the status line says so.
+  - **consent-copy.md §2:** six rows for the strings that were NEW (the close button, "Cookies and storage", the columns, the three lifetimes); `src/content/en/legal/consent.ts` drops its NEW markers.
+  - **Protected, approved today:** 04 §2's P3 row and 06 §2.6 name GTM's own loader (C56) instead of `@next/third-parties`; `.claude/rules/analytics-tracking.md` the same, and its paths now reach `src/lib/tracking/**`, `*Tracking*` components and `SiteDocument.tsx` (it named `src/app/layout.tsx` and `*Tracker*`, which don't exist, so it never loaded); 09 §2.8 the first-action capture, and 09's protected list `clicks.ts` and `attribution.ts`; C46 amended (the error page's plain `<a>` now uses `routePath('R001')`, no lint exception); the engine's §9.3 Exclude list names the consent banner and Cookie settings; the design index's change log has P3's row; lessons 6 (the `$'` replacement), 7 (untracked files hid a missing commit, P2's `0c7032a`) and 8 (two sessions in one checkout).
+  - **ci.yml:** one Lighthouse annotation per page (the median-LCP run's line, then every run's LCP and score) instead of one per run, so all three pages show within GitHub's 10. Checked locally against the last lhci results.
 Phase: P3
 Branch: three parts, one merge each (Q1): `feat/p3-analytics-consent` (part A, already holds the owner's three docs commits), then `feat/p3b-consent-tracking` and `feat/p3c-gtm-container`, each from `main` after the previous merge
 Page tier: T1. Everything here is sitewide (the document, the shell, the banner). It's measured on Home and the review page, as in P2.
@@ -539,6 +553,9 @@ You add `NEXT_PUBLIC_GTM_ID` in Vercel (Production; Preview optional with a GTM 
 
 | Path | Action | Purpose |
 |---|---|---|
+| `docs/content-drafts/legal/privacy-policy.md`, `consent-copy.md`, `src/content/en/legal/consent.ts` | MODIFY | C0: your answers Q2 and Q5 (2026-10-02) |
+| `docs/ai/04-build-sequence.md`, `06-code-standards.md`, `09-analytics-tracking.md`, `lessons-learned.md`, `.claude/rules/analytics-tracking.md`, `docs/design/README.md`, `docs/seo/seo-geo-domination-engine.md` | MODIFY (protected; your Q6 and Q7 answers, 2026-10-02) | C0 |
+| `docs/ai/conflict-register.md` | MODIFY (protected; your Q7 answer) | C0: C46's amendment |
 | `scripts/build-tracking.mjs` | CREATE | The generator (L) |
 | `docs/owner/tracking/deepzeta-gtm-container.json` | CREATE (generated) | The import file |
 | `docs/owner/tracking/ga4-setup.md` | CREATE (generated) | The GA4 tables and the Ads method |
@@ -546,7 +563,7 @@ You add `NEXT_PUBLIC_GTM_ID` in Vercel (Production; Preview optional with a GTM 
 | `tests/unit/tracking-artifacts.test.ts` | CREATE | The parity and structure checks |
 | `tests/fixtures/gtm/reference-export.json`, `roundtrip-export.json` | CREATE | Your two exports (test IDs only) |
 | `src/lib/tracking/accounts.ts` | MODIFY | Your IDs, when sent |
-| `.github/workflows/ci.yml` | MODIFY | `NEXT_PUBLIC_GTM_ID` (a public ID) |
+| `.github/workflows/ci.yml` | MODIFY | `NEXT_PUBLIC_GTM_ID` (a public ID); C0: one Lighthouse annotation per page |
 | `lighthouserc.cjs`, `lighthouserc.row.cjs`, `scripts/check-page-weight.mjs` | MODIFY | The third-party caps from the measurement |
 | `tests/e2e/tracking.spec.ts` | MODIFY | The GTM cases |
 | `docs/owner/p3-tracking-setup-guide.md`, `docs/owner/pre-launch-register.md` | MODIFY | Section N |
@@ -578,6 +595,7 @@ You add `NEXT_PUBLIC_GTM_ID` in Vercel (Production; Preview optional with a GTM 
 13. **B10 · Part B close:** `verify`; the reviewer, the performance and accessibility auditor, the SEO/GEO auditor (the banner's text in every page's HTML); CI green → **merge on your "merge"**
 
 **Part C** (on `feat/p3c-gtm-container`)
+- **C0 · Part B's close** (your answers, 2026-10-02): the privacy and consent drafts, the protected edits, CI's annotations → `verify:fast` + `check:rules`
 14. **C1 · The reference export** (you, guide A8) → the fixture; the generator's shapes taken from it
 15. **C2 · The generator** and the three generated files (with test IDs until yours arrive) → `test` (parity, structure, privacy parity)
 16. **C3 · The test import and re-export** (you, guide B0) → the round-trip fixture and its test; the throwaway containers deleted

@@ -33,7 +33,7 @@
 3. **`next/image`** for every raster image with explicit `width`/`height` (or `fill` + sized parent); `priority` only for the above-the-fold LCP image.
 4. **`next/link`** for internal links. Links must be real `<a href>` (server-rendered, crawlable). No JavaScript-only navigation.
 5. **`next/font`** for fonts (see [05](05-design-system.md) §3).
-6. **Third-party scripts** via `@next/third-parties` or `next/script` with a deliberate strategy (see [09](09-analytics-tracking.md)). Nothing render-blocking in the head.
+6. **Third-party scripts** via `next/script` with a deliberate strategy, or a small loader of our own where that costs less (GTM: `src/lib/tracking/gtm.ts`, [C56](conflict-register.md); see [09](09-analytics-tracking.md)). Nothing render-blocking in the head.
 7. **Heavy or interactive widgets** (chat agent, booking, WebGL) load **on interaction or when visible**, with a lightweight placeholder that reserves space (no layout shift). "Wow on demand" experiences (concept sites, the app demo, the Device Stage, GSAP scenes) load only on an explicit visitor action (decision 0008). WebGL follows 05 §5 rule 5 and [13](13-experience-design.md) §4.6: T3 only, device-gated, started by the first real input.
 8. **Sitewide output only in the root layout** (schema org/website nodes, analytics init, consent, page-view tracker, floating widgets).
 9. **No data fetching in `useEffect`** for content; fetch on the server.

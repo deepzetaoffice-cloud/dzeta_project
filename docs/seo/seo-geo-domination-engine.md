@@ -510,7 +510,7 @@ A: {answer}
 
 **Rules:**
 - **Include:** direct answers, section answers, steps, deliverables, tables and FAQs.
-- **Exclude:** CTAs, nav, footer, hero slogans, marketing strings and demo UI text.
+- **Exclude:** CTAs, nav, footer, hero slogans, marketing strings, demo UI text, and the consent banner and Cookie settings (interface copy in `src/content/en/legal/consent.ts`; pages come from registry rows, never from walking a content folder; the owner, 2026-10-02).
 - **Built** by one formatter per content type (a registry pattern, so new types plug in without edits).
 - **If the file passes 500 KB,** split it by pillar (`/llms/ai-automation.txt` and so on) and list the parts in llms.txt.
 

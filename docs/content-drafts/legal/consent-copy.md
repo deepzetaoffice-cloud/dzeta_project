@@ -1,6 +1,6 @@
 # Consent wording (DRAFT)
 
-> **Status:** Final wording approved by the owner, 2026-09-29 (no external legal review, the owner's decision). **Changed 2026-10-02 (P3, conflict C52):** consent by region (principles 1 and 4, §1's placement, §5); approved by the owner with the P3 plan (section N). The banner's and the settings' own strings are unchanged.
+> **Status:** Final wording approved by the owner, 2026-09-29 (no external legal review, the owner's decision). **Changed 2026-10-02 (P3, conflict C52):** consent by region (principles 1 and 4, §1's placement, §5); approved by the owner with the P3 plan (section N). The banner's and the settings' own strings are unchanged. **Added 2026-10-02 (P3 part B's close):** the settings panel's close button, its list of cookies and storage, and the list's columns and lifetimes (§2, the last six rows); approved by the owner, 2026-10-02.
 > **Moves to:** `src/content/en/legal/consent.ts`: §1 and §2 moved in P3 (with four new strings for the settings panel, marked NEW there); §3 and §4 (form and tool notices) in P6/P7. Strings are keyed by stable IDs so the Arabic partner can be written natively in P11 (11 §1.4).
 > **Tokens:** `{brandName}` and `{email}` come from the site config (06 §3). "Privacy policy" always links to `/privacy`.
 
@@ -47,6 +47,12 @@ Shown only to visitors from the EEA, the UK and Switzerland who haven't chosen y
 | `settings.rejectAll` | Reject all |
 | `settings.saved` | Saved. You can change this at any time in Cookie settings. |
 | `footer.cookieSettings` | Cookie settings |
+| `settings.close` | Close privacy settings (the close button's accessible name) |
+| `settings.cookiesHeading` | Cookies and storage (above each group's list; each table is named "{group}, Cookies and storage") |
+| `settings.cookieColumns` | Name · Provider · Lifetime |
+| `settings.lifetime.months` | {n} months |
+| `settings.lifetime.days` | {n} days |
+| `settings.lifetime.untilCleared` | Until you clear it |
 
 The switches are real `<button role="switch" aria-checked>` controls with visible labels (a11y). "Essential" is shown as a locked state, not a disabled-looking switch.
 

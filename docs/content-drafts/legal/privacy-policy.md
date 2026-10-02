@@ -1,6 +1,6 @@
 # Privacy Policy: content and layout (DRAFT)
 
-> **Status:** Final wording approved by the owner, 2026-09-29. **Changed 2026-09-30:** the AI provider is now DeepSeek, which stores data in China (decision 0016; §6, §7, §8, Q4–Q6), so the wording needs the owner's re-approval. Before `/privacy` ships, the P7 check of whether DeepSeek trains on API inputs (0016) must be done, and §6 and Q6 updated if it does. **Changed 2026-10-02 (P3, conflict C52):** consent by region: analytics and marketing wait for permission in the EEA, the UK and Switzerland and are on elsewhere until switched off (the hero, at a glance, §3, §4, §5, §9, Table E, §18, Q3 and Part 3 note 2); approved by the owner with the P3 plan (section N). No external legal review (the owner's decision). Values in `{braces}` are variables from the site config; build dependencies are listed in Part 3.
+> **Status:** Final wording approved by the owner, 2026-09-29. **Changed 2026-09-30:** the AI provider is now DeepSeek, which stores data in China (decision 0016; §6, §7, §8, Q4–Q6), so the wording needs the owner's re-approval. Before `/privacy` ships, the P7 check of whether DeepSeek trains on API inputs (0016) must be done, and §6 and Q6 updated if it does. **Changed 2026-10-02 (P3, conflict C52):** consent by region: analytics and marketing wait for permission in the EEA, the UK and Switzerland and are on elsewhere until switched off (the hero, at a glance, §3, §4, §5, §9, Table E, §18, Q3 and Part 3 note 2); approved by the owner with the P3 plan (section N). **Changed 2026-10-02 (P3 part B's close):** four sentences that still said optional cookies wait for consent everywhere now name the region (§1's "In short", Table C's Google row and its ad networks row, FAQ Q4, which also gains a closing sentence to reach the 40-word floor); approved by the owner, 2026-10-02. No external legal review (the owner's decision). Values in `{braces}` are variables from the site config; build dependencies are listed in Part 3.
 > **Moves to:** `src/content/en/legal/privacy.ts` (typed content) in P6. The page is `/privacy` (T2).
 > **Adapted from:** the owner's other site's privacy page (`Planning Folder/For Ai/Other project references only/privacy-policy-content-and-layout.md`).
 
@@ -100,7 +100,7 @@ This Privacy Policy explains how {legalName}, trading as {brandName} ("{brandNam
 
 We handle personal data in line with the UAE Federal Decree-Law No. 45 of 2021 on the Protection of Personal Data (the "PDPL") and the other UAE laws that apply to us.
 
-In short: we collect what we need, we use it for the reason you gave it to us, we never sell it, and optional cookies wait for your permission.
+In short: we collect what we need, we use it for the reason you gave it to us, we never sell it, and optional cookies wait for your permission if you visit from the EEA, the UK or Switzerland.
 
 ### 2 · `who-we-are` · Who we are
 
@@ -166,14 +166,14 @@ We use a small number of service providers to run this website and our services.
 | Provider | What they do for us | Data involved |
 |---|---|---|
 | Vercel | Hosts this website | Technical data; forms as they pass through |
-| Google | Email and our customer records (Google Workspace); tag management and, with consent, analytics (Google Tag Manager, Google Analytics); speed checks (PageSpeed Insights) | Contact details, requests, conversations; analytics data; the web address you check |
+| Google | Email and our customer records (Google Workspace); tag management and analytics (Google Tag Manager, Google Analytics; with your consent in the EEA, the UK and Switzerland); speed checks (PageSpeed Insights) | Contact details, requests, conversations; analytics data; the web address you check |
 | n8n | Runs our automations: passes your enquiry to our records and our email | Contact details, your request |
 | DeepSeek | Powers the AI agent demo and the Content Planner | What you type into them |
 | Cloudflare | Spam protection on forms (Turnstile) | Browser and device signals |
 | Upstash | Short-term limits that stop form abuse | IP address, kept briefly |
 | Cal.com | Call booking | Name, email, booking details |
 | Meta (WhatsApp Business Platform) | WhatsApp messages with us | Phone number, profile name, messages |
-| Google Ads, Meta, LinkedIn (only with marketing consent) | Measure whether our ads work | Cookie identifiers; a hashed (scrambled) email or phone after you send a form |
+| Google Ads, Meta, LinkedIn (with marketing consent in the EEA, the UK and Switzerland; on elsewhere until you switch them off) | Measure whether our ads work | Cookie identifiers; a hashed (scrambled) email or phone after you send a form |
 
 
 We may also disclose personal data when UAE law, a court or a competent authority requires it, or to protect our rights, our clients or the public.
@@ -296,7 +296,7 @@ Your name, business name, email, phone or WhatsApp number, the service you're in
 Yes. Essential cookies keep the site secure and working. Analytics and marketing cookies wait for your permission if you visit from the EEA, the UK or Switzerland, and are on elsewhere. You can change your choice at any time from "Cookie settings" at the bottom of every page.
 
 **Q4. Which companies process my data for you?**
-Our main service providers are Vercel (hosting), Google (email, customer records and, with consent, analytics), n8n (automation), DeepSeek (AI demos), Cloudflare (spam protection), Upstash (abuse limits), Cal.com (booking) and Meta (WhatsApp). Section 7 lists what each one does.
+Our main service providers are Vercel (hosting), Google (email, customer records and analytics), n8n (automation), DeepSeek (AI demos), Cloudflare (spam protection), Upstash (abuse limits), Cal.com (booking) and Meta (WhatsApp). Section 7 lists what each one does for us and which data it handles.
 
 **Q5. Is my data stored in the UAE?**
 Not always. Some of our providers store or process data outside the UAE, for example in the European Union, the United States or China. We transfer data only as the UAE PDPL allows and choose providers that commit to protecting it.
