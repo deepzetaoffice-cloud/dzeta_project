@@ -33,7 +33,7 @@ Every page ends with a landing. The journey line that followed the visitor down 
 - **Controls:** the display controls (Reduce effects beside the theme switch, 05 §1) and a language switch placeholder (hidden until Arabic).
 - **Business name, address and phone:** an `<address>` from the site config, each line shown only once CONFIRMED in `docs/facts/company-facts.md`. A PENDING value (the phone, WhatsApp) is left out, never filled with a placeholder.
 - **Opening hours** (the owner, 2026-10-02; P3 plan, A): their own line after the `<address>`, "Opening hours: " and the fact from the site config, byte for byte (facts §2).
-- **The legal line:** "© 2026 Deepzeta Digital Solutions L.L.C.".
+- **The legal line:** "© 2026 Deepzeta Digital Solutions L.L.C.", with **Cookie settings** at its inline end for every visitor (P3, docs/ai/09 §2.7): a button that opens the consent settings, hidden in place until it works.
 - **On mobile,** "See how AI reads this page" also appears here. It shares the same AI View state as the header.
 
 ## Light mode

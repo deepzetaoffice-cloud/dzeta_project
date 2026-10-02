@@ -739,6 +739,13 @@ Progress:
   - **06 §4** (approved with the plan): the enforced CSP and its reasons; C40's exception now names both static init scripts, allowed through `'unsafe-inline'`.
  patterns, and none had any.
   - Gates: `test` passed; `lint` passed; `check:rules` passed; `lhci` exit 0 (above).
+- 2026-10-02 · **Step B9 (the drafts and the specs) is done.**
+  - **privacy-policy.md**, section N's approved wording: the hero's direct answer (57 words), at a glance ("Cookies you control"), §3's technical data, §4, §5's two bases, §9's intro, Table D's defaults and "Changing your choice", a Table E row ("How you found us… 90 days"), §18, FAQ Q3, Part 3 note 2, the "How this draft differs" row; its status line records the change.
+  - **consent-copy.md:** principles 1 and 4, §1's placement (Europe only; `glass-frost` with the muted tint, as built; the policy link once `/privacy` is live), §5's "Where it applies", "Server-side conversions" and the names now decided (`dz-consent`, no cookie; `dz-region`; `consent_update`); its status and "Moves to" lines. The banner's and the settings' own strings are unchanged.
+  - **n8n guide §8.1:** one line on `consent_ads` (true when the consent state at sending includes Marketing; n8n sends server-side conversions only then).
+  - **conversion-path.md:** a "consent banner" section (Europe only, first frame, placement, look, order and focus, the sticky bar giving way, the scroll reserve, the settings dialog). **footer.md:** Cookie settings at the legal line's inline end, for every visitor.
+  - **Proposed, not made:** a row in the design index's change log (`docs/design/README.md`, outside the table) for part A's and part B's spec edits.
+  - Gates: `check:rules` passed.
 Phase: P3
 Branch: three parts, one merge each (Q1): `feat/p3-analytics-consent` (part A, already holds the owner's three docs commits), then `feat/p3b-consent-tracking` and `feat/p3c-gtm-container`, each from `main` after the previous merge
 Page tier: T1. Everything here is sitewide (the document, the shell, the banner). It's measured on Home and the review page, as in P2.

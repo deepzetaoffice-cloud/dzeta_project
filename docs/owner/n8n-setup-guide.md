@@ -413,6 +413,7 @@ The website sends this JSON. Claude builds that side later; this guide lets you 
 ```
 
 - **WhatsApp format:** country code + number, digits only, no `+`, no spaces, no leading 0 (a UAE mobile looks like `9715…`).
+- **`consent_ads`** is `true` when the visitor's consent state at sending includes Marketing: chosen in the cookie banner or Cookie settings, or the default for visitors outside the EEA, the UK and Switzerland (P3). n8n sends server-side conversions (Meta, LinkedIn, Google offline import) only then. No workflow step changes.
 - The website checks the spam shield (Cloudflare Turnstile) itself, **before** calling n8n.
 
 ### 8.2 Build it

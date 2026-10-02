@@ -27,6 +27,15 @@ This is the book-audit page from the blueprint's core pages. Its URL is set in i
   - It hides while the mobile menu sheet or a modal is open, and never shows without JavaScript.
   - It slides with a transform only. Safe-area padding keeps it clear of an iPhone's home indicator (`viewportFit: 'cover'`; checked on an iPhone before launch, 0019), and `scroll-padding-block-end` keeps focused content clear of it.
 
+## The consent banner (P3; docs/ai/09 §2.7, C52)
+
+- **Shown only to visitors from the EEA, the UK and Switzerland** who haven't chosen yet. It's in the first frame (the consent init script marks `<html data-consent="ask">` before the first paint), never popping in later.
+- **Placement:** full width at the bottom on a phone, safe-area padding like the sticky bar; from 640 px a corner panel at the inline end. `--dz-layer-consent`.
+- **Look:** `glass-frost` with the muted tint (no second live blur on a phone); solid in forced colours. Accept all and Reject all are the same outline pill, neither on the action gradient, so one gradient CTA in view still holds (C42).
+- **Order:** right after the skip link, first in the reading and Tab order; it never takes focus by itself. After a choice it fades out (at once under Reduce effects) and focus that was on it moves to `<main>`.
+- **The sticky CTA bar gives way** while the banner shows, and returns after the choice. The page's end and `scroll-padding-block-end` take the banner's height, so a focused control never ends under it (WCAG 2.4.11).
+- **Cookie settings** (the second layer) is a modal dialog: full height on a phone, a centred panel over a dim from 640 px, `glass-live`.
+
 ## Floating elements at 360 px
 
 Priority, highest first:
