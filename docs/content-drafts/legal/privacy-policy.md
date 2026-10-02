@@ -1,6 +1,6 @@
 # Privacy Policy: content and layout (DRAFT)
 
-> **Status:** Final wording approved by the owner, 2026-09-29. **Changed 2026-09-30:** the AI provider is now DeepSeek, which stores data in China (decision 0016; §6, §7, §8, Q4–Q6), so the wording needs the owner's re-approval. Before `/privacy` ships, the P7 check of whether DeepSeek trains on API inputs (0016) must be done, and §6 and Q6 updated if it does. **Changed 2026-10-02 (P3, conflict C52):** consent by region: analytics and marketing wait for permission in the EEA, the UK and Switzerland and are on elsewhere until switched off (the hero, at a glance, §3, §4, §5, §9, Table E, §18, Q3 and Part 3 note 2); approved by the owner with the P3 plan (section N). **Changed 2026-10-02 (P3 part B's close):** four sentences that still said optional cookies wait for consent everywhere now name the region (§1's "In short", Table C's Google row and its ad networks row, FAQ Q4, which also gains a closing sentence to reach the 40-word floor); approved by the owner, 2026-10-02. No external legal review (the owner's decision). Values in `{braces}` are variables from the site config; build dependencies are listed in Part 3.
+> **Status:** Final wording approved by the owner, 2026-09-29. **Changed 2026-09-30:** the AI provider is now DeepSeek, which stores data in China (decision 0016; §6, §7, §8, Q4–Q6), so the wording needs the owner's re-approval. Before `/privacy` ships, the P7 check of whether DeepSeek trains on API inputs (0016) must be done, and §6 and Q6 updated if it does. **Changed 2026-10-02 (P3, conflict C52):** consent by region: analytics and marketing wait for permission in the EEA, the UK and Switzerland and are on elsewhere until switched off (the hero, at a glance, §3, §4, §5, §9, Table E, §18, Q3 and Part 3 note 2); approved by the owner with the P3 plan (section N). **Changed 2026-10-02 (P3 part B's close):** four sentences that still said optional cookies wait for consent everywhere now name the region (§1's "In short", Table C's Google row and its ad networks row, FAQ Q4, which also gains a closing sentence to reach the 40-word floor); approved by the owner, 2026-10-02. **Changed 2026-10-02 (P3 part C, C1e):** the ad networks named are now Meta and Microsoft Advertising (Table C's ad-networks row, Table D's Marketing row, FAQ Q4, the "differs" row and Part 3 note 2); Google Ads and LinkedIn are postponed until after launch, and each name comes back in the same change that adds it to the container; approved by the owner with the part C plan (Q3, all recommendations). No external legal review (the owner's decision). Values in `{braces}` are variables from the site config; build dependencies are listed in Part 3.
 > **Moves to:** `src/content/en/legal/privacy.ts` (typed content) in P6. The page is `/privacy` (T2).
 > **Adapted from:** the owner's other site's privacy page (`Planning Folder/For Ai/Other project references only/privacy-policy-content-and-layout.md`).
 
@@ -12,7 +12,7 @@ The owner asked to change only the brand and related topics. Several of the refe
 |---|---|---|
 | "100% in-house processing", "0 third parties", "we never share with any third party" | We use service providers: hosting, email, CRM, automation, AI, spam protection, booking, WhatsApp | "We never **sell** your data", plus an honest list of providers (§7) |
 | "Data processed and stored within the UAE" | Several providers store or process data outside the UAE | §8 says so and explains the safeguards |
-| "We do not share browsing data with advertising networks" | Our analytics plan (09 §1) includes Google Ads, Meta and LinkedIn measurement | Only with marketing consent in the EEA, the UK and Switzerland; on by default elsewhere, and stated plainly (§9) |
+| "We do not share browsing data with advertising networks" | Our analytics plan (09 §1) includes Meta and Microsoft Advertising measurement | Only with marketing consent in the EEA, the UK and Switzerland; on by default elsewhere, and stated plainly (§9) |
 | "Legitimate interest" as a legal basis | The UAE PDPL has no general legitimate-interest basis like the GDPR | Consent, your request/contract, legal duty |
 | Stats strip "0 / 100% / 24h" | Numbers we can't prove (N3) | Four plain promises, no numbers |
 | Government authorities section; DED licence number; Dubai Chamber membership | Not our business; not our facts | Removed; our licence number is added when the owner provides it |
@@ -173,7 +173,7 @@ We use a small number of service providers to run this website and our services.
 | Upstash | Short-term limits that stop form abuse | IP address, kept briefly |
 | Cal.com | Call booking | Name, email, booking details |
 | Meta (WhatsApp Business Platform) | WhatsApp messages with us | Phone number, profile name, messages |
-| Google Ads, Meta, LinkedIn (with marketing consent in the EEA, the UK and Switzerland; on elsewhere until you switch them off) | Measure whether our ads work | Cookie identifiers; a hashed (scrambled) email or phone after you send a form |
+| Meta, Microsoft Advertising (with marketing consent in the EEA, the UK and Switzerland; on elsewhere until you switch them off) | Measure whether our ads work | Cookie identifiers; a hashed (scrambled) email or phone after you send a form |
 
 
 We may also disclose personal data when UAE law, a court or a competent authority requires it, or to protect our rights, our clients or the public.
@@ -192,7 +192,7 @@ Cookies are small files your browser stores. We sort them into three groups. Ess
 |---|---|---|
 | Essential | Keeps the site secure, stops spam on forms, and remembers your cookie choice and display settings (such as Reduce effects) | Always on |
 | Analytics | Google Analytics shows us, in aggregate, which pages people visit and where they get stuck | Off until you allow it in the EEA, the UK and Switzerland; on elsewhere |
-| Marketing | Google Ads, Meta and LinkedIn measure whether our ads bring people here, and can show our ads to people who've visited | Off until you allow it in the EEA, the UK and Switzerland; on elsewhere |
+| Marketing | Meta and Microsoft Advertising measure whether our ads bring people here, and can show our ads to people who've visited | Off until you allow it in the EEA, the UK and Switzerland; on elsewhere |
 
 - **Changing your choice:** use "Cookie settings" at the bottom of every page. We remember your choice for 12 months.
 - **Blocking cookies:** you can also block cookies in your browser. Essential ones are needed for forms to work.
@@ -296,7 +296,7 @@ Your name, business name, email, phone or WhatsApp number, the service you're in
 Yes. Essential cookies keep the site secure and working. Analytics and marketing cookies wait for your permission if you visit from the EEA, the UK or Switzerland, and are on elsewhere. You can change your choice at any time from "Cookie settings" at the bottom of every page.
 
 **Q4. Which companies process my data for you?**
-Our main service providers are Vercel (hosting), Google (email, customer records and analytics), n8n (automation), DeepSeek (AI demos), Cloudflare (spam protection), Upstash (abuse limits), Cal.com (booking) and Meta (WhatsApp). Section 7 lists what each one does for us and which data it handles.
+Our main service providers are Vercel (hosting), Google (email, customer records and analytics), n8n (automation), DeepSeek (AI demos), Cloudflare (spam protection), Upstash (abuse limits), Cal.com (booking), Meta (WhatsApp and ad measurement) and Microsoft (ad measurement). Section 7 lists what each one does for us and which data it handles.
 
 **Q5. Is my data stored in the UAE?**
 Not always. Some of our providers store or process data outside the UAE, for example in the European Union, the United States or China. We transfer data only as the UAE PDPL allows and choose providers that commit to protecting it.
@@ -337,7 +337,7 @@ Email {email} and tell us what you need. We'll confirm it's you, then answer wit
 These keep the promises in this policy true. They are checked by the plans named here, not shown on the page.
 
 1. **Cookie list (P3):** "Cookie settings" lists every cookie's name, provider and lifetime, generated from the live GTM container. Nothing loads that isn't listed.
-2. **Consent (P3):** for visitors from the EEA, the UK and Switzerland, no analytics or marketing tag runs before consent; for others they run until switched off. Server-side conversion events (Meta, LinkedIn, Google offline import) with hashed contact details go only for leads whose consent state at sending includes Marketing (chosen, or the default outside Europe) (`consent-copy.md` §5).
+2. **Consent (P3):** for visitors from the EEA, the UK and Switzerland, no analytics or marketing tag runs before consent; for others they run until switched off. Server-side conversion events (Meta now; LinkedIn and Google offline import when they start) with hashed contact details go only for leads whose consent state at sending includes Marketing (chosen, or the default outside Europe) (`consent-copy.md` §5).
 3. **Providers:** Table C and FAQ Q4 list only providers that are active. Adding or removing a provider changes this page in the same pull request.
 4. **AI demo (P7):** demo conversations are not written to our records (§6).
 5. **Retention:** Table E is carried out as written. The GA4 data-retention setting is 14 months; spam and abuse limits expire within 24 hours; tool results expire within 30 days.

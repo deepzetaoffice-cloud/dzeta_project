@@ -28,6 +28,12 @@ Progress:
   - **conversion-path.md line 60:** `book_call_click` out of the booking flow's events, with the C59 note.
   - **external-sources.md:** PROPOSED rows S008 (UET's `bat.bing.com` host), S009 (UET's four first-party cookies, lifetimes unstated), S010 (GA4's `_ga` cookies, 24 months) and S011 (Meta's `_fbp`/`_fbc`); the change log has the row. They await the owner's approval one by one, as the register's rules say.
   - Gates: `check:rules` passed (18 entry files).
+- 2026-10-02 · **C1e (the wording, §6 as approved with the plan) is done.**
+  - `src/content/en/legal/consent.ts`: `settings.marketing.body` now reads "Measure whether our ads on Meta and Microsoft Bing bring people here, and show our ads to people who've visited us."
+  - privacy-policy.md: Table C's ad-networks row and Table D's Marketing row name **Meta and Microsoft Advertising**; FAQ Q4 ends "…Cal.com (booking), Meta (WhatsApp and ad measurement) and Microsoft (ad measurement)." (44 words, over the floor); the "differs" row and Part 3 note 2 say "Meta now; LinkedIn and Google offline import when they start"; the status line records the change and the rule that a returning platform's name comes back with its container change.
+  - consent-copy.md: `settings.marketing.body` matches the string exactly; §5's server-side conversions line says "Meta now; LinkedIn and Google offline import when they start".
+  - Gates: `test` 360 passed; `check:rules` passed.
+  - **C1a–C1e complete.** Next: C1 (the owner's reference export, guide A8) → C2 the generator. The branch holds `a184b17`, `52bbfac`, `1f67dda`, `5910f1e` and this commit on top of C0.
 Phase: P3
 Branch: `feat/p3c-gtm-container` (from `main` at `2625fb2`; step C0 done there)
 Page tier: T1 (sitewide: the CSP, the cookie list and the container reach every page; measured on Home and the review page, as in parts A and B)

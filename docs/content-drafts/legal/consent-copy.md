@@ -39,7 +39,7 @@ Shown only to visitors from the EEA, the UK and Switzerland who haven't chosen y
 | `settings.analytics.name` | Analytics |
 | `settings.analytics.body` | Show us, in aggregate, which pages people visit and where they get stuck, so we can make the site faster and clearer. Uses Google Analytics. |
 | `settings.marketing.name` | Marketing |
-| `settings.marketing.body` | Measure whether our ads on Google, Meta and LinkedIn bring people here, and show our ads to people who've visited us. |
+| `settings.marketing.body` | Measure whether our ads on Meta and Microsoft Bing bring people here, and show our ads to people who've visited us. |
 | `settings.toggleOn` | On |
 | `settings.toggleOff` | Off |
 | `settings.save` | Save my choices |
@@ -100,6 +100,6 @@ The switches are real `<button role="switch" aria-checked>` controls with visibl
 | Marketing | `ad_storage`, `ad_user_data`, `ad_personalization` | denied |
 
 - **Where it applies (C52):** the EEA, the UK and Switzerland, or no region hint: everything above denied, and the banner asks. Everyone else: Analytics and Marketing granted by default, no banner. A stored choice wins either way. The region comes from Vercel's country header through a CDN rule (`Server-Timing: dz-region`, which stores nothing); the defaults are set in `dataLayer[0]` before GTM loads (09 §2.2).
-- **Server-side conversions:** conversion events sent from n8n (Meta, LinkedIn, Google offline import) go only for leads whose consent state at sending includes Marketing (`ad_user_data` granted: chosen, or the default outside Europe). The lead payload carries it as `consent_ads` (`docs/owner/n8n-setup-guide.md` §8.1).
+- **Server-side conversions:** conversion events sent from n8n (Meta now; LinkedIn and Google offline import when they start) go only for leads whose consent state at sending includes Marketing (`ad_user_data` granted: chosen, or the default outside Europe). The lead payload carries it as `consent_ads` (`docs/owner/n8n-setup-guide.md` §8.1).
 - **Stored choice:** a first-party record of the choice, with the wording version and a timestamp. It contains no personal data. When the groups or this wording change, the version number increases and the banner asks again.
 - **Names (P3):** the stored choice is `dz-consent` in the browser's storage (`CONSENT_VERSION` 1; no cookie); the region hint `dz-region` stores nothing; a choice is reported as `consent_update` (09 §3, GTM only), which says which groups it newly granted.

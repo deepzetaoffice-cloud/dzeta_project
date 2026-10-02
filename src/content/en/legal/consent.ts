@@ -36,7 +36,7 @@ export const consentContent = {
     },
     marketing: {
       name: 'Marketing',
-      body: "Measure whether our ads on Google, Meta and LinkedIn bring people here, and show our ads to people who've visited us.",
+      body: "Measure whether our ads on Meta and Microsoft Bing bring people here, and show our ads to people who've visited us.",
     },
     // Each switch's visible state
     toggleOn: 'On',
