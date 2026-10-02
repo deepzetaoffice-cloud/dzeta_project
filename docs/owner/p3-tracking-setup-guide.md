@@ -32,17 +32,17 @@ What must match, and where it lives:
 
 Reply in chat with this list filled in. Send **only public IDs**. Never a password, never a secret key or token (rule: secrets go only into Vercel's settings, by you).
 
-| # | What | Where to find it | Public? |
-|---|---|---|---|
-| 1 | **GTM container ID** (starts `GTM-`) | Part A2, last step | Yes |
-| 2 | **GA4 Measurement ID** (starts `G-`) | Part A3, step 6 | Yes |
-| 3 | **Which ad platforms you'll use in the first months:** Google Ads, Meta (Facebook/Instagram), LinkedIn, Microsoft (Bing) Ads. Yes, no or later for each | Your marketing plan | — |
-| 4 | **Meta dataset (pixel) ID**, if Meta = yes | Part A6 | Yes |
-| 5 | **LinkedIn Insight Tag Partner ID**, if LinkedIn = yes | Part A7 | Yes |
-| 6 | **Google Ads customer ID** (123-456-7890), if Google Ads = yes | Top right in Google Ads | Yes |
-| 7 | **Your office's internet address (IP)**, if it never changes; otherwise say "it changes" | Search "what is my IP" from the office network | Yes |
-| 8 | **The consent choice** (below): (a) or (b) | — | — |
-| 9 | **What counts as a conversion** (below): confirm or change | — | — |
+| # | What | Where to find it | Public? | **Your answer (2026-10-02, handoff §1–§2)** |
+|---|---|---|---|---|
+| 1 | **GTM container ID** (starts `GTM-`) | Part A2, last step | Yes | `GTM-5MR4S8R2` — entered in Vercel → Production by you, at step C5 |
+| 2 | **GA4 Measurement ID** (starts `G-`) | Part A3, step 6 | Yes | `G-RTLSJW7Q9W` — in the code (`accounts.ts`) |
+| 3 | **Which ad platforms you'll use in the first months:** Google Ads, Meta (Facebook/Instagram), LinkedIn, Microsoft (Bing) Ads. Yes, no or later for each | Your marketing plan | — | **Meta: yes. Microsoft Ads: yes. LinkedIn: later, after launch. Google Ads: later, after launch.** |
+| 4 | **Meta dataset (pixel) ID**, if Meta = yes | Part A6 | Yes | `2290203821825563` — in the code (`accounts.ts`) |
+| 5 | **LinkedIn Insight Tag Partner ID**, if LinkedIn = yes | Part A7 | Yes | Postponed (stays `null` until you send it) |
+| 6 | **Google Ads customer ID** (123-456-7890), if Google Ads = yes | Top right in Google Ads | Yes | Postponed (stays `null` until you send it) |
+| 7 | **Your office's internet address (IP)**, if it never changes; otherwise say "it changes" | Search "what is my IP" from the office network | Yes | "It changes" (Etisalat, no static IP confirmed). See A3.11 |
+| 8 | **The consent choice** (below): (a) or (b) | — | — | (b), already answered and built (below) |
+| 9 | **What counts as a conversion** (below): confirm or change | — | — | Changed: see the table below |
 
 **Question 8, the consent banner** (rule 09 §2.7, UAE PDPL):
 - **(a) Recommended: one banner for every visitor; nothing that measures or advertises runs until they press Accept.** This is what the rules already say. The cost: GA4 sees only visitors who accept, so its numbers are lower than real traffic. Google fills some of the gap with modelling only once a site has about 1,000 events a day from visitors who declined and 1,000 daily visitors who accepted, so expect no modelling at first.
@@ -50,14 +50,16 @@ Reply in chat with this list filled in. Send **only public IDs**. Never a passwo
 
 > **Your answer (2026-10-02, final): a banner for Europe only.** Visitors from the EEA, the UK and Switzerland see the banner, and nothing that measures or advertises runs until they press Accept. Every other visitor (the UAE, the GCC and the rest of the world) gets analytics and ad tracking on by default, with no banner. (It replaces a first answer the same day: no banner for anyone.) It differs from rule 09 §2.7, so the P3 plan records it as an exception for your approval, and updates this guide's steps that mention the banner (B2 step 4).
 
-**Question 9, conversions.** The site's one goal is booked audits. Proposed (**your answer, 2026-10-02: as proposed**):
+**Question 9, conversions.** The site's one goal is booked audits. Proposed, then **changed by your answer (2026-10-02, handoff §2.3)**:
 
 | Conversion | When it fires | Counts for ads bidding? |
 |---|---|---|
-| `generate_lead` | The audit form is sent successfully | **Yes, primary** |
-| `book_call_click` | The booking calendar is opened | No (secondary, for insight) |
-| `contact_click` | WhatsApp, phone or email is clicked | No (secondary) |
+| `generate_lead` | The audit form is sent successfully | **Yes, primary** (unchanged) |
+| `contact_click` | WhatsApp, phone or email is clicked | **Yes, primary** (was secondary; in Meta you choose the optimisation event per ad set, so both `Lead` and `Contact` stay available) |
+| `book_call_click` | ~~The booking calendar is opened~~ | **Dropped by you.** The name stays reserved in the taxonomy (append-only) but is marked `retired`: never fired, no key event, not in the container, the GA4 tables or the booking flow (C59) |
 | A confirmed booking | Cal.com confirms a booked slot | Later: sent from the server through n8n, because the booking happens on Cal.com's side, which the site's tags can't see reliably |
+
+> **Note (finding 5 of the P3 part C plan):** until the audit page (R002) ships, the header's "Book a free AI audit" is an email link, so every click on it is a `contact_click` and counts as a primary conversion. B8's tables say so beside the goal settings.
 
 ---
 
@@ -101,9 +103,8 @@ Reply in chat with this list filled in. Send **only public IDs**. Never a passwo
 8. **Data retention:** **Admin → Data collection and modification → Data retention →** Event data retention **14 months** → Save. (It affects explorations, not the standard reports.)
 9. **Google signals: leave it off for now** (**Admin → Data collection and modification → Data collection**). It's for ad remarketing; on a new, small site it hides small numbers in reports. Turn it on later with Claude, when ads start.
 10. **Reporting identity:** **Admin → Data display → Reporting identity →** keep **Blended** (needed for consent modelling later).
-11. **Your own visits** (only if your office IP never changes):
-    - **Admin → Data streams →** your stream **→ Configure tag settings → Show more → Define internal traffic → Create.** Rule name `Office`, `traffic_type` value `internal`, IP address **equals** your office IP → Create.
-    - **Admin → Data collection and modification → Data filters →** the **Internal Traffic** filter is created automatically in **Testing** state. Leave it in Testing; Part B switches it to Active after the tests.
+11. **Your own visits.** **Your answer: "it changes" (2026-10-02), so the IP rule is Not needed** (the handoff marked it so; the office line is Etisalat, no static IP confirmed). Revisit only if you later confirm a static IP.
+    - **What Part C kept, and why (plan Q2):** the IP rule itself is dropped, but the container still marks every host except `deepzeta.ai` and `www.deepzeta.ai` with `traffic_type = internal` (Vercel previews, CI's Lighthouse runs once CI has the GTM ID, local tests). GA4 drops those events only while the **Internal Traffic** filter is **Active** — which is B7's step.
 12. **Don't create custom dimensions or key events yet**, and never use **Create event** or **Modify event**. Part B gives you the exact list.
 
 ### A4. Google Ads (if Google Ads = yes)
@@ -156,6 +157,8 @@ Nothing now. At launch: a **Domain** property for `deepzeta.ai`, verified by DNS
    | `GA4 - cta_click` | **Google Analytics: GA4 Event** | Measurement ID `G-TEST123456`; Event Name `cta_click`; under **Event Parameters**, one row: `cta_id` → `{{DLV - cta_id}}`. In **Advanced Settings → Tag Sequencing**, tick the option to fire a tag **before** this one, and choose `Google tag - update` | `CE - cta_click` | The same: `analytics_storage` |
    | `HTML - test` | **Custom HTML** | In the HTML box: `<script>window.dzReference = true;</script>` | `WL - production` | **Require additional consent for tag to fire** → `ad_storage` |
    | `LinkedIn - test` (only if LinkedIn = yes) | **Discover more tag types in the Community Template Gallery** → search **LinkedIn InsightTag 2.0** → **Add to workspace** | Partner ID `1234567` | `WL - production` | The same: `ad_storage` |
+   | `UET - test` (**added 2026-10-02**: Microsoft is a launch platform now) | **Discover more tag types in the Community Template Gallery** → search **Microsoft Advertising Universal Event Tracking** → **Add to workspace** | Tag ID `1234567` (a test value). Choose **UET config/page view (required)**, with **Enable automatic tracking for page view events** ticked. If the template shows **Inherit initial consent**, tick it (this site's tags fire only after consent); leave **Enable consent updates** on (its default) | `WL - production` | **Require additional consent for tag to fire** → `ad_storage` |
+   | `UET - test event` (**added 2026-10-02**) | The same **Microsoft Advertising Universal Event Tracking** template | Tag ID `1234567`; Event Type **Custom**; Action `cta_click`; leave Category, Label and Value empty (the taxonomy name is the only identifier, by the tracking-parity rule). In **Advanced Settings → Tag Sequencing**, tick the option to fire a tag **before** this one, and choose `UET - test` | `CE - cta_click` | The same: `ad_storage` |
 
    Save each one. **Don't click Submit or Publish.** Nothing in this container ever goes live.
 5. **Export it.** **Admin → Export Container → Choose a version or workspace →** choose **Default Workspace** → **Download**. The file's name starts with the throwaway container's `GTM-` ID.
@@ -179,6 +182,8 @@ You'll receive: the container file (`deepzeta-gtm-container.json`), and in this 
 2. On the site that opens, follow Claude's **test script** (for example: accept the banner, click "Book a free AI audit", open a form, send a test).
 3. In Tag Assistant, each step must show the expected event and the tags that fired, **once each**. Note anything that fired twice or didn't fire.
 4. Also check the **Consent** tab: before you accept, the consent types show *denied*; after, *granted*.
+5. **Microsoft's UET Tag Helper (added 2026-10-02):** install the browser extension, then on the same test run: **before you accept the banner (in Europe), no UET request is sent at all**; after Accept, the tag helper's `asc` value reads *granted*. If it reads *denied* after Accept, stop and send Claude a screenshot.
+6. **Keep Microsoft's Clarity integration off** (added 2026-10-02). It would need its own consent wording and CSP hosts; if Microsoft offers it during setup, decline.
 
 ### B3. Check GA4's DebugView
 1. **GA4 → Admin → Data display → DebugView**, while Preview is still connected.
@@ -196,10 +201,13 @@ You'll receive: the container file (`deepzeta-gtm-container.json`), and in this 
 ### B7. Turn on your filter
 After a day of normal use: **Admin → Data filters → Internal Traffic → Active.** (Active filters can't be undone for past data, which is why it waited.)
 
-### B8. Meta, LinkedIn and Google Ads conversions (only those you said yes to)
-- **Meta:** **Events Manager →** your dataset **→ Test events → Open website**, run the test script, and check that `PageView` and `Lead` arrive. (The browser helper is now called **Meta Ads Data Advisor**.)
-- **LinkedIn:** **Measure → Conversion tracking → Create conversion → Insight Tag conversion → event-specific**, one per row of Claude's table. Send Claude each **conversion ID**; Claude adds them in a small second import.
-- **Google Ads:** follow the single method Claude's P3 update names: either GA4 key events imported into Ads, or Google Ads' own conversion tag, **never both as "primary"** for the same action.
+**Why this step stays (2026-10-02):** your office IP changes, so there's no IP rule (A3.11), but the container marks every host except `deepzeta.ai` and `www.deepzeta.ai` as `traffic_type = internal` — Vercel previews, CI's Lighthouse runs and local tests. GA4 drops those events only while this filter is Active. Your own visits still count (there's no static IP to filter them by), until you ask for the "mark this browser as mine" option (postponed, plan Q6).
+
+### B8. Meta, Microsoft, LinkedIn and Google Ads conversions (only the platforms you said yes to; **your answers: Meta and Microsoft now, LinkedIn and Google Ads postponed**, 2026-10-02)
+- **Meta:** **Events Manager →** your dataset **→ Test events → Open website**, run the test script, and check that `PageView`, `Lead` and `Contact` arrive. (The browser helper is now called **Meta Ads Data Advisor**.) You choose the optimisation event per ad set, so both stay available.
+- **Microsoft Advertising:** **Tools → Conversion goals → Create conversion goal →** type **Event**, one per row of Claude's generated table, **named exactly as the events** (`generate_lead`, `contact_click`). Both count as conversions; Microsoft's goal setting that makes one "primary" is quoted in the table when it's read (step C4). Beside `contact_click`, note the same caveat as GA4's table: until the audit page ships, every header CTA click is a `contact_click`.
+- **LinkedIn (postponed):** when it starts: **Measure → Conversion tracking → Create conversion → Insight Tag conversion → event-specific**, one per row of Claude's table. Send Claude each **conversion ID**; Claude adds them in a small second import.
+- **Google Ads (postponed):** when it starts, follow the single method already decided (your Q6): GA4 key events imported into Ads — both `generate_lead` and `contact_click` as **primary** — and no Ads tag in the container, so nothing is counted twice.
 
 ### B9. Tell Claude
 Send: "B1–B8 done", the version number GTM shows, and any screenshot of something unexpected. Claude records it in the pre-launch register.
