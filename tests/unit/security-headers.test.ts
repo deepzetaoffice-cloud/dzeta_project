@@ -7,6 +7,7 @@ import type { Accounts } from '@/lib/tracking/accounts';
 const NO_IDS: Accounts = {
   ga4MeasurementId: null,
   metaDatasetId: null,
+  microsoftUetTagId: null,
   linkedinPartnerId: null,
   linkedinConversionIds: { generate_lead: null },
   googleAdsCustomerId: null,
@@ -15,6 +16,7 @@ const ALL_IDS: Accounts = {
   ...NO_IDS,
   ga4MeasurementId: 'G-TEST1234',
   metaDatasetId: '1234567890123',
+  microsoftUetTagId: '123456789',
   linkedinPartnerId: '1234567',
 };
 
@@ -83,11 +85,14 @@ describe('the CSP (C53)', () => {
     expect(gtmOnly['connect-src']).not.toContain('https://*.google-analytics.com');
     const all = parse(contentSecurityPolicy({ gtm: true, https: true, ids: ALL_IDS }));
     expect(all['connect-src']).toEqual(
-      expect.arrayContaining(['https://*.google-analytics.com', 'https://www.facebook.com']),
+      expect.arrayContaining(['https://*.google-analytics.com', 'https://www.facebook.com', 'https://bat.bing.com']),
     );
     expect(all['script-src']).toEqual(
-      expect.arrayContaining(['https://connect.facebook.net', 'https://snap.licdn.com']),
+      expect.arrayContaining(['https://connect.facebook.net', 'https://bat.bing.com', 'https://snap.licdn.com']),
     );
+    // bat.bing.com only, the host of Microsoft's official tag code: bat.bing.net appears in a Q&A
+    // answer, not in Microsoft's documentation (plan finding 11)
+    expect(contentSecurityPolicy({ gtm: true, https: true, ids: ALL_IDS })).not.toContain('bat.bing.net');
     for (const list of Object.values(all)) expect(new Set(list).size).toBe(list.length);
   });
 

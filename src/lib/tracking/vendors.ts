@@ -10,7 +10,7 @@
 import type { Accounts } from './accounts.ts';
 
 export type ConsentGroup = 'essential' | 'analytics' | 'marketing';
-export type VendorId = 'gtm' | 'gtm_preview' | 'ga4' | 'meta' | 'linkedin';
+export type VendorId = 'gtm' | 'gtm_preview' | 'ga4' | 'meta' | 'microsoft' | 'linkedin';
 export type CspHosts = {
   script?: readonly string[];
   style?: readonly string[];
@@ -97,6 +97,23 @@ export const VENDORS: readonly Vendor[] = [
     withdraw: ['_fbp', '_fbc'],
   },
   {
+    // Microsoft publishes no CSP list: this is the host its own tag code loads from
+    // ("The tag code loads //bat.bing.com/bat.js", learn.microsoft.com, hlp_ba_conc_uet_consent).
+    // bat.bing.net appears only in a Microsoft Q&A answer, not in its documentation, so it's left out;
+    // if C5's tests show another host, it needs an official source or the owner's OK (plan finding 11).
+    id: 'microsoft',
+    name: 'Microsoft Advertising (UET)',
+    group: 'marketing',
+    hosts: { script: ['https://bat.bing.com'], img: ['https://bat.bing.com'], connect: ['https://bat.bing.com'] },
+    source: 'https://learn.microsoft.com/en-us/microsoft-advertising/entitlements/hlp_ba_conc_uet_consent (the tag code)',
+    // Deleted when Marketing is switched off: the first-party names from Microsoft's consent FAQ
+    // (hlp_ba_conc_uet_consentfaq). No `cookies` list: Microsoft's pages give no lifetimes for them, and
+    // MUID and MSPTC are Bing's own cookies, which the site can't delete anyway; Cookie settings shows a
+    // vendor's cookies only once their external-sources.md row is approved (plan finding 12), so
+    // Microsoft's stay hidden until an official source gives lifetimes.
+    withdraw: ['_uetsid', '_uetvid', '_uetsid_exp', '_uetvid_exp'],
+  },
+  {
     id: 'linkedin',
     name: 'LinkedIn Insight Tag',
     group: 'marketing',
@@ -131,6 +148,7 @@ export function vendorsInUse({ gtm }: { gtm: boolean }, ids: Accounts): Vendor[]
     gtm_preview: true,
     ga4: ids.ga4MeasurementId !== null,
     meta: ids.metaDatasetId !== null,
+    microsoft: ids.microsoftUetTagId !== null,
     linkedin: ids.linkedinPartnerId !== null,
   };
   return VENDORS.filter((vendor) => set[vendor.id]);
