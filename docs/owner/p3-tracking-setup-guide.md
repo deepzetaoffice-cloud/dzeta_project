@@ -1,7 +1,7 @@
 # deepzeta · Tracking setup guide (GTM, GA4, Meta, LinkedIn, Google Ads)
 
 > **For:** the owner, who does every dashboard step by hand (rule 09 §2.10). Claude never logs in to these accounts.
-> **When:** Part A now, before Phase 3 (P3) starts. Part B after P3 is built, before launch.
+> **When:** Part A now, before Phase 3 (P3) starts (A8, the reference export, at P3's step C1). Part B after P3 is built, before launch.
 > **Checked against:** Google's, Meta's and LinkedIn's official help pages, read on 2026-10-01 (sources at the end). Menus move: if a label differs, look for the nearest match and tell Claude, who updates this guide.
 
 ---
@@ -122,6 +122,45 @@ Nothing now. At launch: a **Domain** property for `deepzeta.ai`, verified by DNS
 1. **Campaign Manager → Measure → Signals manager → Sources → Insight Tag →** choose **"I will use a tag manager"**.
 2. Copy the **Partner ID** for Claude. Don't create conversions yet.
 
+### A8. The reference export (P3 step C1, about 20 minutes)
+
+**Why:** Google doesn't publish the format of a GTM container file. So before Claude writes one for you, you build one small example by hand in a **throwaway container**, export it, and send it. Claude's generator copies its exact shape, and a test checks every file against it. It holds **test IDs only**, never your real ones.
+
+**Names matter less than shapes here:** use the names below, so Claude can find each item in the file. If a label in GTM differs, pick the nearest one and tell Claude.
+
+1. **The throwaway container.** In Tag Manager, go to the **Accounts** tab, click **⋮** next to your `deepzeta` account → **Create Container**. Name `dz-reference`, type **Web** → **Create**. Close the "Install Google Tag Manager" box. Make sure the container name at the top says `dz-reference` from now on, **never `deepzeta.ai`**.
+2. **Five variables.** **Variables → User-Defined Variables → New → Variable Configuration**, then:
+
+   | Variable name (top left) | Type | Fill in |
+   |---|---|---|
+   | `DLV - cta_id` | **Data Layer Variable** | The data layer variable's name: `cta_id` |
+   | `DLV - consent_granted_now` | **Data Layer Variable** | The name: `consent_granted_now` |
+   | `Const - test id` | **Constant** | Value: `TEST` |
+   | `Lookup - traffic_type` | **Lookup Table** | Input variable: `{{Page Hostname}}`; one row: `deepzeta.ai` → `public`; tick the default value and enter `internal` |
+
+   Save each one. (That's four; the fifth is GTM's own **Page Hostname**: under **Variables → Built-In Variables → Configure**, make sure it's ticked.)
+3. **Three triggers.** **Triggers → New → Trigger Configuration**, then:
+
+   | Trigger name | Type | Fill in |
+   |---|---|---|
+   | `CE - cta_click` | **Custom Event** | Event name `cta_click`; **This trigger fires on: All Custom Events** |
+   | `CE - consent_update - analytics` | **Custom Event** | Event name `consent_update`; **Some Custom Events**: `DLV - consent_granted_now` · **contains** · `analytics` |
+   | `WL - production` | **Window Loaded** | **Some Window Loaded Events**: `Page Hostname` · **equals** · `deepzeta.ai` |
+
+4. **Five tags** (four if LinkedIn = no). **Tags → New → Tag Configuration**, then for **every** tag also open **Advanced Settings → Consent Settings** and set what the last column says:
+
+   | Tag name | Type | Fill in | Triggering | Consent Settings |
+   |---|---|---|---|---|
+   | `Google tag` | **Google Tag** | Tag ID `G-TEST123456`. Under **Configuration settings**, add two parameters: `send_page_view` = `false`, and `traffic_type` = `{{Lookup - traffic_type}}` | **Initialization - All Pages**, and also `CE - consent_update - analytics` | **Require additional consent for tag to fire** → **+ Add required consent** → `analytics_storage` |
+   | `Google tag - update` | **Google Tag** | Tag ID `G-TEST123456`. **Configuration settings**: `update` = `true`, and `page_title` = `{{Const - test id}}` | `CE - cta_click` | The same: `analytics_storage` |
+   | `GA4 - cta_click` | **Google Analytics: GA4 Event** | Measurement ID `G-TEST123456`; Event Name `cta_click`; under **Event Parameters**, one row: `cta_id` → `{{DLV - cta_id}}`. In **Advanced Settings → Tag Sequencing**, tick the option to fire a tag **before** this one, and choose `Google tag - update` | `CE - cta_click` | The same: `analytics_storage` |
+   | `HTML - test` | **Custom HTML** | In the HTML box: `<script>window.dzReference = true;</script>` | `WL - production` | **Require additional consent for tag to fire** → `ad_storage` |
+   | `LinkedIn - test` (only if LinkedIn = yes) | **Discover more tag types in the Community Template Gallery** → search **LinkedIn InsightTag 2.0** → **Add to workspace** | Partner ID `1234567` | `WL - production` | The same: `ad_storage` |
+
+   Save each one. **Don't click Submit or Publish.** Nothing in this container ever goes live.
+5. **Export it.** **Admin → Export Container → Choose a version or workspace →** choose **Default Workspace** → **Download**. The file's name starts with the throwaway container's `GTM-` ID.
+6. **Send it:** leave the file in your **Downloads** folder and tell Claude its name. Claude checks it holds only the test values above, then commits it as the reference. **Keep the `dz-reference` container** for now: step B0 (Part B) uses a second throwaway container, and both are deleted after it.
+
 ---
 
 ## Part B · After P3 is built (Claude sends the file and the filled-in tables)
@@ -204,7 +243,7 @@ Send: "B1–B8 done", the version number GTM shows, and any screenshot of someth
 
 ## Sources (official, read 2026-10-01)
 
-- GTM: create an account and container: https://support.google.com/tagmanager/answer/6103696 · import and export: https://support.google.com/tagmanager/answer/6106997 · Google tag: https://support.google.com/tagmanager/answer/9442095 · consent settings: https://support.google.com/tagmanager/answer/10718549 · preview: https://support.google.com/tagmanager/answer/6107056 · publish and versions: https://support.google.com/tagmanager/answer/6107163 · users: https://support.google.com/tagmanager/answer/6107011 · 2-step for certain operations: https://support.google.com/tagmanager/answer/4525539
+- GTM: create an account and container: https://support.google.com/tagmanager/answer/6103696 · import and export: https://support.google.com/tagmanager/answer/6106997 · Custom Event trigger: https://support.google.com/tagmanager/answer/7679219 · user-defined variables: https://support.google.com/tagmanager/answer/7683362 · Custom HTML tag: https://support.google.com/tagmanager/answer/6107167 · GA4 Event tag: https://support.google.com/tagmanager/answer/13034206 (A8's pages read 2026-10-02) · Google tag: https://support.google.com/tagmanager/answer/9442095 · consent settings: https://support.google.com/tagmanager/answer/10718549 · preview: https://support.google.com/tagmanager/answer/6107056 · publish and versions: https://support.google.com/tagmanager/answer/6107163 · users: https://support.google.com/tagmanager/answer/6107011 · 2-step for certain operations: https://support.google.com/tagmanager/answer/4525539
 - GA4: create a property and stream: https://support.google.com/analytics/answer/9304153 · enhanced measurement: https://support.google.com/analytics/answer/9216061 · page views and `send_page_view`: https://developers.google.com/analytics/devguides/collection/ga4/views?client_type=gtm · single-page sites with GTM: https://developers.google.com/analytics/devguides/collection/ga4/single-page-applications?implementation=gtm · data retention: https://support.google.com/analytics/answer/7667196 · Google signals: https://support.google.com/analytics/answer/9445345 · reporting identity: https://support.google.com/analytics/answer/10976610 · internal traffic: https://support.google.com/analytics/answer/10104470 · data filters: https://support.google.com/analytics/answer/13296662 · custom dimensions: https://support.google.com/analytics/answer/14239696 · limits: https://support.google.com/analytics/answer/10075209 · key events: https://support.google.com/analytics/answer/13128484 · create/modify events: https://support.google.com/analytics/answer/10085872 · collection limits: https://support.google.com/analytics/answer/9267744 · reserved names: https://support.google.com/analytics/answer/13316687 · DebugView: https://support.google.com/analytics/answer/7201382 · Search Console link: https://support.google.com/analytics/answer/10737381 · Google Ads link: https://support.google.com/analytics/answer/9379420
 - Consent Mode: https://developers.google.com/tag-platform/security/concepts/consent-mode · setup: https://developers.google.com/tag-platform/security/guides/consent?consentmode=advanced · basic vs advanced: https://support.google.com/google-ads/answer/10000067 · modelling thresholds: https://support.google.com/analytics/answer/11161109 · Google's EU user consent policy: https://www.google.com/about/company/user-consent-policy/ · UAE data protection laws (u.ae): https://u.ae/en/about-the-uae/digital-uae/data/data-protection-laws
 - Meta: Pixel with GTM: https://www.facebook.com/business/help/1021909254506499 · standard events: https://www.facebook.com/business/help/402791146561655 · test events: https://www.facebook.com/business/help/2040882565969969 · deduplication: https://developers.facebook.com/docs/marketing-api/conversions-api/deduplicate-pixel-and-server-events · consent: https://developers.facebook.com/docs/meta-pixel/implementation/gdpr
