@@ -35,10 +35,18 @@ const FRAMEWORK_JS_GROWTH = 5 * KB;
 // and src/lib/fx/).
 // P2 part C: 8,052 B (147,720 B in all 5 runs on Home and on the review page, 2026-10-01): cta.ts's
 // sticky bar, the finale's hand-off and the first state shown without a transition added 84 B.
-const OWN_JS_HOME = 8052;
-if (OWN_JS_HOME > 10 * KB) throw new Error('OWN_JS_HOME is above the 10 KB Home cap (07 §2, 13 §7).');
+// P3 step B6: 10,884 B (150,552 B in all 5 runs on Home and on the review page, 2026-10-02): the
+// tracking runtime with the consent defaults, trackEvent() and the taxonomy's parameter rules, the
+// error page's route helper (16 B, P3 part A), and GTM's own loader (C56). The consent code, the
+// settings panel and the click handling load only when used.
+const OWN_JS_HOME = 10_884;
+// Home's cap: 10 KB until P3, 11 KB since the tracking runtime (decision 0021).
+const HOME_OWN_JS_CAP = 11 * KB;
+if (OWN_JS_HOME > HOME_OWN_JS_CAP) throw new Error('OWN_JS_HOME is above the 11 KB Home cap (07 §2, 13 §7).');
 // HTML + CSS + JS before the first interaction ≤ the framework baseline + 50 KB (07 §2).
 const FIRST_LOAD_LIMIT = FRAMEWORK_JS_BASELINE + 50 * KB;
+// The review page alone (conflict C57): it never reaches visitors, and carries the complete shell.
+const REVIEW_FIRST_LOAD_LIMIT = 192_000;
 
 // T1 Home (decision 0005): Performance ≥ 0.95. Core Web Vitals hard limits apply to every tier (07 §1).
 const t1Assertions = {
@@ -99,5 +107,13 @@ module.exports = {
     },
   },
   // Not an lhci key (lhci reads `ci` only): the budget for scripts/check-page-weight.mjs.
-  budget: { KB, FRAMEWORK_JS_BASELINE, FRAMEWORK_JS_GROWTH, OWN_JS_HOME, FIRST_LOAD_LIMIT },
+  budget: {
+    KB,
+    FRAMEWORK_JS_BASELINE,
+    FRAMEWORK_JS_GROWTH,
+    OWN_JS_HOME,
+    HOME_OWN_JS_CAP,
+    FIRST_LOAD_LIMIT,
+    REVIEW_FIRST_LOAD_LIMIT,
+  },
 };

@@ -72,6 +72,21 @@ Progress:
   - **Attribution** (`attribution.ts`): the eleven keys, a character allowlist (letters, digits, spaces and `._~:+%/|-`), 200 characters, first and last touch, 90 days. The runtime imports it only when `HAS_ATTRIBUTION` matches the address. Without Marketing consent the touch waits for a `dz:consent` event that grants it; `applyChoice()` now announces every choice that way and removes both touches when Marketing is withdrawn. The storage keys and the 90 days live in `consent.ts`, which is always loaded, so importing them doesn't pull the capture code into every page. Cookie settings lists the two touches under Marketing (90 days).
   - Tests: `attribution.test.ts` (the keys, sanitising, first and last touch, expiry, the consent wait, `HAS_ATTRIBUTION` against every key); `analytics.test.ts` (`linkEvent`, `contentGroup`); `consent.test.ts` (withdrawal removes the touches; `dz:consent`); `tracking.spec.ts` (one page view per page with its address, title and group, for AE and DE; the header CTA's two events; the sticky bar's, the finale's and the sheet's locations; a social tile's `outbound_click` and the footer email's `contact_click`, each once; attribution stored at once for AE, and only after Accept for DE).
   - Gates: `verify:fast` exit 0; `test` 338 passed; `build` exit 0; `test:e2e` 168 passed; `format:check` passed.
+- 2026-10-02 · **Step B6 (GTM) stopped at its Risks stop; the owner is asked.** Not committed yet: `npm install @next/third-parties@16.3.7 --save-exact` (package.json and the lockfile: `@next/third-parties` and `third-party-capital@1.0.20` only; `npm audit`'s 14 findings are all in the lhci toolchain, none in the new packages), `TagManager.tsx` mounted by `SiteDocument`, `tag-manager.test.ts` (3 passed).
+  - **lhci with the whole of part B so far** (local, 5 runs, Lighthouse 12.6.1, no country, so the European profile with the banner): **Home's scripts 156,101 B** (part A: 147,736; +8,365 B, so our own code would be about 16.4 KB against the 10 KB cap), **Home's LCP 2,554–2,572 ms** (over the 2.5 s hard limit; part A's median 2,406), Performance 97, TBT 11–20 ms, CLS 0. The review page: LCP 2,711–2,720 ms (C50's limit 2,700) and HTML + CSS + JS 196,768 B (cap 190,868). Two stops apply: Home's own JavaScript past 10 KB, and its LCP past 2,410 ms.
+  - **The banner isn't the cause:** as a UAE visitor (no banner, 3 runs) Home's LCP is 2,557–2,577 ms with the H1 as the LCP element. In the European profile the banner's paragraph is the LCP element, at the same time.
+  - **What each piece costs** (Home's modern scripts, gzip level 6, contents only): everything 147,314 B; without `TagManager` 144,528 B (−2,786 B: `@next/third-parties` brings `next/script` and its own chunk); without the tracking runtime as well 140,910 B (the runtime, consent, `trackEvent` and the taxonomy are 3,618 B). A GTM ID or none makes no difference: the loader's code ships either way.
+  - **Without `@next/third-parties`** (UAE, 3 runs): Home's LCP **2,329–2,410 ms**, part A's range again; scripts **151,348 B** (−4,753 B in lhci's measure, which counts the extra request too), so our own code would be about 11.7 KB.
+- 2026-10-02 · **The owner's answers at B6:** "Own tiny loader" (GTM by the site's own loader, not `@next/third-parties`) and "Slim, then cap decision"; then, with the numbers, "11 KB" for Home's cap and "Review-page exception" for the review page's page weight.
+- 2026-10-02 · **Step B6 (GTM) is done.**
+  - `npm uninstall @next/third-parties`: `package.json` and the lockfile are as they were. `TagManager.tsx` and its test, never committed, are gone.
+  - `src/lib/tracking/gtm.ts`: Google's snippet's two steps (`gtm.js` event, async script with the ID and an optional environment), once per document; `TrackingRuntime` calls it after hydration in an effect of its own (`gtm` is its prop now, the whole `Gtm` from `env()`). `gtm.test.ts`: the address with and without an environment, the order after `dataLayer[0]`, once.
+  - **Slimmed:** the banner's two choices take the banner away at once (focus to `<main>`, `data-consent` off) and import `consent.ts` to apply the choice; the attribution check (`HAS_ATTRIBUTION`, now in `analytics.ts`) imports `consent.ts` and `attribution.ts` together; the click handling moved to `src/lib/tracking/clicks.ts` (`linkEvent`, `ctaLocation`, `reportClick`), imported on the first click on a CTA or a link. So the first load holds the runtime, `trackEvent()` with the taxonomy's parameter rules, and the GTM loader. Measured: consent lazy −3,321 B (contents), clicks lazy −261 B.
+  - **lhci after slimming** (5 runs, no country): **Home** scripts 150,552 B (own code **10,884 B**), LCP **2,329–2,408 ms** (median 2,331), Performance 98, TBT 11–18 ms, CLS 0, HTML + CSS + JS 177,507 B; the banner's paragraph is the LCP element (the European profile). **The review page** LCP 2,481–2,488 ms (median 2,485), Performance 98, 191,211 B.
+  - **Decision 0021** (ACCEPTED in part) with its index row: Home's cap **11 KB**; GTM's own loader. **C56** (the loader) and **C57** (the review page may reach 192,000 B). 07 §2 and 13 §7 (the cap and the measured 10,884 B), 09 §2.1 (the loader) and 0004's tracking row changed with them.
+  - `lighthouserc.cjs`: `OWN_JS_HOME` 10,884, `HOME_OWN_JS_CAP` 11 KB, `REVIEW_FIRST_LOAD_LIMIT` 192,000; `check-page-weight.mjs` takes each page's limit (`limitFor()`) and prints the tightest run; its test covers the review page's allowance. `lhci assert` passed; `check:page-weight` passed ("tightest run /shell-review 191211 B of 192000 B, 0.8 KB left").
+  - `.env.example`: the GTM variables' notes (nothing loads while the ID is empty; the environment pair).
+  - **Proposed, not made:** 04 §2's P3 row and `.claude/rules/analytics-tracking.md` still name `@next/third-parties`.
 Phase: P3
 Branch: three parts, one merge each (Q1): `feat/p3-analytics-consent` (part A, already holds the owner's three docs commits), then `feat/p3b-consent-tracking` and `feat/p3c-gtm-container`, each from `main` after the previous merge
 Page tier: T1. Everything here is sitewide (the document, the shell, the banner). It's measured on Home and the review page, as in P2.
@@ -264,11 +279,11 @@ The seven fixes (0019 Consequences; your "2, yes"):
 - **The banner and Cookie settings:** the buttons (`data-consent-action`) through the same listener; the settings panel is imported when first opened.
 - **Click IDs and UTM tags** (09 §2.8), section I.
 
-### H. GTM through `@next/third-parties`
+### H. GTM's loader (changed at B6: the site's own, C56)
 
-- `TagManager.tsx` renders `<GoogleTagManager gtmId auth preview />` from `@next/third-parties/google` (09 §2.1), mounted once by `SiteDocument` after the consent init. Strategy `afterInteractive` (the component's default): normal priority, never idle-deferred (09 §2.2, L6).
+- **As built:** `src/lib/tracking/gtm.ts` does what Google's container snippet does: it pushes the `gtm.js` event, then adds `gtm.js?id=…` (with `gtm_auth`, `gtm_preview` and `gtm_cookies_win=x` for a GTM environment) as an async script. `TrackingRuntime` calls it once, after hydration: normal priority, never idle-deferred (09 §2.2, L6), after `dataLayer[0]`.
 - **Only when `NEXT_PUBLIC_GTM_ID` is set** (section J). Without it, no GTM and no third-party request at all.
-- **Size:** measured at step B6 from the build (lhci's script size minus the baseline). If the `google` barrel pulls in more than the GTM component, `experimental.optimizePackageImports: ['@next/third-parties']` is tried in `next.config.ts` and measured again. `OWN_JS_HOME` rises by the measured amount, within the 10 KB cap (the Risks stop).
+- **Why not `@next/third-parties`** (the plan's first choice, 09 §2.1 until C56): at B6 it brought Next.js's script loader and a chunk of its own, +4,753 B on Home, and pushed Home's lab LCP to 2,554–2,577 ms. The owner chose the own loader; it's uninstalled.
 
 ### I. Click IDs and UTM tags (09 §2.8)
 
@@ -426,7 +441,7 @@ You add `NEXT_PUBLIC_GTM_ID` in Vercel (Production; Preview optional with a GTM 
 
 | Path | Action | Purpose |
 |---|---|---|
-| `package.json`, `package-lock.json` | MODIFY (by `npm install @next/third-parties@16.3.7 --save-exact` only) | The dependency; the `lhci` and `tracking:build` scripts |
+| `package.json`, `package-lock.json` | MODIFY (by `npm install @next/third-parties@16.3.7 --save-exact` only; uninstalled at B6, so unchanged in the end) | The `lhci` and `tracking:build` scripts |
 | `src/lib/tracking/taxonomy.ts` | CREATE | The one taxonomy (F) |
 | `src/lib/tracking/region.ts` | CREATE | The codes and the header rules (B) |
 | `src/lib/tracking/consent.ts` | CREATE | The groups, the stored choice, applying and withdrawing (C, E) |
@@ -438,8 +453,13 @@ You add `NEXT_PUBLIC_GTM_ID` in Vercel (Production; Preview optional with a GTM 
 | `src/components/layout/ConsentBanner.tsx` | CREATE | The first layer (D) |
 | `src/components/layout/ConsentSettings.tsx` | CREATE | The second layer, loaded on open (E) |
 | `src/components/layout/TrackingRuntime.tsx` | CREATE | Page views, delegated clicks, consent buttons, attribution (G) |
-| `src/components/layout/TagManager.tsx` | CREATE | GTM when the ID is set (H) |
-| `src/components/layout/SiteDocument.tsx` | MODIFY | Mount the consent init, `TagManager` and `TrackingRuntime` once |
+| `src/components/layout/TagManager.tsx` | CREATE, then dropped at B6 (never committed; C56) | — |
+| `src/lib/tracking/gtm.ts` | CREATE (B6, the owner's answer; C56) | GTM's own loader |
+| `src/lib/tracking/clicks.ts` | CREATE (B6, the owner's "slim first") | The click handling, imported on the first tracked click |
+| `tests/unit/gtm.test.ts` | CREATE (B6) | The loader's address and its two steps, once |
+| `docs/decisions/0021-analytics-and-consent.md`, `docs/decisions/README.md` | CREATE, APPEND-ONLY (from B6, ACCEPTED in part; the owner's answers) | Home's 11 KB cap; GTM's own loader; the rest at the exit |
+| `docs/decisions/0004-tech-stack.md` | MODIFY (protected; the owner's B6 answer) | The tracking row: GTM's own loader |
+| `src/components/layout/SiteDocument.tsx` | MODIFY | Mount the consent init and `TrackingRuntime` once (GTM loads from the runtime, C56) |
 | `src/components/layout/SiteShell.tsx` | MODIFY | The banner after the skip link |
 | `src/components/layout/SiteFooter.tsx` | MODIFY | The Cookie settings button |
 | `src/components/ui/CtaButton.tsx` | MODIFY | `data-cta-id` (G) |
@@ -458,7 +478,7 @@ You add `NEXT_PUBLIC_GTM_ID` in Vercel (Production; Preview optional with a GTM 
 | `tests/unit/check-page-weight.test.ts` | MODIFY | The same |
 | `.github/workflows/ci.yml` | MODIFY | Print both profiles' runs |
 | `playwright.config.ts` | MODIFY | The e2e project's default country (AE) |
-| `tests/unit/taxonomy.test.ts`, `analytics.test.ts`, `consent.test.ts`, `consent-init.test.ts`, `region.test.ts`, `attribution.test.ts`, `tag-manager.test.ts` | CREATE | Section M |
+| `tests/unit/taxonomy.test.ts`, `analytics.test.ts`, `consent.test.ts`, `consent-init.test.ts`, `region.test.ts`, `attribution.test.ts` | CREATE | Section M (`tag-manager.test.ts` became `gtm.test.ts` at B6) |
 | `tests/unit/env.test.ts`, `security-headers.test.ts`, `routes.test.ts` | MODIFY | Section M |
 | `tests/e2e/tracking.spec.ts`, `tests/e2e/consent.spec.ts` | CREATE | Section M |
 | `tests/e2e/helpers/tracking.ts` | CREATE | Reading the data layer; the GTM stub |
@@ -507,7 +527,7 @@ You add `NEXT_PUBLIC_GTM_ID` in Vercel (Production; Preview optional with a GTM 
 6. **B3 · Consent defaults:** `consent.ts`, `consent-init.ts`, mounted by `SiteDocument` → `test` (every case) + `build` + `test:e2e` (`dataLayer[0]` for AE and DE)
 7. **B4 · The banner and Cookie settings:** the components, the Content Writer's `consent.ts`, the CSS, the `Switch` variant, the footer button; the vendor cookie rows read from their official pages and drafted for `external-sources.md` (proposed in part C's edit) → `verify:fast` + `build` + `test:e2e` (consent) + axe + `check:contrast`
 8. **B5 · The tracker:** `TrackingRuntime` (page views, delegated clicks, attribution), `CtaButton`'s attribute, the route types → `test` + `build` + `test:e2e` (events exactly once)
-9. **B6 · GTM:** `npm install @next/third-parties@16.3.7 --save-exact`, `TagManager`, `env.ts`; a local build with a test ID to measure the bundle (Playwright stubs the script); `OWN_JS_HOME` from lhci; 13 §7's row → `verify` + bundle check (03 §2, dependency added). **Stop if Home's own JavaScript would pass 10 KB** (Risks)
+9. **B6 · GTM:** measured with `@next/third-parties` and stopped (Risks); on the owner's answers, the site's own loader (`gtm.ts`, C56), the consent code and the click handling loaded when used, Home's cap 11 KB (decision 0021) and the review page's allowance (C57); `OWN_JS_HOME` from lhci; 13 §7's row → `verify` + bundle check
 10. **B7 · The CSP:** `security-headers.ts` from `vendors.ts`, enforced, and 06 §4's lines; checked in Chromium that nothing on Home and the review page is blocked → `test` + `build` + `test:e2e` (CSP)
 11. **B8 · lhci, both profiles:** `lighthouserc.row.cjs`, the page-weight script's first/third-party split (Q3), CI's print step, 03 §1's rows → `lhci` (Home with the banner, Home without it, the review page)
 12. **B9 · The drafts and specs** (N, O: the legal drafts, the n8n line, conversion-path.md, footer.md) → `check:rules`
@@ -548,9 +568,7 @@ The banner leaving after a choice (200 ms opacity and transform; instant under R
 
 ## Dependencies to add
 
-| Package | Version (verified) | Why native or hand-rolled is worse |
-|---|---|---|
-| `@next/third-parties` | `16.3.7` (exact; peers `next ^16`, `react ^19`; brings `third-party-capital@1.0.20`) | 09 §2.1 names it as the one GTM loader: it's maintained with Next.js, takes GTM environments (`auth`, `preview`) and loads with `next/script`'s scheduling. A hand-written loader would be about 0.3 KB smaller but needs a 09 edit and owns that upkeep (the Risks stop names it as the fallback) |
+None. `@next/third-parties@16.3.7` was installed at B6, measured and uninstalled on the owner's answer (C56): `package.json` and the lockfile are as they were.
 
 ## Risks & mitigations
 

@@ -25,7 +25,7 @@ Google Ads ◄── scheduled offline-conversion import from the Sheet
 
 ## 2. Rules
 
-1. **One loader:** Google Tag Manager via `@next/third-parties` `<GoogleTagManager>` in the **root layout only**. Never hand-paste GTM or gtag snippets. Never load gtag.js directly alongside GTM (double counting).
+1. **One loader:** Google Tag Manager, loaded by the site's own loader (`src/lib/tracking/gtm.ts`, [C56](conflict-register.md)) from the tracking runtime, once per document in the **root document only**. It does what Google's container snippet does, after hydration. Never hand-paste GTM or gtag snippets elsewhere. Never load gtag.js directly alongside GTM (double counting).
 2. **`dataLayer[0]` rule:** an inline script in the root layout initialises `window.dataLayer` and the **Consent Mode v2 defaults** before GTM loads. GTM loads at normal priority. **Never idle-defer GTM** (the reference project lost GA4 data this way). Other vendor scripts may be deferred.
 3. **`trackEvent()` only.** Components never call `sendGTMEvent`, `gtag`, `fbq` or `lintrk` directly.
 4. **Taxonomy first:** an event is added to the table in §3 (APPEND-ONLY) **before** any component fires it. Names are `snake_case` `<object>_<action>`. Existing names never change.

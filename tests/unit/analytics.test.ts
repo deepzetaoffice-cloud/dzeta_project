@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { cleanValue, contentGroup, eventPayload, linkEvent, trackEvent } from '@/lib/analytics';
+import { cleanValue, contentGroup, eventPayload, trackEvent } from '@/lib/analytics';
+import { linkEvent } from '@/lib/tracking/clicks';
 
 // trackEvent() (docs/ai/09 §2.3, §2.6, §4; P3 plan, F): the payload's shape, the checks on each value,
 // and the push after a yield. Its types are checked by `typecheck`: the @ts-expect-error lines below

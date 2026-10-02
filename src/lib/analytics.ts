@@ -79,32 +79,9 @@ export function eventPayload<E extends EventName>(
   return payload;
 }
 
-const WHATSAPP_HOSTS = new Set(['wa.me', 'api.whatsapp.com', 'web.whatsapp.com', 'whatsapp.com', 'www.whatsapp.com']);
-
-// What a click on a link reports (P3 plan, G): an email, phone or WhatsApp link is contact_click; a link
-// to another site is outbound_click with its domain (www. dropped, so a site counts once); a link
-// within the site reports nothing. `href` is the link's resolved address.
-export function linkEvent(
-  href: string,
-  pageHost: string,
-):
-  | { event: 'contact_click'; params: EventParams<'contact_click'> }
-  | { event: 'outbound_click'; params: EventParams<'outbound_click'> }
-  | null {
-  let url: URL;
-  try {
-    url = new URL(href);
-  } catch {
-    return null;
-  }
-  if (url.protocol === 'mailto:') return { event: 'contact_click', params: { method: 'email' } };
-  if (url.protocol === 'tel:') return { event: 'contact_click', params: { method: 'phone' } };
-  if (url.protocol === 'whatsapp:' || WHATSAPP_HOSTS.has(url.hostname)) {
-    return { event: 'contact_click', params: { method: 'whatsapp' } };
-  }
-  if ((url.protocol !== 'https:' && url.protocol !== 'http:') || url.host === pageHost) return null;
-  return { event: 'outbound_click', params: { destination_domain: url.hostname.replace(/^www\./, '') } };
-}
+// Whether an address carries a click ID or a campaign tag: the tracking runtime checks it before
+// importing the capture code (attribution.ts; attribution.test.ts keeps it in step with its keys).
+export const HAS_ATTRIBUTION = /[?&](?:gclid|gbraid|wbraid|fbclid|li_fat_id|msclkid|utm_[a-z]+)=/;
 
 // A page's content group (GA4's content_group): its first path segment, "home" for "/". It's read from
 // the address, not looked up in the route table, so no table ships to the browser (P3 B5).

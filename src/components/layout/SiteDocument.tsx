@@ -22,7 +22,8 @@ import { fontVariables } from '@/styles/fonts';
 // - SiteShell wraps every page: the skip link, the header and <main> (plan B1). `review` is the review
 //   page's: every nav item shown, as placeholders (plan A3).
 // - FxRuntime starts the shared effect controllers after hydration (plan G).
-// - TrackingRuntime handles consent, page views and the tracked clicks (P3 plan, G), once per document,
+// - TrackingRuntime handles consent, page views, the tracked clicks and GTM's loading (P3 plan, G; C56),
+//   once per document,
 //   inside <Suspense> as docs/ai/09 §2.9 asks of the page-view tracker.
 
 export type SiteDocumentProps = {
@@ -47,7 +48,7 @@ export function SiteDocument({ locale, review = false, children }: SiteDocumentP
         <SiteShell review={review}>{children}</SiteShell>
         <FxRuntime />
         <Suspense fallback={null}>
-          <TrackingRuntime gtm={env().gtm !== null} />
+          <TrackingRuntime gtm={env().gtm} />
         </Suspense>
       </body>
     </html>

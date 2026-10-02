@@ -6,7 +6,8 @@ import {
   storeTouch,
   touchFrom,
 } from '@/lib/tracking/attribution';
-import { ATTRIBUTION_DAYS, FIRST_TOUCH_KEY, HAS_ATTRIBUTION, LAST_TOUCH_KEY } from '@/lib/tracking/consent';
+import { HAS_ATTRIBUTION } from '@/lib/analytics';
+import { ATTRIBUTION_DAYS, FIRST_TOUCH_KEY, LAST_TOUCH_KEY } from '@/lib/tracking/consent';
 
 // Click IDs and campaign tags (docs/ai/09 §2.8; P3 plan, I and M): what's read from an address, the
 // first and last touch, the 90 days, and the consent gate.
