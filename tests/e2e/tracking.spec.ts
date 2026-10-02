@@ -172,8 +172,18 @@ test.describe('Click IDs and campaign tags (09 §2.8; attribution.ts)', () => {
   const stored = (page: Page) =>
     page.evaluate(() => [localStorage.getItem('dz-attribution-first'), localStorage.getItem('dz-attribution-last')]);
 
-  test('outside Europe they’re stored at once, first touch and last touch', async ({ page }) => {
+  test('outside Europe they’re stored on the first action, first touch and last touch', async ({ page }) => {
+    const scripts: string[] = [];
+    page.on('request', (request) => {
+      if (request.resourceType() === 'script') scripts.push(request.url());
+    });
     await page.goto('/?utm_source=test&gclid=TEST123');
+    await page.waitForLoadState('networkidle');
+    // Not in the first load (07 §2, 0021): nothing is stored until the visitor acts, and the code comes then
+    expect(await stored(page)).toEqual([null, null]);
+    const loaded = scripts.length;
+    await page.keyboard.press('Tab');
+    await expect.poll(() => scripts.length).toBeGreaterThan(loaded);
     await expect
       .poll(async () => (await stored(page)).map((raw) => raw && JSON.parse(raw).params))
       .toEqual([

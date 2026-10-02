@@ -11,7 +11,9 @@ module.exports = {
   ci: {
     collect: {
       startServerCommand: 'npm run start',
-      url: ['http://127.0.0.1:3000/'],
+      // A campaign landing: the address carries a campaign tag and a click ID, so the capture code
+      // (attribution.ts) loads as it does for paid traffic, and counts in the first load.
+      url: ['http://127.0.0.1:3000/?utm_source=lhci&gclid=test'],
       numberOfRuns: 5,
       // Vercel's country header; next start applies the same header rules (src/lib/tracking/region.ts).
       settings: { extraHeaders: JSON.stringify({ 'x-vercel-ip-country': 'AE' }) },

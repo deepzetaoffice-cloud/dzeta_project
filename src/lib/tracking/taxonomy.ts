@@ -42,7 +42,7 @@ export type EventDetails = {
 
 // Shared value sets. Values are APPEND-ONLY too.
 export const CTA_IDS = ['book_audit'] as const;
-export const CTA_LOCATIONS = ['header', 'sheet', 'sticky', 'finale', 'hero', 'page'] as const;
+export const CTA_LOCATIONS = ['header', 'sheet', 'sticky', 'finale', 'page'] as const;
 export const CONTACT_METHODS = ['email', 'phone', 'whatsapp'] as const;
 export const PILLARS = ['ai', 'web', 'software', 'ranking'] as const;
 export const CONSENT_STATES = ['granted', 'denied'] as const;

@@ -13,6 +13,9 @@ import { isLive, routePath } from '@/lib/routes';
 //   on the action gradient, so the one-gradient-CTA rule holds (C42). Choose settings opens the second
 //   layer. TrackingRuntime handles the three buttons (data-consent-action).
 // - The privacy policy link appears once /privacy (R006) is live (04 §1.4).
+// - Its content sits in a data-nosnippet <div>: the banner is in every page's HTML (hidden by CSS for
+//   most visitors), so its text must never become a search snippet or an AI answer. Google honours the
+//   attribute on div, span and section, not on aside.
 // - glass-frost on the navy chrome: it sits over the whole scrolling page, and on a phone the header
 //   pill is already the one live blur (effects.css). The muted tint: more opaque behind a paragraph,
 //   and the tint check:contrast gates the link colour on.
@@ -26,31 +29,33 @@ export function ConsentBanner() {
       className="dz-consent dz-glass dz-glass--muted"
       data-consent-banner=""
     >
-      <p id="dz-consent-title" className="font-bold text-fg-strong">
-        {banner.title}
-      </p>
-      <p className="mt-2 text-small">{banner.body}</p>
-      {isLive('R006') ? (
-        <p className="mt-1 text-small">
-          <Link href={routePath('R006')} prefetch={false} className="dz-underline dz-target text-link">
-            {banner.policyLink}
-          </Link>
+      <div data-nosnippet="">
+        <p id="dz-consent-title" className="font-bold text-fg-strong">
+          {banner.title}
         </p>
-      ) : null}
-      <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2">
-        <button type="button" data-consent-action="accept" className="dz-consent-button dz-press">
-          {banner.acceptAll}
-        </button>
-        <button type="button" data-consent-action="reject" className="dz-consent-button dz-press">
-          {banner.rejectAll}
-        </button>
-        <button
-          type="button"
-          data-consent-action="choose"
-          className="dz-underline dz-target ms-1 min-h-11 text-small font-medium text-link"
-        >
-          {banner.choose}
-        </button>
+        <p className="mt-2 text-small">{banner.body}</p>
+        {isLive('R006') ? (
+          <p className="mt-1 text-small">
+            <Link href={routePath('R006')} prefetch={false} className="dz-underline dz-target text-link">
+              {banner.policyLink}
+            </Link>
+          </p>
+        ) : null}
+        <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2">
+          <button type="button" data-consent-action="accept" className="dz-consent-button dz-press font-bold">
+            {banner.acceptAll}
+          </button>
+          <button type="button" data-consent-action="reject" className="dz-consent-button dz-press font-bold">
+            {banner.rejectAll}
+          </button>
+          <button
+            type="button"
+            data-consent-action="choose"
+            className="dz-underline dz-target ms-1 min-h-11 text-small font-medium text-link"
+          >
+            {banner.choose}
+          </button>
+        </div>
       </div>
     </aside>
   );

@@ -39,7 +39,10 @@ const FRAMEWORK_JS_GROWTH = 5 * KB;
 // tracking runtime with the consent defaults, trackEvent() and the taxonomy's parameter rules, the
 // error page's route helper (16 B, P3 part A), and GTM's own loader (C56). The consent code, the
 // settings panel and the click handling load only when used.
-const OWN_JS_HOME = 10_884;
+// P3 step B10: 11,048 B (150,716 B in all 5 runs on Home, the campaign landing and the review page,
+// 2026-10-02): the audit fixes (the banner's reserve and resize, the failed-download fallbacks) and the
+// campaign capture's first-action listeners; the capture code itself loads on the visitor's first action.
+const OWN_JS_HOME = 11_048;
 // Home's cap: 10 KB until P3, 11 KB since the tracking runtime (decision 0021).
 const HOME_OWN_JS_CAP = 11 * KB;
 if (OWN_JS_HOME > HOME_OWN_JS_CAP) throw new Error('OWN_JS_HOME is above the 11 KB Home cap (07 §2, 13 §7).');
@@ -99,9 +102,9 @@ module.exports = {
     assert: {
       assertMatrix: [
         { matchingUrlPattern: '^http://localhost:3000/$', assertions: t1Assertions },
-        // Home as a visitor from the UAE, collected by lighthouserc.row.cjs on 127.0.0.1 so its runs stay
-        // apart from the European ones (P3 plan, B8; C52)
-        { matchingUrlPattern: '^http://127\\.0\\.0\\.1:3000/$', assertions: t1Assertions },
+        // Home as a visitor from the UAE landing from a campaign, collected by lighthouserc.row.cjs on
+        // 127.0.0.1 so its runs stay apart from the European ones (P3 plan, B8 and B10; C52)
+        { matchingUrlPattern: '^http://127\\.0\\.0\\.1:3000/(\\?.*)?$', assertions: t1Assertions },
         { matchingUrlPattern: '^http://localhost:3000/shell-review$', assertions: reviewAssertions },
       ],
     },

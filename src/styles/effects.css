@@ -1144,6 +1144,11 @@
     padding-inline: max(var(--dz-gutter), env(safe-area-inset-left), env(safe-area-inset-right));
     border-inline-width: 0;
     border-block-end-width: 0;
+    /* Never taller than the window: at 320 px wide (400% zoom) its text would reach above the top,
+       out of reach (WCAG 1.4.10), so it scrolls inside itself instead. */
+    max-block-size: 100dvh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
     opacity: 0;
     translate: 0 calc(var(--dz-drop) * -1);
     @variant fx {
@@ -1157,6 +1162,7 @@
       inset-inline-end: max(var(--dz-gutter), env(safe-area-inset-left), env(safe-area-inset-right));
       inset-block-end: max(var(--dz-gutter), env(safe-area-inset-bottom));
       max-inline-size: var(--dz-consent-width);
+      max-block-size: calc(100dvh - var(--dz-gutter) * 2);
       padding: --spacing(5);
       border-width: var(--dz-glass-edge-width);
       border-radius: var(--dz-radius-lg);
@@ -1180,7 +1186,6 @@
     border: var(--dz-cta-outline-width) solid var(--dz-mist);
     border-radius: var(--dz-radius-pill);
     color: var(--dz-text-strong);
-    font-weight: 700;
     &:hover {
       border-color: var(--dz-frost);
     }
@@ -1252,7 +1257,6 @@
     }
     & th {
       color: var(--dz-text-strong);
-      font-weight: 500;
     }
   }
 }
@@ -1317,8 +1321,9 @@
 }
 
 /* While the consent banner shows, the page's end and any focused control scroll clear of it (WCAG
-   2.4.11; the tracking runtime keeps --dz-consent-height current). Outside the layers, so it wins over
-   the sticky bar's reserve, which is hidden meanwhile. */
+   2.4.11). The tracking runtime keeps --dz-consent-height at how far the banner reaches up from the
+   window's bottom: its height, plus the corner panel's offset from 640 px. Outside the layers, so it
+   wins over the sticky bar's reserve, which is hidden meanwhile. */
 :root[data-consent='ask'] {
   scroll-padding-block-end: calc(var(--dz-consent-height) + var(--dz-focus-width) + var(--dz-focus-offset));
   & body {

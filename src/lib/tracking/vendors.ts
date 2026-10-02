@@ -19,8 +19,9 @@ export type CspHosts = {
   connect?: readonly string[];
   frame?: readonly string[];
 };
-// A first-party cookie a vendor sets, as Cookie settings lists it, from the vendor's own page.
-export type VendorCookie = { name: string; lifetimeMonths: number; source: string };
+// A first-party cookie a vendor sets, as Cookie settings lists it, from the vendor's own page. `approved`
+// once its row in docs/facts/external-sources.md is APPROVED: only then is it shown (00 §4).
+export type VendorCookie = { name: string; lifetimeMonths: number; source: string; approved: boolean };
 export type Vendor = {
   id: VendorId;
   name: string;
@@ -28,8 +29,9 @@ export type Vendor = {
   hosts: CspHosts;
   // Where the hosts come from
   source: string;
-  // Listed in Cookie settings while the vendor is in use. A vendor without a checked list shows its
-  // name only, until its cookies are read from its own page (and proposed in external-sources.md).
+  // Listed in Cookie settings while the vendor is in use, each once approved. Until then the group's
+  // own text names the tool (consent-copy.md §2), and its cookies are read from its own page and
+  // proposed in external-sources.md.
   cookies?: readonly VendorCookie[];
   // Deleted when the visitor switches the vendor's group off (consent.ts). Deleting a cookie that
   // isn't there does nothing, so this list may be wider than `cookies`.
@@ -45,7 +47,7 @@ export const VENDORS: readonly Vendor[] = [
     name: 'Google Tag Manager',
     // It loads the other tags and holds none of a visitor's data itself (07 §2: GTM alone before consent)
     group: 'essential',
-    hosts: { script: [GTM], img: [GTM], connect: [GTM, 'https://www.google.com'] },
+    hosts: { script: [GTM], img: [GTM], connect: [GTM, 'https://www.google.com'], frame: [GTM] },
     source: 'https://developers.google.com/tag-platform/security/guides/csp (Tag Manager without a nonce)',
   },
   {
@@ -75,8 +77,9 @@ export const VENDORS: readonly Vendor[] = [
     },
     source: 'https://developers.google.com/tag-platform/security/guides/csp (Google Analytics without ads features)',
     cookies: [
-      { name: '_ga', lifetimeMonths: 24, source: GA_COOKIES },
-      { name: '_ga_<container-id>', lifetimeMonths: 24, source: GA_COOKIES },
+      // PROPOSED in external-sources.md at C4; shown once the owner approves the row
+      { name: '_ga', lifetimeMonths: 24, source: GA_COOKIES, approved: false },
+      { name: '_ga_<container-id>', lifetimeMonths: 24, source: GA_COOKIES, approved: false },
     ],
     withdraw: ['_ga', /^_ga_/],
   },

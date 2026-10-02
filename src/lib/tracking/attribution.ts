@@ -1,13 +1,18 @@
 // Click IDs and campaign tags (docs/ai/09 §2.8; P3 plan, I): where a visitor came from, kept as the
 // first touch and the last touch so P6's forms can send them to the CRM with the lead (n8n guide §8.1).
 // - Written to the visitor's browser only with Marketing consent (granted by default outside Europe,
-//   C52). Until then they're held in memory, and written if Accept comes on the same page (consent.ts
-//   announces a choice with the dz:consent event). Withdrawing Marketing removes them (consent.ts).
+//   C52). The consent is read from dataLayer: the default the consent init script set from the stored
+//   choice and the region, or a choice's update since, so a campaign landing doesn't load the consent
+//   code as well. Until it's granted they're held in memory, and written if Accept comes on the same
+//   page (consent.ts announces a choice with the dz:consent event). Withdrawing Marketing removes them
+//   (consent.ts).
 // - Each value is checked against a character allowlist and cut to 200 characters, and kept for 90
 //   days, the longest Google Ads click window. Nothing here is personal: IDs and campaign names.
-// The tracking runtime imports this module only when the address carries one of the keys. Its storage
-// keys and lifetime live in consent.ts, which deletes them on withdrawal and is always loaded.
-import { ATTRIBUTION_DAYS, FIRST_TOUCH_KEY, LAST_TOUCH_KEY } from './consent';
+// The tracking runtime imports this module only when the landing's address carries one of the keys, on
+// the visitor's first action (a scroll, a tap, a click or a key), and passes it the landing's address,
+// so it's never in a campaign landing's first load (07 §2, 0021). Its storage keys and lifetime live
+// in keys.ts, shared with the consent code and the cookie list.
+import { ATTRIBUTION_DAYS, FIRST_TOUCH_KEY, LAST_TOUCH_KEY } from './keys';
 
 export const ATTRIBUTION_KEYS = [
   'gclid',
@@ -76,11 +81,28 @@ export function readAttribution(now = Date.now()): { first: Touch | null; last: 
   }
 }
 
-// Captures this page's touch: stored now with Marketing consent, otherwise held until a choice grants it.
-export function captureAttribution(marketing: boolean): void {
-  const touch = touchFrom(location.search, location.pathname, Date.now());
+// Whether Marketing is granted now: the latest gtag('consent', …) entry in dataLayer that sets
+// ad_storage, an arguments object. That's the init script's default (dataLayer[0]) or a choice's update
+// since (consent.ts), so a choice made before this module arrived counts too. Nothing counts as not
+// granted.
+export function marketingGranted(): boolean {
+  const layer = window.dataLayer ?? [];
+  for (let i = layer.length - 1; i >= 0; i--) {
+    const entry = layer[i] as ArrayLike<unknown> | null | undefined;
+    const state = entry?.[2] as { ad_storage?: unknown } | undefined;
+    if (entry?.[0] === 'consent' && (entry[1] === 'default' || entry[1] === 'update') && state?.ad_storage) {
+      return state.ad_storage === 'granted';
+    }
+  }
+  return false;
+}
+
+// Captures the landing's touch (its query string and path): stored now with Marketing consent,
+// otherwise held until a choice grants it.
+export function captureAttribution(search: string, landing: string): void {
+  const touch = touchFrom(search, landing, Date.now());
   if (!touch) return;
-  if (marketing) {
+  if (marketingGranted()) {
     storeTouch(touch, localStorage);
     return;
   }

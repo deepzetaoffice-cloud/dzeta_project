@@ -7,15 +7,8 @@ import { consentContent } from '@/content/en/legal/consent';
 import { EFFECTS_KEY, THEME_KEY } from '@/lib/fx/preferences';
 import { siteConfig } from '@/lib/site-config';
 import { accounts } from '@/lib/tracking/accounts';
-import {
-  applyChoice,
-  ATTRIBUTION_DAYS,
-  CONSENT_KEY,
-  currentConsent,
-  FIRST_TOUCH_KEY,
-  LAST_TOUCH_KEY,
-  type Choice,
-} from '@/lib/tracking/consent';
+import { applyChoice, CONSENT_KEY, currentConsent, type Choice } from '@/lib/tracking/consent';
+import { ATTRIBUTION_DAYS, FIRST_TOUCH_KEY, LAST_TOUCH_KEY } from '@/lib/tracking/keys';
 import { vendorsInUse, withdrawnCookies, type ConsentGroup } from '@/lib/tracking/vendors';
 
 // Cookie settings, the second layer (docs/ai/09 §2.7, conflict C52; P3 plan, E;
@@ -60,40 +53,52 @@ function rowsFor(group: ConsentGroup, gtm: boolean): Row[] {
   const vendors = vendorsInUse({ gtm }, accounts)
     .filter((vendor) => vendor.group === group)
     .flatMap((vendor) =>
-      (vendor.cookies ?? []).map((cookie) => ({
-        name: cookie.name,
-        provider: vendor.name,
-        lifetime: settings.lifetime.months(cookie.lifetimeMonths),
-      })),
+      (vendor.cookies ?? [])
+        .filter((cookie) => cookie.approved)
+        .map((cookie) => ({
+          name: cookie.name,
+          provider: vendor.name,
+          lifetime: settings.lifetime.months(cookie.lifetimeMonths),
+        })),
     );
   return [...own, ...vendors];
 }
 
-function CookieList({ rows, id }: { rows: Row[]; id: string }) {
+// Each group's table is named by its group as well ("Analytics, Cookies and storage"), so the three
+// tables never share one name, and it scrolls on its own when a name is wider than a 320 px screen.
+function CookieList({ rows, id, group }: { rows: Row[]; id: string; group: string }) {
   if (rows.length === 0) return null;
   return (
     <div className="mt-3">
       <p id={id} className="text-small font-medium text-fg-strong">
         {settings.cookiesHeading}
       </p>
-      <table aria-labelledby={id} className="dz-consent-table mt-1 w-full text-small">
-        <thead>
-          <tr>
-            <th scope="col">{settings.cookieColumns.name}</th>
-            <th scope="col">{settings.cookieColumns.provider}</th>
-            <th scope="col">{settings.cookieColumns.lifetime}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((row) => (
-            <tr key={row.name}>
-              <td className="font-mono whitespace-nowrap">{row.name}</td>
-              <td>{row.provider}</td>
-              <td>{row.lifetime}</td>
+      <div className="mt-1 overflow-x-auto">
+        <table aria-label={`${group}, ${settings.cookiesHeading}`} className="dz-consent-table w-full text-small">
+          <thead>
+            <tr>
+              <th scope="col" className="font-medium">
+                {settings.cookieColumns.name}
+              </th>
+              <th scope="col" className="font-medium">
+                {settings.cookieColumns.provider}
+              </th>
+              <th scope="col" className="font-medium">
+                {settings.cookieColumns.lifetime}
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {rows.map((row) => (
+              <tr key={row.name}>
+                <td className="font-mono whitespace-nowrap">{row.name}</td>
+                <td>{row.provider}</td>
+                <td>{row.lifetime}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
@@ -134,7 +139,7 @@ export default function ConsentSettings({ gtm, onClose }: ConsentSettingsProps) 
         </span>
       </div>
       <p className="mt-1 text-small">{settings[key].body}</p>
-      <CookieList rows={rowsFor(key, gtm)} id={`dz-settings-${key}-list`} />
+      <CookieList rows={rowsFor(key, gtm)} id={`dz-settings-${key}-list`} group={settings[key].name} />
     </section>
   );
 
@@ -169,26 +174,30 @@ export default function ConsentSettings({ gtm, onClose }: ConsentSettingsProps) 
               <span className="text-small font-medium text-fg-strong">{settings.essential.state}</span>
             </div>
             <p className="mt-1 text-small">{settings.essential.body}</p>
-            <CookieList rows={rowsFor('essential', gtm)} id="dz-settings-essential-list" />
+            <CookieList
+              rows={rowsFor('essential', gtm)}
+              id="dz-settings-essential-list"
+              group={settings.essential.name}
+            />
           </section>
           {group('analytics')}
           {group('marketing')}
         </div>
         <div className="mt-6 flex flex-wrap gap-3 border-t border-hairline pt-5">
-          <button type="button" onClick={() => apply(choice)} className="dz-consent-button dz-press">
+          <button type="button" onClick={() => apply(choice)} className="dz-consent-button dz-press font-bold">
             {settings.save}
           </button>
           <button
             type="button"
             onClick={() => apply({ analytics: true, marketing: true })}
-            className="dz-consent-button dz-press"
+            className="dz-consent-button dz-press font-bold"
           >
             {settings.acceptAll}
           </button>
           <button
             type="button"
             onClick={() => apply({ analytics: false, marketing: false })}
-            className="dz-consent-button dz-press"
+            className="dz-consent-button dz-press font-bold"
           >
             {settings.rejectAll}
           </button>

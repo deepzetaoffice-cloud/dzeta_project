@@ -2,12 +2,14 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
   ATTRIBUTION_KEYS,
   captureAttribution,
+  marketingGranted,
   readAttribution,
   storeTouch,
   touchFrom,
 } from '@/lib/tracking/attribution';
 import { HAS_ATTRIBUTION } from '@/lib/analytics';
-import { ATTRIBUTION_DAYS, FIRST_TOUCH_KEY, LAST_TOUCH_KEY } from '@/lib/tracking/consent';
+import { consentInitScript } from '@/lib/tracking/consent-init';
+import { ATTRIBUTION_DAYS, FIRST_TOUCH_KEY, LAST_TOUCH_KEY } from '@/lib/tracking/keys';
 
 // Click IDs and campaign tags (docs/ai/09 §2.8; P3 plan, I and M): what's read from an address, the
 // first and last touch, the 90 days, and the consent gate.
@@ -74,12 +76,27 @@ describe('storeTouch and readAttribution', () => {
 });
 
 describe('captureAttribution', () => {
-  function page(search: string) {
+  // dataLayer as the real consent init script leaves it: outside Europe Marketing is granted, in
+  // Europe (with no stored choice) denied.
+  function initDataLayer(region: 'row' | 'eea') {
+    const win: { dataLayer?: unknown[] } = {};
+    new Function('window', 'performance', 'localStorage', 'document', 'Date', consentInitScript)(
+      win,
+      { getEntriesByType: () => [{ serverTiming: [{ name: 'dz-region', description: region }] }] },
+      { getItem: () => null },
+      { documentElement: { setAttribute: () => {} } },
+      Date,
+    );
+    return win.dataLayer ?? [];
+  }
+
+  function page(search: string, region: 'row' | 'eea' | null) {
     const storage = memoryStorage();
     const listeners = new Map<string, (event: Event) => void>();
     vi.stubGlobal('localStorage', storage);
     vi.stubGlobal('location', { search, pathname: '/' });
     vi.stubGlobal('window', {
+      dataLayer: region ? initDataLayer(region) : [],
       addEventListener: (type: string, listener: (event: Event) => void) => listeners.set(type, listener),
       removeEventListener: (type: string) => listeners.delete(type),
     });
@@ -88,15 +105,41 @@ describe('captureAttribution', () => {
     return { storage, choose, listeners };
   }
 
-  it('stores at once with Marketing consent', () => {
-    const { storage } = page('?utm_source=linkedin');
-    captureAttribution(true);
+  // gtag('consent', 'update', {…}) as consent.ts pushes it (an arguments object; an array reads the same)
+  const update = (state: Record<string, string>) => ['consent', 'update', state];
+
+  it('reads Marketing consent from the latest consent entry in dataLayer, and anything else as not granted', () => {
+    page('', 'row');
+    expect(marketingGranted()).toBe(true);
+    page('', 'eea');
+    expect(marketingGranted()).toBe(false);
+    page('', null);
+    expect(marketingGranted()).toBe(false);
+  });
+
+  it('counts a choice made before the capture code arrived (the update after the default)', () => {
+    const { storage } = page('?utm_source=linkedin', 'eea');
+    const layer = (window as unknown as { dataLayer: unknown[] }).dataLayer;
+    layer.push(update({ ad_storage: 'granted', analytics_storage: 'granted' }), { event: 'consent_update' });
+    expect(marketingGranted()).toBe(true);
+    captureAttribution('?utm_source=linkedin', '/');
     expect(storage.map.has(LAST_TOUCH_KEY)).toBe(true);
+    layer.push(update({ ad_storage: 'denied' }));
+    expect(marketingGranted()).toBe(false);
+  });
+
+  it('stores at once with Marketing consent, from the landing’s address it’s given', () => {
+    const { storage } = page('', 'row');
+    captureAttribution('?utm_source=linkedin', '/services');
+    expect(JSON.parse(storage.map.get(LAST_TOUCH_KEY)!)).toMatchObject({
+      params: { utm_source: 'linkedin' },
+      landing: '/services',
+    });
   });
 
   it('holds the touch without it, and stores it only when a choice grants Marketing', () => {
-    const { storage, choose, listeners } = page('?gclid=abc');
-    captureAttribution(false);
+    const { storage, choose, listeners } = page('', 'eea');
+    captureAttribution('?gclid=abc', '/');
     expect(storage.map.size).toBe(0);
     choose(false);
     expect(storage.map.size).toBe(0);

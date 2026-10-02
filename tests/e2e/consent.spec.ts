@@ -154,22 +154,50 @@ test.describe('A European visitor (DE): the banner', () => {
     await expect(bar).toBeVisible();
   });
 
-  test('390 px: Tab never leaves a focused control under the banner (WCAG 2.4.11)', async ({ page }) => {
-    await open(page, HOME, 390);
-    const covered = () =>
-      page.evaluate((selector) => {
-        const el = document.activeElement;
-        const aside = document.querySelector(selector);
-        if (!el || el === document.body || !aside || aside.contains(el)) return 0;
-        const root = getComputedStyle(document.documentElement);
-        const ring =
-          parseFloat(root.getPropertyValue('--dz-focus-width')) +
-          parseFloat(root.getPropertyValue('--dz-focus-offset'));
-        return Math.max(0, el.getBoundingClientRect().bottom + ring - aside.getBoundingClientRect().top);
-      }, BANNER);
-    for (let i = 0; i < 30; i++) {
-      await page.keyboard.press('Tab');
-      await expect.poll(covered).toBe(0);
+  for (const [path, width, tabs] of [
+    [HOME, 390, 30],
+    [REVIEW, 1280, 90],
+  ] as const) {
+    test(`${width} px, ${path}: Tab never leaves a focused control under the banner (WCAG 2.4.11)`, async ({
+      page,
+    }) => {
+      await open(page, path, width);
+      const covered = () =>
+        page.evaluate((selector) => {
+          const el = document.activeElement;
+          const aside = document.querySelector(selector);
+          if (!el || el === document.body || !aside || aside.contains(el)) return 0;
+          const root = getComputedStyle(document.documentElement);
+          const ring =
+            parseFloat(root.getPropertyValue('--dz-focus-width')) +
+            parseFloat(root.getPropertyValue('--dz-focus-offset'));
+          return Math.max(0, el.getBoundingClientRect().bottom + ring - aside.getBoundingClientRect().top);
+        }, BANNER);
+      for (let i = 0; i < tabs; i++) {
+        await page.keyboard.press('Tab');
+        await expect.poll(covered).toBe(0);
+      }
+    });
+  }
+
+  test('at 320 × 256 (400% zoom) it scrolls inside itself, so its title and every button can be reached (WCAG 1.4.10)', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 320, height: 256 });
+    await page.goto(HOME);
+    await page.waitForLoadState('networkidle');
+    const aside = page.locator(BANNER);
+    const box = (await aside.boundingBox())!;
+    expect(box.y).toBeGreaterThanOrEqual(0);
+    expect(box.height).toBeLessThanOrEqual(256);
+    for (const target of [
+      page.locator('#dz-consent-title'),
+      page.getByRole('button', { name: banner.acceptAll }),
+      page.getByRole('button', { name: banner.rejectAll }),
+      page.getByRole('button', { name: banner.choose }),
+    ]) {
+      await target.scrollIntoViewIfNeeded();
+      await expect(target).toBeInViewport();
     }
   });
 

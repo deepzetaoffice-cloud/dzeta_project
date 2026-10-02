@@ -19,6 +19,14 @@ import lhciConfig from '../lighthouserc.cjs';
 const RESULTS_DIR = '.lighthouseci';
 export const FIRST_LOAD_TYPES = ['document', 'stylesheet', 'script'];
 export const { FIRST_LOAD_LIMIT, REVIEW_FIRST_LOAD_LIMIT, FIRST_PARTY_JS_LIMIT } = lhciConfig.budget;
+const { FRAMEWORK_JS_BASELINE, HOME_OWN_JS_CAP } = lhciConfig.budget;
+
+// A run's JavaScript limit: the framework-growth guard everywhere, and on Home also its own cap, the
+// baseline + 11 KB (decision 0021), whichever is lower.
+export function jsLimitFor(url) {
+  const home = new URL(url).pathname === '/';
+  return home ? Math.min(FIRST_PARTY_JS_LIMIT, FRAMEWORK_JS_BASELINE + HOME_OWN_JS_CAP) : FIRST_PARTY_JS_LIMIT;
+}
 
 // Lighthouse's request types, as resource-summary names them
 const TYPES = { Document: 'document', Stylesheet: 'stylesheet', Script: 'script' };
@@ -60,7 +68,7 @@ export const firstLoadBytes = (lhr) => {
 };
 
 // Every run against its page's limits. `runs` is [{ name, lhr }].
-export function checkRuns(runs, limitOf = limitFor, jsLimit = FIRST_PARTY_JS_LIMIT) {
+export function checkRuns(runs, limitOf = limitFor, jsLimitOf = jsLimitFor) {
   const problems = [];
   if (runs.length === 0) problems.push(`no Lighthouse results in ${RESULTS_DIR}/: run lhci first`);
   const rows = [];
@@ -70,6 +78,7 @@ export function checkRuns(runs, limitOf = limitFor, jsLimit = FIRST_PARTY_JS_LIM
       const url = lhr.finalDisplayedUrl ?? lhr.requestedUrl;
       const bytes = FIRST_LOAD_TYPES.reduce((sum, type) => sum + first[type], 0);
       const limit = limitOf(url);
+      const jsLimit = jsLimitOf(url);
       rows.push({
         name,
         url,
@@ -110,7 +119,7 @@ function main() {
   if (!pass) {
     console.error(
       `check:page-weight FAILED: first-party HTML + CSS + JS ≤ ${FIRST_LOAD_LIMIT} B (${kb(FIRST_LOAD_LIMIT)}, 07 §2; ` +
-        `the review page ${REVIEW_FIRST_LOAD_LIMIT} B, C57); first-party JS ≤ ${FIRST_PARTY_JS_LIMIT} B (0014, 0021)`,
+        `the review page ${REVIEW_FIRST_LOAD_LIMIT} B, C57); first-party JS ≤ ${FIRST_PARTY_JS_LIMIT} B (0014), on Home ≤ the baseline + 11 KB (0021)`,
     );
     for (const row of rows.filter((r) => !r.pass)) {
       console.error(
@@ -124,7 +133,7 @@ function main() {
   console.log(
     `check:page-weight passed: tightest run ${tightest.url} ${tightest.bytes} B of ${tightest.limit} B ` +
       `(${kb(tightest.limit - tightest.bytes)} left, ${rows.length} runs); first-party JS at most ` +
-      `${Math.max(...rows.map((row) => row.script))} B of ${FIRST_PARTY_JS_LIMIT} B.`,
+      `${Math.max(...rows.map((row) => row.script))} B (Home's limit ${jsLimitFor('http://localhost/')} B).`,
   );
 }
 

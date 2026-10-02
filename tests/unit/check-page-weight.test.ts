@@ -4,6 +4,7 @@ import {
   FIRST_LOAD_LIMIT,
   FIRST_PARTY_JS_LIMIT,
   firstLoadBytes,
+  jsLimitFor,
   limitFor,
   partyBytes,
   REVIEW_FIRST_LOAD_LIMIT,
@@ -52,7 +53,7 @@ describe('check:page-weight', () => {
   });
 
   it('passes a run exactly at the page-weight limit and fails one 1 byte over', () => {
-    const script = FIRST_PARTY_JS_LIMIT;
+    const script = jsLimitFor('http://localhost:3000/');
     const atLimit = { name: 'at', lhr: page(1000, FIRST_LOAD_LIMIT - 1000 - script, script) };
     const over = { name: 'over', lhr: page(1000, FIRST_LOAD_LIMIT - 999 - script, script) };
     expect(checkRuns([atLimit]).pass).toBe(true);
@@ -61,12 +62,23 @@ describe('check:page-weight', () => {
     expect(result.rows.find((row) => !row.pass)?.name).toBe('over');
   });
 
-  it('fails first-party JavaScript over the baseline + its growth + our own code (0014, 0021)', () => {
-    const atLimit = { name: 'at', lhr: page(1000, 1000, FIRST_PARTY_JS_LIMIT) };
-    const over = { name: 'over', lhr: page(1000, 1000, FIRST_PARTY_JS_LIMIT + 1) };
+  it('fails first-party JavaScript over the baseline + its growth + our own code (0014)', () => {
+    const review = 'http://localhost:3000/shell-review';
+    const atLimit = { name: 'at', lhr: page(1000, 1000, FIRST_PARTY_JS_LIMIT, [], review) };
+    const over = { name: 'over', lhr: page(1000, 1000, FIRST_PARTY_JS_LIMIT + 1, [], review) };
     expect(checkRuns([atLimit]).pass).toBe(true);
     expect(checkRuns([over]).pass).toBe(false);
-    expect(FIRST_PARTY_JS_LIMIT).toBe(139_668 + 5 * 1024 + 10_884);
+    expect(FIRST_PARTY_JS_LIMIT).toBe(139_668 + 5 * 1024 + 11_048);
+  });
+
+  it('holds Home to the baseline + its 11 KB cap (0021), and the campaign profile too', () => {
+    expect(jsLimitFor('http://localhost:3000/')).toBe(139_668 + 11 * 1024);
+    expect(jsLimitFor('http://127.0.0.1:3000/?utm_source=lhci&gclid=test')).toBe(139_668 + 11 * 1024);
+    expect(jsLimitFor('http://localhost:3000/shell-review')).toBe(FIRST_PARTY_JS_LIMIT);
+    const atCap = { name: 'at', lhr: page(1000, 1000, 139_668 + 11 * 1024) };
+    const overCap = { name: 'over', lhr: page(1000, 1000, 139_668 + 11 * 1024 + 1) };
+    expect(checkRuns([atCap]).pass).toBe(true);
+    expect(checkRuns([overCap]).pass).toBe(false);
   });
 
   it('fails when there are no results, or a result has no requests or no own document', () => {

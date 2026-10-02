@@ -10,6 +10,7 @@
 //   (the privacy policy's promise).
 import { trackEvent } from '@/lib/analytics';
 import { REGION_TIMING, type Region } from '@/lib/tracking/region';
+import { FIRST_TOUCH_KEY, LAST_TOUCH_KEY } from '@/lib/tracking/keys';
 import type { GRANTED_NOW } from '@/lib/tracking/taxonomy';
 
 declare global {
@@ -25,10 +26,6 @@ export const CONSENT_MAX_AGE_MS = 365 * DAY_MS;
 // A clock a little ahead of ours is fine; a choice dated far in the future is not a real one.
 export const CONSENT_CLOCK_SKEW_MS = DAY_MS;
 export const ASK_ATTRIBUTE = 'data-consent';
-// The attribution touches (attribution.ts), kept here because withdrawing Marketing removes them.
-export const FIRST_TOUCH_KEY = 'dz-attribution-first';
-export const LAST_TOUCH_KEY = 'dz-attribution-last';
-export const ATTRIBUTION_DAYS = 90;
 export const ASK = 'ask';
 
 export type Choice = { analytics: boolean; marketing: boolean };

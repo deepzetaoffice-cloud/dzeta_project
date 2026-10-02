@@ -41,7 +41,7 @@ Google Ads ◄── scheduled offline-conversion import from the Sheet
 10. **Dashboard work** (GTM tags/triggers, **publishing the container**, GA4 key events, Ads/Meta/LinkedIn setup) is done by the owner from a checklist the agent writes. Never assume it's done.
 11. If server-side conversion APIs are used alongside browser pixels, send the same `event_id` from both for deduplication.
 
-**Protected files (once built):** `src/lib/analytics.ts`, `src/lib/tracking/taxonomy.ts`, `src/lib/tracking/consent.ts` and `consent-init.ts` (the dataLayer and consent defaults), `src/components/layout/ConsentBanner.tsx`, `ConsentSettings.tsx`, `TrackingRuntime.tsx` and `TagManager.tsx`, form tracking hooks. Changing them requires a request that explicitly asks for a tracking change, a plan naming the file, and the tracking e2e test passing.
+**Protected files (once built):** `src/lib/analytics.ts`, `src/lib/tracking/taxonomy.ts`, `src/lib/tracking/consent.ts` and `consent-init.ts` (the dataLayer and consent defaults), `src/components/layout/ConsentBanner.tsx`, `ConsentSettings.tsx` and `TrackingRuntime.tsx`, `src/lib/tracking/gtm.ts` (the GTM loader, C56), form tracking hooks. Changing them requires a request that explicitly asks for a tracking change, a plan naming the file, and the tracking e2e test passing.
 
 ---
 
