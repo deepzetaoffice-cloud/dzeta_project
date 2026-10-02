@@ -1,6 +1,6 @@
 # 06 · Code Standards
 
-> **Applies to:** all source code · **Precedence:** below 00 · **Last reviewed:** 2026-10-01
+> **Applies to:** all source code · **Precedence:** below 00 · **Last reviewed:** 2026-10-02
 
 ---
 
@@ -67,10 +67,10 @@
     - CSP, HSTS, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy`
     - `X-Frame-Options: SAMEORIGIN` plus CSP `frame-ancestors 'self'`. Not `DENY`: Designer Studio concepts load our own pages in a sandboxed iframe (`docs/design/studio.md`).
     - no deprecated `X-XSS-Protection`
-    - CSP ships as `Content-Security-Policy-Report-Only` in P0. The enforcement mode is decided in P3, after GTM is in, because nonce-based CSP forces dynamic rendering (verify on the installed Next.js).
+    - The CSP is enforced from P3 ([C53](conflict-register.md)), built in `src/lib/security-headers.ts`: our own origin plus the hosts of the tracking vendors in use (`src/lib/tracking/vendors.ts`); `'unsafe-inline'` for scripts with no hash or nonce, because Next.js 16's static pages carry inline scripts of its own that change per page and per build, and a nonce forces dynamic rendering; never `'unsafe-eval'`; `upgrade-insecure-requests` where the site is served over https.
   - `images.dangerouslyAllowSVG` stays off.
   - **Absolute URLs** are built only with `siteUrl()` / `absoluteUrl(path, locale)` from `src/lib/url.ts`, fed by the validated `NEXT_PUBLIC_SITE_URL`. There are no hostname literals in code ([08](08-seo-geo-aeo-schema.md) §1, C27).
-  - `dangerouslySetInnerHTML` only for JSON-LD produced by our schema builders, with `<` escaped (see [08](08-seo-geo-aeo-schema.md)). **One named exception (C40):** the no-flash preferences script, the static string in `src/lib/fx/init-script.ts`, built only from our own constants (never request or visitor data) and mounted once per document by `SiteDocument`. P3's CSP allows it by its hash.
+  - `dangerouslySetInnerHTML` only for JSON-LD produced by our schema builders, with `<` escaped (see [08](08-seo-geo-aeo-schema.md)). **Two named exceptions (C40):** the no-flash preferences script (`src/lib/fx/init-script.ts`) and, from P3, the consent init script (`src/lib/tracking/consent-init.ts`, C52): static strings built only from our own constants (never request or visitor data), mounted once per document by `SiteDocument`. The CSP allows them through `'unsafe-inline'` (C53); they stay static so a hash-based policy remains possible.
   - Rate-limit form endpoints with a store that works on serverless (not in-memory).
   - **Tools that fetch a visitor-supplied URL** guard against SSRF. They allow only public `http(s)` hosts, block private, link-local and metadata IP ranges after DNS resolution, and cap redirects, response size and time.
   - **AI-powered tools** cap tokens per request and per visitor, and treat visitor input and fetched page content as untrusted (prompt-injection handling).

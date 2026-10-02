@@ -22,7 +22,13 @@ const nextConfig: NextConfig = {
   // Set once, for every route (docs/ai/06 §4). Non-indexable deployments also send noindex (08 §1).
   async headers() {
     return [
-      { source: '/:path*', headers: [...securityHeaders(), ...noindexHeaders(indexable)] },
+      {
+        source: '/:path*',
+        headers: [
+          ...securityHeaders({ gtm: currentEnv.gtm !== null, https: currentEnv.siteUrl.startsWith('https:') }),
+          ...noindexHeaders(indexable),
+        ],
+      },
       // The logo at its current versioned URL (src/lib/brand.ts): a new logo gets a new URL, so
       // browsers keep this one for a year without asking again (P2 plan, E2; decision 0018). Other
       // requests for the path keep the default.

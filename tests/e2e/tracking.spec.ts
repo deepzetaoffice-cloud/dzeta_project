@@ -195,3 +195,37 @@ test.describe('Click IDs and campaign tags (09 §2.8; attribution.ts)', () => {
     });
   });
 });
+
+test.describe('The Content Security Policy, enforced (C53; security-headers.ts)', () => {
+  test.use(fromCountry('DE'));
+
+  test('is sent as an enforced policy, and nothing on Home or the review page breaks it', async ({ page }) => {
+    // Every violation the browser reports, from the first byte of each page.
+    await page.addInitScript(() => {
+      const seen: string[] = [];
+      (window as unknown as { __csp: string[] }).__csp = seen;
+      document.addEventListener('securitypolicyviolation', (event) =>
+        seen.push(`${event.violatedDirective} ${event.blockedURI}`),
+      );
+    });
+    const violations = () => page.evaluate(() => (window as unknown as { __csp: string[] }).__csp);
+
+    const response = await page.goto('/');
+    expect(response?.headers()['content-security-policy']).toContain("object-src 'none'");
+    expect(response?.headers()['content-security-policy-report-only']).toBeUndefined();
+    await page.waitForLoadState('networkidle');
+    await page.getByRole('button', { name: 'Choose settings' }).click();
+    await expect(page.getByRole('dialog', { name: 'Privacy settings' })).toBeVisible();
+    await page.keyboard.press('Escape');
+    expect(await violations()).toEqual([]);
+
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/shell-review');
+    await page.waitForLoadState('networkidle');
+    await page.getByRole('button', { name: 'Accept all' }).click();
+    await page.getByRole('button', { name: 'Menu' }).click();
+    await page.evaluate(() => scrollTo(0, document.documentElement.scrollHeight));
+    await page.waitForTimeout(300);
+    expect(await violations()).toEqual([]);
+  });
+});

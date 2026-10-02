@@ -117,11 +117,13 @@ function measureClearance(
   return smallest;
 }
 
-// The colour Chromium paints at one point of the page (a screenshot, decoded in the page itself).
+// The colour Chromium paints at one point of the page (a screenshot, decoded in the page itself). The
+// bytes go straight into a Blob: a fetch of a data: URL is blocked by the site's CSP (connect-src, C53).
 async function paintedColour(page: Page, x: number, y: number) {
   const png = await page.screenshot({ clip: { x, y, width: 1, height: 1 } });
   return page.evaluate(async (base64) => {
-    const bitmap = await createImageBitmap(await (await fetch(`data:image/png;base64,${base64}`)).blob());
+    const bytes = Uint8Array.from(atob(base64), (char) => char.charCodeAt(0));
+    const bitmap = await createImageBitmap(new Blob([bytes], { type: 'image/png' }));
     const canvas = new OffscreenCanvas(1, 1);
     const context = canvas.getContext('2d');
     context?.drawImage(bitmap, 0, 0);
