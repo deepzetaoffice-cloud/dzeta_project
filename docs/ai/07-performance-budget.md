@@ -31,8 +31,8 @@ The site is deepzeta's proof of work. **A page that fails a hard limit does not 
 | Budget | Limit | Status |
 |---|---|---|
 | HTML + CSS + JS loaded before the first interaction | ≤ framework baseline + 50 KB (≈ 186 KB today) | Hard limit (decision 0014). Code started by an explicit visitor action ("Launch", "Play", "Open") never loads on first view and is budgeted per feature in its plan (decision 0008) |
-| JavaScript on first load | Framework baseline (136.4 KB) + ≤ 5 KB growth, plus our own code: ≤ 10 KB on Home, ≤ 25 KB on T2 and T3 pages | Hard limit: the baseline + 5 KB growth (decision 0014), asserted by `lhci` on each tested page (Home today). Home's 10 KB is provisional until the feasibility gate (next row, [13](13-experience-design.md) §7) |
-| First-party effect/UI JS on Home at first load | ≤ 10 KB (provisional) | Validated by the effects feasibility gate ([04](04-build-sequence.md) §2; caps in [13](13-experience-design.md) §7) |
+| JavaScript on first load | Framework baseline (136.4 KB) + ≤ 5 KB growth, plus our own code: ≤ 11 KB on Home, ≤ 25 KB on T2 and T3 pages | Hard limit: the baseline + 5 KB growth (decision 0014), asserted by `lhci` on each tested page (Home today). Home's cap was 10 KB until P3 added the sitewide tracking runtime ([decision 0021](../decisions/0021-analytics-and-consent.md)) |
+| First-party JS on Home at first load (effects, UI and tracking) | ≤ 11 KB | Validated by the effects feasibility gate ([04](04-build-sequence.md) §2; caps in [13](13-experience-design.md) §7); raised from 10 KB for the tracking runtime ([decision 0021](../decisions/0021-analytics-and-consent.md)) |
 | Fonts (subset; variable, or one static weight when that keeps the target, 0015) | ≈ 60 KB total | Hard limit 70 KB on deepzeta pages. Studio concept routes load their own fonts within their T3 page budget (decision 0008) |
 | Images per page (above the fold) | ≤ 200 KB, hero ≤ 120 KB | Hard limit |
 | Render-blocking third-party or font files | 0 | Hard limit |

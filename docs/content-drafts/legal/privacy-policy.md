@@ -1,6 +1,6 @@
 # Privacy Policy: content and layout (DRAFT)
 
-> **Status:** Final wording approved by the owner, 2026-09-29. **Changed 2026-09-30:** the AI provider is now DeepSeek, which stores data in China (decision 0016; §6, §7, §8, Q4–Q6), so the wording needs the owner's re-approval. Before `/privacy` ships, the P7 check of whether DeepSeek trains on API inputs (0016) must be done, and §6 and Q6 updated if it does. No external legal review (the owner's decision). Values in `{braces}` are variables from the site config; build dependencies are listed in Part 3.
+> **Status:** Final wording approved by the owner, 2026-09-29. **Changed 2026-09-30:** the AI provider is now DeepSeek, which stores data in China (decision 0016; §6, §7, §8, Q4–Q6), so the wording needs the owner's re-approval. Before `/privacy` ships, the P7 check of whether DeepSeek trains on API inputs (0016) must be done, and §6 and Q6 updated if it does. **Changed 2026-10-02 (P3, conflict C52):** consent by region: analytics and marketing wait for permission in the EEA, the UK and Switzerland and are on elsewhere until switched off (the hero, at a glance, §3, §4, §5, §9, Table E, §18, Q3 and Part 3 note 2); approved by the owner with the P3 plan (section N). No external legal review (the owner's decision). Values in `{braces}` are variables from the site config; build dependencies are listed in Part 3.
 > **Moves to:** `src/content/en/legal/privacy.ts` (typed content) in P6. The page is `/privacy` (T2).
 > **Adapted from:** the owner's other site's privacy page (`Planning Folder/For Ai/Other project references only/privacy-policy-content-and-layout.md`).
 
@@ -12,7 +12,7 @@ The owner asked to change only the brand and related topics. Several of the refe
 |---|---|---|
 | "100% in-house processing", "0 third parties", "we never share with any third party" | We use service providers: hosting, email, CRM, automation, AI, spam protection, booking, WhatsApp | "We never **sell** your data", plus an honest list of providers (§7) |
 | "Data processed and stored within the UAE" | Several providers store or process data outside the UAE | §8 says so and explains the safeguards |
-| "We do not share browsing data with advertising networks" | Our analytics plan (09 §1) includes Google Ads, Meta and LinkedIn measurement | Only with marketing consent, and stated plainly (§9) |
+| "We do not share browsing data with advertising networks" | Our analytics plan (09 §1) includes Google Ads, Meta and LinkedIn measurement | Only with marketing consent in the EEA, the UK and Switzerland; on by default elsewhere, and stated plainly (§9) |
 | "Legitimate interest" as a legal basis | The UAE PDPL has no general legitimate-interest basis like the GDPR | Consent, your request/contract, legal duty |
 | Stats strip "0 / 100% / 24h" | Numbers we can't prove (N3) | Four plain promises, no numbers |
 | Government authorities section; DED licence number; Dubai Chamber membership | Not our business; not our facts | Removed; our licence number is added when the owner provides it |
@@ -80,7 +80,7 @@ The owner asked to change only the brand and related topics. Several of the refe
 - **Eyebrow:** Privacy
 - **H1:** Privacy Policy
 - **Direct answer:**
-  > {brandName} collects only the personal data it needs to answer your enquiry, deliver your project and run this website. We never sell your data. Analytics and marketing cookies run only if you allow them, and you can use your rights under the UAE Personal Data Protection Law at any time by emailing {email}.
+  > {brandName} collects only the personal data it needs to answer your enquiry and deliver your project, and never sells it. Analytics and marketing cookies wait for your permission if you visit from the EEA, the UK or Switzerland; elsewhere they're on until you switch them off in Cookie settings. Email {email} to use your UAE PDPL rights.
 - **Last updated:** {lastUpdated}
 
 ## 2.3 At a glance
@@ -88,7 +88,7 @@ The owner asked to change only the brand and related topics. Several of the refe
 | Title | Line |
 |---|---|
 | We never sell your data | Not to advertisers, not to data brokers, not to anyone. |
-| Cookies only with your OK | Analytics and marketing stay off until you choose. |
+| Cookies you control | We ask first in the EEA, the UK and Switzerland. Anywhere, you can switch them off at any time. |
 | Your rights, one email away | Ask to see, correct or delete your data at {email}. |
 | Protected by UAE law | Federal Decree-Law No. 45 of 2021 on the Protection of Personal Data. |
 
@@ -122,13 +122,13 @@ We collect the smallest amount of personal data that does the job. We don't ask 
 | Conversations | Emails and WhatsApp messages with us | You contact us or we reply |
 | Project and billing records | Scope, quotes, invoices, payment status | You become a client |
 | How you found us | Campaign tags (UTM) and ad click IDs saved with your form | You arrive from a link or an ad and send a form |
-| Technical data | IP address, browser, device, pages visited, approximate location (city level) | You visit the site. Analytics data only with your consent. |
+| Technical data | IP address, browser, device, pages visited, approximate location (city level) | You visit the site. Analytics data: with your consent if you're in the EEA, the UK or Switzerland; elsewhere unless you switch it off. |
 | AI demo and tool inputs | What you type into the AI agent demo or the Social Media Content Planner | You use them |
 
 ### 4 · `how-we-collect` · How we collect it
 
 - **From you:** through our forms, booking page, email, WhatsApp and the tools on this site.
-- **Automatically:** through essential cookies and, if you allow them, analytics and marketing cookies (§9).
+- **Automatically:** through essential cookies and, if you allow them, analytics and marketing cookies (§9). If you visit from outside the EEA, the UK and Switzerland, analytics and marketing are on until you switch them off.
 - **From your public website:** when you ask the Website & AI Search Health Check to review a web address, we read that public page. We never log in or collect personal data from it.
 
 ### 5 · `how-we-use` · How we use it, and why we're allowed to
@@ -141,8 +141,8 @@ We collect the smallest amount of personal data that does the job. We don't ask 
 | Deliver and support your project | Contact details, project records, conversations | Our contract with you |
 | Invoicing, tax and accounting | Billing records | UAE legal obligations |
 | Keep the site secure and stop spam and abuse | Technical data | Needed to run the site safely |
-| Understand which pages help people | Analytics data | Your consent |
-| Measure our ads | Marketing cookies; hashed email or phone | Your consent |
+| Understand which pages help people | Analytics data | Your consent in the EEA, the UK and Switzerland; elsewhere, your choice: on unless you switch it off |
+| Measure our ads | Marketing cookies; hashed email or phone | Your consent in the EEA, the UK and Switzerland; elsewhere, your choice: on unless you switch it off |
 | Send you ideas and news by email | Email address | Your consent (opt-in; unsubscribe any time) |
 
 
@@ -184,17 +184,17 @@ Some of our providers store or process data outside the UAE, for example in the 
 
 ### 9 · `cookies` · Cookies and similar technologies
 
-Cookies are small files your browser stores. We sort them into three groups. Only essential ones run before you choose.
+Cookies are small files your browser stores. We sort them into three groups. Essential ones always run. If you visit from the EEA, the UK or Switzerland, analytics and marketing wait for your choice; elsewhere they're on until you switch them off.
 
 **Table D: Cookie groups**
 
 | Group | What it does | Default |
 |---|---|---|
 | Essential | Keeps the site secure, stops spam on forms, and remembers your cookie choice and display settings (such as Reduce effects) | Always on |
-| Analytics | Google Analytics shows us, in aggregate, which pages people visit and where they get stuck | Off until you allow it |
-| Marketing | Google Ads, Meta and LinkedIn measure whether our ads bring people here, and can show our ads to people who've visited | Off until you allow it |
+| Analytics | Google Analytics shows us, in aggregate, which pages people visit and where they get stuck | Off until you allow it in the EEA, the UK and Switzerland; on elsewhere |
+| Marketing | Google Ads, Meta and LinkedIn measure whether our ads bring people here, and can show our ads to people who've visited | Off until you allow it in the EEA, the UK and Switzerland; on elsewhere |
 
-- **Changing your choice:** use "Cookie settings" at the bottom of every page. We remember your choice for 12 months, then ask again.
+- **Changing your choice:** use "Cookie settings" at the bottom of every page. We remember your choice for 12 months.
 - **Blocking cookies:** you can also block cookies in your browser. Essential ones are needed for forms to work.
 
 The full list of cookies, with each one's name, provider and lifetime, is shown in "Cookie settings".
@@ -229,6 +229,7 @@ We keep personal data only as long as we need it for the purpose you gave it for
 | Spam-protection and abuse limits | Up to 24 hours |
 | Analytics data | 14 months |
 | Your cookie choice | 12 months |
+| How you found us (campaign tags and ad click IDs, in your browser) | 90 days |
 
 
 ### 13 · `your-rights` · Your rights under the UAE PDPL
@@ -274,7 +275,7 @@ For any privacy question or request:
 
 ### 18 · `consent` · Consent, and how to withdraw it
 
-Where we rely on your consent (analytics, marketing cookies, marketing emails, WhatsApp follow-ups you opted into), you can withdraw it at any time:
+Where we rely on your consent or your choice (analytics and marketing cookies, marketing emails, WhatsApp follow-ups you opted into), you can withdraw it at any time:
 - **Cookies:** change your choice in "Cookie settings" at the bottom of every page.
 - **Emails:** use the unsubscribe link in any email.
 - **Anything else:** email {email}.
@@ -292,7 +293,7 @@ No. We never sell or rent your personal data, and we never give it to other comp
 Your name, business name, email, phone or WhatsApp number, the service you're interested in and your message. If you arrived from a link or an ad, we also save the campaign tag. We use this only to prepare and schedule your audit.
 
 **Q3. Do you use cookies?**
-Yes. Essential cookies keep the site secure and working. Analytics and marketing cookies stay off until you allow them, and you can change your choice at any time from "Cookie settings" at the bottom of every page.
+Yes. Essential cookies keep the site secure and working. Analytics and marketing cookies wait for your permission if you visit from the EEA, the UK or Switzerland, and are on elsewhere. You can change your choice at any time from "Cookie settings" at the bottom of every page.
 
 **Q4. Which companies process my data for you?**
 Our main service providers are Vercel (hosting), Google (email, customer records and, with consent, analytics), n8n (automation), DeepSeek (AI demos), Cloudflare (spam protection), Upstash (abuse limits), Cal.com (booking) and Meta (WhatsApp). Section 7 lists what each one does.
@@ -336,7 +337,7 @@ Email {email} and tell us what you need. We'll confirm it's you, then answer wit
 These keep the promises in this policy true. They are checked by the plans named here, not shown on the page.
 
 1. **Cookie list (P3):** "Cookie settings" lists every cookie's name, provider and lifetime, generated from the live GTM container. Nothing loads that isn't listed.
-2. **Consent (P3):** no analytics or marketing tag runs before consent. Server-side conversion events (Meta, LinkedIn, Google offline import) with hashed contact details go only for visitors who granted marketing consent (`consent-copy.md` §5).
+2. **Consent (P3):** for visitors from the EEA, the UK and Switzerland, no analytics or marketing tag runs before consent; for others they run until switched off. Server-side conversion events (Meta, LinkedIn, Google offline import) with hashed contact details go only for leads whose consent state at sending includes Marketing (chosen, or the default outside Europe) (`consent-copy.md` §5).
 3. **Providers:** Table C and FAQ Q4 list only providers that are active. Adding or removing a provider changes this page in the same pull request.
 4. **AI demo (P7):** demo conversations are not written to our records (§6).
 5. **Retention:** Table E is carried out as written. The GA4 data-retention setting is 14 months; spam and abuse limits expire within 24 hours; tool results expire within 30 days.

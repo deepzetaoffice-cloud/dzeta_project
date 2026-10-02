@@ -111,7 +111,9 @@ test.describe('Home', () => {
 test.describe('Headers and robots (docs/ai/06 §4, docs/ai/08 §1)', () => {
   test('security headers are set once, centrally, without deprecated ones', async ({ request }) => {
     const headers = (await request.get('/')).headers();
-    expect(headers['content-security-policy-report-only']).toContain("default-src 'self'");
+    // Enforced since P3 (conflict C53); the report-only header is gone.
+    expect(headers['content-security-policy']).toContain("default-src 'self'");
+    expect(headers['content-security-policy-report-only']).toBeUndefined();
     expect(headers['strict-transport-security']).toBe('max-age=63072000; includeSubDomains');
     expect(headers['x-content-type-options']).toBe('nosniff');
     expect(headers['referrer-policy']).toBe('strict-origin-when-cross-origin');

@@ -35,10 +35,25 @@ const FRAMEWORK_JS_GROWTH = 5 * KB;
 // and src/lib/fx/).
 // P2 part C: 8,052 B (147,720 B in all 5 runs on Home and on the review page, 2026-10-01): cta.ts's
 // sticky bar, the finale's hand-off and the first state shown without a transition added 84 B.
-const OWN_JS_HOME = 8052;
-if (OWN_JS_HOME > 10 * KB) throw new Error('OWN_JS_HOME is above the 10 KB Home cap (07 §2, 13 §7).');
+// P3 step B6: 10,884 B (150,552 B in all 5 runs on Home and on the review page, 2026-10-02): the
+// tracking runtime with the consent defaults, trackEvent() and the taxonomy's parameter rules, the
+// error page's route helper (16 B, P3 part A), and GTM's own loader (C56). The consent code, the
+// settings panel and the click handling load only when used.
+// P3 step B10: 11,048 B (150,716 B in all 5 runs on Home, the campaign landing and the review page,
+// 2026-10-02): the audit fixes (the banner's reserve and resize, the failed-download fallbacks) and the
+// campaign capture's first-action listeners; the capture code itself loads on the visitor's first action.
+const OWN_JS_HOME = 11_048;
+// Home's cap: 10 KB until P3, 11 KB since the tracking runtime (decision 0021).
+const HOME_OWN_JS_CAP = 11 * KB;
+if (OWN_JS_HOME > HOME_OWN_JS_CAP) throw new Error('OWN_JS_HOME is above the 11 KB Home cap (07 §2, 13 §7).');
+// First-party JavaScript ≤ the baseline + its growth allowance + our own code (07 §2; 0014, 0021). It's
+// checked by scripts/check-page-weight.mjs, which counts the page's own origin only: lhci's script size
+// counts every origin, and GTM's tags have their own caps (C54).
+const FIRST_PARTY_JS_LIMIT = FRAMEWORK_JS_BASELINE + FRAMEWORK_JS_GROWTH + OWN_JS_HOME;
 // HTML + CSS + JS before the first interaction ≤ the framework baseline + 50 KB (07 §2).
 const FIRST_LOAD_LIMIT = FRAMEWORK_JS_BASELINE + 50 * KB;
+// The review page alone (conflict C57): it never reaches visitors, and carries the complete shell.
+const REVIEW_FIRST_LOAD_LIMIT = 192_000;
 
 // T1 Home (decision 0005): Performance ≥ 0.95. Core Web Vitals hard limits apply to every tier (07 §1).
 const t1Assertions = {
@@ -52,13 +67,10 @@ const t1Assertions = {
   // TTFB hard limit (07 §1). Locally it's the Node server on localhost; the real figure comes from
   // PageSpeed Insights on deepzeta.ai.
   'server-response-time': ['error', { maxNumericValue: 600, ...medianRun }],
-  // 07 §2: no third-party requests before consent. P3 allows GTM here.
+  // 07 §2: no third-party requests before consent. Until the owner's GTM container ID is set, CI builds
+  // without GTM, so there are none at all; GTM's own caps come with the real container (P3 plan, C5).
   'resource-summary:third-party:count': ['error', { maxNumericValue: 0, ...everyRun }],
-  // 07 §2: JavaScript on first load ≤ the framework baseline + its growth allowance + our own code.
-  'resource-summary:script:size': [
-    'error',
-    { maxNumericValue: FRAMEWORK_JS_BASELINE + FRAMEWORK_JS_GROWTH + OWN_JS_HOME, ...everyRun },
-  ],
+  // 07 §2: first-party JavaScript on first load is checked by scripts/check-page-weight.mjs (C54).
   // 07 §2: fonts ≈ 60 KB (the target), hard limit 70 KB; two files at most on an English page
   // (Montserrat and JetBrains Mono, decision 0015).
   'resource-summary:font:size': ['error', { maxNumericValue: 70 * KB, ...everyRun }],
@@ -90,6 +102,9 @@ module.exports = {
     assert: {
       assertMatrix: [
         { matchingUrlPattern: '^http://localhost:3000/$', assertions: t1Assertions },
+        // Home as a visitor from the UAE landing from a campaign, collected by lighthouserc.row.cjs on
+        // 127.0.0.1 so its runs stay apart from the European ones (P3 plan, B8 and B10; C52)
+        { matchingUrlPattern: '^http://127\\.0\\.0\\.1:3000/(\\?.*)?$', assertions: t1Assertions },
         { matchingUrlPattern: '^http://localhost:3000/shell-review$', assertions: reviewAssertions },
       ],
     },
@@ -99,5 +114,14 @@ module.exports = {
     },
   },
   // Not an lhci key (lhci reads `ci` only): the budget for scripts/check-page-weight.mjs.
-  budget: { KB, FRAMEWORK_JS_BASELINE, FRAMEWORK_JS_GROWTH, OWN_JS_HOME, FIRST_LOAD_LIMIT },
+  budget: {
+    KB,
+    FRAMEWORK_JS_BASELINE,
+    FRAMEWORK_JS_GROWTH,
+    OWN_JS_HOME,
+    HOME_OWN_JS_CAP,
+    FIRST_PARTY_JS_LIMIT,
+    FIRST_LOAD_LIMIT,
+    REVIEW_FIRST_LOAD_LIMIT,
+  },
 };

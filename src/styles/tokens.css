@@ -280,6 +280,14 @@
   --dz-journey-width: 2px;
   --dz-journey-pixel: 0.5rem;
   --dz-sticky-height: 4.5rem;
+  /* The consent banner and Cookie settings (P3 plan, D and E): the banner's width as a corner panel
+     from 640 px, the settings dialog's width, the banner's height (0 until the tracking runtime
+     measures it; the page's end and focused controls scroll clear of it), and the dim behind the
+     dialog: navy at 64%. */
+  --dz-consent-width: 28rem;
+  --dz-consent-dialog-width: 36rem;
+  --dz-consent-height: 0rem;
+  --dz-scrim: rgba(1, 4, 19, 0.64);
 
   /* The social letter tiles (conflict C49): each platform's own colour, read from its own pages (P2
      plan, step 13), inside the signal-gradient edge. Instagram's gradient is approximated from

@@ -264,7 +264,7 @@ The P2 effects feasibility gate (04 §2) confirmed these in the lab, with the sh
 
 | Item | Cap | Measured at the end of P2 |
 |---|---|---|
-| All first-party effect/UI JS on Home at first load (T1 "native", decision 0008) | ≤ 10 KB | 8,052 B: the root error page, `next/link` and the effect runtime |
+| All first-party JS on Home at first load (T1 "native", decision 0008): effects, UI and, from P3, tracking | ≤ 11 KB (10 KB until P3; [decision 0021](../decisions/0021-analytics-and-consent.md)) | 10,884 B (P3 step B6): the root error page, `next/link`, the effect runtime (8,052 B at the end of P2) and the tracking runtime with the consent defaults, `trackEvent()` and the taxonomy's parameter rules |
 | Shared pointer controller | ≤ 1.5 KB | 604 B |
 | Shared IntersectionObserver (reveals, icons, CTA handoff) | ≤ 0.5 KB | 293 B |
 | Story controls (shared) | ≤ 2 KB | Not built yet |

@@ -22,7 +22,13 @@ export default defineConfig({
     timeout: 120_000,
   },
   projects: [
-    { name: 'e2e', testMatch: 'e2e/**/*.spec.ts' },
+    // A visitor from the UAE by default, most of the site's audience: no consent banner (09 §2.7, C52).
+    // Tests of a European visitor send their own country (tests/e2e/helpers/tracking.ts).
+    {
+      name: 'e2e',
+      testMatch: 'e2e/**/*.spec.ts',
+      use: { extraHTTPHeaders: { 'x-vercel-ip-country': 'AE' } },
+    },
     // The HTML gates read raw server HTML, as crawlers do (plan section E).
     { name: 'gate-seo', testMatch: 'gates/seo.spec.ts', use: { javaScriptEnabled: false } },
     { name: 'gate-schema', testMatch: 'gates/schema.spec.ts', use: { javaScriptEnabled: false } },

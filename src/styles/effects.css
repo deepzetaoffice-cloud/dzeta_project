@@ -1127,6 +1127,138 @@
     translate: 0 100%;
     visibility: hidden;
   }
+
+  /* The consent banner (P3 plan, D; conversion-path.md, first at 360 px). Shown only while <html>
+     carries data-consent="ask", which the consent init script sets before the first paint, so it's in
+     the first frame with no entrance of its own (13 §2.1). glass-frost: it sits over the whole
+     scrolling page, and on a phone the header pill is already the one live blur. Full width at the
+     bottom on a phone; a corner panel at the inline end from 640 px. After a choice it fades out
+     (the visitor's action); at once under Reduce effects. */
+  .dz-consent {
+    display: none;
+    position: fixed;
+    inset-inline: 0;
+    inset-block-end: 0;
+    z-index: var(--dz-layer-consent);
+    padding-block: --spacing(5) max(--spacing(5), env(safe-area-inset-bottom));
+    padding-inline: max(var(--dz-gutter), env(safe-area-inset-left), env(safe-area-inset-right));
+    border-inline-width: 0;
+    border-block-end-width: 0;
+    /* Never taller than the window: at 320 px wide (400% zoom) its text would reach above the top,
+       out of reach (WCAG 1.4.10), so it scrolls inside itself instead. */
+    max-block-size: 100dvh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    opacity: 0;
+    translate: 0 calc(var(--dz-drop) * -1);
+    @variant fx {
+      transition:
+        display var(--dz-dur-base) allow-discrete,
+        opacity var(--dz-dur-base) var(--dz-ease-out),
+        translate var(--dz-dur-base) var(--dz-ease-out);
+    }
+    @variant sm {
+      inset-inline-start: auto;
+      inset-inline-end: max(var(--dz-gutter), env(safe-area-inset-left), env(safe-area-inset-right));
+      inset-block-end: max(var(--dz-gutter), env(safe-area-inset-bottom));
+      max-inline-size: var(--dz-consent-width);
+      max-block-size: calc(100dvh - var(--dz-gutter) * 2);
+      padding: --spacing(5);
+      border-width: var(--dz-glass-edge-width);
+      border-radius: var(--dz-radius-lg);
+    }
+  }
+
+  :root[data-consent='ask'] .dz-consent {
+    display: block;
+    opacity: 1;
+    translate: none;
+  }
+
+  /* The banner's two choices, the same size and weight, neither on the action gradient (C42), and
+     Cookie settings' three: an outline pill, like the error page's button. */
+  .dz-consent-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-block-size: var(--dz-target-min);
+    padding-inline: --spacing(6);
+    border: var(--dz-cta-outline-width) solid var(--dz-mist);
+    border-radius: var(--dz-radius-pill);
+    color: var(--dz-text-strong);
+    &:hover {
+      border-color: var(--dz-frost);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .dz-consent-button {
+      border-color: ButtonText;
+    }
+  }
+
+  /* The sticky CTA bar gives way to the banner until the visitor chooses (conversion-path.md). */
+  :root[data-consent='ask'] .dz-sticky {
+    translate: 0 100%;
+    visibility: hidden;
+  }
+
+  /* Cookie settings (P3 plan, E): a modal dialog. Full height on a phone, as conversion-path.md asks of
+     panels at 360 px; from 640 px a centred panel over a dim. glass-live, allowed for modals (13 §4.1):
+     the page behind is inert, so nothing scrolls under the blur. */
+  .dz-consent-dialog {
+    position: fixed;
+    inset: 0;
+    inline-size: 100%;
+    max-inline-size: 100%;
+    block-size: 100dvh;
+    max-block-size: 100dvh;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--dz-text);
+    overflow-y: auto;
+    @variant sm {
+      inline-size: min(calc(100% - var(--dz-gutter) * 2), var(--dz-consent-dialog-width));
+      block-size: fit-content;
+      max-block-size: calc(100dvh - var(--dz-gutter) * 2);
+      margin: auto;
+    }
+  }
+
+  .dz-consent-dialog::backdrop {
+    background-color: var(--dz-scrim);
+  }
+
+  .dz-consent-panel {
+    min-block-size: 100%;
+    padding-block: max(var(--dz-gutter), env(safe-area-inset-top)) max(var(--dz-gutter), env(safe-area-inset-bottom));
+    padding-inline: max(var(--dz-gutter), env(safe-area-inset-left), env(safe-area-inset-right));
+    border-width: 0;
+    @variant sm {
+      min-block-size: auto;
+      padding: --spacing(8);
+      border-width: var(--dz-glass-edge-width);
+      border-radius: var(--dz-radius-lg);
+    }
+  }
+
+  /* Each group's cookies and storage */
+  .dz-consent-table {
+    border-collapse: collapse;
+    & th,
+    & td {
+      padding-block: --spacing(1.5);
+      padding-inline-end: --spacing(3);
+      border-block-end: var(--dz-glass-edge-width) solid var(--dz-hairline);
+      text-align: start;
+      vertical-align: top;
+    }
+    & th {
+      color: var(--dz-text-strong);
+    }
+  }
 }
 
 /* viewportFit 'cover' (src/lib/viewport.ts) lets the page reach under an iPhone's notch in landscape,
@@ -1180,6 +1312,23 @@
    runtime starts (P2 step 16); hidden, it's out of the tab order and the accessibility tree. */
 :root:not([data-prefs='ready']) footer .dz-display {
   visibility: hidden;
+}
+
+/* The footer's Cookie settings button works once the tracking runtime has started; until then it's
+   hidden in place, so the legal line doesn't move (P3 plan, E). */
+:root:not([data-tracking='ready']) .dz-cookie-settings {
+  visibility: hidden;
+}
+
+/* While the consent banner shows, the page's end and any focused control scroll clear of it (WCAG
+   2.4.11). The tracking runtime keeps --dz-consent-height at how far the banner reaches up from the
+   window's bottom: its height, plus the corner panel's offset from 640 px. Outside the layers, so it
+   wins over the sticky bar's reserve, which is hidden meanwhile. */
+:root[data-consent='ask'] {
+  scroll-padding-block-end: calc(var(--dz-consent-height) + var(--dz-focus-width) + var(--dz-focus-offset));
+  & body {
+    padding-block-end: var(--dz-consent-height);
+  }
 }
 
 /* The close icon turns in as the sheet opens. */

@@ -3,6 +3,7 @@ import { LOGO_URL, LOGO_VERSION } from './src/lib/brand.ts';
 import { env } from './src/lib/env.ts';
 import { securityHeaders } from './src/lib/security-headers.ts';
 import { isIndexable, noindexHeaders } from './src/lib/seo/indexing.ts';
+import { regionHeaderRules } from './src/lib/tracking/region.ts';
 
 // Stops at once when the environment is missing or malformed (docs/ai/02 §2.5, .env.example).
 const currentEnv = env();
@@ -21,7 +22,13 @@ const nextConfig: NextConfig = {
   // Set once, for every route (docs/ai/06 §4). Non-indexable deployments also send noindex (08 §1).
   async headers() {
     return [
-      { source: '/:path*', headers: [...securityHeaders(), ...noindexHeaders(indexable)] },
+      {
+        source: '/:path*',
+        headers: [
+          ...securityHeaders({ gtm: currentEnv.gtm !== null, https: currentEnv.siteUrl.startsWith('https:') }),
+          ...noindexHeaders(indexable),
+        ],
+      },
       // The logo at its current versioned URL (src/lib/brand.ts): a new logo gets a new URL, so
       // browsers keep this one for a year without asking again (P2 plan, E2; decision 0018). Other
       // requests for the path keep the default.
@@ -30,6 +37,9 @@ const nextConfig: NextConfig = {
         has: [{ type: 'query', key: 'v', value: LOGO_VERSION }],
         headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
       },
+      // The visitor's region for consent, from Vercel's country header, as a Server-Timing value the
+      // page reads before its first paint (docs/ai/09 §2.7, C52; src/lib/tracking/region.ts).
+      ...regionHeaderRules(),
     ];
   },
 };
