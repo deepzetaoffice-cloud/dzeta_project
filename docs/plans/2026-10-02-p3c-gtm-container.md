@@ -71,6 +71,12 @@ Progress:
     - **The real Meta pixel ID is injected by the generator:** the Custom HTML template interpolates `accounts.metaDatasetId` (test digits in `--test`, the real dataset in the committed build) — no dashboard step carries the ID.
   - The exact imported build is snapshotted at `.scratch/tracking-test-imported/` so the round-trip comparison stays honest against what GTM accepted.
   - Gates after the once-per-page fix: `tracking-artifacts` 18 passed; full suite and commit follow with the round-trip fixture.
+- 2026-10-03 · **C3 (the round trip) is done: PASSED.**
+  - The owner's re-export (`docs/owner/GTM-W2WX5BFC_workspace3.json`, the `dz-roundtrip` container) verified: test IDs only (including inside the Meta HTML string), and committed byte-identical (same git hash) as `tests/fixtures/gtm/roundtrip-export.json`.
+  - **The comparison, and what it proved:** after normalising what GTM legitimately changes — renumbered entity IDs and their cross-references (each side mapped through its own ID map; the reserved Initialization ID 2147479573 kept), added fingerprints, the target container's `accountId`/`containerId`, removed empty `eventSettingsTable` lists, and `DLV - turn`'s `formatValue` `{"number":{}}` → `{}` — **every tag, trigger, variable and built-in matches exactly**: 23 tags, 20 triggers, 20 variables, 5 built-ins, names, types, parameters, consent settings, firing options and setups all identical.
+  - **The comparison lives on as a test** (`tracking-artifacts.test.ts`, 20 tests now): the fixture is always checked for test IDs and counts, and when the gitignored snapshot of the imported build exists the full normalised diff runs again — so a future generator change that breaks GTM compatibility fails the suite, not the owner's next import.
+  - **Both throwaway containers can now be deleted** (`dz-reference` and `dz-roundtrip`): the owner's step, per the guide's B0 step 9.
+  - Gates: `test` **380+2 passed** (the two new B0 tests; full suite below in the commit); `verify:fast` exit 0.
 Phase: P3
 Branch: `feat/p3c-gtm-container` (from `main` at `2625fb2`; step C0 done there)
 Page tier: T1 (sitewide: the CSP, the cookie list and the container reach every page; measured on Home and the review page, as in parts A and B)

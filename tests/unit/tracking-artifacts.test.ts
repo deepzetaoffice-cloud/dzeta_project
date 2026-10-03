@@ -59,6 +59,107 @@ describe('the committed files equal a fresh generation', () => {
   });
 });
 
+// The B0 round trip (guide B0, step C3, 2026-10-03): GTM accepted the generated test container, and
+// its re-export (committed byte-identical as the fixture) equals the generated build after
+// normalising what GTM legitimately changes: renumbered IDs and cross-references (each side mapped
+// through its own ID map), added fingerprints, the target container's accountId/containerId,
+// removed empty eventSettingsTable lists, and a dropped empty formatValue number format
+// (DLV - turn). The comparison runs against .scratch/tracking-test-imported/ (the snapshot of the
+// exact build the owner imported, gitignored); if that snapshot is absent the test is skipped, and
+// the committed fixture itself is always checked for test IDs and the right shape.
+describe('the GTM round trip (B0)', () => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const roundtrip: any = JSON.parse(readFileSync(join(ROOT, 'tests/fixtures/gtm/roundtrip-export.json'), 'utf8'));
+  const rtVersion = roundtrip.containerVersion;
+
+  it('the fixture is GTM\'s own export: test IDs only, and the counts match', () => {
+    const text = JSON.stringify(roundtrip);
+    expect(text).toContain('G-TEST123456');
+    for (const realId of [accounts.ga4MeasurementId, accounts.metaDatasetId, accounts.microsoftUetTagId]) {
+      if (realId !== null) expect(text).not.toContain(realId);
+    }
+    expect(rtVersion.tag.length).toBe(23);
+    expect(rtVersion.trigger.length).toBe(20);
+    expect(rtVersion.variable.length).toBe(20);
+    expect(rtVersion.builtInVariable.length).toBe(5);
+  });
+
+  it('GTM\'s export equals the generated build after normalisation', () => {
+    const snapshotPath = join(ROOT, '.scratch/tracking-test-imported/deepzeta-gtm-container.json');
+    let snapshot: string;
+    try {
+      snapshot = readFileSync(snapshotPath, 'utf8');
+    } catch {
+      return; // the gitignored snapshot isn't around (fresh clone, cleaned scratch): nothing to diff
+    }
+    // The GTM export shape isn't a type we own; loose typing is the point of this comparison.
+    type Json = Record<string, unknown> & { formatValue?: unknown; firingTriggerId?: unknown; parameter?: unknown[] };
+    const generated = JSON.parse(snapshot) as { containerVersion: Record<string, Json[]> };
+
+    const stripAndSort = (value: unknown): unknown => {
+      if (Array.isArray(value)) return value.map(stripAndSort);
+      if (value === null || typeof value !== 'object') return value;
+      const out: Record<string, unknown> = {};
+      for (const key of Object.keys(value as Record<string, unknown>).sort()) {
+        if (['fingerprint', 'accountId', 'containerId'].includes(key)) continue;
+        out[key] = stripAndSort((value as Record<string, unknown>)[key]);
+      }
+      return out;
+    };
+    const dropEmptySettingsLists = (entity: Json): Json => {
+      if (!Array.isArray(entity?.parameter)) return entity;
+      return { ...entity, parameter: entity.parameter.filter((p) => !((p as Json).type === 'LIST' && ((p as Json).list as unknown[] | undefined)?.length === 0)) };
+    };
+    const normaliseFormatValue = (entity: Json): Json => {
+      const fv = entity?.formatValue;
+      if (!fv || typeof fv !== 'object') return entity;
+      const clean: Record<string, unknown> = {};
+      for (const [key, val] of Object.entries(fv)) {
+        if (val && typeof val === 'object' && Object.keys(val).length === 0) continue;
+        clean[key] = val;
+      }
+      return { ...entity, formatValue: clean };
+    };
+    const idMap = (entities: Json[]): Map<string, string> =>
+      new Map(entities.map((e) => [String(e.tagId ?? e.triggerId ?? e.variableId), String(e.name)]));
+    const mapTriggers = (ids: unknown, map: Map<string, string>): unknown =>
+      Array.isArray(ids)
+        ? ids.map((id) => map.get(String(id)) ?? (String(id) === '2147479573' ? 'INIT' : `?${id}`)).sort()
+        : ids;
+
+    const byName = (list: Json[], map: Map<string, string>, idKey: string) => {
+      const out = new Map<string, unknown>();
+      for (const item of list) {
+        const normalised = normaliseFormatValue(dropEmptySettingsLists(item));
+        const cleaned = stripAndSort(normalised) as Record<string, unknown>;
+        cleaned.firingTriggerId = mapTriggers(item.firingTriggerId, map);
+        delete cleaned[idKey];
+        out.set(String(item.name), cleaned);
+      }
+      return out;
+    };
+
+    const genVersion = generated.containerVersion;
+    const rtTriggers = rtVersion.trigger as Json[];
+    for (const kind of ['tag', 'trigger', 'variable'] as const) {
+      const idKey = kind === 'tag' ? 'tagId' : kind === 'trigger' ? 'triggerId' : 'variableId';
+      const genList = (genVersion[kind] ?? []) as Json[];
+      const rtList = (rtVersion[kind] ?? []) as Json[];
+      const genMap = idMap((genVersion.trigger ?? []) as Json[]);
+      const expected = byName(genList, genMap, idKey);
+      const actual = byName(rtList, idMap(rtTriggers), idKey);
+      expect([...actual.keys()].sort()).toEqual([...expected.keys()].sort());
+      for (const name of expected.keys()) {
+        expect(JSON.stringify(actual.get(name)), `${kind} ${name} matches`).toBe(JSON.stringify(expected.get(name)));
+      }
+    }
+    // Built-ins: type → name pairs.
+    const genBuiltins = new Map(((genVersion.builtInVariable ?? []) as Json[]).map((b) => [String(b.type), String(b.name)]));
+    const rtBuiltins = new Map((rtVersion.builtInVariable as Json[]).map((b) => [String(b.type), String(b.name)]));
+    expect([...rtBuiltins.entries()].sort()).toEqual([...genBuiltins.entries()].sort());
+  });
+});
+
 describe('the --test build holds test IDs only (guide B0; the round-trip fixture re-exports it)', () => {
   const TEST_OUT = '.scratch/tracking-test';
 
