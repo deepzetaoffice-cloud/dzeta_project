@@ -178,7 +178,7 @@ You'll receive: the container file (`deepzeta-gtm-container.json`), and in this 
 2. **Import the test file.** **Admin → Import Container → Choose container file** → the `deepzeta-gtm-container.json` Claude sends you (the `--test` one).
 3. **Choose workspace: New**, name it `roundtrip`.
 4. **Import option: Overwrite.** The container is empty, so nothing of yours is lost.
-5. **Click "View detailed changes".** The numbers must equal what Claude's message says (23 tags, 19 triggers, 23 variables, 5 built-in variables). If they differ, stop and send Claude a screenshot.
+5. **Click "View detailed changes".** The numbers must equal what Claude's message says (**23 tags, 20 triggers, 20 variables, 5 built-in variables**; updated 2026-10-03: the second production-host trigger added, the three unused ID constants removed). If they differ, stop and send Claude a screenshot.
 6. **Confirm.** Don't publish — nothing in this container ever goes live.
 7. **Export it back.** **Admin → Export Container → Choose a version or workspace →** choose **Default Workspace** → **Download**. The file's name starts with this container's `GTM-` ID.
 8. **Send it:** leave the file in your **Downloads** folder and tell Claude its name. Claude checks it against the generator's output (the round-trip test), then commits it as the round-trip fixture.
@@ -188,7 +188,7 @@ You'll receive: the container file (`deepzeta-gtm-container.json`), and in this 
 1. **Admin → Import Container → Choose container file** → `docs/owner/tracking/deepzeta-gtm-container.json` (the real-ID build; Claude confirms it's fresh from `npm run tracking:build` when he sends the clicks at C5).
 2. **Choose workspace: New**, name it `P3 tracking v1`.
 3. **Import option: Overwrite.** The container is empty, so nothing of yours is lost, and the result matches the file exactly. (Later imports use the option Claude names in that update.)
-4. Click **View detailed changes**. The numbers must be **23 tags, 19 triggers, 23 variables, 5 built-in variables** (the generated file's counts; B0 tested the same file's test-ID build). If they differ, stop and send Claude a screenshot.
+4. Click **View detailed changes**. The numbers must be **23 tags, 20 triggers, 20 variables, 5 built-in variables** (the generated file's counts, updated 2026-10-03; B0 tested the same file's test-ID build). If they differ, stop and send Claude a screenshot.
 5. **Confirm.** Don't publish yet.
 
 ### B2. Test in Preview (Tag Assistant)

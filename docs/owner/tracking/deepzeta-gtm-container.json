@@ -1,14 +1,47 @@
 {
   "exportFormatVersion": 2,
+  "exportTime": "2026-10-03 00:00:00",
   "containerVersion": {
-    "accountId": "0",
-    "containerId": "0",
+    "path": "accounts/6379445400/containers/265930100/versions/0",
+    "accountId": "6379445400",
+    "containerId": "265930100",
     "containerVersionId": "0",
+    "container": {
+      "path": "accounts/6379445400/containers/265930100",
+      "accountId": "6379445400",
+      "containerId": "265930100",
+      "name": "deepzeta.ai",
+      "publicId": "GTM-GENERATED",
+      "usageContext": [
+        "WEB"
+      ],
+      "fingerprint": "1000000000000",
+      "tagManagerUrl": "https://tagmanager.google.com/#/container/accounts/6379445400/containers/265930100/workspaces?apiLink=container",
+      "features": {
+        "supportUserPermissions": true,
+        "supportEnvironments": true,
+        "supportWorkspaces": true,
+        "supportGtagConfigs": false,
+        "supportBuiltInVariables": true,
+        "supportClients": false,
+        "supportFolders": true,
+        "supportTemplates": true,
+        "supportTags": true,
+        "supportTriggers": true,
+        "supportVariables": true,
+        "supportVersions": true,
+        "supportZones": true,
+        "supportTransformations": false
+      },
+      "tagIds": [
+        "GTM-GENERATED"
+      ]
+    },
     "tag": [
       {
-        "accountId": "0",
-        "containerId": "0",
-        "tagId": "52",
+        "accountId": "6379445400",
+        "containerId": "265930100",
+        "tagId": "50",
         "name": "Google tag",
         "type": "googtag",
         "parameter": [
@@ -56,7 +89,7 @@
         ],
         "firingTriggerId": [
           "2147479573",
-          "49"
+          "46"
         ],
         "tagFiringOption": "ONCE_PER_EVENT",
         "monitoringMetadata": {
@@ -76,9 +109,9 @@
         }
       },
       {
-        "accountId": "0",
-        "containerId": "0",
-        "tagId": "53",
+        "accountId": "6379445400",
+        "containerId": "265930100",
+        "tagId": "51",
         "name": "Google tag - update",
         "type": "googtag",
         "parameter": [
@@ -155,8 +188,8 @@
           }
         ],
         "firingTriggerId": [
-          "33",
-          "49"
+          "30",
+          "46"
         ],
         "tagFiringOption": "ONCE_PER_EVENT",
         "monitoringMetadata": {
@@ -176,9 +209,9 @@
         }
       },
       {
-        "accountId": "0",
-        "containerId": "0",
-        "tagId": "54",
+        "accountId": "6379445400",
+        "containerId": "265930100",
+        "tagId": "52",
         "name": "GA4 - page_view",
         "type": "gaawe",
         "parameter": [
@@ -204,8 +237,8 @@
           }
         ],
         "firingTriggerId": [
-          "33",
-          "49"
+          "30",
+          "46"
         ],
         "tagFiringOption": "ONCE_PER_EVENT",
         "monitoringMetadata": {
@@ -230,9 +263,9 @@
         ]
       },
       {
-        "accountId": "0",
-        "containerId": "0",
-        "tagId": "55",
+        "accountId": "6379445400",
+        "containerId": "265930100",
+        "tagId": "53",
         "name": "GA4 - cta_click",
         "type": "gaawe",
         "parameter": [
@@ -289,7 +322,7 @@
           }
         ],
         "firingTriggerId": [
-          "34"
+          "31"
         ],
         "tagFiringOption": "ONCE_PER_EVENT",
         "monitoringMetadata": {
@@ -309,9 +342,9 @@
         }
       },
       {
-        "accountId": "0",
-        "containerId": "0",
-        "tagId": "56",
+        "accountId": "6379445400",
+        "containerId": "265930100",
+        "tagId": "54",
         "name": "GA4 - audit_start",
         "type": "gaawe",
         "parameter": [
@@ -353,7 +386,7 @@
           }
         ],
         "firingTriggerId": [
-          "35"
+          "32"
         ],
         "tagFiringOption": "ONCE_PER_EVENT",
         "monitoringMetadata": {
@@ -373,9 +406,9 @@
         }
       },
       {
-        "accountId": "0",
-        "containerId": "0",
-        "tagId": "57",
+        "accountId": "6379445400",
+        "containerId": "265930100",
+        "tagId": "55",
         "name": "GA4 - generate_lead",
         "type": "gaawe",
         "parameter": [
@@ -432,7 +465,7 @@
           }
         ],
         "firingTriggerId": [
-          "36"
+          "33"
         ],
         "tagFiringOption": "ONCE_PER_EVENT",
         "monitoringMetadata": {
@@ -452,9 +485,9 @@
         }
       },
       {
-        "accountId": "0",
-        "containerId": "0",
-        "tagId": "58",
+        "accountId": "6379445400",
+        "containerId": "265930100",
+        "tagId": "56",
         "name": "GA4 - contact_click",
         "type": "gaawe",
         "parameter": [
@@ -496,7 +529,7 @@
           }
         ],
         "firingTriggerId": [
-          "37"
+          "34"
         ],
         "tagFiringOption": "ONCE_PER_EVENT",
         "monitoringMetadata": {
@@ -516,9 +549,9 @@
         }
       },
       {
-        "accountId": "0",
-        "containerId": "0",
-        "tagId": "59",
+        "accountId": "6379445400",
+        "containerId": "265930100",
+        "tagId": "57",
         "name": "GA4 - demo_open",
         "type": "gaawe",
         "parameter": [
@@ -560,7 +593,7 @@
           }
         ],
         "firingTriggerId": [
-          "38"
+          "35"
         ],
         "tagFiringOption": "ONCE_PER_EVENT",
         "monitoringMetadata": {
@@ -580,9 +613,9 @@
         }
       },
       {
-        "accountId": "0",
-        "containerId": "0",
-        "tagId": "60",
+        "accountId": "6379445400",
+        "containerId": "265930100",
+        "tagId": "58",
         "name": "GA4 - agent_message_sent",
         "type": "gaawe",
         "parameter": [
@@ -624,7 +657,7 @@
           }
         ],
         "firingTriggerId": [
-          "39"
+          "36"
         ],
         "tagFiringOption": "ONCE_PER_EVENT",
         "monitoringMetadata": {
@@ -644,9 +677,9 @@
         }
       },
       {
-        "accountId": "0",
-        "containerId": "0",
-        "tagId": "61",
+        "accountId": "6379445400",
+        "containerId": "265930100",
+        "tagId": "59",
         "name": "GA4 - calculator_complete",
         "type": "gaawe",
         "parameter": [
@@ -688,7 +721,7 @@
           }
         ],
         "firingTriggerId": [
-          "40"
+          "37"
         ],
         "tagFiringOption": "ONCE_PER_EVENT",
         "monitoringMetadata": {
@@ -708,9 +741,9 @@
         }
       },
       {
-        "accountId": "0",
-        "containerId": "0",
-        "tagId": "62",
+        "accountId": "6379445400",
+        "containerId": "265930100",
+        "tagId": "60",
         "name": "GA4 - speed_test_request",
         "type": "gaawe",
         "parameter": [
@@ -752,7 +785,7 @@
           }
         ],
         "firingTriggerId": [
-          "41"
+          "38"
         ],
         "tagFiringOption": "ONCE_PER_EVENT",
         "monitoringMetadata": {
@@ -772,9 +805,9 @@
         }
       },
       {
-        "accountId": "0",
-        "containerId": "0",
-        "tagId": "63",
+        "accountId": "6379445400",
+        "containerId": "265930100",
+        "tagId": "61",
         "name": "GA4 - view_service",
         "type": "gaawe",
         "parameter": [
@@ -831,7 +864,7 @@
           }
         ],
         "firingTriggerId": [
-          "42"
+          "39"
         ],
         "tagFiringOption": "ONCE_PER_EVENT",
         "monitoringMetadata": {
@@ -851,9 +884,9 @@
         }
       },
       {
-        "accountId": "0",
-        "containerId": "0",
-        "tagId": "64",
+        "accountId": "6379445400",
+        "containerId": "265930100",
+        "tagId": "62",
         "name": "GA4 - pricing_view",
         "type": "gaawe",
         "parameter": [
@@ -879,7 +912,7 @@
           }
         ],
         "firingTriggerId": [
-          "43"
+          "40"
         ],
         "tagFiringOption": "ONCE_PER_EVENT",
         "monitoringMetadata": {
@@ -899,9 +932,9 @@
         }
       },
       {
-        "accountId": "0",
-        "containerId": "0",
-        "tagId": "65",
+        "accountId": "6379445400",
+        "containerId": "265930100",
+        "tagId": "63",
         "name": "GA4 - case_study_view",
         "type": "gaawe",
         "parameter": [
@@ -943,7 +976,7 @@
           }
         ],
         "firingTriggerId": [
-          "44"
+          "41"
         ],
         "tagFiringOption": "ONCE_PER_EVENT",
         "monitoringMetadata": {
@@ -963,9 +996,9 @@
         }
       },
       {
-        "accountId": "0",
-        "containerId": "0",
-        "tagId": "66",
+        "accountId": "6379445400",
+        "containerId": "265930100",
+        "tagId": "64",
         "name": "GA4 - faq_expand",
         "type": "gaawe",
         "parameter": [
@@ -1007,7 +1040,7 @@
           }
         ],
         "firingTriggerId": [
-          "45"
+          "42"
         ],
         "tagFiringOption": "ONCE_PER_EVENT",
         "monitoringMetadata": {
@@ -1027,9 +1060,9 @@
         }
       },
       {
-        "accountId": "0",
-        "containerId": "0",
-        "tagId": "67",
+        "accountId": "6379445400",
+        "containerId": "265930100",
+        "tagId": "65",
         "name": "GA4 - outbound_click",
         "type": "gaawe",
         "parameter": [
@@ -1071,7 +1104,7 @@
           }
         ],
         "firingTriggerId": [
-          "46"
+          "43"
         ],
         "tagFiringOption": "ONCE_PER_EVENT",
         "monitoringMetadata": {
@@ -1091,9 +1124,9 @@
         }
       },
       {
-        "accountId": "0",
-        "containerId": "0",
-        "tagId": "68",
+        "accountId": "6379445400",
+        "containerId": "265930100",
+        "tagId": "66",
         "name": "GA4 - newsletter_signup",
         "type": "gaawe",
         "parameter": [
@@ -1135,7 +1168,7 @@
           }
         ],
         "firingTriggerId": [
-          "47"
+          "44"
         ],
         "tagFiringOption": "ONCE_PER_EVENT",
         "monitoringMetadata": {
@@ -1155,9 +1188,9 @@
         }
       },
       {
-        "accountId": "0",
-        "containerId": "0",
-        "tagId": "69",
+        "accountId": "6379445400",
+        "containerId": "265930100",
+        "tagId": "67",
         "name": "HTML - Meta base",
         "type": "html",
         "parameter": [
@@ -1173,8 +1206,9 @@
           }
         ],
         "firingTriggerId": [
-          "51",
-          "50"
+          "48",
+          "49",
+          "47"
         ],
         "tagFiringOption": "ONCE_PER_EVENT",
         "monitoringMetadata": {
@@ -1194,9 +1228,9 @@
         }
       },
       {
-        "accountId": "0",
-        "containerId": "0",
-        "tagId": "70",
+        "accountId": "6379445400",
+        "containerId": "265930100",
+        "tagId": "68",
         "name": "HTML - Meta Lead",
         "type": "html",
         "parameter": [
@@ -1212,7 +1246,7 @@
           }
         ],
         "firingTriggerId": [
-          "36"
+          "33"
         ],
         "tagFiringOption": "ONCE_PER_EVENT",
         "monitoringMetadata": {
@@ -1237,9 +1271,9 @@
         ]
       },
       {
-        "accountId": "0",
-        "containerId": "0",
-        "tagId": "71",
+        "accountId": "6379445400",
+        "containerId": "265930100",
+        "tagId": "69",
         "name": "HTML - Meta Contact",
         "type": "html",
         "parameter": [
@@ -1255,7 +1289,7 @@
           }
         ],
         "firingTriggerId": [
-          "37"
+          "34"
         ],
         "tagFiringOption": "ONCE_PER_EVENT",
         "monitoringMetadata": {
@@ -1280,9 +1314,9 @@
         ]
       },
       {
-        "accountId": "0",
-        "containerId": "0",
-        "tagId": "72",
+        "accountId": "6379445400",
+        "containerId": "265930100",
+        "tagId": "70",
         "name": "UET - base",
         "type": "baut",
         "parameter": [
@@ -1343,8 +1377,9 @@
           }
         ],
         "firingTriggerId": [
-          "51",
-          "50"
+          "48",
+          "49",
+          "47"
         ],
         "tagFiringOption": "ONCE_PER_EVENT",
         "monitoringMetadata": {
@@ -1364,9 +1399,9 @@
         }
       },
       {
-        "accountId": "0",
-        "containerId": "0",
-        "tagId": "73",
+        "accountId": "6379445400",
+        "containerId": "265930100",
+        "tagId": "71",
         "name": "UET - generate_lead",
         "type": "baut",
         "parameter": [
@@ -1387,7 +1422,7 @@
           }
         ],
         "firingTriggerId": [
-          "36"
+          "33"
         ],
         "tagFiringOption": "ONCE_PER_EVENT",
         "monitoringMetadata": {
@@ -1412,9 +1447,9 @@
         ]
       },
       {
-        "accountId": "0",
-        "containerId": "0",
-        "tagId": "74",
+        "accountId": "6379445400",
+        "containerId": "265930100",
+        "tagId": "72",
         "name": "UET - contact_click",
         "type": "baut",
         "parameter": [
@@ -1435,7 +1470,7 @@
           }
         ],
         "firingTriggerId": [
-          "37"
+          "34"
         ],
         "tagFiringOption": "ONCE_PER_EVENT",
         "monitoringMetadata": {
@@ -1462,9 +1497,9 @@
     ],
     "trigger": [
       {
-        "accountId": "0",
-        "containerId": "0",
-        "triggerId": "33",
+        "accountId": "6379445400",
+        "containerId": "265930100",
+        "triggerId": "30",
         "name": "page_view",
         "type": "CUSTOM_EVENT",
         "customEventFilter": [
@@ -1486,9 +1521,9 @@
         ]
       },
       {
-        "accountId": "0",
-        "containerId": "0",
-        "triggerId": "34",
+        "accountId": "6379445400",
+        "containerId": "265930100",
+        "triggerId": "31",
         "name": "cta_click",
         "type": "CUSTOM_EVENT",
         "customEventFilter": [
@@ -1510,9 +1545,9 @@
         ]
       },
       {
-        "accountId": "0",
-        "containerId": "0",
-        "triggerId": "35",
+        "accountId": "6379445400",
+        "containerId": "265930100",
+        "triggerId": "32",
         "name": "audit_start",
         "type": "CUSTOM_EVENT",
         "customEventFilter": [
@@ -1534,9 +1569,9 @@
         ]
       },
       {
-        "accountId": "0",
-        "containerId": "0",
-        "triggerId": "36",
+        "accountId": "6379445400",
+        "containerId": "265930100",
+        "triggerId": "33",
         "name": "generate_lead",
         "type": "CUSTOM_EVENT",
         "customEventFilter": [
@@ -1558,9 +1593,9 @@
         ]
       },
       {
-        "accountId": "0",
-        "containerId": "0",
-        "triggerId": "37",
+        "accountId": "6379445400",
+        "containerId": "265930100",
+        "triggerId": "34",
         "name": "contact_click",
         "type": "CUSTOM_EVENT",
         "customEventFilter": [
@@ -1582,9 +1617,9 @@
         ]
       },
       {
-        "accountId": "0",
-        "containerId": "0",
-        "triggerId": "38",
+        "accountId": "6379445400",
+        "containerId": "265930100",
+        "triggerId": "35",
         "name": "demo_open",
         "type": "CUSTOM_EVENT",
         "customEventFilter": [
@@ -1606,9 +1641,9 @@
         ]
       },
       {
-        "accountId": "0",
-        "containerId": "0",
-        "triggerId": "39",
+        "accountId": "6379445400",
+        "containerId": "265930100",
+        "triggerId": "36",
         "name": "agent_message_sent",
         "type": "CUSTOM_EVENT",
         "customEventFilter": [
@@ -1630,9 +1665,9 @@
         ]
       },
       {
-        "accountId": "0",
-        "containerId": "0",
-        "triggerId": "40",
+        "accountId": "6379445400",
+        "containerId": "265930100",
+        "triggerId": "37",
         "name": "calculator_complete",
         "type": "CUSTOM_EVENT",
         "customEventFilter": [
@@ -1654,9 +1689,9 @@
         ]
       },
       {
-        "accountId": "0",
-        "containerId": "0",
-        "triggerId": "41",
+        "accountId": "6379445400",
+        "containerId": "265930100",
+        "triggerId": "38",
         "name": "speed_test_request",
         "type": "CUSTOM_EVENT",
         "customEventFilter": [
@@ -1678,9 +1713,9 @@
         ]
       },
       {
-        "accountId": "0",
-        "containerId": "0",
-        "triggerId": "42",
+        "accountId": "6379445400",
+        "containerId": "265930100",
+        "triggerId": "39",
         "name": "view_service",
         "type": "CUSTOM_EVENT",
         "customEventFilter": [
@@ -1702,9 +1737,9 @@
         ]
       },
       {
-        "accountId": "0",
-        "containerId": "0",
-        "triggerId": "43",
+        "accountId": "6379445400",
+        "containerId": "265930100",
+        "triggerId": "40",
         "name": "pricing_view",
         "type": "CUSTOM_EVENT",
         "customEventFilter": [
@@ -1726,9 +1761,9 @@
         ]
       },
       {
-        "accountId": "0",
-        "containerId": "0",
-        "triggerId": "44",
+        "accountId": "6379445400",
+        "containerId": "265930100",
+        "triggerId": "41",
         "name": "case_study_view",
         "type": "CUSTOM_EVENT",
         "customEventFilter": [
@@ -1750,9 +1785,9 @@
         ]
       },
       {
-        "accountId": "0",
-        "containerId": "0",
-        "triggerId": "45",
+        "accountId": "6379445400",
+        "containerId": "265930100",
+        "triggerId": "42",
         "name": "faq_expand",
         "type": "CUSTOM_EVENT",
         "customEventFilter": [
@@ -1774,9 +1809,9 @@
         ]
       },
       {
-        "accountId": "0",
-        "containerId": "0",
-        "triggerId": "46",
+        "accountId": "6379445400",
+        "containerId": "265930100",
+        "triggerId": "43",
         "name": "outbound_click",
         "type": "CUSTOM_EVENT",
         "customEventFilter": [
@@ -1798,9 +1833,9 @@
         ]
       },
       {
-        "accountId": "0",
-        "containerId": "0",
-        "triggerId": "47",
+        "accountId": "6379445400",
+        "containerId": "265930100",
+        "triggerId": "44",
         "name": "newsletter_signup",
         "type": "CUSTOM_EVENT",
         "customEventFilter": [
@@ -1822,9 +1857,9 @@
         ]
       },
       {
-        "accountId": "0",
-        "containerId": "0",
-        "triggerId": "48",
+        "accountId": "6379445400",
+        "containerId": "265930100",
+        "triggerId": "45",
         "name": "consent_update",
         "type": "CUSTOM_EVENT",
         "customEventFilter": [
@@ -1846,9 +1881,9 @@
         ]
       },
       {
-        "accountId": "0",
-        "containerId": "0",
-        "triggerId": "49",
+        "accountId": "6379445400",
+        "containerId": "265930100",
+        "triggerId": "46",
         "name": "CE - consent_update - analytics",
         "type": "CUSTOM_EVENT",
         "customEventFilter": [
@@ -1887,9 +1922,9 @@
         ]
       },
       {
-        "accountId": "0",
-        "containerId": "0",
-        "triggerId": "50",
+        "accountId": "6379445400",
+        "containerId": "265930100",
+        "triggerId": "47",
         "name": "CE - consent_update - marketing",
         "type": "CUSTOM_EVENT",
         "customEventFilter": [
@@ -1928,9 +1963,9 @@
         ]
       },
       {
-        "accountId": "0",
-        "containerId": "0",
-        "triggerId": "51",
+        "accountId": "6379445400",
+        "containerId": "265930100",
+        "triggerId": "48",
         "name": "WL - production",
         "type": "WINDOW_LOADED",
         "filter": [
@@ -1950,12 +1985,36 @@
             ]
           }
         ]
+      },
+      {
+        "accountId": "6379445400",
+        "containerId": "265930100",
+        "triggerId": "49",
+        "name": "WL - production www",
+        "type": "WINDOW_LOADED",
+        "filter": [
+          {
+            "type": "EQUALS",
+            "parameter": [
+              {
+                "type": "TEMPLATE",
+                "key": "arg0",
+                "value": "{{Page Hostname}}"
+              },
+              {
+                "type": "TEMPLATE",
+                "key": "arg1",
+                "value": "www.deepzeta.ai"
+              }
+            ]
+          }
+        ]
       }
     ],
     "variable": [
       {
-        "accountId": "0",
-        "containerId": "0",
+        "accountId": "6379445400",
+        "containerId": "265930100",
         "variableId": "10",
         "name": "DLV - case_slug",
         "type": "v",
@@ -1979,8 +2038,8 @@
         "formatValue": {}
       },
       {
-        "accountId": "0",
-        "containerId": "0",
+        "accountId": "6379445400",
+        "containerId": "265930100",
         "variableId": "11",
         "name": "DLV - consent_analytics",
         "type": "v",
@@ -2004,8 +2063,8 @@
         "formatValue": {}
       },
       {
-        "accountId": "0",
-        "containerId": "0",
+        "accountId": "6379445400",
+        "containerId": "265930100",
         "variableId": "12",
         "name": "DLV - consent_granted_now",
         "type": "v",
@@ -2029,8 +2088,8 @@
         "formatValue": {}
       },
       {
-        "accountId": "0",
-        "containerId": "0",
+        "accountId": "6379445400",
+        "containerId": "265930100",
         "variableId": "13",
         "name": "DLV - consent_marketing",
         "type": "v",
@@ -2054,8 +2113,8 @@
         "formatValue": {}
       },
       {
-        "accountId": "0",
-        "containerId": "0",
+        "accountId": "6379445400",
+        "containerId": "265930100",
         "variableId": "14",
         "name": "DLV - content_group",
         "type": "v",
@@ -2079,8 +2138,8 @@
         "formatValue": {}
       },
       {
-        "accountId": "0",
-        "containerId": "0",
+        "accountId": "6379445400",
+        "containerId": "265930100",
         "variableId": "15",
         "name": "DLV - cta_id",
         "type": "v",
@@ -2104,8 +2163,8 @@
         "formatValue": {}
       },
       {
-        "accountId": "0",
-        "containerId": "0",
+        "accountId": "6379445400",
+        "containerId": "265930100",
         "variableId": "16",
         "name": "DLV - cta_location",
         "type": "v",
@@ -2129,8 +2188,8 @@
         "formatValue": {}
       },
       {
-        "accountId": "0",
-        "containerId": "0",
+        "accountId": "6379445400",
+        "containerId": "265930100",
         "variableId": "17",
         "name": "DLV - demo_id",
         "type": "v",
@@ -2154,8 +2213,8 @@
         "formatValue": {}
       },
       {
-        "accountId": "0",
-        "containerId": "0",
+        "accountId": "6379445400",
+        "containerId": "265930100",
         "variableId": "18",
         "name": "DLV - destination_domain",
         "type": "v",
@@ -2179,8 +2238,8 @@
         "formatValue": {}
       },
       {
-        "accountId": "0",
-        "containerId": "0",
+        "accountId": "6379445400",
+        "containerId": "265930100",
         "variableId": "19",
         "name": "DLV - faq_id",
         "type": "v",
@@ -2204,8 +2263,8 @@
         "formatValue": {}
       },
       {
-        "accountId": "0",
-        "containerId": "0",
+        "accountId": "6379445400",
+        "containerId": "265930100",
         "variableId": "20",
         "name": "DLV - form_id",
         "type": "v",
@@ -2229,8 +2288,8 @@
         "formatValue": {}
       },
       {
-        "accountId": "0",
-        "containerId": "0",
+        "accountId": "6379445400",
+        "containerId": "265930100",
         "variableId": "21",
         "name": "DLV - industry",
         "type": "v",
@@ -2254,8 +2313,8 @@
         "formatValue": {}
       },
       {
-        "accountId": "0",
-        "containerId": "0",
+        "accountId": "6379445400",
+        "containerId": "265930100",
         "variableId": "22",
         "name": "DLV - method",
         "type": "v",
@@ -2279,8 +2338,8 @@
         "formatValue": {}
       },
       {
-        "accountId": "0",
-        "containerId": "0",
+        "accountId": "6379445400",
+        "containerId": "265930100",
         "variableId": "23",
         "name": "DLV - page_location",
         "type": "v",
@@ -2304,8 +2363,8 @@
         "formatValue": {}
       },
       {
-        "accountId": "0",
-        "containerId": "0",
+        "accountId": "6379445400",
+        "containerId": "265930100",
         "variableId": "24",
         "name": "DLV - page_title",
         "type": "v",
@@ -2329,8 +2388,8 @@
         "formatValue": {}
       },
       {
-        "accountId": "0",
-        "containerId": "0",
+        "accountId": "6379445400",
+        "containerId": "265930100",
         "variableId": "25",
         "name": "DLV - pillar",
         "type": "v",
@@ -2354,8 +2413,8 @@
         "formatValue": {}
       },
       {
-        "accountId": "0",
-        "containerId": "0",
+        "accountId": "6379445400",
+        "containerId": "265930100",
         "variableId": "26",
         "name": "DLV - service_interest",
         "type": "v",
@@ -2379,8 +2438,8 @@
         "formatValue": {}
       },
       {
-        "accountId": "0",
-        "containerId": "0",
+        "accountId": "6379445400",
+        "containerId": "265930100",
         "variableId": "27",
         "name": "DLV - service_slug",
         "type": "v",
@@ -2404,8 +2463,8 @@
         "formatValue": {}
       },
       {
-        "accountId": "0",
-        "containerId": "0",
+        "accountId": "6379445400",
+        "containerId": "265930100",
         "variableId": "28",
         "name": "DLV - turn",
         "type": "v",
@@ -2431,54 +2490,9 @@
         }
       },
       {
-        "accountId": "0",
-        "containerId": "0",
+        "accountId": "6379445400",
+        "containerId": "265930100",
         "variableId": "29",
-        "name": "Const - GA4 ID",
-        "type": "c",
-        "parameter": [
-          {
-            "type": "TEMPLATE",
-            "key": "value",
-            "value": "G-RTLSJW7Q9W"
-          }
-        ],
-        "formatValue": {}
-      },
-      {
-        "accountId": "0",
-        "containerId": "0",
-        "variableId": "30",
-        "name": "Const - Meta dataset",
-        "type": "c",
-        "parameter": [
-          {
-            "type": "TEMPLATE",
-            "key": "value",
-            "value": "2290203821825563"
-          }
-        ],
-        "formatValue": {}
-      },
-      {
-        "accountId": "0",
-        "containerId": "0",
-        "variableId": "31",
-        "name": "Const - UET tag",
-        "type": "c",
-        "parameter": [
-          {
-            "type": "TEMPLATE",
-            "key": "value",
-            "value": "187278109"
-          }
-        ],
-        "formatValue": {}
-      },
-      {
-        "accountId": "0",
-        "containerId": "0",
-        "variableId": "32",
         "name": "Lookup - traffic_type",
         "type": "smm",
         "parameter": [
@@ -2506,12 +2520,12 @@
                 "map": [
                   {
                     "type": "TEMPLATE",
-                    "key": "parameter",
+                    "key": "key",
                     "value": "deepzeta.ai"
                   },
                   {
                     "type": "TEMPLATE",
-                    "key": "parameterValue",
+                    "key": "value",
                     "value": "public"
                   }
                 ]
@@ -2521,12 +2535,12 @@
                 "map": [
                   {
                     "type": "TEMPLATE",
-                    "key": "parameter",
+                    "key": "key",
                     "value": "www.deepzeta.ai"
                   },
                   {
                     "type": "TEMPLATE",
-                    "key": "parameterValue",
+                    "key": "value",
                     "value": "public"
                   }
                 ]
@@ -2539,35 +2553,37 @@
     ],
     "builtInVariable": [
       {
-        "accountId": "0",
-        "containerId": "0",
+        "accountId": "6379445400",
+        "containerId": "265930100",
         "type": "PAGE_URL",
         "name": "Page URL"
       },
       {
-        "accountId": "0",
-        "containerId": "0",
+        "accountId": "6379445400",
+        "containerId": "265930100",
         "type": "PAGE_HOSTNAME",
         "name": "Page Hostname"
       },
       {
-        "accountId": "0",
-        "containerId": "0",
+        "accountId": "6379445400",
+        "containerId": "265930100",
         "type": "PAGE_PATH",
         "name": "Page Path"
       },
       {
-        "accountId": "0",
-        "containerId": "0",
+        "accountId": "6379445400",
+        "containerId": "265930100",
         "type": "REFERRER",
         "name": "Referrer"
       },
       {
-        "accountId": "0",
-        "containerId": "0",
+        "accountId": "6379445400",
+        "containerId": "265930100",
         "type": "EVENT",
         "name": "Event"
       }
-    ]
+    ],
+    "fingerprint": "1000000000000",
+    "tagManagerUrl": "https://tagmanager.google.com/#/container/accounts/6379445400/containers/265930100/workspaces?apiLink=container"
   }
 }

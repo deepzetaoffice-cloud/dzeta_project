@@ -6,15 +6,21 @@
 //   docs/owner/tracking/ga4-setup.md                 GA4's custom dimensions and key events
 //   docs/owner/tracking/ads-conversions.md           Meta's and Microsoft's conversion tables
 //   docs/owner/tracking/taxonomy.md                  the human table 09 §3 points to
-// Deterministic (02 §1.5): no timestamps, fixed IDs and order. Every shape comes from the owner's
-// reference export (tests/fixtures/gtm/reference-export.json, guide A8): the type IDs (`googtag`,
-// `gaawe`, `html`, `baut`), the parameter keys, the consentSettings and setupTag shapes, and the
-// export's top level. A retired event (C59) gets no trigger, tag or table row. A vendor whose ID is
-// null (LinkedIn, Google Ads) gets nothing. Microsoft's UET event tags carry no Tag ID (the template
-// has no such field in Custom mode; the base config tag holds the ID — the owner's note, verified in
-// the reference). UET auto SPA page tracking stays on (the owner's note, 2026-10-02): the site's
-// page_view feeds GA4 only, UET produces its own exactly-one page view per page, and no UET tag is
-// ever wired to the site's page_view, so nothing doubles.
+// Deterministic (02 §1.5): fixed values and order (a fixed exportTime; fingerprints as fixed
+// placeholders). Every shape comes from the owner's reference export
+// (tests/fixtures/gtm/reference-export.json, guide A8): the type IDs (`googtag`, `gaawe`, `html`,
+// `baut`), the parameter keys — lookup map rows are key/value, settings rows are
+// parameter/parameterValue (B0's second finding) — the consentSettings and setupTag shapes, and the
+// export's top level: exportTime, path, the container metadata block, fingerprint and tagManagerUrl
+// (B0's first finding). A retired event (C59) gets no trigger, tag or table row. A vendor whose ID
+// is null (LinkedIn, Google Ads) gets nothing. Microsoft's UET event tags carry no Tag ID (the
+// template has no such field in Custom mode; the base config tag holds the ID — the owner's note,
+// verified in the reference). UET auto SPA page tracking stays on (the owner's note, 2026-10-02):
+// the site's page_view feeds GA4 only, UET produces its own exactly-one page view per page, and no
+// UET tag is ever wired to the site's page_view, so nothing doubles. The marketing tags fire on
+// either production-host trigger: the apex and www (B0's third finding; production serves on www
+// until the redirect-direction fix). No Const variables for the vendor IDs (B0's fourth finding):
+// nothing referenced them, and the reference inlines the IDs in its tags.
 
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -49,8 +55,13 @@ const activeEvents = EVENT_NAMES.filter((name) => !isRetired(name));
 
 // --- GTM entity builders (each shape copied from the reference export) -------------------------
 
-const ACCOUNT_ID = '0'; // GTM assigns real ones on import; 0 is what a workspace export carries
-const CONTAINER_ID = '0';
+// Non-zero account and container IDs (B0's first finding, 2026-10-03): GTM's importer refused the
+// all-zero file with "Not Found". A workspace export carries the container's real IDs, and the
+// reference (the owner's A8 export) carries its own; ours are fixed non-zero placeholders, so the
+// build stays deterministic and never matches a real container. GTM remaps IDs to the target
+// container on import.
+const ACCOUNT_ID = '6379445400';
+const CONTAINER_ID = '265930100';
 let nextId = 10; // deterministic: tags from 10, triggers 30+ below (never colliding)
 
 const id = () => String(nextId++);
@@ -60,10 +71,16 @@ const consent = (type) => ({
 });
 const param = (key, value) => ({ type: 'TEMPLATE', key, value: String(value) });
 const boolean = (key, value) => ({ type: 'BOOLEAN', key, value: String(value) });
+// A settings-table row (configSettingsTable / eventSettingsTable): parameter/parameterValue, the
+// reference's shape (GTM-5WZ3ZJ7V_workspace2.json lines 56–70).
 const setting = (parameter, parameterValue) => ({
   type: 'MAP',
   map: [param('parameter', parameter), param('parameterValue', parameterValue)],
 });
+// A lookup-table map row (smm's `map` list): key/value — NOT parameter/parameterValue. B0's second
+// finding: GTM couldn't parse the lookup's rows written as settings rows and the import failed
+// ("Not Found"); the reference's lookup uses key/value (lines 613–629).
+const lookupRow = (key, value) => ({ type: 'MAP', map: [param('key', key), param('value', value)] });
 const triggerRef = (name) => `{{${name}}}`;
 
 // Variables: one Data Layer Variable per parameter (the {{DLV - name}} shape from the reference),
@@ -88,9 +105,9 @@ for (const parameter of parameterNames) {
   variables[variables.length - 1].parameter.unshift({ type: 'INTEGER', key: 'dataLayerVersion', value: '2' });
 }
 
-if (ga4Id !== null) addVariable('Const - GA4 ID', 'c', [param('value', ga4Id)]);
-if (metaId !== null) addVariable('Const - Meta dataset', 'c', [param('value', metaId)]);
-if (uetId !== null) addVariable('Const - UET tag', 'c', [param('value', uetId)]);
+// (B0's fourth finding) No Const variables for the vendor IDs: nothing referenced them (the tags
+// inline their IDs, exactly as the reference inlines G-TEST123456 in its googtag/gaawe tags), so
+// they were dead weight the import would carry for nothing. 23 → 20 variables.
 
 addVariable('Lookup - traffic_type', 'smm', [
   boolean('setDefaultValue', true),
@@ -99,7 +116,7 @@ addVariable('Lookup - traffic_type', 'smm', [
   {
     type: 'LIST',
     key: 'map',
-    list: [setting('deepzeta.ai', 'public'), setting('www.deepzeta.ai', 'public')],
+    list: [lookupRow('deepzeta.ai', 'public'), lookupRow('www.deepzeta.ai', 'public')],
   },
 ]);
 
@@ -129,12 +146,23 @@ addTrigger('CE - consent_update - marketing', 'CUSTOM_EVENT', {
     { type: 'CONTAINS', parameter: [param('arg0', triggerRef(dlvName('consent_granted_now'))), param('arg1', 'marketing')] },
   ],
 });
+// (B0's third finding) The production-host trigger matches both hosts. The export format ANDs the
+// filter array, so OR is two triggers, each a single EQUALS row in the reference's exact shape: the
+// canonical apex (0006) and www — production currently serves on www (the register's
+// redirect-direction row), and the 301 www→apex isn't in place until the owner fixes it in Vercel.
+// Preview hosts match neither, so they stay internal.
+const productionTriggerNames = ['WL - production', 'WL - production www'];
 addTrigger('WL - production', 'WINDOW_LOADED', {
   filter: [{ type: 'EQUALS', parameter: [param('arg0', '{{Page Hostname}}'), param('arg1', 'deepzeta.ai')] }],
+});
+addTrigger('WL - production www', 'WINDOW_LOADED', {
+  filter: [{ type: 'EQUALS', parameter: [param('arg0', '{{Page Hostname}}'), param('arg1', 'www.deepzeta.ai')] }],
 });
 
 const triggerIdByName = Object.fromEntries(triggers.map((t) => [t.name, t.triggerId]));
 const on = (name) => [triggerIdByName[name]];
+// The marketing tags fire on either production-host trigger (the OR, B0's third finding).
+const onProduction = () => productionTriggerNames.map((name) => triggerIdByName[name]);
 
 // Tags. Every one has consentSettings (the reference's shape); none without.
 const tags = [];
@@ -251,7 +279,7 @@ if (metaId !== null) {
     'HTML - Meta base',
     'html',
     [{ type: 'TEMPLATE', key: 'html', value: baseHtml }, boolean('supportDocumentWrite', false)],
-    [triggerIdByName['WL - production'], triggerIdByName['CE - consent_update - marketing']],
+    [...onProduction(), triggerIdByName['CE - consent_update - marketing']],
     'ad_storage',
   );
   for (const event of activeEvents) {
@@ -295,7 +323,7 @@ if (uetId !== null) {
       param('eventType', 'PAGE_LOAD'),
       boolean('c_enableAutoSpaTracking', true),
     ],
-    [triggerIdByName['WL - production'], triggerIdByName['CE - consent_update - marketing']],
+    [...onProduction(), triggerIdByName['CE - consent_update - marketing']],
     'ad_storage',
   );
   for (const event of activeEvents) {
@@ -313,12 +341,47 @@ if (uetId !== null) {
 
 // --- The container export ----------------------------------------------------------------------
 
+// (B0's first finding) The top level matches the reference export's shape: exportTime, path, and the
+// full container metadata block (name, publicId, usageContext, features, tagIds). GTM's importer
+// showed "Not Found" without it. Deterministic values only — a fixed exportTime, placeholder IDs,
+// the container named after the site — so two runs of the generator write identical bytes.
+const EXPORT_TIME = '2026-10-03 00:00:00';
+const containerPath = `accounts/${ACCOUNT_ID}/containers/${CONTAINER_ID}/versions/0`;
 const container = {
   exportFormatVersion: 2,
+  exportTime: EXPORT_TIME,
   containerVersion: {
+    path: containerPath,
     accountId: ACCOUNT_ID,
     containerId: CONTAINER_ID,
     containerVersionId: '0',
+    container: {
+      path: `accounts/${ACCOUNT_ID}/containers/${CONTAINER_ID}`,
+      accountId: ACCOUNT_ID,
+      containerId: CONTAINER_ID,
+      name: 'deepzeta.ai',
+      publicId: 'GTM-GENERATED',
+      usageContext: ['WEB'],
+      fingerprint: '1000000000000',
+      tagManagerUrl: `https://tagmanager.google.com/#/container/accounts/${ACCOUNT_ID}/containers/${CONTAINER_ID}/workspaces?apiLink=container`,
+      features: {
+        supportUserPermissions: true,
+        supportEnvironments: true,
+        supportWorkspaces: true,
+        supportGtagConfigs: false,
+        supportBuiltInVariables: true,
+        supportClients: false,
+        supportFolders: true,
+        supportTemplates: true,
+        supportTags: true,
+        supportTriggers: true,
+        supportVariables: true,
+        supportVersions: true,
+        supportZones: true,
+        supportTransformations: false,
+      },
+      tagIds: ['GTM-GENERATED'],
+    },
     tag: tags,
     trigger: triggers,
     variable: variables,
@@ -329,6 +392,8 @@ const container = {
       { accountId: ACCOUNT_ID, containerId: CONTAINER_ID, type: 'REFERRER', name: 'Referrer' },
       { accountId: ACCOUNT_ID, containerId: CONTAINER_ID, type: 'EVENT', name: 'Event' },
     ],
+    fingerprint: '1000000000000',
+    tagManagerUrl: `https://tagmanager.google.com/#/container/accounts/${ACCOUNT_ID}/containers/${CONTAINER_ID}/workspaces?apiLink=container`,
   },
 };
 

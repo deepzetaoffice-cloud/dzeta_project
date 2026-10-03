@@ -117,6 +117,75 @@ describe('the container matches the taxonomy', () => {
     expect(event.setupTag?.[0]?.tagName).toBe('Google tag - update');
   });
 
+  it('the export matches the reference fixture\'s structural shape (B0\'s first finding: the import refused the shape-less file)', () => {
+    // The reference export (the owner's A8 file) is the only ground truth for GTM's undocumented
+    // import format. Every top-level and containerVersion key the reference carries, the generated
+    // container carries too (with our deterministic values), or the import shows "Not Found".
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const reference: any = JSON.parse(readFileSync(join(ROOT, 'tests/fixtures/gtm/reference-export.json'), 'utf8'));
+    const refVersion = reference.containerVersion;
+    for (const key of Object.keys(refVersion)) {
+      if (key === 'tag' || key === 'trigger' || key === 'variable' || key === 'builtInVariable') continue;
+      expect(Object.hasOwn(cv, key), `containerVersion.${key} present`).toBe(true);
+    }
+    for (const key of Object.keys(reference)) {
+      if (key === 'containerVersion') continue;
+      expect(Object.hasOwn(container, key), `top-level ${key} present`).toBe(true);
+    }
+    // The container metadata block, with the fields the importer displays.
+    for (const key of Object.keys(refVersion.container)) {
+      expect(Object.hasOwn(cv.container, key), `containerVersion.container.${key} present`).toBe(true);
+    }
+    // Non-zero IDs (all-zero was refused).
+    expect(cv.accountId).not.toBe('0');
+    expect(cv.containerId).not.toBe('0');
+  });
+
+  it('lookup map rows use key/value, not parameter/parameterValue (B0\'s second finding)', () => {
+    const lookup = variables.find((v: { type: string }) => v.type === 'smm');
+    expect(lookup).toBeDefined();
+    const rows = lookup.parameter.find((p: { key: string }) => p.key === 'map').list;
+    expect(rows.length).toBe(2);
+    for (const row of rows) {
+      const keys = row.map.map((m: { key: string }) => m.key);
+      expect(keys).toEqual(['key', 'value']);
+    }
+    const hosts = rows.map((r: { map: { key: string; value: string }[] }) => r.map.find((m) => m.key === 'key')?.value);
+    expect(hosts).toEqual(['deepzeta.ai', 'www.deepzeta.ai']);
+    // And the settings tables keep the reference's parameter/parameterValue shape.
+    const googleTag = tags.find((t: { name: string }) => t.name === 'Google tag');
+    const configRow = googleTag.parameter
+      .find((p: { key: string }) => p.key === 'configSettingsTable')
+      .list[0].map.map((m: { key: string }) => m.key);
+    expect(configRow).toEqual(['parameter', 'parameterValue']);
+  });
+
+  it('the marketing tags fire on either production-host trigger, apex or www (B0\'s third finding)', () => {
+    const apex = triggers.find((t: { name: string }) => t.name === 'WL - production');
+    const www = triggers.find((t: { name: string }) => t.name === 'WL - production www');
+    expect(apex).toBeDefined();
+    expect(www).toBeDefined();
+    for (const name of ['HTML - Meta base', 'UET - base']) {
+      const tag = tags.find((t: { name: string }) => t.name === name);
+      expect(tag.firingTriggerId).toContain(apex.triggerId);
+      expect(tag.firingTriggerId).toContain(www.triggerId);
+    }
+  });
+
+  it('no unreferenced constants (B0\'s fourth finding)', () => {
+    // Every variable the generator writes is one of: a DLV for a taxonomy parameter (a parameter
+    // the site sends with its event; its consumer may be a future tag, so existence — not use — is
+    // what's guaranteed), or the traffic_type lookup (referenced by the Google tag). The finding
+    // was the vendor-ID constants, which nothing referenced at all: they're gone.
+    for (const v of variables) {
+      const isDlv = v.type === 'v' && v.parameter.some((p: { key: string; value: string }) => p.key === 'name');
+      expect(isDlv || v.type === 'smm', `${v.name} is a DLV or the lookup`).toBe(true);
+    }
+    const text = JSON.stringify(cv);
+    expect(text).toContain('{{Lookup - traffic_type}}');
+    expect(variables.some((v: { name: string }) => v.name.startsWith('Const -'))).toBe(false);
+  });
+
   it('every parameter has a Data Layer Variable; every {{reference}} resolves', () => {
     for (const parameter of new Set(activeEvents.flatMap((e) => Object.keys(EVENT_PARAMS[e])))) {
       expect(variableNames.has(`DLV - ${parameter}`), `DLV - ${parameter}`).toBe(true);
