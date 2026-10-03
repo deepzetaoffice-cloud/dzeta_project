@@ -206,6 +206,61 @@ test.describe('Click IDs and campaign tags (09 §2.8; attribution.ts)', () => {
   });
 });
 
+// GTM (09 §2.1, C56; gtm.ts). 09 §4: GTM requests are answered by a stub, so tests never send data.
+// The build carries the container only once NEXT_PUBLIC_GTM_ID is set at build time (C5: the owner's
+// Vercel step; the CSP gains googletagmanager.com only then, security-headers.ts), so until then both
+// cases skip — the runtime gets null and the loader never runs.
+test.describe('The GTM loader (09 §2.1, C56; gtm.ts)', () => {
+  const GTM_SCRIPT = /^https:\/\/www\.googletagmanager\.com\/gtm\.js\?id=GTM-[A-Z0-9]+$/;
+
+  // Routes every third-party request: the container's script is answered by a stub, any other
+  // third-party host is aborted and recorded — nothing but the site's own origin and the container
+  // may load in a test.
+  async function stubThirdParties(page: Page) {
+    const requests: string[] = [];
+    await page.route('**/*', (route) => {
+      const { hostname } = new URL(route.request().url());
+      if (hostname === 'localhost' || hostname === '127.0.0.1') return route.continue();
+      requests.push(route.request().url());
+      if (hostname === 'www.googletagmanager.com')
+        return route.fulfill({ status: 200, contentType: 'application/javascript', body: '' });
+      return route.abort();
+    });
+    return requests;
+  }
+
+  const buildHasGtm = (csp: string | undefined) => (csp ?? '').includes('googletagmanager.com');
+
+  test('one container request after hydration, after the consent default, and nothing else third-party', async ({
+    page,
+  }) => {
+    const requests = await stubThirdParties(page);
+    const response = await page.goto('/');
+    test.skip(!buildHasGtm(response?.headers()['content-security-policy']), 'no GTM ID in this build (C5 pending)');
+    await page.waitForLoadState('networkidle');
+    // The loader's gtm.start lands after the consent default (09 §2.2): the container only runs once
+    // dataLayer[0] has set the Consent Mode state it reads.
+    const layer = await dataLayer(page);
+    expect(layer[0]).toEqual({ gtag: ['consent', 'default', GRANTED] });
+    const start = layer.findIndex((entry) => typeof entry === 'object' && entry !== null && 'gtm.start' in entry);
+    expect(start).toBeGreaterThan(0);
+    expect(requests.filter((url) => GTM_SCRIPT.test(url))).toHaveLength(1);
+    expect(requests.filter((url) => !GTM_SCRIPT.test(url))).toEqual([]);
+  });
+
+  test.describe('in Europe (DE)', () => {
+    test.use(fromCountry('DE'));
+    test('the container still loads while consent is denied: the tags wait inside GTM, not here', async ({ page }) => {
+      const requests = await stubThirdParties(page);
+      const response = await page.goto('/');
+      test.skip(!buildHasGtm(response?.headers()['content-security-policy']), 'no GTM ID in this build (C5 pending)');
+      await page.waitForLoadState('networkidle');
+      expect((await dataLayer(page))[0]).toEqual({ gtag: ['consent', 'default', DENIED] });
+      expect(requests.some((url) => GTM_SCRIPT.test(url))).toBe(true);
+    });
+  });
+});
+
 test.describe('The Content Security Policy, enforced (C53; security-headers.ts)', () => {
   test.use(fromCountry('DE'));
 
