@@ -224,6 +224,17 @@ describe('the container matches the taxonomy', () => {
     }
   });
 
+  it('the marketing base tags fire once per page (the owner\'s B0 note: window load and a later Accept are two triggers to one base)', () => {
+    for (const name of ['HTML - Meta base', 'UET - base']) {
+      const tag = tags.find((t: { name: string }) => t.name === name);
+      expect(tag.tagFiringOption).toBe('ONCE_PER_PAGE');
+    }
+    for (const tag of tags) {
+      if (['HTML - Meta base', 'UET - base'].includes(tag.name)) continue;
+      expect(tag.tagFiringOption, `${tag.name} stays per event`).toBe('ONCE_PER_EVENT');
+    }
+  });
+
   it('keeps UET auto SPA page tracking on, and no UET tag is fired by the site page_view', () => {
     const base = tags.find((t) => t.name === 'UET - base');
     expect(base?.parameter.find((p: { key: string }) => p.key === 'c_enableAutoSpaTracking')?.value).toBe('true');

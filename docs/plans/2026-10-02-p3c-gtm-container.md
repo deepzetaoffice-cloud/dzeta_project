@@ -64,6 +64,13 @@ Progress:
   - **Regression tests added** (17 in `tracking-artifacts.test.ts` now): structural key parity with the reference fixture, the lookup's key/value rows (and the settings tables' shape), the two production triggers on the marketing tags, and no unreferenced constants. The DLVs keep their existence-only guarantee (a parameter's consumer may be a future tag; `consent_analytics` is the live example).
   - Gates: `test` **379 passed** (28 suites, vmThreads); `verify:fast` exit 0; `check:rules` passed. Both builds regenerated (committed and `--test`).
   - **B0 is ready to retry:** `.scratch/tracking-test/deepzeta-gtm-container.json`, test IDs only.
+- 2026-10-03 · **The B0 retry succeeded** (the owner: "GTM accepted the import, 63 items — 23 tags, 20 triggers, 20 vars"). The round-trip comparison runs when the owner's re-export lands in `docs/owner/` (GTM-W2WX5BFC_workspace3.json, the `dz-roundtrip` container); GTM's export normalisations are known and handled: renumbered IDs, added fingerprints, removed empty `eventSettingsTable` lists, and `DLV - turn`'s `formatValue` `{"number":{}}` → `{}` (GTM drops an empty number format on export).
+  - **The owner's three follow-ups, answered:**
+    - **The `consent_update` trigger is used, not dead:** `CE - consent_update - analytics` fires the Google tag's re-config and the page-view pair after Accept, and `CE - consent_update - marketing` fires the Meta and UET bases. The DLVs `consent_analytics`/`consent_marketing` have no reader yet (only `consent_granted_now` feeds the filters) — they're the visibility path for a future tag, same existence-only guarantee as every parameter DLV.
+    - **The marketing base tags now fire ONCE_PER_PAGE** (the owner's note): each is reachable from two triggers (the window's load and a later Accept), and the base must load once. A new parity test enforces it (18 tests in `tracking-artifacts.test.ts` now); everything else stays ONCE_PER_EVENT.
+    - **The real Meta pixel ID is injected by the generator:** the Custom HTML template interpolates `accounts.metaDatasetId` (test digits in `--test`, the real dataset in the committed build) — no dashboard step carries the ID.
+  - The exact imported build is snapshotted at `.scratch/tracking-test-imported/` so the round-trip comparison stays honest against what GTM accepted.
+  - Gates after the once-per-page fix: `tracking-artifacts` 18 passed; full suite and commit follow with the round-trip fixture.
 Phase: P3
 Branch: `feat/p3c-gtm-container` (from `main` at `2625fb2`; step C0 done there)
 Page tier: T1 (sitewide: the CSP, the cookie list and the container reach every page; measured on Home and the review page, as in parts A and B)

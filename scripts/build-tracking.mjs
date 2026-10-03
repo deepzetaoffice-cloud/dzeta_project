@@ -164,7 +164,12 @@ const on = (name) => [triggerIdByName[name]];
 // The marketing tags fire on either production-host trigger (the OR, B0's third finding).
 const onProduction = () => productionTriggerNames.map((name) => triggerIdByName[name]);
 
-// Tags. Every one has consentSettings (the reference's shape); none without.
+// Tags. Every one has consentSettings (the reference's shape); none without. The marketing base
+// tags fire ONCE_PER_PAGE (the owner's B0 note, 2026-10-03): each can be reached by two triggers —
+// the window's load and a later Accept's consent_update — and the base must load its script only
+// once (fbq and uetq guard it themselves, but the tag firing twice is still wrong). GTM's option is
+// the guard. Everything else stays ONCE_PER_EVENT (an event tag firing twice would mean two events,
+// which the parity e2e tests catch).
 const tags = [];
 const addTag = (name, type, parameter, firingTriggerId, consentType, setupTag, extra = {}) =>
   tags.push({
@@ -180,6 +185,19 @@ const addTag = (name, type, parameter, firingTriggerId, consentType, setupTag, e
     consentSettings: consent(consentType),
     ...(setupTag ? { setupTag: [{ tagName: setupTag }] } : {}),
     ...extra,
+  });
+const addBaseTag = (name, type, parameter, firingTriggerId, consentType) =>
+  tags.push({
+    accountId: ACCOUNT_ID,
+    containerId: CONTAINER_ID,
+    tagId: id(),
+    name,
+    type,
+    parameter,
+    firingTriggerId,
+    tagFiringOption: 'ONCE_PER_PAGE',
+    monitoringMetadata: { type: 'MAP' },
+    consentSettings: consent(consentType),
   });
 
 if (ga4Id !== null) {
@@ -275,7 +293,7 @@ if (metaId !== null) {
     `  fbq('init', '${metaId}');\n` +
     `  fbq('track', 'PageView');\n` +
     `  </script>`;
-  addTag(
+  addBaseTag(
     'HTML - Meta base',
     'html',
     [{ type: 'TEMPLATE', key: 'html', value: baseHtml }, boolean('supportDocumentWrite', false)],
@@ -307,7 +325,7 @@ if (uetId !== null) {
   // The UET base tag (the template's exact fields, from the reference): PAGE_LOAD, auto page-view
   // and SPA tracking on, Inherit initial consent on (C60), Enable consent updates on (its default).
   // No Tag ID on the event tags below: the config tag is the only one that holds it.
-  addTag(
+  addBaseTag(
     'UET - base',
     'baut',
     [
