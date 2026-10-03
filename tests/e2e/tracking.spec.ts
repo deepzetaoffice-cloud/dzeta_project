@@ -1,6 +1,6 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
 import { consentModeState } from '../../src/lib/tracking/consent';
-import { dataLayer, events, fromCountry } from './helpers/tracking';
+import { dataLayer, events, fromCountry, stubGtm } from './helpers/tracking';
 
 // Tracking on the production build (docs/ai/09 §4; P3 plan, M): the region hint, the consent defaults
 // as dataLayer[0], page views, the tracked clicks exactly once, attribution and (from B7) the CSP.
@@ -23,6 +23,12 @@ test.describe('The region hint (C52; region.ts)', () => {
     expect(chunk).toBeDefined();
     expect(await hint(chunk!, 'AE')).toBeUndefined();
   });
+});
+
+// 09 §4: GTM answered by a stub in every test (helpers/tracking.ts), so the data layer holds only
+// what the site pushes and no test sends data. The GTM-loader cases below stub all third parties.
+test.beforeEach(async ({ page }) => {
+  await stubGtm(page);
 });
 
 test.describe('Consent defaults before GTM (09 §2.2; consent-init.ts)', () => {
@@ -104,7 +110,9 @@ test.describe('Page views (09 §2.9; TrackingRuntime)', () => {
     test.use(fromCountry('DE'));
     test('the page view is in the data layer too: the tags wait for consent in GTM, not here', async ({ page }) => {
       await page.goto('/');
-      await expect.poll(async () => (await events(page)).map((e) => e.event)).toEqual(['page_view']);
+      // With GTM in the build the loader's own 'gtm.js' entry is here too (gtm.ts); the page view
+      // must land beside it, unblocked: the tags wait for consent inside GTM, not in this push.
+      await expect.poll(async () => (await events(page)).map((e) => e.event)).toContain('page_view');
     });
   });
 });
@@ -215,7 +223,8 @@ test.describe('The GTM loader (09 §2.1, C56; gtm.ts)', () => {
 
   // Routes every third-party request: the container's script is answered by a stub, any other
   // third-party host is aborted and recorded — nothing but the site's own origin and the container
-  // may load in a test.
+  // may load in a test. (Playwright matches the most recently registered route first, so this one
+  // catch-all handles the GTM request itself; the beforeEach stub covers the rest of the suite.)
   async function stubThirdParties(page: Page) {
     const requests: string[] = [];
     await page.route('**/*', (route) => {

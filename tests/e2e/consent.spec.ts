@@ -2,7 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { consentContent } from '../../src/content/en/legal/consent';
 import { consentModeState } from '../../src/lib/tracking/consent';
 import { seriousAxeViolations } from './helpers/axe';
-import { dataLayer, events, fromCountry } from './helpers/tracking';
+import { dataLayer, events, fromCountry, stubGtm } from './helpers/tracking';
 
 // The consent banner and Cookie settings (docs/ai/09 §2.7, C52; P3 plan, D, E and M;
 // docs/design/conversion-path.md). A European visitor (DE) sees the banner; a visitor from the UAE
@@ -33,6 +33,7 @@ const consentEvents = async (page: Page) => (await events(page)).filter((entry) 
 
 test.beforeEach(async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await stubGtm(page);
 });
 
 test.describe('A European visitor (DE): the banner', () => {
