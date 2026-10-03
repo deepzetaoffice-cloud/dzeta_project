@@ -165,11 +165,13 @@ const on = (name) => [triggerIdByName[name]];
 const onProduction = () => productionTriggerNames.map((name) => triggerIdByName[name]);
 
 // Tags. Every one has consentSettings (the reference's shape); none without. The marketing base
-// tags fire ONCE_PER_PAGE (the owner's B0 note, 2026-10-03): each can be reached by two triggers —
+// tags fire ONCE_PER_LOAD (the owner's B0 note, 2026-10-03): each can be reached by two triggers —
 // the window's load and a later Accept's consent_update — and the base must load its script only
 // once (fbq and uetq guard it themselves, but the tag firing twice is still wrong). GTM's option is
-// the guard. Everything else stays ONCE_PER_EVENT (an event tag firing twice would mean two events,
-// which the parity e2e tests catch).
+// the guard. The export value is ONCE_PER_LOAD (GTM's UI "Once per load"; its importer rejected the
+// first attempt's ONCE_PER_PAGE, which is no value it knows — the owner's B1 import, 2026-10-03).
+// Everything else stays ONCE_PER_EVENT (an event tag firing twice would mean two events, which the
+// parity e2e tests catch).
 const tags = [];
 const addTag = (name, type, parameter, firingTriggerId, consentType, setupTag, extra = {}) =>
   tags.push({
@@ -195,7 +197,7 @@ const addBaseTag = (name, type, parameter, firingTriggerId, consentType) =>
     type,
     parameter,
     firingTriggerId,
-    tagFiringOption: 'ONCE_PER_PAGE',
+    tagFiringOption: 'ONCE_PER_LOAD',
     monitoringMetadata: { type: 'MAP' },
     consentSettings: consent(consentType),
   });

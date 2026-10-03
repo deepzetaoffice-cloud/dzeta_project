@@ -1210,7 +1210,7 @@
           "49",
           "47"
         ],
-        "tagFiringOption": "ONCE_PER_PAGE",
+        "tagFiringOption": "ONCE_PER_LOAD",
         "monitoringMetadata": {
           "type": "MAP"
         },
@@ -1381,7 +1381,7 @@
           "49",
           "47"
         ],
-        "tagFiringOption": "ONCE_PER_PAGE",
+        "tagFiringOption": "ONCE_PER_LOAD",
         "monitoringMetadata": {
           "type": "MAP"
         },

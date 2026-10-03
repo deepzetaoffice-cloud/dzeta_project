@@ -326,9 +326,11 @@ describe('the container matches the taxonomy', () => {
   });
 
   it('the marketing base tags fire once per page (the owner\'s B0 note: window load and a later Accept are two triggers to one base)', () => {
+    // ONCE_PER_LOAD is GTM's own export value for "Once per load"; its importer rejected the first
+    // attempt's ONCE_PER_PAGE (no such enum value — the owner's B1 import, 2026-10-03).
     for (const name of ['HTML - Meta base', 'UET - base']) {
       const tag = tags.find((t: { name: string }) => t.name === name);
-      expect(tag.tagFiringOption).toBe('ONCE_PER_PAGE');
+      expect(tag.tagFiringOption).toBe('ONCE_PER_LOAD');
     }
     for (const tag of tags) {
       if (['HTML - Meta base', 'UET - base'].includes(tag.name)) continue;
