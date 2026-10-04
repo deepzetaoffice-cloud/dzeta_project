@@ -141,7 +141,22 @@ describe('trackEvent', () => {
       { event: 'demo_open' },
       { event: 'pricing_view' },
     ]);
-    expect(warn).toHaveBeenCalledWith("trackEvent: button_click isn't in the taxonomy");
+    expect(warn).toHaveBeenCalledWith("trackEvent: button_click isn't an active event");
+    warn.mockRestore();
+  });
+
+  it('refuses a retired event, in the types and at run time (C59)', () => {
+    vi.useFakeTimers();
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const win: { dataLayer?: unknown[] } = {};
+    vi.stubGlobal('window', win);
+    // @ts-expect-error: book_call_click was retired by the owner (2026-10-02); the name is reserved,
+    // but trackEvent() must never send it
+    trackEvent('book_call_click', { cta_location: 'header' });
+    vi.runAllTimers();
+    // Nothing is pushed: the array is never even created
+    expect(win.dataLayer).toBeUndefined();
+    expect(warn).toHaveBeenCalledWith("trackEvent: book_call_click isn't an active event");
     warn.mockRestore();
   });
 });

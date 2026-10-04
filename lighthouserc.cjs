@@ -42,7 +42,11 @@ const FRAMEWORK_JS_GROWTH = 5 * KB;
 // P3 step B10: 11,048 B (150,716 B in all 5 runs on Home, the campaign landing and the review page,
 // 2026-10-02): the audit fixes (the banner's reserve and resize, the failed-download fallbacks) and the
 // campaign capture's first-action listeners; the capture code itself loads on the visitor's first action.
-const OWN_JS_HOME = 11_048;
+// P3 step C5: 11,077 B (the no-ID build at 150,745 B = 151,272 − 527, the EVENT_DETAILS leak C1b added
+// and C5 removed, minus the baseline; the leak's own code, retired to RETIRED_EVENTS, is what grew it).
+// With the GTM ID set, lhci also counts ~550 B of CSP header on each script response (the enforced
+// policy names the vendor hosts once GTM is on): +3,850 B on Home that is not JavaScript (07 §2 Units).
+const OWN_JS_HOME = 11_077;
 // Home's cap: 10 KB until P3, 11 KB since the tracking runtime (decision 0021).
 const HOME_OWN_JS_CAP = 11 * KB;
 if (OWN_JS_HOME > HOME_OWN_JS_CAP) throw new Error('OWN_JS_HOME is above the 11 KB Home cap (07 §2, 13 §7).');
@@ -56,20 +60,36 @@ const FIRST_LOAD_LIMIT = FRAMEWORK_JS_BASELINE + 50 * KB;
 const REVIEW_FIRST_LOAD_LIMIT = 192_000;
 
 // T1 Home (decision 0005): Performance ≥ 0.95. Core Web Vitals hard limits apply to every tier (07 §1).
+// Third-party caps from C5's measurement with the real container (2026-10-04, lhci, 15 runs):
+// - Europe (this profile: no country, the banner up, nothing granted): GTM only — gtm.js at
+//   133,388–133,405 B, and, in some runs, GTM's own internal telemetry pixel (googletagmanager.com/a?,
+//   59 B, an Image) after the container loads — so the cap is 2 requests and 160 KB (about 20%
+//   headroom for GTM's own growth; every vendor tag waits for consent, 07 §2, C54).
+// - Outside Europe (rowAssertions below): GTM + the Google tag + GA4's collect, 3–4 requests,
+//   300,696–300,790 B, so the caps are 4 requests and 350 KB. Meta's and UET's base tags fire on the
+//   window's load on the production host only (the WL - production triggers), so CI never loads them;
+//   PSI on production measures every tag (a pre-launch register row).
+const THIRD_PARTY_EU = { count: 2, size: 160 * KB };
 const t1Assertions = {
   'categories:performance': ['error', { minScore: 0.95, ...medianScore }],
   'categories:accessibility': ['error', { minScore: 0.95, ...medianScore }],
   'categories:best-practices': ['error', { minScore: 0.95, ...medianScore }],
   'categories:seo': ['error', { minScore: 0.95, ...medianScore }],
-  'largest-contentful-paint': ['error', { maxNumericValue: 2500, ...medianRun }],
+  // C61 (the owner, 2026-10-04): with the real GTM container, European Home's lab LCP sits on the
+  // 2.5 s line (2,412–2,524 ms over 10 runs; medians 2,488 and 2,507), decided by lab variance — the
+  // CSP header bytes GTM adds to every script response and gtm.js's own 133 KB — not by a real
+  // regression (UAE Home stays 2,329–2,407 ms; Performance 97–98, TBT ≤ 28 ms, CLS 0). The lab
+  // allowance for this one profile is 2,550 ms; the 2.5 s hard limit (07 §1) stays for every page and
+  // is checked against real visitors' field data (PSI/CrUX) after launch.
+  'largest-contentful-paint': ['error', { maxNumericValue: 2550, ...medianRun }],
   'cumulative-layout-shift': ['error', { maxNumericValue: 0.1, ...medianRun }],
   'total-blocking-time': ['error', { maxNumericValue: 200, ...medianRun }],
   // TTFB hard limit (07 §1). Locally it's the Node server on localhost; the real figure comes from
   // PageSpeed Insights on deepzeta.ai.
   'server-response-time': ['error', { maxNumericValue: 600, ...medianRun }],
-  // 07 §2: no third-party requests before consent. Until the owner's GTM container ID is set, CI builds
-  // without GTM, so there are none at all; GTM's own caps come with the real container (P3 plan, C5).
-  'resource-summary:third-party:count': ['error', { maxNumericValue: 0, ...everyRun }],
+  // 07 §2: before consent, GTM only (C54). The caps come from C5's measurement (above).
+  'resource-summary:third-party:count': ['error', { maxNumericValue: THIRD_PARTY_EU.count, ...everyRun }],
+  'resource-summary:third-party:size': ['error', { maxNumericValue: THIRD_PARTY_EU.size, ...everyRun }],
   // 07 §2: first-party JavaScript on first load is checked by scripts/check-page-weight.mjs (C54).
   // 07 §2: fonts ≈ 60 KB (the target), hard limit 70 KB; two files at most on an English page
   // (Montserrat and JetBrains Mono, decision 0015).
@@ -79,6 +99,16 @@ const t1Assertions = {
   'resource-summary:image:size': ['error', { maxNumericValue: 200 * KB, ...everyRun }],
   // 07 §2: HTML + CSS + JS before the first interaction ≤ the framework baseline + 50 KB. lhci can't add
   // resource types together, so scripts/check-page-weight.mjs checks it after every lhci run.
+};
+
+// The UAE campaign landing's own assertions (C5's measurement, above): GTM, the Google tag and GA4's
+// collect, 3–4 requests, at most 300,790 B; 4 and 350 KB with headroom. Its LCP stays at the true
+// 2.5 s hard limit (07 §1): C61's allowance is for the European profile only, whose runs carry GTM's
+// header bytes without a country hint to tell the CSP apart.
+const rowThirdParty = {
+  'resource-summary:third-party:count': ['error', { maxNumericValue: 4, ...everyRun }],
+  'resource-summary:third-party:size': ['error', { maxNumericValue: 350 * KB, ...everyRun }],
+  'largest-contentful-paint': ['error', { maxNumericValue: 2500, ...medianRun }],
 };
 
 // The review page shows the complete shell (P2 plan, A3; registry R165) and is measured as T1 too, with
@@ -104,7 +134,10 @@ module.exports = {
         { matchingUrlPattern: '^http://localhost:3000/$', assertions: t1Assertions },
         // Home as a visitor from the UAE landing from a campaign, collected by lighthouserc.row.cjs on
         // 127.0.0.1 so its runs stay apart from the European ones (P3 plan, B8 and B10; C52)
-        { matchingUrlPattern: '^http://127\\.0\\.0\\.1:3000/(\\?.*)?$', assertions: t1Assertions },
+        {
+          matchingUrlPattern: '^http://127\\.0\\.0\\.1:3000/(\\?.*)?$',
+          assertions: { ...t1Assertions, ...rowThirdParty },
+        },
         { matchingUrlPattern: '^http://localhost:3000/shell-review$', assertions: reviewAssertions },
       ],
     },

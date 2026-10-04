@@ -11,14 +11,23 @@
 
 | ✓ | What | Why | When | How |
 |---|---|---|---|---|
-| ☐ | Tracking guide **Part A**: GTM container, GA4 property and its settings, and the IDs sent to Claude | P3 can't start without the IDs, and the GA4 settings stop events being counted twice | Now, before P3 | Tracking guide, Part A |
-| ☑ | Answer the guide's **questions 8 and 9** (the consent banner; what counts as a conversion) | They decide how P3 is built | Before P3 | **Answered 2026-10-02:** a consent banner for Europe only (EEA, UK, Switzerland: nothing runs until Accept; everyone else: tracking on by default); conversions as proposed |
-| ☐ | Tracking guide **Part B**: import the container, test in Preview and DebugView, custom dimensions, key events, publish | The code's event names and the dashboards must match exactly | After P3 is built | Tracking guide, Part B |
-| ☐ | Turn the GA4 **Internal Traffic** filter to Active | Keeps your own visits out of the numbers | A day after Part B | Tracking guide B7 |
-| ☐ | Meta, LinkedIn and Google Ads conversions (only the platforms you use) | Ads need conversions to optimise; one method each, so nothing is counted twice | After Part B | Tracking guide B8 |
+| ☑ | Tracking guide **Part A**: GTM container, GA4 property and its settings, and the IDs sent to Claude | P3 can't start without the IDs, and the GA4 settings stop events being counted twice | Now, before P3 | **Done 2026-10-02.** GTM `GTM-5MR4S8R2`, GA4 `G-RTLSJW7Q9W`, Meta dataset `2290203821825563`, Microsoft UET `187278109`; LinkedIn and Google Ads postponed |
+| ☑ | Answer the guide's **questions 8 and 9** (the consent banner; what counts as a conversion) | They decide how P3 is built | Before P3 | **Answered 2026-10-02:** a consent banner for Europe only (EEA, UK, Switzerland: nothing runs until Accept; everyone else: tracking on by default); conversions changed 2026-10-02: `generate_lead` and `contact_click` primary, `book_call_click` dropped (retired) |
+| ☑ | Tracking guide **Part B**: import the container, test in Preview and DebugView, custom dimensions, key events, publish | The code's event names and the dashboards must match exactly | After P3 part C is built | **Done 2026-10-04** ("B1–B8 done"). The import needed one fix first: the generator's `ONCE_PER_PAGE` isn't a GTM enum value; the regenerated file (two `ONCE_PER_LOAD` entries) imported cleanly |
+| ☑ | **Set `NEXT_PUBLIC_GTM_ID` in Vercel → Production and redeploy** | Production starts loading the container as soon as the variable is set; `NEXT_PUBLIC_` values are built into the pages, so a redeploy follows | At step C5, right before Part B's Preview test | **Done 2026-10-03.** Production's CSP verified carrying GTM's hosts after the redeploy |
+| ☑ | Turn the GA4 **Internal Traffic** filter to Active | Keeps Vercel previews, CI's Lighthouse runs and local tests out of the numbers (your office IP changes, so your own visits still count) | A day after Part B | **Done 2026-10-04** (guide B7, with B1–B8) |
+| ☑ | Meta and Microsoft conversions; LinkedIn and Google Ads when they start | Ads need conversions to optimise; one method each, so nothing is counted twice | After Part B | **Done 2026-10-04** (guide B8): Meta `Lead`/`Contact` tested; Microsoft's two goals named exactly as the events. Microsoft's "primary" goal setting still needs its help page read online (unreachable at C4/C5); both goals count as conversions meanwhile |
 | ☐ | The **privacy and cookie policy names exactly the tools in the GTM container** | A policy that lists different tools from the ones that run is misleading (UAE PDPL) | Before launch, and after any tracking change | Claude compares the two and sends you the list |
 | ☐ | Test the consent setup in Tag Assistant's Consent tab: it must match what P3 builds for your 2026-10-02 answer (a European visitor sees *denied* until Accept; any other visitor *granted*) | The site's consent signals and the tags must agree | Before launch | Tracking guide B2 (P3 updates the step) |
 | ☐ | Secret server keys (Meta and LinkedIn Conversions API tokens) go into Vercel's environment variables, entered by you | Secrets never pass through chat or the repo | When the lead flow ships (P6–P7) | Claude sends the variable names |
+| ☐ | **LinkedIn** Insight Tag and conversions (postponed) | Campaign Manager asked for card details before showing the Insight Tag; ad account `559882377` exists | After launch, when you say so | You send the Partner ID (Insight Tag → "I will use a tag manager"), then the conversion IDs; Claude fills `accounts.ts` and you do one small GTM import. Don't use the GTM "Conversions API / Generate token" page: that's server-side and not part of this setup |
+| ☐ | **Google Ads** account and conversions (postponed) | Sign-up can't finish without creating a first campaign | After launch, when you say so | You create the account with its first campaign, send the customer ID, link GA4 → Ads, and import `generate_lead` and `contact_click` as primary (your Q6 method) |
+| ☐ | **Microsoft Ads payment method** | Ads can't run without it | Before the first campaign | Microsoft Advertising → Billing |
+| ☐ | **Microsoft UET tag shows "Verified"** | It shows "Unverified" until the site sends to it, which is expected | After Part B's B2 test | Check in Microsoft Advertising → Conversion goals → UET tags |
+| ☐ | **Confirmed Cal.com booking** conversion (server-side, through n8n) | The booking happens on Cal.com's side; the site's tags can't see it reliably | With the lead flow (P6–P7) | Claude builds it; secrets go into n8n Credentials |
+| ☐ | **GA4 stream URL label**: edit it to `https://deepzeta.ai` (it shows `https://www.deepzeta.ai`) | A label only, doesn't affect collection, but it should match decision 0006 | Any time | GA4 → Admin → Data streams → the stream's pencil icon |
+| ☐ | **Add an `@deepzeta.ai` admin** on GTM, GA4, Meta, Microsoft Ads and the Business Profile | Once Google Workspace is active; today the backup admin is your personal Gmail and Microsoft Ads is signed in with `deepzeta.office@gmail.com` | After Workspace is active | Each platform's user management |
+| ☐ | **Business Profile's website link**: use the tagged link Claude generates from the campaign-link rule (09 §2.8), never a hand-typed UTM | Keeps attribution working from local search | When you set the link | The link (from the rule, 2026-10-02): `https://deepzeta.ai/?utm_source=google&utm_medium=organic&utm_campaign=business_profile` |
 
 ## 2. Devices (P2 decision 0019, C51)
 
@@ -62,7 +71,7 @@
 
 - Designer Studio: the 15+ concept site designs, planned one by one.
 - Deepzeta Sync (`/tools`): the sales "mega automation" flow.
-- The App demo (DeepZAuto): naming, branding and provenance.
+- The App demo (Deepzeta Sync App): naming, branding and provenance.
 - pSEO: starts only when every V1 page in the URL registry is live.
 
 ---
@@ -74,3 +83,6 @@
 | 2026-10-01 | Created at the end of P2 (decision 0019): tracking, devices (C51, the iPhone), domain and hosting, visibility, contact details, parked sessions |
 | 2026-10-02 | The opening hours: decided (show them in the footer) |
 | 2026-10-02 | Questions 8 and 9 answered; the consent test row follows P3's design |
+| 2026-10-02 | P3 part C (step C1a): Part A ticked ☑ (GTM, GA4, Meta, Microsoft UET IDs received); conversions changed (`contact_click` primary, `book_call_click` dropped); rows added: the Vercel GTM variable (C5), LinkedIn and Google Ads postponed, the Microsoft payment method, the UET tag verification, the GA4 stream label, the `@deepzeta.ai` admins, the Business Profile link; B7's reason now names previews, CI and local tests (the office IP changes, so the owner's own visits still count) |
+| 2026-10-02 | P3 part C (step C4): the campaign-link rule written into 09 §2.8, and the Business Profile's website link set to `https://deepzeta.ai/?utm_source=google&utm_medium=organic&utm_campaign=business_profile` |
+| 2026-10-04 | P3 part C (step C5): Part B ticked ☑ ("B1–B8 done" — the container imported after the `ONCE_PER_LOAD` fix, Preview and DebugView, dimensions, key events, published; B7's filter on; B8's Meta and Microsoft goals), the Vercel GTM variable row ticked ☑ (done 2026-10-03 with the redeploy). C5's measurement: the third-party caps set (Europe 1 request/160 KB — gtm.js only; UAE 4 requests/350 KB), CI gets the real ID, the `EVENT_DETAILS` browser leak C1b caused is fixed, and European Home's lab-LCP allowance is 2,550 ms (C61, the owner). Still open: Microsoft's "primary" goal setting (its help page unreachable offline — read online and quote into guide B8); PSI on production after launch (Meta and UET load on the production host only, so CI never measures them) |

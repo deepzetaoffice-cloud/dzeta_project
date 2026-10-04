@@ -1,6 +1,6 @@
 # 04 · Build Sequence & Task Plans
 
-> **Applies to:** planning and ordering of all work · **Precedence:** below 00 · **Last reviewed:** 2026-09-30
+> **Applies to:** planning and ordering of all work · **Precedence:** below 00 · **Last reviewed:** 2026-10-02
 
 ---
 
@@ -23,7 +23,7 @@
 | **P0 Foundation** | Install Node LTS; scaffold Next.js (latest stable, App Router, TypeScript strict, `src/`, `@/*` alias), verified versions recorded in a decision; Tailwind v4 with `tokens.css`; `next/font` self-hosted variable fonts (subset); ESLint flat config, Prettier, Vitest, Playwright + axe, Lighthouse CI; all gate scripts; GitHub Actions CI; `.env.example` + env validation (`src/lib/env.ts`); `src/lib/url.ts` (`siteUrl()`, `absoluteUrl()`); English routes in the `(en)` route group with its own root layout (11 §2); non-production `noindex`; security headers (CSP report-only); the `check:seo` script; **baseline measurement of an empty page** against the performance budget | `verify` green; baseline recorded in a decision |
 | **P1 Brand primitives** | Logo component (from the locked SVG, unchanged), favicon/manifest, icon system foundations per Icon Master Rules | `verify` green |
 | **P2 Layout shell** | Header "Proof Bar", mega-menu, mobile nav, footer "The Landing", conversion-path elements (built once, shared; specs in `docs/design/`), shared effect controllers (`src/lib/fx/`), Reduce effects switch, language-switch placeholder (hidden until Arabic) | `verify` + e2e keyboard nav at 360/390/768/1280 + **effects feasibility gate**: the shell with every T1 effect on, measured with `lhci` on the Home route (≥ 95) and on a budget Android phone, within the caps in [13](13-experience-design.md) §7 |
-| **P3 Analytics & consent** | `trackEvent()` wrapper, event taxonomy, GTM via `@next/third-parties`, Consent Mode v2, click-ID capture | tracking e2e green + owner GTM checklist |
+| **P3 Analytics & consent** | `trackEvent()` wrapper, event taxonomy, GTM by the site's own loader (C56), Consent Mode v2, click-ID capture | tracking e2e green + owner GTM checklist |
 | **P4 Data & schema engine** | Content types, catalogue data, `src/lib/site-config.ts`, `src/lib/schema/` `@id` graph builders (spec: `docs/plans/2026-09-29-schema-system.md`), the schema registry `docs/seo/schema-graph.md`, `src/lib/geo/` builders, facts allowlist | unit tests + `check:schema` |
 | **P5 Homepage** | Sections per `docs/design/home.md` (blueprint order); demos stubbed behind lightweight triggers | page gates (see [03](03-verification-gates.md) §2) + the effects feasibility gate re-run on the full Home |
 | **P6 Core pages** | Every page follows its row in the [URL registry](../seo/url-registry.md) and its blueprint in the [SEO/GEO Domination Engine](../seo/seo-geo-domination-engine.md) §3, in waves W1 → W2. Services hub + pilot service page → review → remaining services; the Automation page (`/services/ai-automation`, the AI Automation pillar page); solutions; industries; pricing; about; contact; book-audit; privacy; terms | page gates per page |

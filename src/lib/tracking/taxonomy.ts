@@ -34,8 +34,14 @@ export type EventDetails = {
   // Sent to GA4 as an event of the same name; false means GTM only (a trigger for other tags)
   ga4: boolean;
   keyEvent?: KeyEvent;
+  // Dropped by the owner (2026-10-02): the name stays reserved (append-only) but is never fired, is not
+  // a key event, and is in no container or table. trackEvent() refuses it in its types and at run time
+  // (ActiveEventName, analytics.ts; C59).
+  retired?: string;
   // Meta's standard event for it (Meta's own GTM method, P3 plan L), when Meta is used
   meta?: 'PageView' | 'Lead' | 'Contact';
+  // A Microsoft UET custom event: its Action is the taxonomy name exactly (tracking parity)
+  microsoft?: true;
   // A LinkedIn event-specific conversion, once the owner sends its conversion ID (accounts.ts)
   linkedin?: boolean;
 };
@@ -97,20 +103,22 @@ export const EVENT_DETAILS = {
     ga4: true,
     keyEvent: 'primary',
     meta: 'Lead',
+    microsoft: true,
     linkedin: true,
   },
   book_call_click: {
     category: 'lead',
     firedBy: 'The booking sheet opened (P7)',
     ga4: true,
-    keyEvent: 'secondary',
+    retired: '2026-10-02, the owner: never sent',
   },
   contact_click: {
     category: 'contact',
     firedBy: 'Any mailto:, tel: or wa.me link (P3)',
     ga4: true,
-    keyEvent: 'secondary',
+    keyEvent: 'primary',
     meta: 'Contact',
+    microsoft: true,
   },
   demo_open: { category: 'engagement', firedBy: 'A live demo opened (P7)', ga4: true },
   agent_message_sent: {
@@ -154,4 +162,19 @@ export type EventParams<E extends EventName> = {
 
 export const EVENT_NAMES = Object.keys(EVENT_PARAMS) as EventName[];
 
+// The events trackEvent() accepts and the generator writes: every name except the retired ones (C59).
+// Derived, so a future retirement drops out of both by itself.
+export type ActiveEventName = {
+  [K in EventName]: (typeof EVENT_DETAILS)[K] extends { retired: string } ? never : K;
+}[EventName];
+
 export const isEventName = (name: string): name is EventName => Object.hasOwn(EVENT_PARAMS, name);
+
+// The retired names on their own: isRetired() runs in the browser (analytics.ts), so it must not read
+// EVENT_DETAILS or the whole table would ship to visitors (the contract at the top of this file; the
+// C5 measurement caught it there). taxonomy.test.ts keeps this list equal to the names EVENT_DETAILS
+// marks retired, so a future retirement lands in both or fails the gate.
+export const RETIRED_EVENTS: readonly EventName[] = ['book_call_click'];
+
+// Whether a name is retired: trackEvent() refuses it at run time, and the generator skips it.
+export const isRetired = (name: EventName): boolean => RETIRED_EVENTS.includes(name);

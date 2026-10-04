@@ -1,6 +1,6 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
 import { consentModeState } from '../../src/lib/tracking/consent';
-import { dataLayer, events, fromCountry } from './helpers/tracking';
+import { dataLayer, events, fromCountry, stubGtm } from './helpers/tracking';
 
 // Tracking on the production build (docs/ai/09 §4; P3 plan, M): the region hint, the consent defaults
 // as dataLayer[0], page views, the tracked clicks exactly once, attribution and (from B7) the CSP.
@@ -23,6 +23,12 @@ test.describe('The region hint (C52; region.ts)', () => {
     expect(chunk).toBeDefined();
     expect(await hint(chunk!, 'AE')).toBeUndefined();
   });
+});
+
+// 09 §4: GTM answered by a stub in every test (helpers/tracking.ts), so the data layer holds only
+// what the site pushes and no test sends data. The GTM-loader cases below stub all third parties.
+test.beforeEach(async ({ page }) => {
+  await stubGtm(page);
 });
 
 test.describe('Consent defaults before GTM (09 §2.2; consent-init.ts)', () => {
@@ -104,7 +110,9 @@ test.describe('Page views (09 §2.9; TrackingRuntime)', () => {
     test.use(fromCountry('DE'));
     test('the page view is in the data layer too: the tags wait for consent in GTM, not here', async ({ page }) => {
       await page.goto('/');
-      await expect.poll(async () => (await events(page)).map((e) => e.event)).toEqual(['page_view']);
+      // With GTM in the build the loader's own 'gtm.js' entry is here too (gtm.ts); the page view
+      // must land beside it, unblocked: the tags wait for consent inside GTM, not in this push.
+      await expect.poll(async () => (await events(page)).map((e) => e.event)).toContain('page_view');
     });
   });
 });
@@ -202,6 +210,62 @@ test.describe('Click IDs and campaign tags (09 §2.8; attribution.ts)', () => {
       await expect
         .poll(async () => (await stored(page)).map((raw) => raw && JSON.parse(raw).params))
         .toEqual([{ utm_campaign: 'spring' }, { utm_campaign: 'spring' }]);
+    });
+  });
+});
+
+// GTM (09 §2.1, C56; gtm.ts). 09 §4: GTM requests are answered by a stub, so tests never send data.
+// The build carries the container only once NEXT_PUBLIC_GTM_ID is set at build time (C5: the owner's
+// Vercel step; the CSP gains googletagmanager.com only then, security-headers.ts), so until then both
+// cases skip — the runtime gets null and the loader never runs.
+test.describe('The GTM loader (09 §2.1, C56; gtm.ts)', () => {
+  const GTM_SCRIPT = /^https:\/\/www\.googletagmanager\.com\/gtm\.js\?id=GTM-[A-Z0-9]+$/;
+
+  // Routes every third-party request: the container's script is answered by a stub, any other
+  // third-party host is aborted and recorded — nothing but the site's own origin and the container
+  // may load in a test. (Playwright matches the most recently registered route first, so this one
+  // catch-all handles the GTM request itself; the beforeEach stub covers the rest of the suite.)
+  async function stubThirdParties(page: Page) {
+    const requests: string[] = [];
+    await page.route('**/*', (route) => {
+      const { hostname } = new URL(route.request().url());
+      if (hostname === 'localhost' || hostname === '127.0.0.1') return route.continue();
+      requests.push(route.request().url());
+      if (hostname === 'www.googletagmanager.com')
+        return route.fulfill({ status: 200, contentType: 'application/javascript', body: '' });
+      return route.abort();
+    });
+    return requests;
+  }
+
+  const buildHasGtm = (csp: string | undefined) => (csp ?? '').includes('googletagmanager.com');
+
+  test('one container request after hydration, after the consent default, and nothing else third-party', async ({
+    page,
+  }) => {
+    const requests = await stubThirdParties(page);
+    const response = await page.goto('/');
+    test.skip(!buildHasGtm(response?.headers()['content-security-policy']), 'no GTM ID in this build (C5 pending)');
+    await page.waitForLoadState('networkidle');
+    // The loader's gtm.start lands after the consent default (09 §2.2): the container only runs once
+    // dataLayer[0] has set the Consent Mode state it reads.
+    const layer = await dataLayer(page);
+    expect(layer[0]).toEqual({ gtag: ['consent', 'default', GRANTED] });
+    const start = layer.findIndex((entry) => typeof entry === 'object' && entry !== null && 'gtm.start' in entry);
+    expect(start).toBeGreaterThan(0);
+    expect(requests.filter((url) => GTM_SCRIPT.test(url))).toHaveLength(1);
+    expect(requests.filter((url) => !GTM_SCRIPT.test(url))).toEqual([]);
+  });
+
+  test.describe('in Europe (DE)', () => {
+    test.use(fromCountry('DE'));
+    test('the container still loads while consent is denied: the tags wait inside GTM, not here', async ({ page }) => {
+      const requests = await stubThirdParties(page);
+      const response = await page.goto('/');
+      test.skip(!buildHasGtm(response?.headers()['content-security-policy']), 'no GTM ID in this build (C5 pending)');
+      await page.waitForLoadState('networkidle');
+      expect((await dataLayer(page))[0]).toEqual({ gtag: ['consent', 'default', DENIED] });
+      expect(requests.some((url) => GTM_SCRIPT.test(url))).toBe(true);
     });
   });
 });

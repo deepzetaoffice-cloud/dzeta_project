@@ -7,8 +7,11 @@
 //   page alone has its own allowance (C57).
 // - JavaScript ≤ the framework baseline + its 5 KB growth allowance + our own measured code
 //   (OWN_JS_HOME, within Home's 11 KB cap, 0021), so third-party tags never count against it (C54).
-// Third-party bytes and requests are printed for every run; their own caps arrive with the real GTM
-// container (the P3 plan, step C5). Fonts and images have their own lhci assertions (lighthouserc.cjs).
+// Third-party requests and bytes are capped per region profile (07 §2, C5's measurement): the
+// European profile (no country: the banner, nothing granted) allows GTM only — 1 request, 160 KB —
+// and the UAE campaign profile (consent granted by default) 4 requests, 350 KB (lighthouserc.cjs's
+// own assertions cover the same numbers per run; this gate reads the run's URL to tell the profiles
+// apart). Fonts and images have their own lhci assertions (lighthouserc.cjs).
 
 import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -20,6 +23,16 @@ const RESULTS_DIR = '.lighthouseci';
 export const FIRST_LOAD_TYPES = ['document', 'stylesheet', 'script'];
 export const { FIRST_LOAD_LIMIT, REVIEW_FIRST_LOAD_LIMIT, FIRST_PARTY_JS_LIMIT } = lhciConfig.budget;
 const { FRAMEWORK_JS_BASELINE, HOME_OWN_JS_CAP } = lhciConfig.budget;
+
+// Third-party caps per region profile (07 §2, C5). The UAE campaign profile runs on 127.0.0.1 so its
+// runs stay apart from the European ones (lighthouserc.row.cjs); everything else is the European build.
+export const THIRD_PARTY_LIMITS = {
+  row: { requests: 4, bytes: 350 * 1024 },
+  // 2, not 1: gtm.js plus, in some runs, GTM's own telemetry pixel (googletagmanager.com/a?, 59 B).
+  europe: { requests: 2, bytes: 160 * 1024 },
+};
+export const thirdPartyLimitFor = (url) =>
+  new URL(url).hostname === '127.0.0.1' ? THIRD_PARTY_LIMITS.row : THIRD_PARTY_LIMITS.europe;
 
 // A run's JavaScript limit: the framework-growth guard everywhere, and on Home also its own cap, the
 // baseline + 11 KB (decision 0021), whichever is lower.
@@ -68,7 +81,7 @@ export const firstLoadBytes = (lhr) => {
 };
 
 // Every run against its page's limits. `runs` is [{ name, lhr }].
-export function checkRuns(runs, limitOf = limitFor, jsLimitOf = jsLimitFor) {
+export function checkRuns(runs, limitOf = limitFor, jsLimitOf = jsLimitFor, thirdPartyLimitOf = thirdPartyLimitFor) {
   const problems = [];
   if (runs.length === 0) problems.push(`no Lighthouse results in ${RESULTS_DIR}/: run lhci first`);
   const rows = [];
@@ -79,6 +92,8 @@ export function checkRuns(runs, limitOf = limitFor, jsLimitOf = jsLimitFor) {
       const bytes = FIRST_LOAD_TYPES.reduce((sum, type) => sum + first[type], 0);
       const limit = limitOf(url);
       const jsLimit = jsLimitOf(url);
+      const thirdLimit = thirdPartyLimitOf(url);
+      const thirdOk = third.requests <= thirdLimit.requests && third.bytes <= thirdLimit.bytes;
       rows.push({
         name,
         url,
@@ -87,7 +102,8 @@ export function checkRuns(runs, limitOf = limitFor, jsLimitOf = jsLimitFor) {
         script: first.script,
         jsLimit,
         third,
-        pass: bytes <= limit && first.script <= jsLimit,
+        thirdLimit,
+        pass: bytes <= limit && first.script <= jsLimit && thirdOk,
       });
     } catch (error) {
       problems.push(`${name}: ${error.message}`);
@@ -119,12 +135,19 @@ function main() {
   if (!pass) {
     console.error(
       `check:page-weight FAILED: first-party HTML + CSS + JS ≤ ${FIRST_LOAD_LIMIT} B (${kb(FIRST_LOAD_LIMIT)}, 07 §2; ` +
-        `the review page ${REVIEW_FIRST_LOAD_LIMIT} B, C57); first-party JS ≤ ${FIRST_PARTY_JS_LIMIT} B (0014), on Home ≤ the baseline + 11 KB (0021)`,
+        `the review page ${REVIEW_FIRST_LOAD_LIMIT} B, C57); first-party JS ≤ ${FIRST_PARTY_JS_LIMIT} B (0014), on Home ≤ the baseline + 11 KB (0021); ` +
+        `third party ≤ ${THIRD_PARTY_LIMITS.europe.requests} requests ${THIRD_PARTY_LIMITS.europe.bytes} B before consent, ` +
+        `≤ ${THIRD_PARTY_LIMITS.row.requests} requests ${THIRD_PARTY_LIMITS.row.bytes} B outside Europe (C5, 07 §2)`,
     );
     for (const row of rows.filter((r) => !r.pass)) {
-      console.error(
-        `  ${row.name}: ${row.bytes - row.limit} B over the page weight, ${row.script - row.jsLimit} B over the JS`,
-      );
+      const parts = [];
+      if (row.bytes > row.limit) parts.push(`${row.bytes - row.limit} B over the page weight`);
+      if (row.script > row.jsLimit) parts.push(`${row.script - row.jsLimit} B over the JS`);
+      if (row.third.requests > row.thirdLimit.requests)
+        parts.push(`${row.third.requests} third-party requests (limit ${row.thirdLimit.requests})`);
+      if (row.third.bytes > row.thirdLimit.bytes)
+        parts.push(`${row.third.bytes} B third party (limit ${row.thirdLimit.bytes} B)`);
+      console.error(`  ${row.name}: ${parts.join(', ')}`);
     }
     for (const problem of problems) console.error(`  ${problem}`);
     process.exit(1);

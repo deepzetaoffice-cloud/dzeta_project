@@ -57,4 +57,4 @@ Stacking uses the `--dz-layer-*` token scale (05 §4). It is separate from the v
 
 ## Tracking
 
-Use existing taxonomy events only (09 §3): `cta_click`, `audit_start`, `generate_lead`, `book_call_click`, `contact_click`. New events are registered in the taxonomy before anything is built.
+Use existing taxonomy events only (09 §3): `cta_click`, `audit_start`, `generate_lead`, `contact_click` (`book_call_click` was retired by the owner on 2026-10-02, C59: never fired, not in any container or table). New events are registered in the taxonomy before anything is built.

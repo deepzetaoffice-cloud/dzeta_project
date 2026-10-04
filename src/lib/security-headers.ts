@@ -46,6 +46,15 @@ export function contentSecurityPolicy({ gtm, https, ids = accounts }: SecurityOp
   ].join('; ');
 }
 
+// The asset response's own headers (the C5 amendment, the owner, 2026-10-04). Browsers ignore a CSP,
+// HSTS, framing and permissions policies delivered on a subresource response: they protect documents.
+// Sending them on /_next/static chunks cost ~550 B a response once GTM widened the CSP (~3.7 KB of
+// every first load, measured at C5) for no effect. `nosniff` is the one that still matters on an
+// asset, and it is small; caching and `Secure` are the server's own (Next.js sets Cache-Control).
+export function assetSecurityHeaders(): { key: string; value: string }[] {
+  return [{ key: 'X-Content-Type-Options', value: 'nosniff' }];
+}
+
 export function securityHeaders(options: SecurityOptions): { key: string; value: string }[] {
   return [
     { key: 'Content-Security-Policy', value: contentSecurityPolicy(options) },

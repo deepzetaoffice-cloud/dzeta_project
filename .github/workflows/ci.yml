@@ -28,6 +28,10 @@ jobs:
       # real page (plan section A). Vercel previews stay noindex whatever this says.
       NEXT_PUBLIC_SITE_URL: http://localhost:3000
       SITE_INDEXING: 'on'
+      # The real container (C5): a public ID — it ships in every page's HTML. CI's lhci measures the
+      # real gtm.js (third-party caps, lighthouserc.cjs) and e2e stubs it (09 §4), so CI never sends
+      # data. The Internal Traffic filter (guide B7) keeps CI's runs out of the reports.
+      NEXT_PUBLIC_GTM_ID: GTM-5MR4S8R2
     steps:
       - uses: actions/checkout@v7
 
@@ -54,7 +58,8 @@ jobs:
           if (!existsSync(dir)) { console.log('No Lighthouse results: an earlier gate failed before lhci.'); process.exit(0); }
           const kb = (b) => (b / 1024).toFixed(1) + ' KB';
           const files = readdirSync(dir).filter((n) => /^lhr-.*\.json$/.test(n));
-          files.forEach((f, i) => {
+          const pages = {};
+          files.forEach((f) => {
             const lhr = JSON.parse(readFileSync(dir + '/' + f, 'utf8'));
             const a = lhr.audits;
             const t = Object.fromEntries(a['resource-summary'].details.items.map((i) => [i.resourceType, i.transferSize]));
@@ -77,8 +82,17 @@ jobs:
               'benchmarkIndex ' + Math.round(lhr.environment.benchmarkIndex),
             ].join(' | ');
             console.log(line);
-            console.log('::notice title=Lighthouse run ' + (i + 1) + ' of ' + files.length + '::' + line);
-          });"
+            const page = lhr.requestedUrl.replace('http://', '');
+            (pages[page] ??= []).push({ line, lcp: Math.round(a['largest-contentful-paint'].numericValue), perf: Math.round(lhr.categories.performance.score * 100) });
+          });
+          // One annotation per page, since GitHub shows at most 10 per step (15 runs would lose the last
+          // page): the median-LCP run's line, then every run's LCP and score. No comma or colon in a title.
+          const label = (p) => p.startsWith('127.0.0.1') ? 'Home (UAE campaign landing)' : p.endsWith('/shell-review') ? 'Review page (Europe)' : 'Home (Europe)';
+          for (const [page, runs] of Object.entries(pages)) {
+            const median = runs.slice().sort((x, y) => x.lcp - y.lcp)[Math.floor(runs.length / 2)];
+            const every = 'every run: LCP ' + runs.map((r) => r.lcp).join(', ') + ' ms; perf ' + runs.map((r) => r.perf).join(', ');
+            console.log('::notice title=Lighthouse ' + label(page) + ' ' + runs.length + ' runs::median run: ' + median.line + ' | ' + every);
+          }"
 
       - name: Keep the reports
         if: always()

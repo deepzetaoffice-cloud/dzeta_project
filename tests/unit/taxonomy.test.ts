@@ -5,6 +5,8 @@ import {
   EVENT_NAMES,
   EVENT_PARAMS,
   GA4_FIELDS,
+  isRetired,
+  RETIRED_EVENTS,
   type EventDetails,
   type ParamSpec,
 } from '@/lib/tracking/taxonomy';
@@ -60,7 +62,8 @@ const RESERVED_PARAMS = [
 ];
 const RESERVED_PREFIXES = ['_', 'firebase_', 'ga_', 'google_', 'gtag.'];
 
-// The taxonomy as approved on 2026-10-02 (C55). Entries may be added; these never change or go.
+// The taxonomy as approved on 2026-10-02 (C55; the key events changed at part C, C59). Entries may be
+// added; these never change or go.
 const FROZEN: Record<string, string[]> = {
   page_view: ['page_location', 'page_title', 'content_group'],
   cta_click: ['cta_id', 'cta_location'],
@@ -122,16 +125,39 @@ describe('the taxonomy (09 §3)', () => {
     expect(EVENT_NAMES.filter((name) => specs[name]!.keyEvent).length).toBeLessThanOrEqual(30);
   });
 
-  it('marks the owner’s conversions: generate_lead primary, book_call_click and contact_click secondary', () => {
+  it('keeps the browser’s retired list equal to EVENT_DETAILS (the C5 leak fix)', () => {
+    // isRetired() must not read EVENT_DETAILS in the browser or the whole table ships to visitors
+    // (taxonomy.ts’s own contract). This guard makes a future retirement land in both places.
+    const marked = EVENT_NAMES.filter((name) => 'retired' in EVENT_DETAILS[name]);
+    expect([...RETIRED_EVENTS].sort()).toEqual(marked.sort());
+    for (const name of RETIRED_EVENTS) expect(isRetired(name), name).toBe(true);
+    for (const name of EVENT_NAMES.filter((n) => !RETIRED_EVENTS.includes(n))) {
+      expect(isRetired(name), name).toBe(false);
+    }
+  });
+
+  it('marks the owner’s conversions: generate_lead and contact_click primary, book_call_click retired (C59)', () => {
     const keyEvents = Object.fromEntries(
       EVENT_NAMES.filter((name) => specs[name]!.keyEvent).map((name) => [name, specs[name]!.keyEvent]),
     );
     expect(keyEvents).toEqual({
       generate_lead: 'primary',
-      book_call_click: 'secondary',
-      contact_click: 'secondary',
+      contact_click: 'primary',
     });
     for (const name of Object.keys(keyEvents)) expect(specs[name]!.ga4, name).toBe(true);
+    // A retired event is never a key event, is never mapped to a vendor, and never goes to GA4's tables
+    expect(specs.book_call_click!.retired).toBe('2026-10-02, the owner: never sent');
+    expect(specs.book_call_click!.keyEvent).toBeUndefined();
+    expect(specs.book_call_click!.meta).toBeUndefined();
+    expect(specs.book_call_click!.microsoft).toBeUndefined();
+    expect(specs.book_call_click!.linkedin).toBeUndefined();
+  });
+
+  it('marks exactly generate_lead and contact_click for Microsoft, and page_view for Meta', () => {
+    expect(EVENT_NAMES.filter((name) => specs[name]!.microsoft).sort()).toEqual(['contact_click', 'generate_lead']);
+    expect(specs.page_view!.meta).toBe('PageView');
+    expect(specs.generate_lead!.meta).toBe('Lead');
+    expect(specs.contact_click!.meta).toBe('Contact');
   });
 
   it('sends page_view with GA4’s own fields only, and keeps consent_update out of GA4', () => {
@@ -163,6 +189,7 @@ describe('the accounts’ IDs (accounts.ts)', () => {
     const checks: [string | null, RegExp][] = [
       [accounts.ga4MeasurementId, ACCOUNT_FORMATS.ga4MeasurementId],
       [accounts.metaDatasetId, ACCOUNT_FORMATS.metaDatasetId],
+      [accounts.microsoftUetTagId, ACCOUNT_FORMATS.microsoftUetTagId],
       [accounts.linkedinPartnerId, ACCOUNT_FORMATS.linkedinPartnerId],
       [accounts.googleAdsCustomerId, ACCOUNT_FORMATS.googleAdsCustomerId],
       ...Object.values(accounts.linkedinConversionIds).map((id): [string | null, RegExp] => [
@@ -171,5 +198,16 @@ describe('the accounts’ IDs (accounts.ts)', () => {
       ]),
     ];
     for (const [id, format] of checks) if (id !== null) expect(id).toMatch(format);
+  });
+
+  it('hold the owner’s sent IDs (the handoff, 2026-10-02), with LinkedIn and Google Ads still null', () => {
+    expect(accounts).toEqual({
+      ga4MeasurementId: 'G-RTLSJW7Q9W',
+      metaDatasetId: '2290203821825563',
+      microsoftUetTagId: '187278109',
+      linkedinPartnerId: null,
+      linkedinConversionIds: { generate_lead: null },
+      googleAdsCustomerId: null,
+    });
   });
 });

@@ -19,6 +19,10 @@
 | S005 | Google's scaled content abuse policy | — | https://developers.google.com/search/docs/essentials/spam-policies | 2026-09-30 | PROPOSED | `/services/programmatic-seo` (R069) |
 | S006 | "Good" Core Web Vitals thresholds: LCP 2.5 s, INP 200 ms, CLS 0.1 | 2.5 s / 200 ms / 0.1 | https://web.dev/articles/vitals | — | Listed in facts §6 (CONFIRMED there); official link to be re-checked in P8 | `/resources/core-web-vitals-explained` (R128) |
 | S007 | DeepSeek, our AI provider, stores and processes personal data in the People's Republic of China | China; operated by Hangzhou DeepSeek Artificial Intelligence Co., Ltd. (policy updated 2026-02-10) | https://cdn.deepseek.com/policies/en-US/deepseek-privacy-policy.html | 2026-09-30 | PROPOSED | `/privacy` §8, Q5 (decision 0016) |
+| S008 | Microsoft's UET tag code loads from `bat.bing.com` | `https://bat.bing.com/bat.js` | https://learn.microsoft.com/en-us/microsoft-advertising/entitlements/hlp_ba_conc_uet_consent | 2026-10-02 | PROPOSED | the CSP's `microsoft` vendor (`src/lib/tracking/vendors.ts`) |
+| S009 | UET's consent-relevant first-party cookies | `_uetsid`, `_uetvid`, `_uetsid_exp`, `_uetvid_exp` (lifetimes not stated by Microsoft) | https://learn.microsoft.com/en-us/microsoft-advertising/entitlements/hlp_ba_conc_uet_consentfaq | 2026-10-02 | PROPOSED | withdrawn on Marketing off (`consent.ts`); hidden in Cookie settings until lifetimes are sourced |
+| S010 | GA4's first-party cookies and their lifetime | `_ga` and `_ga_<container-id>`, 24 months | https://support.google.com/analytics/answer/11397207 | 2026-10-02 | PROPOSED | Cookie settings' Analytics list (`vendors.ts`) |
+| S011 | Meta's browser cookies (`_fbp`, `_fbc`) are set by its pixel | — | https://developers.facebook.com/docs/meta-pixel/implementation/gdpr (Meta publishes no lifetime list) | 2026-10-02 | PROPOSED | withdrawn on Marketing off (`consent.ts`) |
 
 ## Change log
 
@@ -26,3 +30,4 @@
 |---|---|---|
 | 2026-09-30 | Created with the first proposed entries | Owner (plan approval, 2026-09-30); entries await approval one by one |
 | 2026-09-30 | S007 added: DeepSeek's data location, for the privacy policy (decision 0016) | Proposed; awaits the owner's approval |
+| 2026-10-02 | S008–S011 added (P3 part C, C1d): Microsoft's UET host and cookies, GA4's cookies, Meta's cookies — for the CSP, the withdraw lists and Cookie settings | Proposed; awaits the owner's approval |

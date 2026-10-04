@@ -11,3 +11,8 @@ LICENSE
 
 # Changed only by npm commands (docs/ai/06 section 5).
 package-lock.json
+
+# Byte-identical commits of GTM's own exports (test fixtures, P3 part C): reformatting them would
+# break the round-trip comparison, which diffs the generator's output against what GTM exported.
+tests/fixtures/gtm/reference-export.json
+tests/fixtures/gtm/roundtrip-export.json

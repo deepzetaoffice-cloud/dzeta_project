@@ -12,6 +12,8 @@ export type Accounts = {
   ga4MeasurementId: string | null;
   // Meta dataset (pixel) ID, digits
   metaDatasetId: string | null;
+  // Microsoft Advertising UET tag ID, digits
+  microsoftUetTagId: string | null;
   // LinkedIn Insight Tag Partner ID, digits
   linkedinPartnerId: string | null;
   // LinkedIn's "Conversion ID for Google Tag Manager", per event the taxonomy marks `linkedin`
@@ -20,9 +22,12 @@ export type Accounts = {
   googleAdsCustomerId: string | null;
 };
 
+// The owner's handoff (2026-10-02): GA4, Meta and Microsoft ready; LinkedIn and Google Ads postponed
+// after launch (their IDs stay null). These are public IDs, so they ship in every page.
 export const accounts: Accounts = {
-  ga4MeasurementId: null,
-  metaDatasetId: null,
+  ga4MeasurementId: 'G-RTLSJW7Q9W',
+  metaDatasetId: '2290203821825563',
+  microsoftUetTagId: '187278109',
   linkedinPartnerId: null,
   linkedinConversionIds: { generate_lead: null },
   googleAdsCustomerId: null,
@@ -32,6 +37,7 @@ export const accounts: Accounts = {
 export const ACCOUNT_FORMATS = {
   ga4MeasurementId: /^G-[A-Z0-9]{6,12}$/,
   metaDatasetId: /^\d{10,20}$/,
+  microsoftUetTagId: /^\d{6,12}$/,
   linkedinPartnerId: /^\d{4,12}$/,
   linkedinConversionId: /^\d{4,12}$/,
   googleAdsCustomerId: /^\d{3}-\d{3}-\d{4}$/,

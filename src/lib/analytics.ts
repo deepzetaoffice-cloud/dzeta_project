@@ -1,12 +1,22 @@
 // trackEvent(): the only way the site reports an event (docs/ai/09 §2.3; P3 plan, F). Its types come
 // from the taxonomy (src/lib/tracking/taxonomy.ts), so an unknown event, a missing parameter or a
-// wrong value fails the typecheck. Components never call gtag, sendGTMEvent, fbq or lintrk.
+// wrong value fails the typecheck. A retired event (C59: `book_call_click`, dropped by the owner) is
+// refused the same way, in the types and at run time. Components never call gtag, sendGTMEvent, fbq
+// or lintrk.
 // - Each value is checked against its kind before it leaves: a value that doesn't fit is dropped, and
 //   so is anything that looks like an email address or a phone number (09 §2.6). Nothing here takes
 //   visitor-typed text in the first place; this is the second line.
 // - The push waits for the next task (setTimeout 0): GTM runs its tags synchronously inside
 //   dataLayer.push, and that work must never land inside a click's input delay (INP, 07 §1).
-import { EVENT_PARAMS, isEventName, type EventName, type EventParams, type ParamSpec } from '@/lib/tracking/taxonomy';
+import {
+  EVENT_PARAMS,
+  isEventName,
+  isRetired,
+  type ActiveEventName,
+  type EventName,
+  type EventParams,
+  type ParamSpec,
+} from '@/lib/tracking/taxonomy';
 
 declare global {
   interface Window {
@@ -60,13 +70,13 @@ export function cleanValue(spec: ParamSpec, value: unknown): string | number | u
 }
 
 // The object pushed to the data layer: the event and its checked parameters, nothing else. An event
-// that isn't in the taxonomy (only possible past the types, with a cast) is never sent.
+// that isn't in the taxonomy, or one the owner retired (C59), is never sent, whatever the types say.
 export function eventPayload<E extends EventName>(
   event: E,
   params: EventParams<E>,
 ): Record<string, unknown> | undefined {
-  if (!isEventName(event)) {
-    if (process.env.NODE_ENV !== 'production') console.warn(`trackEvent: ${String(event)} isn't in the taxonomy`);
+  if (!isEventName(event) || isRetired(event)) {
+    if (process.env.NODE_ENV !== 'production') console.warn(`trackEvent: ${String(event)} isn't an active event`);
     return undefined;
   }
   const specs: Readonly<Record<string, ParamSpec>> = EVENT_PARAMS[event];
@@ -93,7 +103,7 @@ export function contentGroup(pathname: string): string {
 
 type ParamsArg<E extends EventName> = keyof EventParams<E> extends never ? [] : [params: EventParams<E>];
 
-export function trackEvent<E extends EventName>(event: E, ...[params]: ParamsArg<E>): void {
+export function trackEvent<E extends ActiveEventName>(event: E, ...[params]: ParamsArg<E>): void {
   if (typeof window === 'undefined') return;
   const payload = eventPayload(event, (params ?? {}) as EventParams<E>);
   if (!payload) return;

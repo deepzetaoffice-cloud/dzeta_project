@@ -36,7 +36,7 @@ export const consentContent = {
     },
     marketing: {
       name: 'Marketing',
-      body: "Measure whether our ads on Google, Meta and LinkedIn bring people here, and show our ads to people who've visited us.",
+      body: "Measure whether our ads on Meta and Microsoft Bing bring people here, and show our ads to people who've visited us.",
     },
     // Each switch's visible state
     toggleOn: 'On',
@@ -46,13 +46,13 @@ export const consentContent = {
     rejectAll: 'Reject all',
     // The status line after saving; it names footer.cookieSettings too
     saved: 'Saved. You can change this at any time in Cookie settings.',
-    // NEW: the close button's accessible name
+    // The close button's accessible name (approved 2026-10-02, like the five below)
     close: 'Close privacy settings',
-    // NEW: above each group's list of tools and their cookies and storage (P3 plan, E)
+    // Above each group's list of tools and their cookies and storage (P3 plan, E)
     cookiesHeading: 'Cookies and storage',
-    // NEW: that list's column headers
+    // That list's column headers
     cookieColumns: { name: 'Name', provider: 'Provider', lifetime: 'Lifetime' },
-    // NEW: the Lifetime column. The numbers come from code. No singular form: today the code passes only
+    // The Lifetime column. The numbers come from code. No singular form: today the code passes only
     // 12 (months, the stored choice) and 90 (days, attribution), so a 1 would need one first.
     lifetime: {
       months: (n: number) => `${n} months`,

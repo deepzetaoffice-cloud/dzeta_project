@@ -26,7 +26,7 @@ The owner decided on 2026-09-26: a custom-coded consent banner; 3 performance ti
 | WhatsApp | WhatsApp Business Cloud API, driven by n8n (blueprint demo 4) |
 | Booking | Cal.com, embedded only when the visitor opens booking; booking webhook → n8n → the same Sheet |
 | AI agent demo | AI SDK on a Vercel route handler with a Claude model, streaming; small custom chat UI loaded on tap. Model chosen in the P7 plan. Answers grounded in our own published content; rate limit and token cap. |
-| Tracking | GTM via the site's own loader (`@next/third-parties` until P3; conflict C56, decision 0021), GA4, Google Ads, Meta Pixel + CAPI, LinkedIn Insight + CAPI (server events via n8n) |
+| Tracking | GTM via the site's own loader (conflict C56, decision 0021), GA4, **Microsoft Advertising UET** and Meta Pixel at launch; Google Ads and LinkedIn Insight + CAPI after launch (the owner's platform choices, 2026-10-02; server events via n8n) |
 | Consent | Custom-coded banner feeding Google Consent Mode v2, UAE PDPL wording |
 | Speed proof | `web-vitals` for the live speed badge |
 | Hosting | Vercel; function region verified in P0 (UAE / Middle East if available) |
