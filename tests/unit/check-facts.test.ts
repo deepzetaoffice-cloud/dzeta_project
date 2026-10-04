@@ -25,7 +25,12 @@ describe('check:facts', () => {
           { key: 'x', platform: 'X', url: 'https://x.com/Deep_Zeta' },
         ],
       }),
-    ).toEqual(['hello@deepzeta.ai', 'Office #202, Dubai', 'https://www.linkedin.com/company/x/', 'https://x.com/Deep_Zeta']);
+    ).toEqual([
+      'hello@deepzeta.ai',
+      'Office #202, Dubai',
+      'https://www.linkedin.com/company/x/',
+      'https://x.com/Deep_Zeta',
+    ]);
   });
 
   it('fails a contact fact typed outside the site config (handoff §7.3)', () => {

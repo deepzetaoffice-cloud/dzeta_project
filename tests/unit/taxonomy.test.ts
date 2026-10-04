@@ -5,6 +5,8 @@ import {
   EVENT_NAMES,
   EVENT_PARAMS,
   GA4_FIELDS,
+  isRetired,
+  RETIRED_EVENTS,
   type EventDetails,
   type ParamSpec,
 } from '@/lib/tracking/taxonomy';
@@ -121,6 +123,17 @@ describe('the taxonomy (09 §3)', () => {
     for (const name of EVENT_NAMES) expect(Object.keys(specs[name]!.params).length, name).toBeLessThanOrEqual(25);
     expect(customDimensions.length).toBeLessThanOrEqual(50);
     expect(EVENT_NAMES.filter((name) => specs[name]!.keyEvent).length).toBeLessThanOrEqual(30);
+  });
+
+  it('keeps the browser’s retired list equal to EVENT_DETAILS (the C5 leak fix)', () => {
+    // isRetired() must not read EVENT_DETAILS in the browser or the whole table ships to visitors
+    // (taxonomy.ts’s own contract). This guard makes a future retirement land in both places.
+    const marked = EVENT_NAMES.filter((name) => 'retired' in EVENT_DETAILS[name]);
+    expect([...RETIRED_EVENTS].sort()).toEqual(marked.sort());
+    for (const name of RETIRED_EVENTS) expect(isRetired(name), name).toBe(true);
+    for (const name of EVENT_NAMES.filter((n) => !RETIRED_EVENTS.includes(n))) {
+      expect(isRetired(name), name).toBe(false);
+    }
   });
 
   it('marks the owner’s conversions: generate_lead and contact_click primary, book_call_click retired (C59)', () => {

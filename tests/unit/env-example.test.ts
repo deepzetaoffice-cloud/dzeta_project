@@ -65,7 +65,14 @@ describe('.env.example, the settings index (handoff §7)', () => {
     // The handoff's rule is "every variable listed, nothing lost" — planned variables are listed
     // ahead of their phase, so "read nowhere yet" is not an error. Only the block's key names
     // are held exact, by the test above.
-    for (const name of ['NEXT_PUBLIC_TURNSTILE_SITE_KEY', 'TURNSTILE_SECRET_KEY', 'N8N_LEAD_WEBHOOK_URL', 'UPSTASH_REDIS_REST_URL', 'DEEPSEEK_API_KEY', 'GOOGLE_PAGESPEED_API_KEY']) {
+    for (const name of [
+      'NEXT_PUBLIC_TURNSTILE_SITE_KEY',
+      'TURNSTILE_SECRET_KEY',
+      'N8N_LEAD_WEBHOOK_URL',
+      'UPSTASH_REDIS_REST_URL',
+      'DEEPSEEK_API_KEY',
+      'GOOGLE_PAGESPEED_API_KEY',
+    ]) {
       expect(LISTED_VARS, `${name} should stay listed even before its phase`).toContain(name);
     }
   });

@@ -1,7 +1,7 @@
 import type { NextConfig } from 'next';
 import { LOGO_URL, LOGO_VERSION } from './src/lib/brand.ts';
 import { env } from './src/lib/env.ts';
-import { securityHeaders } from './src/lib/security-headers.ts';
+import { assetSecurityHeaders, securityHeaders } from './src/lib/security-headers.ts';
 import { isIndexable, noindexHeaders } from './src/lib/seo/indexing.ts';
 import { regionHeaderRules } from './src/lib/tracking/region.ts';
 
@@ -19,15 +19,28 @@ const nextConfig: NextConfig = {
     // Unmatched URLs need one 404 across multiple root layouts (English now, Arabic in P11).
     globalNotFound: true,
   },
-  // Set once, for every route (docs/ai/06 §4). Non-indexable deployments also send noindex (08 §1).
+  // Security and noindex headers on page paths only (docs/ai/06 §4; the C5 amendment, 2026-10-04):
+  // a CSP, HSTS, framing and permissions policies delivered on a subresource response is ignored by
+  // browsers, so /_next/static chunks carry just nosniff — with the full set on chunks, GTM's hosts
+  // cost ~3.7 KB of headers on every first load for no effect (C5's measurement).
   async headers() {
+    const security = securityHeaders({
+      gtm: currentEnv.gtm !== null,
+      https: currentEnv.siteUrl.startsWith('https:'),
+    });
     return [
       {
-        source: '/:path*',
-        headers: [
-          ...securityHeaders({ gtm: currentEnv.gtm !== null, https: currentEnv.siteUrl.startsWith('https:') }),
-          ...noindexHeaders(indexable),
-        ],
+        // Everything except /_next/ files: pages, robots.txt, the icons and the logo. The region rule
+        // uses a narrower page-only shape (no dots) because a Server-Timing value only matters on a
+        // document; these headers are cheap on the few non-chunk assets and must not vanish from
+        // robots.txt (its noindex is checked, foundation.spec.ts).
+        source: '/:path((?!_next/).*)',
+        headers: [...security, ...noindexHeaders(indexable)],
+      },
+      {
+        // Build output chunks and other /_next/ responses: the one header an asset response needs.
+        source: '/_next/:path*',
+        headers: assetSecurityHeaders(),
       },
       // The logo at its current versioned URL (src/lib/brand.ts): a new logo gets a new URL, so
       // browsers keep this one for a year without asking again (P2 plan, E2; decision 0018). Other

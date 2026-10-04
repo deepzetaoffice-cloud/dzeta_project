@@ -170,5 +170,11 @@ export type ActiveEventName = {
 
 export const isEventName = (name: string): name is EventName => Object.hasOwn(EVENT_PARAMS, name);
 
+// The retired names on their own: isRetired() runs in the browser (analytics.ts), so it must not read
+// EVENT_DETAILS or the whole table would ship to visitors (the contract at the top of this file; the
+// C5 measurement caught it there). taxonomy.test.ts keeps this list equal to the names EVENT_DETAILS
+// marks retired, so a future retirement lands in both or fails the gate.
+export const RETIRED_EVENTS: readonly EventName[] = ['book_call_click'];
+
 // Whether a name is retired: trackEvent() refuses it at run time, and the generator skips it.
-export const isRetired = (name: EventName): boolean => Object.hasOwn(EVENT_DETAILS[name], 'retired');
+export const isRetired = (name: EventName): boolean => RETIRED_EVENTS.includes(name);

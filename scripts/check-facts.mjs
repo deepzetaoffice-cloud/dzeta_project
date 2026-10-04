@@ -36,9 +36,7 @@ export function contactFacts(siteConfig) {
 }
 
 export function findRetypedFacts(relPath, text, facts) {
-  return facts
-    .filter((fact) => text.includes(fact))
-    .map((fact) => ({ file: relPath, fact }));
+  return facts.filter((fact) => text.includes(fact)).map((fact) => ({ file: relPath, fact }));
 }
 
 function listFiles(root, dir) {

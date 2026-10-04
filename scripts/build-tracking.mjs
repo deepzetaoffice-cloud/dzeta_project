@@ -31,13 +31,9 @@ const root = process.cwd();
 // --- The sources (the same values the site ships) ---------------------------------------------
 
 const { accounts } = await import(pathToFileURL(join(root, 'src/lib/tracking/accounts.ts')).href);
-const {
-  EVENT_DETAILS,
-  EVENT_NAMES,
-  EVENT_PARAMS,
-  GA4_FIELDS,
-  isRetired,
-} = await import(pathToFileURL(join(root, 'src/lib/tracking/taxonomy.ts')).href);
+const { EVENT_DETAILS, EVENT_NAMES, EVENT_PARAMS, GA4_FIELDS, isRetired } = await import(
+  pathToFileURL(join(root, 'src/lib/tracking/taxonomy.ts')).href
+);
 // The vendors list isn't read here: the privacy-parity check compares the generated file's tags
 // against vendorsInUse (tests/unit/tracking-artifacts.test.ts).
 
@@ -89,18 +85,21 @@ const triggerRef = (name) => `{{${name}}}`;
 const dlvName = (parameter) => `DLV - ${parameter}`;
 const variables = [];
 const addVariable = (name, type, parameter, formatValue = {}) =>
-  variables.push({ accountId: ACCOUNT_ID, containerId: CONTAINER_ID, variableId: id(), name, type, parameter, formatValue });
+  variables.push({
+    accountId: ACCOUNT_ID,
+    containerId: CONTAINER_ID,
+    variableId: id(),
+    name,
+    type,
+    parameter,
+    formatValue,
+  });
 
-const parameterNames = [
-  ...new Set(activeEvents.flatMap((event) => Object.keys(EVENT_PARAMS[event]))),
-].sort();
+const parameterNames = [...new Set(activeEvents.flatMap((event) => Object.keys(EVENT_PARAMS[event])))].sort();
 for (const parameter of parameterNames) {
-  addVariable(
-    dlvName(parameter),
-    'v',
-    [boolean('setDefaultValue', false), param('name', parameter)],
-    { ...(parameter === 'turn' ? { number: {} } : {}) },
-  );
+  addVariable(dlvName(parameter), 'v', [boolean('setDefaultValue', false), param('name', parameter)], {
+    ...(parameter === 'turn' ? { number: {} } : {}),
+  });
   // dataLayerVersion 2, as the reference writes it
   variables[variables.length - 1].parameter.unshift({ type: 'INTEGER', key: 'dataLayerVersion', value: '2' });
 }
@@ -137,13 +136,19 @@ for (const event of activeEvents) {
 addTrigger('CE - consent_update - analytics', 'CUSTOM_EVENT', {
   customEventFilter: [eventFilter('consent_update')],
   filter: [
-    { type: 'CONTAINS', parameter: [param('arg0', triggerRef(dlvName('consent_granted_now'))), param('arg1', 'analytics')] },
+    {
+      type: 'CONTAINS',
+      parameter: [param('arg0', triggerRef(dlvName('consent_granted_now'))), param('arg1', 'analytics')],
+    },
   ],
 });
 addTrigger('CE - consent_update - marketing', 'CUSTOM_EVENT', {
   customEventFilter: [eventFilter('consent_update')],
   filter: [
-    { type: 'CONTAINS', parameter: [param('arg0', triggerRef(dlvName('consent_granted_now'))), param('arg1', 'marketing')] },
+    {
+      type: 'CONTAINS',
+      parameter: [param('arg0', triggerRef(dlvName('consent_granted_now'))), param('arg1', 'marketing')],
+    },
   ],
 });
 // (B0's third finding) The production-host trigger matches both hosts. The export format ANDs the
@@ -206,16 +211,24 @@ if (ga4Id !== null) {
   // The Google tag: send_page_view false (the site reports pages itself), traffic_type from the
   // lookup; fires on Initialization and on the analytics after-Accept trigger (a page blocked before
   // Accept is configured then).
-  addTag('Google tag', 'googtag', [param('tagId', ga4Id)], ['2147479573', triggerIdByName['CE - consent_update - analytics']], 'analytics_storage', undefined, {
-    parameter: [
-      param('tagId', ga4Id),
-      {
-        type: 'LIST',
-        key: 'configSettingsTable',
-        list: [setting('send_page_view', 'false'), setting('traffic_type', triggerRef('Lookup - traffic_type'))],
-      },
-    ],
-  });
+  addTag(
+    'Google tag',
+    'googtag',
+    [param('tagId', ga4Id)],
+    ['2147479573', triggerIdByName['CE - consent_update - analytics']],
+    'analytics_storage',
+    undefined,
+    {
+      parameter: [
+        param('tagId', ga4Id),
+        {
+          type: 'LIST',
+          key: 'configSettingsTable',
+          list: [setting('send_page_view', 'false'), setting('traffic_type', triggerRef('Lookup - traffic_type'))],
+        },
+      ],
+    },
+  );
 
   // The page-view pair, Google's single-page-site method: a Google tag update (update: true, the
   // page's fields) sequenced before a GA4 Event tag page_view; both fire on the site's page_view and
@@ -458,15 +471,19 @@ ${ga4Events
 When Google Ads starts: link GA4 → Ads and import both key events as **primary** (your Q6; no Ads tag in the container, so nothing is counted twice).
 `;
 
-const adsRows = (activeEvents.flatMap((event) => {
+const adsRows = activeEvents.flatMap((event) => {
   const d = EVENT_DETAILS[event];
   const rows = [];
   if (metaId !== null && d.meta && d.meta !== 'PageView')
-    rows.push(`| Meta | \`${event}\` | Standard event **${d.meta}** | Choose the optimisation event per ad set; both stay available |`);
+    rows.push(
+      `| Meta | \`${event}\` | Standard event **${d.meta}** | Choose the optimisation event per ad set; both stay available |`,
+    );
   if (uetId !== null && d.microsoft)
-    rows.push(`| Microsoft Advertising | \`${event}\` | UET custom event, Action **\`${event}\`** (the taxonomy name exactly) | Goal type **Event**, counted as a conversion${d.keyEvent === 'primary' ? '; **primary**' : ''} |`);
+    rows.push(
+      `| Microsoft Advertising | \`${event}\` | UET custom event, Action **\`${event}\`** (the taxonomy name exactly) | Goal type **Event**, counted as a conversion${d.keyEvent === 'primary' ? '; **primary**' : ''} |`,
+    );
   return rows;
-}));
+});
 
 const adsConversions = `# Ad-platform conversions (generated — copy each name exactly)
 
@@ -523,6 +540,12 @@ for (const [name, content] of files) {
 }
 
 console.log(`tracking:build wrote ${files.length} files to ${OUT_DIR}${testMode ? ' (TEST IDs)' : ''}:`);
-console.log(`  container: ${tags.length} tags, ${triggers.length} triggers, ${variables.length} variables, 5 built-ins`);
-console.log(`  ga4-setup.md: ${customParams.length} custom dimensions, ${keyEvents.length} key events (of ${ga4Events.length} GA4 events)`);
-console.log(`  vendors in the container: ${[ga4Id !== null && 'GA4', metaId !== null && 'Meta', uetId !== null && 'Microsoft'].filter(Boolean).join(', ')}`);
+console.log(
+  `  container: ${tags.length} tags, ${triggers.length} triggers, ${variables.length} variables, 5 built-ins`,
+);
+console.log(
+  `  ga4-setup.md: ${customParams.length} custom dimensions, ${keyEvents.length} key events (of ${ga4Events.length} GA4 events)`,
+);
+console.log(
+  `  vendors in the container: ${[ga4Id !== null && 'GA4', metaId !== null && 'Meta', uetId !== null && 'Microsoft'].filter(Boolean).join(', ')}`,
+);

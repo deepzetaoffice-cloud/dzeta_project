@@ -28,6 +28,10 @@ jobs:
       # real page (plan section A). Vercel previews stay noindex whatever this says.
       NEXT_PUBLIC_SITE_URL: http://localhost:3000
       SITE_INDEXING: 'on'
+      # The real container (C5): a public ID — it ships in every page's HTML. CI's lhci measures the
+      # real gtm.js (third-party caps, lighthouserc.cjs) and e2e stubs it (09 §4), so CI never sends
+      # data. The Internal Traffic filter (guide B7) keeps CI's runs out of the reports.
+      NEXT_PUBLIC_GTM_ID: GTM-5MR4S8R2
     steps:
       - uses: actions/checkout@v7
 

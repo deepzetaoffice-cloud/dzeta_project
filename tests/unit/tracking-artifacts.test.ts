@@ -52,9 +52,13 @@ const activeEvents = EVENT_NAMES.filter((name) => !isRetired(name));
 
 describe('the committed files equal a fresh generation', () => {
   it('deepzeta-gtm-container.json, ga4-setup.md, ads-conversions.md, taxonomy.md', () => {
-    const before = ['deepzeta-gtm-container.json', 'ga4-setup.md', 'ads-conversions.md', 'taxonomy.md'].map(readGenerated);
+    const before = ['deepzeta-gtm-container.json', 'ga4-setup.md', 'ads-conversions.md', 'taxonomy.md'].map(
+      readGenerated,
+    );
     run(); // a real run, not --test: the committed files hold the real IDs
-    const after = ['deepzeta-gtm-container.json', 'ga4-setup.md', 'ads-conversions.md', 'taxonomy.md'].map(readGenerated);
+    const after = ['deepzeta-gtm-container.json', 'ga4-setup.md', 'ads-conversions.md', 'taxonomy.md'].map(
+      readGenerated,
+    );
     expect(after).toEqual(before);
   });
 });
@@ -72,7 +76,7 @@ describe('the GTM round trip (B0)', () => {
   const roundtrip: any = JSON.parse(readFileSync(join(ROOT, 'tests/fixtures/gtm/roundtrip-export.json'), 'utf8'));
   const rtVersion = roundtrip.containerVersion;
 
-  it('the fixture is GTM\'s own export: test IDs only, and the counts match', () => {
+  it("the fixture is GTM's own export: test IDs only, and the counts match", () => {
     const text = JSON.stringify(roundtrip);
     expect(text).toContain('G-TEST123456');
     for (const realId of [accounts.ga4MeasurementId, accounts.metaDatasetId, accounts.microsoftUetTagId]) {
@@ -84,7 +88,7 @@ describe('the GTM round trip (B0)', () => {
     expect(rtVersion.builtInVariable.length).toBe(5);
   });
 
-  it('GTM\'s export equals the generated build after normalisation', () => {
+  it("GTM's export equals the generated build after normalisation", () => {
     const snapshotPath = join(ROOT, '.scratch/tracking-test-imported/deepzeta-gtm-container.json');
     let snapshot: string;
     try {
@@ -108,7 +112,12 @@ describe('the GTM round trip (B0)', () => {
     };
     const dropEmptySettingsLists = (entity: Json): Json => {
       if (!Array.isArray(entity?.parameter)) return entity;
-      return { ...entity, parameter: entity.parameter.filter((p) => !((p as Json).type === 'LIST' && ((p as Json).list as unknown[] | undefined)?.length === 0)) };
+      return {
+        ...entity,
+        parameter: entity.parameter.filter(
+          (p) => !((p as Json).type === 'LIST' && ((p as Json).list as unknown[] | undefined)?.length === 0),
+        ),
+      };
     };
     const normaliseFormatValue = (entity: Json): Json => {
       const fv = entity?.formatValue;
@@ -154,7 +163,9 @@ describe('the GTM round trip (B0)', () => {
       }
     }
     // Built-ins: type → name pairs.
-    const genBuiltins = new Map(((genVersion.builtInVariable ?? []) as Json[]).map((b) => [String(b.type), String(b.name)]));
+    const genBuiltins = new Map(
+      ((genVersion.builtInVariable ?? []) as Json[]).map((b) => [String(b.type), String(b.name)]),
+    );
     const rtBuiltins = new Map((rtVersion.builtInVariable as Json[]).map((b) => [String(b.type), String(b.name)]));
     expect([...rtBuiltins.entries()].sort()).toEqual([...genBuiltins.entries()].sort());
   });
@@ -211,14 +222,14 @@ describe('the container matches the taxonomy', () => {
     expect(event.parameter.find((p: { key: string }) => p.key === 'eventSettingsTable').list).toEqual([]);
     const update = tags.find((t) => t.name === 'Google tag - update');
     const config = update.parameter.find((p: { key: string }) => p.key === 'configSettingsTable');
-    const setParams = (config.list as { map: { key: string; value: string }[] }[]).map((row) =>
-      row.map.find((m) => m.key === 'parameter')?.value,
+    const setParams = (config.list as { map: { key: string; value: string }[] }[]).map(
+      (row) => row.map.find((m) => m.key === 'parameter')?.value,
     );
     expect(setParams).toEqual(['update', 'page_location', 'page_title', 'content_group']);
     expect(event.setupTag?.[0]?.tagName).toBe('Google tag - update');
   });
 
-  it('the export matches the reference fixture\'s structural shape (B0\'s first finding: the import refused the shape-less file)', () => {
+  it("the export matches the reference fixture's structural shape (B0's first finding: the import refused the shape-less file)", () => {
     // The reference export (the owner's A8 file) is the only ground truth for GTM's undocumented
     // import format. Every top-level and containerVersion key the reference carries, the generated
     // container carries too (with our deterministic values), or the import shows "Not Found".
@@ -242,7 +253,7 @@ describe('the container matches the taxonomy', () => {
     expect(cv.containerId).not.toBe('0');
   });
 
-  it('lookup map rows use key/value, not parameter/parameterValue (B0\'s second finding)', () => {
+  it("lookup map rows use key/value, not parameter/parameterValue (B0's second finding)", () => {
     const lookup = variables.find((v: { type: string }) => v.type === 'smm');
     expect(lookup).toBeDefined();
     const rows = lookup.parameter.find((p: { key: string }) => p.key === 'map').list;
@@ -261,7 +272,7 @@ describe('the container matches the taxonomy', () => {
     expect(configRow).toEqual(['parameter', 'parameterValue']);
   });
 
-  it('the marketing tags fire on either production-host trigger, apex or www (B0\'s third finding)', () => {
+  it("the marketing tags fire on either production-host trigger, apex or www (B0's third finding)", () => {
     const apex = triggers.find((t: { name: string }) => t.name === 'WL - production');
     const www = triggers.find((t: { name: string }) => t.name === 'WL - production www');
     expect(apex).toBeDefined();
@@ -273,7 +284,7 @@ describe('the container matches the taxonomy', () => {
     }
   });
 
-  it('no unreferenced constants (B0\'s fourth finding)', () => {
+  it("no unreferenced constants (B0's fourth finding)", () => {
     // Every variable the generator writes is one of: a DLV for a taxonomy parameter (a parameter
     // the site sends with its event; its consumer may be a future tag, so existence — not use — is
     // what's guaranteed), or the traffic_type lookup (referenced by the Google tag). The finding
@@ -325,7 +336,7 @@ describe('the container matches the taxonomy', () => {
     }
   });
 
-  it('the marketing base tags fire once per page (the owner\'s B0 note: window load and a later Accept are two triggers to one base)', () => {
+  it("the marketing base tags fire once per page (the owner's B0 note: window load and a later Accept are two triggers to one base)", () => {
     // ONCE_PER_LOAD is GTM's own export value for "Once per load"; its importer rejected the first
     // attempt's ONCE_PER_PAGE (no such enum value — the owner's B1 import, 2026-10-03).
     for (const name of ['HTML - Meta base', 'UET - base']) {
@@ -355,9 +366,7 @@ describe('the GA4 tables list exactly the taxonomy', () => {
   it('the custom dimensions are the taxonomy custom parameters, and nothing else', () => {
     const expected = [
       ...new Set(
-        activeEvents
-          .filter((e) => detailsOf(e).ga4)
-          .flatMap((e) => paramsOf(e).filter((p) => !ga4Fields.includes(p))),
+        activeEvents.filter((e) => detailsOf(e).ga4).flatMap((e) => paramsOf(e).filter((p) => !ga4Fields.includes(p))),
       ),
     ].sort();
     for (const parameter of expected) expect(ga4Setup).toContain(`\`${parameter}\` | \`${parameter}\``);

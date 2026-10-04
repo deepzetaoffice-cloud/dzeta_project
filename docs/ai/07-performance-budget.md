@@ -37,6 +37,8 @@ The site is deepzeta's proof of work. **A page that fails a hard limit does not 
 | Images per page (above the fold) | ≤ 200 KB, hero ≤ 120 KB | Hard limit |
 | Render-blocking third-party or font files | 0 | Hard limit |
 | Third-party scripts before consent/interaction | GTM only | Hard limit |
+| Third-party requests before consent (Europe, measured at C5 with the real container) | ≤ 2 requests, ≤ 160 KB (gtm.js and, in some runs, GTM's own 59 B telemetry pixel; every vendor tag waits for consent) | Hard limit, asserted per run by `lhci` (Europe profile) |
+| Third-party requests outside Europe (C5's measurement: GTM + the Google tag + GA4's collect; Meta and UET load on the production host only, measured by PSI after launch) | ≤ 4 requests, ≤ 350 KB | Hard limit, asserted per run by `lhci` (UAE campaign profile) |
 
 **The framework baseline (decision 0014, C8 resolved).**
 - P0 measured an empty page: the Next.js 16.3.7 / React 19.3 runtime alone is 136.4 KB of JavaScript, so the old 50 KB target can't be met with Next.js.

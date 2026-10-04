@@ -105,7 +105,8 @@ export const VENDORS: readonly Vendor[] = [
     name: 'Microsoft Advertising (UET)',
     group: 'marketing',
     hosts: { script: ['https://bat.bing.com'], img: ['https://bat.bing.com'], connect: ['https://bat.bing.com'] },
-    source: 'https://learn.microsoft.com/en-us/microsoft-advertising/entitlements/hlp_ba_conc_uet_consent (the tag code)',
+    source:
+      'https://learn.microsoft.com/en-us/microsoft-advertising/entitlements/hlp_ba_conc_uet_consent (the tag code)',
     // Deleted when Marketing is switched off: the first-party names from Microsoft's consent FAQ
     // (hlp_ba_conc_uet_consentfaq). No `cookies` list: Microsoft's pages give no lifetimes for them, and
     // MUID and MSPTC are Bing's own cookies, which the site can't delete anyway; Cookie settings shows a
