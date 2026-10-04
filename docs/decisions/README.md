@@ -36,7 +36,7 @@ Status: PROPOSED | ACCEPTED (owner, date) | SUPERSEDED by NNNN
 | [0018](0018-brand-primitives.md) | Brand primitives (P1): the locked logo served as it is and shown by crops; app icons and manifest from the logo's mark; the icon registry, `Icon` and `IconDefs` (Tier 1–2); knockouts; the lab LCP cost accepted | ACCEPTED |
 | [0019](0019-layout-shell.md) | Layout shell (P2): live links only plus the review page; the document, the no-flash script and Reduce effects; per-weight fallback fonts; the logo's caching; the glass tokens; the effect controllers; the header, mega menu, sheet, footer and conversion path; Tier 3 icons; the effects feasibility gate's results (the budget phone before launch, C51) | ACCEPTED |
 | [0020](0020-performance-exception-limit.md) | The performance exception limit: the gates stay; an owner-approved exception never takes a T1 or T2 page below Performance 86, and LCP only a little over 2.5 s (0019 is reserved for the P2 layout shell) | ACCEPTED |
-| [0021](0021-analytics-and-consent.md) | Analytics and consent (P3): Home's first-party JavaScript cap 11 KB with the tracking runtime; GTM by the site's own loader (C56); the rest of P3 at its exit | ACCEPTED in part |
+| [0021](0021-analytics-and-consent.md) | Analytics and consent (P3): Home's first-party JavaScript cap 11 KB with the tracking runtime; GTM by the site's own loader (C56); the generated container, proven by a GTM round trip and live since the owner's B1–B8; the measured third-party caps per region; the security headers on pages only; European Home's lab LCP 2,550 ms (C61) | ACCEPTED |
 
 ## Open business decisions (from the blueprint)
 

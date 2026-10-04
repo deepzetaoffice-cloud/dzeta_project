@@ -1,6 +1,6 @@
 # 0021 · Analytics and consent (P3)
 
-Status: ACCEPTED in part (owner, 2026-10-02, in chat at P3 step B6): §1 Home's first-party JavaScript cap and §2 GTM's loader. The rest of P3 (consent by region, the taxonomy, the generated GTM container, the third-party caps) is recorded here at the phase's exit.
+Status: ACCEPTED (owner). §1 and §2 on 2026-10-02, in chat at P3 step B6; the rest (consent by region C52, the taxonomy C55, the generated GTM container and the round trip, the third-party caps and the C5 measurement, the CSP header split and C61's European lab-LCP allowance) at the phase's exit, 2026-10-04.
 
 ## Context
 
@@ -22,8 +22,16 @@ The owner chose "slim, then a cap decision" for whatever remained:
 ### 2. GTM's loader
 GTM is loaded by the site's own loader, `src/lib/tracking/gtm.ts`, not by `@next/third-parties` ([C56](../ai/conflict-register.md)): Google's container snippet's two steps, called once by the tracking runtime after hydration, at normal priority, never idle-deferred (lesson L6), after the Consent Mode defaults. `@next/third-parties` is uninstalled. [09](../ai/09-analytics-tracking.md) §2.1 and [0004](0004-tech-stack.md)'s tracking row say so.
 
+## 3. The phase's exit (2026-10-04): the container, the caps, the measurement
+
+- **The generated container is live.** The generator (`scripts/build-tracking.mjs`, `npm run tracking:build`) writes it from `taxonomy.ts` and `accounts.ts`; the GTM round trip (part C step C3) proved the import format against real GTM, and the owner imported it (B1–B8 done, 2026-10-04). The parity test (`tests/unit/tracking-artifacts.test.ts`) keeps the committed artifacts equal to a fresh generation and the taxonomy.
+- **The third-party caps, from C5's measurement with the real container** (07 §2): Europe before consent — GTM only, ≤ 2 requests and 160 KB (`gtm.js` 133.4 KB, and in some runs GTM's own 59 B telemetry pixel); the UAE campaign profile — ≤ 4 requests and 350 KB (GTM, the Google tag, GA4's collect; Meta and UET fire on the production host only, so PSI measures them after launch). Enforced per run by lhci and by `check-page-weight.mjs`.
+- **`OWN_JS_HOME` is 11,077 B** after C5 fixed the `EVENT_DETAILS` leak C1b had shipped to browsers (`RETIRED_EVENTS` and its parity test); Home's 11 KB cap (§1) holds again, and the security headers now serve pages only (`/_next/` carries `nosniff` alone — the owner's C5 amendment), so the ~550 B/response of ignored header bytes no longer counts.
+- **[C61](../ai/conflict-register.md):** European Home's lab-LCP allowance is 2,550 ms (measured on the 2.5 s line: 2,412–2,524 ms over 10 runs, from the CSP header bytes and `gtm.js`, not a regression — UAE Home stays 2,329–2,407 ms). The UAE profile and every other page keep the 2,500 ms assertion; the 2.5 s hard limit (07 §1) stands for field data (PSI/CrUX) after launch.
+
 ## Consequences
 
-- **The review page** (`/shell-review`) is 191,211 B against the 190,868 B page-weight limit; [C57](../ai/conflict-register.md) lets it alone reach 192,000 B. Home and every real page keep the limit. Real pages with the full shell remain the P6 question decision [0019](0019-layout-shell.md) raised.
-- **Home has 380 B of first-party room** until a P5 plan measures and decides its own sections.
-- **Proposed, not made** (outside what the owner approved here): 04 §2's P3 row and `.claude/rules/analytics-tracking.md` still name `@next/third-parties`.
+- **The review page** (`/shell-review`) is 187,811 B of its 192,000 B allowance after the header split ([C57](../ai/conflict-register.md); 4.1 KB left). Home is 174,081 B of 190,868 B. Real pages with the full shell remain the P6 question decision [0019](0019-layout-shell.md) raised.
+- **Home has 3,841 B of first-party JS room** (150,932 − 147,091) until a P5 plan measures and decides its own sections.
+- ~~Proposed, not made: 04 §2's P3 row and `.claude/rules/analytics-tracking.md` still name `@next/third-parties`~~ — both were fixed at part C step C0 (2026-10-02).
+- **Still open, by design:** Microsoft's "primary" goal setting is unquoted (its help pages were unreachable offline; guide B8 carries the click path for the owner), and PSI on production measures Meta and UET after launch (a pre-launch register row).
