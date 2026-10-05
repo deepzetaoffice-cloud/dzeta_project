@@ -154,3 +154,31 @@ artifacts, `.github/workflows/ci.yml` (it already runs `lhci` on the branch), `l
   `["error",{"maxNumericValue":225,"aggregationMethod":"median-run"}]`. `test` + `test:e2e` NOT
   RUN locally (the known machine quirks: the vitest collection failure, the port-3000 dev server) —
   CI is the evidence, reported in D3.
+- **D3 (2026-10-05): the deferral works, but it cannot move the row TBT — the evidence, and the owner's 0023.**
+  - **The push lesson:** the first `git push` exited 0 without updating the remote (the branch ref
+    stayed at `cfc2940`); caught by `git ls-remote` after the CI watcher found no run. Always
+    verify the remote ref after pushing. The second push landed (`cfc2940..83562da`).
+  - **The outage:** GitHub Actions was in a live incident (degraded_performance → major_outage,
+    ~20:00–21:56 UTC) — three runs sat queued ~14 minutes and were cancelled before a single step
+    started. A recovery watcher (`.scratch/`, deleted) waited for the status page to return to
+    operational, then dispatched the run.
+  - **Run 1** (post-outage runner): everything green except lhci — Europe LCP 2624.87 vs ≤ 2550,
+    row Performance 0.94 (runs 0.91–0.95), row LCP 2631.71 vs ≤ 2500, row TBT 266 vs ≤ 225. The
+    uniform ~100 ms shift on **both** profiles (Europe's only third party is a denied gtm.js the
+    deferral doesn't touch) marked the runner as the suspect.
+  - **Run 2** (healthy runner, rerun of the same SHA): the **Europe profile fully green** —
+    confirming run 1's Europe LCP was runner noise — and the row profile failing only Performance
+    0.94 (runs 0.93–0.94) and TBT 247 vs ≤ 225. Every other gate green in both runs: all unit
+    tests, build, `check:schema`/`check:seo`/`check:links`, all e2e including the two GTM-loader
+    cases (the deferral proven: the container loads once, after the consent default, in both
+    regions).
+  - **The finding:** the deferral keeps the granted scripts off the paint work but cannot move
+    their execution out of the TBT window (first paint to TTI, ~3 s) — past-TTI would be the
+    idle-defer 09 §2.2 forbids. TBT 247–266 ms and Performance 0.93–0.95 are the intrinsic lab
+    cost of the granted third-party scripts on a throttled budget CPU.
+  - **The owner's resolution (2026-10-05, decision
+    [0023](../decisions/0023-row-profile-tbt-and-performance-allowance.md)):** accept the intrinsic
+    cost — the row profile's TBT lab allowance is 275 ms and its Performance floor 0.93 (the C61
+    precedent, scoped to one profile), superseding 0022's 225 ms; 0022's deferral half stands.
+    07 §1's ≤ 200 ms and 0.95 stand for every page and profile; PSI/CrUX field data stays the
+    arbiter after launch. `lighthouserc.cjs` and 07 §2 updated accordingly; CI re-run below.
