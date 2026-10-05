@@ -144,7 +144,8 @@ describe('the §7.5 best-fit table', () => {
 
   it('resolves every automation the table names to a catalogue number, in order', () => {
     bestFitAutomations.forEach((row, index) => {
-      const [, cell] = bestFitRows[index]!;
+      // Match arrays: [full row, label, automations cell].
+      const [, , cell] = bestFitRows[index]!;
       const named = cell!.split(',').map((name) => name.trim());
       expect(row.automations, row.label).toHaveLength(named.length);
       named.forEach((name, position) => {
