@@ -7,6 +7,23 @@ export type SocialKey =
   'linkedin' | 'instagram' | 'facebook' | 'youtube' | 'tiktok' | 'x' | 'threads' | 'snapchat' | 'pinterest';
 export type SocialProfile = { key: SocialKey; platform: string; url: string };
 
+// The founder (facts §4): name, role and profile links are CONFIRMED; the bio and the photo choice are
+// UNKNOWN, so they are null and whatever uses them hides itself (02 §1). The profile URLs are the fact
+// byte for byte — never rebuilt from the handle. The schema Person node (spec §2.1, "founder") reads
+// this; his other companies (below) never touch Deepzeta AI's NAP or sameAs (facts §4.1 rules).
+export type Founder = {
+  name: string;
+  jobTitle: string;
+  sameAs: readonly string[];
+  photo: string | null;
+  bio: string | null;
+};
+
+// The founder's other companies (facts §4.1), separate businesses from Deepzeta AI. `hasOffice` is the
+// table's "Physical office" column ("Yes" → true, "Not stated" → false). They appear only in the
+// founder's bio (About) and his Person schema, as Organization nodes without an @id (spec §2.1).
+export type FounderCompany = { name: string; url: string; hasOffice: boolean };
+
 export const siteConfig = {
   brandName: 'Deepzeta AI', // facts §1 (conflict C29)
   legalName: 'Deepzeta Digital Solutions L.L.C.', // facts §1 (decision D2)
@@ -42,4 +59,20 @@ export const siteConfig = {
     { key: 'snapchat', platform: 'Snapchat', url: 'https://www.snapchat.com/@deepzeta.ai' },
     { key: 'pinterest', platform: 'Pinterest', url: 'https://www.pinterest.com/deepzeta_ai/' },
   ] satisfies readonly SocialProfile[],
+  // Facts §4. Credentials and photo are UNKNOWN in the table, and the bios below it are UNKNOWN, so
+  // both stay null until the owner confirms them (02 §1).
+  founder: {
+    name: 'Jamsheed Khalid',
+    jobTitle: 'Founder',
+    sameAs: ['https://www.linkedin.com/in/jamsheed-khalid-343148b6/', 'https://gravatar.com/maximumglitter2857dbbf77'],
+    photo: null as string | null,
+    bio: null as string | null,
+  } satisfies Founder,
+  // Facts §4.1, in its order, URLs copied exactly (trailing slash included).
+  founderCompanies: [
+    { name: 'Wasleen Interior Design', url: 'https://www.wasleen.com', hasOffice: true },
+    { name: 'Wasleen Pergolas', url: 'https://pergolas.wasleen.com', hasOffice: true },
+    { name: 'Wasleen Liminal Approvals', url: 'https://www.dubaiapprovalconsultants.com/', hasOffice: true },
+    { name: 'Wasleen Digital Lab', url: 'https://www.wasleen.com/wasleen-digital', hasOffice: false },
+  ] satisfies readonly FounderCompany[],
 } as const;

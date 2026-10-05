@@ -91,4 +91,34 @@ describe('siteConfig equals the facts file', () => {
     const year = confirmed('Founding date').slice(0, 4);
     expect(shellContent.copyright).toBe(`© ${year}`);
   });
+
+  it('the founder is facts §4, byte for byte; UNKNOWN credentials and photo stay null (P4 S1)', () => {
+    const section = FACTS.slice(FACTS.indexOf('## 4. People'), FACTS.indexOf('### 4.1'));
+    const row = section.split('\n').find((line) => /^\| [^-|]/.test(line) && !line.startsWith('| Name'))!;
+    const [, name, role, credentials, links] = row.split('|').map((cell) => cell.trim());
+    expect(siteConfig.founder.name).toBe(name);
+    expect(siteConfig.founder.jobTitle).toBe(role);
+    // The profile links, exactly as written in facts §4, in its order.
+    expect(siteConfig.founder.sameAs).toEqual(links!.split(' · '));
+    // Credentials and photo are UNKNOWN (facts §4): null, never filled (02 §1).
+    expect(credentials).toBe('UNKNOWN (owner to provide)');
+    expect(siteConfig.founder.photo).toBeNull();
+    expect(siteConfig.founder.bio).toBeNull();
+  });
+
+  it('the founder’s companies are facts §4.1, both directions, URLs copied exactly (P4 S1)', () => {
+    const section = FACTS.slice(FACTS.indexOf('### 4.1'), FACTS.indexOf('## 5. Proof'));
+    const rows = section
+      .split('\n')
+      .filter((line) => /^\| [^-|]/.test(line) && !line.startsWith('| Company'))
+      .map((line) => line.split('|').map((cell) => cell.trim()));
+    expect(rows).toHaveLength(4);
+    expect(siteConfig.founderCompanies).toHaveLength(rows.length);
+    siteConfig.founderCompanies.forEach((company, index) => {
+      const [, name, url, office] = rows[index]!;
+      expect(company.name).toBe(name);
+      expect(company.url).toBe(url);
+      expect(company.hasOffice, name!).toBe(office === 'Yes');
+    });
+  });
 });
