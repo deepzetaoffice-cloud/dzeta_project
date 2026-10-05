@@ -84,6 +84,9 @@ const INFORMAL: Record<string, string> = {
   'AI Sales Prospecting': '1B.7',
   'Delivery & Logistics Tracking': '1E.5',
   'Custom AI Agents': '1A.7',
+  // The Logistics row's shorthand for 1B.3 (its full name is "Automated Quotation & Quote
+  // Tracking System", the row's Construction name is the longer "Automated Quotation & Tracking").
+  'Automated Quotation': '1B.3',
 };
 
 describe('the industry groups (catalogue §7.1–§7.4)', () => {
