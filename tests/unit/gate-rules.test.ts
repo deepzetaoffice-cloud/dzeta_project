@@ -144,8 +144,11 @@ describe('schemaProblems (check:schema)', () => {
   });
 
   it('fails a block that does not parse', () => {
+    // The unparseable block also misses #organization/#website, so all three problems surface.
     expect(schemaProblems(pageData({ jsonLd: ['{"@type": '] }), schemaOptions)).toEqual([
       'JSON-LD block 1 does not parse',
+      `${origin}/#organization defined 0 times (expected 1)`,
+      `${origin}/#website defined 0 times (expected 1)`,
     ]);
   });
 
@@ -156,7 +159,8 @@ describe('schemaProblems (check:schema)', () => {
 
   it('fails empty and placeholder values, including empty arrays', () => {
     const node = JSON.stringify({ '@type': 'Organization', telephone: '', foundingDate: '[[TODO: date]]', sameAs: [] });
-    expect(schemaProblems(pageData({ jsonLd: [node] }), schemaOptions)).toHaveLength(3);
+    // The three value problems, plus the two missing global nodes (this graph defines neither).
+    expect(schemaProblems(pageData({ jsonLd: [node] }), schemaOptions)).toHaveLength(5);
   });
 
   it('fails #organization or #website missing or duplicated (spec §4 assertion 10)', () => {

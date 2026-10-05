@@ -27,9 +27,15 @@ const bestFitAutomations: readonly BestFitAutomation[] = bestFitData;
 // (the best-fit table) and §7.6 (compliance notes) are also "### 7.n" headings, so the number
 // is limited to the four groups.
 const groupSections = [...CATALOGUE.matchAll(/^### (7\.[1-4]) (.+)$/gm)];
-// §7.5's table rows: "| Real Estate | Speed-to-Lead (portals), WhatsApp AI Agent, … |".
-const bestFitRows = [...CATALOGUE.matchAll(/^\| ([^|]+) \| ([^|]+) \|$/gm)].filter(([match]) =>
-  /^### 7\.5/.test(CATALOGUE.slice(Math.max(0, CATALOGUE.indexOf(match) - 400), CATALOGUE.indexOf(match))),
+// §7.5's table rows: "| Real Estate | Speed-to-Lead (portals), WhatsApp AI Agent, … |". The
+// section runs from its heading to the next "## " heading (§8), so rows are matched inside that
+// slice — anchoring against a window before each row misses the heading entirely.
+const section75 = CATALOGUE.slice(
+  CATALOGUE.indexOf('### 7.5'),
+  CATALOGUE.indexOf('\n## ', CATALOGUE.indexOf('### 7.5')),
+);
+const bestFitRows = [...section75.matchAll(/^\| ([^|]+) \| ([^|]+) \|$/gm)].filter(
+  ([match]) => !/^\| Industry \|/.test(match) && !/^\|---/.test(match),
 );
 
 // Registry rows as cells, ID first (catalogue.test.ts's shape).
@@ -157,8 +163,10 @@ describe('the §7.5 best-fit table', () => {
         covered.add(slug);
       }
     }
-    // The table covers 13 of the 27; the rest get their best fits from their group page (P6).
-    expect(covered.size).toBe(13);
+    // The table covers 17 of the 27 (the S2 module mapped group rows to their member industries,
+    // so a row like "Technical Services & Facility Management" covers its three); the rest get
+    // their best fits from their group page (P6).
+    expect(covered.size).toBe(17);
   });
 });
 

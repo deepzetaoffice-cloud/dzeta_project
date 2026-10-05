@@ -35,15 +35,22 @@ test('check:schema', async ({ browser, baseURL }) => {
 
 // Spec §4 assertion 11: the golden fixture matches, or the diff is approved in the same change.
 // One fixture per shipping template (sitewide, Home); each page's plan adds its own with its page.
+// The served origin (localhost in CI) is rewritten to the fixture's canonical origin before the
+// comparison, so the fixture pins the graph's shape, not the machine that served it.
 test('golden fixtures match the rendered graphs', async ({ request, baseURL }) => {
-  const origin = new URL(baseURL as string).origin;
+  const served = new URL(baseURL as string).origin;
+  const canonical = 'https://deepzeta.ai';
   const fixtures: { url: string; fixture: string }[] = [
-    { url: origin + '/', fixture: 'tests/fixtures/schema/home.json' },
+    { url: served + '/', fixture: 'tests/fixtures/schema/home.json' },
   ];
   for (const { url, fixture } of fixtures) {
     const html = await (await request.get(url)).text();
     const raw = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)].map((m) => m[1]!);
-    const parsed = raw.map((block) => JSON.parse(block!));
+    const parsed = JSON.parse(
+      JSON.stringify(raw.map((block) => JSON.parse(block!)))
+        .split(served)
+        .join(canonical),
+    );
     const golden = JSON.parse(readFileSync(fixture, 'utf8'));
     expect(parsed, `the rendered blocks for ${url} differ from ${fixture}`).toEqual(golden);
   }

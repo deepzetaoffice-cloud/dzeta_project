@@ -30,9 +30,10 @@ const escape = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 // "#### 1A.1 WhatsApp AI Agent 🔥" / "### 2.1 Custom-Coded … 🔥 (Flagship)": the exact number and
 // name, then the tag, a parenthetical or the line's end.
 const heading = (number: string, name: string) => new RegExp(`^#{3,4} ${escape(number)} ${escape(name)}(?: |$)`, 'm');
-// The same heading with its priority tag on it (§ "Priority tags used below").
+// The same heading with its priority tag on it (§ "Priority tags used below"). The tag is escaped
+// too: the flagship's "🔥 (Flagship)" carries literal parentheses.
 const taggedHeading = (number: string, name: string, tag: string) =>
-  new RegExp(`^#{3,4} ${escape(number)} ${escape(name)} ${tag}`, 'm');
+  new RegExp(`^#{3,4} ${escape(number)} ${escape(name)} ${escape(tag)}`, 'm');
 const TAGS: Record<string, string> = { lead: '🔥', core: '⭐', addon: '➕', timely: '⏰' };
 
 // Registry rows as cells: ID, URL, then the table's other columns. Tables with a Cat. column
