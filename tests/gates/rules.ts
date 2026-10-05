@@ -147,7 +147,10 @@ export function schemaProblems(page: PageData, options: SchemaOptions): string[]
     if (count !== 1) problems.push(`${globalId} defined ${count} times (expected 1)`);
   }
 
-  // Spec §4 assertion 3: every reference resolves in the document (the blocks are unioned).
+  // Spec §4 assertion 3: every reference resolves in the document (the blocks are unioned), or to
+  // a registered node whose home page is not built yet (the registry's reserved rows; each ships
+  // with its page and leaves this list — docs/seo/schema-graph.md's "Shipping today").
+  const RESERVED = new Set([`${siteUrl}/#person-jamsheed-khalid`]);
   walk(
     page.jsonLd.map((raw) => {
       try {
@@ -167,7 +170,9 @@ export function schemaProblems(page: PageData, options: SchemaOptions): string[]
     },
   );
   for (const ref of referenced) {
-    if (!defined.has(ref)) problems.push(`the reference "${ref}" resolves to no @id in the document`);
+    if (!defined.has(ref) && !RESERVED.has(ref)) {
+      problems.push(`the reference "${ref}" resolves to no @id in the document`);
+    }
   }
 
   // Spec §4 assertion 6: every URL in the graph is absolute on the canonical origin, no trailing
