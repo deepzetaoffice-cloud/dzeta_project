@@ -1,0 +1,123 @@
+[
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "ProfessionalService",
+        "@id": "https://deepzeta.ai/#organization",
+        "name": "Deepzeta AI",
+        "legalName": "Deepzeta Digital Solutions L.L.C.",
+        "url": "https://deepzeta.ai/#website",
+        "email": "hello@deepzeta.ai",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Office #202, Al Hilal Bank Building, Al Qusais 2",
+          "addressLocality": "Dubai",
+          "addressRegion": "Dubai",
+          "addressCountry": "AE"
+        },
+        "foundingDate": "2026-08-02",
+        "logo": {
+          "@id": "https://deepzeta.ai/#logo"
+        },
+        "founder": {
+          "@id": "https://deepzeta.ai/#person-jamsheed-khalid"
+        },
+        "sameAs": [
+          "https://www.linkedin.com/company/deepzeta-ai-digital-solutions-dubai/",
+          "https://www.instagram.com/deepzeta.ai/",
+          "https://www.facebook.com/DeepzetaAi/",
+          "https://www.youtube.com/@DeepzetaAiAgency",
+          "https://www.tiktok.com/@deepzeta.ai",
+          "https://x.com/Deep_Zeta",
+          "https://www.threads.com/@deepzeta.ai",
+          "https://www.snapchat.com/@deepzeta.ai",
+          "https://www.pinterest.com/deepzeta_ai/"
+        ],
+        "openingHoursSpecification": [
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": [
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday",
+              "Saturday"
+            ],
+            "opens": "08:00",
+            "closes": "17:00"
+          }
+        ],
+        "areaServed": {
+          "@type": "Country",
+          "name": "United Arab Emirates",
+          "sameAs": "https://www.wikidata.org/wiki/Q878"
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://deepzeta.ai/#website",
+        "url": "https://deepzeta.ai",
+        "name": "Deepzeta AI",
+        "publisher": {
+          "@id": "https://deepzeta.ai/#organization"
+        },
+        "inLanguage": "en"
+      },
+      {
+        "@type": "ImageObject",
+        "@id": "https://deepzeta.ai/#logo",
+        "url": "https://deepzeta.ai/brand/deepzeta-logo-512.png",
+        "width": 512,
+        "height": 512
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://deepzeta.ai",
+        "url": "https://deepzeta.ai",
+        "name": "AI Automation and Custom Websites in the UAE",
+        "isPartOf": {
+          "@id": "https://deepzeta.ai/#website"
+        },
+        "about": {
+          "@id": "https://deepzeta.ai/#organization"
+        },
+        "inLanguage": "en",
+        "description": "Deepzeta AI builds custom-coded websites, SEO and AI search visibility, and AI automation for UAE businesses. The full site is coming: email hello@deepzeta.ai."
+      },
+      {
+        "@type": "ItemList",
+        "@id": "https://deepzeta.ai#itemlist",
+        "name": "The four pillars",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "name": "AI Automation",
+            "url": "https://deepzeta.ai/services/ai-automation#service"
+          },
+          {
+            "@type": "ListItem",
+            "name": "Websites",
+            "url": "https://deepzeta.ai/services/websites#service"
+          },
+          {
+            "@type": "ListItem",
+            "name": "Software",
+            "url": "https://deepzeta.ai/services/software#service"
+          },
+          {
+            "@type": "ListItem",
+            "name": "Growth & Ranking",
+            "url": "https://deepzeta.ai/services/growth-ranking#service"
+          }
+        ]
+      }
+    ]
+  }
+]

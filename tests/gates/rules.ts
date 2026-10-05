@@ -27,8 +27,7 @@ export const SKIPPED = {
     'noindex routes absent from the llms files (enabled in P9, with the llms files)',
   ],
   schema: [
-    '#organization and #website exactly once, reference resolution, the page-type matrix, NAP, breadcrumbs, visible parity (enabled in P4)',
-    'every URL absolute on the canonical host with no trailing slash (enabled in P4)',
+    'the page-type matrix beyond the shipped templates, breadcrumbs, visible parity (each with its page, P5–P8)',
   ],
   links: [
     'URL-registry rules, link budgets, anchors, duplicate targets in the prose, orphans, click depth (enabled in P4)',
@@ -110,10 +109,13 @@ function canonicalProblems(page: PageData, siteUrl: string): string[] {
   return problems;
 }
 
-// docs/ai/08 §3, the parts that apply before the schema builders exist (P4).
-export function schemaProblems(page: PageData): string[] {
+// docs/ai/08 §3 and the schema-system spec §4, the assertions that apply to the two shipping
+// templates (sitewide + Home). The rest of the matrix arrives with each page (P5–P8).
+export function schemaProblems(page: PageData, options: SchemaOptions): string[] {
+  const { siteUrl, nap } = options;
   const problems: string[] = [];
   const defined = new Map<string, number>();
+  const referenced = new Set<string>();
 
   page.jsonLd.forEach((raw, index) => {
     let data: unknown;
@@ -138,8 +140,96 @@ export function schemaProblems(page: PageData): string[] {
   });
 
   for (const [id, count] of defined) if (count > 1) problems.push(`@id defined ${count} times: ${id}`);
+
+  // Spec §4 assertion 10: the global nodes appear exactly once per document.
+  for (const globalId of [`${siteUrl}/#organization`, `${siteUrl}/#website`]) {
+    const count = defined.get(globalId) ?? 0;
+    if (count !== 1) problems.push(`${globalId} defined ${count} times (expected 1)`);
+  }
+
+  // Spec §4 assertion 3: every reference resolves in the document (the blocks are unioned).
+  walk(
+    page.jsonLd.map((raw) => {
+      try {
+        return JSON.parse(raw);
+      } catch {
+        return null;
+      }
+    }),
+    (node) => {
+      if (
+        typeof node['@id'] === 'string' &&
+        node['@type'] === undefined &&
+        Object.keys(node).every((key) => key === '@id' || key === 'name' || key === 'url' || key === 'item')
+      ) {
+        referenced.add(node['@id']);
+      }
+    },
+  );
+  for (const ref of referenced) {
+    if (!defined.has(ref)) problems.push(`the reference "${ref}" resolves to no @id in the document`);
+  }
+
+  // Spec §4 assertion 6: every URL in the graph is absolute on the canonical origin, no trailing
+  // slash, no query. External facts (sameAs, the Wikidata entity) are exempt.
+  const jsonNodes: unknown[] = page.jsonLd.flatMap((raw) => {
+    try {
+      return [JSON.parse(raw)];
+    } catch {
+      return [];
+    }
+  });
+  walk(jsonNodes, (node) => {
+    for (const [key, value] of Object.entries(node)) {
+      // @context is schema.org's own URL; sameAs holds external profile URLs (facts §2.1), copied
+      // exactly. Both are exempt from the canonical-origin rule.
+      if (key === '@context' || key === 'sameAs') continue;
+      const urls: string[] = [];
+      if (typeof value === 'string' && /^https?:\/\//.test(value)) urls.push(value);
+      if (Array.isArray(value)) {
+        for (const item of value) if (typeof item === 'string' && /^https?:\/\//.test(item)) urls.push(item);
+      }
+      for (const url of urls) {
+        if (key === 'url' && url === siteUrl) continue; // the home URL is the bare origin
+        if (!url.startsWith(siteUrl)) {
+          problems.push(`"${key}" leaves the canonical origin: ${url}`);
+        } else if (url.length > siteUrl.length + 1 && url.endsWith('/')) {
+          problems.push(`"${key}" has a trailing slash: ${url}`);
+        }
+      }
+    }
+  });
+
+  // Spec §4 assertion 5: NAP fields equal the site config byte for byte.
+  walk(jsonNodes, (node) => {
+    if (node['@type'] === 'PostalAddress') {
+      if (node.streetAddress !== nap.streetAddress)
+        problems.push(`streetAddress differs from the config: ${node.streetAddress}`);
+      if (node.addressLocality !== nap.addressLocality)
+        problems.push(`addressLocality differs: ${node.addressLocality}`);
+      if (node.addressRegion !== nap.addressRegion) problems.push(`addressRegion differs: ${node.addressRegion}`);
+      if (node.addressCountry !== nap.addressCountry) problems.push(`addressCountry differs: ${node.addressCountry}`);
+    }
+    if (node['@type'] === 'ProfessionalService') {
+      if (node.name !== nap.brandName) problems.push(`organization name differs from the config: ${node.name}`);
+      if (node.email !== nap.email) problems.push(`organization email differs from the config: ${node.email}`);
+    }
+  });
+
   return problems;
 }
+
+export type SchemaOptions = {
+  siteUrl: string;
+  nap: {
+    brandName: string;
+    email: string;
+    streetAddress: string;
+    addressLocality: string;
+    addressRegion: string;
+    addressCountry: string;
+  };
+};
 
 function walk(value: unknown, visit: (node: Record<string, unknown>) => void): void {
   if (Array.isArray(value)) {
