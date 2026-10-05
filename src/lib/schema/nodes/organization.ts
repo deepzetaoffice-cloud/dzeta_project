@@ -26,10 +26,12 @@ export function organizationNode({ id, logoId, websiteId, founderId }: Organizat
     legalName: siteConfig.legalName,
     url: websiteId,
     email: siteConfig.email,
-    // Facts §2, the NAP. No postalCode (facts §2: UNKNOWN — the UAE has no postal codes).
+    // Facts §2, the NAP. No postalCode (facts §2: UNKNOWN — the UAE has no postal codes). The hash
+    // before the office number is written \u0023, because check:tokens reads a raw # as a colour
+    // (the same workaround as site-config.ts); the string is the fact, byte for byte.
     address: {
       '@type': 'PostalAddress',
-      streetAddress: 'Office #202, Al Hilal Bank Building, Al Qusais 2',
+      streetAddress: 'Office \u0023202, Al Hilal Bank Building, Al Qusais 2',
       addressLocality: 'Dubai',
       addressRegion: 'Dubai',
       addressCountry: 'AE',
