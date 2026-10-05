@@ -247,13 +247,15 @@ test.describe('The GTM loader (09 §2.1, C56; gtm.ts)', () => {
     const response = await page.goto('/');
     test.skip(!buildHasGtm(response?.headers()['content-security-policy']), 'no GTM ID in this build (C5 pending)');
     await page.waitForLoadState('networkidle');
+    // The container is fetched past the first paint (decision 0022), so it can land after the idle
+    // window closes: poll for exactly one request, then read the data layer once it's there.
+    await expect.poll(() => requests.filter((url) => GTM_SCRIPT.test(url)).length).toBe(1);
     // The loader's gtm.start lands after the consent default (09 §2.2): the container only runs once
     // dataLayer[0] has set the Consent Mode state it reads.
     const layer = await dataLayer(page);
     expect(layer[0]).toEqual({ gtag: ['consent', 'default', GRANTED] });
     const start = layer.findIndex((entry) => typeof entry === 'object' && entry !== null && 'gtm.start' in entry);
     expect(start).toBeGreaterThan(0);
-    expect(requests.filter((url) => GTM_SCRIPT.test(url))).toHaveLength(1);
     expect(requests.filter((url) => !GTM_SCRIPT.test(url))).toEqual([]);
   });
 
@@ -265,7 +267,8 @@ test.describe('The GTM loader (09 §2.1, C56; gtm.ts)', () => {
       test.skip(!buildHasGtm(response?.headers()['content-security-policy']), 'no GTM ID in this build (C5 pending)');
       await page.waitForLoadState('networkidle');
       expect((await dataLayer(page))[0]).toEqual({ gtag: ['consent', 'default', DENIED] });
-      expect(requests.some((url) => GTM_SCRIPT.test(url))).toBe(true);
+      // Past the first paint (decision 0022), so it can arrive after the idle window: poll.
+      await expect.poll(() => requests.some((url) => GTM_SCRIPT.test(url))).toBe(true);
     });
   });
 });

@@ -105,10 +105,16 @@ const t1Assertions = {
 // collect, 3–4 requests, at most 300,790 B; 4 and 350 KB with headroom. Its LCP stays at the true
 // 2.5 s hard limit (07 §1): C61's allowance is for the European profile only, whose runs carry GTM's
 // header bytes without a country hint to tell the CSP apart.
+// TBT (decision 0022, the owner, 2026-10-05): this profile's lab allowance is 225 ms, headroom
+// against runner noise for the GTM-granted third-party scripts, now fetched past the first paint
+// (TrackingRuntime's afterFirstPaint) — with the deferral in place, runs are expected well under
+// 200 ms, so 07 §1's ≤ 200 ms hard limit stands for every page and this stays a margin, not a
+// licence. If runs consistently sit above ~200 ms, that's reported, not absorbed.
 const rowThirdParty = {
   'resource-summary:third-party:count': ['error', { maxNumericValue: 4, ...everyRun }],
   'resource-summary:third-party:size': ['error', { maxNumericValue: 350 * KB, ...everyRun }],
   'largest-contentful-paint': ['error', { maxNumericValue: 2500, ...medianRun }],
+  'total-blocking-time': ['error', { maxNumericValue: 225, ...medianRun }],
 };
 
 // The review page shows the complete shell (P2 plan, A3; registry R165) and is measured as T1 too, with

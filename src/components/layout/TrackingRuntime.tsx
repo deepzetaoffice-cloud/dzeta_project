@@ -14,7 +14,9 @@ import { loadGtm } from '@/lib/tracking/gtm';
 //   the route changes so the new page's title is in place; a repeat of the same address is skipped.
 // - Tracked clicks: a click on a CTA or a link is handed to clicks.ts, imported on the first one, which
 //   reports cta_click, contact_click or outbound_click.
-// - GTM (09 §2.1, C56): loaded once, after hydration, when its container ID is set (gtm.ts).
+// - GTM (09 §2.1, C56): loaded once, after hydration and past the first paint, when its container ID
+//   is set (gtm.ts) — deferred to afterFirstPaint below (decision 0022, the owner, 2026-10-05), so
+//   gtm.js and its tags never compete with the main thread's paint work on the TBT window.
 // - Click IDs and campaign tags (09 §2.8): when the landing's address carries one, the capture code
 //   (attribution.ts) is imported on the visitor's first action (a scroll, a tap, a click or a key) and
 //   given that address, so a campaign landing's first load stays within Home's cap (07 §2, 0021). It
@@ -49,6 +51,23 @@ function PanelUnavailable({ onClose }: ConsentSettingsProps) {
 const ConsentSettings = lazy<ComponentType<ConsentSettingsProps>>(() =>
   loadSettings().catch(() => ({ default: PanelUnavailable })),
 );
+
+// Past the first paint (decision 0022, the owner, 2026-10-05): GTM still loads on the page's first
+// load — never idle-deferred (09 §2.2, lesson L6) — but after the browser has painted, so the
+// container and its granted tags stop blocking the main thread during the TBT window. The idle wait
+// carries a hard 1,500 ms timeout and ends in a double rAF (two frames ⇒ painted), so the container
+// always arrives well inside GA4's session window; a hidden tab, which will never paint, loads at
+// once. The consent defaults are untouched by this: dataLayer[0] was set by the inline script before
+// hydration, long before any of this runs.
+function afterFirstPaint(run: () => void): void {
+  if (document.visibilityState === 'hidden') {
+    run();
+    return;
+  }
+  const painted = () => requestAnimationFrame(() => requestAnimationFrame(run));
+  if (typeof requestIdleCallback === 'function') requestIdleCallback(painted, { timeout: 1500 });
+  else setTimeout(painted, 0);
+}
 
 const ASK = 'data-consent';
 const CONSENT_CONTROL = '[data-consent-action], [data-consent-settings]';
@@ -90,7 +109,14 @@ export function TrackingRuntime({ gtm }: TrackingRuntimeProps) {
   }, [pathname]);
 
   useEffect(() => {
-    if (gtm) loadGtm(gtm);
+    if (!gtm) return;
+    let cancelled = false;
+    afterFirstPaint(() => {
+      if (!cancelled) loadGtm(gtm);
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [gtm]);
 
   useEffect(() => {
