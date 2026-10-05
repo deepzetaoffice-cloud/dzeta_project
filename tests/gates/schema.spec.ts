@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { expect, test } from '@playwright/test';
+import { parseEnv } from '../../src/lib/env';
 import { siteConfig } from '../../src/lib/site-config';
 import { crawlSite } from './crawl';
 import { isHtml, schemaProblems, SKIPPED } from './rules';
@@ -9,22 +10,22 @@ import { isHtml, schemaProblems, SKIPPED } from './rules';
 // #organization/#website exactly once, absolute canonical URLs with no trailing slash, NAP parity
 // with the site config, and the golden fixtures for the two shipping templates.
 
-const OPTIONS = {
-  siteUrl: (await import('../../src/lib/env')).parseEnv(process.env).siteUrl,
-  nap: {
-    brandName: siteConfig.brandName,
-    email: siteConfig.email,
-    streetAddress: 'Office #202, Al Hilal Bank Building, Al Qusais 2',
-    addressLocality: 'Dubai',
-    addressRegion: 'Dubai',
-    addressCountry: 'AE',
-  },
-};
-
 test('check:schema', async ({ browser, baseURL }) => {
+  const { siteUrl } = parseEnv(process.env);
+  const options = {
+    siteUrl,
+    nap: {
+      brandName: siteConfig.brandName,
+      email: siteConfig.email,
+      streetAddress: 'Office #202, Al Hilal Bank Building, Al Qusais 2',
+      addressLocality: 'Dubai',
+      addressRegion: 'Dubai',
+      addressCountry: 'AE',
+    },
+  };
   const pages = (await crawlSite(browser, baseURL as string)).filter((page) => page.status === 200 && isHtml(page));
   const blocks = pages.reduce((sum, page) => sum + page.jsonLd.length, 0);
-  const problems = pages.flatMap((page) => schemaProblems(page, OPTIONS).map((problem) => `${page.url}: ${problem}`));
+  const problems = pages.flatMap((page) => schemaProblems(page, options).map((problem) => `${page.url}: ${problem}`));
 
   console.log(`check:schema: ${pages.length} page(s), ${blocks} JSON-LD block(s) checked.`);
   for (const skipped of [...SKIPPED.schema, ...SKIPPED.crawl]) console.log(`  not checked yet: ${skipped}`);
