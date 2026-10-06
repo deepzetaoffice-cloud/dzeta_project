@@ -61,7 +61,7 @@ export function Hero() {
         <Logo variant="mark" decorative className="dz-hero-mark" />
       </div>
 
-      <div className="relative mx-auto grid max-w-page gap-10 px-gutter pt-section pb-section lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:items-center">
+      <div className="relative z-1 mx-auto grid max-w-page gap-10 px-gutter pt-section pb-section lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:items-center">
         <div>
           {/* The Assembly sits beside the statement: the cluster locks in after its flight */}
           <div className="flex flex-wrap items-center gap-4">

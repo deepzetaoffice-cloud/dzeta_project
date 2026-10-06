@@ -18,8 +18,10 @@ export function FinalCta() {
             {finalCta.heading}
           </h2>
           <p className="mt-4 max-w-measure text-lead">{finalCta.lede}</p>
+          {/* The shell's footer finale follows immediately with its own primary CTA (the one
+              gradient CTA in view, C42), so this section's CTA is the outline secondary */}
           <div className="mt-8">
-            <CtaButton href={auditHref()} label={shellContent.cta} variant="primary" />
+            <CtaButton href={auditHref()} label={shellContent.cta} variant="header" />
           </div>
         </div>
         {/* The 60-second speed-to-lead test stub (demo 4; the real test is P7) in glass-live */}

@@ -53,8 +53,10 @@ export function Faq({ heading, lede, questions, pillar = 'ranking', stillHeading
               </button>
             ))}
           </div>
-          {/* The live region the enhancement announces filter counts into */}
-          <p className="dz-faq-count sr-only" role="status" data-faq-count></p>
+          {/* The live region the enhancement announces filter counts into. aria-live only (no
+              role="status"): a second named status region would collide with the consent panel's
+              on pages that show both; polite live is the announcement we need. */}
+          <p className="dz-faq-count sr-only" aria-live="polite" data-faq-count></p>
           <div className="dz-glass dz-faq-ask mt-8">
             <h3 className="text-h4">{stillHeading ?? 'Still have a question?'}</h3>
             <p className="mt-2 text-small">{stillLine ?? "Can't find your question? Ask us directly."}</p>

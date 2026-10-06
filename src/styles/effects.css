@@ -1627,28 +1627,38 @@
 }
 
 /* The flight: each pixel starts on its 35° path, off-stage, and locks in when the hero's
-   scroll-sentinel passes (the observer adds .is-in on the section) */
-@variant fx {
-  .dz-hero .dz-assembly-px {
+   scroll-sentinel passes (the observer adds .is-in on the section). Nested inside a selector
+   rule, never a top-level @variant fx (globals.css: a top-level one compiles to :scope and
+   never matches — caught by the preferences e2e). */
+.dz-hero .dz-assembly-px {
+  @variant fx {
     opacity: 0;
     translate: calc(var(--dz-asm-far, 6rem) * -0.819) calc(var(--dz-asm-far, 6rem) * -0.574);
   }
+}
 
-  .dz-hero.is-in .dz-assembly-px {
+.dz-hero.is-in .dz-assembly-px {
+  @variant fx {
     opacity: 1;
     translate: 0 0;
   }
+}
 
-  /* The stagger: each pixel settles a beat after the previous (the Assemble vocabulary) */
-  .dz-hero.is-in .dz-assembly-px--web {
+/* The stagger: each pixel settles a beat after the previous (the Assemble vocabulary) */
+.dz-hero.is-in .dz-assembly-px--web {
+  @variant fx {
     transition-delay: calc(var(--dz-dur-travel) * 0.12);
   }
+}
 
-  .dz-hero.is-in .dz-assembly-px--software {
+.dz-hero.is-in .dz-assembly-px--software {
+  @variant fx {
     transition-delay: calc(var(--dz-dur-travel) * 0.24);
   }
+}
 
-  .dz-hero.is-in .dz-assembly-px--ranking {
+.dz-hero.is-in .dz-assembly-px--ranking {
+  @variant fx {
     transition-delay: calc(var(--dz-dur-travel) * 0.36);
   }
 }
@@ -1703,31 +1713,38 @@
   color: var(--dz-text-muted);
 }
 
-/* The one-shot: hidden start states live inside the fx variant only (13 §3.3) */
-@variant fx {
-  .dz-story-chat .dz-chat-bubble,
-  .dz-story-chat .dz-chat-note {
+/* The one-shot: hidden start states live inside the fx variant only (13 §3.3), each nested in
+   its selector rule (a top-level @variant fx never matches — see globals.css) */
+.dz-story-chat .dz-chat-bubble,
+.dz-story-chat .dz-chat-note {
+  @variant fx {
     opacity: 0;
     translate: 0 var(--dz-stagger-rise);
   }
+}
 
-  .dz-story-chat.is-in .dz-chat-bubble--customer {
+.dz-story-chat.is-in .dz-chat-bubble--customer {
+  @variant fx {
     opacity: 1;
     translate: 0 0;
     transition:
       opacity var(--dz-dur-base) var(--dz-ease-out) 0.2s,
       translate var(--dz-dur-base) var(--dz-ease-out) 0.2s;
   }
+}
 
-  .dz-story-chat.is-in .dz-chat-bubble--agent {
+.dz-story-chat.is-in .dz-chat-bubble--agent {
+  @variant fx {
     opacity: 1;
     translate: 0 0;
     transition:
       opacity var(--dz-dur-base) var(--dz-ease-out) 1.1s,
       translate var(--dz-dur-base) var(--dz-ease-out) 1.1s;
   }
+}
 
-  .dz-story-chat.is-in .dz-chat-note {
+.dz-story-chat.is-in .dz-chat-note {
+  @variant fx {
     opacity: 1;
     translate: 0 0;
     transition:
@@ -1752,8 +1769,8 @@
 /* §02 The proof strip: scroll-drift (13 §4.4) — the row moves only while the visitor scrolls.
    Native scroll-driven, inside @supports; the static state is the complete row. */
 @supports (animation-timeline: scroll()) {
-  @variant fx {
-    .dz-drift {
+  .dz-drift {
+    @variant fx {
       animation: dz-drift linear both;
       animation-timeline: view();
       animation-range: entry 0% exit 100%;
@@ -1802,8 +1819,8 @@
   background-image: var(--dz-pixel-ai);
 }
 
-@variant fx {
-  .dz-before-after.is-in .dz-ba-pixel {
+.dz-before-after.is-in .dz-ba-pixel {
+  @variant fx {
     animation: dz-pixel-travel 1.6s var(--dz-ease-travel) 0.3s both;
   }
 }
@@ -1867,7 +1884,10 @@
   padding: 0.5rem 0.875rem;
   font-size: var(--dz-text-small);
   font-weight: 500;
-  white-space: nowrap;
+  /* Wrapping (not nowrap): the row of nodes never widens the page past its viewport (WCAG
+     1.4.10 reflow — the 320 px e2e) */
+  white-space: normal;
+  text-align: center;
 }
 
 .dz-flow-node--end {
@@ -1898,20 +1918,26 @@
   background-image: var(--dz-pixel-ai);
 }
 
-@variant fx {
-  .dz-story-flow.is-in .dz-flow-line {
+.dz-story-flow.is-in .dz-flow-line {
+  @variant fx {
     scale: 1 1;
   }
+}
 
-  .dz-story-flow.is-in .dz-flow-line:nth-of-type(2) {
+.dz-story-flow.is-in .dz-flow-line:nth-of-type(2) {
+  @variant fx {
     transition-delay: 0.3s;
   }
+}
 
-  .dz-story-flow.is-in .dz-flow-line:nth-of-type(3) {
+.dz-story-flow.is-in .dz-flow-line:nth-of-type(3) {
+  @variant fx {
     transition-delay: 0.6s;
   }
+}
 
-  .dz-story-flow.is-in .dz-flow-pixel {
+.dz-story-flow.is-in .dz-flow-pixel {
+  @variant fx {
     animation: dz-pixel-travel 2.2s var(--dz-ease-travel) 0.4s both;
   }
 }
@@ -1922,11 +1948,9 @@
 .dz-pin-stage {
   @supports (animation-timeline: scroll()) {
     @variant fx {
-      /* The scene's length: ≤ 250vh (13 §4.4) */
+      /* The scene's length: ≤ 250vh (13 §4.4). The stage grows; the content stays at its
+         natural place at the top (no flex re-ordering: the steps list follows the laptop). */
       min-block-size: 200vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
     }
   }
 }
@@ -1934,7 +1958,8 @@
 /* The depth-css laptop: a CSS 3D frame (13 §5 "Watch this page build itself") */
 .dz-laptop {
   perspective: 75rem;
-  max-inline-size: 40rem;
+  /* Fits its container's width — never widens the page past the viewport (WCAG 1.4.10) */
+  max-inline-size: 100%;
 }
 
 .dz-laptop-screen {
@@ -1996,26 +2021,34 @@
 }
 
 @supports (animation-timeline: scroll()) {
-  @variant fx {
-    .dz-pin-stage .dz-lap-layer {
+  .dz-pin-stage .dz-lap-layer {
+    @variant fx {
       animation: dz-layer-in linear both;
       animation-timeline: view();
       animation-range: entry 20% cover 60%;
     }
+  }
 
-    .dz-pin-stage .dz-lap-layer[data-lap-step='2'] {
+  .dz-pin-stage .dz-lap-layer[data-lap-step='2'] {
+    @variant fx {
       animation-range: entry 30% cover 55%;
     }
+  }
 
-    .dz-pin-stage .dz-lap-layer[data-lap-step='3'] {
+  .dz-pin-stage .dz-lap-layer[data-lap-step='3'] {
+    @variant fx {
       animation-range: entry 40% cover 50%;
     }
+  }
 
-    .dz-pin-stage .dz-lap-layer[data-lap-step='4'] {
+  .dz-pin-stage .dz-lap-layer[data-lap-step='4'] {
+    @variant fx {
       animation-range: entry 50% cover 45%;
     }
+  }
 
-    .dz-pin-stage .dz-lap-layer[data-lap-step='5'] {
+  .dz-pin-stage .dz-lap-layer[data-lap-step='5'] {
+    @variant fx {
       animation-range: entry 60% cover 40%;
     }
   }

@@ -33,7 +33,11 @@ test.describe('Home', () => {
     const page = await context.newPage();
     await page.goto('/');
     await expect(page.locator('h1')).toBeVisible();
-    await expect(page.locator('main p')).toHaveCount(2);
+    // The real Home (P5): the hero answer and the FAQ answers are server-rendered paragraphs;
+    // at least those two regions are present with JavaScript off
+    const paragraphs = page.locator('main p');
+    expect(await paragraphs.count()).toBeGreaterThanOrEqual(2);
+    await expect(page.locator('.dz-faq-item')).toHaveCount(8);
     await context.close();
   });
 

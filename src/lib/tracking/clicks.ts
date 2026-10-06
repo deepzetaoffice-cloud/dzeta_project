@@ -51,7 +51,7 @@ function ctaLocation(cta: Element): CtaLocation {
   return 'page';
 }
 
-// Reports a click on `target` (a CTA, a link, a demo trigger, or something inside one).
+// Reports a click on `target` (a CTA, a link, or something inside one).
 export function reportClick(target: Element): void {
   const cta = target.closest<HTMLElement>('[data-cta]');
   if (cta) {
@@ -59,10 +59,8 @@ export function reportClick(target: Element): void {
     const ctaId = (cta.dataset.ctaId ?? '') as (typeof CTA_IDS)[number];
     trackEvent('cta_click', { cta_id: ctaId, cta_location: ctaLocation(cta) });
   }
-  // A demo trigger (P5's DemoStub): demo_open with its demo_id. The id is the taxonomy's id kind
-  // (a slug), so an unknown value is dropped by trackEvent the same way a bad cta_id is.
-  const demo = target.closest<HTMLElement>('[data-demo]');
-  if (demo) trackEvent('demo_open', { demo_id: demo.dataset.demo ?? '' });
+  // A demo trigger's own event (demo_open) is fired by the lazy home enhancement when its panel
+  // actually opens (P5 S7); a click here only arms that load.
   const link = target.closest<HTMLAnchorElement>('a[href]');
   const reported = link ? linkEvent(link.href, location.host) : null;
   if (reported?.event === 'contact_click') trackEvent('contact_click', reported.params);

@@ -66,7 +66,7 @@ A row is never deleted, and an ID is never reused.
 
 | ID | URL | Type | Cluster | Cat. | Intent | Tier | Phase | Wave | Status | Index | Needs |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| R001 | `/` | Home | — | — | Who Deepzeta AI is, what it builds (custom-coded websites, AI automation) and why to book an audit | T1 | P5 | W1 | planned | index | — |
+| R001 | `/` | Home | — | — | Who Deepzeta AI is, what it builds (custom-coded websites, AI automation) and why to book an audit | T1 | P5 | W1 | live | index | — |
 | R002 | `/free-ai-audit` | Audit | — | 0.1 | "Book a free AI automation audit": what you get and how to book | T2 | P6 | W1 | planned | index | — |
 | R003 | `/about` | About | Company | — | Who runs Deepzeta AI, where it is, how it works | T2 | P6 | W1 | planned | index | Founder bio |
 | R004 | `/about/jamsheed-khalid` | Founder profile | Company | — | Who Jamsheed Khalid is (founder, author) | T2 | P6 | W3 | planned | index | Bio, photo, credentials |

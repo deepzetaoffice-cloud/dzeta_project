@@ -37,8 +37,11 @@ export default function HomePage() {
           sitewide block in the layout plus this one. */}
       <JsonLd graph={homeGraph()} />
 
-      {/* §01 Hero — the statement H1 is the LCP, visible at first paint (13 §3 rule 2) */}
-      <Hero />
+      {/* §01 Hero — the statement H1 is the LCP, visible at first paint (13 §3 rule 2). The lazy
+          home enhancement (story replay, demo panel) arms on its first interaction. */}
+      <div data-fx-lazy="home">
+        <Hero />
+      </div>
 
       {/* §02 Proof strip — platform names as text (catalogue §8); no logos (facts §5) */}
       <ProofStrip />
@@ -52,8 +55,11 @@ export default function HomePage() {
       {/* §05 Workflow explorer — the visible steps and one static story-flow (P7 makes it live) */}
       <WorkflowExplorer />
 
-      {/* §06 Proof — the page's one pinned scene, the depth-css laptop, the real-LCP stamp */}
-      <BuildItself />
+      {/* §06 Proof — the page's one pinned scene, the depth-css laptop, the real-LCP stamp (the
+          stamp fills through the lazy home enhancement) */}
+      <div data-fx-lazy="home">
+        <BuildItself />
+      </div>
 
       {/* §07 How we work — Audit → Build → Launch → Improve, Tier 1 step icons, no timeframes */}
       <HowWeWork />
