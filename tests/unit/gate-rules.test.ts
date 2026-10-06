@@ -143,6 +143,62 @@ describe('schemaProblems (check:schema)', () => {
     expect(schemaProblems(pageData({ jsonLd: goodBlocks() }), schemaOptions)).toEqual([]);
   });
 
+  // P5: the FAQ visible-parity check (08 §3 rule 7). The questions and answers of a FAQPage block
+  // must appear in the page's visible text; both sides are whitespace-normalised before comparing.
+  const faqBlock = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'FAQPage',
+        '@id': `${origin}#faq`,
+        mainEntity: [
+          {
+            '@type': 'Question',
+            name: 'What does the audit include?',
+            acceptedAnswer: { '@type': 'Answer', text: 'Everything you need to decide, in one session.' },
+          },
+        ],
+      },
+    ],
+  });
+
+  it('passes a FAQPage whose question and answer are visible on the page', () => {
+    const [sitewideBlock, pageBlock] = goodBlocks();
+    expect(
+      schemaProblems(
+        pageData({
+          jsonLd: [sitewideBlock!, pageBlock!, faqBlock],
+          bodyText: 'What does the audit include? Everything you need to decide, in one session.',
+        }),
+        schemaOptions,
+      ),
+    ).toEqual([]);
+  });
+
+  it('fails a FAQPage question or answer that is not visible on the page', () => {
+    const [sitewideBlock, pageBlock] = goodBlocks();
+    const problems = schemaProblems(
+      pageData({ jsonLd: [sitewideBlock!, pageBlock!, faqBlock], bodyText: 'Completely unrelated text.' }),
+      schemaOptions,
+    );
+    expect(problems).toHaveLength(2);
+    expect(problems.join('\n')).toMatch(/question is not visible/);
+    expect(problems.join('\n')).toMatch(/answer is not visible/);
+  });
+
+  it('ignores markup differences: only the normalised words are compared', () => {
+    const [sitewideBlock, pageBlock] = goodBlocks();
+    expect(
+      schemaProblems(
+        pageData({
+          jsonLd: [sitewideBlock!, pageBlock!, faqBlock],
+          bodyText: '<p>What does the audit include?</p>  <span>Everything you need to decide, in one session.</span>',
+        }),
+        schemaOptions,
+      ),
+    ).toEqual([]);
+  });
+
   it('fails a block that does not parse', () => {
     // The unparseable block also misses #organization/#website, so all three problems surface.
     expect(schemaProblems(pageData({ jsonLd: ['{"@type": '] }), schemaOptions)).toEqual([

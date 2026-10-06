@@ -65,6 +65,9 @@ export async function crawlSite(browser: Browser, baseUrl: string): Promise<Page
           links: attr('a[href]', 'href'),
           navLists: [...navGroups.values()],
           jsonLd: all('script[type="application/ld+json"]').map((el) => el.textContent ?? ''),
+          // The visible text of the page body, whitespace-normalised: the visible-parity check
+          // (P5) reads it — schema values that must mirror the page (the FAQ Q&A) are searched in it.
+          bodyText: (document.querySelector('main')?.textContent ?? '').replace(/\s+/g, ' ').trim(),
         };
       });
 

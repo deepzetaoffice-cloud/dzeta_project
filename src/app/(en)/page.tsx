@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
-import { homeContent } from '@/content/en/home';
+import { faqSection, homeContent } from '@/content/en/home';
+import { homeFaq } from '@/content/en/faq-bank';
 import { JsonLd } from '@/components/seo/JsonLd';
+import { Faq } from '@/components/sections/Faq';
 import { brandedTitle } from '@/lib/seo/title';
 import { homeGraph } from '@/lib/schema/graphs/home';
 import { absoluteUrl } from '@/lib/url';
@@ -12,17 +14,28 @@ export const metadata: Metadata = {
   alternates: { canonical: absoluteUrl('/') },
 };
 
-// The real Home assembles in S7 (P5 plan): the sections per docs/design/home.md, in blueprint
-// order, mount inside this page. The copy is typed data (src/content/en/home.ts); the FAQ and its
-// FAQPage schema block ship in S3.
+// The real Home assembles section by section (P5 plan, S3→S7). The FAQ ships first (S3), so the
+// FAQPage schema block has visible parity from its first commit; the remaining sections mount in
+// S4–S6 and the page takes its final shape at S7. Copy is typed data (src/content/en/*.ts); the
+// shell's SiteShell provides <main>, so the page renders its sections directly.
 export default function HomePage() {
   return (
-    <div className="mx-auto max-w-measure px-gutter pt-8 pb-section">
-      {/* Home's page schema block (P4 S7; spec decision 3): the sitewide block in the layout plus
-          this one. No FAQPage until the FAQ is visible (the plan's S7 note). */}
+    <>
+      {/* Home's page schema block (P4 S7; P5 adds the FAQPage: the FAQ is visible below): the
+          sitewide block in the layout plus this one. */}
       <JsonLd graph={homeGraph()} />
-      <h1 className="text-h1">{homeContent.heading}</h1>
-      <p className="mt-4">{homeContent.intro}</p>
-    </div>
+      {/* §01 The hero grows into its full form in S4; its H1 and answer are the page's LCP (13 §3 rule 2) */}
+      <section aria-labelledby="home-heading" className="mx-auto max-w-measure px-gutter pt-section">
+        <h1 id="home-heading" className="text-statement">
+          {homeContent.heading}
+        </h1>
+        <p className="mt-6 text-lead">{homeContent.intro}</p>
+      </section>
+      {/* §10 The FAQ (P5 S3; docs/design/faq.md): zero-JS base, lazy enhancement. The most
+          breathing room on the page (home.md) — py-section both sides. */}
+      <div data-fx-lazy="faq" className="mx-auto max-w-page px-gutter py-section">
+        <Faq heading={faqSection.heading} lede={faqSection.lede} questions={homeFaq} />
+      </div>
+    </>
   );
 }

@@ -1,11 +1,15 @@
 // The Home page graph assembler (P4 S7; spec §2.3 matrix, the Home row): primary entity WebPage
 // with about → #organization (no mainEntity — the matrix leaves it out), plus the ItemList of the
 // four pillars, in catalogue order, the names the mega menu shows (visible parity, 08 §3 rule 7).
-// No BreadcrumbList (the plan: nothing visible to mirror) and no FAQPage (the FAQ is not visible
-// until the real Home ships in P5). Assemblers compose nodes and resolve @ids; no literal values.
+// No BreadcrumbList (the plan: nothing visible to mirror). P5 adds the FAQPage block: the FAQ is
+// now visible on the real Home, and the Q&A mirrors the question bank byte for byte — the same
+// strings the Faq component renders, never retyped here (the P4 plan's S7 note, fulfilled).
+// Assemblers compose nodes and resolve @ids; no literal values.
 import { pillars } from '@/content/catalogue.ts';
+import { homeFaq } from '@/content/en/faq-bank.ts';
 import { homeContent } from '@/content/en/home.ts';
 import { checkedGraph } from '@/lib/schema/graph.ts';
+import { faqPageNode } from '@/lib/schema/nodes/faqPage.ts';
 import { itemListNode } from '@/lib/schema/nodes/itemList.ts';
 import { webPageNode } from '@/lib/schema/nodes/webPage.ts';
 import { absoluteUrl, siteUrl } from '@/lib/url.ts';
@@ -36,6 +40,13 @@ export function homeGraph() {
           // anchor is appended here, like the global @ids in sitewide.ts.
           id: `${absoluteUrl(`/services/${pillar.slug}`)}#service`,
           name: pillar.name,
+        })),
+      }),
+      faqPageNode({
+        id: `${pageUrl}#faq`,
+        questions: homeFaq.map((question) => ({
+          name: question.question,
+          answerText: question.answer,
         })),
       }),
     ],

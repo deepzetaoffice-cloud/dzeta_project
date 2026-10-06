@@ -1346,3 +1346,197 @@
     translate: 0 var(--dz-stagger-rise);
   }
 }
+
+/* The FAQ module (P5 S3; docs/design/faq.md; hover-guide-line, touch-press, the Zeta Pixel as the
+   open-state marker). Two columns on ≥ 1024 px (the intro column sticky while the list scrolls);
+   stacked below, chips wrapping, tap targets ≥ 44 px. Zero JS for the base: native <details>. */
+.dz-faq-grid {
+  display: grid;
+  gap: var(--dz-space-8, 2rem);
+  @media (width >= 64rem) {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    align-items: start;
+  }
+}
+
+.dz-faq-intro {
+  @media (width >= 64rem) {
+    position: sticky;
+    inset-block-start: calc(var(--dz-header-clear, 5.5rem) + 1rem);
+  }
+}
+
+/* hover-guide-line (13 §4.3): a pillar-colour line grows at inline-start on hover and focus */
+.dz-faq-item {
+  position: relative;
+  border-radius: var(--dz-radius-md, 0.75rem);
+}
+
+.dz-faq-item::before {
+  content: '';
+  position: absolute;
+  inset-block: 0.25rem;
+  inset-inline-start: 0;
+  inline-size: 2px;
+  border-radius: 1px;
+  background-image: var(--dz-pixel-ranking);
+  scale: 1 0;
+  transform-origin: center block-start;
+  @variant fx {
+    transition: scale var(--dz-dur-base) var(--dz-ease-out);
+  }
+}
+
+.dz-faq-item:where(:hover, :focus-within, [open])::before {
+  scale: 1 1;
+}
+
+/* The summary: the question, the pixel marker, the chevron. Touch-press on the summary. */
+.dz-faq-q {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-block-size: 3rem;
+  padding-inline: 0.875rem;
+  cursor: pointer;
+  border-radius: inherit;
+  @variant fx {
+    transition: scale var(--dz-dur-fast) var(--dz-ease-pop);
+  }
+}
+
+.dz-faq-q:active {
+  scale: 0.985;
+}
+
+/* The Zeta Pixel (13 §8): the current place — the open question. Never decorative; forced colours
+   fall back to a system-colour bar (faq.md). */
+.dz-faq-px {
+  inline-size: 0.625rem;
+  block-size: 0.625rem;
+  border-radius: 1.5px;
+  background-image: var(--dz-pixel-ranking);
+  box-shadow: 0 0 var(--dz-px-glow-size, 8px) var(--dz-pixel-ranking-glow, rgb(76 39 251 / 0.4));
+  opacity: 0;
+  scale: 0.5;
+  flex: none;
+  @variant fx {
+    transition:
+      opacity var(--dz-dur-base) var(--dz-ease-pop),
+      scale var(--dz-dur-base) var(--dz-ease-pop);
+  }
+}
+
+.dz-faq-item[open] .dz-faq-px {
+  opacity: 1;
+  scale: 1;
+}
+
+@media (forced-colors: active) {
+  .dz-faq-px {
+    background-image: none;
+    background-color: Highlight;
+    box-shadow: none;
+  }
+}
+
+.dz-faq-qtext {
+  flex: 1;
+  font-weight: 700;
+}
+
+.dz-faq-chev {
+  rotate: 0deg;
+  @variant fx {
+    transition: rotate var(--dz-dur-base) var(--dz-ease-out);
+  }
+}
+
+.dz-faq-item[open] .dz-faq-chev {
+  rotate: 180deg;
+}
+
+.dz-faq-a {
+  padding-inline: 0.875rem;
+  padding-block-end: 1rem;
+}
+
+/* The open/close height transition, native (faq.md): ::details-content with interpolate-size,
+   inside @supports. Instant under reduced motion or Reduce effects. */
+@supports selector(::details-content) and (interpolate-size: allow-keywords) {
+  @variant fx {
+    .dz-faq-item::details-content {
+      block-size: 0;
+      overflow: clip;
+      transition:
+        block-size var(--dz-dur-slow) var(--dz-ease-out),
+        content-visibility var(--dz-dur-slow) allow-discrete;
+      transition-behavior: allow-discrete;
+    }
+
+    .dz-faq-item[open]::details-content {
+      block-size: auto;
+    }
+  }
+}
+
+/* The topic chips (lazy enhancement only; hidden until it runs — faq.md: no JS, no chips) */
+.dz-faq-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-block-start: 1.25rem;
+}
+
+.dz-chip {
+  min-block-size: 2.75rem;
+  padding-inline: 1rem;
+  border-radius: var(--dz-radius-pill, 999px);
+  border: var(--dz-glass-edge-width, 1px) solid var(--dz-glass-edge);
+  background-color: var(--dz-glass-tint-min);
+  font-size: var(--dz-text-small);
+  font-weight: 500;
+  color: var(--dz-text);
+  cursor: pointer;
+
+  &[aria-pressed='true'] {
+    background-image: var(--dz-grad-signal);
+    color: var(--dz-navy);
+    border-color: transparent;
+    font-weight: 700;
+  }
+}
+
+/* The copy-link button (added by the enhancement) */
+.dz-faq-copy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 2.75rem;
+  padding-inline: 0.625rem;
+  margin-block-start: 0.5rem;
+  border-radius: var(--dz-radius-md, 0.75rem);
+  border: var(--dz-glass-edge-width, 1px) solid transparent;
+  color: var(--dz-text-muted);
+  cursor: pointer;
+
+  svg {
+    inline-size: 1.25rem;
+    block-size: 1.25rem;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  &[data-copied] {
+    color: var(--dz-ok);
+  }
+}
+
+/* The "Still have a question?" card (glass-frost; the audit CTA in ladder order) */
+.dz-faq-ask {
+  border-radius: var(--dz-radius-lg, 1rem);
+  padding: 1.25rem;
+}

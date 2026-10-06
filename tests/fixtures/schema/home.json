@@ -82,7 +82,7 @@
           "@id": "https://deepzeta.ai/#organization"
         },
         "inLanguage": "en",
-        "description": "Deepzeta AI builds custom-coded websites, SEO and AI search visibility, and AI automation for UAE businesses. The full site is coming: email hello@deepzeta.ai."
+        "description": "Deepzeta AI, a Dubai agency, builds custom-coded, high-performance websites with SEO and AI search visibility built in, plus AI automation for UAE businesses."
       },
       {
         "@type": "ItemList",
@@ -108,6 +108,76 @@
             "@type": "ListItem",
             "name": "Growth & Ranking",
             "url": "https://deepzeta.ai/services/growth-ranking#service"
+          }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://deepzeta.ai#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What does the free AI automation audit include?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The audit is free and comes with no obligation. In one session we map your sales, operations and admin processes, identify where customers or hours are being lost, and show which automations would pay back first. You get a clear picture of what to automate, in what order, and what each step involves — whether or not you build it with us."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How long does an automation or website take to build?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "It depends entirely on the scope, so we do not quote a standard timeframe before the audit. A single workflow, such as review requests or appointment reminders, is a smaller build than a full website with an AI agent behind it. After the audit you get a written scope with a delivery plan you can compare, and nothing starts without your sign-off on it."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is my business and customer data safe with AI systems?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes — data handling is designed in, not added later. We follow the UAE Personal Data Protection Law, customer-facing automations include consent wording and a way to reach a human, and you choose which platforms hold which data. We never sell or share your data, and the audit itself only covers what you agree to show us."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Do the AI agents work in Arabic as well as English?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. AI agents that talk to customers are built bilingual, Arabic and English, because UAE customers message in both — often in the same conversation. AI models with strong Arabic support, including the UAE’s own Jais and Falcon, are among the platforms we build with. Arabic-first flows are designed Arabic-first, never translated as an afterthought."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Which tools and platforms can you connect?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "If a tool has an API, it can usually be connected. The automations connect the platforms UAE businesses already run: WhatsApp Business API, Instagram, Messenger, email and SMS for messaging; HubSpot, Zoho CRM, Pipedrive, Salesforce and Odoo for CRM; n8n, Make and Zapier as automation engines; and accounting systems such as Zoho Books, QuickBooks and Xero."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Who owns the automation or website once it is built?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "You do — completely. The code, the workflows, the accounts and the data belong to your business, in your name, from day one. We build on your accounts, document everything and hand over full access at launch. If you later want another team to run or extend the system, nothing is locked and there is nothing to buy back from us."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Do you guarantee rankings, leads or results?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No — and we would question anyone who does. We build to measurable targets, like a reply within 60 seconds to every new lead, and we show you the numbers our own site achieves as the working example. What we guarantee is the engineering: custom code, performance budgets enforced in our pipeline, and AI-search-ready structure on every page we ship."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What happens after launch — am I on my own?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. Launch is a step, not the end. We watch the numbers with you, fix what surfaces in the first weeks, and there is an ongoing care retainer for businesses that want us to keep running and improving the systems. You can also run everything yourself: the handover includes documentation and training for your team."
+            }
           }
         ]
       }
