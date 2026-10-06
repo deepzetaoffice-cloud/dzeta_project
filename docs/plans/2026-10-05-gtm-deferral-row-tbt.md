@@ -182,3 +182,19 @@ artifacts, `.github/workflows/ci.yml` (it already runs `lhci` on the branch), `l
     precedent, scoped to one profile), superseding 0022's 225 ms; 0022's deferral half stands.
     07 §1's ≤ 200 ms and 0.95 stand for every page and profile; PSI/CrUX field data stays the
     arbiter after launch. `lighthouserc.cjs` and 07 §2 updated accordingly; CI re-run below.
+  - **0023 implemented (`6e99462`, 5 files, +90/−8):** the row TBT allowance 275 ms and the
+    Performance floor 0.93 in `lighthouserc.cjs` (verified loaded:
+    `["error",{"maxNumericValue":275,"aggregationMethod":"median-run"}]`,
+    `["error",{"minScore":0.93,"aggregationMethod":"median"}]`), decision 0023 written, 0022's TBT
+    row marked superseded, 07 §2's sentence repointed at 0023, this note. Local gates:
+    `format:check` PASS on all five files; `check:rules` PASS (18 entry files). The push needed the
+    second attempt again (the same silent-push failure; `git ls-remote` catches it — always verify
+    after pushing).
+  - **CI:** run 3 on `6e99462` failed only LCP — Europe 2573.05 and row 2573.94, within 1 ms of
+    each other across both profiles (a ~100 ms uniform shift over the morning baseline, on a
+    config-and-docs-only commit; `83562da`'s run 2 had passed LCP on both profiles) — post-outage
+    runner wobble. The rerun (attempt 2 of run 37390061546) is **CI GREEN, every gate end-to-end**:
+    https://github.com/deepzetaoffice-cloud/dzeta_project/actions/runs/37390061546. The 0023
+    allowances held as designed (TBT and Performance pass with the intrinsic third-party cost); LCP
+    needed no allowance — it passed on the healthy runner.
+  - **The plan is complete.** All three steps done; the throwaway scripts deleted from `.scratch/`.
