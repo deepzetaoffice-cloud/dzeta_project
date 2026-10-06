@@ -67,9 +67,14 @@ export function Hero() {
           {/* The Assembly locks beside the headline after its flight. It floats inline-start of
               the H1's first line on wide screens and above it on narrow ones, never adding a
               block of height before the H1 (the H1 stays the page's LCP, and the European
-              banner's reserved band never covers it at 360 × 640). */}
+              banner's reserved band never covers it at 360 × 640). Below 640 px the H1 takes the
+              h1 size. At the statement size its third line filled the 328 px box exactly, so Linux
+              and Android glyph widths wrapped it to six lines, under the banner (CI, 2026-10-06).
+              At the display size Montserrat and its fallback wrapped to different line counts, so
+              the font swap shifted the page. At the h1 size both give the same four lines, and the
+              widest line keeps 10% slack. */}
           <div className="dz-hero-statement flex flex-wrap items-center gap-x-4 gap-y-2">
-            <h1 id="home-heading" className="text-statement text-balance">
+            <h1 id="home-heading" className="text-h1 text-balance sm:text-statement">
               {heroAnswer.heading}
             </h1>
             <TheAssembly />
