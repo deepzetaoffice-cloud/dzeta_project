@@ -55,6 +55,8 @@ This is deepzeta's own website and its first case study. Speed, custom code, SEO
     - The review page's allowance is 194,000 B (C64).
     - A pre-launch row checks Home on production.
   - **CSS:** all page CSS still sits in the one shared stylesheet. A Home-only stylesheet was tried and reverted: the second render-blocking request cost Home about 75 ms of lab LCP. P6's plan decides the CSS architecture.
+  - **The hero H1 on phones:** below 640 px it takes the h1 size, so Linux and Android glyph widths never wrap it under the European banner.
+  - **CI:** Playwright's `github` reporter makes e2e failures public annotations. CI is green end-to-end on `14a38aa`: e2e 185/185 and lhci, with Home's LCP at 2,724 ms on both profiles and Performance 96.
   - **Next:** after the merge, P6 Core pages (04 §2).
 
   Tracking names come from one taxonomy (09 §3) and GTM and GA4 are configured from it, never typed by hand: the owner's setup is `docs/owner/p3-tracking-setup-guide.md` (Part A before P3, Part B after). Every manual task before launch is in `docs/owner/pre-launch-register.md`; each phase adds its rows. The app runs Next.js 16.3.7, React 19.3, TypeScript 6.0.3, Tailwind 4.3 (decision 0012). Every gate is an npm script: `npm run verify:fast` after each step, `npm run verify` before a merge (03). Work goes live only when the owner says "merge" (12 §1, decision 0017). Local runs need `.env.local` (`docs/owner/p0-setup-guide.md`); e2e and lhci need `NEXT_PUBLIC_SITE_URL` and `SITE_INDEXING=on` in the shell, and `.env.local` holds the real `NEXT_PUBLIC_GTM_ID` (CI has it too; e2e stubs GTM, 09 §4).
