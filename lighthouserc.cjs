@@ -105,10 +105,21 @@ const t1Assertions = {
 // collect, 3–4 requests, at most 300,790 B; 4 and 350 KB with headroom. Its LCP stays at the true
 // 2.5 s hard limit (07 §1): C61's allowance is for the European profile only, whose runs carry GTM's
 // header bytes without a country hint to tell the CSP apart.
+// TBT and Performance (decisions 0022 and 0023, the owner, 2026-10-05): with the tags granted on
+// this profile, gtm.js + the Google tag + GA4's collect execute inside Lighthouse's TBT window
+// (first paint to TTI) however early they load — the deferral past first paint (0022,
+// TrackingRuntime's afterFirstPaint) keeps them off the paint work but cannot move their execution
+// past TTI, which would be the idle-defer 09 §2.2 forbids (lesson L6). Measured twice on 83562da:
+// TBT 247–266 ms, Performance 0.93–0.95. The owner accepted the intrinsic cost (0023): this
+// profile's TBT lab allowance is 275 ms and its Performance floor 0.93, while 07 §1's ≤ 200 ms
+// TBT and the 0.95 T1 floor stand for every page and profile — the row exception covers the
+// granted third-party scripts only, and PSI/CrUX field data stays the arbiter after launch.
 const rowThirdParty = {
+  'categories:performance': ['error', { minScore: 0.93, ...medianScore }],
   'resource-summary:third-party:count': ['error', { maxNumericValue: 4, ...everyRun }],
   'resource-summary:third-party:size': ['error', { maxNumericValue: 350 * KB, ...everyRun }],
   'largest-contentful-paint': ['error', { maxNumericValue: 2500, ...medianRun }],
+  'total-blocking-time': ['error', { maxNumericValue: 275, ...medianRun }],
 };
 
 // The review page shows the complete shell (P2 plan, A3; registry R165) and is measured as T1 too, with

@@ -69,7 +69,7 @@ Schema is an **entity-clarity layer, not a ranking factor**, and AI engines read
 
    External profile URLs are never `@id`s; they go in `sameAs`.
 5. **Defined once, referenced many times.** Each `@id` is defined at most once per document.
-   - A reference resolves in the same document, or to a node listed in the schema registry (`docs/seo/schema-graph.md`, created in P4) that its home page defines in the same build. `check:schema` verifies both.
+   - A reference resolves in the same document, or to a node listed in the schema registry ([`docs/seo/schema-graph.md`](../seo/schema-graph.md), live since P4) that its home page defines in the same build. `check:schema` verifies both.
    - Pages point to entities; entities don't point back to pages. The one exception is `#organization` → `hasOfferCatalog` → `{SITE_URL}/services#catalog`.
 6. **One entity across locales.** `#organization` and `#website` are the same bytes in every locale's documents and contain no language-specific prose. Locale text lives on page nodes. Page-level `@id`s carry the locale through the page URL (`/ar/…`). A locale-prefixed global `@id` (`/ar/#organization`) is never used.
 7. **Visible parity.** Schema text equals the visible text, word for word, for:

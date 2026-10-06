@@ -7,10 +7,57 @@ import {
   schemaProblems,
   seoProblems,
   type PageData,
+  type SchemaOptions,
 } from '../gates/rules';
 
 const origin = 'https://deepzeta.ai';
 const options = { siteUrl: origin, brandName: 'Deepzeta AI' };
+const schemaOptions: SchemaOptions = {
+  siteUrl: origin,
+  nap: {
+    brandName: 'Deepzeta AI',
+    email: 'hello@deepzeta.ai',
+    streetAddress: 'Office #202, Al Hilal Bank Building, Al Qusais 2',
+    addressLocality: 'Dubai',
+    addressRegion: 'Dubai',
+    addressCountry: 'AE',
+  },
+};
+
+// A minimal sitewide + page graph that satisfies every P4 assertion.
+const goodBlocks = () => [
+  JSON.stringify({
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'ProfessionalService',
+        '@id': `${origin}/#organization`,
+        name: 'Deepzeta AI',
+        email: 'hello@deepzeta.ai',
+        address: {
+          '@type': 'PostalAddress',
+          streetAddress: 'Office #202, Al Hilal Bank Building, Al Qusais 2',
+          addressLocality: 'Dubai',
+          addressRegion: 'Dubai',
+          addressCountry: 'AE',
+        },
+      },
+      { '@type': 'WebSite', '@id': `${origin}/#website`, url: origin, publisher: { '@id': `${origin}/#organization` } },
+    ],
+  }),
+  JSON.stringify({
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'WebPage',
+        '@id': origin,
+        url: origin,
+        isPartOf: { '@id': `${origin}/#website` },
+        about: { '@id': `${origin}/#organization` },
+      },
+    ],
+  }),
+];
 
 function pageData(overrides: Partial<PageData> = {}): PageData {
   return {
@@ -92,33 +139,103 @@ describe('duplicateMetaProblems (check:seo)', () => {
 });
 
 describe('schemaProblems (check:schema)', () => {
-  it('passes a valid graph with references', () => {
-    const block = JSON.stringify({
-      '@context': 'https://schema.org',
-      '@graph': [
-        { '@type': 'WebPage', '@id': origin, about: { '@id': `${origin}/#organization` } },
-        {
-          '@type': 'ItemList',
-          '@id': `${origin}#itemlist`,
-          itemListElement: [{ '@id': `${origin}/services#service` }],
-        },
-      ],
-    });
-    expect(schemaProblems(pageData({ jsonLd: [block] }))).toEqual([]);
+  it('passes a valid two-block document (sitewide + page)', () => {
+    expect(schemaProblems(pageData({ jsonLd: goodBlocks() }), schemaOptions)).toEqual([]);
   });
 
   it('fails a block that does not parse', () => {
-    expect(schemaProblems(pageData({ jsonLd: ['{"@type": '] }))).toEqual(['JSON-LD block 1 does not parse']);
+    // The unparseable block also misses #organization/#website, so all three problems surface.
+    expect(schemaProblems(pageData({ jsonLd: ['{"@type": '] }), schemaOptions)).toEqual([
+      'JSON-LD block 1 does not parse',
+      `${origin}/#organization defined 0 times (expected 1)`,
+      `${origin}/#website defined 0 times (expected 1)`,
+    ]);
   });
 
   it('fails an @id defined twice across blocks', () => {
     const node = JSON.stringify({ '@type': 'Organization', '@id': `${origin}/#organization`, name: 'Deepzeta AI' });
-    expect(schemaProblems(pageData({ jsonLd: [node, node] })).join('\n')).toMatch(/defined 2 times/);
+    expect(schemaProblems(pageData({ jsonLd: [node, node] }), schemaOptions).join('\n')).toMatch(/defined 2 times/);
   });
 
   it('fails empty and placeholder values, including empty arrays', () => {
     const node = JSON.stringify({ '@type': 'Organization', telephone: '', foundingDate: '[[TODO: date]]', sameAs: [] });
-    expect(schemaProblems(pageData({ jsonLd: [node] }))).toHaveLength(3);
+    // The three value problems, plus the two missing global nodes (this graph defines neither).
+    expect(schemaProblems(pageData({ jsonLd: [node] }), schemaOptions)).toHaveLength(5);
+  });
+
+  it('fails #organization or #website missing or duplicated (spec §4 assertion 10)', () => {
+    const [sitewideBlock, pageBlock] = goodBlocks();
+    expect(schemaProblems(pageData({ jsonLd: [pageBlock!] }), schemaOptions).join('\n')).toMatch(
+      /#organization.*0 times/,
+    );
+    expect(
+      schemaProblems(pageData({ jsonLd: [sitewideBlock!, sitewideBlock!, pageBlock!] }), schemaOptions).join('\n'),
+    ).toMatch(/#website.*2 times/);
+  });
+
+  it('fails a reference that resolves nowhere in the document (assertion 3)', () => {
+    const block = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': 'WebSite',
+          '@id': `${origin}/#website`,
+          url: origin,
+          publisher: { '@id': `${origin}/#organization` },
+        },
+        { '@type': 'WebPage', '@id': origin, isPartOf: { '@id': `${origin}/#website` } },
+      ],
+    });
+    // #organization referenced (the WebSite's publisher) but never defined.
+    expect(schemaProblems(pageData({ jsonLd: [block] }), schemaOptions).join('\n')).toMatch(/resolves to no @id/);
+  });
+
+  it('fails a URL that leaves the canonical origin or carries a trailing slash (assertion 6)', () => {
+    const [sitewideBlock] = goodBlocks();
+    const block = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@graph': [
+        {
+          '@type': 'WebSite',
+          '@id': `${origin}/#website`,
+          url: origin,
+          publisher: { '@id': `${origin}/#organization` },
+        },
+        {
+          '@type': 'WebPage',
+          '@id': origin,
+          url: origin,
+          isPartOf: { '@id': `${origin}/#website` },
+          about: { '@id': `${origin}/#organization` },
+          relatedLink: 'https://example.com/x',
+        },
+      ],
+    });
+    expect(
+      schemaProblems(
+        pageData({ jsonLd: [sitewideBlock!.replace(`"url":"${origin}"`, `"url":"${origin}/"`), block] }),
+        schemaOptions,
+      ).join('\n'),
+    ).toMatch(/leaves the canonical origin|trailing slash/);
+  });
+
+  it('fails NAP that differs from the site config (assertion 5)', () => {
+    const [sitewideBlock, pageBlock] = goodBlocks();
+    const edited = sitewideBlock!.replace('Office #202', 'Office 202');
+    expect(schemaProblems(pageData({ jsonLd: [edited, pageBlock!] }), schemaOptions).join('\n')).toMatch(
+      /streetAddress differs/,
+    );
+  });
+
+  it('sameAs is exempt from the origin rule: external profile URLs pass', () => {
+    const [sitewideBlock, pageBlock] = goodBlocks();
+    const withProfiles = sitewideBlock!.replace(
+      '"addressCountry":"AE"}',
+      '"addressCountry":"AE"},"sameAs":["https://www.linkedin.com/company/deepzeta-ai-digital-solutions-dubai/"]',
+    );
+    expect(schemaProblems(pageData({ jsonLd: [withProfiles, pageBlock!] }), schemaOptions).join('\n')).not.toMatch(
+      /leaves the canonical origin/,
+    );
   });
 });
 

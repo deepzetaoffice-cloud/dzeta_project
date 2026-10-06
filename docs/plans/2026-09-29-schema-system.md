@@ -192,3 +192,7 @@ The P4 plan lists them when P4 starts; section 3 is the expected list. This plan
 ## Open questions
 1. The trade licence number (PENDING until the full licence; a variable until then).
 2. The office map pin (for `geo`) and the Google Business Profile, both created once the full licence is issued (variables until then).
+
+## Progress notes (implementation, P4)
+- **Open question in the P4 plan resolved (2026-10-05):** the built-HTML gate lives in the existing Playwright `tests/gates/schema.spec.ts` + `rules.ts` (the `check:schema` npm script and 03's catalogue already point there; a second parallel checker would violate one-source-per-topic). The spec's §3/§4 file name `scripts/check-schema.mjs` is recorded here as a deviation — nothing was created under that name.
+- Built S3–S9 (2026-10-05): the types, `JsonLd`, the generators (global + ten page), the graph guards, the sitewide and Home assemblers, the extended `check:schema` assertions, the registry `docs/seo/schema-graph.md` and the golden fixture for Home. Details in the P4 plan's Progress notes.

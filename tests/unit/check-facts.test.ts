@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { contactFacts, findRetypedFacts, findTodoMarkers } from '../../scripts/check-facts.mjs';
+import { contactFacts, findRetypedFacts, findTodoMarkers, findUnsourcedNumbers } from '../../scripts/check-facts.mjs';
 
 describe('check:facts', () => {
   it('passes content without placeholders', () => {
@@ -40,5 +40,18 @@ describe('check:facts', () => {
     ]);
     // A file that reads it through the config passes
     expect(findRetypedFacts('src/components/layout/SiteFooter.tsx', `mailto:${'siteConfig.email'}`, facts)).toEqual([]);
+  });
+
+  it('the numbers allowlist: an allowed number passes, an unsourced one fails (P4 S9)', () => {
+    const file = 'src/content/en/home.ts';
+    const good = `// a comment mentioning 99 problems
+      intro: 'We reply within 60 seconds, around the clock.',
+      stat: 'Agents run 24/7.',
+      catalogue: 'E-Invoicing Ready (5.6)', // an ID, not a claim
+      copyright: '© 2026',
+    `;
+    expect(findUnsourcedNumbers(file, good)).toEqual([]);
+    const bad = `intro: 'We boost revenue by 300 percent.'`;
+    expect(findUnsourcedNumbers(file, bad)).toEqual([{ file, value: '300' }]);
   });
 });
