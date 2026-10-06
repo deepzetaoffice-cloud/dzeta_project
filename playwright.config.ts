@@ -9,7 +9,8 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: Boolean(process.env.CI),
   retries: 0,
-  reporter: process.env.CI ? [['list'], ['html', { open: 'never' }]] : 'list',
+  // On CI, `github` turns each failure into a public annotation: the job logs need admin rights.
+  reporter: process.env.CI ? [['list'], ['github'], ['html', { open: 'never' }]] : 'list',
   use: {
     baseURL: `http://localhost:${PORT}`,
     ...devices['Desktop Chrome'],
