@@ -39,6 +39,7 @@ function StoryChat() {
       className="dz-story-chat"
       role="img"
       aria-label="An example conversation: a customer asks about availability on WhatsApp, an AI agent replies in seconds and confirms a booking for Tuesday at 4pm."
+      data-fx-once=""
     >
       <p className="dz-chat-bubble dz-chat-bubble--customer">Hi, do you have anything available this week?</p>
       <p className="dz-chat-bubble dz-chat-bubble--agent">
@@ -63,12 +64,15 @@ export function Hero() {
 
       <div className="relative z-1 mx-auto grid max-w-page gap-10 px-gutter pt-section pb-section lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:items-center">
         <div>
-          {/* The Assembly sits beside the statement: the cluster locks in after its flight */}
-          <div className="flex flex-wrap items-center gap-4">
-            <TheAssembly />
+          {/* The Assembly locks beside the headline after its flight. It floats inline-start of
+              the H1's first line on wide screens and above it on narrow ones, never adding a
+              block of height before the H1 (the H1 stays the page's LCP, and the European
+              banner's reserved band never covers it at 360 × 640). */}
+          <div className="dz-hero-statement flex flex-wrap items-center gap-x-4 gap-y-2">
             <h1 id="home-heading" className="text-statement text-balance">
               {heroAnswer.heading}
             </h1>
+            <TheAssembly />
           </div>
           <p className="mt-6 max-w-measure text-lead">{heroAnswer.answer}</p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
@@ -86,8 +90,9 @@ export function Hero() {
           </div>
         </div>
 
-        {/* The proof card: glass-liquid (one per view), story-chat inside, plays once in view */}
-        <div className="dz-glass dz-hero-proof" data-fx-once="">
+        {/* The proof card: glass-liquid (one per view), story-chat inside, plays once in view.
+            data-fx-once sits on the chat itself: the one-shot CSS targets .dz-story-chat.is-in */}
+        <div className="dz-glass dz-hero-proof">
           <p className="font-mono text-caption uppercase tracking-eyebrow text-fg-muted">{heroAnswer.proofEyebrow}</p>
           <h2 className="mt-2 text-h3">{heroAnswer.proofHeading}</h2>
           <div className="mt-4">

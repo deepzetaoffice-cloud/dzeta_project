@@ -1372,18 +1372,36 @@
   border-radius: var(--dz-radius-md);
 }
 
-.dz-faq-item::before {
-  content: '';
-  position: absolute;
-  inset-block: 0.25rem;
-  inset-inline-start: 0;
-  inline-size: calc(var(--dz-glass-edge-width) * 2);
-  border-radius: 12.5%;
-  background-image: var(--dz-pixel-ranking);
-  scale: 1 0;
-  transform-origin: center block-start;
+.dz-faq-item {
+  /* The guide line itself: the variant wraps the element and &::before nests inside it — a
+     variant directly after the pseudo-element compiles to a dead :where() (preferences e2e) */
   @variant fx {
-    transition: scale var(--dz-dur-base) var(--dz-ease-out);
+    &::before {
+      content: '';
+      position: absolute;
+      inset-block: 0.25rem;
+      inset-inline-start: 0;
+      inline-size: calc(var(--dz-glass-edge-width) * 2);
+      border-radius: 12.5%;
+      background-image: var(--dz-pixel-ranking);
+      scale: 1 0;
+      transform-origin: center block-start;
+      transition: scale var(--dz-dur-base) var(--dz-ease-out);
+    }
+  }
+
+  /* The line rests in place without effects: the static final state is a visible line, so
+     no-JS and Reduce effects visitors see the marked question */
+  &::before {
+    content: '';
+    position: absolute;
+    inset-block: 0.25rem;
+    inset-inline-start: 0;
+    inline-size: calc(var(--dz-glass-edge-width) * 2);
+    border-radius: 12.5%;
+    background-image: var(--dz-pixel-ranking);
+    scale: 1 1;
+    transform-origin: center block-start;
   }
 }
 
@@ -1463,18 +1481,27 @@
 /* The open/close height transition, native (faq.md): ::details-content with interpolate-size,
    inside @supports. Instant under reduced motion or Reduce effects. */
 @supports selector(::details-content) and (interpolate-size: allow-keywords) {
-  @variant fx {
-    .dz-faq-item::details-content {
-      block-size: 0;
-      overflow: clip;
-      transition:
-        block-size var(--dz-dur-slow) var(--dz-ease-out),
-        content-visibility var(--dz-dur-slow) allow-discrete;
-      transition-behavior: allow-discrete;
+  /* The variant wraps the element selector and the pseudo-element nests inside it with &: a
+     variant directly after ::details-content compiles to a dead empty :where() (the
+     preferences e2e's second dead-rule case). */
+  .dz-faq-item {
+    @variant fx {
+      &::details-content {
+        block-size: 0;
+        overflow: clip;
+        transition:
+          block-size var(--dz-dur-slow) var(--dz-ease-out),
+          content-visibility var(--dz-dur-slow) allow-discrete;
+        transition-behavior: allow-discrete;
+      }
     }
+  }
 
-    .dz-faq-item[open]::details-content {
-      block-size: auto;
+  .dz-faq-item[open] {
+    @variant fx {
+      &::details-content {
+        block-size: auto;
+      }
     }
   }
 }
@@ -1572,9 +1599,13 @@
   position: absolute;
   inset-inline-end: 4%;
   inset-block-start: 10%;
-  height: 45%;
-  min-height: 12rem;
-  opacity: 0.28;
+  /* Decorative and bounded: never larger than a third of the hero, so the statement H1 is
+     always the page's LCP element (13 §3 rule 2's spirit; the foundation e2e reads the
+     observed LCP node) */
+  height: 30%;
+  max-height: 10rem;
+  min-height: 6rem;
+  opacity: 0.24;
   @variant fx {
     animation: dz-mark-sweep var(--dz-dur-slow) var(--dz-ease-out) both;
   }
@@ -1779,6 +1810,8 @@
 }
 
 @keyframes dz-drift {
+  /* ±4% of the row's own width, but the row is inside the page's padding: translating it
+     sideways must never widen the document. The overflow-clip wrapper (below) guarantees that. */
   from {
     translate: 4% 0;
   }
@@ -1872,6 +1905,7 @@
 
 .dz-flow-nodes {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem;
   position: relative;

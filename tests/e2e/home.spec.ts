@@ -152,9 +152,11 @@ test('axe: no serious or critical violations on Home', async ({ page }) => {
 });
 
 test('Reduce effects: the stories rest in their final states', async ({ page }) => {
-  // The display switch needs the runtime; the data-effects attribute is the same switch
+  // A genuine trigger (13 §2.11): the init script reads the media query before the first
+  // paint, so no race with the preferences runtime's own write of data-effects
+  await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
-  await page.evaluate(() => document.documentElement.setAttribute('data-effects', 'reduced'));
+  await expect(page.locator('html')).toHaveAttribute('data-effects', 'reduced');
   // The chat's final state: the complete conversation, no hidden bubbles
   const bubbles = page.locator('.dz-chat-bubble');
   await expect(bubbles).toHaveCount(2);

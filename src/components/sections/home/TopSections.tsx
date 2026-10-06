@@ -12,7 +12,12 @@ import { fourDoors, problemOutcome, proofStrip } from '@/content/en/home';
 // and partner badges appear only once confirmed (facts §5) — none are, so none are shown.
 export function ProofStrip() {
   return (
-    <section aria-labelledby="proof-strip-heading" className="dz-proof-strip border-y border-hairline py-8">
+    // overflow-clip: the drift row's ±4% translate (13 §4.4) moves inside this band and can
+    // never widen the document (WCAG 1.4.10 — the 320 px reflow e2e)
+    <section
+      aria-labelledby="proof-strip-heading"
+      className="dz-proof-strip overflow-clip border-y border-hairline py-8"
+    >
       <div className="mx-auto max-w-page px-gutter">
         <h2
           id="proof-strip-heading"
@@ -48,7 +53,7 @@ export function ProblemOutcome() {
       <p className="mt-4 max-w-measure text-lead">{problemOutcome.lede}</p>
       <div className="mt-10 grid gap-6">
         {problemOutcome.rows.map((row) => (
-          <article key={row.problem} className="dz-before-after dz-glass">
+          <article key={row.problem} className="dz-before-after dz-glass" data-fx-once="">
             <div className="dz-ba-side dz-ba-side--problem">
               <h3 className="font-mono text-caption uppercase tracking-eyebrow text-fg-muted">Today</h3>
               <p className="mt-1.5 text-h4">{row.problem}</p>

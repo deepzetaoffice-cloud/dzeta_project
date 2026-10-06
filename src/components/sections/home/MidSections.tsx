@@ -36,6 +36,7 @@ export function WorkflowExplorer() {
           className="dz-story-flow dz-glass"
           role="img"
           aria-label={`An example workflow: ${workflowExplorer.steps.join(' ')}`}
+          data-fx-once=""
         >
           <span className="dz-flow-label font-mono text-caption uppercase tracking-eyebrow text-fg-muted">
             {workflowExplorer.flowLabel}
