@@ -46,7 +46,13 @@ const FRAMEWORK_JS_GROWTH = 5 * KB;
 // and C5 removed, minus the baseline; the leak's own code, retired to RETIRED_EVENTS, is what grew it).
 // With the GTM ID set, lhci also counts ~550 B of CSP header on each script response (the enforced
 // policy names the vendor hosts once GTM is on): +3,850 B on Home that is not JavaScript (07 §2 Units).
-const OWN_JS_HOME = 11_077;
+// P5 step S7: 8,737 B (148,404–148,405 B in every run on Home, both profiles, and on the review
+// page, 2026-10-06). Since the C5 amendment, `/_next/` chunks carry nosniff alone, so every script response
+// is lighter than when the baseline was measured, and the same method now reads lower. Measured the
+// same way as P3's post-amendment 147,091 B, P4 and P5 together added 1,314 B at first load: P4's
+// first-paint deferral, and P5's lazy loader with its FxRuntime and clicks.ts hooks. Every P5
+// enhancement module loads on first use.
+const OWN_JS_HOME = 8_737;
 // Home's cap: 10 KB until P3, 11 KB since the tracking runtime (decision 0021).
 const HOME_OWN_JS_CAP = 11 * KB;
 if (OWN_JS_HOME > HOME_OWN_JS_CAP) throw new Error('OWN_JS_HOME is above the 11 KB Home cap (07 §2, 13 §7).');
@@ -57,7 +63,15 @@ const FIRST_PARTY_JS_LIMIT = FRAMEWORK_JS_BASELINE + FRAMEWORK_JS_GROWTH + OWN_J
 // HTML + CSS + JS before the first interaction ≤ the framework baseline + 50 KB (07 §2).
 const FIRST_LOAD_LIMIT = FRAMEWORK_JS_BASELINE + 50 * KB;
 // The review page alone (conflict C57): it never reaches visitors, and carries the complete shell.
-const REVIEW_FIRST_LOAD_LIMIT = 192_000;
+// C64 raised it from 192,000 B: P5's effects CSS and its eight Tier 1 icons reach every page, and the
+// review page measured 192,937 B (2026-10-06).
+const REVIEW_FIRST_LOAD_LIMIT = 194_000;
+// Home alone, in the lab (conflict C64, the owner, 2026-10-06): the real Home measures 200,042 B
+// with gzip, which is what `next start` serves. React sends the page twice (markup + page data),
+// and gzip's 32 KB window can't compress copies that far apart. Production serves Brotli, which
+// does: about 180 KB on the same build, under FIRST_LOAD_LIMIT. That limit stands for every
+// other page and for what visitors receive (a pre-launch register row checks it on production).
+const HOME_FIRST_LOAD_LIMIT = 200 * KB;
 
 // T1 Home (decision 0005): Performance ≥ 0.95. Core Web Vitals hard limits apply to every tier (07 §1).
 // Third-party caps from C5's measurement with the real container (2026-10-04, lhci, 15 runs):
@@ -81,7 +95,11 @@ const t1Assertions = {
   // regression (UAE Home stays 2,329–2,407 ms; Performance 97–98, TBT ≤ 28 ms, CLS 0). The lab
   // allowance for this one profile is 2,550 ms; the 2.5 s hard limit (07 §1) stays for every page and
   // is checked against real visitors' field data (PSI/CrUX) after launch.
-  'largest-contentful-paint': ['error', { maxNumericValue: 2550, ...medianRun }],
+  // C63 (the owner, 2026-10-06, within decision 0020): the real Home's bytes before first paint
+  // (C64) put its lab LCP at a 2,707 ms median (2,629–2,728 ms), Performance 0.96–0.97, TBT ≤ 24 ms,
+  // CLS 0. Home's lab allowance is 2,750 ms on both profiles. The 2.5 s hard limit stands for real
+  // visitors (field data on production).
+  'largest-contentful-paint': ['error', { maxNumericValue: 2750, ...medianRun }],
   'cumulative-layout-shift': ['error', { maxNumericValue: 0.1, ...medianRun }],
   'total-blocking-time': ['error', { maxNumericValue: 200, ...medianRun }],
   // TTFB hard limit (07 §1). Locally it's the Node server on localhost; the real figure comes from
@@ -102,9 +120,9 @@ const t1Assertions = {
 };
 
 // The UAE campaign landing's own assertions (C5's measurement, above): GTM, the Google tag and GA4's
-// collect, 3–4 requests, at most 300,790 B; 4 and 350 KB with headroom. Its LCP stays at the true
-// 2.5 s hard limit (07 §1): C61's allowance is for the European profile only, whose runs carry GTM's
-// header bytes without a country hint to tell the CSP apart.
+// collect, 3–4 requests, at most 300,790 B; 4 and 350 KB with headroom. Its LCP was at the true
+// 2.5 s hard limit (07 §1) until P5. The real Home measures a 2,706 ms median here (2,630–2,712 ms),
+// so C63 gives it the same 2,750 ms lab allowance as the European profile.
 // TBT and Performance (decisions 0022 and 0023, the owner, 2026-10-05): with the tags granted on
 // this profile, gtm.js + the Google tag + GA4's collect execute inside Lighthouse's TBT window
 // (first paint to TTI) however early they load — the deferral past first paint (0022,
@@ -118,7 +136,7 @@ const rowThirdParty = {
   'categories:performance': ['error', { minScore: 0.93, ...medianScore }],
   'resource-summary:third-party:count': ['error', { maxNumericValue: 4, ...everyRun }],
   'resource-summary:third-party:size': ['error', { maxNumericValue: 350 * KB, ...everyRun }],
-  'largest-contentful-paint': ['error', { maxNumericValue: 2500, ...medianRun }],
+  'largest-contentful-paint': ['error', { maxNumericValue: 2750, ...medianRun }],
   'total-blocking-time': ['error', { maxNumericValue: 275, ...medianRun }],
 };
 
@@ -126,7 +144,7 @@ const rowThirdParty = {
 // two differences. It's noindex by design (never linked, 404 in production), so Lighthouse's SEO
 // category, which fails a page that blocks indexing, doesn't apply. And it carries the full mega menu,
 // the sheet, the full footer and the icon gallery in its HTML, so its lab LCP may reach 2,700 ms (C48,
-// raised by C50; decision 0020); Home keeps the 2.5 s hard limit.
+// raised by C50; decision 0020). Home's own lab allowance is C63's.
 const reviewAssertions = {
   ...t1Assertions,
   'categories:seo': 'off',
@@ -167,5 +185,6 @@ module.exports = {
     FIRST_PARTY_JS_LIMIT,
     FIRST_LOAD_LIMIT,
     REVIEW_FIRST_LOAD_LIMIT,
+    HOME_FIRST_LOAD_LIMIT,
   },
 };

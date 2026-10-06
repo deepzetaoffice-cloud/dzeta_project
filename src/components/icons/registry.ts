@@ -112,7 +112,7 @@ export const TIER_1 = {
   // B2B, Corporate & Tech: an org chart — teams and reporting lines.
   'industry-b2b': {
     flip: false,
-    d: 'M12 3.75v4M7.75 11.75v-2h8.5v2M9.25 11.75v-1h5.5v1M6.75 15.75h4v4h-4zM13.25 15.75h4v4h-4zM8.75 11.75v4M15.25 11.75v4M12 7.75v4',
+    d: 'M12.25 3.75v4M7.75 11.75v-2h9v2M9.25 11.75v-1h6v1M6.75 15.75h4v4h-4zM13.75 15.75h4v4h-4zM8.75 11.75v4M15.75 11.75v4M12.25 7.75v4',
   },
   // E-Commerce & Consumer Brands: a basket.
   'industry-commerce': {
@@ -127,7 +127,7 @@ export const TIER_1 = {
   // Local, Medical & Field Services: a first-aid-style cross in a rounded square — care on call.
   'industry-services': {
     flip: false,
-    d: 'M4.25 6.75a2.5 2.5 0 0 1 2.5-2.5h10.5a2.5 2.5 0 0 1 2.5 2.5v10.5a2.5 2.5 0 0 1-2.5 2.5h-10.5a2.5 2.5 0 0 1-2.5-2.5zM12 8.75v6.5M8.75 12h6.5',
+    d: 'M4.25 6.75a2.5 2.5 0 0 1 2.5-2.5h11a2.5 2.5 0 0 1 2.5 2.5v11a2.5 2.5 0 0 1-2.5 2.5h-11a2.5 2.5 0 0 1-2.5-2.5zM12.25 9v6.5M9 12.25h6.5',
   },
 } as const satisfies Record<string, Tier1Icon>;
 

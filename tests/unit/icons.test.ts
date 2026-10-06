@@ -222,8 +222,19 @@ const P1_TIER_1 = ['arrow', 'send', 'check', 'menu', 'close', 'globe'];
 describe('Tier 1 icons drawn from P2 on', () => {
   const fresh = tier1.filter(([name]) => !P1_TIER_1.includes(name));
 
-  it('are the chevron and the external link', () => {
-    expect(fresh.map(([name]) => name)).toEqual(['chevron', 'external-link']);
+  it("are the chevron and the external link (P2), and Home's four step and four industry icons (P5)", () => {
+    expect(fresh.map(([name]) => name)).toEqual([
+      'chevron',
+      'external-link',
+      'audit',
+      'build',
+      'launch',
+      'improve',
+      'industry-b2b',
+      'industry-commerce',
+      'industry-property',
+      'industry-services',
+    ]);
   });
 
   it.each(fresh)('%s: horizontal and vertical line centres on .25 or .75, inside the live area (§3)', (_, icon) => {
