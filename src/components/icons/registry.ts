@@ -96,6 +96,39 @@ export const TIER_1 = {
     flip: true,
     d: 'M14.25 3.75h6v6M20.25 3.75l-8.5 8.5M17.75 13.25v4.75a2.25 2.25 0 0 1-2.25 2.25h-9.5a2.25 2.25 0 0 1-2.25-2.25v-9a2.25 2.25 0 0 1 2.25-2.25h5',
   },
+  // The four process steps of "How we work" (P5, home.md §07). Plain line icons, no pixel: the
+  // pixel stays reserved for services (the owner's choice, open question 1). Drawn from P2 on, so
+  // line centres sit on .25/.75 (§3, C39). None mirrors: each draws a process, not a direction.
+  // Audit: a page under a magnifier — the findings come first.
+  audit: { flip: false, d: 'M10.75 3.75h-7v16h13.5v-7M10.75 10.75h9.5M17.25 14.75l3-3' },
+  // Build: a code bracket pair, the hand-written-code motif of the Websites pillar icon.
+  build: { flip: false, d: 'M8.75 7.75l-4.5 4.5 4.5 4.5M15.25 7.75l4.5 4.5-4.5 4.5' },
+  // Launch: an arrow leaving a pad — the system goes live.
+  launch: { flip: false, d: 'M3.75 8.75v11.5h11.5M20.25 3.75L9.25 14.75M20.25 3.75h-6.5M20.25 3.75v6.5' },
+  // Improve: a gauge climbing — the numbers keep moving after launch.
+  improve: { flip: false, d: 'M4.25 17.75a8.5 8.5 0 1 1 15.5 0M12 12.25l4.25-4.25' },
+  // The four industry groups (P5, home.md §09; Icon Master Rules §14.2: plain Tier 1 for
+  // industries, so they don't compete with service icons). None mirrors.
+  // B2B, Corporate & Tech: an org chart — teams and reporting lines.
+  'industry-b2b': {
+    flip: false,
+    d: 'M12 3.75v4M7.75 11.75v-2h8.5v2M9.25 11.75v-1h5.5v1M6.75 15.75h4v4h-4zM13.25 15.75h4v4h-4zM8.75 11.75v4M15.25 11.75v4M12 7.75v4',
+  },
+  // E-Commerce & Consumer Brands: a basket.
+  'industry-commerce': {
+    flip: false,
+    d: 'M3.75 8.75h16.5l-1.75 8.5h-13zM8.75 8.75l2.75-5M15.25 8.75l-2.75-5M9.75 12.75v2M14.25 12.75v2',
+  },
+  // Real Estate, Construction & Professional: a skyline of two buildings.
+  'industry-property': {
+    flip: false,
+    d: 'M3.75 20.25h16.5M5.75 20.25V8.75h6.5v11.5M12.25 12.75h6v7.5M8.25 11.75h1.5M8.25 14.75h1.5M15.25 15.75h1M15.25 17.75h1',
+  },
+  // Local, Medical & Field Services: a first-aid-style cross in a rounded square — care on call.
+  'industry-services': {
+    flip: false,
+    d: 'M4.25 6.75a2.5 2.5 0 0 1 2.5-2.5h10.5a2.5 2.5 0 0 1 2.5 2.5v10.5a2.5 2.5 0 0 1-2.5 2.5h-10.5a2.5 2.5 0 0 1-2.5-2.5zM12 8.75v6.5M8.75 12h6.5',
+  },
 } as const satisfies Record<string, Tier1Icon>;
 
 // Tier 2: the prototype's service icons. All five are catalogue §1, the AI Automation pillar.
