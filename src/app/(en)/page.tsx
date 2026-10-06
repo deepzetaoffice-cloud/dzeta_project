@@ -3,7 +3,6 @@ import { homeContent } from '@/content/en/home';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { brandedTitle } from '@/lib/seo/title';
 import { homeGraph } from '@/lib/schema/graphs/home';
-import { siteConfig } from '@/lib/site-config';
 import { absoluteUrl } from '@/lib/url';
 
 export const metadata: Metadata = {
@@ -13,8 +12,9 @@ export const metadata: Metadata = {
   alternates: { canonical: absoluteUrl('/') },
 };
 
-// Placeholder Home for P0: the empty-page baseline (decision 0014) is measured on this page. The
-// shell's header and <main> come from SiteDocument (P2); the real Home replaces this in P5.
+// The real Home assembles in S7 (P5 plan): the sections per docs/design/home.md, in blueprint
+// order, mount inside this page. The copy is typed data (src/content/en/home.ts); the FAQ and its
+// FAQPage schema block ship in S3.
 export default function HomePage() {
   return (
     <div className="mx-auto max-w-measure px-gutter pt-8 pb-section">
@@ -23,13 +23,6 @@ export default function HomePage() {
       <JsonLd graph={homeGraph()} />
       <h1 className="text-h1">{homeContent.heading}</h1>
       <p className="mt-4">{homeContent.intro}</p>
-      <p className="mt-4">
-        {homeContent.contactBefore}
-        <a className="text-link underline" href={`mailto:${siteConfig.email}`}>
-          {siteConfig.email}
-        </a>
-        {homeContent.contactAfter}
-      </p>
     </div>
   );
 }
