@@ -7,6 +7,10 @@
 // - The npm script collects this profile with --additive, after the first.
 // - The server and the number of runs are lighthouserc.cjs' own (kept equal by hand: a config file
 //   can't import the other here, as the lint rules forbid require()).
+// The CPU calibration (decision 0024), as in lighthouserc.cjs: scripts/lhci-run.mjs sets the variable.
+const cpuSlowdownMultiplier = Number(process.env.DZ_LHCI_CPU_MULTIPLIER);
+const calibrated = cpuSlowdownMultiplier > 0 ? { throttling: { cpuSlowdownMultiplier } } : {};
+
 module.exports = {
   ci: {
     collect: {
@@ -16,7 +20,7 @@ module.exports = {
       url: ['http://127.0.0.1:3000/?utm_source=lhci&gclid=test'],
       numberOfRuns: 5,
       // Vercel's country header; next start applies the same header rules (src/lib/tracking/region.ts).
-      settings: { extraHeaders: JSON.stringify({ 'x-vercel-ip-country': 'AE' }) },
+      settings: { extraHeaders: JSON.stringify({ 'x-vercel-ip-country': 'AE' }), ...calibrated },
     },
   },
 };

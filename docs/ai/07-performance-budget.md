@@ -4,7 +4,7 @@
 
 The site is deepzeta's proof of work. **A page that fails a hard limit does not ship.**
 
-**Test conditions:** mobile, budget Android class device, slow 4G. Lighthouse mobile emulation in CI (`lhci`), and PageSpeed Insights/CrUX field data after launch. Studio-laptop results don't count.
+**Test conditions:** mobile, budget Android class device, slow 4G. Lighthouse mobile emulation in CI (`lhci`), with the CPU slowdown calibrated to the machine's speed (4 × benchmarkIndex ÷ 4,000, [decision 0025](../decisions/0025-lighthouse-cpu-calibration.md)), and PageSpeed Insights/CrUX field data after launch. Studio-laptop results don't count.
 
 ---
 

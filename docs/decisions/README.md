@@ -39,6 +39,7 @@ Status: PROPOSED | ACCEPTED (owner, date) | SUPERSEDED by NNNN
 | [0021](0021-analytics-and-consent.md) | Analytics and consent (P3): Home's first-party JavaScript cap 11 KB with the tracking runtime; GTM by the site's own loader (C56); the generated container, proven by a GTM round trip and live since the owner's B1–B8; the measured third-party caps per region; the security headers on pages only; European Home's lab LCP 2,550 ms (C61) | ACCEPTED |
 | [0022](0022-gtm-deferral-and-row-tbt-budget.md) | GTM deferred past first paint (afterFirstPaint: idle wait with a 1,500 ms timeout into a double rAF — never idle-deferred, 09 §2.2); the UAE campaign profile's TBT lab allowance 225 ms while §1's ≤ 200 ms hard limit stands | ACCEPTED (TBT row superseded by 0023) |
 | [0023](0023-row-profile-tbt-and-performance-allowance.md) | The UAE campaign profile's lab allowances: TBT 275 ms, Performance floor 0.93 — the granted third-party scripts' execution cost inside the TBT window is intrinsic (measured 247–266 ms, 0.93–0.95 on 83562da); §1's ≤ 200 ms and 0.95 stand for every page and profile | ACCEPTED |
+| [0025](0025-lighthouse-cpu-calibration.md) | Lighthouse's CPU slowdown calibrated to each machine: multiplier = 4 × benchmarkIndex ÷ 4,000 (clamped 2–8), measured by `scripts/lhci-run.mjs` before every lhci run; no threshold changes | ACCEPTED |
 
 ## Open business decisions (from the blueprint)
 

@@ -151,12 +151,19 @@ const reviewAssertions = {
   'largest-contentful-paint': ['error', { maxNumericValue: 2700, ...medianRun }],
 };
 
+// The CPU calibration (decision 0024): scripts/lhci-run.mjs sets DZ_LHCI_CPU_MULTIPLIER from this
+// machine's benchmarkIndex. Lighthouse deep-merges this partial `throttling` into its defaults, so
+// only the multiplier changes. Unset (a bare `lhci collect`), Lighthouse's default 4 applies.
+const cpuSlowdownMultiplier = Number(process.env.DZ_LHCI_CPU_MULTIPLIER);
+const calibrated = cpuSlowdownMultiplier > 0 ? { throttling: { cpuSlowdownMultiplier } } : {};
+
 module.exports = {
   ci: {
     collect: {
       startServerCommand: 'npm run start',
       url: ['http://localhost:3000/', 'http://localhost:3000/shell-review'],
       numberOfRuns: 5,
+      settings: { ...calibrated },
     },
     assert: {
       assertMatrix: [

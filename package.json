@@ -26,7 +26,7 @@
     "check:links": "playwright test --project=gate-links",
     "test": "vitest run",
     "test:e2e": "playwright test --project=e2e",
-    "lhci": "lhci collect && lhci collect --config=./lighthouserc.row.cjs --additive && lhci assert && lhci upload && node scripts/check-page-weight.mjs",
+    "lhci": "node scripts/lhci-run.mjs",
     "verify:fast": "npm run typecheck && npm run lint && npm run check:tokens && npm run check:contrast",
     "verify": "npm run verify:fast && npm run format:check && npm run check:facts && npm run check:rules && npm run check:effects && npm run test && npm run build && npm run check:schema && npm run check:seo && npm run check:links && npm run test:e2e && npm run lhci"
   },
