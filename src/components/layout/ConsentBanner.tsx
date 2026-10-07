@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { consentContent } from '@/content/en/legal/consent';
 import { isLive, routePath } from '@/lib/routes';
 
@@ -36,9 +35,9 @@ export function ConsentBanner() {
         <p className="mt-2 text-small">{banner.body}</p>
         {isLive('R006') ? (
           <p className="mt-1 text-small">
-            <Link href={routePath('R006')} prefetch={false} className="dz-underline dz-target text-link">
+            <a href={routePath('R006')} className="dz-underline dz-target text-link">
               {banner.policyLink}
-            </Link>
+            </a>
           </p>
         ) : null}
         <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2">

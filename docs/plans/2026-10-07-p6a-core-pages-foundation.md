@@ -428,6 +428,8 @@ None. Every change uses Next.js 16.3.7, Lighthouse 12.6.1 through `@lhci/cli` 0.
   - **Cause 1:** the FAQ enhancement shows its chip bar on the first focus inside the section, which pushed a just-focused question under the European banner by up to 51.6 px. The enhancement now centres the focused question after showing the chips.
   - **Cause 2:** Chrome rounds its focus scroll to whole pixels, which could leave a ring 0.06 px under the banner (25 of 25 in a slower diagnostic). The banner's scroll-padding now counts the ring offset twice.
   - **Result:** the diagnostic fails 0 of 25, and the consent suite passes 160/160 over 10 repeats.
+- **Files L5 needed** (the trims S2 names): `src/app/global-error.tsx`, `src/content/en/error.ts`, `src/lib/brand.ts` (the brand name), `src/lib/site-config.ts`, `src/lib/seo/title.ts`.
+- **L1, the Next.js option.** The real option is `experimental.turbopackChunking` with `minChunkSize`, `maxChunkCountPerGroup` and `maxMergeChunkSize` (the installed docs). The plan's `priorityRoutes` doesn't exist in 16.3.7.
 
 ## Progress notes
 
@@ -441,3 +443,15 @@ None. Every change uses Next.js 16.3.7, Lighthouse 12.6.1 through `@lhci/cli` 0.
   - Decision 0025; 07 §1's test conditions and 03 §1's lhci row.
   - The local calibration read benchmarkIndex 3,792 (runs 3,792, 3,775, 3,929) and set 3.79×.
 - **S2 started.** `scripts/measure-prod-weight.mjs` (C65's method; 4 unit tests) reproduces C65 on production: **198,401 B**, 7,533 B over. A real Chromium on production (HTTP/2, Resource Timing) reads **194,153 B**: bodies 191,453 B plus Chrome's fixed 300 B per response. The bodies alone are 585 B over the limit, and curl counts HTTP/1.1 headers uncompressed (about 650 B per file). The gap to close is about 3.3 KB as a browser receives the page, and 7.5 KB by the curl method. Both are reported at S2's end.
+- **S2 measured (2026-10-07, local build unless stated; gzip 6):**
+  - **Home's first-load JS:** 7 files, 145,343 B. Framework and router 45,138 + 73,282 + 7,579; the Turbopack runtime 3,867; the router boundary 3,682; the root error page 3,051; our runtime 8,744, holding `next/link`, which no file name shows.
+  - **The error page carried the whole site config**, including the founder's four other companies, and the whole route table. Turbopack ships whole modules: its unused-export removal (on by default) didn't drop them.
+  - **CSS coverage on Home** (390 and 1280 px, after the FAQ, chips, the sheet or menu, Cookie settings): 80,431 B raw, 14,946 gz. Unused 10,606 raw, 2,447 gz, mostly font faces, the light theme, keyframes and Tailwind's `@property` rules, which are all needed. L4 is worth a few hundred bytes at most, so it is left for S5.
+  - **Chunk merging (L1)** changes nothing at its documented defaults or with `maxChunkCountPerGroup` alone. With all three settings, the framework and router merge.
+  - **Production as a browser receives it** (Chromium, HTTP/2, Resource Timing, before A1): 194,153 B. By the curl method (HTTP/1.1 headers uncompressed): 198,401 B.
+- **S3–S4 levers done (each in its own commit, each measured):**
+  - **L5** (`a18db6d`): the root error page imports only the brand name (`src/lib/brand.ts`) and links Home by the locale's path prefix. Its chunk went from 3,051 to 1,781 B (−1,270 B on every page).
+  - **L1** (`2ebb754`): `turbopackChunking { minChunkSize 1,000,000, maxChunkCountPerGroup 1, maxMergeChunkSize 1,000,000 }`. Home has 5 first-load files (was 7), and its JS went from 144,033 to 141,571 B (−2,462 B). The lazy modules stay their own chunks.
+  - **L2** (this commit): plain `<a>` in 7 files, plus 06 §2.4 and C67. Our runtime chunk went from 8,733 to 5,441 B (−3,292 B).
+  - **Home's first-load JS now:** 138,279 B in 5 files, **−7,064 B** against P5's 145,343 B in 7 files. e2e 185/185 after the three.
+  - **Expected on production:** by curl, 198,401 − 7,064 − 2 files' headers (~1,300) ≈ 190,000 B, about 800 B under the hard limit and about 240 B over the 189,800 target. As a browser receives it, ≈ 186,500 B. Measured on the preview at S6.

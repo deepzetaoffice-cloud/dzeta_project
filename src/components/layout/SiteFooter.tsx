@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { ClusterLayers } from '@/components/icons/Cluster';
 import type { Pillar } from '@/components/icons/registry';
 import { DisplayControls } from '@/components/layout/DisplayControls';
@@ -90,15 +89,12 @@ export function SiteFooter({ review = false }: SiteFooterProps) {
                 <ul aria-labelledby={`dz-footer-${column.id}`} className="mt-2">
                   {column.links.map((link) => (
                     <li key={link.route} className="flex min-h-11 items-center py-1">
-                      {/* No prefetch: once the columns are live, some thirty links entering the view
-                          together would each fetch their page data on a slow phone (P2 step 16). */}
-                      <Link
+                      <a
                         href={navHref(link.route, review)}
-                        prefetch={false}
                         className="dz-underline dz-target text-small text-fg hover:text-fg-strong"
                       >
                         {link.label}
-                      </Link>
+                      </a>
                     </li>
                   ))}
                 </ul>
