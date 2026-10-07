@@ -51,7 +51,7 @@ This is deepzeta's own website and its first case study. Speed, custom code, SEO
   - **Demos and enhancements:** the demos are stubbed behind lightweight triggers (`DemoStub`). Every enhancement loads on first use through one lazy loader (`src/lib/fx/lazy.ts`).
   - **Home's lab exceptions** (the owner, 2026-10-06, within decision 0020):
     - LCP 2,750 ms on both region profiles (C63).
-    - Page weight 204,800 B (C64). The lab serves gzip; production's Brotli delivers about 179 KB, under the 190,868 B hard limit.
+    - Page weight 204,800 B in the lab (C64). **Production delivers 198,396 B, 7.5 KB over the 190,868 B hard limit (C65): P6 must bring Home under it before launch.**
     - The review page's allowance is 194,000 B (C64).
     - A pre-launch row checks Home on production.
   - **CSS:** all page CSS still sits in the one shared stylesheet. A Home-only stylesheet was tried and reverted: the second render-blocking request cost Home about 75 ms of lab LCP. P6's plan decides the CSS architecture.

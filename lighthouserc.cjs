@@ -68,9 +68,9 @@ const FIRST_LOAD_LIMIT = FRAMEWORK_JS_BASELINE + 50 * KB;
 const REVIEW_FIRST_LOAD_LIMIT = 194_000;
 // Home alone, in the lab (conflict C64, the owner, 2026-10-06): the real Home measures 200,042 B
 // with gzip, which is what `next start` serves. React sends the page twice (markup + page data),
-// and gzip's 32 KB window can't compress copies that far apart. Production serves Brotli, which
-// does: about 180 KB on the same build, under FIRST_LOAD_LIMIT. That limit stands for every
-// other page and for what visitors receive (a pre-launch register row checks it on production).
+// and gzip's 32 KB window can't compress copies that far apart. Production's Brotli shrinks only
+// the HTML: measured on production, Home is 198,396 B (C65), over FIRST_LOAD_LIMIT. That limit
+// stands for every other page and for what visitors receive, and P6 brings Home back under it.
 const HOME_FIRST_LOAD_LIMIT = 200 * KB;
 
 // T1 Home (decision 0005): Performance ≥ 0.95. Core Web Vitals hard limits apply to every tier (07 §1).
