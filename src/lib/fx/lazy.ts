@@ -14,6 +14,8 @@
 const MODULES: Record<string, () => Promise<{ enhance: (scope: ParentNode) => void }>> = {
   faq: () => import('@/components/sections/faq-enhance').then((m) => ({ enhance: m.enhanceFaq })),
   home: () => import('@/components/sections/home/home-enhance').then((m) => ({ enhance: m.enhanceHome })),
+  // Each demo trigger is its own region (P6 part A2, S8): only reaching for a demo loads it
+  demo: () => import('@/components/demos/demo-enhance').then((m) => ({ enhance: m.enhanceDemos })),
 };
 
 // One shared observer: a region enters the viewport → arm its trigger; the first pointerover,

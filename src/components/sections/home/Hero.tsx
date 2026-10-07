@@ -82,11 +82,12 @@ export function Hero() {
           <p className="mt-6 max-w-measure text-lead">{heroAnswer.answer}</p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <CtaButton href={auditHref()} label={shellContent.cta} variant="primary" />
-            {/* The secondary CTA (hover-outline): the AI agent demo stub (S6 wires its trigger) */}
+            {/* The secondary CTA (hover-outline): the AI agent demo stub, its own lazy region (demo-enhance.ts) */}
             <a
               className="dz-cta dz-cta--outline dz-magnet inline-flex min-h-12 items-center gap-2.5 rounded-pill px-5.5 font-bold no-underline"
               href={auditHref()}
               data-demo="ai-agent"
+              data-fx-lazy="demo"
               data-cta="page"
             >
               <Icon name="send" size={20} />

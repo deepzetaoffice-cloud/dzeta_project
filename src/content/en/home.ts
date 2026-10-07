@@ -152,13 +152,6 @@ export const finalCta = {
   testCta: 'Take the speed-to-lead test',
 } as const;
 
-// The demo stubs' honest panel copy (P5's lightweight triggers; the live demos are P7)
-export const demoStub = {
-  title: 'The live demo is being built',
-  line: 'This is where the interactive demo opens. The live version arrives with the next phase of the site — you can still see the real thing today: book a free audit and we will show you the system working.',
-  close: 'Close',
-} as const;
-
 // Home's metadata (08 §1; the gate: title 50–60 chars, description 140–160)
 export const homeContent = {
   title: 'AI Automation and Custom Websites in the UAE',

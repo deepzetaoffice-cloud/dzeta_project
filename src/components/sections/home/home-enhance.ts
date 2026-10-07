@@ -1,49 +1,11 @@
-// The Home lazy enhancement (P5 S6): the demo stub panels, the story-chat replay and the LCP
-// stamp. Loaded by the shared lazy loader (fx/lazy.ts) — on the first pointer, focus or click
-// near a marked region — never at first load (07 §2; the P5 plan's budget rule). No React: it
-// decorates the server-rendered markup. demo_open fires when a panel actually opens (the
-// enhancement owns the event; the click path in clicks.ts only arms the pending trigger).
-import { createElement } from 'react';
-import { renderToStaticMarkup } from 'react-dom/server';
-import { DemoStubPanel } from '@/components/demos/DemoStub';
-import { trackEvent } from '@/lib/analytics';
+// The Home lazy enhancement (P5 S6): the story-chat replay and the LCP stamp. Loaded by the shared
+// lazy loader (fx/lazy.ts) on the first pointer, focus or click near a marked region, never at
+// first load (07 §2; the P5 plan's budget rule). No React: it decorates the server-rendered markup.
+// The demo panels moved to src/components/demos/demo-enhance.ts (P6 part A2, S8), each trigger its
+// own region, so a touch on the hero no longer loads them.
 
-// The demo panel: mounts after the first trigger click. The trigger button becomes the panel's
-// opener; a second click toggles it away. (A real modal's inert/focus work arrives with the P7
-// demos' own plans; the stub panel is non-modal and labelled as such.) A trigger the loader
-// marked pending (its click arrived before this module did) opens at once — one open, one event.
-export function enhanceDemos(scope: ParentNode): void {
-  for (const trigger of [...scope.querySelectorAll<HTMLButtonElement>('[data-demo]')]) {
-    if (trigger.dataset.demoWired === 'true') continue;
-    trigger.dataset.demoWired = 'true';
-    const openPanel = () => {
-      const demoId = trigger.dataset.demo ?? '';
-      // One panel per trigger; a second click toggles it
-      let panel = trigger.parentElement?.querySelector<HTMLElement>(`[data-demo-panel="${demoId}"]`);
-      if (panel) {
-        panel.remove();
-        return;
-      }
-      panel = document.createElement('div');
-      panel.dataset.demoPanel = demoId;
-      panel.className = 'dz-demo-mount';
-      panel.innerHTML = renderToStaticMarkup(createElement(DemoStubPanel));
-      trigger.after(panel);
-      trackEvent('demo_open', { demo_id: demoId });
-      (panel.querySelector<HTMLAnchorElement>('a') ?? panel).focus({ preventScroll: true });
-    };
-    trigger.addEventListener('click', openPanel);
-    // The click that loaded this module (fx/lazy.ts marked it pending): open now, once
-    if (trigger.dataset.demoPending === 'true') {
-      trigger.removeAttribute('data-demo-pending');
-      openPanel();
-    }
-  }
-}
-
-// The loader's entry point: the three Home enhancers in one pass
+// The loader's entry point: Home's enhancers in one pass
 export function enhanceHome(scope: ParentNode): void {
-  enhanceDemos(scope);
   enhanceStoryReplay(scope);
   enhanceLcpStamp(scope);
 }

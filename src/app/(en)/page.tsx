@@ -10,6 +10,7 @@ import {
   WorkflowExplorer,
 } from '@/components/sections/home/MidSections';
 import { FinalCta } from '@/components/sections/home/FinalCta';
+import { DemoPanelTemplate } from '@/components/demos/DemoStub';
 import { Faq } from '@/components/sections/Faq';
 import { faqSection, homeContent } from '@/content/en/home';
 import { homeFaq } from '@/content/en/faq-bank';
@@ -80,6 +81,9 @@ export default function HomePage() {
       <div data-fx-lazy="home">
         <FinalCta />
       </div>
+
+      {/* The demo stubs' panel, once per page: hidden until a trigger clones it (demo-enhance.ts) */}
+      <DemoPanelTemplate />
     </>
   );
 }
