@@ -432,6 +432,12 @@ None. Every change uses Next.js 16.3.7, Lighthouse 12.6.1 through `@lhci/cli` 0.
 - **L1, the Next.js option.** The real option is `experimental.turbopackChunking` with `minChunkSize`, `maxChunkCountPerGroup` and `maxMergeChunkSize` (the installed docs). The plan's `priorityRoutes` doesn't exist in 16.3.7.
 - **L8 and L9 move to A2** (start of S8). With the pilot flipped live in a local build (never committed), Home's HTML grew +2,512 B gzip in the lab, from the pilot's mega-menu column, its sheet entry and its footer link. Plain links don't shrink that markup. So L8 (the full panel on intent) and L9 (the footer's service links) are built where that growth appears, and measured against it before the pilot ships. A1 measures Home as it is today.
 - **S5, the CSS architecture, is decided on the rule's fallback** (option A). The inline-CSS measurement (another session) has no report yet, so option C can't be adopted (its rule needs the measurement and the owner's approval of the lab method). One shared stylesheet stays, and the T2 discipline applies from A2 (decision 0026). The file split by role (`modules/`, `templates/`) comes with the first new template in A2, where it has something to separate.
+- **Files the review and the audit needed:**
+  - `src/components/sections/Faq.tsx`: the chips' markup.
+  - `tests/e2e/home.spec.ts`: the chips' test.
+  - `src/lib/tracking/clicks.ts`: a comment only. It is a protected tracking file, named here.
+  - `src/components/layout/TrackingRuntime.tsx` (protected, already named for S11): the back/forward page view, and the click reporter loading on intent.
+  - **These tracking changes keep tracking correct after C67, which the owner approved.** They go to the owner for an OK at the A1 merge.
 
 ## Progress notes
 
@@ -485,3 +491,11 @@ None. Every change uses Next.js 16.3.7, Lighthouse 12.6.1 through `@lhci/cli` 0.
   - **C68 (PROPOSED):** the brand name in `brand.ts`, the error page's home link, and the back/forward page view, for the owner at the merge
   - the protected-file labels in this table
   - comments
+- **Audit (Performance & Accessibility Auditor, 2026-10-07).**
+  - **Confirmed:** lazy modules stay lazy with the merged chunks; first-load caps hold; Reduce effects and reduced motion respected. The FAQ enhancement is 1,083 B lazy, against its 1.5 KB cap.
+  - **Fixed:**
+    - **The FAQ chips caused a layout shift (pre-existing, P5).** Hidden until the enhancement ran, they pushed the page 168 px on a phone: CLS 0.24 after a swipe, over the 0.1 hard limit in field data, and lhci can't see it. They now render whenever scripts run (CSS `@media (scripting: enabled)`), from the first paint, inert until armed, so the enhancement moves nothing. No JavaScript means no chips (faq.md). The keyboard re-centring went with the cause, and the e2e test asserts no shift.
+    - **A same-tab internal CTA could leave before `cta_click`** (a C67 side effect, latent until R002 ships). The click reporter now loads on intent (a pointer or focus on a CTA or a link).
+  - **Moved to A2, S8:** the demo panel's lazy chunk is 66,512 B gzip, because `home-enhance.ts` imports `react-dom/server` (pre-existing, P5; cap 1 KB). S8 moves the demo code to `demo-enhance.ts`, clones a server-rendered `<template>` instead, and arms on the trigger, not the whole hero. Each lazy chunk is measured as the browser fetches it.
+  - **To the owner:** `OWN_JS_HOME` = 851 B understates our own code, which is 7,242 B (the runtime chunk plus the root error page). The P0 baseline no longer matches the merged framework files (131,080 B of bodies). Proposed: re-baseline the framework under the merged chunking, by decision, and have `check-page-weight` check our own chunks directly against 11,264 B. It is a gate-number change, so it waits for the owner (first step of A2 if approved).
+  - **Gates after the fixes:** `verify:fast`, build, `test:e2e` 186/186.

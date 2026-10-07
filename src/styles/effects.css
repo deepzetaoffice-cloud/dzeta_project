@@ -1508,12 +1508,25 @@
   }
 }
 
-/* The topic chips (lazy enhancement only; hidden until it runs — faq.md: no JS, no chips) */
+/* The topic chips (faq.md: no JS, no chips). Shown whenever scripts run, from the first paint, so the
+   enhancement arriving later moves nothing: hidden until it ran, they shifted the page 168 px on a
+   phone (CLS 0.24 after a swipe, the P6 A1 audit). Inert until the enhancement arms them; a browser
+   without the scripting query shows them once the enhancement marks them. */
 .dz-faq-chips {
-  display: flex;
+  display: none;
   flex-wrap: wrap;
   gap: 0.5rem;
   margin-block-start: 1.25rem;
+}
+
+@media (scripting: enabled) {
+  .dz-faq-chips {
+    display: flex;
+  }
+}
+
+.dz-faq-chips[data-shown] {
+  display: flex;
 }
 
 .dz-chip {

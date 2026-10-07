@@ -88,12 +88,17 @@ test('the FAQ enhancement: the chips filter, the live count, copy-link (lazy, af
   page,
 }) => {
   await page.goto('/');
-  // The chips stay hidden until the enhancement loads (faq.md: no JS, no chips)
-  await expect(page.locator('[data-faq-chips]')).toBeHidden();
+  // The chips are on screen from the first paint whenever scripts run, inert until the enhancement
+  // arms them, so its arrival moves nothing (no layout shift: the P6 A1 audit's CLS 0.24 on a phone)
+  const bar = page.locator('[data-faq-chips]');
+  await expect(bar).toBeVisible();
+  await bar.scrollIntoViewIfNeeded();
+  const firstQuestion = page.locator('.dz-faq-item').first();
+  const before = await firstQuestion.boundingBox();
   // The first pointer inside the region loads it
   await page.locator('.dz-faq-item').nth(1).hover();
-  const chips = page.locator('[data-faq-topic]');
-  await expect(chips.first()).toBeVisible({ timeout: 5_000 });
+  await expect(bar).toHaveAttribute('data-shown', '', { timeout: 5_000 });
+  expect((await firstQuestion.boundingBox())?.y).toBe(before?.y);
   // Press the Cost chip (the questions carry data-faq-topic too; the chip is the button)
   await page.locator('button[data-faq-topic="cost"]').click();
   await expect(page.locator('[data-faq-count]')).toHaveText(/Showing 1 of 8 questions/i);
