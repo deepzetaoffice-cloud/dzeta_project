@@ -85,4 +85,11 @@ export function enhanceFaq(scope: ParentNode): void {
 
   // The chips show once the enhancement runs (hidden until; faq.md: without JS, no chips)
   chipBar?.removeAttribute('hidden');
+  // Showing the chips moves the questions down. The enhancement loads on the first focus inside the
+  // section, so a question just focused by keyboard could slide under the European banner (WCAG
+  // 2.4.11; consent.spec.ts caught it in 4 of 15 runs). Centre it between the header and the
+  // banner (the page's scroll-padding): 'nearest' left it on the padding edge, where sub-pixel
+  // rounding could still put its focus ring 0.06 px under the banner.
+  const focused = document.activeElement;
+  if (focused instanceof HTMLElement && (scope as Node).contains(focused)) focused.scrollIntoView({ block: 'center' });
 }

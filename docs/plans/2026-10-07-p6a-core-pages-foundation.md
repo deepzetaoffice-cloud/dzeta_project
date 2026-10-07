@@ -424,6 +424,10 @@ None. Every change uses Next.js 16.3.7, Lighthouse 12.6.1 through `@lhci/cli` 0.
 - **S1's reference** is **4,000**, the owner's choice (2026-10-07), not the CI median of 2,774. Locally (benchmarkIndex ~3,900), Home's LCP median read 2,604 ms at 2.5×, 2,712 at 4× and 2,741 at 5.6×. The median reference would have given fast machines 5.6× and left Home 9 ms under C63's 2,750 ms. With 4,000, the owner's machine and CI's fast runners keep about 4×, where every current allowance was measured.
 - **S1c's pass criterion** reads TBT, not LCP: S1a found that LCP doesn't follow the runner (below). The S1a stop doesn't apply, because TBT and Performance, which caused the failures, do follow it. LCP's margin comes from S2–S5.
 - **`.env.example`** gains `DZ_LHCI_CPU_MULTIPLIER=` (empty, with its comment). `env-example.test.ts` requires every variable the scripts read to be listed. The other session's unstaged edits to the file are never staged by this branch.
+- **A WCAG 2.4.11 bug fixed on the way** (`src/components/sections/faq-enhance.ts`, `src/styles/effects.css`). CI run 1 on S1 failed `consent.spec.ts:162`; locally it failed in 4 of 15 runs:
+  - **Cause 1:** the FAQ enhancement shows its chip bar on the first focus inside the section, which pushed a just-focused question under the European banner by up to 51.6 px. The enhancement now centres the focused question after showing the chips.
+  - **Cause 2:** Chrome rounds its focus scroll to whole pixels, which could leave a ring 0.06 px under the banner (25 of 25 in a slower diagnostic). The banner's scroll-padding now counts the ring offset twice.
+  - **Result:** the diagnostic fails 0 of 25, and the consent suite passes 160/160 over 10 repeats.
 
 ## Progress notes
 
@@ -436,3 +440,4 @@ None. Every change uses Next.js 16.3.7, Lighthouse 12.6.1 through `@lhci/cli` 0.
   - Both lhci configs read `DZ_LHCI_CPU_MULTIPLIER`; `npm run lhci` runs the wrapper; ci.yml's Lighthouse lines add each run's multiplier.
   - Decision 0025; 07 §1's test conditions and 03 §1's lhci row.
   - The local calibration read benchmarkIndex 3,792 (runs 3,792, 3,775, 3,929) and set 3.79×.
+- **S2 started.** `scripts/measure-prod-weight.mjs` (C65's method; 4 unit tests) reproduces C65 on production: **198,401 B**, 7,533 B over. A real Chromium on production (HTTP/2, Resource Timing) reads **194,153 B**: bodies 191,453 B plus Chrome's fixed 300 B per response. The bodies alone are 585 B over the limit, and curl counts HTTP/1.1 headers uncompressed (about 650 B per file). The gap to close is about 3.3 KB as a browser receives the page, and 7.5 KB by the curl method. Both are reported at S2's end.
