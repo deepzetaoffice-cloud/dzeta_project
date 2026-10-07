@@ -430,6 +430,8 @@ None. Every change uses Next.js 16.3.7, Lighthouse 12.6.1 through `@lhci/cli` 0.
   - **Result:** the diagnostic fails 0 of 25, and the consent suite passes 160/160 over 10 repeats.
 - **Files L5 needed** (the trims S2 names): `src/app/global-error.tsx`, `src/content/en/error.ts`, `src/lib/brand.ts` (the brand name), `src/lib/site-config.ts`, `src/lib/seo/title.ts`.
 - **L1, the Next.js option.** The real option is `experimental.turbopackChunking` with `minChunkSize`, `maxChunkCountPerGroup` and `maxMergeChunkSize` (the installed docs). The plan's `priorityRoutes` doesn't exist in 16.3.7.
+- **L8 and L9 move to A2** (start of S8). With the pilot flipped live in a local build (never committed), Home's HTML grew +2,512 B gzip in the lab, from the pilot's mega-menu column, its sheet entry and its footer link. Plain links don't shrink that markup. So L8 (the full panel on intent) and L9 (the footer's service links) are built where that growth appears, and measured against it before the pilot ships. A1 measures Home as it is today.
+- **S5, the CSS architecture, is decided on the rule's fallback** (option A). The inline-CSS measurement (another session) has no report yet, so option C can't be adopted (its rule needs the measurement and the owner's approval of the lab method). One shared stylesheet stays, and the T2 discipline applies from A2 (decision 0026). The file split by role (`modules/`, `templates/`) comes with the first new template in A2, where it has something to separate.
 
 ## Progress notes
 
@@ -455,3 +457,12 @@ None. Every change uses Next.js 16.3.7, Lighthouse 12.6.1 through `@lhci/cli` 0.
   - **L2** (this commit): plain `<a>` in 7 files, plus 06 §2.4 and C67. Our runtime chunk went from 8,733 to 5,441 B (−3,292 B).
   - **Home's first-load JS now:** 138,279 B in 5 files, **−7,064 B** against P5's 145,343 B in 7 files. e2e 185/185 after the three.
   - **Expected on production:** by curl, 198,401 − 7,064 − 2 files' headers (~1,300) ≈ 190,000 B, about 800 B under the hard limit and about 240 B over the 189,800 target. As a browser receives it, ≈ 186,500 B. Measured on the preview at S6.
+- **S5 done (2026-10-07):** option A, decision 0026. Coverage put the shared sheet at 14,946 B gzip with about 2.4 KB unused on Home, all of it needed elsewhere or by state.
+- **S6 measured (2026-10-07):**
+  - **Previews**, `scripts/measure-prod-weight.mjs` with a Vercel share cookie: the levers' preview (`bf52cf7`) 189,456 B in 7 responses (HTML 28,762, CSS 16,706, JS 143,988). The baseline preview (`828b52a`, the same site as `main`) 199,151 B in 9. **Saved: 9,695 B.** **1,412 B under the hard limit, 344 B under the 189,800 B target.**
+  - **Local lhci** (3.86×), exit 0:
+    - Home: LCP 2,711–2,721 ms, TBT 17–22 ms, Performance 0.96. The UAE profile: LCP 2,712–2,765, TBT 68–135, Performance 0.95–0.96.
+    - The review page: LCP 2,563–2,567 ms, Performance 0.97.
+    - Page weight: Home 192,349 B (was 200,049), the review page 185,307 B (was 192,906). First-party JS 140,519 B in 5 files.
+    - Home's lab LCP didn't move: the cuts were JavaScript, which loads after the paint path. The review page's lab LCP rose about 85 ms with the merged chunk (inside its 2,700 ms allowance). Its 2,032 ms on CI came from the old split chunks.
+  - **`OWN_JS_HOME` = 851 B** by the established method, with the reasons in `lighthouserc.cjs`.

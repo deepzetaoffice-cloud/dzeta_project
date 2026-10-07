@@ -40,6 +40,7 @@ Status: PROPOSED | ACCEPTED (owner, date) | SUPERSEDED by NNNN
 | [0022](0022-gtm-deferral-and-row-tbt-budget.md) | GTM deferred past first paint (afterFirstPaint: idle wait with a 1,500 ms timeout into a double rAF — never idle-deferred, 09 §2.2); the UAE campaign profile's TBT lab allowance 225 ms while §1's ≤ 200 ms hard limit stands | ACCEPTED (TBT row superseded by 0023) |
 | [0023](0023-row-profile-tbt-and-performance-allowance.md) | The UAE campaign profile's lab allowances: TBT 275 ms, Performance floor 0.93 — the granted third-party scripts' execution cost inside the TBT window is intrinsic (measured 247–266 ms, 0.93–0.95 on 83562da); §1's ≤ 200 ms and 0.95 stand for every page and profile | ACCEPTED |
 | [0025](0025-lighthouse-cpu-calibration.md) | Lighthouse's CPU slowdown calibrated to each machine: multiplier = 4 × benchmarkIndex ÷ 4,000 (clamped 2–8), measured by `scripts/lhci-run.mjs` before every lhci run; no threshold changes | ACCEPTED |
+| [0026](0026-p6-css-architecture-and-shell-weight.md) | P6's CSS architecture and the shell's weight: plain `<a>` links (C67), the framework chunks merged, the root error page importing only what it shows, one shared stylesheet until the inline-CSS measurement decides, the mega menu's panel on intent and the footer's pillar links in A2 | ACCEPTED |
 
 ## Open business decisions (from the blueprint)
 

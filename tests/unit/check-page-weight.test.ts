@@ -82,15 +82,19 @@ describe('check:page-weight', () => {
     const over = { name: 'over', lhr: page(1000, 1000, FIRST_PARTY_JS_LIMIT + 1, [], review) };
     expect(checkRuns([atLimit]).pass).toBe(true);
     expect(checkRuns([over]).pass).toBe(false);
-    expect(FIRST_PARTY_JS_LIMIT).toBe(139_668 + 5 * 1024 + 8_737);
+    expect(FIRST_PARTY_JS_LIMIT).toBe(139_668 + 5 * 1024 + 851);
   });
 
-  it('holds Home to the baseline + its 11 KB cap (0021), and the campaign profile too', () => {
-    expect(jsLimitFor('http://localhost:3000/')).toBe(139_668 + 11 * 1024);
-    expect(jsLimitFor('http://127.0.0.1:3000/?utm_source=lhci&gclid=test')).toBe(139_668 + 11 * 1024);
+  it('holds Home to the lower of the growth guard and its 11 KB cap (0021), on both profiles', () => {
+    const homeLimit = Math.min(FIRST_PARTY_JS_LIMIT, 139_668 + 11 * 1024);
+    expect(jsLimitFor('http://localhost:3000/')).toBe(homeLimit);
+    expect(jsLimitFor('http://127.0.0.1:3000/?utm_source=lhci&gclid=test')).toBe(homeLimit);
+    // Since P6 A1 the framework compresses smaller (merged chunks, no next/link), so the growth guard
+    // binds: OWN_JS_HOME is 851 B by the established method.
+    expect(homeLimit).toBe(FIRST_PARTY_JS_LIMIT);
     expect(jsLimitFor('http://localhost:3000/shell-review')).toBe(FIRST_PARTY_JS_LIMIT);
-    const atCap = { name: 'at', lhr: page(1000, 1000, 139_668 + 11 * 1024) };
-    const overCap = { name: 'over', lhr: page(1000, 1000, 139_668 + 11 * 1024 + 1) };
+    const atCap = { name: 'at', lhr: page(1000, 1000, homeLimit) };
+    const overCap = { name: 'over', lhr: page(1000, 1000, homeLimit + 1) };
     expect(checkRuns([atCap]).pass).toBe(true);
     expect(checkRuns([overCap]).pass).toBe(false);
   });
@@ -124,8 +128,8 @@ describe('check:page-weight', () => {
       resourceType: 'Script',
       transferSize: 100_000,
     };
-    const eu = { name: 'eu', lhr: page(1000, 1000, 150_000, [gtm, gtmPing]) };
-    const euOver = { name: 'euOver', lhr: page(1000, 1000, 150_000, [gtm, gtmPing, gtag]) };
+    const eu = { name: 'eu', lhr: page(1000, 1000, 140_519, [gtm, gtmPing]) };
+    const euOver = { name: 'euOver', lhr: page(1000, 1000, 140_519, [gtm, gtmPing, gtag]) };
     expect(checkRuns([eu]).pass).toBe(true);
     expect(checkRuns([euOver]).pass).toBe(false);
     expect(checkRuns([euOver]).rows[0]!.third.requests).toBe(3);
@@ -133,13 +137,13 @@ describe('check:page-weight', () => {
     const collect = { url: 'https://region1.google-analytics.com/g/collect', resourceType: 'Ping', transferSize: 200 };
     const row = {
       name: 'row',
-      lhr: page(1000, 1000, 150_000, [gtm, gtag, collect], 'http://127.0.0.1:3000/?gclid=test'),
+      lhr: page(1000, 1000, 140_519, [gtm, gtag, collect], 'http://127.0.0.1:3000/?gclid=test'),
     };
     expect(checkRuns([row]).pass).toBe(true);
     const fat = { ...gtag, transferSize: 350 * 1024 };
     const rowOver = {
       name: 'rowOver',
-      lhr: page(1000, 1000, 150_000, [gtm, fat, collect], 'http://127.0.0.1:3000/?gclid=test'),
+      lhr: page(1000, 1000, 140_519, [gtm, fat, collect], 'http://127.0.0.1:3000/?gclid=test'),
     };
     expect(checkRuns([rowOver]).pass).toBe(false);
   });
@@ -164,7 +168,7 @@ describe('check:page-weight', () => {
   });
 
   it('holds Home to its lab allowance (C64): exactly at 204,800 B passes, 1 byte over fails', () => {
-    const script = 148_405;
+    const script = 140_519;
     const at = { name: 'at', lhr: page(1000, HOME_FIRST_LOAD_LIMIT - 1000 - script, script) };
     const over = { name: 'over', lhr: page(1000, HOME_FIRST_LOAD_LIMIT - 999 - script, script) };
     expect(checkRuns([at]).pass).toBe(true);
