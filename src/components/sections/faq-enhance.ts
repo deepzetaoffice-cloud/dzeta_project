@@ -83,6 +83,7 @@ export function enhanceFaq(scope: ParentNode): void {
   deepLink();
   window.addEventListener('hashchange', deepLink);
 
-  // The chips show once the enhancement runs (hidden until; faq.md: without JS, no chips)
-  chipBar?.removeAttribute('hidden');
+  // The chips are on screen from the first paint (CSS: scripting). The mark shows them in a browser
+  // without that query, and tells the tests the filter is armed.
+  chipBar?.setAttribute('data-shown', '');
 }

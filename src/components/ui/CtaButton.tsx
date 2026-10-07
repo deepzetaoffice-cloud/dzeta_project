@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { Icon } from '@/components/icons/Icon';
 import { shellContent } from '@/content/en/shell';
 import { isLive, routePath } from '@/lib/routes';
@@ -61,15 +60,9 @@ export function CtaButton({ href, label, variant, wide = false, className, ctaId
   const wrapper = ['dz-magnet', wide ? 'block' : 'inline-block', className].filter(Boolean).join(' ');
   return (
     <span className={wrapper} data-fx-pointer="">
-      {href.startsWith('/') ? (
-        <Link href={href} className={classes} data-cta={variant} data-cta-id={ctaId}>
-          {content}
-        </Link>
-      ) : (
-        <a href={href} className={classes} data-cta={variant} data-cta-id={ctaId}>
-          {content}
-        </a>
-      )}
+      <a href={href} className={classes} data-cta={variant} data-cta-id={ctaId}>
+        {content}
+      </a>
     </span>
   );
 }

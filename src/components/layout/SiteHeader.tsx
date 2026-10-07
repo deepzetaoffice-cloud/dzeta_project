@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { ClusterLayers } from '@/components/icons/Cluster';
 import { megaColumns, MegaMenu } from '@/components/layout/MegaMenu';
 import { MobileSheet } from '@/components/layout/MobileSheet';
@@ -38,14 +37,14 @@ export function SiteHeader({ review = false }: SiteHeaderProps) {
         {/* The mark stands in for the wordmark's D (the owner, 2026-10-01). At 360 px the bar holds the
             logo, the CTA and the menu button, so small screens show the mark alone; below 360 px the
             pill's padding and gaps tighten, so it still fits at 320 px. */}
-        <Link href={routePath('R001')} className="inline-flex min-h-11 shrink-0 items-center rounded-md">
+        <a href={routePath('R001')} className="inline-flex min-h-11 shrink-0 items-center rounded-md">
           <span className="flex sm:hidden">
             <Logo variant="mark" label={siteConfig.brandName} className="h-9" />
           </span>
           <span className="hidden sm:flex">
             <Logo variant="inline" label={siteConfig.brandName} className="h-8" />
           </span>
-        </Link>
+        </a>
         {links.length > 0 || services ? (
           <nav aria-label={shellContent.navLabel} className="relative hidden lg:block" data-fx-nav="">
             <ul className="flex gap-1">
@@ -56,13 +55,13 @@ export function SiteHeader({ review = false }: SiteHeaderProps) {
               ) : null}
               {links.map((link, index) => (
                 <li key={link.route}>
-                  <Link
+                  <a
                     href={navHref(link.route, review)}
                     aria-current={review && index === 0 ? 'page' : undefined}
                     className="inline-flex min-h-11 items-center rounded-pill px-2.5 text-small font-medium text-fg hover:text-fg-strong aria-[current=page]:text-fg-strong xl:px-3"
                   >
                     {link.label}
-                  </Link>
+                  </a>
                 </li>
               ))}
             </ul>

@@ -1,11 +1,11 @@
 import { trackEvent } from '@/lib/analytics';
 import { CTA_LOCATIONS, type CTA_IDS, type EventParams } from '@/lib/tracking/taxonomy';
 
-// What a click reports (P3 plan, G): the tracking runtime imports this module on the first click on a
-// CTA or a link, so it's not in the first load (Home's first-party JavaScript budget, 07 §2; the owner,
-// 2026-10-02). One limit: a click that takes the page away in the same tab before this module arrives
-// goes unreported. Today none does: links to other sites open a new tab, and contact links don't
-// unload the page. A same-tab link off the site would need this module loaded earlier.
+// What a click reports (P3 plan, G): the tracking runtime imports this module on intent (a pointer or
+// focus on a CTA or a link) and again on the click, so it's not in the first load (Home's first-party
+// JavaScript budget, 07 §2; the owner, 2026-10-02). Loading on intent matters since C67: internal
+// links are plain anchors that leave the page in the same tab, so the module must be here before the
+// click lands, or the click goes unreported.
 // - A CTA (data-cta) reports cta_click with its data-cta-id and where it sits.
 // - A link reports what linkEvent() says: an email, phone or WhatsApp link is contact_click; a link to
 //   another site is outbound_click. The audit CTA is an email link until R002 ships, so its click

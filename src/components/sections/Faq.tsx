@@ -44,9 +44,10 @@ export function Faq({ heading, lede, questions, pillar = 'ranking', stillHeading
             {heading}
           </h2>
           <p className="mt-4 text-lead">{lede}</p>
-          {/* The chips are server-rendered but inert without the enhancement (faq.md: no JS, no
-              chips). They render with hidden until; until enhanced and are only ever a filter. */}
-          <div className="dz-faq-chips" data-faq-chips hidden>
+          {/* The chips are server-rendered and shown whenever scripts run (CSS: scripting), from the
+              first paint, so the enhancement arriving on the first pointer or focus moves nothing; with
+              no JavaScript they aren't shown (faq.md). They are only ever a filter. */}
+          <div className="dz-faq-chips" data-faq-chips>
             {topics.map((topic) => (
               <button key={topic} type="button" className="dz-chip" data-faq-topic={topic} aria-pressed="false">
                 {FAQ_TOPIC_LABELS[topic as keyof typeof FAQ_TOPIC_LABELS]}

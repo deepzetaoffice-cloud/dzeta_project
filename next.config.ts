@@ -18,6 +18,13 @@ const nextConfig: NextConfig = {
   experimental: {
     // Unmatched URLs need one 404 across multiple root layouts (English now, Arabic in P11).
     globalNotFound: true,
+    // Fewer, larger first-load chunks (the P6 part A plan, L1; docs: next/dist/docs, turbopackChunking).
+    // The framework and router chunks (166 + 234 + 28 KB minified) merge into one: it compresses
+    // 2,462 B smaller (gzip) and saves two responses on every first load. Dynamic imports keep their own
+    // groups, so the lazy modules stay lazy. The thresholds count unminified bytes (the docs). Measured:
+    // all three settings are needed; lower minChunkSize values, or maxChunkCountPerGroup alone, merged
+    // less or nothing.
+    turbopackChunking: { minChunkSize: 1_000_000, maxChunkCountPerGroup: 1, maxMergeChunkSize: 1_000_000 },
   },
   // Security and noindex headers on page paths only (docs/ai/06 §4; the C5 amendment, 2026-10-04):
   // a CSP, HSTS, framing and permissions policies delivered on a subresource response is ignored by

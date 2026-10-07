@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { Icon } from '@/components/icons/Icon';
 import { DisplayControls } from '@/components/layout/DisplayControls';
 import { auditHref, CtaButton } from '@/components/ui/CtaButton';
@@ -63,12 +62,12 @@ export function MobileSheet({ review }: MobileSheetProps) {
                 <ul className="dz-sheet-items grid gap-2">
                   {links.map((link) => (
                     <li key={link.route}>
-                      <Link
+                      <a
                         href={navHref(link.route, review)}
                         className="dz-stagger inline-flex min-h-11 items-center text-h2 text-fg-strong"
                       >
                         {link.label}
-                      </Link>
+                      </a>
                     </li>
                   ))}
                 </ul>
@@ -77,12 +76,12 @@ export function MobileSheet({ review }: MobileSheetProps) {
                 <ul className="grid gap-2">
                   {pillars.map((column) => (
                     <li key={column.pillar}>
-                      <Link
+                      <a
                         href={navHref(column.route, review)}
                         className={`dz-pillar-bar dz-pillar--${column.pillar} flex min-h-11 items-center ps-4 font-medium text-fg-strong`}
                       >
                         {column.name}
-                      </Link>
+                      </a>
                     </li>
                   ))}
                 </ul>

@@ -52,7 +52,12 @@ const FRAMEWORK_JS_GROWTH = 5 * KB;
 // same way as P3's post-amendment 147,091 B, P4 and P5 together added 1,314 B at first load: P4's
 // first-paint deferral, and P5's lazy loader with its FxRuntime and clicks.ts hooks. Every P5
 // enhancement module loads on first use.
-const OWN_JS_HOME = 8_737;
+// P6 part A, S6: 851 B (140,519 B in every run on Home, both profiles, and on the review page,
+// 2026-10-07; 5 files). The same method reads far lower because the framework itself shrank: L1
+// merges the framework and router chunks into one file that compresses 2,462 B smaller (gzip), and
+// fewer files carry fewer headers. Our own runtime chunk is 5,441 B gzip since L2 removed next/link
+// (C67), and L5 took the site config and the route table out of the root error page.
+const OWN_JS_HOME = 851;
 // Home's cap: 10 KB until P3, 11 KB since the tracking runtime (decision 0021).
 const HOME_OWN_JS_CAP = 11 * KB;
 if (OWN_JS_HOME > HOME_OWN_JS_CAP) throw new Error('OWN_JS_HOME is above the 11 KB Home cap (07 §2, 13 §7).');
@@ -69,8 +74,9 @@ const REVIEW_FIRST_LOAD_LIMIT = 194_000;
 // Home alone, in the lab (conflict C64, the owner, 2026-10-06): the real Home measures 200,042 B
 // with gzip, which is what `next start` serves. React sends the page twice (markup + page data),
 // and gzip's 32 KB window can't compress copies that far apart. Production's Brotli shrinks only
-// the HTML: measured on production, Home is 198,396 B (C65), over FIRST_LOAD_LIMIT. That limit
-// stands for every other page and for what visitors receive, and P6 brings Home back under it.
+// the HTML: measured on production, Home was 198,396 B (C65), over FIRST_LOAD_LIMIT. P6 part A1
+// brought it to 189,456 B on its preview (scripts/measure-prod-weight.mjs, C65's method) and to
+// 192,349 B here. That limit stands for every other page and for what visitors receive.
 const HOME_FIRST_LOAD_LIMIT = 200 * KB;
 
 // T1 Home (decision 0005): Performance ≥ 0.95. Core Web Vitals hard limits apply to every tier (07 §1).
@@ -151,12 +157,19 @@ const reviewAssertions = {
   'largest-contentful-paint': ['error', { maxNumericValue: 2700, ...medianRun }],
 };
 
+// The CPU calibration (decision 0025): scripts/lhci-run.mjs sets DZ_LHCI_CPU_MULTIPLIER from this
+// machine's benchmarkIndex. Lighthouse deep-merges this partial `throttling` into its defaults, so
+// only the multiplier changes. Unset (a bare `lhci collect`), Lighthouse's default 4 applies.
+const cpuSlowdownMultiplier = Number(process.env.DZ_LHCI_CPU_MULTIPLIER);
+const calibrated = cpuSlowdownMultiplier > 0 ? { throttling: { cpuSlowdownMultiplier } } : {};
+
 module.exports = {
   ci: {
     collect: {
       startServerCommand: 'npm run start',
       url: ['http://localhost:3000/', 'http://localhost:3000/shell-review'],
       numberOfRuns: 5,
+      settings: { ...calibrated },
     },
     assert: {
       assertMatrix: [

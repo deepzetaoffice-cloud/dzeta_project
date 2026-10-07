@@ -4,7 +4,7 @@
 
 The site is deepzeta's proof of work. **A page that fails a hard limit does not ship.**
 
-**Test conditions:** mobile, budget Android class device, slow 4G. Lighthouse mobile emulation in CI (`lhci`), and PageSpeed Insights/CrUX field data after launch. Studio-laptop results don't count.
+**Test conditions:** mobile, budget Android class device, slow 4G. Lighthouse mobile emulation in CI (`lhci`), with the CPU slowdown calibrated to the machine's speed (4 × benchmarkIndex ÷ 4,000, [decision 0025](../decisions/0025-lighthouse-cpu-calibration.md)), and PageSpeed Insights/CrUX field data after launch. Studio-laptop results don't count.
 
 ---
 
@@ -45,7 +45,7 @@ The site is deepzeta's proof of work. **A page that fails a hard limit does not 
 - The runtime is a fixed, watched baseline. `lhci` fails if it grows by more than 5 KB, so every Next.js upgrade shows its cost. Raising the baseline needs the owner's approval in a new decision.
 - Our own first-load JavaScript is budgeted on top of it, per page. Each plan that adds client code states its measured size and raises that page's `lhci` allowance, within the limits above.
 
-**Units (decision 0014).** The KB in the first two rows are KiB (1,024 bytes) of transfer size, as Lighthouse reports it: compressed, HTTP response headers included. The lab figures come from `next start` (gzip). Vercel serves Brotli, which is smaller, so the lab is expected to be the stricter measure (the live figure isn't measured yet).
+**Units (decision 0014).** The KB in the first two rows are KiB (1,024 bytes) of transfer size, as Lighthouse reports it: compressed, HTTP response headers included. The lab figures come from `next start` (gzip). The live figure is measured with `scripts/measure-prod-weight.mjs` (C65's method: the response as served, Brotli, every HTTP/1.1 header counted). Vercel's Brotli shrinks the HTML well but not the JS and CSS, so neither measure is always the stricter one: the hard limit holds on both, except where an allowance in the conflict register says otherwise (C64).
 
 ---
 

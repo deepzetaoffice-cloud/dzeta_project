@@ -5,6 +5,11 @@
 // Imported by scripts/build-brand-icons.mjs through Node's own TypeScript loader: keep this file free
 // of imports and TypeScript-only runtime syntax.
 
+// The brand name (facts §1, conflict C29). It lives here rather than only in site-config.ts: Turbopack
+// ships whole modules, and the root error page, which ships with every page, needs the name and the
+// logo but none of the other facts (the P6 part A plan, L5). siteConfig.brandName reads it.
+export const BRAND_NAME = 'Deepzeta AI';
+
 export const LOCKED_LOGO_PATH = 'Planning Folder/For Ai/deepZeta Ai Logo/Coded Logo SVG Do not touch the code.svg';
 
 // Where the site serves it (URL registry R178).

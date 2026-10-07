@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { Icon } from '@/components/icons/Icon';
 import type { Pillar, Tier3Name } from '@/components/icons/registry';
 import { DisplayControls } from '@/components/layout/DisplayControls';
@@ -82,7 +81,7 @@ export function MegaMenu({ review }: MegaMenuProps) {
                 <ul aria-labelledby={title} className="-mx-3 grid content-start gap-0.5">
                   {column.items.map((item) => (
                     <li key={item.route}>
-                      <Link
+                      <a
                         href={navHref(item.route, review)}
                         className="dz-menu-row dz-icon-host flex items-start gap-3 rounded-md px-3 py-1.5 text-small"
                       >
@@ -97,18 +96,18 @@ export function MegaMenu({ review }: MegaMenuProps) {
                           <span className="font-medium text-fg-strong">{item.name}</span>{' '}
                           <span className="text-fg-muted">{item.outcome}</span>
                         </span>
-                      </Link>
+                      </a>
                     </li>
                   ))}
                 </ul>
                 {isShown(column.route, review) ? (
-                  <Link
+                  <a
                     href={navHref(column.route, review)}
                     className="dz-underline dz-target dz-menu-all self-end justify-self-start text-small font-medium text-balance text-link"
                   >
                     {column.allLabel}
                     <Icon name="arrow" size={16} className="dz-menu-arrow ms-1.5 align-middle" />
-                  </Link>
+                  </a>
                 ) : null}
               </div>
             );
@@ -118,21 +117,21 @@ export function MegaMenu({ review }: MegaMenuProps) {
           {solutions.length > 0 ? (
             <div className="flex flex-wrap items-center gap-x-5 gap-y-6">
               {isShown(navigation.solutions.route, review) ? (
-                <Link
+                <a
                   href={navHref(navigation.solutions.route, review)}
                   className="dz-underline dz-target font-bold text-fg-strong"
                 >
                   {navigation.solutions.label}
-                </Link>
+                </a>
               ) : (
                 <span className="font-bold text-fg-strong">{navigation.solutions.label}</span>
               )}
               <ul className="flex flex-wrap items-center gap-x-5 gap-y-6">
                 {solutions.map((item) => (
                   <li key={item.route}>
-                    <Link href={navHref(item.route, review)} className="dz-underline dz-target text-fg">
+                    <a href={navHref(item.route, review)} className="dz-underline dz-target text-fg">
                       {item.name}
-                    </Link>
+                    </a>
                   </li>
                 ))}
               </ul>
@@ -153,12 +152,12 @@ export function MegaMenu({ review }: MegaMenuProps) {
                 <ul className="flex flex-wrap items-center gap-x-4 gap-y-6">
                   {rail.map((link) => (
                     <li key={link.route}>
-                      <Link
+                      <a
                         href={navHref(link.route, review)}
                         className="dz-underline dz-target font-medium text-fg-strong"
                       >
                         {link.label}
-                      </Link>
+                      </a>
                     </li>
                   ))}
                 </ul>

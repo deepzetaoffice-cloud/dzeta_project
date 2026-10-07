@@ -59,6 +59,16 @@ This is deepzeta's own website and its first case study. Speed, custom code, SEO
   - **CI:** Playwright's `github` reporter makes e2e failures public annotations. CI is green end-to-end on `14a38aa`: e2e 185/185 and lhci, with Home's LCP at 2,724 ms on both profiles and Performance 96.
   - **Next:** after the merge, P6 Core pages (04 §2).
 
+- **P6 Core pages, part A1 is built on `feat/p6a1-foundation`** (`docs/plans/2026-10-07-p6a-core-pages-foundation.md`, approved 2026-10-07). Waiting for the owner's "merge".
+  - **CI Lighthouse calibrated to the runner** (decision 0025): `npm run lhci` runs `scripts/lhci-run.mjs`, which sets cpuSlowdownMultiplier = 4 × benchmarkIndex ÷ 4,000. No threshold changed.
+  - **Home's weight.** L5 (the root error page imports only `BRAND_NAME` from `src/lib/brand.ts`), L1 (`turbopackChunking`: 5 first-load files, was 7) and L2 (plain `<a>`, no `next/link`; C67, 06 §2.4).
+    - Home's first-load JS: −7,064 B gzip.
+    - The preview: 189,456 B against the 190,868 B hard limit (C65's method; `scripts/measure-prod-weight.mjs`). The lab: 192,349 B (C64 allows 204,800).
+  - **A WCAG 2.4.11 fix:** the FAQ's focused question no longer slides under the European banner.
+  - **Moved to A2:** the mega menu's panel on intent (L8) and the footer's service links (L9), so they are measured where the pilot makes the menu grow.
+  - **The CSS architecture** (decision 0026): one shared stylesheet, until the inline-CSS measurement decides otherwise.
+  - **Next:** A2, the services hub and the Speed-to-Lead System pilot.
+
   Tracking names come from one taxonomy (09 §3) and GTM and GA4 are configured from it, never typed by hand: the owner's setup is `docs/owner/p3-tracking-setup-guide.md` (Part A before P3, Part B after). Every manual task before launch is in `docs/owner/pre-launch-register.md`; each phase adds its rows. The app runs Next.js 16.3.7, React 19.3, TypeScript 6.0.3, Tailwind 4.3 (decision 0012). Every gate is an npm script: `npm run verify:fast` after each step, `npm run verify` before a merge (03). Work goes live only when the owner says "merge" (12 §1, decision 0017). Local runs need `.env.local` (`docs/owner/p0-setup-guide.md`); e2e and lhci need `NEXT_PUBLIC_SITE_URL` and `SITE_INDEXING=on` in the shell, and `.env.local` holds the real `NEXT_PUBLIC_GTM_ID` (CI has it too; e2e stubs GTM, 09 §4).
 - **Decisions.** Decided on 2026-09-30: the JS budget (C8, decision 0014 option A: the 136.4 KB framework baseline plus our own budget per page), the pre-launch indexing lock (0013), and the design tokens, themes and fonts (0015). Decided on 2026-09-29: the company entity (D2, Deepzeta Digital Solutions L.L.C.), the service structure (C6, the four pillars) and the brand name "Deepzeta AI" (C29). The domain is `deepzeta.ai` (0006). See `docs/decisions/README.md`.
 - **Stack and performance tiers** accepted in decisions 0004 and 0005 (`docs/decisions/`). Motion is native-first; GSAP only on T2/T3 pages; automation runs on n8n.
