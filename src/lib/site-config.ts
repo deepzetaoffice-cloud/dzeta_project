@@ -27,7 +27,7 @@ export type Founder = {
 export type FounderCompany = { name: string; url: string; hasOffice: boolean };
 
 export const siteConfig = {
-  brandName: BRAND_NAME, // facts §1 (conflict C29), kept in brand.ts (below)
+  brandName: BRAND_NAME, // facts §1 (conflict C29), kept in brand.ts (imported above)
   legalName: 'Deepzeta Digital Solutions L.L.C.', // facts §1 (decision D2)
   positioningLine: 'Deepzeta AI builds online growth for every business.', // facts §1
   email: 'hello@deepzeta.ai', // facts §2

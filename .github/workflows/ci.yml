@@ -80,7 +80,7 @@ jobs:
               'total ' + kb(t.total ?? 0),
               (lhr.environment.hostUserAgent.match(/Chrome\/[\d.]+/) ?? ['Chrome ?'])[0],
               'benchmarkIndex ' + Math.round(lhr.environment.benchmarkIndex),
-              // The calibrated CPU slowdown (decision 0024; scripts/lhci-run.mjs)
+              // The calibrated CPU slowdown (decision 0025; scripts/lhci-run.mjs)
               'CPU ' + lhr.configSettings.throttling.cpuSlowdownMultiplier + 'x',
             ].join(' | ');
             console.log(line);

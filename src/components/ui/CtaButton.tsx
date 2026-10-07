@@ -60,15 +60,9 @@ export function CtaButton({ href, label, variant, wide = false, className, ctaId
   const wrapper = ['dz-magnet', wide ? 'block' : 'inline-block', className].filter(Boolean).join(' ');
   return (
     <span className={wrapper} data-fx-pointer="">
-      {href.startsWith('/') ? (
-        <a href={href} className={classes} data-cta={variant} data-cta-id={ctaId}>
-          {content}
-        </a>
-      ) : (
-        <a href={href} className={classes} data-cta={variant} data-cta-id={ctaId}>
-          {content}
-        </a>
-      )}
+      <a href={href} className={classes} data-cta={variant} data-cta-id={ctaId}>
+        {content}
+      </a>
     </span>
   );
 }

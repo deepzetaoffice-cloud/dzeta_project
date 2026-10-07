@@ -106,6 +106,29 @@ test.describe('Page views (09 §2.9; TrackingRuntime)', () => {
       .toEqual(['shell-review']);
   });
 
+  test('Back to a page counts a page view, from the back/forward cache or from a fresh load (C67)', async ({
+    page,
+  }) => {
+    await page.goto('/');
+    await page.waitForLoadState('networkidle');
+    // A marker survives only if Back restores this same page from the back/forward cache
+    await page.evaluate(() => Object.assign(window, { dzMarker: true }));
+    await page.goto('/shell-review');
+    await page.waitForLoadState('networkidle');
+    await page.goBack();
+    await page.waitForLoadState('networkidle');
+    const restored = await page.evaluate(() => 'dzMarker' in window);
+    const homeViews = async () =>
+      (await events(page)).filter((e) => e.event === 'page_view' && e.content_group === 'home').length;
+    // Restored: the first view plus the restore's. Reloaded: the fresh page's own view.
+    await expect.poll(homeViews).toBe(restored ? 2 : 1);
+    // Playwright's Chromium usually reloads instead of restoring, so the restore itself is played
+    // too: the event the browser fires when it shows a page from the back/forward cache.
+    const before = await homeViews();
+    await page.evaluate(() => dispatchEvent(new PageTransitionEvent('pageshow', { persisted: true })));
+    await expect.poll(homeViews).toBe(before + 1);
+  });
+
   test.describe('in Europe (DE)', () => {
     test.use(fromCountry('DE'));
     test('the page view is in the data layer too: the tags wait for consent in GTM, not here', async ({ page }) => {

@@ -54,7 +54,7 @@ const FRAMEWORK_JS_GROWTH = 5 * KB;
 // enhancement module loads on first use.
 // P6 part A, S6: 851 B (140,519 B in every run on Home, both profiles, and on the review page,
 // 2026-10-07; 5 files). The same method reads far lower because the framework itself shrank: L1
-// merges the framework and router chunks into one file that compresses about 2.5 KB smaller, and
+// merges the framework and router chunks into one file that compresses 2,462 B smaller (gzip), and
 // fewer files carry fewer headers. Our own runtime chunk is 5,441 B gzip since L2 removed next/link
 // (C67), and L5 took the site config and the route table out of the root error page.
 const OWN_JS_HOME = 851;
@@ -157,7 +157,7 @@ const reviewAssertions = {
   'largest-contentful-paint': ['error', { maxNumericValue: 2700, ...medianRun }],
 };
 
-// The CPU calibration (decision 0024): scripts/lhci-run.mjs sets DZ_LHCI_CPU_MULTIPLIER from this
+// The CPU calibration (decision 0025): scripts/lhci-run.mjs sets DZ_LHCI_CPU_MULTIPLIER from this
 // machine's benchmarkIndex. Lighthouse deep-merges this partial `throttling` into its defaults, so
 // only the multiplier changes. Unset (a bare `lhci collect`), Lighthouse's default 4 applies.
 const cpuSlowdownMultiplier = Number(process.env.DZ_LHCI_CPU_MULTIPLIER);

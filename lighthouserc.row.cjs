@@ -7,7 +7,7 @@
 // - The npm script collects this profile with --additive, after the first.
 // - The server and the number of runs are lighthouserc.cjs' own (kept equal by hand: a config file
 //   can't import the other here, as the lint rules forbid require()).
-// The CPU calibration (decision 0024), as in lighthouserc.cjs: scripts/lhci-run.mjs sets the variable.
+// The CPU calibration (decision 0025), as in lighthouserc.cjs: scripts/lhci-run.mjs sets the variable.
 const cpuSlowdownMultiplier = Number(process.env.DZ_LHCI_CPU_MULTIPLIER);
 const calibrated = cpuSlowdownMultiplier > 0 ? { throttling: { cpuSlowdownMultiplier } } : {};
 

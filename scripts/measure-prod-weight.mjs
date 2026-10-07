@@ -27,8 +27,11 @@ export function firstLoadAssets(html, pageUrl) {
     if (!isStylesheet && !isScript) continue;
     const ref = (attributes.match(/\b(?:href|src)="([^"]+)"/) || [])[1];
     if (!ref) continue;
-    const url = new URL(ref.replaceAll('&amp;', '&'), pageUrl).href;
-    if (!assets.some((asset) => asset.url === url)) assets.push({ url, type: isStylesheet ? 'css' : 'js' });
+    const url = new URL(ref.replaceAll('&amp;', '&'), pageUrl);
+    // First party only (C54): another origin's script has its own caps
+    if (url.origin !== new URL(pageUrl).origin) continue;
+    if (!assets.some((asset) => asset.url === url.href))
+      assets.push({ url: url.href, type: isStylesheet ? 'css' : 'js' });
   }
   return assets;
 }
@@ -76,8 +79,10 @@ function get(url, cookie) {
 
 async function fetchFollowing(url, cookie) {
   let current = url;
+  const origin = new URL(url).origin;
   for (let hops = 0; hops < 5; hops++) {
-    const response = await get(current, cookie);
+    // The share cookie goes to the page's own origin only, never to where a redirect points
+    const response = await get(current, new URL(current).origin === origin ? cookie : undefined);
     if (response.status >= 300 && response.status < 400 && response.location) {
       current = new URL(response.location, current).href;
       continue;

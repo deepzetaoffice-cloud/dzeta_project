@@ -4,7 +4,7 @@ Status: ACCEPTED (owner, 2026-10-07: the P6 part A plan, "approve, 1 yes, 2 yes,
 
 ## Context
 
-- **Home was over the limit for real visitors.** Production measured 198,396 B for Home's first load (C65), over 07 §2's 190,868 B hard limit. Of it, 153 KB was JavaScript in 7 files, and the CSS is one shared stylesheet (14.9 KB gzip) that grows with every template.
+- **Home was over the limit for real visitors.** Production measured 198,396 B for Home's first load (C65), over 07 §2's 190,868 B hard limit. Of it, 153,306 B (149.7 KiB) was JavaScript in 7 files. The CSS is one shared stylesheet (14,946 B gzip in the lab, 14.6 KiB) that grows with every template.
 - **What P6 adds.** About 99 pages and their templates, and the first live mega-menu column (decision 0019: about 8 KB in the lab on every page).
 - **Measured in P6 part A** (local builds and Vercel previews, 2026-10-07):
   - **The root error page** ships with every page. Turbopack ships whole modules, so through `site-config.ts` and `routes.ts` it carried every business fact (the founder's other companies included) and every registry row.
@@ -18,11 +18,11 @@ Status: ACCEPTED (owner, 2026-10-07: the P6 part A plan, "approve, 1 yes, 2 yes,
 
 1. **Every internal link is a plain `<a href>`** built from the route helpers. `next/link` isn't used ([C67](../ai/conflict-register.md); 06 §2.4).
 2. **The framework chunks merge** (`turbopackChunking { minChunkSize 1,000,000, maxChunkCountPerGroup 1, maxMergeChunkSize 1,000,000 }`). Dynamic imports keep their own groups, so lazy modules stay lazy.
-3. **The root error page imports only what it shows:** the brand name from `src/lib/brand.ts`, and Home's path from the locale's prefix. Any client component in the first load follows the same rule: no import of a module that carries data it doesn't use.
+3. **The root error page imports only what it shows:** the brand name from `src/lib/brand.ts`, and Home's path from the locale's prefix (both exceptions to 06's wording, proposed in [C68](../ai/conflict-register.md)). *Proposed for 06, for the owner:* every client component in the first load follows the same rule, importing no module that carries data it doesn't use.
 4. **CSS: one shared stylesheet (option A)** until the inline-CSS measurement shows option C qualifies under the plan's rule. That rule needs Home's production first load at least 1 KB lower, lab LCP no higher, and the owner's approval of the lab weight method. With A:
    - The shared sheet holds the tokens, the base, the shell, the modules used by two or more templates, and Home's own CSS (Home is T1: one request).
    - **T2 templates lay out with Tailwind utilities** (shared, atomic). Their own rules live in `src/styles/templates/<template>.css`, and a template's stylesheet stays only while its lab LCP holds 2.5 s.
-   - **Every part's exit reports the shared sheet's size.** Growth past 16 KB in production (15.8 KB today) goes to the owner.
+   - **Every part's exit reports the shared sheet's size**, measured as production's response, headers included (07 §2 Units). Past 16 KiB, it goes to the owner. At C65 it was 16,413 B (16.0 KiB). **At A1's exit it is 16,706 B (16.3 KiB) on the preview: past the point, and reported to the owner.** Its body is 16,021 B; the rest is Vercel's headers.
 5. **The mega menu's full panel loads on intent, with a server-rendered lite panel** (the hub and the pillar pages) for no-JS visitors and crawlers. **The footer links the pillar pages and the hub, not every service.** Both ship in part A2, before the pilot service makes the first menu column live.
 
 ## Consequences

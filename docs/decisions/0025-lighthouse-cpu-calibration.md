@@ -26,7 +26,7 @@ Status: ACCEPTED (owner, 2026-10-07: the P6 part A plan's Q1 "yes", then the ref
 
 ## Consequences
 
-- **Steadier verdicts.** TBT and Performance verdicts no longer depend on which runner CI gets. LCP's run-to-run spread stays: it doesn't come from CPU speed.
+- **Steadier verdicts, measured.** On four calibrated CI runs (S1c: benchmarkIndex 2,354–2,807, multipliers 2.4–2.73×), Home's median TBT ran 46–67 ms in Europe and 99–142 ms on the UAE profile. Those spreads, 21 and 43 ms, are under half of S1a's uncalibrated 102 and 190 ms, and every gate passed. CI drew no fast runner in those four, so the fast side is checked as CI draws one. LCP's run-to-run spread stays: it doesn't come from CPU speed.
 - **Cost.** Every `lhci` run costs one extra 3-run collect.
 - **Rules.** 07 §1's test conditions and 03 §1's lhci row name the calibration.
 - **A future reference change** is the owner's, like a threshold change, because it moves every lab number.

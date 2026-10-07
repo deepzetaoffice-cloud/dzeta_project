@@ -92,7 +92,7 @@ Page tier: T1 for Home's slimming in A1 (decision 0005; C63's and C64's lab allo
 | `src/styles/templates/*.css` | CREATE | S5, S8: one file per template (Home, hub, service) |
 | `src/components/icons/IconDefs.tsx`, `src/components/icons/Icon.tsx` | MODIFY | S3: the sprite holds the shell's icons; the Tier 3 heads by `<use>` if their stories still play |
 | `tests/unit/icons.test.ts`, `tests/e2e/icons.spec.ts` | MODIFY | Pin the icon delivery |
-| `src/components/layout/SiteHeader.tsx`, `MegaMenu.tsx`, `MobileSheet.tsx`, `SiteFooter.tsx`, `ConsentBanner.tsx` | MODIFY | S4 (Q2): plain `<a>`, the lite panel, the footer's service links. S7: the hub link |
+| `src/components/layout/SiteHeader.tsx`, `MegaMenu.tsx`, `MobileSheet.tsx`, `SiteFooter.tsx`, `ConsentBanner.tsx` (protected tracking file, named: markup only) | MODIFY | S4 (Q2): plain `<a>`, the lite panel, the footer's service links. S7: the hub link |
 | `src/components/layout/MegaMenuPanel.tsx` | CREATE (only with Q2 (b)) | S4: the full panel, imported on intent |
 | `src/components/ui/CtaButton.tsx`, `src/app/global-not-found.tsx` | MODIFY | S4 (Q2 (a)): plain `<a>` |
 | `src/content/en/navigation.ts`, `src/content/en/shell.ts` | MODIFY | S4, S7: the footer's service links, the hub link, the lite panel's and the breadcrumb's labels |
@@ -104,7 +104,7 @@ Page tier: T1 for Home's slimming in A1 (decision 0005; C63's and C64's lab allo
 | `tests/unit/routes.test.ts` | MODIFY | S4: the footer lists. S11: R010, and liveness through the service template's params |
 | `tests/e2e/shell.spec.ts`, `foundation.spec.ts`, `home.spec.ts`, `consent.spec.ts`, `preferences.spec.ts`, `fonts.spec.ts`, `tracking.spec.ts` | MODIFY | S3–S5: the shell changes. S11: the new pages in the banner, font-swap and tracking checks |
 | `tests/e2e/helpers/tracking.ts` | MODIFY (only if needed) | The `view_service` assertion |
-| `src/components/layout/TrackingRuntime.tsx` | MODIFY (protected tracking file, named) | S11: `view_service` from the page's data attributes, once per page view |
+| `src/components/layout/TrackingRuntime.tsx` | MODIFY (protected tracking file, named) | S11: `view_service` from the page's data attributes, once per page view. **A1 (review finding 4):** a page restored from the back/forward cache fires `page_view` (C68 proposed) |
 | `src/app/(en)/services/page.tsx` | CREATE | S11: the hub (R010) |
 | `src/app/(en)/services/[slug]/page.tsx` | CREATE | S11: the service template; `generateStaticParams` from the live service rows; `dynamicParams = false` |
 | `src/components/sections/hub/*.tsx` | CREATE | S8: the hub's hero, chooser and directories |
@@ -466,3 +466,22 @@ None. Every change uses Next.js 16.3.7, Lighthouse 12.6.1 through `@lhci/cli` 0.
     - Page weight: Home 192,349 B (was 200,049), the review page 185,307 B (was 192,906). First-party JS 140,519 B in 5 files.
     - Home's lab LCP didn't move: the cuts were JavaScript, which loads after the paint path. The review page's lab LCP rose about 85 ms with the merged chunk (inside its 2,700 ms allowance). Its 2,032 ms on CI came from the old split chunks.
   - **`OWN_JS_HOME` = 851 B** by the established method, with the reasons in `lighthouserc.cjs`.
+- **S1c result.** Four calibrated CI runs passed every gate (Home's medians):
+  - `b330cb9`: 2.4×, Europe TBT 46 / UAE 119 ms, Performance 99 / 96.
+  - `828b52a`: 2.52×, 46 / 99 ms, 97 / 96.
+  - `bf52cf7`: 2.48×, 63 / 142 ms, 97 / 95.
+  - `bdfcd96`: 2.73×, 67 / 128 ms, 96 / 96.
+  - **Verdict: pass.** TBT spread 21 ms (Europe) and 43 ms (UAE), against the amended criterion of at most half of S1a's 102 and 190 ms. CI drew no fast runner in those four, so the fast side is watched as CI draws one.
+- **Review (Reviewer, 2026-10-07): 12 findings, all fixed.**
+  - the stale "decision 0024" references, now 0025
+  - **Back/Forward page views.** With plain links, a restore from the back/forward cache runs no effect. `TrackingRuntime` now fires `page_view` on a persisted `pageshow`. The e2e test covers both a fresh load and a restore (Playwright's Chromium reloads, so the restore event is dispatched too).
+  - the FAQ's re-centring only on keyboard focus (`:focus-visible`)
+  - CtaButton's duplicate branch
+  - a hand-set multiplier keeps the 2–8 clamp
+  - `measure-prod-weight.mjs`: first party only, and the cookie only to its own origin
+  - `measure:weight` in package.json
+  - KiB and the measurement basis in 0026; the shared stylesheet reported (16,706 B, 16.3 KiB, past the 16 KiB point)
+  - 0026's standing rule marked as a proposal
+  - **C68 (PROPOSED):** the brand name in `brand.ts`, the error page's home link, and the back/forward page view, for the owner at the merge
+  - the protected-file labels in this table
+  - comments

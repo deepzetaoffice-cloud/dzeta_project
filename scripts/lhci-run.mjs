@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // The lhci gate with Lighthouse's CPU slowdown calibrated to the machine (docs/ai/03 · lhci;
-// decision 0024; the P6 part A plan, S1). No dependencies.
+// decision 0025; the P6 part A plan, S1). No dependencies.
 // In simulate mode Lantern multiplies every observed CPU task by `cpuSlowdownMultiplier`. CI
 // runners differ in speed (benchmarkIndex 2,408–4,443 on identical code, 2026-10-06/07), so the
 // same page measured slower on a slow runner: Home's TBT ran from 24 to 126 ms in Europe and from 84
@@ -16,7 +16,7 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
-// The machine the lab numbers are expressed for (decision 0024).
+// The machine the lab numbers are expressed for (decision 0025).
 export const REFERENCE_BENCHMARK_INDEX = 4000;
 // Lighthouse's default, which every allowance so far was measured with.
 export const DEFAULT_MULTIPLIER = 4;
@@ -39,12 +39,13 @@ export function multiplierFor(benchmarkIndex, reference = REFERENCE_BENCHMARK_IN
   return { value: Math.round(value * 100) / 100, clamped: value !== raw };
 }
 
-// DZ_LHCI_CPU_MULTIPLIER: unset or empty → undefined (calibrate); otherwise a positive number.
+// DZ_LHCI_CPU_MULTIPLIER: unset or empty → undefined (calibrate); otherwise a number inside the clamp,
+// so a hand-set value can't soften the CPU-bound checks (03 §3.4).
 export function parseMultiplier(text) {
   if (text === undefined || text === '') return undefined;
   const value = Number(text);
-  if (!Number.isFinite(value) || value <= 0)
-    throw new Error(`DZ_LHCI_CPU_MULTIPLIER must be a positive number, not "${text}"`);
+  if (!Number.isFinite(value) || value < CLAMP.min || value > CLAMP.max)
+    throw new Error(`DZ_LHCI_CPU_MULTIPLIER must be a number from ${CLAMP.min} to ${CLAMP.max}, not "${text}"`);
   return value;
 }
 

@@ -23,9 +23,12 @@ describe('measure-prod-weight', () => {
     ]);
   });
 
-  it('decodes &amp; in a URL and keeps other origins as they are', () => {
-    const html = '<script src="https://cdn.example/x.js?a=1&amp;b=2" async=""></script>';
-    expect(firstLoadAssets(html, PAGE)).toEqual([{ url: 'https://cdn.example/x.js?a=1&b=2', type: 'js' }]);
+  it('decodes &amp; in a URL, and leaves other origins out (first party only, C54)', () => {
+    const html =
+      '<script src="/_next/static/x.js?a=1&amp;b=2" async=""></script><script src="https://cdn.example/y.js" async=""></script>';
+    expect(firstLoadAssets(html, PAGE)).toEqual([
+      { url: 'https://www.deepzeta.ai/_next/static/x.js?a=1&b=2', type: 'js' },
+    ]);
   });
 
   it('counts a header block as it travels: the status line, each header line, the blank line', () => {

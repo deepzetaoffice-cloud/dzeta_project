@@ -90,6 +90,9 @@ export function enhanceFaq(scope: ParentNode): void {
   // 2.4.11; consent.spec.ts caught it in 4 of 15 runs). Centre it between the header and the
   // banner (the page's scroll-padding): 'nearest' left it on the padding edge, where sub-pixel
   // rounding could still put its focus ring 0.06 px under the banner.
+  // Keyboard focus only: a tap focuses the question too, and moving the page under a finger would be a
+  // jump nobody asked for.
   const focused = document.activeElement;
-  if (focused instanceof HTMLElement && (scope as Node).contains(focused)) focused.scrollIntoView({ block: 'center' });
+  if (focused instanceof HTMLElement && (scope as Node).contains(focused) && focused.matches(':focus-visible'))
+    focused.scrollIntoView({ block: 'center' });
 }

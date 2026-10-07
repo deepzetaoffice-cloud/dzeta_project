@@ -9,7 +9,7 @@ import {
   REFERENCE_BENCHMARK_INDEX,
 } from '../../scripts/lhci-run.mjs';
 
-// The lhci wrapper's calibration (decision 0024; the P6 part A plan, S1): multiplier = 4 ×
+// The lhci wrapper's calibration (decision 0025; the P6 part A plan, S1): multiplier = 4 ×
 // benchmarkIndex ÷ the reference, clamped to 2–8.
 
 describe('lhci-run calibration', () => {
@@ -18,7 +18,7 @@ describe('lhci-run calibration', () => {
   });
 
   it('scales the multiplier with the machine’s speed, rounded to 2 decimals', () => {
-    // CI's slowest and fastest runners on identical code (2026-10-06/07)
+    // A slow and a fast CI runner on identical code (2026-10-06/07: 2,408–4,443)
     expect(multiplierFor(2450, 4000)).toEqual({ value: 2.45, clamped: false });
     expect(multiplierFor(4443, 4000)).toEqual({ value: 4.44, clamped: false });
     expect(multiplierFor(3000, 3000).value).toBe(4);
@@ -45,11 +45,14 @@ describe('lhci-run calibration', () => {
     expect(benchmarkIndexes([{ environment: { benchmarkIndex: 3900.5 } }, {}, { environment: {} }])).toEqual([3900.5]);
   });
 
-  it('parses DZ_LHCI_CPU_MULTIPLIER: unset calibrates, a positive number is used as it is', () => {
+  it('parses DZ_LHCI_CPU_MULTIPLIER: unset calibrates, a number inside the clamp is used as it is', () => {
     expect(parseMultiplier(undefined)).toBeUndefined();
     expect(parseMultiplier('')).toBeUndefined();
     expect(parseMultiplier('5.6')).toBe(5.6);
     expect(() => parseMultiplier('0')).toThrow();
+    expect(() => parseMultiplier('1')).toThrow();
+    expect(() => parseMultiplier('9')).toThrow();
+    expect(parseMultiplier('2')).toBe(2);
     expect(() => parseMultiplier('fast')).toThrow();
   });
 });

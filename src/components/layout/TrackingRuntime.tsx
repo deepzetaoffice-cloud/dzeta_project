@@ -192,9 +192,18 @@ export function TrackingRuntime({ gtm }: TrackingRuntimeProps) {
       }
     };
 
-    // A page from the back/forward cache keeps the banner it had; a choice made since takes it away.
+    // A page from the back/forward cache is a page view again (09 §2.9): with plain links (C67), Back
+    // and Forward restore the page instead of a client navigation, and none of its effects run again.
+    // It keeps the banner it had; a choice made since takes it away.
     const onPageShow = (event: PageTransitionEvent) => {
-      if (!event.persisted || !root.hasAttribute(ASK)) return;
+      if (!event.persisted) return;
+      lastPage.current = location.href;
+      trackEvent('page_view', {
+        page_location: location.href,
+        page_title: document.title,
+        content_group: contentGroup(location.pathname),
+      });
+      if (!root.hasAttribute(ASK)) return;
       loadConsent()
         .then(({ currentConsent }) => {
           if (currentConsent().ask) return;
