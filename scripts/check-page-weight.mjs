@@ -4,7 +4,8 @@
 // It counts the page's own origin only (first party), from each run's list of requests, because lhci
 // can neither add resource types together nor tell parties apart:
 // - HTML + CSS + JS before the first interaction ≤ the framework baseline + 50 KB (07 §2); the review
-//   page alone has its own allowance (C57).
+//   page (C57) and Home's lab runs (C64: gzip in the lab, Brotli in production) have their own
+//   allowances.
 // - JavaScript ≤ the framework baseline + its 5 KB growth allowance + our own measured code
 //   (OWN_JS_HOME, within Home's 11 KB cap, 0021), so third-party tags never count against it (C54).
 // Third-party requests and bytes are capped per region profile (07 §2, C5's measurement): the
@@ -21,7 +22,8 @@ import lhciConfig from '../lighthouserc.cjs';
 
 const RESULTS_DIR = '.lighthouseci';
 export const FIRST_LOAD_TYPES = ['document', 'stylesheet', 'script'];
-export const { FIRST_LOAD_LIMIT, REVIEW_FIRST_LOAD_LIMIT, FIRST_PARTY_JS_LIMIT } = lhciConfig.budget;
+export const { FIRST_LOAD_LIMIT, REVIEW_FIRST_LOAD_LIMIT, HOME_FIRST_LOAD_LIMIT, FIRST_PARTY_JS_LIMIT } =
+  lhciConfig.budget;
 const { FRAMEWORK_JS_BASELINE, HOME_OWN_JS_CAP } = lhciConfig.budget;
 
 // Third-party caps per region profile (07 §2, C5). The UAE campaign profile runs on 127.0.0.1 so its
@@ -44,10 +46,12 @@ export function jsLimitFor(url) {
 // Lighthouse's request types, as resource-summary names them
 const TYPES = { Document: 'document', Stylesheet: 'stylesheet', Script: 'script' };
 
-// A run's page-weight limit: the review page's own allowance (conflict C57; never in production), the
-// hard limit on every other page.
+// A run's page-weight limit: the review page's own allowance (conflict C57; never in production), Home's
+// lab allowance on both region profiles (C64), and the hard limit on every other page.
 export function limitFor(url) {
-  return new URL(url).pathname === '/shell-review' ? REVIEW_FIRST_LOAD_LIMIT : FIRST_LOAD_LIMIT;
+  const { pathname } = new URL(url);
+  if (pathname === '/shell-review') return REVIEW_FIRST_LOAD_LIMIT;
+  return pathname === '/' ? HOME_FIRST_LOAD_LIMIT : FIRST_LOAD_LIMIT;
 }
 
 // One Lighthouse result's bytes by party: the page's own origin's HTML, CSS and JS, and everything any
@@ -135,7 +139,7 @@ function main() {
   if (!pass) {
     console.error(
       `check:page-weight FAILED: first-party HTML + CSS + JS ≤ ${FIRST_LOAD_LIMIT} B (${kb(FIRST_LOAD_LIMIT)}, 07 §2; ` +
-        `the review page ${REVIEW_FIRST_LOAD_LIMIT} B, C57); first-party JS ≤ ${FIRST_PARTY_JS_LIMIT} B (0014), on Home ≤ the baseline + 11 KB (0021); ` +
+        `the review page ${REVIEW_FIRST_LOAD_LIMIT} B, C57; Home ${HOME_FIRST_LOAD_LIMIT} B, C64); first-party JS ≤ ${FIRST_PARTY_JS_LIMIT} B (0014), on Home ≤ the baseline + 11 KB (0021); ` +
         `third party ≤ ${THIRD_PARTY_LIMITS.europe.requests} requests ${THIRD_PARTY_LIMITS.europe.bytes} B before consent, ` +
         `≤ ${THIRD_PARTY_LIMITS.row.requests} requests ${THIRD_PARTY_LIMITS.row.bytes} B outside Europe (C5, 07 §2)`,
     );

@@ -715,7 +715,10 @@ test.describe('The sticky CTA bar (conversion-path.md; C42)', () => {
     page,
   }) => {
     await open(page, HOME, 390);
-    // Home has no hero CTA yet, so the bar shows from the start.
+    // The real Home (P5) has a hero CTA, so the bar starts hidden and appears past the hero
+    // (the CTA hand-off, C42) before this test opens the sheet.
+    await expect.poll(() => shown(page)).toBe(false);
+    await page.evaluate(() => scrollTo(0, innerHeight * 1.5));
     await expect.poll(() => shown(page)).toBe(true);
     await page.getByRole('button', { name: shellContent.menuOpen }).click();
     await expect.poll(() => shown(page)).toBe(false);
@@ -734,14 +737,17 @@ test.describe('The sticky CTA bar (conversion-path.md; C42)', () => {
     await expect(bar(page)).toBeHidden();
   });
 
-  test('390 px, Home: it is simply there at load, then slides only after a visitor scrolls (13 §2.1)', async ({
+  test('390 px, Home: hidden at load (the hero CTA holds the gradient), up once it leaves, gone at the finale (C42)', async ({
     page,
   }) => {
     await page.emulateMedia({ reducedMotion: 'no-preference' });
     await open(page, HOME, 390);
-    await expect.poll(() => shown(page)).toBe(true);
+    // The hero's primary CTA is on screen: the bar stays away, and nothing moves at load (13 §2.1)
+    await expect.poll(() => shown(page)).toBe(false);
     const moving = () => bar(page).evaluate((el) => el.getAnimations().length);
     expect(await moving()).toBe(0);
+    await page.evaluate(() => scrollTo(0, innerHeight * 1.5));
+    await expect.poll(() => shown(page)).toBe(true);
     await page.locator('footer [data-cta="primary"]').scrollIntoViewIfNeeded();
     await expect.poll(() => shown(page)).toBe(false);
   });

@@ -23,9 +23,9 @@ The one place every `@id` is registered. A new `@id` is added here in the same c
 | `{page URL}#termset` | DefinedTermSet | `/resources/glossary` (P8) | — |
 | `{page URL}#offer` | Offer | its own page (the audit's price 0 AED; pricing's real prices) | — |
 
-## Shipping today (P4)
+## Shipping today (P5)
 
-Only the sitewide block (`#organization`, `#website`, `#logo`) and Home's page block (`#webpage` at `https://deepzeta.ai`, `#itemlist` at `https://deepzeta.ai#itemlist`) are emitted. Every other row above is a reserved pattern that its page's plan implements with its page — never before (04 §1.4).
+Only the sitewide block (`#organization`, `#website`, `#logo`) and Home's page block (`#webpage` at `https://deepzeta.ai`, `#itemlist` at `https://deepzeta.ai#itemlist`, `#faq` at `https://deepzeta.ai#faq` — the FAQ is visible on the real Home since P5) are emitted. Every other row above is a reserved pattern that its page's plan implements with its page — never before (04 §1.4).
 
 ## Conventions (spec §1's decisions)
 

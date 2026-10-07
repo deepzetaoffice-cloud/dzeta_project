@@ -16,6 +16,7 @@ export type PageData = {
   links: string[]; // absolute, hash removed
   navLists: string[][]; // raw hrefs in the header and the footer, one array per list (crawl.ts)
   jsonLd: string[]; // raw script contents
+  bodyText?: string; // the visible text of <main>, whitespace-normalised (crawl.ts; P5 parity)
 };
 
 // Printed with every run so the output never claims more than it checked (plan section E).
@@ -26,9 +27,7 @@ export const SKIPPED = {
     'sitemap parity (enabled in P9, with the sitemap)',
     'noindex routes absent from the llms files (enabled in P9, with the llms files)',
   ],
-  schema: [
-    'the page-type matrix beyond the shipped templates, breadcrumbs, visible parity (each with its page, P5–P8)',
-  ],
+  schema: ['the page-type matrix beyond the shipped templates, and breadcrumbs (each with its page, P6–P8)'],
   links: [
     'URL-registry rules, link budgets, anchors, duplicate targets in the prose, orphans, click depth (enabled in P4)',
   ],
@@ -201,6 +200,26 @@ export function schemaProblems(page: PageData, options: SchemaOptions): string[]
         } else if (url.length > siteUrl.length + 1 && url.endsWith('/')) {
           problems.push(`"${key}" has a trailing slash: ${url}`);
         }
+      }
+    }
+  });
+
+  // P5: the FAQ visible-parity check (08 §3 rule 7, on the pages that emit a FAQPage): every
+  // question and answer appears in the page's visible text. Both are whitespace-normalised, so
+  // only the words are compared, never the markup.
+  const normalize = (value: string) => value.replace(/\s+/g, ' ').trim();
+  const bodyText = normalize(page.bodyText ?? '');
+  walk(jsonNodes, (node) => {
+    if (node['@type'] !== 'FAQPage' || !Array.isArray(node.mainEntity)) return;
+    for (const question of node.mainEntity as Record<string, unknown>[]) {
+      const name = typeof question.name === 'string' ? normalize(question.name) : '';
+      if (name && !bodyText.includes(name)) {
+        problems.push(`FAQPage question is not visible on the page: "${name}"`);
+      }
+      const answer = question.acceptedAnswer as Record<string, unknown> | undefined;
+      const text = typeof answer?.text === 'string' ? normalize(answer.text) : '';
+      if (text && !bodyText.includes(text)) {
+        problems.push(`FAQPage answer is not visible on the page: "${text.slice(0, 60)}…"`);
       }
     }
   });

@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 import { startCta } from '@/lib/fx/cta';
+import { armLazyEnhancers } from '@/lib/fx/lazy';
 import { markCurrent, startHeader } from '@/lib/fx/header';
 import { revealOnce } from '@/lib/fx/observer';
 import { startPointer } from '@/lib/fx/pointer';
@@ -23,6 +24,7 @@ export function FxRuntime() {
   }, []);
   useEffect(() => {
     revealOnce();
+    armLazyEnhancers();
     markCurrent(pathname);
     return startCta();
   }, [pathname]);

@@ -4,6 +4,7 @@ import {
   FIRST_LOAD_LIMIT,
   FIRST_PARTY_JS_LIMIT,
   firstLoadBytes,
+  HOME_FIRST_LOAD_LIMIT,
   jsLimitFor,
   limitFor,
   partyBytes,
@@ -64,9 +65,11 @@ describe('check:page-weight', () => {
   });
 
   it('passes a run exactly at the page-weight limit and fails one 1 byte over', () => {
-    const script = jsLimitFor('http://localhost:3000/');
-    const atLimit = { name: 'at', lhr: page(1000, FIRST_LOAD_LIMIT - 1000 - script, script) };
-    const over = { name: 'over', lhr: page(1000, FIRST_LOAD_LIMIT - 999 - script, script) };
+    // A page with no allowance of its own: the hard limit (07 §2)
+    const url = 'http://localhost:3000/services';
+    const script = jsLimitFor(url) - 10_000;
+    const atLimit = { name: 'at', lhr: page(1000, FIRST_LOAD_LIMIT - 1000 - script, script, [], url) };
+    const over = { name: 'over', lhr: page(1000, FIRST_LOAD_LIMIT - 999 - script, script, [], url) };
     expect(checkRuns([atLimit]).pass).toBe(true);
     const result = checkRuns([atLimit, over]);
     expect(result.pass).toBe(false);
@@ -79,7 +82,7 @@ describe('check:page-weight', () => {
     const over = { name: 'over', lhr: page(1000, 1000, FIRST_PARTY_JS_LIMIT + 1, [], review) };
     expect(checkRuns([atLimit]).pass).toBe(true);
     expect(checkRuns([over]).pass).toBe(false);
-    expect(FIRST_PARTY_JS_LIMIT).toBe(139_668 + 5 * 1024 + 11_077);
+    expect(FIRST_PARTY_JS_LIMIT).toBe(139_668 + 5 * 1024 + 8_737);
   });
 
   it('holds Home to the baseline + its 11 KB cap (0021), and the campaign profile too', () => {
@@ -145,16 +148,26 @@ describe('check:page-weight', () => {
     expect(FIRST_LOAD_LIMIT).toBe(139_668 + 50 * 1024);
   });
 
-  it('gives the review page alone its own allowance (C57), and every other page the hard limit', () => {
-    expect(REVIEW_FIRST_LOAD_LIMIT).toBe(192_000);
+  it('gives the review page (C57) and Home (C64) their own allowances, and every other page the hard limit', () => {
+    expect(REVIEW_FIRST_LOAD_LIMIT).toBe(194_000);
+    expect(HOME_FIRST_LOAD_LIMIT).toBe(200 * 1024);
     expect(limitFor('http://localhost:3000/shell-review')).toBe(REVIEW_FIRST_LOAD_LIMIT);
-    expect(limitFor('http://localhost:3000/')).toBe(FIRST_LOAD_LIMIT);
-    expect(limitFor('http://127.0.0.1:3000/')).toBe(FIRST_LOAD_LIMIT);
+    expect(limitFor('http://localhost:3000/')).toBe(HOME_FIRST_LOAD_LIMIT);
+    expect(limitFor('http://127.0.0.1:3000/?utm_source=lhci&gclid=test')).toBe(HOME_FIRST_LOAD_LIMIT);
     expect(limitFor('http://localhost:3000/shell-review-copy')).toBe(FIRST_LOAD_LIMIT);
+    expect(limitFor('http://localhost:3000/services')).toBe(FIRST_LOAD_LIMIT);
     const weight = 191_211 - 1000 - 140_000;
     const review = { name: 'r', lhr: page(1000, weight, 140_000, [], 'http://localhost:3000/shell-review') };
-    const home = { name: 'h', lhr: page(1000, weight, 140_000) };
+    const other = { name: 'o', lhr: page(1000, weight, 140_000, [], 'http://localhost:3000/services') };
     expect(checkRuns([review]).pass).toBe(true);
-    expect(checkRuns([home]).pass).toBe(false);
+    expect(checkRuns([other]).pass).toBe(false);
+  });
+
+  it('holds Home to its lab allowance (C64): exactly at 204,800 B passes, 1 byte over fails', () => {
+    const script = 148_405;
+    const at = { name: 'at', lhr: page(1000, HOME_FIRST_LOAD_LIMIT - 1000 - script, script) };
+    const over = { name: 'over', lhr: page(1000, HOME_FIRST_LOAD_LIMIT - 999 - script, script) };
+    expect(checkRuns([at]).pass).toBe(true);
+    expect(checkRuns([over]).pass).toBe(false);
   });
 });

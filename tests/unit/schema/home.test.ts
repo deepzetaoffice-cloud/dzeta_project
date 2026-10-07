@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { pillars } from '@/content/catalogue.ts';
+import { homeFaq } from '@/content/en/faq-bank.ts';
 import { homeContent } from '@/content/en/home.ts';
 import { homeGraph } from '@/lib/schema/graphs/home.ts';
 import { parseEnv } from '@/lib/env.ts';
@@ -19,7 +20,7 @@ describe('homeGraph', () => {
 
   it('wraps with @context once', () => {
     expect(graph['@context']).toBe('https://schema.org');
-    expect(nodes).toHaveLength(2);
+    expect(nodes).toHaveLength(3);
   });
 
   it('the primary entity is the WebPage at the home URL, about #organization', () => {
@@ -46,9 +47,24 @@ describe('homeGraph', () => {
     );
   });
 
-  it('no BreadcrumbList and no FAQPage (nothing visible to mirror yet)', () => {
+  it('no BreadcrumbList (nothing visible to mirror)', () => {
     expect(nodes.some((node) => node['@type'] === 'BreadcrumbList')).toBe(false);
-    expect(nodes.some((node) => node['@type'] === 'FAQPage')).toBe(false);
+  });
+
+  // P5 S3: the FAQ is visible on the real Home, so the FAQPage block ships (the P4 plan's S7 note).
+  // Q&A parity is byte for byte with the question bank the Faq component renders (08 §3 rule 7).
+  it('the FAQPage mirrors the visible FAQ byte for byte', () => {
+    const faq = nodes.find((node) => node['@type'] === 'FAQPage');
+    expect(faq).toBeDefined();
+    expect(faq!['@id']).toBe(`${origin}#faq`);
+    expect(faq!.mainEntity).toHaveLength(homeFaq.length);
+    expect(faq!.mainEntity).toEqual(
+      homeFaq.map((question) => ({
+        '@type': 'Question',
+        name: question.question,
+        acceptedAnswer: { '@type': 'Answer', text: question.answer },
+      })),
+    );
   });
 
   it('the names match the mega menu column names byte for byte (visible parity)', () => {

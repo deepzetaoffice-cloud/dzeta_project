@@ -185,11 +185,15 @@ test.describe('Reduce effects', () => {
     await page.goto(HOME);
     await addGlass(page);
     await expect(page.locator('#glass')).toHaveCSS('backdrop-filter', /blur/);
-    expect(grain).toEqual([]);
+    // The real Home (P5) has its own glass-frost surfaces (the FAQ ask card, the doors, the
+    // before-after rows), so the page's grain arrives with them — once, never speculatively
+    // before paint and never twice (the live-blur surfaces never request it).
+    await expect.poll(() => grain.length).toBe(1);
 
     await choose(page, 'dz-effects', 'reduced');
     await expect(page.locator('#glass')).toHaveCSS('backdrop-filter', 'none');
-    await expect.poll(() => grain.length).toBe(1);
+    // The live surfaces fall back to frost and reuse the same cached grain: still one request
+    await expect.poll(() => grain.length, { timeout: 2_000 }).toBe(1);
     const response = await page.request.get('/brand/glass-grain.svg');
     expect((await response.body()).length).toBeLessThanOrEqual(512);
   });
