@@ -32,8 +32,8 @@
 | Full address, one line (display) | Office #202, Al Hilal Bank Building, Al Qusais 2, Dubai, United Arab Emirates | CONFIRMED (owner, 2026-09-29) |
 | Postal code / P.O. Box | — | UNKNOWN (UAE has no postal codes; a P.O. Box only if the owner has one) |
 | Geo coordinates (office pin) | — | PENDING (created once the full licence is issued; copied from the Google Business Profile pin) |
-| Phone (international format) | — | PENDING (registered number expected around 2026-10-09) |
-| WhatsApp number | — | PENDING (with the phone number) |
+| Phone (international format) | +971 54 547 6335 | CONFIRMED (owner, in chat, 2026-10-07; Deepzeta's main contact number). `src/lib/site-config.ts` isn't updated yet: the P6 branch is editing it, and the cta-set plan wires it |
+| WhatsApp number | +971 54 547 6335 (the same number, on Meta's WhatsApp Cloud API; it can't be used in the WhatsApp app) | CONFIRMED (owner, in chat, 2026-10-07; decision 0027). **Live on WhatsApp only once Track A registers it**: the site's WhatsApp button and `wa.me` links wait until then |
 | Public contact email | hello@deepzeta.ai | CONFIRMED (owner, 2026-09-29) |
 | Opening hours | Monday to Saturday, 08:00–17:00 GST (UTC+4); closed Sunday | CONFIRMED (owner, 2026-09-29) |
 | Google Business Profile URL | — | PENDING (created once the full licence is issued) |
@@ -78,6 +78,8 @@ Source: owner, 2026-09-29 (`Planning Folder/Components references/#Deepzeta ai S
 |---|---|---|
 | GitHub repository | https://github.com/deepzetaoffice-cloud/dzeta_project | Source code (`origin` remote) |
 | Vercel team | https://vercel.com/deep-zeta | Hosting and deployments |
+| Team alerts email | deepzeta.office@gmail.com | The WhatsApp agent's booking and hand-off alerts (owner, 2026-10-07; decision 0027) |
+| Team alerts WhatsApp | — | PENDING (the owner gives it later; until then alerts are email only) |
 
 These are for building and deploying only. They never appear in page content, the footer, `sameAs`, `llms.txt` or the sitemap.
 
@@ -87,6 +89,8 @@ These are for building and deploying only. They never appear in page content, th
 |---|---|---|---|
 | Primary market | UAE first, then GCC | CONFIRMED | Blueprint D3 |
 | Primary conversion | Book a free AI automation audit | CONFIRMED | Blueprint D5 |
+| Free AI audit booking | A 30-minute call, with a 30-minute gap after it in the calendar, bookable Monday to Saturday, 10:00–17:00 GST (the catalogue's 0.1 says "30–45 minute"; the booking length is 30) | CONFIRMED | Owner, 2026-10-07 (decision 0027) |
+| Audit meeting types | A phone call (Deepzeta calls the visitor at the booked time), Google Meet, or an office visit | CONFIRMED | Owner, 2026-10-07 (decision 0027) |
 | Secondary contact | WhatsApp (floating button) | CONFIRMED | Blueprint D5 |
 | Business model | Hybrid: custom projects + fixed-scope packages with "starting from" prices | PROPOSED | Blueprint D4 (awaiting final confirmation) |
 | Services | See `Planning Folder/For Ai/DeepZeta Services Catalogue.md` (names used exactly) | CONFIRMED | Catalogue v1.1 |
