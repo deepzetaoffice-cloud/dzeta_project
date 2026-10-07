@@ -28,6 +28,8 @@ export default defineConfig([
     'test-results/**',
     '.lighthouseci/**',
     '.scratch/**',
+    // Other sessions' git worktrees: each is a full checkout with its own build output
+    '.claude/worktrees/**',
     'docs/**',
     'Planning Folder/**',
     'Mockups fo reference only/**',

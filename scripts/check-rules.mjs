@@ -10,9 +10,13 @@ const root = process.cwd();
 const problems = [];
 
 const read = (p) => readFileSync(join(root, p), 'utf8');
+// .claude/worktrees holds other sessions' full checkouts (their own rule copies and node_modules),
+// not this checkout's rule system.
+const SKIP = new Set([join('.claude', 'worktrees')]);
 const walk = (dir) =>
   readdirSync(join(root, dir)).flatMap((name) => {
     const rel = join(dir, name);
+    if (SKIP.has(rel)) return [];
     return statSync(join(root, rel)).isDirectory() ? walk(rel) : [rel];
   });
 
