@@ -2,9 +2,9 @@
 // The root layout uses `titleTemplate` for every child page. Next.js doesn't apply a layout's
 // template to the page in the layout's own segment (the home page), so that page sets
 // `title: { absolute: brandedTitle(...) }` instead.
-import { siteConfig } from '../site-config.ts';
+import { BRAND_NAME } from '../brand.ts';
 
-export const titleTemplate = `%s | ${siteConfig.brandName}`;
+export const titleTemplate = `%s | ${BRAND_NAME}`;
 
 export function brandedTitle(pageTitle: string): string {
   // A function replacer, so "$&" or "$1" in a title is kept as text, not treated as a pattern.

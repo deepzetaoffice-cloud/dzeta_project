@@ -1,11 +1,10 @@
 'use client';
 
 import { Logo } from '@/components/ui/Logo';
+import { BRAND_NAME } from '@/lib/brand';
 import { errorContent } from '@/content/en/error';
 import { locales } from '@/lib/i18n/locales';
-import { routePath } from '@/lib/routes';
 import { brandedTitle } from '@/lib/seo/title';
-import { siteConfig } from '@/lib/site-config';
 import { fontVariables } from '@/styles/fonts';
 import '@/styles/globals.css';
 
@@ -29,7 +28,7 @@ export default function GlobalError({ retry }: GlobalErrorProps) {
       <body>
         <title>{brandedTitle(errorContent.title)}</title>
         <header data-theme="dark" className="mx-auto max-w-measure px-gutter pt-section">
-          <Logo variant="lockup" label={siteConfig.brandName} className="h-9" />
+          <Logo variant="lockup" label={BRAND_NAME} className="h-9" />
         </header>
         <main className="mx-auto max-w-measure px-gutter pt-8 pb-section">
           <h1 className="text-h1">{errorContent.heading}</h1>
@@ -42,9 +41,10 @@ export default function GlobalError({ retry }: GlobalErrorProps) {
             >
               {errorContent.retry}
             </button>
-            {/* A plain <a>: a full reload home after an error, and one copy of next/link per page (conflict
-                C46). The lint rule only reads a typed href, so the route helper needs no exception. */}
-            <a className="inline-flex min-h-11 items-center text-link underline" href={routePath('R001')}>
+            {/* A plain <a> (C67: every internal link is): a full reload home after an error. Home is the locale's path prefix (11 §2), not routePath('R001'): Turbopack ships whole
+                modules, so the route table and the site config stay out of every page's first load
+                (the P6 part A plan, L5). */}
+            <a className="inline-flex min-h-11 items-center text-link underline" href={locale.pathPrefix || '/'}>
               {errorContent.homeLink}
             </a>
           </div>
