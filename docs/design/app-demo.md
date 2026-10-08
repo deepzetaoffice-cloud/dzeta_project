@@ -4,7 +4,7 @@ Status: LATER (frame proposed; details in an owner session) · Page tier: T3 · 
 
 ## What exists
 
-The owner is rebuilding the app in `D:\DeepZAuto App`.
+The owner is rebuilding the app in `D:\Deepzeta Sync App`.
 
 - **What the folder holds:** **Forge Growth** (MIT licence, by Forgemind), a WhatsApp CRM.
 - **Features that exist in the code:**
