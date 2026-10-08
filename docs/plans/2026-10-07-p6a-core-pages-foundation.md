@@ -518,3 +518,8 @@ None. Every change uses Next.js 16.3.7, Lighthouse 12.6.1 through `@lhci/cli` 0.
   - **Page weight** (`check-page-weight`, every run passes): the hub 190,409 B (459 B left), the pilot 187,633 B, Home 194,107 B (lab allowance 204,800), the review page 184,585 B; first-party JS 140,684 B everywhere.
   - **Preview** (`a12a1a0`, `measure-prod-weight.mjs`): **Home 190,661 B, 207 B under the hard limit and 861 B over the 189,800 B target**; the hub 189,469 B; the pilot 187,057 B. Home grew 1,205 B since A1's preview, mostly HTML (+1,121 B): the Services button, its lite panel and the footer's Services column now render. **The target stop applies:** reported to the owner with R1 and R2. Every later live page in the shell costs Home more bytes, so the pillar pages need the headroom first.
   - **Not done, waiting on the weight decision:** Home's first contextual links to the hub and the pilot (S10). Two links cost about 150–200 B on Home, which leaves 207 B.
+  - **CI on `a12a1a0`:** e2e 207/207 and every gate but lhci, which failed only on a T2 page's LCP (calibrated 2.44×; medians 2,312–2,545 ms across the Europe pages, Performance 97–98; the UAE profile 2,540 ms, Performance 97).
+- **The owner's decisions (2026-10-08, in chat):**
+  - **"Lab allowance 2,750"** for T2 pages: C69, `lighthouserc.cjs`'s `t2Assertions`, 03 §1's sample. The local runs re-asserted: all pass.
+  - **"Accept, fix in Part B"** for Home's weight: A2 merges at 190,661 B (207 B under the hard limit). Part B starts by freeing Home's headroom (R1 or a shell trim) before the pillar pages and Home's contextual links ship.
+  - CI's Lighthouse annotations now name each page (`ci.yml`).
