@@ -19,12 +19,13 @@ import { isShown, navHref } from '@/lib/routes';
 //   and, at the inline end, the two display switches side by side (Q2). The columns get the full width.
 // The strip's links and "All … services" are one line of small text, so each gets a 44 px hit area
 // (dz-target, 05 §7); wrapped lines keep a gap wide enough that two hit areas never overlap.
-// Only live pages are linked: a column with no live item is left out, and with no column the button
-// isn't rendered (plan I4). Items marked `mega: false` stay out of the menu (the owner, 2026-10-01).
-// The review page shows everything, each link a fragment of itself.
+// Only live pages are linked: every column, item and strip link renders, but as muted text while its
+// page is unshipped (04 §1.4; plan 2026-10-08-header-full-menu). Items marked `mega: false` stay out
+// of the menu (the owner, 2026-10-01). The review page links every item as a fragment of itself.
 // Loaded on intent (L8, decision 0026; header.md): the popover always holds a small server-rendered
-// lite panel (the hub, then the live pillar pages), so no-JS visitors and crawlers reach every service
-// through the hub. The full panel (the columns and the strip, MegaMenuPanel) stays out of every
+// lite panel (the hub, then the pillar pages — live ones as links, unshipped as text), so no-JS
+// visitors and crawlers reach every service through the hub. The full panel (the columns and the
+// strip, MegaMenuPanel) stays out of every
 // page's first load: the button is a lazy region (data-fx-lazy="mega"), and the first pointer or
 // focus on it fetches the panel as a static fragment (/shell/mega-menu, R179) into its mount. The
 // review page renders the full panel inline.
@@ -38,56 +39,55 @@ const HEAD: Record<Pillar, Tier3Name> = {
   ranking: 'growth-ranking',
 };
 
-export function megaColumns(review: boolean) {
-  return navigation.columns
-    .map((column) => ({
-      ...column,
-      items: column.items.filter((item) => isShown(item.route, review) && !('mega' in item && item.mega === false)),
-    }))
-    .filter((column) => column.items.length > 0);
+// Every column and every item render: an item is a link only while its page is live, else the menu
+// shows it as muted text. Items marked `mega: false` stay out (the owner, 2026-10-01).
+export function megaColumns() {
+  return navigation.columns.map((column) => ({
+    ...column,
+    items: column.items.filter((item) => !('mega' in item && item.mega === false)),
+  }));
 }
 
-// The lite panel's links: the hub, then the pillar pages, each while its page is live
-export function megaLiteLinks(review: boolean) {
+// The lite panel's links: the hub, then the pillar pages. The render site chooses a link or muted text.
+export function megaLiteLinks() {
   return [
     { route: 'R010' as const, label: navigation.hubLabel },
     ...navigation.columns.map((column) => ({ route: column.route, label: column.name })),
-  ].filter((link) => isShown(link.route, review));
+  ];
 }
-
-// The Services button renders while anything in its panel is live
-export const megaShown = (review: boolean) => megaColumns(review).length > 0 || megaLiteLinks(review).length > 0;
 
 export type MegaMenuProps = { review: boolean };
 
 export function MegaMenu({ review }: MegaMenuProps) {
-  if (!megaShown(review)) return null;
-  const lite = megaLiteLinks(review);
-  const full = megaColumns(review).length > 0;
+  const lite = megaLiteLinks();
   return (
     <>
       <button
         type="button"
         popoverTarget={PANEL}
         className="dz-mega-button inline-flex min-h-11 items-center gap-1 rounded-pill px-2.5 xl:px-3 text-small font-medium text-fg hover:text-fg-strong"
-        data-fx-lazy={full && !review ? 'mega' : undefined}
+        data-fx-lazy={!review ? 'mega' : undefined}
       >
         {navigation.servicesLabel}
         <Icon name="chevron" size={16} className="dz-mega-chevron" />
       </button>
       <div id={PANEL} popover="auto" data-theme="dark" className="dz-mega dz-glass dz-glass--live dz-glass--muted">
-        {lite.length > 0 ? (
-          <ul className="dz-mega-lite mb-6 flex flex-wrap items-center gap-x-5 gap-y-3 text-small">
-            {lite.map((link) => (
+        <ul className="dz-mega-lite mb-6 flex flex-wrap items-center gap-x-5 gap-y-3 text-small">
+          {lite.map((link) =>
+            isShown(link.route, review) ? (
               <li key={link.route}>
                 <a href={navHref(link.route, review)} className="dz-underline dz-target font-bold text-fg-strong">
                   {link.label}
                 </a>
               </li>
-            ))}
-          </ul>
-        ) : null}
-        {full ? review ? <MegaMenuPanel review /> : <div data-mega-full="" /> : null}
+            ) : (
+              <li key={link.route}>
+                <span className="font-bold text-fg-muted">{link.label}</span>
+              </li>
+            ),
+          )}
+        </ul>
+        {review ? <MegaMenuPanel review /> : <div data-mega-full="" />}
       </div>
     </>
   );
@@ -96,9 +96,9 @@ export function MegaMenu({ review }: MegaMenuProps) {
 // The full panel: the four columns and the strip. Inline on the review page; elsewhere served as a
 // static fragment (src/app/shell/mega-menu/route.ts, R179) and fetched on intent (mega-enhance.ts).
 export function MegaMenuPanel({ review }: MegaMenuProps) {
-  const columns = megaColumns(review);
-  const solutions = navigation.solutions.items.filter((item) => isShown(item.route, review));
-  const rail = navigation.rail.filter((link) => isShown(link.route, review));
+  const columns = megaColumns();
+  const solutions = navigation.solutions.items;
+  const rail = navigation.rail;
   return (
     <>
       <div className="grid gap-x-6 gap-y-8 lg:grid-cols-4">
@@ -121,12 +121,10 @@ export function MegaMenuPanel({ review }: MegaMenuProps) {
                 </div>
               </div>
               <ul aria-labelledby={title} className="-mx-3 grid content-start gap-0.5">
-                {column.items.map((item) => (
-                  <li key={item.route}>
-                    <a
-                      href={navHref(item.route, review)}
-                      className="dz-menu-row dz-icon-host flex items-start gap-3 rounded-md px-3 py-1.5 text-small"
-                    >
+                {column.items.map((item) => {
+                  const live = isShown(item.route, review);
+                  const content = (
+                    <>
                       {'icon' in item && item.icon ? (
                         <Icon name={item.icon} size={24} />
                       ) : (
@@ -135,12 +133,28 @@ export function MegaMenuPanel({ review }: MegaMenuProps) {
                       {/* The space keeps the name and the outcome two words apart for text readers and
                             crawlers, which read the link's text as one run; the grid doesn't render it. */}
                       <span className="grid gap-0.5 leading-snug">
-                        <span className="font-medium text-fg-strong">{item.name}</span>{' '}
+                        <span className={live ? 'font-medium text-fg-strong' : 'font-medium text-fg-muted'}>
+                          {item.name}
+                        </span>{' '}
                         <span className="text-fg-muted">{item.outcome}</span>
                       </span>
-                    </a>
-                  </li>
-                ))}
+                    </>
+                  );
+                  return (
+                    <li key={item.route}>
+                      {live ? (
+                        <a
+                          href={navHref(item.route, review)}
+                          className="dz-menu-row dz-icon-host flex items-start gap-3 rounded-md px-3 py-1.5 text-small"
+                        >
+                          {content}
+                        </a>
+                      ) : (
+                        <span className="flex items-start gap-3 rounded-md px-3 py-1.5 text-small">{content}</span>
+                      )}
+                    </li>
+                  );
+                })}
               </ul>
               {isShown(column.route, review) ? (
                 <a
@@ -150,35 +164,41 @@ export function MegaMenuPanel({ review }: MegaMenuProps) {
                   {column.allLabel}
                   <Icon name="arrow" size={16} className="dz-menu-arrow ms-1.5 align-middle" />
                 </a>
-              ) : null}
+              ) : (
+                <span className="dz-menu-all self-end justify-self-start text-small font-medium text-balance text-fg-muted">
+                  {column.allLabel}
+                </span>
+              )}
             </div>
           );
         })}
       </div>
       <div className="mt-6 grid gap-3 border-t border-hairline pt-5 text-small">
-        {solutions.length > 0 ? (
-          <div className="flex flex-wrap items-center gap-x-5 gap-y-6">
-            {isShown(navigation.solutions.route, review) ? (
-              <a
-                href={navHref(navigation.solutions.route, review)}
-                className="dz-underline dz-target font-bold text-fg-strong"
-              >
-                {navigation.solutions.label}
-              </a>
-            ) : (
-              <span className="font-bold text-fg-strong">{navigation.solutions.label}</span>
-            )}
-            <ul className="flex flex-wrap items-center gap-x-5 gap-y-6">
-              {solutions.map((item) => (
-                <li key={item.route}>
+        <div className="flex flex-wrap items-center gap-x-5 gap-y-6">
+          {isShown(navigation.solutions.route, review) ? (
+            <a
+              href={navHref(navigation.solutions.route, review)}
+              className="dz-underline dz-target font-bold text-fg-strong"
+            >
+              {navigation.solutions.label}
+            </a>
+          ) : (
+            <span className="font-bold text-fg-muted">{navigation.solutions.label}</span>
+          )}
+          <ul className="flex flex-wrap items-center gap-x-5 gap-y-6">
+            {solutions.map((item) => (
+              <li key={item.route}>
+                {isShown(item.route, review) ? (
                   <a href={navHref(item.route, review)} className="dz-underline dz-target text-fg">
                     {item.name}
                   </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ) : null}
+                ) : (
+                  <span className="text-fg-muted">{item.name}</span>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
         <div className="flex flex-wrap items-center justify-between gap-x-10 gap-y-3">
           <div className="flex flex-wrap items-center gap-x-4 gap-y-6">
             {review ? (
@@ -190,17 +210,19 @@ export function MegaMenuPanel({ review }: MegaMenuProps) {
                 {shellContent.demoCard}
               </a>
             ) : null}
-            {rail.length > 0 ? (
-              <ul className="flex flex-wrap items-center gap-x-4 gap-y-6">
-                {rail.map((link) => (
-                  <li key={link.route}>
+            <ul className="flex flex-wrap items-center gap-x-4 gap-y-6">
+              {rail.map((link) => (
+                <li key={link.route}>
+                  {isShown(link.route, review) ? (
                     <a href={navHref(link.route, review)} className="dz-underline dz-target font-medium text-fg-strong">
                       {link.label}
                     </a>
-                  </li>
-                ))}
-              </ul>
-            ) : null}
+                  ) : (
+                    <span className="font-medium text-fg-muted">{link.label}</span>
+                  )}
+                </li>
+              ))}
+            </ul>
           </div>
           <DisplayControls place="mega" layout="row" />
         </div>

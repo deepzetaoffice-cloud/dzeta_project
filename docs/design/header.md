@@ -17,16 +17,16 @@ The header is a dashboard of proof. Besides navigation and the CTA, it carries t
   - CTA
 - **Nav** (C6 resolved: the four pillars):
 
-  | Item | Shown |
-  |---|---|
-  | Services ▾ | Once a pillar's pages ship |
-  | Automation | Once its page ships |
-  | Designer Studio | Once its page ships |
-  | Deepzeta Sync (the tools hub, `/tools`) | Only once the page ships |
-  | Work | Only once a real case study exists |
-  | Pricing | Only once prices are confirmed |
+  | Item | Rendered | Clickable |
+  |---|---|---|
+  | Services ▾ | Always | Opens the mega menu once a pillar's pages ship; the button is always present |
+  | Automation | Always | Once its page ships |
+  | Designer Studio | Always | Once its page ships |
+  | Deepzeta Sync (the tools hub, `/tools`) | Always | Once the page ships |
+  | Work | Always | Once a real case study exists |
+  | Pricing | Always | Once prices are confirmed |
 
-  Never link to a page that doesn't exist (04 §1.4): an item renders only when its registry row is live (`src/lib/routes.ts`), so items appear as their pages ship (P2, Q1). About, Contact and Resources live in the mega menu's strip and the footer.
+  Never link to a page that doesn't exist (04 §1.4): every item renders, but an item is a link only while its registry row is live (`src/lib/routes.ts`), so unshipped items show as muted non-clickable text and become links as their pages ship (plan `docs/plans/2026-10-08-header-full-menu.md`). About, Contact and Resources live in the mega menu's strip and the footer.
 - **No display controls in the bar.** The theme switch and Reduce effects live in the mobile sheet, the mega menu's strip and the footer (05 §1).
 - **Current page:** a miniature of the logo's four-pixel cluster marks it (decision 0009). `hover-pixel-hop` moves the cluster to the hovered item, and its small pixels settle a beat after the main one.
 - **CTA handoff** (C42: at most one gradient CTA in view, 05 §2):

@@ -1,6 +1,6 @@
 # Plan: Header renders the full menu; only live pages link
 
-Status: DRAFT
+Status: Approved
 Phase: P6 (part A2 area — header chrome rule change)
 Branch: `feat/header-render-all-nav`
 Page tier: n/a (sitewide header chrome; Home T1 carries the tightest budget, decision 0005)

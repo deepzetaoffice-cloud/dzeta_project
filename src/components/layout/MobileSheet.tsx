@@ -26,11 +26,10 @@ const closes = { commandfor: SHEET, command: 'close' };
 export type MobileSheetProps = { review: boolean };
 
 export function MobileSheet({ review }: MobileSheetProps) {
-  // The services hub first (services-hub.md; header.md), as "Services": the sheet's way to every service
-  const links = [{ route: 'R010' as const, label: navigation.servicesLabel }, ...navigation.primary].filter((link) =>
-    isShown(link.route, review),
-  );
-  const pillars = navigation.columns.filter((column) => isShown(column.route, review));
+  // The services hub first (services-hub.md; header.md), as "Services": the sheet's way to every service.
+  // Every item renders; a link only while its page is live (04 §1.4), else muted text.
+  const links = [{ route: 'R010' as const, label: navigation.servicesLabel }, ...navigation.primary];
+  const pillars = navigation.columns;
   return (
     <>
       <button
@@ -59,38 +58,50 @@ export function MobileSheet({ review }: MobileSheetProps) {
               <Icon name="close" size={24} className="dz-sheet-close" />
             </button>
           </div>
-          {links.length > 0 || pillars.length > 0 ? (
-            <nav aria-label={shellContent.navLabel} className="grid gap-8">
-              {links.length > 0 ? (
-                <ul className="dz-sheet-items grid gap-2">
-                  {links.map((link) => (
-                    <li key={link.route}>
+          <nav aria-label={shellContent.navLabel} className="grid gap-8">
+            <ul className="dz-sheet-items grid gap-2">
+              {links.map((link) => {
+                const live = isShown(link.route, review);
+                return (
+                  <li key={link.route}>
+                    {live ? (
                       <a
                         href={navHref(link.route, review)}
                         className="dz-stagger inline-flex min-h-11 items-center text-h2 text-fg-strong"
                       >
                         {link.label}
                       </a>
-                    </li>
-                  ))}
-                </ul>
-              ) : null}
-              {pillars.length > 0 ? (
-                <ul className="grid gap-2">
-                  {pillars.map((column) => (
-                    <li key={column.pillar}>
+                    ) : (
+                      <span className="inline-flex min-h-11 items-center text-h2 text-fg-muted">{link.label}</span>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+            <ul className="grid gap-2">
+              {pillars.map((column) => {
+                const live = isShown(column.route, review);
+                return (
+                  <li key={column.pillar}>
+                    {live ? (
                       <a
                         href={navHref(column.route, review)}
                         className={`dz-pillar-bar dz-pillar--${column.pillar} flex min-h-11 items-center ps-4 font-medium text-fg-strong`}
                       >
                         {column.name}
                       </a>
-                    </li>
-                  ))}
-                </ul>
-              ) : null}
-            </nav>
-          ) : null}
+                    ) : (
+                      <span
+                        className={`dz-pillar-bar dz-pillar--${column.pillar} flex min-h-11 items-center ps-4 font-medium text-fg-muted`}
+                      >
+                        {column.name}
+                      </span>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
           <DisplayControls place="sheet" />
           {/* The thumb zone: the CTA where a thumb reaches (WhatsApp joins it once the number is confirmed) */}
           <div className="mt-auto">

@@ -1,7 +1,8 @@
 // Navigation copy (P2 plan, I3 and N): the header nav and the mega menu and, from part C, the footer's
 // columns, from one source. Service names are the Services Catalogue's, exactly (docs/ai/10 §2).
-// Hrefs come from src/lib/routes.ts by registry ID, and an item renders only while its page is live
-// (04 §1.4). Outcomes are one line, at most 8 words, written from each service's catalogue entry.
+// Hrefs come from src/lib/routes.ts by registry ID. An item renders always; the header shows it as a
+// link only while its page is live (04 §1.4), else as muted text. Outcomes are one line, at most 8
+// words, written from each service's catalogue entry.
 import type { Pillar, Tier2Name } from '@/components/icons/registry';
 import type { RouteId } from '@/lib/routes';
 

@@ -362,8 +362,8 @@ test.describe('Live links only (04 §1.4; P2 plan, A)', () => {
   for (const path of [HOME, MISSING]) {
     test(`${path} links to no unshipped page, and every internal link returns 200`, async ({ page, request }) => {
       await open(page, path, 1280);
-      // The Services button shows once anything in its panel is live (plan I4): the hub, from P6 part A2.
-      await expect(page.getByRole('button', { name: navigation.servicesLabel })).toHaveCount(ROUTES.R010.live ? 1 : 0);
+      // The Services button always shows now that the header renders the full menu (plan 2026-10-08).
+      await expect(page.getByRole('button', { name: navigation.servicesLabel })).toHaveCount(1);
       const origin = new URL(page.url()).origin;
       const hrefs = await page
         .locator('a[href]:not([href^="#"])')
@@ -381,6 +381,17 @@ test.describe('Live links only (04 §1.4; P2 plan, A)', () => {
       }
     });
   }
+
+  test('Home renders every nav item; unshipped items are muted text, never a link', async ({ page }) => {
+    await open(page, HOME, 1280);
+    const nav = page.locator('[data-fx-nav]');
+    for (const link of navigation.primary) {
+      const live = ROUTES[link.route].live;
+      const label = nav.getByText(link.label, { exact: true });
+      await expect(label).toBeVisible();
+      await expect(nav.locator(`a[href="${ROUTES[link.route].path}"]`)).toHaveCount(live ? 1 : 0);
+    }
+  });
 });
 
 test.describe('The CTA hand-off (C42)', () => {
