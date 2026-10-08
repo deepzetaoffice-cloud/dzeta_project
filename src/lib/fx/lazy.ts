@@ -14,6 +14,10 @@
 const MODULES: Record<string, () => Promise<{ enhance: (scope: ParentNode) => void }>> = {
   faq: () => import('@/components/sections/faq-enhance').then((m) => ({ enhance: m.enhanceFaq })),
   home: () => import('@/components/sections/home/home-enhance').then((m) => ({ enhance: m.enhanceHome })),
+  // Each demo trigger is its own region (P6 part A2, S8): only reaching for a demo loads it
+  demo: () => import('@/components/demos/demo-enhance').then((m) => ({ enhance: m.enhanceDemos })),
+  // The mega menu's full panel, fetched when a visitor reaches for the Services button (L8, decision 0026)
+  mega: () => import('@/components/layout/mega-enhance').then((m) => ({ enhance: m.enhanceMega })),
 };
 
 // One shared observer: a region enters the viewport → arm its trigger; the first pointerover,
@@ -54,10 +58,12 @@ function shared(): IntersectionObserver {
   return observer;
 }
 
-// A click on a demo trigger whose region has not armed yet (it sits below the fold, and the click
-// scrolled it into view for the first time): the document-level catch arms the region and marks
-// the trigger pending, so the module it loads opens the panel for that click. `armed` is read
-// live, so it stays current after each navigation.
+// A click on a demo trigger its module has not wired yet: the document-level catch marks the
+// trigger pending, so the module opens the panel for that click once it arrives. Two cases: the
+// region has not armed (it sits below the fold, and the click scrolled it into view for the first
+// time), so the catch runs it too; or the pointer that came just before the click already asked for
+// the module, which is still loading (a trigger is its own region, so the two are milliseconds
+// apart). `armed` is read live, so it stays current after each navigation.
 let clickCatchInstalled = false;
 function installClickCatch() {
   if (clickCatchInstalled) return;
@@ -66,11 +72,11 @@ function installClickCatch() {
     'click',
     (event) => {
       const demo = (event.target as Element | null)?.closest?.('[data-demo]');
-      if (!demo) return;
+      if (!demo || demo.getAttribute('data-demo-wired') === 'true') return;
+      demo.setAttribute('data-demo-pending', 'true');
       const region = demo.closest('[data-fx-lazy]');
       const run = region ? armed.get(region) : undefined;
       if (!region || !run) return;
-      demo.setAttribute('data-demo-pending', 'true');
       armed.delete(region);
       run();
     },

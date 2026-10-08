@@ -15,6 +15,10 @@ export type WebPageInput = {
   websiteId: string;
   /** #organization, via isPartOf/about */
   organizationId: string;
+  /** The page's primary entity's @id (spec §2.3 matrix), via mainEntity: e.g. {page URL}#service */
+  mainEntityId?: string;
+  /** The page's BreadcrumbList @id, {page URL}#breadcrumb, via breadcrumb */
+  breadcrumbId?: string;
   /** ISO date, from the content field (spec decision 4: a content field, not a git date) */
   dateModified?: string;
   inLanguage?: string;
@@ -27,6 +31,8 @@ export function webPageNode({
   description,
   websiteId,
   organizationId,
+  mainEntityId,
+  breadcrumbId,
   dateModified,
   inLanguage = 'en',
 }: WebPageInput): SchemaNode {
@@ -40,6 +46,8 @@ export function webPageNode({
     inLanguage,
   };
   if (description !== undefined) node.description = description;
+  if (mainEntityId !== undefined) node.mainEntity = { '@id': mainEntityId };
+  if (breadcrumbId !== undefined) node.breadcrumb = { '@id': breadcrumbId };
   if (dateModified !== undefined) node.dateModified = dateModified;
   return node;
 }

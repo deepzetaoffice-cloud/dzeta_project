@@ -5,6 +5,8 @@ import {
   pillars,
   services as serviceData,
   starterOffers as offerData,
+  subgroupOf,
+  subgroups,
   type CatalogueBundle,
   type CatalogueService,
   type StarterOffer,
@@ -190,6 +192,23 @@ describe('the bundles (catalogue §5)', () => {
       for (const component of bundle.components) {
         expect(numbers.has(component), `${bundle.number} → ${component}`).toBe(true);
       }
+    }
+  });
+});
+
+// The sub-groups (the services hub's directories, P6 part A2): each a heading in the catalogue, byte
+// for byte, and every service in sections 1 and 4 inside one of them; the catalogue has no other.
+describe('catalogue sub-groups', () => {
+  it('match the catalogue\'s "### 1A. Name" headings, in order, and no heading is missing', () => {
+    const inCatalogue = [...CATALOGUE.matchAll(/^### (\d[A-Z])\. (.+)$/gm)].map((m) => ({ code: m[1], name: m[2] }));
+    expect(subgroups.map(({ code, name }) => ({ code, name }))).toEqual(inCatalogue);
+  });
+
+  it('hold every service of sections 1 and 4, and none of 2, 3 or 6', () => {
+    for (const service of services) {
+      const group = subgroupOf(service.number);
+      if (/^[14]/.test(service.number)) expect(group?.pillar, service.number).toBe(service.pillar);
+      else expect(group, service.number).toBeUndefined();
     }
   });
 });

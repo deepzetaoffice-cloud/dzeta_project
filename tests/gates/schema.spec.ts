@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 import { parseEnv } from '../../src/lib/env';
 import { siteConfig } from '../../src/lib/site-config';
 import { crawlSite } from './crawl';
-import { isHtml, schemaProblems, SKIPPED } from './rules';
+import { definedIds, isHtml, schemaProblems, SKIPPED } from './rules';
 
 // check:schema (docs/ai/03, docs/ai/08 §3, schema-system spec §4): the built-HTML gate. The P4
 // assertions: parse, @id uniqueness, no empty values, references resolve in the document union,
@@ -25,7 +25,16 @@ test('check:schema', async ({ browser, baseURL }) => {
   };
   const pages = (await crawlSite(browser, baseURL as string)).filter((page) => page.status === 200 && isHtml(page));
   const blocks = pages.reduce((sum, page) => sum + page.jsonLd.length, 0);
-  const problems = pages.flatMap((page) => schemaProblems(page, options).map((problem) => `${page.url}: ${problem}`));
+  // The site-wide union (P6 part A2): every node any built page defines, and every built page's URL
+  const siteDefined = new Set(pages.flatMap((page) => [...definedIds(page)]));
+  const builtUrls = new Set(
+    pages.map((page) => {
+      const { pathname } = new URL(page.url);
+      return pathname === '/' ? siteUrl : `${siteUrl}${pathname.replace(/\/$/, '')}`;
+    }),
+  );
+  const checked = { ...options, siteDefined, builtUrls };
+  const problems = pages.flatMap((page) => schemaProblems(page, checked).map((problem) => `${page.url}: ${problem}`));
 
   console.log(`check:schema: ${pages.length} page(s), ${blocks} JSON-LD block(s) checked.`);
   for (const skipped of [...SKIPPED.schema, ...SKIPPED.crawl]) console.log(`  not checked yet: ${skipped}`);
@@ -43,6 +52,8 @@ test('golden fixtures match the rendered graphs', async ({ request, baseURL }) =
   const canonical = 'https://deepzeta.ai';
   const fixtures: { url: string; fixture: string }[] = [
     { url: served + '/', fixture: 'tests/fixtures/schema/home.json' },
+    { url: served + '/services', fixture: 'tests/fixtures/schema/services-hub.json' },
+    { url: served + '/services/speed-to-lead-system', fixture: 'tests/fixtures/schema/service.json' },
   ];
   for (const { url, fixture } of fixtures) {
     const html = await (await request.get(url)).text();

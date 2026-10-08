@@ -1,0 +1,200 @@
+[
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "ProfessionalService",
+        "@id": "https://deepzeta.ai/#organization",
+        "name": "Deepzeta AI",
+        "legalName": "Deepzeta Digital Solutions L.L.C.",
+        "url": "https://deepzeta.ai",
+        "email": "hello@deepzeta.ai",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Office #202, Al Hilal Bank Building, Al Qusais 2",
+          "addressLocality": "Dubai",
+          "addressRegion": "Dubai",
+          "addressCountry": "AE"
+        },
+        "foundingDate": "2026-08-02",
+        "logo": {
+          "@id": "https://deepzeta.ai/#logo"
+        },
+        "founder": {
+          "@id": "https://deepzeta.ai/#person-jamsheed-khalid"
+        },
+        "sameAs": [
+          "https://www.linkedin.com/company/deepzeta-ai-digital-solutions-dubai/",
+          "https://www.instagram.com/deepzeta.ai/",
+          "https://www.facebook.com/DeepzetaAi/",
+          "https://www.youtube.com/@DeepzetaAiAgency",
+          "https://www.tiktok.com/@deepzeta.ai",
+          "https://x.com/Deep_Zeta",
+          "https://www.threads.com/@deepzeta.ai",
+          "https://www.snapchat.com/@deepzeta.ai",
+          "https://www.pinterest.com/deepzeta_ai/"
+        ],
+        "openingHoursSpecification": [
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+            "opens": "08:00",
+            "closes": "17:00"
+          }
+        ],
+        "areaServed": {
+          "@type": "Country",
+          "name": "United Arab Emirates",
+          "sameAs": "https://www.wikidata.org/wiki/Q878"
+        },
+        "hasOfferCatalog": {
+          "@id": "https://deepzeta.ai/services#catalog"
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://deepzeta.ai/#website",
+        "url": "https://deepzeta.ai",
+        "name": "Deepzeta AI",
+        "publisher": {
+          "@id": "https://deepzeta.ai/#organization"
+        },
+        "inLanguage": "en"
+      },
+      {
+        "@type": "ImageObject",
+        "@id": "https://deepzeta.ai/#logo",
+        "url": "https://deepzeta.ai/brand/deepzeta-logo-512.png",
+        "width": 512,
+        "height": 512
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Service",
+        "@id": "https://deepzeta.ai/services/speed-to-lead-system#service",
+        "url": "https://deepzeta.ai/services/speed-to-lead-system",
+        "name": "Speed-to-Lead System",
+        "provider": {
+          "@id": "https://deepzeta.ai/#organization"
+        },
+        "description": "The Speed-to-Lead System by Deepzeta AI is built to reply to every new lead within 60 seconds, on WhatsApp, SMS or email, then route it to the right salesperson. It is for UAE businesses that get enquiries from ads, property portals, their website and calls, and can’t afford to answer them hours later.",
+        "serviceType": "AI Automation",
+        "areaServed": {
+          "@type": "Country",
+          "name": "United Arab Emirates",
+          "sameAs": "https://www.wikidata.org/wiki/Q878"
+        }
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://deepzeta.ai/services/speed-to-lead-system",
+        "url": "https://deepzeta.ai/services/speed-to-lead-system",
+        "name": "Speed-to-Lead System for UAE Businesses",
+        "isPartOf": {
+          "@id": "https://deepzeta.ai/#website"
+        },
+        "about": {
+          "@id": "https://deepzeta.ai/#organization"
+        },
+        "inLanguage": "en",
+        "description": "The Speed-to-Lead System by Deepzeta AI is built to reply to every new lead within 60 seconds, on WhatsApp, SMS or email, then route it to the right salesperson. It is for UAE businesses that get enquiries from ads, property portals, their website and calls, and can’t afford to answer them hours later.",
+        "mainEntity": {
+          "@id": "https://deepzeta.ai/services/speed-to-lead-system#service"
+        },
+        "breadcrumb": {
+          "@id": "https://deepzeta.ai/services/speed-to-lead-system#breadcrumb"
+        }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://deepzeta.ai/services/speed-to-lead-system#breadcrumb",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://deepzeta.ai"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Services",
+            "item": "https://deepzeta.ai/services"
+          },
+          {
+            "@type": "ListItem",
+            "position": 3,
+            "name": "Speed-to-Lead System",
+            "item": "https://deepzeta.ai/services/speed-to-lead-system"
+          }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://deepzeta.ai/services/speed-to-lead-system#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How much does a Speed-to-Lead System cost?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The price depends on your setup, so we quote it after a free AI audit. The main drivers are how many lead sources you connect, whether you add the AI call-back, and how many salespeople the routing has to cover. Each portal, ad account and phone line is its own connection."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How long does a Speed-to-Lead System take to set up?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "We give a timeframe only after the free AI audit, once we know your lead sources. Answering website forms and WhatsApp is a smaller build than also covering the property portals, ads, phone calls and an AI call-back. After the audit you get a written summary with next steps and a quote."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Will every lead really get a reply within 60 seconds?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Not as a guarantee: 60 seconds is the design target the system is built to, not a measured result. The first reply is automatic, so it never waits for a person. It still depends on each lead source passing the enquiry on, and on the channel delivering the message. We will publish real reply times only after measuring them on live systems."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does it work with the CRM we already use?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The Speed-to-Lead System works with your CRM if it is HubSpot, Zoho CRM, Pipedrive, Salesforce or Odoo. Each new lead and its first reply can be logged there, so your team works from one record. If you have no CRM yet, CRM Setup & Automation adds one, with pipelines, stages, tasks and reminders."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Can the first reply go out in Arabic?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes: first replies can be written in Arabic, English or both, and you choose which version each lead receives. The optional AI call-back uses AI voice platforms with Arabic and English voices. A lead who writes in Arabic can also be routed to a salesperson who speaks it."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How is the personal data in each lead handled?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Every automation project we build includes data rules: consent wording, retention and access rules, and a record of what each AI step uses. For the Speed-to-Lead System, that means consent wording in each message and call, an easy opt-out, and a way to reach a person. You decide who on your team can see each lead."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Who looks after the system once it is live?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "If you want us to keep it running, the AI Ops Retainer looks after your Speed-to-Lead System once it is live. It covers monitoring, fixes, updates and prompt improvements, plus a monthly report of hours saved and results. It also adds new small automations each month, such as connecting a new lead source."
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

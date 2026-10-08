@@ -31,7 +31,7 @@
 1. **Server Components by default.** Add `'use client'` only for state, effects, event handlers or browser APIs, and push it as far down the tree as possible. Never on a layout or page without a stated reason.
 2. **Metadata API** (`metadata` / `generateMetadata`) for every page: title, description, canonical, Open Graph, robots. No hand-written `<head>` tags.
 3. **`next/image`** for every raster image with explicit `width`/`height` (or `fill` + sized parent); `priority` only for the above-the-fold LCP image.
-4. **Internal links are plain `<a href>`** built from the route helpers (`src/lib/routes.ts`): server-rendered and crawlable. No `next/link` ([C67](conflict-register.md): its client code cost about 3.3 KB gzip on every page's first load); a page change is a normal page load. No JavaScript-only navigation.
+4. **Internal links are plain `<a href>`** built from the route helpers (`src/lib/routes.ts`): server-rendered and crawlable. No `next/link` ([C67](conflict-register.md): its client code cost about 3.3 KB gzip on every page's first load); a page change is a normal page load. No JavaScript-only navigation. One exception ([C68](conflict-register.md)): the root error page links Home as its locale's path prefix, so the route table stays out of every first load.
 5. **`next/font`** for fonts (see [05](05-design-system.md) §3).
 6. **Third-party scripts** via `next/script` with a deliberate strategy, or a small loader of our own where that costs less (GTM: `src/lib/tracking/gtm.ts`, [C56](conflict-register.md); see [09](09-analytics-tracking.md)). Nothing render-blocking in the head.
 7. **Heavy or interactive widgets** (chat agent, booking, WebGL) load **on interaction or when visible**, with a lightweight placeholder that reserves space (no layout shift). "Wow on demand" experiences (concept sites, the app demo, the Device Stage, GSAP scenes) load only on an explicit visitor action (decision 0008). WebGL follows 05 §5 rule 5 and [13](13-experience-design.md) §4.6: T3 only, device-gated, started by the first real input.
@@ -45,7 +45,7 @@
 
 1. **Reuse → extend → create.** Before building, search for an existing component and say so in the plan. Extend with a prop/variant if it's ~80% right. Create new only if nothing close exists.
 2. **Props-driven, zero hardcoded copy.** Content comes from `src/content/` as typed props.
-   - Business facts (brand and legal name, NAP, hours, social URLs, the Cal.com link) come from one typed site config, `src/lib/site-config.ts`, built from the facts file.
+   - Business facts (brand and legal name, NAP, hours, social URLs, the Cal.com link) come from one typed site config, `src/lib/site-config.ts`, built from the facts file. One exception ([C68](conflict-register.md)): the brand name's literal lives in `src/lib/brand.ts`, which the site config re-exports, so the root error page (shipped with every page) can read it without carrying every fact.
    - A fact that isn't CONFIRMED yet is `null` there, and every component that uses it hides itself while it's `null`.
 3. **Naming:** PascalCase by role (`HeroSignal`, `PillarCards`, `RoiCalculator`), never `Section2` or `NewHero`. One component per file; export its `Props` type.
 4. **Folders:** `ui/` (atoms), `sections/` (page sections), `layout/` (header, footer, shell), `icons/`, `demos/`.

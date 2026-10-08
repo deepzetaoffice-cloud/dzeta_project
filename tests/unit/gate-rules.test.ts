@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  definedIds,
   duplicateMetaProblems,
   isNoindex,
   linkProblems,
@@ -343,5 +344,103 @@ describe('navLinkProblems (check:links, header and footer)', () => {
   it('fails a link to a page without exactly one canonical', () => {
     const pages = [pageData({ navLists: [['/about']] }), pageData({ url: `${origin}/about`, canonicals: [] })];
     expect(navLinkProblems(pages, origin)).toEqual([`${origin}/: "/about" leads to a page with 0 canonicals`]);
+  });
+});
+
+// P6 part A2 (S9): references across built pages, breadcrumbs, one page-level node per page
+describe('schemaProblems: the P6 additions (check:schema)', () => {
+  const block = (graph: unknown[]) => JSON.stringify({ '@context': 'https://schema.org', '@graph': graph });
+  const [sitewide] = goodBlocks();
+  const crumbs = (steps: { position: number; item?: string }[]) =>
+    block([
+      { '@type': 'WebPage', '@id': `${origin}/services`, isPartOf: { '@id': `${origin}/#website` } },
+      {
+        '@type': 'BreadcrumbList',
+        '@id': `${origin}/services#breadcrumb`,
+        itemListElement: steps.map((step) => ({ '@type': 'ListItem', name: 'x', ...step })),
+      },
+    ]);
+  const built = new Set([origin, `${origin}/services`]);
+
+  it('resolves a reference to a node another built page defines, and fails one defined nowhere', () => {
+    const withCatalog = block([
+      { '@type': 'WebPage', '@id': origin, isPartOf: { '@id': `${origin}/#website` } },
+      { '@type': 'Thing', '@id': `${origin}/#thing`, subjectOf: { '@id': `${origin}/services#catalog` } },
+    ]);
+    const page = pageData({ jsonLd: [sitewide!, withCatalog] });
+    expect(schemaProblems(page, schemaOptions).join('\n')).toMatch(/services#catalog" resolves to no @id/);
+    const hub = pageData({
+      url: `${origin}/services`,
+      jsonLd: [block([{ '@type': 'OfferCatalog', '@id': `${origin}/services#catalog`, name: 'x' }])],
+    });
+    expect([...definedIds(hub)]).toEqual([`${origin}/services#catalog`]);
+    expect(schemaProblems(page, { ...schemaOptions, siteDefined: definedIds(hub) })).toEqual([]);
+  });
+
+  it('a named reference (an offer’s itemOffered: { @id, name }) is still a reference, never a definition', () => {
+    const offered = { '@id': `${origin}/services/not-built#service`, name: 'x' };
+    const hub = pageData({
+      url: `${origin}/services`,
+      jsonLd: [
+        sitewide!,
+        block([
+          { '@type': 'WebPage', '@id': `${origin}/services`, isPartOf: { '@id': `${origin}/#website` } },
+          {
+            '@type': 'OfferCatalog',
+            '@id': `${origin}/services#catalog`,
+            itemListElement: [{ '@type': 'Offer', itemOffered: offered }],
+          },
+        ]),
+      ],
+    });
+    expect(definedIds(hub).has(offered['@id'])).toBe(false);
+    expect(schemaProblems(hub, { ...schemaOptions, siteDefined: definedIds(hub) }).join('\n')).toMatch(
+      /not-built#service" resolves to no @id/,
+    );
+  });
+
+  it('passes a breadcrumb from 1 with no gap to built pages', () => {
+    const page = pageData({
+      url: `${origin}/services`,
+      jsonLd: [
+        sitewide!,
+        crumbs([
+          { position: 1, item: origin },
+          { position: 2, item: `${origin}/services` },
+        ]),
+      ],
+    });
+    expect(schemaProblems(page, { ...schemaOptions, builtUrls: built })).toEqual([]);
+  });
+
+  it('fails a breadcrumb with a gap, a missing item or a step that is not a built page', () => {
+    const page = pageData({
+      url: `${origin}/services`,
+      jsonLd: [
+        sitewide!,
+        crumbs([{ position: 1, item: origin }, { position: 3, item: `${origin}/pricing` }, { position: 3 }]),
+      ],
+    });
+    const problems = schemaProblems(page, { ...schemaOptions, builtUrls: built }).join('\n');
+    expect(problems).toMatch(/breadcrumb position 3 where 2 was expected/);
+    expect(problems).toMatch(/breadcrumb step 2 is not a built page: https:\/\/deepzeta.ai\/pricing/);
+    expect(problems).toMatch(/breadcrumb step 3 has no item URL/);
+  });
+
+  it('fails a page with two page-level nodes; a FAQPage beside its WebPage is fine', () => {
+    const two = block([
+      { '@type': 'WebPage', '@id': origin, isPartOf: { '@id': `${origin}/#website` } },
+      { '@type': 'CollectionPage', '@id': `${origin}/x`, isPartOf: { '@id': `${origin}/#website` } },
+    ]);
+    expect(schemaProblems(pageData({ jsonLd: [sitewide!, two] }), schemaOptions).join('\n')).toMatch(
+      /2 page-level nodes/,
+    );
+    const withFaq = block([
+      { '@type': 'WebPage', '@id': origin, isPartOf: { '@id': `${origin}/#website` } },
+      { '@type': 'FAQPage', '@id': `${origin}#faq`, mainEntity: [] },
+    ]);
+    expect(schemaProblems(pageData({ jsonLd: [sitewide!, withFaq] }), schemaOptions).join('\n')).not.toMatch(
+      /page-level nodes/,
+    );
   });
 });

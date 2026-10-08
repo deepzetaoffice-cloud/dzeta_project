@@ -89,7 +89,7 @@ jobs:
           });
           // One annotation per page, since GitHub shows at most 10 per step (15 runs would lose the last
           // page): the median-LCP run's line, then every run's LCP and score. No comma or colon in a title.
-          const label = (p) => p.startsWith('127.0.0.1') ? 'Home (UAE campaign landing)' : p.endsWith('/shell-review') ? 'Review page (Europe)' : 'Home (Europe)';
+          const label = (p) => p.startsWith('127.0.0.1') ? 'Home (UAE campaign landing)' : p.endsWith('/shell-review') ? 'Review page (Europe)' : p.endsWith(':3000/') ? 'Home (Europe)' : p.slice(p.indexOf('/')) + ' (Europe)';
           for (const [page, runs] of Object.entries(pages)) {
             const median = runs.slice().sort((x, y) => x.lcp - y.lcp)[Math.floor(runs.length / 2)];
             const every = 'every run: LCP ' + runs.map((r) => r.lcp).join(', ') + ' ms; perf ' + runs.map((r) => r.perf).join(', ');

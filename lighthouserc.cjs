@@ -157,6 +157,20 @@ const reviewAssertions = {
   'largest-contentful-paint': ['error', { maxNumericValue: 2700, ...medianRun }],
 };
 
+// T2 pages (decisions 0005 and 0011; 07 §1): Performance ≥ 0.90; Accessibility, Best Practices and SEO
+// ≥ 0.95; CLS, TBT and the same third-party, font and image caps as Home. The page weight is the hard
+// limit (scripts/check-page-weight.mjs). C69 (the owner, 2026-10-08, within decision 0020): every page
+// with the shell sits on a lab LCP floor of about 2,570 ms (the hub 2,569, the review page 2,579), and
+// the JetBrains Mono eyebrows add their font (the pilot 2,723), so T2's lab allowance is Home's
+// 2,750 ms (C63). The 2.5 s hard limit stands for real visitors (field data on production).
+// The services hub (R010) and the service template's pilot (R027) join the sample in P6 part A2; each
+// later T2 template joins with its first page.
+const t2Assertions = {
+  ...t1Assertions,
+  'categories:performance': ['error', { minScore: 0.9, ...medianScore }],
+  'largest-contentful-paint': ['error', { maxNumericValue: 2750, ...medianRun }],
+};
+
 // The CPU calibration (decision 0025): scripts/lhci-run.mjs sets DZ_LHCI_CPU_MULTIPLIER from this
 // machine's benchmarkIndex. Lighthouse deep-merges this partial `throttling` into its defaults, so
 // only the multiplier changes. Unset (a bare `lhci collect`), Lighthouse's default 4 applies.
@@ -167,7 +181,12 @@ module.exports = {
   ci: {
     collect: {
       startServerCommand: 'npm run start',
-      url: ['http://localhost:3000/', 'http://localhost:3000/shell-review'],
+      url: [
+        'http://localhost:3000/',
+        'http://localhost:3000/shell-review',
+        'http://localhost:3000/services',
+        'http://localhost:3000/services/speed-to-lead-system',
+      ],
       numberOfRuns: 5,
       settings: { ...calibrated },
     },
@@ -181,6 +200,7 @@ module.exports = {
           assertions: { ...t1Assertions, ...rowThirdParty },
         },
         { matchingUrlPattern: '^http://localhost:3000/shell-review$', assertions: reviewAssertions },
+        { matchingUrlPattern: '^http://localhost:3000/services(/[a-z0-9-]+)?$', assertions: t2Assertions },
       ],
     },
     upload: {

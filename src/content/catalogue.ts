@@ -101,6 +101,35 @@ export const pillars = [
   },
 ] as const satisfies readonly CataloguePillar[];
 
+// The catalogue's sub-groups ("### 1A. AI Agents & Assistants"), names byte for byte, in catalogue
+// order (the P6 part A plan, S10: the services hub's directories). Websites (2) and Software (3)
+// list their services directly, with no sub-groups. A service's sub-group is its number's prefix
+// before the dot: 1B.1 → 1B.
+export type CatalogueSubgroup = { code: string; name: string; pillar: Pillar };
+
+export const subgroups = [
+  { code: '1A', name: 'AI Agents & Assistants', pillar: 'ai' },
+  { code: '1B', name: 'Sales & Lead Automation', pillar: 'ai' },
+  { code: '1C', name: 'Booking & Scheduling Automation', pillar: 'ai' },
+  { code: '1D', name: 'Customer Service & Retention Automation', pillar: 'ai' },
+  { code: '1E', name: 'Operations & Field Service Automation', pillar: 'ai' },
+  { code: '1F', name: 'Finance & Admin Automation', pillar: 'ai' },
+  { code: '1G', name: 'HR & Team Automation', pillar: 'ai' },
+  { code: '1H', name: 'Marketing Automation', pillar: 'ai' },
+  { code: '1I', name: 'E-Commerce Automation', pillar: 'ai' },
+  { code: '1J', name: 'Data, Reporting & AI Insights', pillar: 'ai' },
+  { code: '1K', name: 'AI Governance & Compliance', pillar: 'ai' },
+  { code: '4A', name: 'Search & AI Visibility', pillar: 'ranking' },
+  { code: '4B', name: 'Performance Marketing (Paid Ads)', pillar: 'ranking' },
+  { code: '4C', name: 'Social Media & Content', pillar: 'ranking' },
+  { code: '4D', name: 'Brand & Strategy', pillar: 'ranking' },
+  { code: '4E', name: 'Full-Funnel Growth System', pillar: 'ranking' },
+] as const satisfies readonly CatalogueSubgroup[];
+
+/** The sub-group a service number belongs to (1B.1 → 1B), or undefined for 2.x and 3.x */
+export const subgroupOf = (serviceNumber: string) =>
+  subgroups.find((group) => serviceNumber.startsWith(`${group.code}.`));
+
 // Every service, in catalogue order: sections 1–4 by pillar, then the cross-pillar section 6.
 export const services = [
   // §1 AI Automation

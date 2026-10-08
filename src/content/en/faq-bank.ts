@@ -90,3 +90,95 @@ export const homeFaq: readonly FaqQuestion[] = [
       'No. Launch is a step, not the end. We watch the numbers with you, fix what surfaces in the first weeks, and there is an ongoing care retainer for businesses that want us to keep running and improving the systems. You can also run everything yourself: the handover includes documentation and training for your team.',
   },
 ];
+
+// The questions on the services hub (/services, R010; the P6 part A plan, S10): 4, the hub's range
+// (engine §3). Each asks what the hub is for (choosing a service), so none repeats Home's
+// questions. Sources: catalogue priority tags (add-ons "sold with another service"), 0.1, 2.1,
+// 2.3, 4A.3, 4C.2, 6.2 and 1A.1.
+export const servicesHubFaq: readonly FaqQuestion[] = [
+  {
+    id: 'can-i-start-with-one-service',
+    topic: 'cost',
+    question: 'Can I start with one service instead of a package?',
+    answer:
+      'Yes: most services are sold on their own, so you can start with the one that matters most. Add-ons, such as AI training or priority support, are sold with another service. Solutions combine several services into one system when you are ready.',
+  },
+  {
+    id: 'which-service-pays-back-first',
+    topic: 'results',
+    question: 'How do I know which service will pay back first?',
+    answer:
+      'A Free AI Automation Audit shows which automations pay back first, at no cost. It maps your sales, operations and admin processes, ranks the opportunities by return and estimates the hours and money saved. You also get a written summary with next steps and a quote.',
+  },
+  {
+    id: 'do-websites-and-automations-connect',
+    topic: 'integrations',
+    question: 'Do your websites and automations work together?',
+    answer:
+      'Yes: Custom-Coded High-Performance Websites are built ready to connect to WhatsApp, a CRM, booking and AI automations, with analytics and conversion tracking included. A website enquiry can then get an instant reply, land in your CRM and reach the right salesperson, with nobody copying details across.',
+  },
+  {
+    id: 'do-you-build-arabic-websites',
+    topic: 'arabic',
+    question: 'Do you build websites in Arabic?',
+    answer:
+      'Yes: websites can be built in Arabic and English, with a true right-to-left layout for Arabic. Online stores, Google Business Profile optimisation and copywriting come in both languages too. AI agents reply in Arabic and English, and AI training for teams can be delivered in either.',
+  },
+];
+
+// The questions on the Speed-to-Lead System page (/services/speed-to-lead-system, R027; the P6 part
+// A plan, S10): 7, the lead service range of 6–8 (engine §3); cost and timeline first (§6.2 rule 3).
+// "60 seconds" is the facts §6 design target, never a measured result. Sources: catalogue 0.1
+// (the written summary and quote), 1B.1, 1B.6, 1K.1 (data rules in every automation project), 6.1,
+// §8 (CRMs, automation engines, Arabic and English voices) and §9 (consent and a human).
+export const speedToLeadSystemFaq: readonly FaqQuestion[] = [
+  {
+    id: 'what-does-speed-to-lead-cost',
+    topic: 'cost',
+    question: 'How much does a Speed-to-Lead System cost?',
+    answer:
+      'The price depends on your setup, so we quote it after a free AI audit. The main drivers are how many lead sources you connect, whether you add the AI call-back, and how many salespeople the routing has to cover. Each portal, ad account and phone line is its own connection.',
+  },
+  {
+    id: 'how-long-does-speed-to-lead-take',
+    topic: 'timeline',
+    question: 'How long does a Speed-to-Lead System take to set up?',
+    answer:
+      'We give a timeframe only after the free AI audit, once we know your lead sources. Answering website forms and WhatsApp is a smaller build than also covering the property portals, ads, phone calls and an AI call-back. After the audit you get a written summary with next steps and a quote.',
+  },
+  {
+    id: 'is-the-speed-to-lead-reply-time-guaranteed',
+    topic: 'results',
+    question: 'Will every lead really get a reply within 60 seconds?',
+    answer:
+      'Not as a guarantee: 60 seconds is the design target the system is built to, not a measured result. The first reply is automatic, so it never waits for a person. It still depends on each lead source passing the enquiry on, and on the channel delivering the message. We will publish real reply times only after measuring them on live systems.',
+  },
+  {
+    id: 'does-speed-to-lead-work-with-my-crm',
+    topic: 'integrations',
+    question: 'Does it work with the CRM we already use?',
+    answer:
+      'The Speed-to-Lead System works with your CRM if it is HubSpot, Zoho CRM, Pipedrive, Salesforce or Odoo. Each new lead and its first reply can be logged there, so your team works from one record. If you have no CRM yet, CRM Setup & Automation adds one, with pipelines, stages, tasks and reminders.',
+  },
+  {
+    id: 'can-speed-to-lead-reply-in-arabic',
+    topic: 'arabic',
+    question: 'Can the first reply go out in Arabic?',
+    answer:
+      'Yes: first replies can be written in Arabic, English or both, and you choose which version each lead receives. The optional AI call-back uses AI voice platforms with Arabic and English voices. A lead who writes in Arabic can also be routed to a salesperson who speaks it.',
+  },
+  {
+    id: 'how-is-speed-to-lead-data-handled',
+    topic: 'data-privacy',
+    question: 'How is the personal data in each lead handled?',
+    answer:
+      'Every automation project we build includes data rules: consent wording, retention and access rules, and a record of what each AI step uses. For the Speed-to-Lead System, that means consent wording in each message and call, an easy opt-out, and a way to reach a person. You decide who on your team can see each lead.',
+  },
+  {
+    id: 'who-runs-speed-to-lead-after-launch',
+    topic: 'support',
+    question: 'Who looks after the system once it is live?',
+    answer:
+      'If you want us to keep it running, the AI Ops Retainer looks after your Speed-to-Lead System once it is live. It covers monitoring, fixes, updates and prompt improvements, plus a monthly report of hours saved and results. It also adds new small automations each month, such as connecting a new lead source.',
+  },
+];

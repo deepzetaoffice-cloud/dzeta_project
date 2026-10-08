@@ -1,7 +1,8 @@
 // Navigation copy (P2 plan, I3 and N): the header nav and the mega menu and, from part C, the footer's
 // columns, from one source. Service names are the Services Catalogue's, exactly (docs/ai/10 §2).
-// Hrefs come from src/lib/routes.ts by registry ID, and an item renders only while its page is live
-// (04 §1.4). Outcomes are one line, at most 8 words, written from each service's catalogue entry.
+// Hrefs come from src/lib/routes.ts by registry ID. An item renders always; the header shows it as a
+// link only while its page is live (04 §1.4), else as muted text. Outcomes are one line, at most 8
+// words, written from each service's catalogue entry.
 import type { Pillar, Tier2Name } from '@/components/icons/registry';
 import type { RouteId } from '@/lib/routes';
 
@@ -25,6 +26,7 @@ export type MenuColumn = {
 export type FooterGroup = { title: string; links: readonly NavLink[] };
 export type Navigation = {
   servicesLabel: string;
+  hubLabel: string;
   primary: readonly NavLink[];
   columns: readonly MenuColumn[];
   solutions: { label: string; route: RouteId; items: readonly { route: RouteId; name: string }[] };
@@ -35,6 +37,9 @@ export type Navigation = {
 export const navigation = {
   // The mega menu's button (header.md)
   servicesLabel: 'Services',
+  // The hub's link: first in the mega menu's lite panel and in the footer's Services column (header.md,
+  // footer.md; decision 0026)
+  hubLabel: 'All services',
   // The header's nav, in header.md's order after Services
   primary: [
     { route: 'R011', label: 'Automation' },

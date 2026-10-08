@@ -27,7 +27,9 @@ export const SKIPPED = {
     'sitemap parity (enabled in P9, with the sitemap)',
     'noindex routes absent from the llms files (enabled in P9, with the llms files)',
   ],
-  schema: ['the page-type matrix beyond the shipped templates, and breadcrumbs (each with its page, P6–P8)'],
+  schema: [
+    'the page-type matrix beyond the shipped templates (pillar, solution, industry, article…: each with its page, P6–P8)',
+  ],
   links: [
     'URL-registry rules, link budgets, anchors, duplicate targets in the prose, orphans, click depth (enabled in P4)',
   ],
@@ -126,8 +128,9 @@ export function schemaProblems(page: PageData, options: SchemaOptions): string[]
     }
     walk(data, (node) => {
       const id = node['@id'];
-      // A node with only "@id" is a reference; anything more is a definition.
-      if (typeof id === 'string' && Object.keys(node).length > 1) defined.set(id, (defined.get(id) ?? 0) + 1);
+      // A node with an @type is a definition; one without is a reference, even when it carries a name
+      // (an offer's itemOffered: { @id, name }), as graph.ts reads them.
+      if (typeof id === 'string' && typeof node['@type'] === 'string') defined.set(id, (defined.get(id) ?? 0) + 1);
       for (const [key, value] of Object.entries(node)) {
         // A missing value means the property is omitted (02 §1.4), never sent empty.
         const empty = value === null || value === '' || (Array.isArray(value) && value.length === 0);
@@ -168,11 +171,39 @@ export function schemaProblems(page: PageData, options: SchemaOptions): string[]
       }
     },
   );
+  // P6 part A2: or to a node another built page defines (e.g. #organization's hasOfferCatalog → the
+  // hub's /services#catalog, the hub's offers → each live service page's #service). The schema lists
+  // and references live pages only, so the defining page is in the crawl.
   for (const ref of referenced) {
-    if (!defined.has(ref) && !RESERVED.has(ref)) {
-      problems.push(`the reference "${ref}" resolves to no @id in the document`);
+    if (!defined.has(ref) && !RESERVED.has(ref) && !options.siteDefined?.has(ref)) {
+      problems.push(`the reference "${ref}" resolves to no @id in the document or on any built page`);
     }
   }
+
+  // Spec §4 assertion 9 (P6 part A2): a BreadcrumbList's positions run from 1 with no gap, and every
+  // step is a built page (the crawl's own URLs).
+  walk(jsonNodesOf(page), (node) => {
+    if (node['@type'] !== 'BreadcrumbList' || !Array.isArray(node.itemListElement)) return;
+    (node.itemListElement as Record<string, unknown>[]).forEach((step, index) => {
+      if (step.position !== index + 1) {
+        problems.push(`breadcrumb position ${String(step.position)} where ${index + 1} was expected`);
+      }
+      const item = typeof step.item === 'string' ? step.item : undefined;
+      if (!item) problems.push(`breadcrumb step ${index + 1} has no item URL`);
+      else if (options.builtUrls && !options.builtUrls.has(item)) {
+        problems.push(`breadcrumb step ${index + 1} is not a built page: ${item}`);
+      }
+    });
+  });
+
+  // The spec §2.3 matrix (P6 part A2): one page-level node per page, its primary entity. FAQPage is
+  // the FAQ block beside it, not the page's type.
+  const PAGE_TYPES = new Set(['WebPage', 'CollectionPage', 'AboutPage', 'ContactPage', 'ItemPage', 'ProfilePage']);
+  let pageNodes = 0;
+  walk(jsonNodesOf(page), (node) => {
+    if (typeof node['@type'] === 'string' && PAGE_TYPES.has(node['@type']) && Object.keys(node).length > 1) pageNodes++;
+  });
+  if (pageNodes > 1) problems.push(`${pageNodes} page-level nodes (WebPage and its page types), expected one`);
 
   // Spec §4 assertion 6: every URL in the graph is absolute on the canonical origin, no trailing
   // slash, no query. External facts (sameAs, the Wikidata entity) are exempt.
@@ -243,7 +274,30 @@ export function schemaProblems(page: PageData, options: SchemaOptions): string[]
   return problems;
 }
 
+// Every @id a page's blocks define (a node with an @type), for the site-wide union
+export function definedIds(page: PageData): Set<string> {
+  const ids = new Set<string>();
+  walk(jsonNodesOf(page), (node) => {
+    if (typeof node['@id'] === 'string' && typeof node['@type'] === 'string') ids.add(node['@id']);
+  });
+  return ids;
+}
+
+function jsonNodesOf(page: PageData): unknown[] {
+  return page.jsonLd.flatMap((raw) => {
+    try {
+      return [JSON.parse(raw)];
+    } catch {
+      return [];
+    }
+  });
+}
+
 export type SchemaOptions = {
+  /** Every @id defined on any crawled page (P6 part A2): a reference may resolve to another page */
+  siteDefined?: ReadonlySet<string>;
+  /** Every crawled page's URL on the canonical origin, no trailing slash (Home is the bare origin) */
+  builtUrls?: ReadonlySet<string>;
   siteUrl: string;
   nap: {
     brandName: string;

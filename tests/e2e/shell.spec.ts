@@ -362,8 +362,8 @@ test.describe('Live links only (04 §1.4; P2 plan, A)', () => {
   for (const path of [HOME, MISSING]) {
     test(`${path} links to no unshipped page, and every internal link returns 200`, async ({ page, request }) => {
       await open(page, path, 1280);
-      // No pillar column has a live item yet, so production has no Services button (plan I4).
-      await expect(page.getByRole('button', { name: navigation.servicesLabel })).toHaveCount(0);
+      // The Services button always shows now that the header renders the full menu (plan 2026-10-08).
+      await expect(page.getByRole('button', { name: navigation.servicesLabel })).toHaveCount(1);
       const origin = new URL(page.url()).origin;
       const hrefs = await page
         .locator('a[href]:not([href^="#"])')
@@ -381,6 +381,17 @@ test.describe('Live links only (04 §1.4; P2 plan, A)', () => {
       }
     });
   }
+
+  test('Home renders every nav item; unshipped items are muted text, never a link', async ({ page }) => {
+    await open(page, HOME, 1280);
+    const nav = page.locator('[data-fx-nav]');
+    for (const link of navigation.primary) {
+      const live = ROUTES[link.route].live;
+      const label = nav.getByText(link.label, { exact: true });
+      await expect(label).toBeVisible();
+      await expect(nav.locator(`a[href="${ROUTES[link.route].path}"]`)).toHaveCount(live ? 1 : 0);
+    }
+  });
 });
 
 test.describe('The CTA hand-off (C42)', () => {
@@ -568,10 +579,14 @@ test.describe('The footer, The Landing (footer.md; P2 plan, L)', () => {
         await expect(link).toHaveAttribute('rel', 'noopener noreferrer');
       }
       await expect(footer.getByText(`${shellContent.copyright} ${siteConfig.legalName}`)).toBeVisible();
-      // The review page shows every column; production, only columns with a live link (none yet).
+      // The review page shows every column; production, only columns with a live link: the Services
+      // column alone while the hub is its only live page (P6 part A2). One Services column (the hub and
+      // the pillar pages, L9, decision 0026), then the footer's groups.
       const nav = footer.getByRole('navigation', { name: shellContent.footerNavLabel });
       if (path === REVIEW) {
-        await expect(nav.getByRole('list')).toHaveCount(navigation.columns.length + navigation.footer.length);
+        await expect(nav.getByRole('list')).toHaveCount(1 + navigation.footer.length);
+      } else if (ROUTES.R010.live) {
+        await expect(nav.getByRole('list')).toHaveCount(1);
       } else {
         await expect(nav).toHaveCount(0);
       }

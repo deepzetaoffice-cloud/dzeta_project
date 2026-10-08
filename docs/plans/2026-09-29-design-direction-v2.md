@@ -29,7 +29,7 @@ Every confirmed decision must land in the rule system, so AI builders follow it.
   - On `main` it is the Roo Code decision, still PROPOSED.
   - On the unmerged branch `docs/d1-domain-and-component-refs` it is the domain decision, ACCEPTED. That branch also holds your 6 component references.
 - **Homepage mockup v1 "Signal Grid"** is honest and light, but restrained.
-- **The DeepZAuto App folder** is currently the open-source "Forge Growth" (MIT).
+- **The Deepzeta Sync App folder** is currently the open-source "Forge Growth" (MIT).
 
 **Outcome:** one coordinated, premium, futuristic language that stays inside the speed budget, proves our claims, and is recorded so builders can't drift.
 
@@ -411,7 +411,7 @@ Structure stays owned by 10 §5 and 08 §2.
 
 ### A5.9 App demo (T3)
 
-**What exists today:** `D:\DeepZAuto App` is **Forge Growth** (MIT, by Forgemind), a WhatsApp CRM with:
+**What exists today:** `D:\Deepzeta Sync App` is **Forge Growth** (MIT, by Forgemind), a WhatsApp CRM with:
 - ad → chat → lead → payment attribution
 - an inbox with bot/human take-over
 - an AI agent test chat with a trace

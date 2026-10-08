@@ -2,6 +2,7 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { navigation as content, type Navigation } from '@/content/en/navigation';
+import { servicePages } from '@/content/en/services';
 import { isShown, navHref, ROUTES, type RouteId } from '@/lib/routes';
 
 // The typed route seed and the navigation that uses it (P2 plan, A1 and O; engine §5.3 rule 5).
@@ -54,7 +55,12 @@ describe('the route seed (src/lib/routes.ts)', () => {
   });
 
   it('marks a route live exactly when its page file exists', () => {
-    const pages = new Set(pagePaths());
+    // The service template (/services/[slug]) is one page per service that has its copy (P6 part A2)
+    const pages = new Set(
+      pagePaths().flatMap((path) =>
+        path === '/services/[slug]' ? Object.keys(servicePages).map((slug) => `/services/${slug}`) : [path],
+      ),
+    );
     expect(pages.has('/')).toBe(true);
     for (const id of ids) expect(ROUTES[id].live, `${id} ${ROUTES[id].path}`).toBe(pages.has(ROUTES[id].path));
   });

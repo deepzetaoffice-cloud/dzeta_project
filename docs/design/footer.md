@@ -27,7 +27,7 @@ Every page ends with a landing. The journey line that followed the visitor down 
 ## Body
 
 - **Links** (in a `<nav>` named "Footer"; only live registry rows render, so the columns appear as pages ship, P2 Q1):
-  - link columns in the four pixel colours, one per pillar (C6): every service in the pillar, including the three left out of the mega menu (header.md), then "All … services"
+  - service links (L9, Q2 (c), decision 0019's proposal, decision 0026): the services hub (`/services`, [services-hub.md](services-hub.md)) and the live pillar pages, not every service
   - Company, Resources, Legal. Company includes Deepzeta Sync (`/tools`) once the page ships.
 - **Social links:** Deepzeta's own letter tiles (C49), one per profile in facts §2.1: in · Ig · f · YT · T · X · @ · S · P, each filled with its platform's colour inside the signal-gradient edge, linked per the rules in the facts file. Hover: `hover-glow` (13 §4.3); touch: `touch-press`.
 - **Controls:** the display controls (Reduce effects beside the theme switch, 05 §1) and a language switch placeholder (hidden until Arabic).

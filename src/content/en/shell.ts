@@ -5,6 +5,10 @@ export const shellContent = {
   skipLink: 'Skip to content',
   // The header nav's accessible name, so it stays distinct from the footer's (part C)
   navLabel: 'Main',
+  // The visible breadcrumb trail on every inner page (engine §5.1; P6 part A2): its landmark name
+  // and the first crumb's label
+  breadcrumbLabel: 'Breadcrumb',
+  breadcrumbHome: 'Home',
   cta: 'Book a free AI audit',
   // Until /free-ai-audit (R002) ships, the CTA is an email to siteConfig.email with this subject (Q1)
   ctaEmailSubject: 'Free AI audit',

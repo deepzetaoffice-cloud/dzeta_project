@@ -7,6 +7,7 @@
 // (story-data's honesty rule: only the visitor's own inputs, never shown here); §09 the four
 // industry-group tiles (hover-window, Tier 1 icons, Icon Master Rules §14.2).
 import { Icon } from '@/components/icons/Icon';
+import { StoryFlow } from '@/components/sections/StoryFlow';
 import { industryGroups } from '@/content/emirates-industries';
 import { buildItself, howWeWork, industries, roiTeaser, workflowExplorer } from '@/content/en/home';
 
@@ -30,36 +31,12 @@ export function WorkflowExplorer() {
             </li>
           ))}
         </ol>
-        {/* The static story-flow: glass nodes, frost connectors, the travelling pixel at rest on
-            the outcome (its final state; the draw-in plays once in view) */}
-        <div
-          className="dz-story-flow dz-glass"
-          role="img"
-          aria-label={`An example workflow: ${workflowExplorer.steps.join(' ')}`}
-          data-fx-once=""
-        >
-          <span className="dz-flow-label font-mono text-caption uppercase tracking-eyebrow text-fg-muted">
-            {workflowExplorer.flowLabel}
-          </span>
-          <div className="dz-flow-nodes" aria-hidden="true">
-            <span className="dz-flow-node" data-flow-node="1">
-              Message
-            </span>
-            <span className="dz-flow-line" />
-            <span className="dz-flow-node" data-flow-node="2">
-              AI agent
-            </span>
-            <span className="dz-flow-line" />
-            <span className="dz-flow-node" data-flow-node="3">
-              Calendar
-            </span>
-            <span className="dz-flow-line" />
-            <span className="dz-flow-node dz-flow-node--end" data-flow-node="4">
-              CRM
-            </span>
-            <span className="dz-flow-pixel" />
-          </div>
-        </div>
+        {/* The static story-flow (shared since P6 part A2): its final state; the draw-in plays once in view */}
+        <StoryFlow
+          label={workflowExplorer.flowLabel}
+          nodes={workflowExplorer.nodes}
+          description={`An example workflow: ${workflowExplorer.steps.join(' ')}`}
+        />
       </div>
     </section>
   );

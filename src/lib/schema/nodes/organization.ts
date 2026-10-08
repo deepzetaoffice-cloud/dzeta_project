@@ -5,26 +5,40 @@
 import { siteConfig } from '@/lib/site-config.ts';
 import type { SchemaNode } from '@/lib/schema/types.ts';
 
+// Facts §3: UAE first. The Wikidata entity was verified on wikidata.org during S4 (Q878,
+// "United Arab Emirates", country in Western Asia; checked 2026-10-05, the live Special:EntityData
+// endpoint), per 08 §3's rule on areaServed — never from memory. GCC countries are added when the
+// owner confirms them (facts §3). Shared: #organization and every Service node serve the same area
+// (the P6 part A plan, S9).
+export const AREA_SERVED: SchemaNode = {
+  '@type': 'Country',
+  name: 'United Arab Emirates',
+  sameAs: 'https://www.wikidata.org/wiki/Q878',
+};
+
 export type OrganizationInput = {
   /** The @id: {SITE_URL}/#organization, built by the assembler (decision 5) */
   id: string;
   /** The #logo ImageObject's @id, {SITE_URL}/#logo */
   logoId: string;
-  /** The #website's @id, {SITE_URL}/#website */
-  websiteId: string;
+  /** The site's address, {SITE_URL}: the organization's url (an @id is not a page address) */
+  url: string;
   /** The founder Person's @id, {SITE_URL}/#person-jamsheed-khalid */
   founderId: string;
+  /** The services hub's OfferCatalog, {SITE_URL}/services#catalog, via hasOfferCatalog; only while the
+   *  hub is live, so the reference always resolves to a published page (the P6 part A plan, S9) */
+  catalogId?: string;
 };
 
-export function organizationNode({ id, logoId, websiteId, founderId }: OrganizationInput): SchemaNode {
+export function organizationNode({ id, logoId, url, founderId, catalogId }: OrganizationInput): SchemaNode {
   // CONFIRMED facts only (spec §2.1). telephone, geo, hasCredential, contactPoint and priceRange are
   // PENDING/omitted (facts §2; 08 §3 rule 8) — they appear when their config fields stop being null.
-  return {
+  const node: SchemaNode = {
     '@type': 'ProfessionalService',
     '@id': id,
     name: siteConfig.brandName,
     legalName: siteConfig.legalName,
-    url: websiteId,
+    url,
     email: siteConfig.email,
     // Facts §2, the NAP. No postalCode (facts §2: UNKNOWN — the UAE has no postal codes). The hash
     // before the office number is written \u0023, because check:tokens reads a raw # as a colour
@@ -49,10 +63,8 @@ export function organizationNode({ id, logoId, websiteId, founderId }: Organizat
         closes: siteConfig.openingHours.closes,
       },
     ],
-    // Facts §3: UAE first. The Wikidata entity was verified on wikidata.org during S4 (Q878,
-    // "United Arab Emirates", country in Western Asia; checked 2026-10-05, the live Special:EntityData
-    // endpoint), per 08 §3's rule on areaServed — never from memory. GCC countries are added when
-    // the owner confirms them (facts §3).
-    areaServed: { '@type': 'Country', name: 'United Arab Emirates', sameAs: 'https://www.wikidata.org/wiki/Q878' },
+    areaServed: AREA_SERVED,
   };
+  if (catalogId !== undefined) node.hasOfferCatalog = { '@id': catalogId };
+  return node;
 }

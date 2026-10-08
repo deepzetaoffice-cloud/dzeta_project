@@ -38,22 +38,24 @@ const LETTERS = {
 
 type Column = { id: string; title: string; pillar?: Pillar; links: NavLink[] };
 
+// The Services column (L9, decision 0026; footer.md): the hub and the pillar pages, each while its page
+// is live, not every service. As some sixty services ship, the footer on every page stays the same
+// size; the hub lists them all.
 function footerColumns(review: boolean): Column[] {
-  const pillars = navigation.columns.map((column) => ({
-    id: column.pillar,
-    title: column.name,
-    pillar: column.pillar,
+  const services = {
+    id: 'services',
+    title: navigation.servicesLabel,
     links: [
-      ...column.items.map((item) => ({ route: item.route, label: item.name })),
-      { route: column.route, label: column.allLabel },
+      { route: 'R010' as const, label: navigation.hubLabel },
+      ...navigation.columns.map((column) => ({ route: column.route, label: column.name })),
     ],
-  }));
+  };
   const groups = navigation.footer.map((group) => ({
     id: group.title.toLowerCase(),
     title: group.title,
     links: [...group.links],
   }));
-  return [...pillars, ...groups]
+  return [services, ...groups]
     .map((column) => ({ ...column, links: column.links.filter((link) => isShown(link.route, review)) }))
     .filter((column) => column.links.length > 0);
 }

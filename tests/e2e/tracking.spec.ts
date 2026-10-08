@@ -140,6 +140,31 @@ test.describe('Page views (09 §2.9; TrackingRuntime)', () => {
   });
 });
 
+test.describe('view_service (09 §3; P6 part A2)', () => {
+  test('a service page fires it once, after its page view, with the taxonomy’s parameters; the hub doesn’t', async ({
+    page,
+  }) => {
+    await page.goto('/services/speed-to-lead-system');
+    await page.waitForLoadState('networkidle');
+    await expect
+      .poll(async () =>
+        (await events(page))
+          .filter((e) => e.event === 'page_view' || e.event === 'view_service')
+          .map(({ event, service_slug, pillar, content_group }) =>
+            event === 'page_view' ? { event, content_group } : { event, service_slug, pillar },
+          ),
+      )
+      .toEqual([
+        { event: 'page_view', content_group: 'services' },
+        { event: 'view_service', service_slug: 'speed-to-lead-system', pillar: 'ai' },
+      ]);
+    await page.goto('/services');
+    await page.waitForLoadState('networkidle');
+    await expect.poll(async () => (await events(page)).map((e) => e.event)).toContain('page_view');
+    expect((await events(page)).filter((e) => e.event === 'view_service')).toEqual([]);
+  });
+});
+
 test.describe('Tracked clicks, each exactly once (09 §4)', () => {
   test('the header CTA: cta_click from the header, and contact_click while it is an email link', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 });

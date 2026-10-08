@@ -1,5 +1,6 @@
 'use client';
 
+import type { Pillar } from '@/components/icons/registry';
 import { usePathname } from 'next/navigation';
 import { lazy, Suspense, useEffect, useRef, useState, type ComponentType } from 'react';
 import type { ConsentSettingsProps } from '@/components/layout/ConsentSettings';
@@ -84,6 +85,25 @@ function focusMain() {
   document.getElementById('main')?.focus({ preventScroll: true });
 }
 
+// One page view (09 §2.9) and, on a service page, its view_service (P6 part A2): the taxonomy's own
+// parameters, read from the hero's data-view-service and data-view-pillar. Fired together, once per page
+// view, whether the page loaded or came back from the back/forward cache (C68).
+function trackPageView() {
+  trackEvent('page_view', {
+    page_location: location.href,
+    page_title: document.title,
+    content_group: contentGroup(location.pathname),
+  });
+  const service = document.querySelector<HTMLElement>('[data-view-service]');
+  const slug = service?.dataset.viewService;
+  const pillar = service?.dataset.viewPillar;
+  // trackEvent() drops a value the taxonomy doesn't hold, so the pillar needs no list here (a runtime
+  // import of the icon registry would put every icon's geometry in the first load)
+  if (slug && pillar) {
+    trackEvent('view_service', { service_slug: slug, pillar: pillar as Pillar });
+  }
+}
+
 export function TrackingRuntime({ gtm }: TrackingRuntimeProps) {
   const pathname = usePathname();
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -99,11 +119,7 @@ export function TrackingRuntime({ gtm }: TrackingRuntimeProps) {
     const frame = requestAnimationFrame(() => {
       if (location.href === lastPage.current) return;
       lastPage.current = location.href;
-      trackEvent('page_view', {
-        page_location: location.href,
-        page_title: document.title,
-        content_group: contentGroup(location.pathname),
-      });
+      trackPageView();
     });
     return () => cancelAnimationFrame(frame);
   }, [pathname]);
@@ -202,11 +218,7 @@ export function TrackingRuntime({ gtm }: TrackingRuntimeProps) {
     const onPageShow = (event: PageTransitionEvent) => {
       if (!event.persisted) return;
       lastPage.current = location.href;
-      trackEvent('page_view', {
-        page_location: location.href,
-        page_title: document.title,
-        content_group: contentGroup(location.pathname),
-      });
+      trackPageView();
       if (!root.hasAttribute(ASK)) return;
       loadConsent()
         .then(({ currentConsent }) => {

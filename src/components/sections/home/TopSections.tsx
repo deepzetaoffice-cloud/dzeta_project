@@ -5,6 +5,7 @@
 // since P2, hover-card, pointer-tilt). The doors are cards, not links, until their pillar pages
 // ship in P6 (04 §1.4) — isLive() flips them then.
 import { Icon } from '@/components/icons/Icon';
+import { BeforeAfter } from '@/components/sections/BeforeAfter';
 import { pillars } from '@/content/catalogue';
 import { fourDoors, problemOutcome, proofStrip } from '@/content/en/home';
 
@@ -51,25 +52,11 @@ export function ProblemOutcome() {
         {problemOutcome.heading}
       </h2>
       <p className="mt-4 max-w-measure text-lead">{problemOutcome.lede}</p>
-      <div className="mt-10 grid gap-6">
-        {problemOutcome.rows.map((row) => (
-          <article key={row.problem} className="dz-before-after dz-glass" data-fx-once="">
-            <div className="dz-ba-side dz-ba-side--problem">
-              <h3 className="font-mono text-caption uppercase tracking-eyebrow text-fg-muted">Today</h3>
-              <p className="mt-1.5 text-h4">{row.problem}</p>
-            </div>
-            {/* The connector: the Zeta Pixel travels it (transform/opacity only) */}
-            <div className="dz-ba-connector" aria-hidden="true">
-              <span className="dz-ba-pixel" />
-            </div>
-            <div className="dz-ba-side dz-ba-side--outcome">
-              <h3 className="font-mono text-caption uppercase tracking-eyebrow text-fg-muted">With Deepzeta AI</h3>
-              <p className="mt-1.5 text-h4 font-bold">{row.outcome}</p>
-            </div>
-            <p className="dz-ba-answer mt-4 max-w-measure text-small text-fg-muted">{row.answer}</p>
-          </article>
-        ))}
-      </div>
+      <BeforeAfter
+        beforeLabel={problemOutcome.beforeLabel}
+        afterLabel={problemOutcome.afterLabel}
+        rows={problemOutcome.rows.map((row) => ({ before: row.problem, after: row.outcome, note: row.answer }))}
+      />
     </section>
   );
 }
