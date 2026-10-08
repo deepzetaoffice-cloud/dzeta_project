@@ -9,6 +9,14 @@
         "legalName": "Deepzeta Digital Solutions L.L.C.",
         "url": "https://deepzeta.ai/#website",
         "email": "hello@deepzeta.ai",
+        "telephone": "+971 54 547 6335",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+971 54 547 6335",
+          "contactType": "customer service",
+          "availableLanguage": "en",
+          "areaServed": "AE"
+        },
         "address": {
           "@type": "PostalAddress",
           "streetAddress": "Office #202, Al Hilal Bank Building, Al Qusais 2",

@@ -74,13 +74,11 @@ describe('organizationNode', () => {
   });
 
   it('every PENDING or omitted fact is absent, never filled (02 §1; spec §2.1)', () => {
-    // telephone, geo, hasCredential, contactPoint, priceRange, aggregateRating, review, award,
-    // numberOfEmployees, postalCode — all PENDING or deliberately omitted.
+    // geo, hasCredential, priceRange, aggregateRating, review, award, numberOfEmployees, postalCode —
+    // all PENDING or deliberately omitted.
     for (const key of [
-      'telephone',
       'geo',
       'hasCredential',
-      'contactPoint',
       'priceRange',
       'aggregateRating',
       'review',
@@ -90,6 +88,23 @@ describe('organizationNode', () => {
       expect(org[key], key).toBeUndefined();
     }
     expect((org.address as Record<string, unknown>).postalCode).toBeUndefined();
+  });
+
+  it('telephone and contactPoint follow the phone fact (facts §2; spec §2.1)', () => {
+    const phone = fact('Phone (international format)');
+    if (phone.status.startsWith('CONFIRMED')) {
+      expect(org.telephone).toBe(phone.value);
+      expect(org.contactPoint).toEqual({
+        '@type': 'ContactPoint',
+        telephone: phone.value,
+        contactType: 'customer service',
+        availableLanguage: 'en',
+        areaServed: 'AE',
+      });
+    } else {
+      expect(org.telephone).toBeUndefined();
+      expect(org.contactPoint).toBeUndefined();
+    }
   });
 
   it('references the logo, website and founder by @id, never by a bare string', () => {

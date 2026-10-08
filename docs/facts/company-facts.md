@@ -1,6 +1,6 @@
 # Company Facts (single source of truth)
 
-> **Applies to:** every page, schema node, footer, contact detail and piece of copy · **Precedence:** the only allowed source of business facts · **Last reviewed:** 2026-09-29
+> **Applies to:** every page, schema node, footer, contact detail and piece of copy · **Precedence:** the only allowed source of business facts · **Last reviewed:** 2026-10-08
 
 **Rules for agents**
 - Use only values marked **CONFIRMED**. A value marked **UNKNOWN** must never be guessed, approximated or filled with something plausible.
@@ -32,14 +32,14 @@
 | Full address, one line (display) | Office #202, Al Hilal Bank Building, Al Qusais 2, Dubai, United Arab Emirates | CONFIRMED (owner, 2026-09-29) |
 | Postal code / P.O. Box | — | UNKNOWN (UAE has no postal codes; a P.O. Box only if the owner has one) |
 | Geo coordinates (office pin) | — | PENDING (created once the full licence is issued; copied from the Google Business Profile pin) |
-| Phone (international format) | — | PENDING (registered number expected around 2026-10-09) |
-| WhatsApp number | — | PENDING (with the phone number) |
+| Phone (international format) | +971 54 547 6335 | CONFIRMED (owner, 2026-10-08) |
+| WhatsApp number | +971 54 547 6335 | CONFIRMED (owner, 2026-10-08) |
 | Public contact email | hello@deepzeta.ai | CONFIRMED (owner, 2026-09-29) |
 | Opening hours | Monday to Saturday, 08:00–17:00 GST (UTC+4); closed Sunday | CONFIRMED (owner, 2026-09-29) |
 | Google Business Profile URL | — | PENDING (created once the full licence is issued) |
 | Social profiles (`sameAs`) | See §2.1 | CONFIRMED |
 
-**Values that aren't confirmed yet are one variable each, never scattered.** They are the phone, WhatsApp, trade licence number, office pin and Google Business Profile (owner, 2026-09-29).
+**Values that aren't confirmed yet are one variable each, never scattered.** They are the trade licence number, office pin and Google Business Profile (owner, 2026-09-29).
 - Code reads every fact from one typed site config (`src/lib/site-config.ts`, built in P0/P4). A PENDING or UNKNOWN fact is `null` there.
 - Everything that uses it hides itself while it's `null`:
   - schema `telephone`, `contactPoint`, `geo` and `hasCredential`

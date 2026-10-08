@@ -17,8 +17,10 @@ export type OrganizationInput = {
 };
 
 export function organizationNode({ id, logoId, websiteId, founderId }: OrganizationInput): SchemaNode {
-  // CONFIRMED facts only (spec §2.1). telephone, geo, hasCredential, contactPoint and priceRange are
-  // PENDING/omitted (facts §2; 08 §3 rule 8) — they appear when their config fields stop being null.
+  // CONFIRMED facts only (spec §2.1). geo, hasCredential and priceRange stay omitted (facts §2; 08 §3
+  // rule 8). telephone and contactPoint appear while the phone fact is CONFIRMED (spec §2.1's
+  // contactPoint row: contactType "customer service", availableLanguage English — Arabic once P11
+  // ships — areaServed AE) and are omitted, never guessed, while it is null.
   return {
     '@type': 'ProfessionalService',
     '@id': id,
@@ -26,6 +28,20 @@ export function organizationNode({ id, logoId, websiteId, founderId }: Organizat
     legalName: siteConfig.legalName,
     url: websiteId,
     email: siteConfig.email,
+    // Facts §2, the phone (owner, 2026-10-08). Both the org's telephone and its contactPoint read
+    // the one config field, so they can never disagree with the footer's tel: link.
+    ...(siteConfig.phone
+      ? {
+          telephone: siteConfig.phone,
+          contactPoint: {
+            '@type': 'ContactPoint',
+            telephone: siteConfig.phone,
+            contactType: 'customer service',
+            availableLanguage: 'en',
+            areaServed: 'AE',
+          },
+        }
+      : {}),
     // Facts §2, the NAP. No postalCode (facts §2: UNKNOWN — the UAE has no postal codes). The hash
     // before the office number is written \u0023, because check:tokens reads a raw # as a colour
     // (the same workaround as site-config.ts); the string is the fact, byte for byte.
