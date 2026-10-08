@@ -1,5 +1,6 @@
 import { ClusterLayers } from '@/components/icons/Cluster';
 import type { Pillar } from '@/components/icons/registry';
+import { CallButton } from '@/components/layout/CallButton';
 import { DisplayControls } from '@/components/layout/DisplayControls';
 import { auditHref, CtaButton } from '@/components/ui/CtaButton';
 import { navigation, type NavLink } from '@/content/en/navigation';
@@ -11,7 +12,8 @@ import { siteConfig, type SocialKey } from '@/lib/site-config';
 // The footer "The Landing" (docs/design/footer.md; P2 plan, L), on every page, navy in both themes.
 // - The finale: The Landing (the logo's four pixels assemble once the finale enters, scroll-assemble;
 //   its rest state is the assembled cluster), the headline at the display size (C41) and the primary
-//   CTA. cta.ts counts that CTA in the hand-off (C42). WhatsApp joins it once the number is confirmed.
+//   CTA. cta.ts counts that CTA in the hand-off (C42). WhatsApp floats site-wide instead (decision
+//   0024); the finale keeps the audit CTA.
 // - The body: the link columns, one per pillar in its pixel colour (C6), then Company, Resources and
 //   Legal; only live links render (04 §1.4), and a column with none isn't shown. The review page shows
 //   every link as a placeholder fragment, as the header does (plan A3).
@@ -117,13 +119,10 @@ export function SiteFooter({ review = false }: SiteFooterProps) {
                     {siteConfig.email}
                   </a>
                 </p>
-                {siteConfig.phone ? (
-                  <p>
-                    <a href={`tel:${siteConfig.phone}`} className="dz-underline dz-target text-link">
-                      {siteConfig.phone}
-                    </a>
-                  </p>
-                ) : null}
+                {/* The Call button (decision 0024): the phone as a deliberate contact CTA, the
+                    number still real text inside <address> for NAP parity. It hides itself while
+                    the phone fact is unconfirmed. */}
+                <CallButton />
               </address>
               <p>
                 {shellContent.hoursLabel}: {siteConfig.openingHours.display}

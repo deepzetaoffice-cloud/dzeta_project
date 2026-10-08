@@ -1,7 +1,7 @@
 import { ClusterLayers } from '@/components/icons/Cluster';
 import { megaColumns, MegaMenu } from '@/components/layout/MegaMenu';
 import { MobileSheet } from '@/components/layout/MobileSheet';
-import { auditHref, CtaButton } from '@/components/ui/CtaButton';
+import { agentHref, CtaButton } from '@/components/ui/CtaButton';
 import { Logo } from '@/components/ui/Logo';
 import { navigation } from '@/content/en/navigation';
 import { shellContent } from '@/content/en/shell';
@@ -70,10 +70,13 @@ export function SiteHeader({ review = false }: SiteHeaderProps) {
             </span>
           </nav>
         ) : null}
+        {/* The header CTA (decision 0024): the brand name on the button, which will launch the
+            Deepzeta Agent bot in P7; until then agentHref() falls back to WhatsApp honestly. cta.ts
+            still hands it the gradient (C42), so its data-cta attributes are unchanged. */}
         <CtaButton
           variant="header"
-          href={auditHref()}
-          label={shellContent.cta}
+          href={agentHref()}
+          label={siteConfig.brandName}
           className="ms-auto text-small lg:text-body"
         />
         <MobileSheet review={review} />
