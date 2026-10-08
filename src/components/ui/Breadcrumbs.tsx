@@ -22,7 +22,7 @@ export const fullTrail = (trail: readonly Crumb[]): readonly Crumb[] => [
 export function Breadcrumbs({ trail }: BreadcrumbsProps) {
   const crumbs = fullTrail(trail);
   return (
-    <nav aria-label={shellContent.breadcrumbLabel} className="mx-auto max-w-page px-gutter pt-8">
+    <nav aria-label={shellContent.breadcrumbLabel} className="mx-auto max-w-page px-gutter pt-4 sm:pt-8">
       <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 text-small text-fg-muted">
         {crumbs.map((crumb, index) => {
           const last = index === crumbs.length - 1;

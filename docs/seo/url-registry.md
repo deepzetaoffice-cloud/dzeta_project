@@ -79,7 +79,7 @@ A row is never deleted, and an ID is never reused.
 
 | ID | URL | Type | Cluster | Cat. | Intent | Tier | Phase | Wave | Status | Index | Needs |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| R010 | `/services` | Hub | Services | — | Every Deepzeta AI service, by pillar: find the right one | T2 | P6 | W1 | planned | index | — |
+| R010 | `/services` | Hub | Services | — | Every Deepzeta AI service, by pillar: find the right one | T2 | P6 | W1 | live | index | — |
 | R011 | `/services/ai-automation` | Pillar | AI Automation | 1 | Which AI automation does my business need? (the Control Room) | T2 | P6 | W1 | planned | index | — |
 | R012 | `/services/websites` | Pillar | Websites | 2 | Which website service do I need? (new site, landing page, store, redesign, care) | T2 | P6 | W1 | planned | index | — |
 | R013 | `/services/software` | Pillar | Software | 3 | Which custom software do I need? (app, portal, internal tool) | T2 | P6 | W1 | planned | index | — |
@@ -96,7 +96,7 @@ A row is never deleted, and an ID is never reused.
 | R024 | `/services/omnichannel-inbox-ai` | Service ⭐ | AI Automation | 1A.5 | One AI-assisted inbox for WhatsApp, Instagram, Messenger and email | T2 | P6 | W2 | planned | index | — |
 | R025 | `/services/internal-knowledge-assistant` | Service ⭐ | AI Automation | 1A.6 | An AI assistant that answers staff questions from company documents | T2 | P6 | W2 | planned | index | — |
 | R026 | `/services/custom-ai-agents` | Service ⭐ | AI Automation | 1A.7 | A custom AI agent built for a specific business task | T2 | P6 | W2 | planned | index | — |
-| R027 | `/services/speed-to-lead-system` | Service 🔥 | AI Automation | 1B.1 | Reply to every new lead within 60 seconds (a design target, facts §6) | T2 | P6 | W1 | planned | index | — |
+| R027 | `/services/speed-to-lead-system` | Service 🔥 | AI Automation | 1B.1 | Reply to every new lead within 60 seconds (a design target, facts §6) | T2 | P6 | W1 | live | index | — |
 | R028 | `/services/ai-lead-qualification-scoring` | Service ⭐ | AI Automation | 1B.2 | Qualify and score leads automatically so sales calls the best first | T2 | P6 | W2 | planned | index | — |
 | R029 | `/services/automated-quotation-tracking` | Service 🔥 | AI Automation | 1B.3 | Send quotes fast and track every quote until it's won or lost | T2 | P6 | W1 | planned | index | — |
 | R030 | `/services/proposal-automation` | Service ⭐ | AI Automation | 1B.4 | Generate proposals automatically from templates and CRM data | T2 | P6 | W2 | planned | index | — |
@@ -260,3 +260,4 @@ The blueprint's draft slugs (for example `web-development`, `ai-chatbots`, `/aud
 | 2026-09-30 | R174–R178, system files (P1): favicon, PNG icon, apple icon, manifest, `/brand/*` | Owner (P1 plan approval) |
 | 2026-09-30 | R165, `/shell-review` (P2): the shell review page, never built in production | Owner (P2 plan approval) |
 | 2026-10-07 | R179, `/shell/mega-menu` (P6 part A2): the mega menu's full panel as a fragment, loaded on intent (decision 0026, L8) | Owner (the P6 part A plan, Q2 (b), 2026-10-07) |
+| 2026-10-08 | R010 `/services` and R027 `/services/speed-to-lead-system` → live (P6 part A2, S11: the services hub and the pilot service page) | Owner (the P6 part A plan, Q3: Speed-to-Lead System, 2026-10-07) |

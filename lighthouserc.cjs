@@ -157,6 +157,17 @@ const reviewAssertions = {
   'largest-contentful-paint': ['error', { maxNumericValue: 2700, ...medianRun }],
 };
 
+// T2 pages (decisions 0005 and 0011; 07 §1): Performance ≥ 0.90 and the Core Web Vitals hard limits
+// with no lab allowance, LCP ≤ 2,500 ms; Accessibility, Best Practices and SEO ≥ 0.95, and the same
+// third-party, font and image caps as Home. The page weight is the hard limit (scripts/check-page-weight.mjs).
+// The services hub (R010) and the service template's pilot (R027) join the sample in P6 part A2; each
+// later T2 template joins with its first page.
+const t2Assertions = {
+  ...t1Assertions,
+  'categories:performance': ['error', { minScore: 0.9, ...medianScore }],
+  'largest-contentful-paint': ['error', { maxNumericValue: 2500, ...medianRun }],
+};
+
 // The CPU calibration (decision 0025): scripts/lhci-run.mjs sets DZ_LHCI_CPU_MULTIPLIER from this
 // machine's benchmarkIndex. Lighthouse deep-merges this partial `throttling` into its defaults, so
 // only the multiplier changes. Unset (a bare `lhci collect`), Lighthouse's default 4 applies.
@@ -167,7 +178,12 @@ module.exports = {
   ci: {
     collect: {
       startServerCommand: 'npm run start',
-      url: ['http://localhost:3000/', 'http://localhost:3000/shell-review'],
+      url: [
+        'http://localhost:3000/',
+        'http://localhost:3000/shell-review',
+        'http://localhost:3000/services',
+        'http://localhost:3000/services/speed-to-lead-system',
+      ],
       numberOfRuns: 5,
       settings: { ...calibrated },
     },
@@ -181,6 +197,7 @@ module.exports = {
           assertions: { ...t1Assertions, ...rowThirdParty },
         },
         { matchingUrlPattern: '^http://localhost:3000/shell-review$', assertions: reviewAssertions },
+        { matchingUrlPattern: '^http://localhost:3000/services(/[a-z0-9-]+)?$', assertions: t2Assertions },
       ],
     },
     upload: {

@@ -30,8 +30,11 @@ export type ServiceInput = {
   websiteId?: string;
   /** The pillar this service belongs to, via serviceType; the catalogue's pillar name */
   serviceType?: string;
-  /** #service of the parent pillar, via isRelatedTo (service pages under a pillar) */
+  /** #service of the parent pillar, via isRelatedTo (service pages under a pillar); only while the
+   *  pillar page is live */
   parentId?: string;
+  /** The area served, the same Country node as #organization's (AREA_SERVED; the P6 part A plan, S9) */
+  areaServed?: SchemaNode;
   offers?: ServiceOfferInput;
 };
 
@@ -44,6 +47,7 @@ export function serviceNode({
   websiteId,
   serviceType,
   parentId,
+  areaServed,
   offers,
 }: ServiceInput): SchemaNode {
   const node: SchemaNode = {
@@ -57,6 +61,7 @@ export function serviceNode({
   if (websiteId !== undefined) node.isPartOf = { '@id': websiteId };
   if (serviceType !== undefined) node.serviceType = serviceType;
   if (parentId !== undefined) node.isRelatedTo = { '@id': parentId };
+  if (areaServed !== undefined) node.areaServed = areaServed;
   if (offers !== undefined) {
     const offer: SchemaNode = {
       '@type': 'Offer',

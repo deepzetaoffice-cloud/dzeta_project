@@ -362,8 +362,8 @@ test.describe('Live links only (04 §1.4; P2 plan, A)', () => {
   for (const path of [HOME, MISSING]) {
     test(`${path} links to no unshipped page, and every internal link returns 200`, async ({ page, request }) => {
       await open(page, path, 1280);
-      // No pillar column has a live item yet, so production has no Services button (plan I4).
-      await expect(page.getByRole('button', { name: navigation.servicesLabel })).toHaveCount(0);
+      // The Services button shows once anything in its panel is live (plan I4): the hub, from P6 part A2.
+      await expect(page.getByRole('button', { name: navigation.servicesLabel })).toHaveCount(ROUTES.R010.live ? 1 : 0);
       const origin = new URL(page.url()).origin;
       const hrefs = await page
         .locator('a[href]:not([href^="#"])')
@@ -568,11 +568,14 @@ test.describe('The footer, The Landing (footer.md; P2 plan, L)', () => {
         await expect(link).toHaveAttribute('rel', 'noopener noreferrer');
       }
       await expect(footer.getByText(`${shellContent.copyright} ${siteConfig.legalName}`)).toBeVisible();
-      // The review page shows every column; production, only columns with a live link (none yet). One
-      // Services column (the hub and the pillar pages, L9, decision 0026), then the footer's groups.
+      // The review page shows every column; production, only columns with a live link: the Services
+      // column alone while the hub is its only live page (P6 part A2). One Services column (the hub and
+      // the pillar pages, L9, decision 0026), then the footer's groups.
       const nav = footer.getByRole('navigation', { name: shellContent.footerNavLabel });
       if (path === REVIEW) {
         await expect(nav.getByRole('list')).toHaveCount(1 + navigation.footer.length);
+      } else if (ROUTES.R010.live) {
+        await expect(nav.getByRole('list')).toHaveCount(1);
       } else {
         await expect(nav).toHaveCount(0);
       }

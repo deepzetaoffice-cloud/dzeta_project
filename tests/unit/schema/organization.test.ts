@@ -25,6 +25,7 @@ const ids = {
   id: `${ORIGIN}/#organization`,
   logoId: `${ORIGIN}/#logo`,
   websiteId: `${ORIGIN}/#website`,
+  url: ORIGIN,
   founderId: `${ORIGIN}/#person-jamsheed-khalid`,
 };
 const org = organizationNode(ids);
@@ -92,9 +93,9 @@ describe('organizationNode', () => {
     expect((org.address as Record<string, unknown>).postalCode).toBeUndefined();
   });
 
-  it('references the logo, website and founder by @id, never by a bare string', () => {
+  it('references the logo and founder by @id, never by a bare string; its url is the site, not an @id', () => {
     expect(org.logo).toEqual({ '@id': ids.logoId });
-    expect(org.url).toBe(ids.websiteId);
+    expect(org.url).toBe(ORIGIN);
     expect(org.founder).toEqual({ '@id': ids.founderId });
   });
 });

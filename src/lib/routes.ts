@@ -17,7 +17,7 @@ export const ROUTES = {
   R007: { path: '/terms', live: false },
   R008: { path: '/editorial-policy', live: false },
   // The services hub and the pillars (§3.2)
-  R010: { path: '/services', live: false },
+  R010: { path: '/services', live: true },
   R011: { path: '/services/ai-automation', live: false },
   R012: { path: '/services/websites', live: false },
   R013: { path: '/services/software', live: false },
@@ -25,7 +25,7 @@ export const ROUTES = {
   // The mega menu's services: the lead services, and the Websites and Software core services (§3.3, §3.4)
   R020: { path: '/services/whatsapp-ai-agent', live: false },
   R021: { path: '/services/ai-voice-receptionist', live: false },
-  R027: { path: '/services/speed-to-lead-system', live: false },
+  R027: { path: '/services/speed-to-lead-system', live: true },
   R029: { path: '/services/automated-quotation-tracking', live: false },
   R033: { path: '/services/booking-automation-system', live: false },
   R038: { path: '/services/review-reputation-automation', live: false },
@@ -65,6 +65,19 @@ export type RouteId = keyof typeof ROUTES;
 export const routePath = (id: RouteId): string => ROUTES[id].path;
 
 export const isLive = (id: RouteId): boolean => ROUTES[id].live;
+
+// Whether a path is a live registry row: the schema lists and references live pages only (the P6 part A
+// plan, S9), and a service is known by its catalogue slug, not its registry ID.
+export const isLivePath = (path: string): boolean =>
+  Object.values(ROUTES).some((route) => route.path === path && route.live);
+
+// A registry path while its page is live, else undefined, so the caller renders plain text instead of a
+// link (04 §1.4; 06 §2.4: hrefs come from the route helpers). For catalogue items known by slug or path.
+export const livePath = (path: string): string | undefined => (isLivePath(path) ? path : undefined);
+
+// The registry ID of a path (a template knows its page by path; its breadcrumb names the row by ID)
+export const routeIdForPath = (path: string): RouteId | undefined =>
+  (Object.keys(ROUTES) as RouteId[]).find((id) => ROUTES[id].path === path);
 
 // The shell's links (P2 plan, A): a route shows once its page is live. The review page shows every
 // route, each a placeholder fragment of the page itself (A3).

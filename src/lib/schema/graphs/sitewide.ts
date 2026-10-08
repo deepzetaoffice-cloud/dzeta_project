@@ -4,6 +4,7 @@
 // catalogue lives on /services (spec §6). The global @ids anchor to the bare origin (decision 2:
 // one entity, no locale prefix), so they are built from siteUrl() — absoluteUrl() is for page
 // paths and rejects the # fragment by design (C27).
+import { isLive, routePath } from '@/lib/routes.ts';
 import { absoluteUrl, siteUrl } from '@/lib/url.ts';
 import { checkedGraph } from '@/lib/schema/graph.ts';
 import { logoNode } from '@/lib/schema/nodes/logo.ts';
@@ -20,12 +21,15 @@ export function sitewideGraph() {
   // #organization's founder reference resolves to a registry node (spec §4 assertion 3): its home
   // page /about/jamsheed-khalid defines it in the same build (spec §7's registry row).
   const founderId = `${origin}/#person-jamsheed-khalid`;
+  // #organization's hasOfferCatalog → the services hub's #catalog, only while the hub is live, so the
+  // reference always resolves to a published page (the P6 part A plan, S9)
+  const catalogId = isLive('R010') ? `${absoluteUrl(routePath('R010'))}#catalog` : undefined;
   return checkedGraph(
     [
-      organizationNode({ id: organizationId, logoId, websiteId, founderId }),
+      organizationNode({ id: organizationId, logoId, url: origin, founderId, catalogId }),
       websiteNode({ id: websiteId, url: origin, publisherId: organizationId }),
       logoNode({ id: logoId, url: absoluteUrl('/brand/deepzeta-logo-512.png') }),
     ],
-    [founderId],
+    [founderId, ...(catalogId ? [catalogId] : [])],
   );
 }
