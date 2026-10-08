@@ -1,5 +1,5 @@
 import { ClusterLayers } from '@/components/icons/Cluster';
-import { megaColumns, MegaMenu } from '@/components/layout/MegaMenu';
+import { MegaMenu, megaShown } from '@/components/layout/MegaMenu';
 import { MobileSheet } from '@/components/layout/MobileSheet';
 import { auditHref, CtaButton } from '@/components/ui/CtaButton';
 import { Logo } from '@/components/ui/Logo';
@@ -23,7 +23,7 @@ export type SiteHeaderProps = { review?: boolean };
 
 export function SiteHeader({ review = false }: SiteHeaderProps) {
   const links = navigation.primary.filter((link) => isShown(link.route, review));
-  const services = megaColumns(review).length > 0;
+  const services = megaShown(review);
   return (
     <header
       className="pointer-events-none sticky top-0 z-(--dz-layer-header) mx-auto w-full max-w-page px-gutter pt-(--dz-header-inset)"

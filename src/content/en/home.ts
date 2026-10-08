@@ -38,6 +38,9 @@ export const proofStrip = {
 // measured results (none exist yet, facts §5)
 export const problemOutcome = {
   heading: 'Sound familiar?',
+  // The labels over each row's two sides (BeforeAfter)
+  beforeLabel: 'Today',
+  afterLabel: `With ${siteConfig.brandName}`,
   lede: 'Most UAE businesses lose customers in the same three places: slow replies, manual admin and a website that cannot be found. Here is what changes when each one is automated.',
   rows: [
     {
@@ -86,6 +89,8 @@ export const workflowExplorer = {
   ],
   // The static story-flow's own label (10 §3.6: an example flow carries the label)
   flowLabel: 'Example workflow',
+  // The flow's nodes, one or two words each (StoryFlow; the last is the outcome)
+  nodes: ['Message', 'AI agent', 'Calendar', 'CRM'],
 } as const;
 
 // §06 Proof: "Watch this page build itself" (home.md; C19: until real case-study figures exist)

@@ -25,6 +25,7 @@ export type MenuColumn = {
 export type FooterGroup = { title: string; links: readonly NavLink[] };
 export type Navigation = {
   servicesLabel: string;
+  hubLabel: string;
   primary: readonly NavLink[];
   columns: readonly MenuColumn[];
   solutions: { label: string; route: RouteId; items: readonly { route: RouteId; name: string }[] };
@@ -35,6 +36,9 @@ export type Navigation = {
 export const navigation = {
   // The mega menu's button (header.md)
   servicesLabel: 'Services',
+  // The hub's link: first in the mega menu's lite panel and in the footer's Services column (header.md,
+  // footer.md; decision 0026)
+  hubLabel: 'All services',
   // The header's nav, in header.md's order after Services
   primary: [
     { route: 'R011', label: 'Automation' },

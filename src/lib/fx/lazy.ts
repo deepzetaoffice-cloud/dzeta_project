@@ -16,6 +16,8 @@ const MODULES: Record<string, () => Promise<{ enhance: (scope: ParentNode) => vo
   home: () => import('@/components/sections/home/home-enhance').then((m) => ({ enhance: m.enhanceHome })),
   // Each demo trigger is its own region (P6 part A2, S8): only reaching for a demo loads it
   demo: () => import('@/components/demos/demo-enhance').then((m) => ({ enhance: m.enhanceDemos })),
+  // The mega menu's full panel, fetched when a visitor reaches for the Services button (L8, decision 0026)
+  mega: () => import('@/components/layout/mega-enhance').then((m) => ({ enhance: m.enhanceMega })),
 };
 
 // One shared observer: a region enters the viewport → arm its trigger; the first pointerover,

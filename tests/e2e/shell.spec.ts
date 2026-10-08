@@ -568,10 +568,11 @@ test.describe('The footer, The Landing (footer.md; P2 plan, L)', () => {
         await expect(link).toHaveAttribute('rel', 'noopener noreferrer');
       }
       await expect(footer.getByText(`${shellContent.copyright} ${siteConfig.legalName}`)).toBeVisible();
-      // The review page shows every column; production, only columns with a live link (none yet).
+      // The review page shows every column; production, only columns with a live link (none yet). One
+      // Services column (the hub and the pillar pages, L9, decision 0026), then the footer's groups.
       const nav = footer.getByRole('navigation', { name: shellContent.footerNavLabel });
       if (path === REVIEW) {
-        await expect(nav.getByRole('list')).toHaveCount(navigation.columns.length + navigation.footer.length);
+        await expect(nav.getByRole('list')).toHaveCount(1 + navigation.footer.length);
       } else {
         await expect(nav).toHaveCount(0);
       }

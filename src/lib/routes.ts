@@ -16,7 +16,8 @@ export const ROUTES = {
   R006: { path: '/privacy', live: false },
   R007: { path: '/terms', live: false },
   R008: { path: '/editorial-policy', live: false },
-  // Pillars (§3.2)
+  // The services hub and the pillars (§3.2)
+  R010: { path: '/services', live: false },
   R011: { path: '/services/ai-automation', live: false },
   R012: { path: '/services/websites', live: false },
   R013: { path: '/services/software', live: false },
