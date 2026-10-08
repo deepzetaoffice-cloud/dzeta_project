@@ -26,7 +26,10 @@ const closes = { commandfor: SHEET, command: 'close' };
 export type MobileSheetProps = { review: boolean };
 
 export function MobileSheet({ review }: MobileSheetProps) {
-  const links = navigation.primary.filter((link) => isShown(link.route, review));
+  // The services hub first (services-hub.md; header.md), as "Services": the sheet's way to every service
+  const links = [{ route: 'R010' as const, label: navigation.servicesLabel }, ...navigation.primary].filter((link) =>
+    isShown(link.route, review),
+  );
   const pillars = navigation.columns.filter((column) => isShown(column.route, review));
   return (
     <>

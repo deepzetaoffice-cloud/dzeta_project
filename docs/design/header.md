@@ -54,23 +54,25 @@ The header is a dashboard of proof. Besides navigation and the CTA, it carries t
 ## Mega menu (Services ▾)
 
 - **Surface:** a `glass-live` sheet that drops from the pill (Drop motion).
+- **The hub first** (P6 part A2, [services-hub.md](services-hub.md)): the services hub (`/services`, R010) is the mega menu's first link.
 - **Four columns**, one per pixel colour, across the full width (each a subgrid, so heads, rows and "All … services" line up):
   - One column per pillar (C6): AI Automation · Websites · Software · Growth & Ranking, in the catalogue order.
   - Column heads use Tier 3 icons beside the pillar's name and promise.
   - Items use Tier 2 icons plus a one-line outcome (the 19 outcomes approved at P2 step 11). A service without a Tier 2 icon yet shows its pillar pixel.
-  - **Left out of the menu** (the owner, P2 step 11), still in the footer and on their pillar pages: Review & Reputation Automation, UAE E-Invoicing Readiness & Integration, AI Shopping Visibility.
+  - **Left out of the menu** (the owner, P2 step 11), still on the services hub and their pillar pages (the footer lists only the hub and the pillar pages since L9): Review & Reputation Automation, UAE E-Invoicing Readiness & Integration, AI Shopping Visibility.
   - Hover: the row lights, grows a guide line in its pillar's colour (`hover-guide-line`) and plays its icon's story, or pops its pillar pixel. "All … services" draws its underline and nudges its arrow.
 - **A strip below the columns** (P2 step 11): the 6 Systems (catalogue §5) on their own line, then the `glass-liquid` "Try a live demo" card, the links (Deepzeta Sync once it ships, Designer Studio, About, Contact, Resources) and the display controls at the inline end.
 - **Behaviour:**
   - It opens on click only. Hover-intent opening was left out (`interestfor` is experimental).
   - It's a `popover="auto"` panel opened by a `popovertarget` button. The platform supplies Esc, light dismiss, focus return and the button's expanded state, so no `aria-expanded` is written. It also closes when focus leaves it or a link is followed.
   - Never `role="menu"` (06 §3).
+  - **Loaded on intent** (L8, Q2 (b), decision 0026): the full panel loads on intent (a pointer or focus over the Services button). A server-rendered lite panel holds the hub and the live pillar pages, so no-JS visitors and crawlers always reach every service through the hub.
 
 ## Mobile (< 1024 px)
 
 - **A compact bar:** logo · CTA · menu button. The menu icon morphs into close.
 - **A full-screen sheet** (a modal `<dialog>`, opened by invoker commands where supported), containing:
-  - heading-size items (`text-h2`, P2 step 11) with `type-word-stagger`: the live nav items above, including Deepzeta Sync once it ships
+  - heading-size items (`text-h2`, P2 step 11) with `type-word-stagger`: "Services" (the services hub, R010) first, then the live nav items above, including Deepzeta Sync once it ships
   - pillar-colour bars
   - the speed chip and AI View (P7), and the display controls (Reduce effects and the theme switch)
   - a thumb zone with the CTA, and WhatsApp once the number is confirmed
