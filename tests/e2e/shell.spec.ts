@@ -374,10 +374,13 @@ test.describe('Live links only (04 §1.4; P2 plan, A)', () => {
         expect(unshipped.has(new URL(href).pathname), href).toBe(false);
         expect((await request.get(href)).status(), href).toBe(200);
       }
-      // Until the audit page ships, every CTA is an email with the subject (Q1).
+      // Until the audit page ships, every audit CTA is an email with the subject (Q1). The header
+      // button is the agent button now (decision 0024): WhatsApp until P7, not the audit email —
+      // cta-set.spec.ts pins its href.
       if (!ROUTES.R002.live) {
         const mailto = `mailto:${siteConfig.email}?subject=${encodeURIComponent(shellContent.ctaEmailSubject)}`;
-        for (const cta of await page.locator('[data-cta]').all()) await expect(cta).toHaveAttribute('href', mailto);
+        for (const cta of await page.locator('[data-cta]:not([data-cta="header"])').all())
+          await expect(cta).toHaveAttribute('href', mailto);
       }
     });
   }
@@ -427,8 +430,9 @@ test.describe('The desktop header', () => {
     page,
   }) => {
     await open(page, HOME, 1280);
+    // The header CTA carries the brand name too (decision 0024); the logo is the first such link.
     await expect(
-      page.locator('[data-fx-header]').getByRole('link', { name: siteConfig.brandName, exact: true }),
+      page.locator('[data-fx-header]').getByRole('link', { name: siteConfig.brandName, exact: true }).first(),
     ).toHaveAttribute('aria-current', 'page');
 
     await open(page, REVIEW, 1280);

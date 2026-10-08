@@ -168,7 +168,11 @@ export function SiteFooter({ review = false }: SiteFooterProps) {
             <DisplayControls place="footer" />
           </div>
         </div>
-        <div className="flex flex-wrap items-center justify-between gap-x-8 gap-y-2">
+        {/* md+ clearance below the last row: its Cookie settings button sits at the inline end,
+            exactly under the floating WhatsApp button's corner; at the document end the scroll
+            clamp would park it (and its 44 px tap cross) under the float, so the row keeps the
+            document ending that much lower (the phone wraps the button to the line start, clear). */}
+        <div className="flex flex-wrap items-center justify-between gap-x-8 gap-y-2 md:pb-16">
           <p className="text-small text-fg-muted">
             {shellContent.copyright} {siteConfig.legalName}
           </p>

@@ -30,9 +30,9 @@ The header is a dashboard of proof. Besides navigation and the CTA, it carries t
 - **No display controls in the bar.** The theme switch and Reduce effects live in the mobile sheet, the mega menu's strip and the footer (05 §1).
 - **Current page:** a miniature of the logo's four-pixel cluster marks it (decision 0009). `hover-pixel-hop` moves the cluster to the hovered item, and its small pixels settle a beat after the main one.
 - **CTA handoff** (C42: at most one gradient CTA in view, 05 §2):
-  - While any in-page primary CTA is on screen (the hero's, the footer finale's), "Book a free AI audit" in the header is an outline button (`hover-outline`).
-  - Once none is on screen, the header CTA switches to the action gradient (`hover-charge`, `pointer-magnet`, `touch-press`) on desktop. On mobile the header CTA stays outline, and the sticky CTA bar takes the gradient instead (conversion-path.md).
-  - Until `/free-ai-audit` ships, the CTA is an email to hello@deepzeta.ai with the subject "Free AI audit".
+  - The header button is **"Deepzeta AI"** (decision 0024): it launches the Deepzeta Agent bot in P7, and until then falls back to WhatsApp honestly. While any in-page primary CTA is on screen (the hero's, the footer finale's), it is an outline button (`hover-outline`).
+  - Once none is on screen, the header button switches to the action gradient (`hover-charge`, `pointer-magnet`, `touch-press`) on desktop. On mobile it stays outline, and the sticky CTA bar takes the gradient instead (conversion-path.md).
+  - "Book a free AI audit" stays the deliberate in-page and sticky CTA (conversion-path.md); until `/free-ai-audit` ships, those are emails to hello@deepzeta.ai with the subject "Free AI audit".
 
 ## Speed chip
 
@@ -73,7 +73,7 @@ The header is a dashboard of proof. Besides navigation and the CTA, it carries t
   - heading-size items (`text-h2`, P2 step 11) with `type-word-stagger`: the live nav items above, including Deepzeta Sync once it ships
   - pillar-colour bars
   - the speed chip and AI View (P7), and the display controls (Reduce effects and the theme switch)
-  - a thumb zone with the CTA, and WhatsApp once the number is confirmed
+  - a thumb zone with the audit CTA (WhatsApp floats site-wide instead, decision 0024)
 - **Focus** is trapped in the open sheet and the page behind is inert and doesn't scroll. Esc, the close button, a followed link and a window that grows to desktop width all close it.
 
 ## States
