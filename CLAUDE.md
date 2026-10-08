@@ -44,7 +44,7 @@ This is deepzeta's own website and its first case study. Speed, custom code, SEO
 
 - **P4 Data & schema engine is done** (`docs/plans/2026-10-04-p4-data-schema-engine.md`, implementing the approved spec `docs/plans/2026-09-29-schema-system.md`): the typed JSON-LD graph engine (`src/lib/schema/` — pure generators, `checkedGraph()` dedupe/resolution guards, the escaping `JsonLd` component), the typed catalogue and emirates/industries data (`src/content/`), the founder and his companies in the site config, the numbers allowlist in `check:facts`, and the `check:schema` gate extended with the spec §4 assertions plus golden fixtures. Two blocks ship now: the sitewide block (Organization + WebSite + the logo) in the `(en)` root layout, and Home's page block (WebPage + the four-pillar ItemList); every other assembler ships with its page in P5–P8, each in its page's plan. The schema registry is `docs/seo/schema-graph.md`. GTM now loads past the first paint and the UAE campaign profile carries lab allowances of TBT 275 ms and Performance 0.93 (decisions 0022 and 0023 — the granted third-party scripts' execution cost inside the TBT window is intrinsic; 07 §1's ≤ 200 ms and 0.95 stand everywhere). CI green end-to-end on the branch head `6e99462`. The owner's manual validators (03 §4) are deferred to the pre-launch register (2026-10-06).
 
-- **P5 Homepage is built on `feat/homepage`** (`docs/plans/2026-10-06-p5-homepage.md`, amended at S7; the design `docs/design/home.md`). Waiting for the owner's "merge".
+- **P5 Homepage is done** (`docs/plans/2026-10-06-p5-homepage.md`, amended at S7; the design `docs/design/home.md`). Merged to `main` (`dc31d2b`).
   - **The page:** the real Home, its 11 sections in blueprint order. The copy is typed data (`src/content/en/home.ts`, `faq-bank.ts`).
   - **The FAQ:** the reusable FAQ module (`Faq.tsx`, native `<details>`), with Home's FAQPage block and a visible-parity assertion in `check:schema`.
   - **Icons:** eight Tier 1 icons (the four steps and the four industry groups).
@@ -57,9 +57,8 @@ This is deepzeta's own website and its first case study. Speed, custom code, SEO
   - **CSS:** all page CSS still sits in the one shared stylesheet. A Home-only stylesheet was tried and reverted: the second render-blocking request cost Home about 75 ms of lab LCP. P6's plan decides the CSS architecture.
   - **The hero H1 on phones:** below 640 px it takes the h1 size, so Linux and Android glyph widths never wrap it under the European banner.
   - **CI:** Playwright's `github` reporter makes e2e failures public annotations. CI is green end-to-end on `14a38aa`: e2e 185/185 and lhci, with Home's LCP at 2,724 ms on both profiles and Performance 96.
-  - **Next:** after the merge, P6 Core pages (04 §2).
 
-- **P6 Core pages, part A1 is built on `feat/p6a1-foundation`** (`docs/plans/2026-10-07-p6a-core-pages-foundation.md`, approved 2026-10-07). Waiting for the owner's "merge".
+- **P6 Core pages, part A1 is done** (`docs/plans/2026-10-07-p6a-core-pages-foundation.md`, approved 2026-10-07). Merged to `main` (`f8f338d`); Home on production after it: 188,926 B.
   - **CI Lighthouse calibrated to the runner** (decision 0025): `npm run lhci` runs `scripts/lhci-run.mjs`, which sets cpuSlowdownMultiplier = 4 × benchmarkIndex ÷ 4,000. No threshold changed.
   - **Home's weight.** L5 (the root error page imports only `BRAND_NAME` from `src/lib/brand.ts`), L1 (`turbopackChunking`: 5 first-load files, was 7) and L2 (plain `<a>`, no `next/link`; C67, 06 §2.4).
     - Home's first-load JS: −7,064 B gzip.
@@ -67,7 +66,14 @@ This is deepzeta's own website and its first case study. Speed, custom code, SEO
   - **A WCAG 2.4.11 fix:** the FAQ's focused question no longer slides under the European banner.
   - **Moved to A2:** the mega menu's panel on intent (L8) and the footer's service links (L9), so they are measured where the pilot makes the menu grow.
   - **The CSS architecture** (decision 0026): one shared stylesheet, until the inline-CSS measurement decides otherwise.
-  - **Next:** A2, the services hub and the Speed-to-Lead System pilot.
+
+- **P6 part A2 is built on `feat/p6a2-services-pilot`** (the same plan). Waiting for the owner's pilot review (04 §1.6), then "merge".
+  - **Live:** the services hub `/services` (R010) and the service template's pilot `/services/speed-to-lead-system` (R027); other slugs 404 (`dynamicParams = false`). Their schema (the hub's CollectionPage, ItemList and `#catalog`; the Service with `provider` and `areaServed`; breadcrumbs; FAQs), `view_service` once per page view, and the Services menu and the footer's Services column now that the hub is live.
+  - **Shared now:** `Breadcrumbs`, `StoryFlow`, `BeforeAfter`; the demo panel cloned from a server-rendered template (545 B lazy); the mega menu's full panel fetched on intent from `/shell/mega-menu` (R179).
+  - **Measured (2026-10-08):**
+    - Home on the preview: 190,661 B, 207 B under the hard limit and 861 B over the plan's 189,800 B target.
+    - Local lab LCP: the hub 2,569 ms, the pilot 2,723 ms, against T2's 2,500 ms with no allowance. Every shell page sits near 2,570 ms in this lab.
+    - Both are the owner's decisions at the pilot review (plan, Progress notes).
 
   Tracking names come from one taxonomy (09 §3) and GTM and GA4 are configured from it, never typed by hand: the owner's setup is `docs/owner/p3-tracking-setup-guide.md` (Part A before P3, Part B after). Every manual task before launch is in `docs/owner/pre-launch-register.md`; each phase adds its rows. The app runs Next.js 16.3.7, React 19.3, TypeScript 6.0.3, Tailwind 4.3 (decision 0012). Every gate is an npm script: `npm run verify:fast` after each step, `npm run verify` before a merge (03). Work goes live only when the owner says "merge" (12 §1, decision 0017). Local runs need `.env.local` (`docs/owner/p0-setup-guide.md`); e2e and lhci need `NEXT_PUBLIC_SITE_URL` and `SITE_INDEXING=on` in the shell, and `.env.local` holds the real `NEXT_PUBLIC_GTM_ID` (CI has it too; e2e stubs GTM, 09 §4).
 - **Decisions.** Decided on 2026-09-30: the JS budget (C8, decision 0014 option A: the 136.4 KB framework baseline plus our own budget per page), the pre-launch indexing lock (0013), and the design tokens, themes and fonts (0015). Decided on 2026-09-29: the company entity (D2, Deepzeta Digital Solutions L.L.C.), the service structure (C6, the four pillars) and the brand name "Deepzeta AI" (C29). The domain is `deepzeta.ai` (0006). See `docs/decisions/README.md`.
