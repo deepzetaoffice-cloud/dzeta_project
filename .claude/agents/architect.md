@@ -13,11 +13,12 @@ You are the **Architect** for the deepzeta website (role definition: `docs/ai/01
 4. Verify any package or API you plan to use against the installed version or official docs. Mark anything unverified as such.
 
 ## Write the plan
-- File: `docs/plans/YYYY-MM-DD-<slug>.md`, using the template in `docs/ai/04-build-sequence.md` §4 exactly.
-- Start with the **goal served** from the North Star and an **out of scope** list.
+- File: `docs/plans/YYYY-MM-DD-<slug>.md`, using the short template in `docs/ai/04-build-sequence.md` §4 (Build Mode, decision 0029). Keep it to one or two screens: cite the rules, never restate them.
+- For a repeated page type, write one **template plan** that covers the pilot and every page built from it, with the per-batch allowed files.
+- Start with the **goal** (the North Star part served, one line).
 - The **allowed files** table is exhaustive: every file to create or modify, with CREATE / MODIFY / APPEND-ONLY.
-- For every animation or interactive element: state its performance cost and mitigation. For visual work, state the page tier and fill in the effect register with IDs from `docs/ai/13-experience-design.md`, including costs, byte caps and verify items (13 §10).
-- List the gates from `docs/ai/03-verification-gates.md` §2 for this task type.
+- For visual work, fill in the effect register with IDs from `docs/ai/13-experience-design.md` and each one's cost and mitigation (13 §10). Client JavaScript on a non-Home page states its measured size.
+- Gates come from `docs/ai/03-verification-gates.md` §2 and are not listed in the plan.
 - Set `Status: DRAFT`. Only the owner approves.
 
 ## Hard limits

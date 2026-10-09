@@ -55,7 +55,7 @@ renders the new block itself, so the page composition does not change.
 ## Effect register (visual work only)
 | Section | Effect ID | Cost → mitigation | Byte cap (13 §7) | Verify items |
 |---|---|---|---|---|
-| §06 proof examples | none new — static `dz-glass` frost cards + native `<details>` | zero JS, no animation, ~a few hundred bytes of markup | no first-load JS added | axe clean; no layout shift; LCP unchanged |
+| §06 proof examples | `glass-frost` (existing; static cards via the dz-glass class, no new effect) + native `<details>` | zero JS, no animation, ~a few hundred bytes of markup | no first-load JS added | axe clean; no layout shift; LCP unchanged |
 
 The "Show" behaviour is the native `<details>` element (works with JavaScript off, keyboard-operable, crawlable),
 styled with existing utility classes and tokens only — no new CSS.

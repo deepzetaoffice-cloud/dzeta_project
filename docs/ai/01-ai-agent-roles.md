@@ -1,6 +1,6 @@
 # 01 · AI Agent Roles
 
-> **Applies to:** every AI agent (Claude Code is the primary tool; any other tool enters through `AGENTS.md`) · **Precedence:** below 00 · **Last reviewed:** 2026-09-30
+> **Applies to:** every AI agent (Claude Code is the primary tool; any other tool enters through `AGENTS.md`) · **Precedence:** below 00 · **Last reviewed:** 2026-10-09 (Build Mode, decision 0029)
 
 Each role has one job. A role never does another role's job in the same step. If you are unsure which role you are in, you are the **Architect**: plan, don't edit.
 
@@ -25,7 +25,11 @@ QA Verifier (runs gates) + Reviewer (checks diff vs plan) [+ Auditors when relev
 Commit on the task branch ──► report ──► owner says "merge" ──► agent merges to main (0017)
 ```
 
-**Small-task shortcut:** a change that touches **one file**, adds **no dependency**, and changes **no protected file** (typo, copy tweak, one class) may skip the written plan. The agent still states a one-line plan before editing and reports gate evidence after.
+**No-plan shortcut (Build Mode, [decision 0029](../decisions/0029-build-mode.md)):** these skip the written plan:
+- a fix or change that touches **up to 3 files**, adds **no dependency** and changes **no protected file** (registry rows for pages being shipped excepted);
+- a batch of pages under an approved template plan.
+
+The agent still states a one-line plan before editing and reports gate evidence after.
 
 ---
 
@@ -46,6 +50,7 @@ Commit on the task branch ──► report ──► owner says "merge" ──�
 - **Hands off to:** QA Verifier and Reviewer.
 
 ### Reviewer (read-only)
+- **When:** on a new template or shell change, or when the owner asks. Every other branch gets the implementer's `git diff --stat` scope check (decision 0029).
 - **Mission:** compare the diff with the plan and the rules.
 - **Checks:** every changed file is in the allowed list; no scope creep; tokens not raw values; logical CSS; reuse over duplication; no invented facts; naming matches the Services Catalogue; effects used match the plan's effect register and exist in [13](13-experience-design.md) §4.
 - **Can edit:** nothing.
@@ -54,14 +59,16 @@ Commit on the task branch ──► report ──► owner says "merge" ──�
 ### QA Verifier
 - **Mission:** run the gates in [03-verification-gates.md](03-verification-gates.md) for the task type and report results.
 - **Can edit:** nothing. May run commands.
-- **Must:** paste the actual command output (trimmed to the relevant lines). A gate without output is reported as **NOT RUN**, never as passed.
+- **Must:** report each gate's result line, and a failing gate's output in full. A gate without output is reported as **NOT RUN**, never as passed.
 
 ### SEO / GEO Auditor (read-only)
+- **When:** once per new template, and on any change to the schema, robots, sitemap or `llms` files (decision 0029).
 - **Mission:** audit metadata, headings, the schema `@id` graph, `llms.txt`, internal links, answer-first structure and AI-bot rules against [08](08-seo-geo-aeo-schema.md).
 - **Can edit:** nothing.
 
 ### Performance & Accessibility Auditor (read-only)
-- **Mission:** audit against [07](07-performance-budget.md) and [13](13-experience-design.md): Lighthouse CI per page tier, bundle size and effect byte caps, INP risks, CLS sources, the LCP rule, the per-viewport and live-blur limits, axe results, keyboard use, reduced motion and the Reduce effects modes, pause controls.
+- **When:** once per new template, and on any change that can reach Home (03 §2) when the owner asks (decision 0029).
+- **Mission:** audit against [07](07-performance-budget.md) and [13](13-experience-design.md): Lighthouse CI on Home, bundle size and effect byte caps, INP risks, CLS sources, the LCP rule, the per-viewport and live-blur limits, axe results, keyboard use, reduced motion and the Reduce effects modes, pause controls.
 - **Can edit:** nothing.
 
 ### Content Writer (English)

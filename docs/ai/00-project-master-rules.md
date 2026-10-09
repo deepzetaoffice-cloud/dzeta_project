@@ -1,6 +1,6 @@
 # 00 · Project Master Rules
 
-> **Applies to:** every agent, every task, every file · **Precedence:** highest written rule (only the owner's explicit current instruction ranks above it) · **Last reviewed:** 2026-09-30
+> **Applies to:** every agent, every task, every file · **Precedence:** highest written rule (only the owner's explicit current instruction ranks above it) · **Last reviewed:** 2026-10-09 (Build Mode, decision 0029)
 
 ---
 
@@ -35,9 +35,9 @@ Every plan must name which part of this North Star it serves. If a task serves n
 | N1 | **Performance is a feature, equal to visual quality.** Hard limits in [07-performance-budget.md](07-performance-budget.md) are never traded for effects. | A slow site contradicts the business's core claim. |
 | N2 | **Custom code only.** No templates, page builders, UI kits or themes. | It is our highlight and our promise. |
 | N3 | **Never invent facts.** No made-up stats, clients, reviews, awards, dates, prices or credentials. Unknown means ask or omit. | Trust, legal safety, and Google/AI-engine penalties. |
-| N4 | **Plan first, then execute.** Non-trivial work needs an approved plan (see [04-build-sequence.md](04-build-sequence.md)). | Prevents sprawl and false edits. |
+| N4 | **Plan once, then build fast.** One approved plan per template (it covers every page built from it) or per unique build; small fixes take a one-line plan (see [04-build-sequence.md](04-build-sequence.md) §4, Build Mode, [decision 0029](../decisions/0029-build-mode.md)). | Prevents sprawl and false edits without stalling the build. |
 | N5 | **Stay in scope.** Only touch files listed in the approved plan. | Prevents collateral damage. |
-| N6 | **Verified, not assumed.** "Done" requires gate evidence (see [03-verification-gates.md](03-verification-gates.md)). | Prevents false "it works" claims. |
+| N6 | **Verified, not assumed.** "Done" requires gate evidence, with the gates chosen by risk (see [03-verification-gates.md](03-verification-gates.md) §2): Home's performance, design and SEO/GEO are never relaxed. | Prevents false "it works" claims. |
 | N7 | **Tokens, never raw values.** Colours, spacing, type and motion come from design tokens. | Consistency and maintainability. |
 | N8 | **RTL-ready from day one.** English launches first, but the layout uses logical CSS only, so Arabic can be added without rework. | Arabic is planned for after launch. |
 | N9 | **SEO/GEO/AEO is architecture, not decoration.** Semantic HTML, one schema `@id` graph, answer-first content, `llms.txt`. | It is a service we sell; the site must demonstrate it. |

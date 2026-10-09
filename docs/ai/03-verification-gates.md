@@ -1,6 +1,6 @@
 # 03 · Verification Gates
 
-> **Applies to:** every task that changes files · **Precedence:** below 00 · **Last reviewed:** 2026-10-02
+> **Applies to:** every task that changes files · **Precedence:** below 00 · **Last reviewed:** 2026-10-09 (Build Mode, decision 0029)
 
 A gate is a **command with a pass condition**. Work is done only when the required gates pass **and their output is in the report**. "I checked mentally" is not a gate.
 
@@ -34,7 +34,7 @@ A gate is a **command with a pass condition**. Work is done only when the requir
 | `npm run test` | Vitest unit tests (schema builders, geo/llms builders, analytics wrapper, utils) | all pass |
 | `npm run build` | `next build` | succeeds, no warnings we haven't accepted in the conflict register |
 | `npm run test:e2e` | Playwright on the production build: key pages render, keyboard navigation, **axe** accessibility, tracking regression (`dataLayer[0]` rule, events fire once), effect modes (reduced motion, Reduce effects, JavaScript off, forced colours, RTL) and the LCP element visible at first paint ([13](13-experience-design.md) §3) | all pass, 0 serious/critical axe violations |
-| `npm run lhci` | Lighthouse CI on the fixed URL sample with per-tier budgets from [07](07-performance-budget.md) (page tiers: decision 0005), run by `scripts/lhci-run.mjs`, which first calibrates the CPU slowdown to the machine ([decision 0025](../decisions/0025-lighthouse-cpu-calibration.md)): scores, Core Web Vitals, and per-type bytes (fonts, images) on every run. From P2 the sample is Home and the review page `/shell-review` (the complete shell, registry R165), both under the T1 assertions; the review page has SEO off (noindex by design) and a lab LCP limit of 2,700 ms (C48, C50). The standing sample is Home and the review page ([decision 0028](../decisions/0028-standard-tier-and-light-verification.md)): the services hub and the pilot leave it at that decision's merge. A new template joins the sample for its own plan's exit run, and a batch of template copies adds one page (`DZ_LHCI_PAGES`), under the standard assertions: Performance ≥ 0.70, CLS ≤ 0.1, Accessibility / Best Practices / SEO ≥ 0.95, TTFB and the third-party, font and image caps — no lab LCP or TBT on standard pages. Both leave the sample again. From P3 it runs in two region profiles ([C52](conflict-register.md)): no country (counted as Europe: the consent banner shows) on both pages, and Home as a visitor from the UAE (`lighthouserc.row.cjs`, on 127.0.0.1). Then `scripts/check-page-weight.mjs` counts the page's own origin only, from each run's requests ([C54](conflict-register.md)): first-party HTML + CSS + JS ≤ the framework baseline + 50 KB (the review page alone 194,000 B, C57), and first-party JS ≤ the baseline + 5 KB growth + our own code (decisions 0014, 0021); third-party bytes are printed per run, with their own caps once the owner's GTM container is in | all assertions pass, and the page-weight check passes |
+| `npm run lhci` | Lighthouse CI on the fixed URL sample with per-tier budgets from [07](07-performance-budget.md) (page tiers: decision 0005), run by `scripts/lhci-run.mjs`, which first calibrates the CPU slowdown to the machine ([decision 0025](../decisions/0025-lighthouse-cpu-calibration.md)): scores, Core Web Vitals, and per-type bytes (fonts, images) on every run. From P2 the sample is Home and the review page `/shell-review` (the complete shell, registry R165), both under the T1 assertions; the review page has SEO off (noindex by design) and a lab LCP limit of 2,700 ms (C48, C50). **Build Mode ([decision 0029](../decisions/0029-build-mode.md)): the sample is Home and the review page only, and `lhci` runs only when a change can reach Home** (§2). No other page enters the sample (`DZ_LHCI_PAGES` stays for a one-off diagnostic the owner asks for). From P3 it runs in two region profiles ([C52](conflict-register.md)): no country (counted as Europe: the consent banner shows) on both pages, and Home as a visitor from the UAE (`lighthouserc.row.cjs`, on 127.0.0.1). Then `scripts/check-page-weight.mjs` counts the page's own origin only, from each run's requests ([C54](conflict-register.md)): first-party HTML + CSS + JS ≤ the framework baseline + 50 KB (the review page alone 194,000 B, C57), and first-party JS ≤ the baseline + 5 KB growth + our own code (decisions 0014, 0021); third-party bytes are printed per run, with their own caps once the owner's GTM container is in | all assertions pass, and the page-weight check passes |
 | `npm run verify:fast` | `typecheck` + `lint` + `check:tokens` + `check:contrast` | pass |
 | `npm run verify` | everything above, in order | pass |
 
@@ -42,24 +42,26 @@ A gate is a **command with a pass condition**. Work is done only when the requir
 
 ## 2. Which gates apply to which task
 
-| Task type | Required gates |
+**Build Mode ([decision 0029](../decisions/0029-build-mode.md)): gates by risk.** Home's performance, design and SEO/GEO are never relaxed; everything else is checked once, automatically, and as early as it is cheap.
+
+| When | Required gates |
 |---|---|
-| Any code change (at each commit, and at the task's exit) | `verify:fast` |
-| Component or section | `verify:fast` + `test` (if logic) + `build` |
-| New or changed page/route (a new template, or a one-off page) | `verify:fast` + `build` + `check:schema` + `check:seo` + `check:content` + `check:links` + `test:e2e` (that page) + `lhci` (that page: the template joins the sample for this run, under the standard assertions — decision 0028) |
-| Pages from a proven template (a standing plan, decision 0028) | Per batch: `verify:fast` (each commit) + `build` + `check:schema` + `check:seo` + `check:content` (or its `.scratch/` equivalent until it exists) + `check:links` + `check:facts` + `test` + `test:e2e` (the batch's pages) + one `lhci` spot-check (one page of the batch, the standard assertions) |
-| Content change | `check:facts` + `check:content` + `check:links` + `build` + `check:seo` |
-| Schema / SEO / `llms.txt` change | `test` + `build` + `check:schema` + `check:seo` + SEO/GEO Auditor review; for a new template, Google's Rich Results Test and the Schema Markup Validator (the owner runs them on the deployed preview) |
-| Analytics / consent change | `test` + `build` + `test:e2e` (tracking) + manual GTM Preview checklist for the owner |
-| Dependency added | `verify` + bundle check in `lhci` + one-line justification in the plan |
-| Phase exit | `verify` (all gates) + owner review |
+| Every commit | `verify:fast` (the stop hook runs it too) |
+| Every branch, before the owner's "merge" | Locally: `build` + `check:schema` + `check:seo` + `check:links` + `check:facts` (+ `test` when logic changed). In CI: `verify:ci` on the branch push (everything but `lhci`, e2e and axe included), green before the merge. `git diff --stat` matches the plan's allowed files |
+| **The change can reach Home**: Home's content or sections, the shell (header, footer, menus, floating buttons), any CSS (one shared stylesheet, decision 0026), `src/lib/fx/`, tracking or consent, the root layout, `next.config`, a dependency | The row above + `lhci` (Home and the review page, 07 in full). A failure blocks the merge |
+| A new template (its pilot page) | The branch row + the SEO/GEO Auditor and the Performance & Accessibility Auditor once + the owner's review of the pilot on the preview; for a new schema shape, the owner runs Google's Rich Results Test and the Schema Markup Validator on the preview (03 §4) |
+| Pages from an approved template (batches of up to 10) | The branch row only. No `lhci`, no auditors |
+| Analytics / consent change | The Home row + `test:e2e` (tracking) + the owner's GTM Preview checklist |
 | Rule system change (owner only) | `check:rules` |
+| Launch readiness (P10) | `verify` (every gate) + the manual checks (§4) |
+
+`check:content` (planned) joins the branch row when it exists; until then the content writer follows the engine's page blueprint and the agent checks the FAQ ids and the direct answer by reading the page, with no `.scratch/` script.
 
 ---
 
 ## 3. Evidence rules
 
-1. Paste the **actual output**: the summary line(s) and any failures. Trim noise, never results.
+1. Report the **actual result**: one line per gate (its summary line), and a failing gate's output in full. Trim noise, never results. A green CI run on the branch head may stand for the gates it ran: give its run link or commit.
 2. A gate that wasn't run is written **NOT RUN, reason**. Never omit it, never mark it passed.
 3. A failing gate is reported **as failing**, with output, even if you believe it's unrelated. Then propose a fix or a separate task.
 4. Never weaken a gate to make it pass: no `// eslint-disable`, `@ts-ignore`, `as any`, skipped tests, lowered Lighthouse budgets or deleted assertions, **unless the plan explicitly approves it** and the conflict register records why.
@@ -80,4 +82,4 @@ These can't be fully automated. The agent writes the checklist; the owner ticks 
 
 ## 5. Continuous integration
 
-GitHub Actions runs `npm run verify` on every pull request to `main` and on manual runs, and `verify:ci` — everything but `lhci` ([decision 0028](../decisions/0028-standard-tier-and-light-verification.md)) — on pushes to other branches, so iteration pushes stay fast while the merge gate stays complete. `main` is protected: merge only through a PR with all checks green. Agents never push to `main` directly (see [12](12-git-workflow.md)).
+GitHub Actions runs `verify:ci` — everything but `lhci` ([decision 0028](../decisions/0028-standard-tier-and-light-verification.md)) — on every push to a branch other than `main`, and the full `npm run verify` on pull requests and manual runs. `lhci` runs locally when §2's Home row applies (decision 0029). `main` takes work only as an approved merge (see [12](12-git-workflow.md)).
