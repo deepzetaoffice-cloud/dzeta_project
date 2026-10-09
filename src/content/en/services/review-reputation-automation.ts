@@ -25,9 +25,9 @@ export const reviewReputationAutomation: ServicePageContent = {
   // 155 characters: the key point (review requests after a service, drafted replies to Google
   // reviews) in the first 120, one concrete fact (Google reviews), ends with the action (08 §1)
   description: `${siteConfig.brandName}’s Review & Reputation Automation sends review requests after a service and drafts replies to Google reviews for approval. Book a free AI audit.`,
-  // 53 characters: the three jobs of catalogue 1D.3 (requests, the manager alert and monitoring,
-  // drafted replies)
-  heading: 'Review & Reputation Automation: ask, listen and reply',
+  // 45 characters: the three jobs of catalogue 1D.3 (requests, the manager alert, drafted replies);
+  // clears the European banner at 360 × 640
+  heading: 'Ask for reviews, catch complaints, reply fast',
   // 58 words: what it is, the outcome, who it's for (1D.3's "Best for")
   answer: `Review & Reputation Automation by ${siteConfig.brandName} asks customers for a review at the right moment after a service, alerts your manager when someone is unhappy, and drafts replies to your Google reviews for you to approve. It is for UAE clinics, restaurants, hotels and service companies that want reviews requested and answered without chasing them by hand.`,
 

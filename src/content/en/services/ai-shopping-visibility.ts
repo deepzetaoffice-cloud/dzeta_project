@@ -25,8 +25,9 @@ export const aiShoppingVisibility: ServicePageContent = {
   // 156 characters: the key point in the first 120 (feeds, schema, Merchant Center for ChatGPT
   // Shopping), the named deliverables as the concrete fact, ends with the action (08 §1)
   description: `AI Shopping Visibility by ${siteConfig.brandName} prepares your product feeds, schema and Merchant Center for ChatGPT Shopping and Google AI Mode. Book a free AI audit.`,
-  // 50 characters, one statement headline; "help", because no one can promise what an assistant shows
-  heading: 'AI Shopping Visibility: help AI find your products',
+  // 32 characters, one statement headline: readiness, because no one can promise what an assistant
+  // shows; two lines, so it clears the European banner at 360 × 640 under the long breadcrumb
+  heading: 'Ready for AI shopping assistants',
   // 59 words: the full catalogue name, the outcome (the catalogue's own aim, "built to help"), what
   // it covers (1I.2's four items) and who it's for (5.4: online stores and D2C brands)
   answer: `AI Shopping Visibility (Agentic Commerce Readiness) by ${siteConfig.brandName} is built to help your products appear and get recommended in AI shopping assistants such as ChatGPT Shopping and Google AI Mode. We restructure your product feed, add product schema and rich attributes, manage Merchant Center and marketplace feeds, and monitor visibility. It is for online stores and D2C brands.`,

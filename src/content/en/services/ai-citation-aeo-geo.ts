@@ -28,8 +28,9 @@ export const aiCitationAeoGeo: ServicePageContent = {
   // 150 characters: the key point in the first 120 (schema, llms.txt and direct answers so AI
   // engines can cite you; 2.1's "understand and cite" wording), ends with the action (08 §1)
   description: `${siteConfig.brandName}’s AEO/GEO service sets up schema, llms.txt and direct-answer content so ChatGPT, Gemini and Perplexity can cite you. Book a free AI audit.`,
-  // 55 characters, one statement headline: what we give the engines, not a promise of what they do
-  heading: 'AI Citation & AEO/GEO: give AI engines answers to quote',
+  // 37 characters, one statement headline: what we give the engines, not a promise of what they do;
+  // clears the European banner at 360 × 640
+  heading: 'Answers AI engines can quote and cite',
   // 56 words: the full catalogue name, the outcome (4A.1's own aim, "built to"), what it covers
   // (4A.1's list) and who it's for (5.3: "any local or B2B business")
   answer: `AI Citation & Answer Engine Optimisation (AEO/GEO) by ${siteConfig.brandName} is built to get your business named and recommended by ChatGPT, Gemini, Perplexity and Google AI Overviews. We set up your entity and schema, llms.txt and direct-answer content, then test every month how AI engines describe you. It suits local and B2B businesses in the UAE.`,

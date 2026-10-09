@@ -23,8 +23,9 @@ export const appointmentRemindersNoShowReduction: ServicePageContent = {
   // 159 characters: the key point (reminders with one-tap confirm or reschedule) in the first 120,
   // one concrete fact (WhatsApp), ends with the action (08 §1)
   description: `${siteConfig.brandName}’s Appointment Reminder & No-Show Reduction sends WhatsApp reminders with one-tap confirm or reschedule, and rebooks no-shows. Book a free AI audit.`,
-  // 60 characters: the exact name and catalogue 1C.2's "One-tap confirm or reschedule"
-  heading: 'Appointment Reminder & No-Show Reduction: confirm in one tap',
+  // 40 characters: what catalogue 1C.2's reminders are for; clears the European banner at 360 × 640
+  // under the long breadcrumb
+  heading: 'Reminders that turn bookings into visits',
   // 57 words: what it is, the outcome, who it's for (catalogue 7.5: Healthcare & Dentists)
   answer: `Appointment Reminder & No-Show Reduction by ${siteConfig.brandName} sends each customer a series of reminders before their appointment, each with a one-tap way to confirm or reschedule. If someone still misses the visit, the system follows up automatically to rebook them. It is for UAE clinics, dentists and service businesses that lose hours to empty appointment slots.`,
 

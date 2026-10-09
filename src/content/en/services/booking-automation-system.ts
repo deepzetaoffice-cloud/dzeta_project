@@ -22,8 +22,9 @@ export const bookingAutomationSystem: ServicePageContent = {
   // 157 characters: the key point (book online, on WhatsApp or by phone) in the first 120, one
   // concrete fact (the waitlist), ends with the action (08 §1)
   description: `${siteConfig.brandName}’s Booking Automation System lets customers book online, on WhatsApp or by phone, and fills cancelled slots from a waitlist. Book a free AI audit.`,
-  // 58 characters, the catalogue's own promise for 1C.1 ("with no back-and-forth")
-  heading: 'Booking Automation System: bookings with no back-and-forth',
+  // 45 characters, the catalogue's own promise for 1C.1 ("with no back-and-forth"); clears the
+  // European banner at 360 × 640
+  heading: 'Let customers book without the back-and-forth',
   // 52 words: what it is, the outcome, who it's for (1C.1's "Best for")
   answer: `The Booking Automation System by ${siteConfig.brandName} lets customers book, reschedule and cancel online, on WhatsApp or by phone, choosing from your real-time availability. Confirmations, calendar invites and reminders go out automatically. It is for UAE clinics, salons, gyms, consultants, car services and training centres that still arrange every appointment by hand.`,
 

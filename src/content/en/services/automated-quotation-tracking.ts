@@ -23,8 +23,9 @@ export const automatedQuotationTracking: ServicePageContent = {
   // 156 characters: the key point in the first 120 (ends at 110), one concrete fact (open tracking),
   // ends with the action (08 §1)
   description: `${siteConfig.brandName}’s Automated Quotation & Quote Tracking System builds branded quotes, tracks when clients open them and follows up for you. Book a free AI audit.`,
-  // 51 characters, from the catalogue's own promise for 1B.3 ("From enquiry to signed quote")
-  heading: 'Automated quotes, tracked from enquiry to signature',
+  // 36 characters, catalogue 1B.3's quote, follow-up and tracking; short enough to clear the
+  // European banner at 360 × 640 under the long breadcrumb
+  heading: 'Every quote sent, chased and tracked',
   // 60 words: what it is, the outcome, who it's for (1B.3's "Best for" line)
   answer: `The Automated Quotation & Quote Tracking System by ${siteConfig.brandName} turns an enquiry into a branded quote, sends it by email or WhatsApp and shows you when the client opens it. Reminders follow up until the quote is accepted, rejected or expires. It is for UAE businesses in technical services, fit-out, construction and maintenance, and for B2B suppliers and agencies.`,
 
