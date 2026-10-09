@@ -9,7 +9,7 @@
 import { Icon } from '@/components/icons/Icon';
 import { StoryFlow } from '@/components/sections/StoryFlow';
 import { industryGroups } from '@/content/emirates-industries';
-import { buildItself, howWeWork, industries, roiTeaser, workflowExplorer } from '@/content/en/home';
+import { buildItself, howWeWork, illustrativeProof, industries, roiTeaser, workflowExplorer } from '@/content/en/home';
 
 // §05 The workflow explorer teaser: the visible step list (13 §4.8) and one static story-flow
 // final state (CSS/SVG only — the Home version never uses GSAP, 07 §4). The flow diagram is the
@@ -48,45 +48,90 @@ export function WorkflowExplorer() {
 // reachable HTML in normal flow; the scrub is native scroll-driven CSS inside @supports.
 export function BuildItself() {
   return (
-    <section aria-labelledby="build-heading" className="dz-pinned-scene border-y border-hairline">
-      <div className="dz-pin-stage mx-auto max-w-page px-gutter py-section">
-        <h2 id="build-heading" className="max-w-measure text-h2 text-balance">
-          {buildItself.heading}
-        </h2>
-        <p className="mt-4 max-w-measure text-lead">{buildItself.lede}</p>
-        {/* The depth-css laptop: a CSS 3D frame; the screen shows the steps as they scrub in.
-            The stamp (this visit's real LCP) fills lazily (S6); its label is real HTML here. */}
-        <div className="dz-laptop mt-10" aria-hidden="true">
-          <div className="dz-laptop-screen">
-            <div className="dz-laptop-desktop">
-              <span className="dz-lap-layer" data-lap-step="1" />
-              <span className="dz-lap-layer" data-lap-step="2" />
-              <span className="dz-lap-layer" data-lap-step="3" />
-              <span className="dz-lap-layer" data-lap-step="4" />
-              <span className="dz-lap-layer" data-lap-step="5" />
+    <>
+      <section aria-labelledby="build-heading" className="dz-pinned-scene border-y border-hairline">
+        <div className="dz-pin-stage mx-auto max-w-page px-gutter py-section">
+          <h2 id="build-heading" className="max-w-measure text-h2 text-balance">
+            {buildItself.heading}
+          </h2>
+          <p className="mt-4 max-w-measure text-lead">{buildItself.lede}</p>
+          {/* The depth-css laptop: a CSS 3D frame; the screen shows the steps as they scrub in.
+              The stamp (this visit's real LCP) fills lazily (S6); its label is real HTML here. */}
+          <div className="dz-laptop mt-10" aria-hidden="true">
+            <div className="dz-laptop-screen">
+              <div className="dz-laptop-desktop">
+                <span className="dz-lap-layer" data-lap-step="1" />
+                <span className="dz-lap-layer" data-lap-step="2" />
+                <span className="dz-lap-layer" data-lap-step="3" />
+                <span className="dz-lap-layer" data-lap-step="4" />
+                <span className="dz-lap-layer" data-lap-step="5" />
+              </div>
+              <div className="dz-laptop-base" />
             </div>
-            <div className="dz-laptop-base" />
           </div>
+          {/* The steps as a visible list (13 §4.8); the stamp sits after it */}
+          <ol className="mt-8 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+            {buildItself.steps.map((step, index) => (
+              <li key={step} className="flex items-baseline gap-3 text-small">
+                <span className="font-mono text-caption text-fg-muted">{String(index + 1).padStart(2, '0')}</span>
+                {step}
+              </li>
+            ))}
+          </ol>
+          <p className="dz-lcp-stamp dz-glass mt-8 inline-flex items-baseline gap-3 px-5 py-4">
+            <span className="font-mono text-caption uppercase tracking-eyebrow text-fg-muted">
+              {buildItself.stampLabel}
+            </span>
+            {/* The real value lands here by the lazy enhancement; the honest fallback names itself */}
+            <span className="text-h3 font-bold" data-lcp-value>
+              not measured in this browser
+            </span>
+          </p>
         </div>
-        {/* The steps as a visible list (13 §4.8); the stamp sits after it */}
-        <ol className="mt-8 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-          {buildItself.steps.map((step, index) => (
-            <li key={step} className="flex items-baseline gap-3 text-small">
-              <span className="font-mono text-caption text-fg-muted">{String(index + 1).padStart(2, '0')}</span>
-              {step}
-            </li>
-          ))}
-        </ol>
-        <p className="dz-lcp-stamp dz-glass mt-8 inline-flex items-baseline gap-3 px-5 py-4">
-          <span className="font-mono text-caption uppercase tracking-eyebrow text-fg-muted">
-            {buildItself.stampLabel}
-          </span>
-          {/* The real value lands here by the lazy enhancement; the honest fallback names itself */}
-          <span className="text-h3 font-bold" data-lcp-value>
-            not measured in this browser
-          </span>
-        </p>
-      </div>
+      </section>
+      {/* The illustrative proof examples: labeled concepts behind a native <details> "Show" button.
+          No new JS, no new H2 (an H3 keeps home.spec.ts's section order intact), zero LCP cost. */}
+      <ProofExamples />
+    </>
+  );
+}
+
+// §06 (below the pinned scene): the illustrative proof examples (C18; 10 §3.6). Each concept card
+// is a native <details>, so "Show" works without JavaScript, is keyboard-operable and crawlable.
+// The section is labelled by an H3 (not a new H2, so the home e2e's section-order assertion holds).
+export function ProofExamples() {
+  return (
+    <section aria-labelledby="proof-examples-heading" className="mx-auto max-w-page px-gutter py-section">
+      <h3 id="proof-examples-heading" className="text-h3 text-balance">
+        {illustrativeProof.heading}
+      </h3>
+      <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {illustrativeProof.cards.map((card, index) => (
+          <li key={card.name}>
+            <details className="dz-glass group rounded-2xl" open={index === 0}>
+              <summary className="flex cursor-pointer list-none items-start justify-between gap-3 rounded-2xl p-5">
+                <span className="block">
+                  <span className="block font-mono text-caption uppercase tracking-eyebrow text-fg-muted">
+                    {card.industry}
+                  </span>
+                  <span className="mt-1 block text-h4">{card.name}</span>
+                </span>
+                <span className="font-mono text-caption text-fg-muted">
+                  <span className="group-open:hidden">{illustrativeProof.show}</span>
+                  <span className="hidden group-open:inline">{illustrativeProof.hide}</span>
+                </span>
+              </summary>
+              <div className="px-5 pb-5">
+                <p className="font-mono text-caption uppercase tracking-eyebrow text-fg-muted">
+                  {illustrativeProof.conceptLabel}
+                </p>
+                <p className="mt-2 text-body text-fg-strong">{card.outcome}</p>
+                <p className="mt-3 text-small text-fg-muted">{card.detail}</p>
+              </div>
+            </details>
+          </li>
+        ))}
+      </ul>
     </section>
   );
 }
