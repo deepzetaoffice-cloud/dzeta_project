@@ -42,3 +42,6 @@ desktop.ini
 
 # Client reference documents (owner decision 2026-09-29: kept local while the repo is public)
 Planning Folder/For Ai/Other project references only/
+
+# The tracking handoff holds the retired Meta IDs by design (P3 part C, Q4/Q5): local only, never tracked
+docs/owner/deepzeta-tracking-part-a-handoff.md

@@ -33,7 +33,7 @@
 | Postal code / P.O. Box | — | UNKNOWN (UAE has no postal codes; a P.O. Box only if the owner has one) |
 | Geo coordinates (office pin) | — | PENDING (created once the full licence is issued; copied from the Google Business Profile pin) |
 | Phone (international format) | +971 54 547 6335 | CONFIRMED (owner, 2026-10-08; Deepzeta's main contact number) |
-| WhatsApp number | +971 54 547 6335 (the same number, on Meta's WhatsApp Cloud API; it can't be used in the WhatsApp app) | CONFIRMED (owner, 2026-10-08; decision 0027). **Live on WhatsApp only once Track A registers it**: the site's WhatsApp button and `wa.me` links wait until then |
+| WhatsApp number | +971 54 547 6335 | CONFIRMED (owner, 2026-10-08; decision 0027; the same number as the phone, on Meta's WhatsApp Cloud API, so it can't be used in the WhatsApp app). **Live on WhatsApp only once Track A registers it**: the site's WhatsApp button and `wa.me` links wait until then |
 | Public contact email | hello@deepzeta.ai | CONFIRMED (owner, 2026-09-29) |
 | Opening hours | Monday to Saturday, 08:00–17:00 GST (UTC+4); closed Sunday | CONFIRMED (owner, 2026-09-29) |
 | Google Business Profile URL | — | PENDING (created once the full licence is issued) |
