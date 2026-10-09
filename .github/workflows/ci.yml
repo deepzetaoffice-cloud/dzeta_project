@@ -1,5 +1,6 @@
-# Every gate on every pull request to main (docs/ai/03 §5). Pushes to other branches run it too, so a
-# branch is checked before its pull request exists. main itself is protected (docs/ai/12 §1).
+# The full gate set on every pull request to main and on manual runs (docs/ai/03 §5). Pushes to other
+# branches run verify:ci — everything but lhci (decision 0028) — so iteration pushes stay fast while
+# the merge gate stays complete. main itself is protected (docs/ai/12 §1).
 name: CI
 
 on:
@@ -45,8 +46,8 @@ jobs:
       - name: Install the Playwright browser
         run: npx playwright install --with-deps chromium
 
-      - name: Run every gate
-        run: npm run verify
+      - name: Run the gates (full on PRs and manual runs; verify:ci, without lhci, on branch pushes)
+        run: npm run ${{ github.event_name == 'push' && 'verify:ci' || 'verify' }}
 
       # Also posted as annotations: they're public on a public repo, while job logs need admin rights.
       - name: Print the Lighthouse runs (the baseline record, decision 0014)
