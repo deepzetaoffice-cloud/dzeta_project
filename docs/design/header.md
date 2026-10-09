@@ -26,7 +26,7 @@ The header is a dashboard of proof. Besides navigation and the CTA, it carries t
   | Work | Always | Once a real case study exists |
   | Pricing | Always | Once prices are confirmed |
 
-  Never link to a page that doesn't exist (04 §1.4): every item renders, but an item is a link only while its registry row is live (`src/lib/routes.ts`), so unshipped items show as muted non-clickable text and become links as their pages ship (plan `docs/plans/2026-10-08-header-full-menu.md`). About, Contact and Resources live in the mega menu's strip and the footer.
+  Never link to a page that doesn't exist (04 §1.4): every item renders, but an item is a link only while its registry row is live (`src/lib/routes.ts`), so unshipped items show as non-clickable text and become links as their pages ship. In the bar they take the same text colour as the links (`text-fg`), with no hover: mist on the bar's glass over a light page is 3.73:1, under 4.5:1 (the owner, 2026-10-09) (plan `docs/plans/2026-10-08-header-full-menu.md`). About, Contact and Resources live in the mega menu's strip and the footer.
 - **No display controls in the bar.** The theme switch and Reduce effects live in the mobile sheet, the mega menu's strip and the footer (05 §1).
 - **Current page:** a miniature of the logo's four-pixel cluster marks it (decision 0009). `hover-pixel-hop` moves the cluster to the hovered item, and its small pixels settle a beat after the main one.
 - **CTA handoff** (C42: at most one gradient CTA in view, 05 §2):

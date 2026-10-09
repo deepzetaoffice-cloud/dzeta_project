@@ -63,7 +63,7 @@ export function SiteHeader({ review = false }: SiteHeaderProps) {
                       {link.label}
                     </a>
                   ) : (
-                    <span className="inline-flex min-h-11 items-center rounded-pill px-2.5 text-small font-medium text-fg-muted xl:px-3">
+                    <span className="inline-flex min-h-11 items-center rounded-pill px-2.5 text-small font-medium text-fg xl:px-3">
                       {link.label}
                     </span>
                   )}
