@@ -12,6 +12,11 @@ export const shellContent = {
   cta: 'Book a free AI audit',
   // Until /free-ai-audit (R002) ships, the CTA is an email to siteConfig.email with this subject (Q1)
   ctaEmailSubject: 'Free AI audit',
+  // The contact labels (decision 0024): the floating WhatsApp button and the Call button. The header
+  // button's label is the brand name itself, read from siteConfig.brandName where it renders, never
+  // typed here (docs/ai/10 §2); the numbers likewise come from siteConfig, never from here.
+  whatsappLabel: 'Chat on WhatsApp',
+  callLabel: 'Call',
   // The menu button's accessible names, closed and open
   menuOpen: 'Menu',
   menuClose: 'Close menu',

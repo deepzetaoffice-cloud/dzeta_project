@@ -33,7 +33,8 @@ test.describe('The logo on Home', () => {
     // width the lockup shows; the mark alone is for small screens and hidden here.
     const pill = page.locator('header [data-theme="dark"]');
     await expect(pill.getByRole('img', { name: siteConfig.brandName })).toHaveCount(1);
-    await expect(pill.getByRole('link', { name: siteConfig.brandName })).toHaveAttribute('href', '/');
+    // The header CTA carries the brand name too (decision 0024); the logo is the first such link.
+    await expect(pill.getByRole('link', { name: siteConfig.brandName }).first()).toHaveAttribute('href', '/');
     // Both crops show the same file; nothing is redrawn.
     await expect(logo.locator('image')).toHaveCount(2);
     for (const image of await logo.locator('image').all())

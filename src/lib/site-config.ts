@@ -44,8 +44,8 @@ export const siteConfig = {
     opens: '08:00',
     closes: '17:00',
   },
-  phone: null as string | null, // facts §2: PENDING, expected around 2026-10-09
-  whatsapp: null as string | null, // facts §2: PENDING, with the phone
+  phone: '+971 54 547 6335', // facts §2 (owner, 2026-10-08)
+  whatsapp: '+971 54 547 6335', // facts §2 (owner, 2026-10-08)
   social: [
     {
       key: 'linkedin',

@@ -1,6 +1,6 @@
 # 0024 · The conversion CTA set: WhatsApp primary, "Deepzeta AI" agent button, four contact CTAs
 
-Status: PROPOSED
+Status: ACCEPTED (owner, 2026-10-08, with `docs/plans/2026-10-07-cta-set.md`; in chat the same day: the number +971 54 547 6335 for both phone and WhatsApp, the full set with WhatsApp as the only floating button, Call with the contact surfaces, and the header's WhatsApp fallback until the P7 agent bot)
 
 ## Context
 

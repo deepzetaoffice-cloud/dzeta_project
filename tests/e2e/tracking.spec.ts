@@ -166,7 +166,9 @@ test.describe('view_service (09 §3; P6 part A2)', () => {
 });
 
 test.describe('Tracked clicks, each exactly once (09 §4)', () => {
-  test('the header CTA: cta_click from the header, and contact_click while it is an email link', async ({ page }) => {
+  test('the header CTA: cta_click from the header, and contact_click on its WhatsApp fallback (0024)', async ({
+    page,
+  }) => {
     await page.setViewportSize({ width: 1280, height: 800 });
     await page.goto('/');
     await page.waitForLoadState('networkidle');
@@ -175,7 +177,7 @@ test.describe('Tracked clicks, each exactly once (09 §4)', () => {
       .poll(() => tracked(page))
       .toEqual([
         { event: 'cta_click', cta_id: 'book_audit', cta_location: 'header' },
-        { event: 'contact_click', method: 'email' },
+        { event: 'contact_click', method: 'whatsapp' },
       ]);
   });
 

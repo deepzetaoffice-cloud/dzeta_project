@@ -21,7 +21,9 @@ This is the book-audit page from the blueprint's core pages. Its URL is set in i
 
 ## Always-available contact
 
-- **Floating WhatsApp button** (D5), at the bottom inline-end corner.
+- **Floating WhatsApp button** (D5; decision 0024): the primary contact CTA, site-wide at the bottom inline-end corner — a `wa.me` deep link, `glass-frost` with `hover-outline`, never the action gradient, so the one-gradient rule holds (C42). The contact page (R005) is itself the contact surface, so it excludes the float (its own plan asserts that). While the WhatsApp fact is unconfirmed the button is absent from the HTML, not CSS-hidden (facts §2). It gives way while the consent banner asks (the banner outranks it in the 360 px list), and the page's scroll-padding clears it at every width, so a focused control or an anchor never rests under it (WCAG 2.4.11; the sticky bar's own clearance extended).
+- **Header button "Deepzeta AI"** (decision 0024): launches the Deepzeta Agent bot (P7); until then it falls back to WhatsApp honestly. It keeps its place in the CTA hand-off below.
+- **Call button** (decision 0024): the phone number as a deliberate contact CTA in the footer's contact block, `tel:` with the number as real text for NAP parity; absent while the phone fact is unconfirmed.
 - **Sticky mobile CTA bar** (below 1024 px, `glass-frost`, so a phone runs no second live blur):
   - **The hand-off (C42):** at most one gradient CTA is in view. The bar shows while no in-page primary CTA (the hero's, the footer finale's) is on screen, and slides out when one is; on mobile the header CTA stays outline. On desktop the header CTA takes the gradient instead.
   - It hides while the mobile menu sheet or a modal is open, and never shows without JavaScript.

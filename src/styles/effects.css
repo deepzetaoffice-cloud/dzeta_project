@@ -1263,7 +1263,10 @@
 
 /* viewportFit 'cover' (src/lib/viewport.ts) lets the page reach under an iPhone's notch in landscape,
    so the body keeps its content inside the safe area; elsewhere the insets are 0. Below 1024 px an
-   anchor or a focused control scrolls clear of the sticky bar. */
+   anchor or a focused control scrolls clear of the sticky bar; at every width also of the floating
+   WhatsApp button (decision 0024), which sits above the bar below 1024 px and at the corner from
+   there. Its height is the component's min-h-12 (3 rem) and its offsets its own: 0.75 rem above the
+   bar, max(1.25 rem, safe area) at the corner — 4.5 rem covers both with a margin. */
 @layer base {
   body {
     padding-inline: max(env(safe-area-inset-left), env(safe-area-inset-right));
@@ -1272,8 +1275,12 @@
   html {
     @variant max-lg {
       scroll-padding-block-end: calc(
-        var(--dz-sticky-height) + var(--dz-glass-edge-width) + env(safe-area-inset-bottom) + var(--dz-focus-width) +
-          var(--dz-focus-offset)
+        var(--dz-sticky-height) + 4.5rem + env(safe-area-inset-bottom) + var(--dz-focus-width) + var(--dz-focus-offset)
+      );
+    }
+    @variant lg {
+      scroll-padding-block-end: calc(
+        max(1.25rem, env(safe-area-inset-bottom)) + 4.5rem + var(--dz-focus-width) + var(--dz-focus-offset)
       );
     }
   }

@@ -21,6 +21,27 @@ export function auditHref(): string {
     : `mailto:${siteConfig.email}?subject=${encodeURIComponent(shellContent.ctaEmailSubject)}`;
 }
 
+// The WhatsApp deep link (decision 0024): wa.me/<number>, digits only — no plus, no spaces. The
+// number is derived from siteConfig, never typed (check:facts). Null-safe: while the WhatsApp fact
+// is unconfirmed this is null, and every caller hides itself (facts §2).
+export function whatsappHref(): string | null {
+  const digits = siteConfig.whatsapp?.replace(/\D/g, '');
+  return digits ? `https://wa.me/${digits}` : null;
+}
+
+// The call link (decision 0024): tel: plus the international format from the one config field —
+// the same string the footer shows (NAP, facts §2). Null-safe the same way.
+export function telHref(): string | null {
+  return siteConfig.phone ? `tel:${siteConfig.phone}` : null;
+}
+
+// The header button's target (decision 0024): the Deepzeta Agent panel once P7 ships; until then an
+// honest fallback to WhatsApp, and to the audit email only if that fact were ever unconfirmed again.
+// P7 swaps this one function for the panel's trigger — the label, placement and markup stay as they are.
+export function agentHref(): string {
+  return whatsappHref() ?? auditHref();
+}
+
 export type CtaButtonProps = {
   href: string;
   label: string;

@@ -4,6 +4,7 @@ import { JourneyLine } from '@/components/layout/JourneyLine';
 import { SiteFooter } from '@/components/layout/SiteFooter';
 import { SiteHeader } from '@/components/layout/SiteHeader';
 import { StickyCta } from '@/components/layout/StickyCta';
+import { WhatsAppFloat } from '@/components/layout/WhatsAppFloat';
 import { shellContent } from '@/content/en/shell';
 
 // The shell around every page (P2 plan, B1, B2, L and M): the skip link, the header, the page's one
@@ -17,7 +18,8 @@ import { shellContent } from '@/content/en/shell';
 //   least the first screen below the header, so the footer always starts below the fold: on a short
 //   page (the placeholder Home, the 404) a font swap above it would otherwise push the whole footer down
 //   in view (CLS), and the finale's display headline would compete with the H1 for LCP (P2 step 14).
-// - The sticky bar comes last, so it's the last tab stop while it shows (mobile only).
+// - The sticky bar and the floating WhatsApp button come last, so they're the last tab stops while
+//   they show (decision 0024: the float is site-wide chrome; the contact page excludes it).
 
 export type SiteShellProps = { review?: boolean; children: ReactNode };
 
@@ -43,6 +45,7 @@ export function SiteShell({ review = false, children }: SiteShellProps) {
       </main>
       <SiteFooter review={review} />
       <StickyCta />
+      <WhatsAppFloat />
     </>
   );
 }
