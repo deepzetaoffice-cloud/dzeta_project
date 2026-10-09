@@ -13,9 +13,8 @@
 // marketplace named, because the catalogue names none; no n8n/Make/Zapier, because 1I.2's entry
 // doesn't say the feed work runs on them (stock sync is 1I.1's, named in Pairs well with).
 // The short form "AI Shopping Visibility" is the catalogue's own (5.4, 7.5); the full name opens
-// the direct answer. The flow is an example, labelled as one (10 §3.6). The FAQ questions are in
-// this file's aiShoppingVisibilityFaq (the integrator moves them into faq-bank.ts).
-import type { FaqQuestion } from '@/content/en/faq-bank';
+// the direct answer. The flow is an example, labelled as one (10 §3.6). The FAQ questions are in faq-bank.ts
+// (aiShoppingVisibilityFaq).
 import type { ServicePageContent } from '@/content/en/services/types';
 import { siteConfig } from '@/lib/site-config';
 
@@ -189,68 +188,3 @@ export const aiShoppingVisibility: ServicePageContent = {
     lede: 'What store owners ask before we touch their catalogue: cost, timing, platforms, Arabic and results.',
   },
 };
-
-// The questions on the AI Shopping Visibility page (/services/ai-shopping-visibility, R051): 8, the
-// lead service range of 6–8 (engine §3); cost and timeline first (§6.2 rule 3). Each first sentence
-// stands alone (≤ 25 words); each answer is 40–90 words and names at most one other service.
-// Sources: catalogue 0.1 (the written summary, next steps and a quote), 1I.2, 1I.3 (translations
-// reviewed by a human), 2.3, §8 and §9 (no guaranteed results); Home's ownership answer. The ids
-// carry the service's stem; none repeats a question on Home, the hub or the pilot.
-export const aiShoppingVisibilityFaq: readonly FaqQuestion[] = [
-  {
-    id: 'what-does-ai-shopping-visibility-cost',
-    topic: 'cost',
-    question: 'How much does AI Shopping Visibility cost?',
-    answer:
-      'The price depends on your catalogue, so we quote it after a free AI audit. The main drivers are how many products and categories need restructuring, how many feeds and marketplaces we manage, and how much product data is missing today. A store with clean data needs less work than one with sparse titles and no attributes.',
-  },
-  {
-    id: 'how-long-does-ai-shopping-visibility-take',
-    topic: 'timeline',
-    question: 'How long does it take to get a catalogue ready?',
-    answer:
-      'We give a timeframe only after the free AI audit, once we have seen your catalogue and feeds. Restructuring a focused range is a smaller job than a store with deep categories and several marketplaces. The audit ends with a written summary, next steps and a quote, so you see the plan before any work begins.',
-  },
-  {
-    id: 'can-ai-shopping-visibility-promise-recommendations',
-    topic: 'results',
-    question: 'Can you make ChatGPT recommend our products?',
-    answer:
-      'No: nobody can promise that ChatGPT or any AI assistant will recommend a product. The assistant decides what it shows, not us and not you. What we control is your side: clear, structured, accurate product data in every feed, and monitoring that shows where your products appear. We report what we measure, never invented numbers.',
-  },
-  {
-    id: 'does-ai-shopping-visibility-work-with-shopify',
-    topic: 'integrations',
-    question: 'Does it work with Shopify and WooCommerce?',
-    answer:
-      'Yes: AI Shopping Visibility works with stores on Shopify, WooCommerce or a custom build. We work in your existing store and feeds, including Merchant Center and the marketplaces you already sell on, so there is no need to change platform. If the store itself needs rebuilding, E-Commerce Websites covers Shopify, WooCommerce and custom stores.',
-  },
-  {
-    id: 'can-ai-shopping-visibility-cover-arabic',
-    topic: 'arabic',
-    question: 'Can our product data be in Arabic as well as English?',
-    answer:
-      'Yes: product titles, descriptions and attributes can be prepared in Arabic and English, so the store reads correctly in both. Where translations are needed, Product Content Automation writes them with AI and a person reviews every one before it reaches your store or feeds.',
-  },
-  {
-    id: 'does-ai-shopping-visibility-need-customer-data',
-    topic: 'data-privacy',
-    question: 'Do you need access to our customer data?',
-    answer:
-      'No: AI Shopping Visibility works on product data, not on your customers’ personal data. We need access to your product catalogue, your feeds and your Merchant Center account, with permissions that cover only that work. You choose the access level, and you can remove it at any time.',
-  },
-  {
-    id: 'who-controls-the-ai-shopping-visibility-feeds',
-    topic: 'ownership',
-    question: 'Who controls our product feeds and Merchant Center account?',
-    answer:
-      'You do: your feeds, your Merchant Center account and your product data stay in your business’s name. We work inside your accounts and document every change we make to the catalogue and feeds. If you later move the work in-house or to another team, nothing has to be rebuilt or handed back.',
-  },
-  {
-    id: 'what-happens-after-ai-shopping-visibility-set-up',
-    topic: 'support',
-    question: 'What happens after the catalogue is restructured?',
-    answer:
-      'Monitoring continues after launch: we watch where your products appear in AI shopping assistants and keep your feeds in line with the store. When you add products or change prices, the feeds follow. You see what changed and what we fixed, so you can judge the work on real observations.',
-  },
-];

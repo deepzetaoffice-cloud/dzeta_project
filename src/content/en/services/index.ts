@@ -3,6 +3,10 @@
 // its copy is written; the route serves only the live registry rows (src/lib/routes.ts), so a
 // record entry alone publishes nothing. Keys are the catalogue's slugs (src/content/catalogue.ts).
 import {
+  aiAdCreativeFaq,
+  aiCitationAeoGeoFaq,
+  aiShoppingVisibilityFaq,
+  localAiDominanceFaq,
   appointmentRemindersNoShowReductionFaq,
   automatedQuotationTrackingFaq,
   bookingAutomationSystemFaq,
@@ -19,6 +23,10 @@ import { crmSetupAutomation } from '@/content/en/services/crm-setup-automation';
 import { bookingAutomationSystem } from '@/content/en/services/booking-automation-system';
 import { appointmentRemindersNoShowReduction } from '@/content/en/services/appointment-reminders-no-show-reduction';
 import { reviewReputationAutomation } from '@/content/en/services/review-reputation-automation';
+import { aiShoppingVisibility } from '@/content/en/services/ai-shopping-visibility';
+import { aiCitationAeoGeo } from '@/content/en/services/ai-citation-aeo-geo';
+import { localAiDominance } from '@/content/en/services/local-ai-dominance';
+import { aiAdCreative } from '@/content/en/services/ai-ad-creative';
 import type { ServicePageContent } from '@/content/en/services/types';
 
 /** One service page: its copy and its FAQ questions (most-asked first) */
@@ -35,4 +43,8 @@ export const servicePages: Readonly<Record<string, ServicePage>> = {
     faq: appointmentRemindersNoShowReductionFaq,
   },
   'review-reputation-automation': { content: reviewReputationAutomation, faq: reviewReputationAutomationFaq },
+  'ai-shopping-visibility': { content: aiShoppingVisibility, faq: aiShoppingVisibilityFaq },
+  'ai-citation-aeo-geo': { content: aiCitationAeoGeo, faq: aiCitationAeoGeoFaq },
+  'local-ai-dominance': { content: localAiDominance, faq: localAiDominanceFaq },
+  'ai-ad-creative': { content: aiAdCreative, faq: aiAdCreativeFaq },
 };

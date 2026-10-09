@@ -16,9 +16,8 @@
 // aren't in the platform chips: 4A.3's entry and §8 don't name them (§8 names Google Gemini).
 // The sibling 4A.1 is citation-wide; this page stays local, bilingual and area by area. The short
 // form "Local AI Dominance" is the catalogue's own (5.3, 5.5); the full name opens the direct
-// answer. The flow is an example, labelled as one (10 §3.6). The FAQ questions are in this file's
-// localAiDominanceFaq (the integrator moves them into faq-bank.ts).
-import type { FaqQuestion } from '@/content/en/faq-bank';
+// answer. The flow is an example, labelled as one (10 §3.6). The FAQ questions are in faq-bank.ts
+// (localAiDominanceFaq).
 import type { ServicePageContent } from '@/content/en/services/types';
 import { siteConfig } from '@/lib/site-config';
 
@@ -191,61 +190,3 @@ export const localAiDominance: ServicePageContent = {
     lede: 'What local business owners ask: cost, timing, Arabic profiles, ownership and what no one can promise.',
   },
 };
-
-// The questions on the Local AI Dominance page (/services/local-ai-dominance, R070): 7, the lead
-// service range of 6–8 (engine §3); cost and timeline first (§6.2 rule 3). Each first sentence
-// stands alone (≤ 25 words); each answer is 40–90 words and names at most one other service.
-// Sources: catalogue 4A.3, 1H.4, 2.1 (local SEO setup per area or emirate), §9 (no guaranteed
-// results); Home's Arabic practice (written natively, never translated as an afterthought). The ids
-// carry the stem "local-ai-dominance"; none repeats a question on Home, the hub, the pilot or 4A.1.
-export const localAiDominanceFaq: readonly FaqQuestion[] = [
-  {
-    id: 'what-does-local-ai-dominance-cost',
-    topic: 'cost',
-    question: 'How much does Local AI Dominance cost?',
-    answer:
-      'Local AI Dominance is priced after a free AI audit, because it depends on your footprint. The main drivers are how many areas and emirates you serve, how many branches or profiles you have, and how far your business details have drifted across directories. A business with one branch in one area needs less work than a chain across emirates.',
-  },
-  {
-    id: 'when-does-local-ai-dominance-show-in-the-map-pack',
-    topic: 'timeline',
-    question: 'How soon will we appear in the map pack?',
-    answer:
-      'No one can promise when, or whether, a business moves up the map pack, so we don’t give a date. The set-up work on your profile, citations and areas follows a schedule agreed after the free AI audit. From then on we track where you appear in each area, so you can see the trend.',
-  },
-  {
-    id: 'is-a-local-ai-dominance-arabic-profile-worth-it',
-    topic: 'arabic',
-    question: 'Is an Arabic profile worth it if most of our customers speak English?',
-    answer:
-      'If any of your customers search in Arabic, an Arabic profile meets them in their own language. We write the Arabic natively, not by translating the English word for word, and keep both versions consistent. We look at your customers and areas in the free AI audit before recommending it.',
-  },
-  {
-    id: 'can-local-ai-dominance-get-ai-recommendations',
-    topic: 'results',
-    question: 'Will AI assistants recommend us to people nearby?',
-    answer:
-      'Nobody can promise what an AI assistant recommends for a local search. The part we can work on is your local facts: your areas, services, hours and contact details, clear and consistent in Arabic and English, on your profile and in directories. We then ask AI assistants local questions and show you how they describe your business.',
-  },
-  {
-    id: 'does-local-ai-dominance-start-from-our-listings',
-    topic: 'integrations',
-    question: 'We already have a profile and a website. Do we start again?',
-    answer:
-      'No: Local AI Dominance starts from what you already have. Your Google Business Profile, website and directory listings are checked and corrected, not replaced, and your website’s contact details are matched to them. If you need a new website, Custom-Coded High-Performance Websites include local SEO set-up for each area or emirate served.',
-  },
-  {
-    id: 'who-owns-the-local-ai-dominance-profile',
-    topic: 'ownership',
-    question: 'Do we keep ownership of our Google Business Profile?',
-    answer:
-      'Yes: your Google Business Profile stays owned by your business. We work with the access you grant, and you can withdraw it at any time. The work covers your public business details, not your customers’ personal data, and every change to your profile and listings is recorded so you can see what we did.',
-  },
-  {
-    id: 'who-updates-the-local-ai-dominance-profile',
-    topic: 'support',
-    question: 'Who keeps our profile up to date after set-up?',
-    answer:
-      'You can keep your profile up to date yourself, or hand the routine work to us. Google Business Profile Automation adds scheduled posts and offers, a Q&A and review response workflow, and photo and information updates. Your team then spends its time on customers, not on the profile.',
-  },
-];

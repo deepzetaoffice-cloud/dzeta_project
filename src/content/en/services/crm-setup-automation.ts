@@ -13,8 +13,8 @@
 // personal data (no citation row is APPROVED). The UAE section states only Deepzeta AI's own
 // practice (catalogue §9, 1K.1).
 // Fields typed as catalogue numbers name a service by number; prose uses the exact catalogue names.
-// The flow is an example, labelled as one (10 §3.6). The FAQ questions are at the end of this file,
-// for the integrator to move into faq-bank.ts.
+// The flow is an example, labelled as one (10 §3.6). The FAQ questions are in faq-bank.ts
+// (crmSetupAutomationFaq).
 import type { ServicePageContent } from '@/content/en/services/types';
 import { siteConfig } from '@/lib/site-config';
 

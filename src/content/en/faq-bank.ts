@@ -520,3 +520,243 @@ export const reviewReputationAutomationFaq: readonly FaqQuestion[] = [
       'An unhappy reply triggers an alert to your manager straight away, with the customer’s message, so they can call and put things right. Draft replies to public reviews still wait for approval, so nothing goes out in a hurry or in anger.',
   },
 ];
+
+// The questions on the AI Shopping Visibility page (/services/ai-shopping-visibility, R051): 8, the
+// lead service range of 6–8 (engine §3); cost and timeline first (§6.2 rule 3). Each first sentence
+// stands alone (≤ 25 words); each answer is 40–90 words and names at most one other service.
+// Sources: catalogue 0.1 (the written summary, next steps and a quote), 1I.2, 1I.3 (translations
+// reviewed by a human), 2.3, §8 and §9 (no guaranteed results); Home's ownership answer. The ids
+// carry the service's stem; none repeats a question on Home, the hub or the pilot.
+export const aiShoppingVisibilityFaq: readonly FaqQuestion[] = [
+  {
+    id: 'what-does-ai-shopping-visibility-cost',
+    topic: 'cost',
+    question: 'How much does AI Shopping Visibility cost?',
+    answer:
+      'The price depends on your catalogue, so we quote it after a free AI audit. The main drivers are how many products and categories need restructuring, how many feeds and marketplaces we manage, and how much product data is missing today. A store with clean data needs less work than one with sparse titles and no attributes.',
+  },
+  {
+    id: 'how-long-does-ai-shopping-visibility-take',
+    topic: 'timeline',
+    question: 'How long does it take to get a catalogue ready?',
+    answer:
+      'We give a timeframe only after the free AI audit, once we have seen your catalogue and feeds. Restructuring a focused range is a smaller job than a store with deep categories and several marketplaces. The audit ends with a written summary, next steps and a quote, so you see the plan before any work begins.',
+  },
+  {
+    id: 'can-ai-shopping-visibility-promise-recommendations',
+    topic: 'results',
+    question: 'Can you make ChatGPT recommend our products?',
+    answer:
+      'No: nobody can promise that ChatGPT or any AI assistant will recommend a product. The assistant decides what it shows, not us and not you. What we control is your side: clear, structured, accurate product data in every feed, and monitoring that shows where your products appear. We report what we measure, never invented numbers.',
+  },
+  {
+    id: 'does-ai-shopping-visibility-work-with-shopify',
+    topic: 'integrations',
+    question: 'Does it work with Shopify and WooCommerce?',
+    answer:
+      'Yes: AI Shopping Visibility works with stores on Shopify, WooCommerce or a custom build. We work in your existing store and feeds, including Merchant Center and the marketplaces you already sell on, so there is no need to change platform. If the store itself needs rebuilding, E-Commerce Websites covers Shopify, WooCommerce and custom stores.',
+  },
+  {
+    id: 'can-ai-shopping-visibility-cover-arabic',
+    topic: 'arabic',
+    question: 'Can our product data be in Arabic as well as English?',
+    answer:
+      'Yes: product titles, descriptions and attributes can be prepared in Arabic and English, so the store reads correctly in both. Where translations are needed, Product Content Automation writes them with AI and a person reviews every one before it reaches your store or feeds.',
+  },
+  {
+    id: 'does-ai-shopping-visibility-need-customer-data',
+    topic: 'data-privacy',
+    question: 'Do you need access to our customer data?',
+    answer:
+      'No: AI Shopping Visibility works on product data, not on your customers’ personal data. We need access to your product catalogue, your feeds and your Merchant Center account, with permissions that cover only that work. You choose the access level, and you can remove it at any time.',
+  },
+  {
+    id: 'who-controls-the-ai-shopping-visibility-feeds',
+    topic: 'ownership',
+    question: 'Who controls our product feeds and Merchant Center account?',
+    answer:
+      'You do: your feeds, your Merchant Center account and your product data stay in your business’s name. We work inside your accounts and document every change we make to the catalogue and feeds. If you later move the work in-house or to another team, nothing has to be rebuilt or handed back.',
+  },
+  {
+    id: 'what-happens-after-ai-shopping-visibility-set-up',
+    topic: 'support',
+    question: 'What happens after the catalogue is restructured?',
+    answer:
+      'Monitoring continues after launch: we watch where your products appear in AI shopping assistants and keep your feeds in line with the store. When you add products or change prices, the feeds follow. You see what changed and what we fixed, so you can judge the work on real observations.',
+  },
+];
+
+// The questions on the AEO/GEO page (/services/ai-citation-aeo-geo, R068): 7, the lead service
+// range of 6–8 (engine §3); cost and timeline first (§6.2 rule 3). Each first sentence stands alone
+// (≤ 25 words); each answer is 40–90 words and names at most one other service. Sources: catalogue
+// 4A.1, 4A.4, §9 (no guaranteed results); the blueprint's monthly test; the Arabic practice of
+// Home's answer (written natively, never translated as an afterthought). The ids carry the stem
+// "aeo-geo"; none repeats a question on Home (its results and Arabic questions are general), the hub
+// or the pilot.
+export const aiCitationAeoGeoFaq: readonly FaqQuestion[] = [
+  {
+    id: 'what-does-aeo-geo-cost',
+    topic: 'cost',
+    question: 'How much does AEO/GEO cost?',
+    answer:
+      'AEO/GEO is quoted after a free AI audit, because the work depends on your site. The main drivers are how many services and pages need direct answers, how much schema your site already has, and whether you need comparison pages. A site with structured data in place needs less set-up than one starting from nothing.',
+  },
+  {
+    id: 'when-does-aeo-geo-start-working',
+    topic: 'timeline',
+    question: 'How long before AI engines start mentioning us?',
+    answer:
+      'There is no fixed timeframe for AI engines to mention a business, so we don’t promise one. The set-up work itself has a schedule, agreed after the free AI audit. When AI engines pick up the changes is their decision, so the monthly tests record what they say about you and how it changes.',
+  },
+  {
+    id: 'how-is-aeo-geo-measured',
+    topic: 'results',
+    question: 'How do you measure whether AEO/GEO is working?',
+    answer:
+      'We measure it with monthly AI visibility tests: the same buyer questions asked to ChatGPT, Gemini and Perplexity, with the answers recorded. You see whether your business is named, how it is described and whether your pages are cited. No one can guarantee a mention, so we report what the engines actually say.',
+  },
+  {
+    id: 'does-aeo-geo-replace-seo',
+    topic: 'integrations',
+    question: 'Does AEO/GEO replace our SEO work?',
+    answer:
+      'No: AEO/GEO builds on SEO rather than replacing it. We treat fast, crawlable pages and clean technical SEO as the base, and AEO/GEO adds the entity, schema and direct-answer layer on top. If you also want SEO work every month, the Performance SEO Retainer covers technical SEO, content and links.',
+  },
+  {
+    id: 'can-aeo-geo-cover-arabic',
+    topic: 'arabic',
+    question: 'Do you write Arabic answers for AI engines too?',
+    answer:
+      'Yes: direct answers, FAQs and entity details can be written in Arabic and English, each written natively rather than translated word for word. The AI visibility tests can then ask the same questions in both languages, so you see how your business is described to Arabic-speaking and English-speaking buyers.',
+  },
+  {
+    id: 'what-access-does-aeo-geo-need',
+    topic: 'data-privacy',
+    question: 'What access to our website do you need?',
+    answer:
+      'We need edit access to your website’s pages and structured data, or a developer on your side who can apply our changes. We don’t need your customer records: AEO/GEO works on public content. Every change is listed, so you can see what was added to your pages and why.',
+  },
+  {
+    id: 'is-aeo-geo-ongoing',
+    topic: 'support',
+    question: 'Is AEO/GEO a one-off project or ongoing?',
+    answer:
+      'Both: the set-up is a project, and the monthly AI visibility tests and reporting continue after it. Each report shows what AI engines say about your business, what changed since the last test and the fixes we recommend next. If a test shows you described wrongly, we trace the source and correct what is in your control.',
+  },
+];
+
+// The questions on the Local AI Dominance page (/services/local-ai-dominance, R070): 7, the lead
+// service range of 6–8 (engine §3); cost and timeline first (§6.2 rule 3). Each first sentence
+// stands alone (≤ 25 words); each answer is 40–90 words and names at most one other service.
+// Sources: catalogue 4A.3, 1H.4, 2.1 (local SEO setup per area or emirate), §9 (no guaranteed
+// results); Home's Arabic practice (written natively, never translated as an afterthought). The ids
+// carry the stem "local-ai-dominance"; none repeats a question on Home, the hub, the pilot or 4A.1.
+export const localAiDominanceFaq: readonly FaqQuestion[] = [
+  {
+    id: 'what-does-local-ai-dominance-cost',
+    topic: 'cost',
+    question: 'How much does Local AI Dominance cost?',
+    answer:
+      'Local AI Dominance is priced after a free AI audit, because it depends on your footprint. The main drivers are how many areas and emirates you serve, how many branches or profiles you have, and how far your business details have drifted across directories. A business with one branch in one area needs less work than a chain across emirates.',
+  },
+  {
+    id: 'when-does-local-ai-dominance-show-in-the-map-pack',
+    topic: 'timeline',
+    question: 'How soon will we appear in the map pack?',
+    answer:
+      'No one can promise when, or whether, a business moves up the map pack, so we don’t give a date. The set-up work on your profile, citations and areas follows a schedule agreed after the free AI audit. From then on we track where you appear in each area, so you can see the trend.',
+  },
+  {
+    id: 'is-a-local-ai-dominance-arabic-profile-worth-it',
+    topic: 'arabic',
+    question: 'Is an Arabic profile worth it if most of our customers speak English?',
+    answer:
+      'If any of your customers search in Arabic, an Arabic profile meets them in their own language. We write the Arabic natively, not by translating the English word for word, and keep both versions consistent. We look at your customers and areas in the free AI audit before recommending it.',
+  },
+  {
+    id: 'can-local-ai-dominance-get-ai-recommendations',
+    topic: 'results',
+    question: 'Will AI assistants recommend us to people nearby?',
+    answer:
+      'Nobody can promise what an AI assistant recommends for a local search. The part we can work on is your local facts: your areas, services, hours and contact details, clear and consistent in Arabic and English, on your profile and in directories. We then ask AI assistants local questions and show you how they describe your business.',
+  },
+  {
+    id: 'does-local-ai-dominance-start-from-our-listings',
+    topic: 'integrations',
+    question: 'We already have a profile and a website. Do we start again?',
+    answer:
+      'No: Local AI Dominance starts from what you already have. Your Google Business Profile, website and directory listings are checked and corrected, not replaced, and your website’s contact details are matched to them. If you need a new website, Custom-Coded High-Performance Websites include local SEO set-up for each area or emirate served.',
+  },
+  {
+    id: 'who-owns-the-local-ai-dominance-profile',
+    topic: 'ownership',
+    question: 'Do we keep ownership of our Google Business Profile?',
+    answer:
+      'Yes: your Google Business Profile stays owned by your business. We work with the access you grant, and you can withdraw it at any time. The work covers your public business details, not your customers’ personal data, and every change to your profile and listings is recorded so you can see what we did.',
+  },
+  {
+    id: 'who-updates-the-local-ai-dominance-profile',
+    topic: 'support',
+    question: 'Who keeps our profile up to date after set-up?',
+    answer:
+      'You can keep your profile up to date yourself, or hand the routine work to us. Google Business Profile Automation adds scheduled posts and offers, a Q&A and review response workflow, and photo and information updates. Your team then spends its time on customers, not on the profile.',
+  },
+];
+
+// The questions on the AI Ad Creative Production page (/services/ai-ad-creative, R076): 7, the lead
+// service range of 6–8 (engine §3); cost and timeline first (§6.2 rule 3). Each first sentence
+// stands alone (≤ 25 words); each answer is 40–90 words and names at most one other service.
+// Sources: catalogue 4B.2, 4B.6, 4C.2, 6.3, 4E (made in-house, replaced when fatigued; attribution
+// you can audit yourself), §9 (no guaranteed results); Home's data answer (never sold). The ids
+// carry the stem "ai-ad-creative"; none repeats a question on Home, the hub or the pilot.
+export const aiAdCreativeFaq: readonly FaqQuestion[] = [
+  {
+    id: 'what-does-ai-ad-creative-cost',
+    topic: 'cost',
+    question: 'How much does AI Ad Creative Production cost?',
+    answer:
+      'AI Ad Creative Production is quoted after a free AI audit, based on what your campaigns need. The main drivers are the formats you want, such as video, UGC-style, static or 3D, how many variations each round needs, and how often creatives are replaced. Motion and 3D work takes more production than static ads.',
+  },
+  {
+    id: 'how-fast-is-ai-ad-creative-delivered',
+    topic: 'timeline',
+    question: 'How quickly can new creatives be ready?',
+    answer:
+      'We confirm turnaround times after the free AI audit, once we know your formats, volumes and approval steps. The first round takes the most set-up, because it settles your brand rules and formats. Replacements then follow the same brief and rules, so they don’t start from scratch.',
+  },
+  {
+    id: 'will-ai-ad-creative-lower-cost-per-lead',
+    topic: 'results',
+    question: 'Will new creatives lower our cost per lead?',
+    answer:
+      'No one can promise that new creatives will lower your cost per lead, so we don’t. What they give you is the means to test: many variations, measured in your own ad accounts, with tired ads replaced when performance drops. You read the results in your own accounts, so you can check every number yourself.',
+  },
+  {
+    id: 'can-ai-ad-creative-be-in-arabic',
+    topic: 'arabic',
+    question: 'Can the ads be made in Arabic?',
+    answer:
+      'Yes: ad copy and on-screen text can be in Arabic, English or both, so you can match each audience. The Arabic is written natively, not translated word for word, and right-to-left text is laid out properly in video, static and motion formats. Where a campaign targets both audiences, each language gets its own version rather than a crowded mix.',
+  },
+  {
+    id: 'does-ai-ad-creative-need-ad-account-access',
+    topic: 'integrations',
+    question: 'Do you need access to our ad accounts?',
+    answer:
+      'Access to your ad accounts helps, because performance decides which creatives are replaced. With it, we see how each variation performs. Without it, your team shares the results and we work from those. If your tracking needs fixing first, Analytics & Tracking Setup covers GA4, Google Tag Manager and the Meta Conversions API.',
+  },
+  {
+    id: 'what-happens-to-ai-ad-creative-brand-files',
+    topic: 'data-privacy',
+    question: 'What happens to the product photos and brand files we send?',
+    answer:
+      'Your product photos, footage and brand files are used to make your creatives, and we never sell them. You decide which assets we may use, and you can ask us to stop using any of them at any time. No creative goes live without your approval, and you name who on your team receives and signs off drafts.',
+  },
+  {
+    id: 'who-keeps-ai-ad-creative-fresh',
+    topic: 'support',
+    question: 'Who keeps the creatives fresh after the first round?',
+    answer:
+      'Ongoing production keeps the loop running: new variations are made as results come in, and tired ads are replaced when their performance drops. Each round builds on what the last one taught. If you want the campaigns managed as well, Meta Ads (Facebook & Instagram) covers lead ads, catalogue ads and Advantage+ campaigns.',
+  },
+];

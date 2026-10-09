@@ -16,9 +16,8 @@
 // is APPROVED yet, so the copy describes our own practice only); no promise to get a business
 // cited or named (catalogue §9).
 // The short form "AEO/GEO" is the catalogue's own (5.3); the full name opens the direct answer. The
-// flow is an example, labelled as one (10 §3.6). The FAQ questions are in this file's
-// aiCitationAeoGeoFaq (the integrator moves them into faq-bank.ts).
-import type { FaqQuestion } from '@/content/en/faq-bank';
+// flow is an example, labelled as one (10 §3.6). The FAQ questions are in faq-bank.ts
+// (aiCitationAeoGeoFaq).
 import type { ServicePageContent } from '@/content/en/services/types';
 import { siteConfig } from '@/lib/site-config';
 
@@ -200,62 +199,3 @@ export const aiCitationAeoGeo: ServicePageContent = {
     lede: 'What business owners ask before working on AI citation: cost, timing, results and access.',
   },
 };
-
-// The questions on the AEO/GEO page (/services/ai-citation-aeo-geo, R068): 7, the lead service
-// range of 6–8 (engine §3); cost and timeline first (§6.2 rule 3). Each first sentence stands alone
-// (≤ 25 words); each answer is 40–90 words and names at most one other service. Sources: catalogue
-// 4A.1, 4A.4, §9 (no guaranteed results); the blueprint's monthly test; the Arabic practice of
-// Home's answer (written natively, never translated as an afterthought). The ids carry the stem
-// "aeo-geo"; none repeats a question on Home (its results and Arabic questions are general), the hub
-// or the pilot.
-export const aiCitationAeoGeoFaq: readonly FaqQuestion[] = [
-  {
-    id: 'what-does-aeo-geo-cost',
-    topic: 'cost',
-    question: 'How much does AEO/GEO cost?',
-    answer:
-      'AEO/GEO is quoted after a free AI audit, because the work depends on your site. The main drivers are how many services and pages need direct answers, how much schema your site already has, and whether you need comparison pages. A site with structured data in place needs less set-up than one starting from nothing.',
-  },
-  {
-    id: 'when-does-aeo-geo-start-working',
-    topic: 'timeline',
-    question: 'How long before AI engines start mentioning us?',
-    answer:
-      'There is no fixed timeframe for AI engines to mention a business, so we don’t promise one. The set-up work itself has a schedule, agreed after the free AI audit. When AI engines pick up the changes is their decision, so the monthly tests record what they say about you and how it changes.',
-  },
-  {
-    id: 'how-is-aeo-geo-measured',
-    topic: 'results',
-    question: 'How do you measure whether AEO/GEO is working?',
-    answer:
-      'We measure it with monthly AI visibility tests: the same buyer questions asked to ChatGPT, Gemini and Perplexity, with the answers recorded. You see whether your business is named, how it is described and whether your pages are cited. No one can guarantee a mention, so we report what the engines actually say.',
-  },
-  {
-    id: 'does-aeo-geo-replace-seo',
-    topic: 'integrations',
-    question: 'Does AEO/GEO replace our SEO work?',
-    answer:
-      'No: AEO/GEO builds on SEO rather than replacing it. We treat fast, crawlable pages and clean technical SEO as the base, and AEO/GEO adds the entity, schema and direct-answer layer on top. If you also want SEO work every month, the Performance SEO Retainer covers technical SEO, content and links.',
-  },
-  {
-    id: 'can-aeo-geo-cover-arabic',
-    topic: 'arabic',
-    question: 'Do you write Arabic answers for AI engines too?',
-    answer:
-      'Yes: direct answers, FAQs and entity details can be written in Arabic and English, each written natively rather than translated word for word. The AI visibility tests can then ask the same questions in both languages, so you see how your business is described to Arabic-speaking and English-speaking buyers.',
-  },
-  {
-    id: 'what-access-does-aeo-geo-need',
-    topic: 'data-privacy',
-    question: 'What access to our website do you need?',
-    answer:
-      'We need edit access to your website’s pages and structured data, or a developer on your side who can apply our changes. We don’t need your customer records: AEO/GEO works on public content. Every change is listed, so you can see what was added to your pages and why.',
-  },
-  {
-    id: 'is-aeo-geo-ongoing',
-    topic: 'support',
-    question: 'Is AEO/GEO a one-off project or ongoing?',
-    answer:
-      'Both: the set-up is a project, and the monthly AI visibility tests and reporting continue after it. Each report shows what AI engines say about your business, what changed since the last test and the fixes we recommend next. If a test shows you described wrongly, we trace the source and correct what is in your control.',
-  },
-];
