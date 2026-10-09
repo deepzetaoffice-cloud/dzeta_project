@@ -128,20 +128,26 @@ export const illustrativeProof = {
       name: 'Luma Properties',
       industry: 'Real estate \u00b7 Dubai',
       // No invented numbers: the outcome is a process promise, not a result claim.
-      outcome: 'Every enquiry is answered in under a minute, then qualified, booked and followed up automatically \u2014 while the agent handles the routine and the team handles the sale.',
-      detail: 'A Speed-to-Lead System replies to a WhatsApp or website enquiry the moment it arrives, in Arabic and English, asks the qualifying questions and drops the meeting straight into the calendar. No lead waits for office hours.',
+      outcome:
+        'Every enquiry is answered in under a minute, then qualified, booked and followed up automatically \u2014 while the agent handles the routine and the team handles the sale.',
+      detail:
+        'A Speed-to-Lead System replies to a WhatsApp or website enquiry the moment it arrives, in Arabic and English, asks the qualifying questions and drops the meeting straight into the calendar. No lead waits for office hours.',
     },
     {
       name: 'Nova Health Clinic',
       industry: 'Healthcare \u00b7 Dubai',
-      outcome: 'Appointments, reminders and follow-ups run themselves, so the front desk spends its time on patients instead of chasing confirmations.',
-      detail: 'The booking flow confirms the slot, sends reminders before the visit and follows up after it, with every step recorded in the CRM. A person steps in only when a patient genuinely needs one.',
+      outcome:
+        'Appointments, reminders and follow-ups run themselves, so the front desk spends its time on patients instead of chasing confirmations.',
+      detail:
+        'The booking flow confirms the slot, sends reminders before the visit and follows up after it, with every step recorded in the CRM. A person steps in only when a patient genuinely needs one.',
     },
     {
       name: 'Atlas Interiors',
       industry: 'Fit-out & interiors \u00b7 Dubai',
-      outcome: 'A fast, custom-coded website that Google and AI engines can read, quote and cite \u2014 built to be found, not just to look good.',
-      detail: 'The site carries structured data, SEO and AI-search visibility built in at development time, and answers the questions buyers actually ask. This very page is the working example of the same build.',
+      outcome:
+        'A fast, custom-coded website that Google and AI engines can read, quote and cite \u2014 built to be found, not just to look good.',
+      detail:
+        'The site carries structured data, SEO and AI-search visibility built in at development time, and answers the questions buyers actually ask. This very page is the working example of the same build.',
     },
   ],
 } as const;
