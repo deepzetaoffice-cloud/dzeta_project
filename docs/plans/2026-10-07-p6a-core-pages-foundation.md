@@ -523,3 +523,4 @@ None. Every change uses Next.js 16.3.7, Lighthouse 12.6.1 through `@lhci/cli` 0.
   - **"Lab allowance 2,750"** for T2 pages: C69, `lighthouserc.cjs`'s `t2Assertions`, 03 §1's sample. The local runs re-asserted: all pass.
   - **"Accept, fix in Part B"** for Home's weight: A2 merges at 190,661 B (207 B under the hard limit). Part B starts by freeing Home's headroom (R1 or a shell trim) before the pillar pages and Home's contextual links ship.
   - CI's Lighthouse annotations now name each page (`ci.yml`).
+- **Superseded by decision 0028 (2026-10-08, the owner):** the services hub and the pilot leave the standing lhci sample at 0028's merge (A2's exit evidence stands as run, under the C69 allowance); later pages assert no lab LCP. T2's floor becomes the standard 70.

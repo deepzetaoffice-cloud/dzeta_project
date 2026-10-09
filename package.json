@@ -29,6 +29,7 @@
     "lhci": "node scripts/lhci-run.mjs",
     "measure:weight": "node scripts/measure-prod-weight.mjs",
     "verify:fast": "npm run typecheck && npm run lint && npm run check:tokens && npm run check:contrast",
+    "verify:ci": "npm run verify:fast && npm run format:check && npm run check:facts && npm run check:rules && npm run check:effects && npm run test && npm run build && npm run check:schema && npm run check:seo && npm run check:links && npm run test:e2e",
     "verify": "npm run verify:fast && npm run format:check && npm run check:facts && npm run check:rules && npm run check:effects && npm run test && npm run build && npm run check:schema && npm run check:seo && npm run check:links && npm run test:e2e && npm run lhci"
   },
   "dependencies": {

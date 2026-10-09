@@ -39,14 +39,14 @@ flowchart LR
         A5 --> A6{All green}
         A6 -- lab noise --> A5
     end
-    subgraph After[One batch after decision 0027]
+    subgraph After[One batch after decision 0028]
         B1[Standing plan<br>no new planning] --> B2[Typed content files<br>from the catalogue]
         B2 --> B3[One build plus schema seo links<br>facts unit per batch]
         B3 --> B4[e2e on the batch pages]
         B4 --> B5[One lhci spot-check<br>one page floor 70]
         B5 --> B6[Report plus owner merge]
     end
-    Today ==>|decision 0027| After
+    Today ==>|decision 0028| After
 ```
 
 ## Out of scope
@@ -64,25 +64,25 @@ flowchart LR
 | Path | Action | Purpose |
 |---|---|---|
 | `docs/plans/2026-10-08-standard-tier-and-light-verification.md` | CREATE, then MODIFY | This plan; its status and Progress notes |
-| `docs/decisions/0027-standard-tier-and-light-verification.md` | CREATE (protected folder, named) | The decision record (§ below) |
-| `docs/decisions/README.md` | MODIFY (protected, named) | The 0027 index row |
+| `docs/decisions/0028-standard-tier-and-light-verification.md` | CREATE (protected folder, named) | The decision record (§ below) |
+| `docs/decisions/README.md` | MODIFY (protected, named) | The 0028 index row |
 | `docs/ai/03-verification-gates.md` | MODIFY (protected, named) | §1 the `lhci` row's sample; §2 the matrix rows; §5 CI |
 | `docs/ai/07-performance-budget.md` | MODIFY (protected, named) | §1 the floor row and the tiers note; §2 where the caps are asserted; §5 the regression rule's scope |
-| `docs/ai/conflict-register.md` | APPEND-ONLY (protected, named) | C70 |
+| `docs/ai/conflict-register.md` | APPEND-ONLY (protected, named) | C71 |
 | `lighthouserc.cjs` | MODIFY | `standardAssertions`; the standing sample; `DZ_LHCI_PAGES` |
 | `.env.example` | MODIFY | `DZ_LHCI_PAGES=` with its comment (mirrors `DZ_LHCI_CPU_MULTIPLIER`) |
 | `package.json` | MODIFY (scripts only) | `verify:ci` |
 | `.github/workflows/ci.yml` | MODIFY | Full `verify` on PRs and manual runs; `verify:ci` on branch pushes |
 | `docs/plans/2026-10-08-service-pages-standing-plan.md` | CREATE | The standing plan for service pages from the pilot template (§ below) |
 | `docs/plans/2026-10-07-p6a-core-pages-foundation.md` | MODIFY (its own amendment/Progress notes, as its allowed-files row allows) | The supersession note: the hub and the pilot leave the standing sample |
-| `CLAUDE.md` | MODIFY (protected, named) | "Current state": the 0027 bullet |
+| `CLAUDE.md` | MODIFY (protected, named) | "Current state": the 0028 bullet |
 | `.scratch/**` | CREATE, then DELETE | Local verification notes |
 
 **Not touched:** everything else — no `src/` file, no test, no SEO doc. This plan changes rules, decision records and gate configuration only.
 
 ## Steps
 
-1. **S1 · The decision record.** Create `docs/decisions/0027-standard-tier-and-light-verification.md` with the text below (its Status line reads ACCEPTED only when the owner approves this plan — lesson 5: a decision is accepted together with its rule edits). Append C70 to the conflict register; add the index row to `docs/decisions/README.md`.
+1. **S1 · The decision record.** Create `docs/decisions/0028-standard-tier-and-light-verification.md` with the text below (its Status line reads ACCEPTED only when the owner approves this plan — lesson 5: a decision is accepted together with its rule edits). Append C71 to the conflict register; add the index row to `docs/decisions/README.md`.
    → gate: `check:rules`.
 2. **S2 · The rule edits.** Apply the exact 03 and 07 replacements below.
    → gate: `check:rules`.
@@ -94,10 +94,10 @@ flowchart LR
    → gate: `check:rules`.
 5. **S5 · Exit.** `verify:ci` locally, CI green on the branch head (the PR runs the full `verify`), the Reviewer on the diff, the owner's review. Merge on the owner's "merge" (0017).
 
-## The decision record — `docs/decisions/0027-standard-tier-and-light-verification.md`
+## The decision record — `docs/decisions/0028-standard-tier-and-light-verification.md`
 
 ```markdown
-# 0027 · The standard page tier: 70 for every page except Home, and light verification
+# 0028 · The standard page tier: 70 for every page except Home, and light verification
 
 Status: ACCEPTED (owner, 2026-10-08, with docs/plans/2026-10-08-standard-tier-and-light-verification.md)
 
@@ -147,15 +147,15 @@ Status: ACCEPTED (owner, 2026-10-08, with docs/plans/2026-10-08-standard-tier-an
   2,750 ms lab allowance remains A2's recorded evidence; later pages assert no lab LCP.
 - Rule edits applied with this decision: 03 §1 (the lhci row's sample), §2 (the matrix rows),
   §5 (CI); 07 §1 (the floor row and the tiers note), §2 (where the caps are asserted), §5 (the
-  regression rule's scope). C70 records the conflict.
+  regression rule's scope). C71 records the conflict.
 - The speed claim stays proven: Home's numbers are the proof, every batch reports its measured
   scores, and the field-data checks cover real visitors on every page.
 ```
 
-The C70 row (append to the conflict register):
+The C71 row (append to the conflict register):
 
 ```markdown
-| C70 | 07 §1 and decisions 0005/0011 set the non-Home floors at Performance ≥ 90 with the CWV hard limits lab-asserted on every page, and C69 had just granted T2 a 2,750 ms lab LCP allowance. The owner (2026-10-08): Home stays the high-performance page; every other page needs only a normal 70+ PageSpeed score, and building must get faster by avoiding unnecessary verifications and considerations — without affecting quality, technical SEO or GEO. | **Decision 0027:** every page except Home gets the standard floor 70 (asserted on the template pilot and one page per batch); CLS ≤ 0.1 and the a11y/bp/seo floors stay asserted on every measured page; LCP/INP/TBT stay hard limits for real visitors (field data) and stay lab-asserted on Home and the review page only. Per-page lhci, the hub/pilot standing-sample membership, per-step `verify:fast` (now per commit) and the full CI verify on branch pushes (now `verify:ci`) are removed; the SEO/build gates run on every batch unchanged. 0020's 86 line stands for Home only. | Owner (in chat, 2026-10-08) | 2026-10-08 | Resolved |
+| C71 | 07 §1 and decisions 0005/0011 set the non-Home floors at Performance ≥ 90 with the CWV hard limits lab-asserted on every page, and C69 had just granted T2 a 2,750 ms lab LCP allowance. The owner (2026-10-08): Home stays the high-performance page; every other page needs only a normal 70+ PageSpeed score, and building must get faster by avoiding unnecessary verifications and considerations — without affecting quality, technical SEO or GEO. | **Decision 0028:** every page except Home gets the standard floor 70 (asserted on the template pilot and one page per batch); CLS ≤ 0.1 and the a11y/bp/seo floors stay asserted on every measured page; LCP/INP/TBT stay hard limits for real visitors (field data) and stay lab-asserted on Home and the review page only. Per-page lhci, the hub/pilot standing-sample membership, per-step `verify:fast` (now per commit) and the full CI verify on branch pushes (now `verify:ci`) are removed; the SEO/build gates run on every batch unchanged. 0020's 86 line stands for Home only. | Owner (in chat, 2026-10-08) | 2026-10-08 | Resolved |
 ```
 
 ## The rule edits — exact text
@@ -168,7 +168,7 @@ The C70 row (append to the conflict register):
 
 **with**
 
-> The standing sample is Home and the review page ([decision 0027](../decisions/0027-standard-tier-and-light-verification.md)): the services hub and the pilot leave it at that decision's merge. A new template joins the sample for its own plan's exit run, and a batch of template copies adds one page (`DZ_LHCI_PAGES`), under the standard assertions: Performance ≥ 0.70, CLS ≤ 0.1, Accessibility / Best Practices / SEO ≥ 0.95, TTFB and the third-party, font and image caps — no lab LCP or TBT on standard pages. Both leave the sample again.
+> The standing sample is Home and the review page ([decision 0028](../decisions/0028-standard-tier-and-light-verification.md)): the services hub and the pilot leave it at that decision's merge. A new template joins the sample for its own plan's exit run, and a batch of template copies adds one page (`DZ_LHCI_PAGES`), under the standard assertions: Performance ≥ 0.70, CLS ≤ 0.1, Accessibility / Best Practices / SEO ≥ 0.95, TTFB and the third-party, font and image caps — no lab LCP or TBT on standard pages. Both leave the sample again.
 
 ### `docs/ai/03-verification-gates.md` §2, the matrix
 
@@ -186,8 +186,8 @@ The C70 row (append to the conflict register):
 
 **with the two rows**
 
-> | New or changed page/route (a new template, or a one-off page) | `verify:fast` + `build` + `check:schema` + `check:seo` + `check:content` + `check:links` + `test:e2e` (that page) + `lhci` (that page: the template joins the sample for this run, under the standard assertions — decision 0027) |
-> | Pages from a proven template (a standing plan, decision 0027) | Per batch: `verify:fast` (each commit) + `build` + `check:schema` + `check:seo` + `check:content` (or its `.scratch/` equivalent until it exists) + `check:links` + `check:facts` + `test` + `test:e2e` (the batch's pages) + one `lhci` spot-check (one page of the batch, the standard assertions) |
+> | New or changed page/route (a new template, or a one-off page) | `verify:fast` + `build` + `check:schema` + `check:seo` + `check:content` + `check:links` + `test:e2e` (that page) + `lhci` (that page: the template joins the sample for this run, under the standard assertions — decision 0028) |
+> | Pages from a proven template (a standing plan, decision 0028) | Per batch: `verify:fast` (each commit) + `build` + `check:schema` + `check:seo` + `check:content` (or its `.scratch/` equivalent until it exists) + `check:links` + `check:facts` + `test` + `test:e2e` (the batch's pages) + one `lhci` spot-check (one page of the batch, the standard assertions) |
 
 ### `docs/ai/03-verification-gates.md` §5
 
@@ -197,7 +197,7 @@ The C70 row (append to the conflict register):
 
 **with**
 
-> GitHub Actions runs `npm run verify` on every pull request to `main` and on manual runs, and `verify:ci` — everything but `lhci` ([decision 0027](../decisions/0027-standard-tier-and-light-verification.md)) — on pushes to other branches, so iteration pushes stay fast while the merge gate stays complete. `main` is protected: merge only through a PR with all checks green. Agents never push to `main` directly (see [12](12-git-workflow.md)).
+> GitHub Actions runs `npm run verify` on every pull request to `main` and on manual runs, and `verify:ci` — everything but `lhci` ([decision 0028](../decisions/0028-standard-tier-and-light-verification.md)) — on pushes to other branches, so iteration pushes stay fast while the merge gate stays complete. `main` is protected: merge only through a PR with all checks green. Agents never push to `main` directly (see [12](12-git-workflow.md)).
 
 ### `docs/ai/07-performance-budget.md` §1
 
@@ -207,7 +207,7 @@ The C70 row (append to the conflict register):
 
 **with**
 
-> | Lighthouse Performance (mobile) | per tier | T1 Home ≥ 95 · **every other page ≥ 70**, asserted on its template pilot and one page per batch ([decision 0027](../decisions/0027-standard-tier-and-light-verification.md)). The T2/T3 lists and their motion toolkits are unchanged (decisions 0005, 0011). Unlisted pages = standard. |
+> | Lighthouse Performance (mobile) | per tier | T1 Home ≥ 95 · **every other page ≥ 70**, asserted on its template pilot and one page per batch ([decision 0028](../decisions/0028-standard-tier-and-light-verification.md)). The T2/T3 lists and their motion toolkits are unchanged (decisions 0005, 0011). Unlisted pages = standard. |
 
 **Replace the tiers note**
 
@@ -215,13 +215,13 @@ The C70 row (append to the conflict register):
 
 **with**
 
-> *Tiers:* CLS ≤ 0.1 is a hard limit on every page and is asserted in the lab on every measured page. LCP, INP and TBT are hard limits for **real visitors** (field data: PSI and CrUX on production, the pre-launch register); in the lab they are asserted on Home and the review page only ([decision 0027](../decisions/0027-standard-tier-and-light-verification.md)). The tier changes the Lighthouse score floor and the motion toolkit allowed.
+> *Tiers:* CLS ≤ 0.1 is a hard limit on every page and is asserted in the lab on every measured page. LCP, INP and TBT are hard limits for **real visitors** (field data: PSI and CrUX on production, the pre-launch register); in the lab they are asserted on Home and the review page only ([decision 0028](../decisions/0028-standard-tier-and-light-verification.md)). The tier changes the Lighthouse score floor and the motion toolkit allowed.
 
 ### `docs/ai/07-performance-budget.md` §2
 
 **Add under the table (after the "Units" paragraph):**
 
-> **Where the caps are asserted (decision 0027):** on Home and the review page, by `lhci` and `scripts/check-page-weight.mjs`. Every other page's bytes are printed by its batch spot-check and recorded in the batch report, not gated. A plan that adds client code to a standard page still states its measured size against the caps above, and Home's caps guard the shared shell and runtime.
+> **Where the caps are asserted (decision 0028):** on Home and the review page, by `lhci` and `scripts/check-page-weight.mjs`. Every other page's bytes are printed by its batch spot-check and recorded in the batch report, not gated. A plan that adds client code to a standard page still states its measured size against the caps above, and Home's caps guard the shared shell and runtime.
 
 ### `docs/ai/07-performance-budget.md` §5
 
@@ -233,7 +233,7 @@ The C70 row (append to the conflict register):
 
 **with**
 
-> The baselines and this rule are asserted on Home and the review page ([decision 0027](../decisions/0027-standard-tier-and-light-verification.md)): a change that drops either's mobile Performance score by **more than 2 points**, takes it below its **floor**, or breaks any hard limit **blocks the merge** (`lhci` assertions), unless the owner approves an exception recorded in the conflict register. A standard page is measured by its batch spot-check: a spot-check below the 70 floor blocks the batch.
+> The baselines and this rule are asserted on Home and the review page ([decision 0028](../decisions/0028-standard-tier-and-light-verification.md)): a change that drops either's mobile Performance score by **more than 2 points**, takes it below its **floor**, or breaks any hard limit **blocks the merge** (`lhci` assertions), unless the owner approves an exception recorded in the conflict register. A standard page is measured by its batch spot-check: a spot-check below the 70 floor blocks the batch.
 >
 > The owner's exception limit ([decision 0020](../decisions/0020-performance-exception-limit.md)): for Home, an exception never takes it below Performance 86, and LCP only a little over 2.5 s. Standard pages have no exceptions below the 70 floor — the change is reworked. Beyond that, the change is reworked, not excepted.
 
@@ -259,7 +259,7 @@ The C70 row (append to the conflict register):
 
 **with**
 
-> // Standard pages (decision 0027; 07 §1): every page except Home. The floor is 70; CLS, the
+> // Standard pages (decision 0028; 07 §1): every page except Home. The floor is 70; CLS, the
 > // Accessibility / Best Practices / SEO categories, TTFB and the third-party, font and image caps stay.
 > // No lab LCP or TBT: every page with the shell sits on the lab's ~2,570 ms LCP floor (C69) while
 > // measuring 0.96–0.97; the hard limits hold for real visitors (field data, the pre-launch register).
@@ -281,7 +281,7 @@ The C70 row (append to the conflict register):
 
 **with**
 
->       // The standing sample is Home and the review page (decision 0027). A template's exit run or a
+>       // The standing sample is Home and the review page (decision 0028). A template's exit run or a
 >       // batch spot-check adds pages through DZ_LHCI_PAGES (paths, comma-separated).
 >       url: [
 >         'http://localhost:3000/',
@@ -307,7 +307,7 @@ The C70 row (append to the conflict register):
 Add beside `DZ_LHCI_CPU_MULTIPLIER=` (the P6a amendment's entry), in the file's existing style:
 
 > DZ_LHCI_PAGES=
-> # Optional. Extra pages for a template's exit run or a batch's spot-check (decision 0027):
+> # Optional. Extra pages for a template's exit run or a batch's spot-check (decision 0028):
 > # paths, comma-separated, e.g. /services/speed-to-lead-system. Empty = the standing sample.
 
 ### `package.json` (scripts only)
@@ -328,7 +328,7 @@ Add after `"verify:fast"`:
 **with**
 
 > # The full gate set on every pull request to main and on manual runs (docs/ai/03 §5). Pushes to other
-> # branches run verify:ci — everything but lhci (decision 0027) — so iteration pushes stay fast while
+> # branches run verify:ci — everything but lhci (decision 0028) — so iteration pushes stay fast while
 > # the merge gate stays complete. main itself is protected (docs/ai/12 §1).
 
 **Replace the step**
@@ -346,10 +346,10 @@ Add after `"verify:fast"`:
 ```markdown
 # Plan: Service pages from the pilot template — the standing plan
 
-Status: APPROVED with 2026-10-08-standard-tier-and-light-verification.md (decision 0027);
+Status: APPROVED with 2026-10-08-standard-tier-and-light-verification.md (decision 0028);
 activates after the A2 pilot review and merge (04 §1.6: pilot, review, then scale)
 Phase: P6 (Parts B and D) · Branch per batch: `content/services-<slugs-or-batch>` from `main`
-Page tier: standard (floor 70, decision 0027)
+Page tier: standard (floor 70, decision 0028)
 
 ## What this plan covers
 
@@ -373,7 +373,7 @@ its own plan.
 3. **Gates (03 §2 "Pages from a proven template"):** `verify:fast` at each commit; per batch:
    `build` + `check:schema` + `check:seo` + `check:content` (or its `.scratch/` equivalent until
    it exists) + `check:links` + `check:facts` + `test` + `test:e2e` (the batch's pages) + one
-   `lhci` spot-check (`DZ_LHCI_PAGES=<the first slug>`; the standard assertions, decision 0027).
+   `lhci` spot-check (`DZ_LHCI_PAGES=<the first slug>`; the standard assertions, decision 0028).
 4. **Report and merge:** the pages, the gate output including the spot-check's scores, and the
    owner's "merge" per batch (0017).
 
@@ -410,15 +410,15 @@ its own plan.
 
 **P6a plan — append to its Amendment section:**
 
-> - **Superseded by decision 0027 (2026-10-08, the owner):** the services hub and the pilot leave the standing lhci sample at 0027's merge (A2's exit evidence stands as run, under the C69 allowance); later pages assert no lab LCP. T2's floor becomes the standard 70.
+> - **Superseded by decision 0028 (2026-10-08, the owner):** the services hub and the pilot leave the standing lhci sample at 0028's merge (A2's exit evidence stands as run, under the C69 allowance); later pages assert no lab LCP. T2's floor becomes the standard 70.
 
 **CLAUDE.md — add to "Current state" after the A2 bullet:**
 
-> - **Decision 0027 — the standard tier and light verification** (`docs/plans/2026-10-08-standard-tier-and-light-verification.md`): every page except Home has the floor **70** (Lighthouse Performance, lab), asserted on the template pilot and one page per batch; CLS ≤ 0.1 and the a11y/best-practices/SEO floors stay asserted on every measured page; LCP/INP/TBT are field-data limits, lab-asserted on Home and the review page only. Per-page `lhci` is gone; branch-push CI runs `verify:ci`; service pages from the pilot template ship under the standing plan `docs/plans/2026-10-08-service-pages-standing-plan.md` (batches of up to 6, no per-page planning). The SEO/build gates are unchanged.
+> - **Decision 0028 — the standard tier and light verification** (`docs/plans/2026-10-08-standard-tier-and-light-verification.md`): every page except Home has the floor **70** (Lighthouse Performance, lab), asserted on the template pilot and one page per batch; CLS ≤ 0.1 and the a11y/best-practices/SEO floors stay asserted on every measured page; LCP/INP/TBT are field-data limits, lab-asserted on Home and the review page only. Per-page `lhci` is gone; branch-push CI runs `verify:ci`; service pages from the pilot template ship under the standing plan `docs/plans/2026-10-08-service-pages-standing-plan.md` (batches of up to 6, no per-page planning). The SEO/build gates are unchanged.
 
 **Decisions README — index row:**
 
-> | [0027](0027-standard-tier-and-light-verification.md) | The standard page tier: 70 for every page except Home; light verification (per-page lhci removed, per-commit verify:fast, verify:ci on branch pushes, standing plans for template copies); CLS and the a11y/bp/seo floors stay; LCP/INP/TBT are field-data limits; 0020's 86 line stands for Home only | ACCEPTED |
+> | [0028](0028-standard-tier-and-light-verification.md) | The standard page tier: 70 for every page except Home; light verification (per-page lhci removed, per-commit verify:fast, verify:ci on branch pushes, standing plans for template copies); CLS and the a11y/bp/seo floors stay; LCP/INP/TBT are field-data limits; 0020's 86 line stands for Home only | ACCEPTED |
 
 ## Dependencies to add
 

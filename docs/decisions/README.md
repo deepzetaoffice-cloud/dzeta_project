@@ -42,6 +42,7 @@ Status: PROPOSED | ACCEPTED (owner, date) | SUPERSEDED by NNNN
 | [0024](0024-conversion-cta-set.md) | The conversion CTA set: WhatsApp as the primary floating CTA (site-wide except the contact page), the header button becomes "Deepzeta AI" (launches the Deepzeta Agent bot), "Book a free AI audit" stays as the deliberate in-page/sticky CTA, a Call button joins, and the WhatsApp chatbot runs on n8n + Meta's WhatsApp Cloud API (not Twilio) | PROPOSED |
 | [0025](0025-lighthouse-cpu-calibration.md) | Lighthouse's CPU slowdown calibrated to each machine: multiplier = 4 × benchmarkIndex ÷ 4,000 (clamped 2–8), measured by `scripts/lhci-run.mjs` before every lhci run; no threshold changes | ACCEPTED |
 | [0026](0026-p6-css-architecture-and-shell-weight.md) | P6's CSS architecture and the shell's weight: plain `<a>` links (C67), the framework chunks merged, the root error page importing only what it shows, one shared stylesheet until the inline-CSS measurement decides, the mega menu's panel on intent and the footer's pillar links in A2 | ACCEPTED |
+| [0028](0028-standard-tier-and-light-verification.md) | The standard page tier: 70 for every page except Home; light verification (per-page lhci removed, per-commit verify:fast, verify:ci on branch pushes, standing plans for template copies); CLS and the a11y/bp/seo floors stay; LCP/INP/TBT are field-data limits; 0020's 86 line stands for Home only | ACCEPTED |
 
 ## Open business decisions (from the blueprint)
 
