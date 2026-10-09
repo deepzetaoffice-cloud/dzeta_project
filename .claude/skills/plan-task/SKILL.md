@@ -17,5 +17,5 @@ Write a plan for: $ARGUMENTS
 2. Check the current phase in `docs/ai/04-build-sequence.md` §2. If the task belongs to a later phase or depends on an OPEN conflict/decision, say so and stop with a question.
 3. Search the codebase for things to reuse; cite paths.
 4. Verify every package/API against the installed version or official docs; mark anything unverified.
-5. Write `docs/plans/YYYY-MM-DD-<slug>.md` using the template in `docs/ai/04-build-sequence.md` §4, `Status: DRAFT`. For visual work, fill in the page tier and the effect register (13 §10).
+5. First check whether a plan is needed at all (`docs/ai/04` §4, Build Mode): a template plan already covers its copies, and a change of up to 3 files with no dependency and no protected file needs only a one-line plan. Otherwise write `docs/plans/YYYY-MM-DD-<slug>.md` using the short template in `docs/ai/04-build-sequence.md` §4, `Status: DRAFT`: one or two screens, the rules cited, never restated. For a repeated page type, write one template plan that covers the pilot and every copy (its per-batch allowed files included). For visual work, fill in the effect register (13 §10).
 6. Reply with the plan path, a short summary, and open questions. **Do not start implementing.** Wait for the owner to approve.

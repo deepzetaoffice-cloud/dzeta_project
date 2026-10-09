@@ -16,11 +16,11 @@ A fast, custom-coded, AI-search-ready website for **deepzeta · AI Digital Solut
 
 ## Hard rules (summary; the files above are authoritative)
 
-- **No approved plan in `docs/plans/`, no code** (except one-file trivial fixes).
+- **No approved plan in `docs/plans/`, no code**, except a fix of up to 3 files with no dependency and no protected file, or a batch under an approved template plan (Build Mode, `docs/decisions/0029-build-mode.md`).
 - Edit **only** the files the plan allows. Read each file before editing it.
 - **Never invent** facts, numbers, clients, reviews, packages, APIs, paths or env vars. Unknown → ask or omit.
 - **Never edit:** `docs/ai/**`, `docs/seo/*.md`, `docs/design/*.md`, `docs/decisions/**`, `docs/facts/**`, `CLAUDE.md`, `AGENTS.md`, `.claude/**`, `Planning Folder/**`, the logo SVG, `.env*`, `package-lock.json`.
 - **Never run:** force push, `git reset --hard`, `git clean`, `rm -rf`, `--no-verify`.
 - Tokens not raw values; logical CSS only (RTL-ready); transform/opacity-only motion; effects only by ID from `docs/ai/13-experience-design.md`, within the page tier (decision 0005); surface specs in `docs/design/`; performance budget in `docs/ai/07`.
-- Work is done only when the gates in `docs/ai/03` pass **and their output is in your report**.
+- Work is done only when the gates in `docs/ai/03` §2 pass (gates by risk: Home's performance, design and SEO/GEO are never relaxed) **and their result is in your short report** (`docs/ai/02` §5).
 - Temporary files go in `.scratch/` and are deleted before you finish.

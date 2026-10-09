@@ -1,6 +1,6 @@
 # Lessons Learned
 
-> **Applies to:** every agent (read before planning) · **Precedence:** informs rule changes; not itself a rule · **Last reviewed:** 2026-10-02
+> **Applies to:** every agent (read before planning) · **Precedence:** informs rule changes; not itself a rule · **Last reviewed:** 2026-10-09
 
 Every AI mistake gets an entry, and every entry ends in a **prevention**: a new rule line, a new gate or a new test. Agents propose entries in their task report; the owner adds them.
 
@@ -14,6 +14,7 @@ Every AI mistake gets an entry, and every entry ends in a **prevention**: a new 
 | 6 | 2026-10-02 | A Node edit script corrupted `lighthouserc.cjs`, then the P3 plan: its replacement text held `$'`, which `String.replace` reads as "the text after the match", so commit `b92cd68` duplicated nearly the whole plan. The reviewer found it a step later. | A string replacement was used where the text was data; nothing checked the result's shape. | Edit scripts use function replacements (`s.replace(a, () => b)`) or the Edit tool, and check the anchor matches once; a plan's `##` headings are checked to occur once after a scripted edit. Proposed gate: `check:rules` fails a plan whose `##` headings repeat. |
 | 7 | 2026-10-01 | CI failed in `check:rules` on P2's `0c7032a`: `CLAUDE.md` named two owner documents that were committed on another branch (`docs/p3-tracking-prep`). Locally they sat untracked in the working tree, so the check passed. | Local gates read the working tree, where untracked files hide a missing commit. | Before a push, read `git status --short` in full: every `??` path is either committed on this branch or named as not needed. Proposed gate: `check:rules` (and any check that a named file exists) reads the committed tree (`git ls-files`). |
 | 8 | 2026-10-02 | Another Claude session edited the same working tree during P3, and a P3 commit took in its conflict-register row (C58). | Two sessions share one checkout; `git add <file>` stages every hunk in the file, the other session's included. | Before staging a shared file (the register, the pre-launch register, the plans), read `git diff <file>`; if it holds another session's hunks, leave the file unstaged until they're committed, or ask. Name any foreign change in the report. |
+| 9 | 2026-10-09 | After P0–P6 part A2, 3 of 100 pages were live while the docs had grown to 76,711 lines against 14,024 lines of source (80 `docs` commits, 59 `feat`). | Every lab number became a decision or conflict entry; every task needed a plan, the full `verify` and about five record files; the lab gates ran on pages whose speed Home already guards. | Build Mode ([decision 0029](../decisions/0029-build-mode.md)): template plans, gates by risk (03 §2), records only for real decisions, short reports. Before adding a rule or a record, ask whether it protects Home's speed, the design or SEO/GEO; if not, don't add it. |
 
 ## Imported lessons (from earlier projects, technical only)
 

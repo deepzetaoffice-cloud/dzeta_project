@@ -1,6 +1,6 @@
 # 07 · Performance Budget
 
-> **Applies to:** every page, component, asset and third-party script · **Precedence:** below 00 (N1 makes this a non-negotiable) · **Last reviewed:** 2026-10-01
+> **Applies to:** every page, component, asset and third-party script · **Precedence:** below 00 (N1 makes this a non-negotiable) · **Last reviewed:** 2026-10-09 (Build Mode, decision 0029)
 
 The site is deepzeta's proof of work. **A page that fails a hard limit does not ship.**
 
@@ -17,10 +17,10 @@ The site is deepzeta's proof of work. **A page that fails a hard limit does not 
 | **CLS** (cumulative layout shift) | ≤ 0.05 | ≤ 0.1 |
 | TTFB | ≤ 200 ms (static/edge) | ≤ 600 ms |
 | TBT (lab proxy for INP) | ≤ 100 ms | ≤ 200 ms |
-| Lighthouse Performance (mobile) | per tier | T1 Home ≥ 95 · **every other page ≥ 70**, asserted on its template pilot and one page per batch ([decision 0028](../decisions/0028-standard-tier-and-light-verification.md)). The T2/T3 lists and their motion toolkits are unchanged (decisions 0005, 0011). Unlisted pages = standard. |
+| Lighthouse Performance (mobile) | per tier | T1 Home ≥ 95, asserted by `lhci` on every change that can reach Home · **every other page: 70 in PageSpeed Insights on production**, checked before launch (the pre-launch register); no lab gate ([decision 0029](../decisions/0029-build-mode.md), Build Mode). The T2/T3 lists and their motion toolkits are unchanged (decisions 0005, 0011). Unlisted pages = standard. |
 | Lighthouse Accessibility / Best Practices / SEO | 100 | ≥ 95 |
 
-*Tiers:* CLS ≤ 0.1 is a hard limit on every page and is asserted in the lab on every measured page. LCP, INP and TBT are hard limits for **real visitors** (field data: PSI and CrUX on production, the pre-launch register); in the lab they are asserted on Home and the review page only ([decision 0028](../decisions/0028-standard-tier-and-light-verification.md)). The tier changes the Lighthouse score floor and the motion toolkit allowed.
+*Tiers:* every metric in this table is asserted in the lab on Home and the review page, which carry the shared shell and runtime that every page uses. On every other page, CLS ≤ 0.1, LCP, INP and TBT are hard limits for **real visitors** (field data: PSI and CrUX on production, the pre-launch register), with no lab gate ([decision 0029](../decisions/0029-build-mode.md)). The tier changes the score floor and the motion toolkit allowed.
 
 *Reconciliation:* the advisory said LCP < 1.5 s, INP < 100 ms, CLS < 0.05; the performance constraint says < 2.5 s / < 200 ms / < 0.1. We aim for the first and never cross the second (blueprint decision). FID is obsolete; INP replaces it.
 
@@ -47,7 +47,7 @@ The site is deepzeta's proof of work. **A page that fails a hard limit does not 
 
 **Units (decision 0014).** The KB in the first two rows are KiB (1,024 bytes) of transfer size, as Lighthouse reports it: compressed, HTTP response headers included. The lab figures come from `next start` (gzip). The live figure is measured with `scripts/measure-prod-weight.mjs` (C65's method: the response as served, Brotli, every HTTP/1.1 header counted). Vercel's Brotli shrinks the HTML well but not the JS and CSS, so neither measure is always the stricter one: the hard limit holds on both, except where an allowance in the conflict register says otherwise (C64).
 
-**Where the caps are asserted (decision 0028):** on Home and the review page, by `lhci` and `scripts/check-page-weight.mjs`. Every other page's bytes are printed by its batch spot-check and recorded in the batch report, not gated. A plan that adds client code to a standard page still states its measured size against the caps above, and Home's caps guard the shared shell and runtime.
+**Where the caps are asserted (decisions 0028, 0029):** on Home and the review page, by `lhci` and `scripts/check-page-weight.mjs`, on every change that can reach Home (03 §2). Other pages aren't measured in the lab. A plan that adds client code to a standard page still states its measured size against the caps above, and Home's caps guard the shared shell and runtime.
 
 ---
 
@@ -99,6 +99,6 @@ The site is deepzeta's proof of work. **A page that fails a hard limit does not 
 
 ## 5. Regression rule
 
-The baselines and this rule are asserted on Home and the review page ([decision 0028](../decisions/0028-standard-tier-and-light-verification.md)): a change that drops either's mobile Performance score by **more than 2 points**, takes it below its **floor**, or breaks any hard limit **blocks the merge** (`lhci` assertions), unless the owner approves an exception recorded in the conflict register. A standard page is measured by its batch spot-check: a spot-check below the 70 floor blocks the batch.
+The baselines and this rule are asserted on Home and the review page ([decisions 0028](../decisions/0028-standard-tier-and-light-verification.md) and [0029](../decisions/0029-build-mode.md)): a change that drops either's mobile Performance score by **more than 2 points**, takes it below its **floor**, or breaks any hard limit **blocks the merge** (`lhci` assertions), unless the owner approves an exception recorded in the conflict register. Standard pages have no lab gate; a production PSI check under 70 makes a fix task before launch.
 
-The owner's exception limit ([decision 0020](../decisions/0020-performance-exception-limit.md)): for Home, an exception never takes it below Performance 86, and LCP only a little over 2.5 s. Standard pages have no exceptions below the 70 floor — the change is reworked. Beyond that, the change is reworked, not excepted.
+The owner's exception limit ([decision 0020](../decisions/0020-performance-exception-limit.md)): for Home, an exception never takes it below Performance 86, and LCP only a little over 2.5 s. Beyond that, the change is reworked, not excepted.

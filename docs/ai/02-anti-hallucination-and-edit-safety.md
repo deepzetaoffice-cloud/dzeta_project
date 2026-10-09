@@ -1,6 +1,6 @@
 # 02 · Anti-Hallucination & Edit Safety
 
-> **Applies to:** every agent, every task · **Precedence:** below 00 and 01 · **Last reviewed:** 2026-09-26
+> **Applies to:** every agent, every task · **Precedence:** below 00 and 01 · **Last reviewed:** 2026-10-09 (Build Mode, decision 0029)
 
 These rules exist because AI agents make five kinds of mistakes: **invented facts, invented code, edits outside scope, unverified "done" claims, and loss of focus.** Each section blocks one of them.
 
@@ -60,16 +60,15 @@ These rules exist because AI agents make five kinds of mistakes: **invented fact
 
 ## 5. Honesty in reports
 
-Every task ends with this report:
+Every task ends with this short report (Build Mode, [decision 0029](../decisions/0029-build-mode.md)):
 
 ```
 ## Report
-Goal served: <North Star phrase>
-Done: <bullet list of changes, each with path>
-Verified: <gate> → PASS/FAIL (paste key output lines)
-Not run / skipped: <gate> — <reason>
-Assumptions: <list, or "none">
-Open questions / proposed rule changes: <list, or "none">
+Shipped: <what, with paths or URLs>
+Preview: <link, if deployed>
+Gates: <gate> → PASS/FAIL (its result line; a failure's output in full) · or the green CI run
+Not run: <gate> — <reason>
+Needs the owner: <decisions, reviews, manual checks, or "nothing">
 ```
 
 - "I don't know" and "not verified" are always acceptable. **Guessing is not.**
