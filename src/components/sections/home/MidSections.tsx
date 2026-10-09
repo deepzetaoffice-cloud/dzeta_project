@@ -56,15 +56,34 @@ export function BuildItself() {
           </h2>
           <p className="mt-4 max-w-measure text-lead">{buildItself.lede}</p>
           {/* The depth-css laptop: a CSS 3D frame; the screen shows the steps as they scrub in.
-              The stamp (this visit's real LCP) fills lazily (S6); its label is real HTML here. */}
+              Each layer is a real, small CSS drawing (13 §5: grid → wireframe → type → glass →
+              content → schema tags); the stamp (this visit's real LCP) fills lazily (S6). */}
           <div className="dz-laptop mt-10" aria-hidden="true">
             <div className="dz-laptop-screen">
               <div className="dz-laptop-desktop">
-                <span className="dz-lap-layer" data-lap-step="1" />
-                <span className="dz-lap-layer" data-lap-step="2" />
-                <span className="dz-lap-layer" data-lap-step="3" />
-                <span className="dz-lap-layer" data-lap-step="4" />
-                <span className="dz-lap-layer" data-lap-step="5" />
+                <span className="dz-lap-layer dz-lap-layer--grid" />
+                <span className="dz-lap-layer dz-lap-layer--wire">
+                  <span className="dz-lap-wire dz-lap-wire--a" />
+                  <span className="dz-lap-wire dz-lap-wire--b" />
+                  <span className="dz-lap-wire dz-lap-wire--c" />
+                  <span className="dz-lap-wire dz-lap-wire--d" />
+                </span>
+                <span className="dz-lap-layer dz-lap-layer--type">
+                  <span className="dz-lap-type-h">Your business, running itself.</span>
+                  <span className="dz-lap-type-p">Custom code, search built in, automation that follows up.</span>
+                </span>
+                <span className="dz-lap-layer dz-lap-layer--glass">
+                  <span className="dz-lap-glass" />
+                </span>
+                <span className="dz-lap-layer dz-lap-layer--content">
+                  <span className="dz-lap-btn" />
+                  <span className="dz-lap-px" />
+                </span>
+                <span className="dz-lap-layer dz-lap-layer--schema">
+                  <span className="dz-lap-tag dz-lap-tag--a">H1 · WebPage</span>
+                  <span className="dz-lap-tag dz-lap-tag--b">Service</span>
+                  <span className="dz-lap-tag dz-lap-tag--c">FAQPage</span>
+                </span>
               </div>
               <div className="dz-laptop-base" />
             </div>

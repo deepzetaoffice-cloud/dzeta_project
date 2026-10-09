@@ -1991,15 +1991,29 @@
   }
 }
 
-/* §06 The pinned scene: the page's one scroll-pinned-scene (13 §4.4). position: sticky inside a
-   ≤ 250vh stage; the steps scrub with native scroll-driven animation inside @supports. Unpins on
-   short viewports and under Reduce effects (the fx variant carries all of it). */
+/* §06 The pinned scene: the page's one scroll-pinned-scene (13 §4.4). The section grows to give the
+   scene its scroll room (≤ 250vh); the stage pins (position: sticky) while the laptop scrubs through
+   its build steps. The layers scrub against the section's own view progress (a named view timeline),
+   because the sticky stage is frozen relative to the viewport while pinned. All of it runs only under
+   scroll-driven support and the fx variant (unpins under Reduce effects; short viewports follow). */
+.dz-pinned-scene {
+  @supports (animation-timeline: scroll()) {
+    @variant fx {
+      /* The scene's length: ≤ 250vh (13 §4.4). The stage stays pinned for this distance. */
+      min-block-size: 200vh;
+      /* Named view timeline: the layers animate against the section's scroll progress. */
+      view-timeline-name: --dz-pin-scene;
+      view-timeline-axis: block;
+    }
+  }
+}
+
 .dz-pin-stage {
   @supports (animation-timeline: scroll()) {
     @variant fx {
-      /* The scene's length: ≤ 250vh (13 §4.4). The stage grows; the content stays at its
-         natural place at the top (no flex re-ordering: the steps list follows the laptop). */
-      min-block-size: 200vh;
+      /* position: sticky pins the stage while the section scrolls (13 §4.4). */
+      position: sticky;
+      inset-block-start: calc(var(--dz-header-clear, 5.5rem) + 1rem);
     }
   }
 }
@@ -2037,68 +2051,195 @@
   background-image: var(--dz-grad-fold);
 }
 
-/* The layers (grid → wireframe → type → glass → content → schema tags): each lights up as the
-   scene scrubs. The stamp shows this visit's real LCP (the lazy enhancement fills it). */
+/* The layers (grid → wireframe → type → glass → content → schema tags): each one is a real, small
+   drawing inside the laptop screen (the approved Lab reference, 13 §5), so the scene visibly builds
+   as it scrubs. Every layer rests at opacity 0; the scroll timeline fades them in in order. Their
+   children are CSS-only primitives using tokens, transform/opacity only (no paint beyond what exists). */
 .dz-lap-layer {
   position: absolute;
   inset: 0;
   opacity: 0;
-  border: var(--dz-glass-edge-width) dashed var(--dz-border);
-  @variant fx {
-    transition: opacity var(--dz-dur-slow) var(--dz-ease-out);
-  }
 }
 
-.dz-lap-layer[data-lap-step='2'] {
-  inset: 12%;
+/* The finished page, shown when the effect can't run (no scroll-timeline support, or Reduce effects):
+   the completed state is never hostage to the animation (13 §2.7–2.8). */
+.dz-lap-layer--wire,
+.dz-lap-layer--type,
+.dz-lap-layer--glass,
+.dz-lap-layer--content,
+.dz-lap-layer--schema {
+  display: grid;
 }
 
-.dz-lap-layer[data-lap-step='3'] {
-  inset: 18% 12%;
-  border-style: solid;
+/* 1 · Blueprint grid: the faint grid already behind the layers, drawn again so it reads as a step. */
+.dz-lap-layer--grid {
+  background-image:
+    linear-gradient(var(--dz-grid-line) var(--dz-glass-edge-width), transparent var(--dz-glass-edge-width)),
+    linear-gradient(90deg, var(--dz-grid-line) var(--dz-glass-edge-width), transparent var(--dz-glass-edge-width));
+  background-size: calc(var(--dz-grid-size) / 2) calc(var(--dz-grid-size) / 2);
 }
 
-.dz-lap-layer[data-lap-step='4'] {
-  inset: 24% 16%;
-  border-color: var(--dz-signal);
+/* 2 · Wireframe: dashed placeholder boxes. */
+.dz-lap-wire {
+  position: absolute;
+  border: var(--dz-glass-edge-width) dashed var(--dz-mist);
+  border-radius: var(--dz-radius-sm);
 }
 
-.dz-lap-layer[data-lap-step='5'] {
-  inset: 30% 20%;
-  border-color: var(--dz-signal);
-  border-radius: 0.5rem;
+.dz-lap-wire--a {
+  inset-inline-start: 8%;
+  inset-block-start: 16%;
+  inline-size: 48%;
+  block-size: 24%;
 }
 
+.dz-lap-wire--b {
+  inset-inline-start: 8%;
+  inset-block-start: 52%;
+  inline-size: 40%;
+  block-size: 14%;
+}
+
+.dz-lap-wire--c {
+  inset-inline-end: 7%;
+  inset-block-start: 16%;
+  inline-size: 34%;
+  block-size: 52%;
+}
+
+.dz-lap-wire--d {
+  inset-inline-start: 8%;
+  inset-block-start: 74%;
+  inline-size: 24%;
+  block-size: 9%;
+}
+
+/* 3 · Type sets in: a headline and a lead line. */
+.dz-lap-type-h {
+  position: absolute;
+  inset-inline-start: 8%;
+  inset-block-start: 16%;
+  inline-size: 48%;
+  color: var(--dz-frost);
+  font-family: var(--dz-font-sans);
+  font-size: var(--dz-text-small);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.dz-lap-type-p {
+  position: absolute;
+  inset-inline-start: 8%;
+  inset-block-start: 46%;
+  inline-size: 44%;
+  color: var(--dz-mist);
+  font-family: var(--dz-font-sans);
+  font-size: var(--dz-text-caption);
+  line-height: 1.3;
+}
+
+/* 4 · Glass arrives: one frosted panel. */
+.dz-lap-glass {
+  position: absolute;
+  inset-inline-end: 7%;
+  inset-block-start: 16%;
+  inline-size: 34%;
+  block-size: 52%;
+  border: var(--dz-glass-edge-width) solid var(--dz-glass-edge);
+  border-radius: var(--dz-radius-md);
+  background-color: var(--dz-glass-tint-muted);
+}
+
+/* 5 · Content and CTA: a pill button and the Zeta Pixel. */
+.dz-lap-btn {
+  position: absolute;
+  inset-inline-start: 8%;
+  inset-block-start: 74%;
+  inline-size: 24%;
+  block-size: 9%;
+  border-radius: var(--dz-radius-pill);
+  background-image: var(--dz-grad-action);
+}
+
+.dz-lap-px {
+  position: absolute;
+  inset-inline-end: 16%;
+  inset-block-start: 40%;
+  inline-size: 9%;
+  aspect-ratio: 1;
+  border-radius: 12.5%;
+  background-image: var(--dz-pixel-web);
+}
+
+/* 6 · Schema tags light up: small labelled chips. */
+.dz-lap-tag {
+  position: absolute;
+  padding: 0.125rem 0.375rem;
+  border-radius: var(--dz-radius-sm);
+  background-color: var(--dz-ice);
+  color: var(--dz-navy);
+  font-family: var(--dz-font-mono);
+  font-size: var(--dz-text-caption);
+  line-height: 1;
+  font-weight: 500;
+}
+
+.dz-lap-tag--a {
+  inset-inline-start: 8%;
+  inset-block-start: 8%;
+}
+
+.dz-lap-tag--b {
+  inset-inline-end: 8%;
+  inset-block-start: 8%;
+}
+
+.dz-lap-tag--c {
+  inset-inline-start: 8%;
+  inset-block-start: 60%;
+}
+
+/* The scrub: the layers fade in, one after another, against the section's own scroll progress (the
+   named view timeline declared on .dz-pinned-scene). The timeline is declared after the animation
+   shorthand, which resets it (13 §4.4). Each step holds a distinct progress band so exactly one is
+   "arriving" at a time. */
 @supports (animation-timeline: scroll()) {
-  .dz-pin-stage .dz-lap-layer {
+  .dz-lap-layer {
     @variant fx {
       animation: dz-layer-in linear both;
-      animation-timeline: view();
-      animation-range: entry 20% cover 60%;
+      animation-timeline: --dz-pin-scene;
+      animation-range: entry 0% entry 16%;
     }
   }
 
-  .dz-pin-stage .dz-lap-layer[data-lap-step='2'] {
+  .dz-lap-layer--wire {
     @variant fx {
-      animation-range: entry 30% cover 55%;
+      animation-range: entry 16% entry 32%;
     }
   }
 
-  .dz-pin-stage .dz-lap-layer[data-lap-step='3'] {
+  .dz-lap-layer--type {
     @variant fx {
-      animation-range: entry 40% cover 50%;
+      animation-range: entry 32% entry 48%;
     }
   }
 
-  .dz-pin-stage .dz-lap-layer[data-lap-step='4'] {
+  .dz-lap-layer--glass {
     @variant fx {
-      animation-range: entry 50% cover 45%;
+      animation-range: entry 48% entry 64%;
     }
   }
 
-  .dz-pin-stage .dz-lap-layer[data-lap-step='5'] {
+  .dz-lap-layer--content {
     @variant fx {
-      animation-range: entry 60% cover 40%;
+      animation-range: entry 64% entry 80%;
+    }
+  }
+
+  .dz-lap-layer--schema {
+    @variant fx {
+      animation-range: entry 80% entry 100%;
     }
   }
 }
@@ -2113,10 +2254,12 @@
   }
 }
 
-/* Without scroll-timeline support (or under Reduce effects): the layers show in their final
-   state, stacked as the finished page — content is never hostage to the effect (13 §2.7–2.8) */
-.dz-laptop-desktop:not(:has(~ *)) .dz-lap-layer {
-  opacity: 0.9;
+/* Without scroll-timeline support (or under Reduce effects): every layer shows in its final, finished
+   state — the complete page — so content is never hostage to the effect (13 §2.7–2.8). */
+@supports not (animation-timeline: scroll()) {
+  .dz-lap-layer {
+    opacity: 1;
+  }
 }
 
 /* §08 The ROI teaser's glass-live result panel (the one live blur on the page, 13 §4.1 limits) */
