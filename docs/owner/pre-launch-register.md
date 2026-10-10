@@ -67,7 +67,7 @@
 | ✓ | What | Why | When | How |
 |---|---|---|---|---|
 | ☐ | Send Claude the **office / WhatsApp number** once it's active | The footer, the contact page and the schema show it only once confirmed | ~2026-10-09 | Chat |
-| ☐ | **Before setting up WhatsApp:** ask Claude to revise the n8n guide first | The guide registers the number in a way that blocks replying from the WhatsApp Business phone app, which you plan to use | Before the number is connected | Chat |
+| ☑ | **Before setting up WhatsApp:** ask Claude to revise the n8n guide first | The guide registers the number in a way that blocks replying from the WhatsApp Business phone app, which you plan to use | Before the number is connected | **Done 2026-10-10:** Cloud API only (no phone app, the 2026-10-07 choice); Part 0 of `n8n-automation-setup-guide.md` rewritten from your Meta screens and checked against Meta's documentation |
 | ☐ | Cal.com account and the "Free AI Automation Audit" event type | The booking flow (P7) | Before P7 | Accounts checklist 4.5 |
 | ☐ | Trade licence number, map pin | Facts, the footer and the schema | After the full licence is issued | Chat |
 | ☑ | **Decide whether the footer shows the opening hours** (Monday–Saturday 08:00–17:00, already confirmed) | The P2 SEO audit: P4's sitewide company markup may only include hours that are visible on the page | Before P4 | **Decided 2026-10-02: yes.** Claude builds it in P3's first step |

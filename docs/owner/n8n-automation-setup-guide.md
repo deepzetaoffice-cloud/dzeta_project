@@ -72,17 +72,36 @@ Start here, because Meta's checks can take days. The detailed clicks are in base
 - So when the agent hands a chat to your team, you reply from a **personal WhatsApp** through the link in the alert. The agent has already told the customer that a team member will contact them from their own number.
 - ⚠️ The number must **not** be on WhatsApp when you add it. If anyone installs WhatsApp on that SIM first, it won't register.
 
-**Steps:**
-1. Go to **business.facebook.com**, signed in as hello@deepzeta.ai. Create the business portfolio **Deepzeta Digital Solutions L.L.C**, then open **Settings** → **Business info** → **Business verification** and upload the trade licence.
-2. Go to **developers.facebook.com** → **My Apps** → **Create app** → type **Business** → add the **WhatsApp** product.
-3. In **WhatsApp Manager**, click **Add phone number**:
-   - display name **Deepzeta AI**, and your business category
-   - number **+971 54 547 6335**
-   - choose to receive the code by **SMS** or **voice call**. It arrives on that SIM; type it in.
-4. Register the number with a **6-digit PIN** you choose (base guide Part 7). Keep the PIN in your password manager.
-5. In WhatsApp Manager, open **Payment settings** and add a payment method (Meta charges for template messages).
-6. Create the **System User** and its **permanent access token** (base guide Part 2), and keep the token in your password manager.
-7. Send Claude the **Phone number ID** and the **WhatsApp Business Account ID** (WhatsApp Manager → **Phone numbers**). These two aren't secrets. Claude adds them to Deepzeta's settings.
+**Where you are (2026-10-10, from your screenshots):**
+- ✅ Business portfolio **Deepzeta Ai** (ID 1770981930839063), with Facebook, Instagram, Threads and WhatsApp connected. The portfolio's name is internal; customers see the WhatsApp display name.
+- ✅ WhatsApp Business Account **Deepzeta Digital Solutions** (ID 1432051959064319). "Review in progress" is normal for a new account.
+- ⏳ Business verification started (documents step).
+- ⬜ No app yet, no phone number yet.
+
+There's nothing called a "Cloud API" to create on its own. You get it by making one Meta app with the WhatsApp use case and registering your number to it (steps 1–5). You don't use the WhatsApp Business app on a phone at all.
+
+**Steps (checked against Meta's documentation on 2026-10-10):**
+1. **Business verification** (business.facebook.com → **Settings** → **Business info** → **Business verification**). It isn't needed to start: an unverified portfolio can still register 2 numbers. It lifts the limits later.
+   - Upload the **trade licence**. The legal name and the address you type must match the document exactly. Watch for repeated text (for example "Office 202" twice).
+   - If your full licence isn't issued yet, leave this step for later and continue.
+2. **Create the app** (developers.facebook.com → **My Apps** → **Create App**):
+   - Name it **Deepzeta AI WhatsApp**, with your contact email.
+   - **Use cases:** tick **only** "Connect with customers through WhatsApp". Untick the Marketing API, app ads and Threads. Meta warns that some use cases can't share an app, and ads or Threads can get their own app later if ever needed.
+   - **Business:** choose **Deepzeta Ai** → **Next** → finish the remaining screens.
+3. **Link the WhatsApp account:** in the new app, open **WhatsApp** → **API Setup** and choose the **existing** account **Deepzeta Digital Solutions**. Don't create a new one. Ignore the free test number Meta shows.
+4. **Check the number is free:** +971 54 547 6335 must not be on WhatsApp or WhatsApp Business on any phone. Meta: "Numbers already in use with WhatsApp cannot be registered unless they are deleted first." If it was ever used there, tell Claude before going on. Keep the SIM in reach for the code.
+5. **Add the number** (WhatsApp Manager → **Phone numbers** → **Add phone number**):
+   - display name **Deepzeta AI**, and your business category (Meta reviews the display name; "Pending review" is normal)
+   - number **+971 54 547 6335**, with the code by **SMS** or **voice call**, typed in
+6. **Register it for the Cloud API.** Meta: adding a number in WhatsApp Manager does **not** register it. Registration is one call with a **6-digit PIN** you choose, made in Meta's **Graph API Explorer** in your browser. Tell Claude when you reach this step: you'll get the exact clicks then. Keep the PIN in your password manager, and never paste the PIN or a token into the chat.
+7. **Payment method:** WhatsApp Manager → **Payment settings** → add a card (Meta charges for template messages).
+8. **System user and permanent token** (business.facebook.com → **Settings** → **Users** → **System users** → **Add**, role **Admin**):
+   - **Assign assets:** the app (full control) and the WhatsApp account (full control).
+   - **Generate token:** choose the app, set it to never expire, and tick `business_management`, `whatsapp_business_messaging` and `whatsapp_business_management`.
+   - Copy the token straight into your password manager.
+9. Send Claude the **Phone number ID** (WhatsApp Manager → **Phone numbers**, or the app's **API Setup**). It isn't a secret. The WhatsApp Business Account ID is already known: 1432051959064319.
+
+> **Later, at Part D:** to receive real messages the app must be switched to **Live**, and Meta may ask for a privacy policy web address. The site's `/privacy` page ships with the company & legal pages, which Claude builds before you reach Part D.
 
 ## Part A · Collect the keys (into your password manager only)
 
