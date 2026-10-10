@@ -41,13 +41,13 @@ Build fast, test what matters. **Never relaxed:** Home's performance (07 in full
 
 ## Current state
 
-- **Live (3 of 100 V1 URLs):** `/` (R001), `/services` (R010), `/services/speed-to-lead-system` (R027, the service template's pilot). Production serves `main` (`a86b6ba`, 2026-10-09).
+- **Live (13 of 100 V1 URLs):** `/`, `/services`, and 11 service pages from the template (the pilot R027 and batch 1: R029, R031–R034, R038, R051, R068, R070, R076). Production serves `main` (`d8ba3eb`, 2026-10-10).
 - **Built:** P0 foundation, tokens, themes, fonts (0012, 0015) · P1 brand primitives (0018) · P2 shell, header, mega menu, footer, effect controllers (0019) · P3 analytics, consent, GTM (0021, owner setup `docs/owner/p3-tracking-setup-guide.md`) · P4 schema engine (`src/lib/schema/`, registry `docs/seo/schema-graph.md`) · P5 Home (`docs/plans/2026-10-06-p5-homepage.md`) · P6 A1 + A2 (`docs/plans/2026-10-07-p6a-core-pages-foundation.md`: the services hub, the template pilot) · the CTA set (0024: phone and WhatsApp `+971 54 547 6335`, the floating WhatsApp button, the header's "Deepzeta AI" button via `agentHref()`) · the full header menu · Home's proof cards and the watch-build scene.
 - **Home's weight (C73):** production measures 193,416 B against the 190,868 B hard limit (2026-10-09). The owner checked PSI (Performance at its best) and chose **no performance edits for now**; re-checked on production before launch. Home's PSI SEO score shows 66 only because of the pre-launch `noindex` lock (0013), lifted at P10.
 - **Next:**
-  1. Service pages from the pilot template: `docs/plans/2026-10-08-service-pages-standing-plan.md`, batches of up to 10 (57 planned service rows). Batch 1 on `content/services-batch-1`.
-  2. The header's unlinked menu items: mist text on the light-page glass is 3.73:1 (axe, the 404 page in the light theme); the owner's call on the fix.
-  3. Template plans for the other page types: pillars, solutions, industries, company and legal pages, then P7 demos and tools and P8 resources as parallel tracks.
+  1. **The flagship Custom-Coded Websites page** (R060): `docs/plans/2026-10-10-flagship-websites-page.md` (DRAFT; the owner chose it first), on `feat/flagship-websites`.
+  2. Then the template plans, in order: the conversational services (`story-chat`), the free AI audit page (a form now, Cal.com later; the owner, 2026-10-10), company and legal, pillars, solutions, industries. Service batch 2 waits until the plans are done (the owner).
+  3. The ~38 other standard service pages under the standing plan `docs/plans/2026-10-08-service-pages-standing-plan.md` (batches of up to 10); 1F.2 waits for APPROVED citations. P7 demos and tools and P8 resources follow as parallel tracks.
 - **Automation Track A (the WhatsApp agent):** the plan `docs/plans/2026-10-07-automation-pipeline.md` (decision 0027, C72), merged as docs; no website code. Deepzeta is client #1 of the n8n + Supabase stack. The owner's setup is `docs/owner/n8n-automation-setup-guide.md`; go-live only after the owner's full test. **Remind:** the team WhatsApp number for alerts.
 - **Owner items:** every manual task before launch is in `docs/owner/pre-launch-register.md`.
 - **Parked for owner sessions:** the 15+ Studio concepts, the Deepzeta Sync sales automation, the App demo. **Remind:** pSEO starts only after every V1 registry row is live (engine §10).
