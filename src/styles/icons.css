@@ -246,6 +246,22 @@
     }
   }
 
+  .dz-icon-host:not(:disabled, [aria-disabled='true']):is(:hover, :focus-visible, :has(:focus-visible))
+    :is(.dz-ln--nudge-start, .dz-ln--nudge-end) {
+    @variant fx {
+      animation: dz-icon-nudge var(--dz-dur-story) var(--dz-ease-out);
+    }
+  }
+
+  /* Which way a line nudges: ¾ of an icon unit (§7.3: ≤ 1 unit), derived from the shared nudge token */
+  .dz-ln--nudge-start {
+    --dz-icon-nudge: calc(var(--dz-nudge) * -0.1875);
+  }
+
+  .dz-ln--nudge-end {
+    --dz-icon-nudge: calc(var(--dz-nudge) * 0.1875);
+  }
+
   /* Tier 3 stories (§7). Every part runs inside one --dz-dur-story-signature timeline: for its share of
      it (--dz-t3-for), from its start (--dz-t3-at, plus --dz-t3-gap per stagger step). The story plays
      once when the icon first scrolls into view (.is-in, from the shared observer), and again on hover
@@ -406,6 +422,18 @@
   }
   30% {
     opacity: 0.15;
+  }
+}
+
+/* The brackets nudge apart while the pixel is hidden, then close on it as it pops (§8.3). */
+@keyframes dz-icon-nudge {
+  0%,
+  55%,
+  100% {
+    translate: 0 0;
+  }
+  25% {
+    translate: var(--dz-icon-nudge) 0;
   }
 }
 
