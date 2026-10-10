@@ -17,9 +17,10 @@ export const PILLARS: readonly Pillar[] = ['ai', 'web', 'software', 'ranking'];
 export type PixelMotion = 'pop' | 'drop' | 'stamp' | 'travel';
 
 // Lines take currentColor and the tier's stroke (icons.css). A dot is filled; `blink` is its place in
-// the story.
+// the story. A path can `nudge` once toward the start or the end of the line before the pixel pops
+// (§7.3: elements nudge ≤ 1 unit).
 export type Shape =
-  | { kind: 'path'; d: string; soft?: true }
+  | { kind: 'path'; d: string; soft?: true; nudge?: 'start' | 'end' }
   | { kind: 'rect'; x: number; y: number; width: number; height: number; rx?: number }
   | { kind: 'circle'; cx: number; cy: number; r: number }
   | { kind: 'dot'; cx: number; cy: number; r: number; blink?: 'early' | 'late' };
@@ -303,9 +304,12 @@ export const TIER_2 = {
     motion: 'pop',
     flip: false, // a code window: code reads left to right in every language, and <■> is symmetric (§9)
     shapes: [
-      // The page in its browser window, and the hand-written code on it
+      // The page in its browser window, and the code on it: the brackets nudge apart, then close on
+      // the pixel as it pops (§8.3, "Brackets nudge → pop")
       { kind: 'rect', x: 3.75, y: 4.75, width: 16.5, height: 14.5, rx: 2.25 },
-      { kind: 'path', d: 'M3.75 8.75h16.5M9 11.5l-2.5 2.5 2.5 2.5M15 11.5l2.5 2.5-2.5 2.5' },
+      { kind: 'path', d: 'M3.75 8.75h16.5' },
+      { kind: 'path', d: 'M9 11.5l-2.5 2.5 2.5 2.5', nudge: 'start' },
+      { kind: 'path', d: 'M15 11.5l2.5 2.5-2.5 2.5', nudge: 'end' },
       { kind: 'dot', cx: 6.5, cy: 6.75, r: 0.75 },
       { kind: 'dot', cx: 8.75, cy: 6.75, r: 0.75 },
       { kind: 'dot', cx: 11, cy: 6.75, r: 0.75 },

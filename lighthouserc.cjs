@@ -111,8 +111,9 @@ const t1Assertions = {
   // TTFB hard limit (07 §1). Locally it's the Node server on localhost; the real figure comes from
   // PageSpeed Insights on deepzeta.ai.
   'server-response-time': ['error', { maxNumericValue: 600, ...medianRun }],
-  // 07 §2: before consent, GTM only (C54). The caps come from C5's measurement (above).
-  'resource-summary:third-party:count': ['error', { maxNumericValue: THIRD_PARTY_EU.count, ...everyRun }],
+  // 07 §2: before consent, GTM only (C54). The caps come from C5's measurement (above). The request
+  // count is checked by scripts/check-page-weight.mjs, which keeps GTM's own telemetry pings apart
+  // (C74: one run in five can send 5 or 6); lhci can't filter by URL, so here only the bytes.
   'resource-summary:third-party:size': ['error', { maxNumericValue: THIRD_PARTY_EU.size, ...everyRun }],
   // 07 §2: first-party JavaScript on first load is checked by scripts/check-page-weight.mjs (C54).
   // 07 §2: fonts ≈ 60 KB (the target), hard limit 70 KB; two files at most on an English page
@@ -140,7 +141,7 @@ const t1Assertions = {
 // granted third-party scripts only, and PSI/CrUX field data stays the arbiter after launch.
 const rowThirdParty = {
   'categories:performance': ['error', { minScore: 0.93, ...medianScore }],
-  'resource-summary:third-party:count': ['error', { maxNumericValue: 4, ...everyRun }],
+  // The request count (4, GTM's telemetry apart) is checked by scripts/check-page-weight.mjs (C74)
   'resource-summary:third-party:size': ['error', { maxNumericValue: 350 * KB, ...everyRun }],
   'largest-contentful-paint': ['error', { maxNumericValue: 2750, ...medianRun }],
   'total-blocking-time': ['error', { maxNumericValue: 275, ...medianRun }],
