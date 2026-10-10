@@ -61,6 +61,45 @@ export type ServicePageContent = {
   faq: { heading: string; lede: string };
 };
 
+/**
+ * The flagship Websites page's two extras (docs/design/service-page.md, "Extras for the Websites
+ * service page"; the plan docs/plans/2026-10-10-flagship-websites-page.md)
+ */
+export type WebsitesExtras = {
+  /** "Code ↔ Page" (story-before-after) beside the How-it-works steps */
+  codePage: {
+    /** The figure's visible label, e.g. "Code ↔ Page" */
+    label: string;
+    /** One sentence under it: what the two sides are (the real hero, its real source) */
+    caption: string;
+    /** The two sides' names */
+    pageLabel: string;
+    codeLabel: string;
+    /** The range input's accessible name */
+    sliderLabel: string;
+  };
+  /** The build terminal (story-terminal): §7 Proof */
+  terminal: {
+    heading: string;
+    /** ≤ 40 words: what the run is and that it is a recording, not live */
+    lede: string;
+    /** The window's title bar text */
+    windowTitle: string;
+    /** "Recorded on {date} from commit {commit}": the template fills the two values */
+    recordedLabel: string;
+    controls: { play: string; pause: string; replay: string; step: string; group: string };
+  };
+};
+
+/** One line of a recorded terminal run: a command, its output, a passing check, or a note */
+export type TerminalLine = { kind: 'command' | 'output' | 'ok' | 'note'; text: string };
+
+/**
+ * A real, recorded run of this site's own commands (13 §4.8 story-terminal: "real commands and
+ * output only"): the date and commit it was recorded from, and its lines, trimmed but never edited
+ */
+export type TerminalRun = { date: string; commit: string; lines: readonly TerminalLine[] };
+
 /** The services hub's copy (/services, R010; docs/design/services-hub.md) */
 export type ServicesHubContent = {
   title: string;

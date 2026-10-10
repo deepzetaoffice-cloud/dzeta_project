@@ -148,6 +148,11 @@
           },
           {
             "@type": "ListItem",
+            "name": "Custom-Coded High-Performance Websites",
+            "url": "https://deepzeta.ai/services/custom-coded-websites#service"
+          },
+          {
+            "@type": "ListItem",
             "name": "AI Citation & Answer Engine Optimisation (AEO/GEO)",
             "url": "https://deepzeta.ai/services/ai-citation-aeo-geo#service"
           },
@@ -222,6 +227,13 @@
             "itemOffered": {
               "@id": "https://deepzeta.ai/services/ai-shopping-visibility#service",
               "name": "AI Shopping Visibility (Agentic Commerce Readiness)"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@id": "https://deepzeta.ai/services/custom-coded-websites#service",
+              "name": "Custom-Coded High-Performance Websites"
             }
           },
           {

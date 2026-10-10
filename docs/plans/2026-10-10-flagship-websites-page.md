@@ -1,5 +1,5 @@
 # Plan: The flagship Custom-Coded Websites page (R060)
-Status: DRAFT
+Status: APPROVED (owner, 2026-10-10: "approved", with the three open questions answered as proposed)
 Phase: P6 · Branch: `feat/flagship-websites` · Page tier: T2 (standard floor, decision 0029)
 
 ## Goal
@@ -98,5 +98,7 @@ the FAQ (6–8, lead service: 1,200–1,800 words), and the CTA.
    rather show a shorter run (build and Lighthouse only)?
 3. **Try it.** The page's demo slot becomes the terminal. AI View ("See how AI reads this page",
    P7) can join later. Agree?
+
+**Answered (owner, 2026-10-10):** 1. yes, `build-run.ts` alone is exempt; 2. the full run; 3. agreed.
 
 ## Progress

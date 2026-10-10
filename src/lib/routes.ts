@@ -31,7 +31,7 @@ export const ROUTES = {
   R038: { path: '/services/review-reputation-automation', live: true },
   R045: { path: '/services/uae-e-invoicing', live: false },
   R051: { path: '/services/ai-shopping-visibility', live: true },
-  R060: { path: '/services/custom-coded-websites', live: false },
+  R060: { path: '/services/custom-coded-websites', live: true },
   R061: { path: '/services/landing-pages-cro', live: false },
   R062: { path: '/services/ecommerce-websites', live: false },
   R063: { path: '/services/website-redesign-migration', live: false },

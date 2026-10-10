@@ -760,3 +760,71 @@ export const aiAdCreativeFaq: readonly FaqQuestion[] = [
       'Ongoing production keeps the loop running: new variations are made as results come in, and tired ads are replaced when their performance drops. Each round builds on what the last one taught. If you want the campaigns managed as well, Meta Ads (Facebook & Instagram) covers lead ads, catalogue ads and Advantage+ campaigns.',
   },
 ];
+
+// The questions on the Custom-Coded High-Performance Websites page (/services/custom-coded-websites,
+// R060): 7, the lead service range of 6–8 (engine §3); cost and timeline first (§6.2 rule 3). Each
+// first sentence stands alone (≤ 25 words); each answer is 40–90 words and names at most one other
+// service. Sources: catalogue 0.1 (the written summary, next steps and a quote), 2.1, 2.5, 6.3, §8;
+// Home's ownership answer (built on your accounts, full access at launch); this site's own build
+// (logical CSS ready for Arabic, English first; Cookie settings at the bottom of every page; the
+// build recording and the Code ↔ Page view on this page). The ids carry the stem "custom-website";
+// none repeats a question on Home (its timeline, ownership and results questions are general), the
+// hub (its Arabic and websites-with-automations questions) or any service page.
+export const customCodedWebsitesFaq: readonly FaqQuestion[] = [
+  {
+    // 65 words; first sentence 21
+    id: 'what-does-a-custom-website-cost',
+    topic: 'cost',
+    question: 'How much does a custom-coded website cost?',
+    answer:
+      'A custom-coded website is priced after a free AI audit, because the cost depends on what the site has to do. The main drivers are the number of pages and languages, whether your content is ready or still to be written, and the integrations you need, such as WhatsApp, a CRM or booking. The audit ends with a written summary, next steps and a quote.',
+  },
+  {
+    // 65 words; first sentence 22
+    id: 'what-decides-a-custom-website-timeline',
+    topic: 'timeline',
+    question: 'What decides how long a custom-coded website takes?',
+    answer:
+      'The scope decides it: the pages, the languages and the integrations, so we set a launch date after the free AI audit. A focused site in one language is a smaller build than a bilingual site with many service and area pages, lead forms and a CRM connection. SEO and speed are built in from the first line of code, not added at the end.',
+  },
+  {
+    // 69 words; first sentence 21
+    id: 'why-code-a-custom-website-instead-of-a-page-builder',
+    topic: 'results',
+    question: 'Why code the website instead of using a page builder?',
+    answer:
+      'Custom code lets each page carry only the code it needs, with no page builder, theme or unused plugins behind it. It is the base for building every page to pass Core Web Vitals. The design, the layout and the structured data are made for your business, not fitted into a template. This page shows it: the Code ↔ Page view reveals the real code behind its opening section.',
+  },
+  {
+    // 68 words; first sentence 17. The thresholds as 2.1 writes them (facts §6), never a result
+    id: 'how-do-we-know-a-custom-website-is-fast',
+    topic: 'results',
+    question: 'How will we know the new website is really fast?',
+    answer:
+      'You get a performance report at launch, so you see the measured speed rather than a promise. Every page is built to pass Core Web Vitals: LCP under 2.5 s, INP under 200 ms and CLS under 0.1, and the report shows where your pages stand on each. On this page, the build recording replays a real run of this site’s own checks, including its homepage’s Lighthouse result.',
+  },
+  {
+    // 57 words; first sentence 21
+    id: 'can-a-custom-website-add-arabic-later',
+    topic: 'arabic',
+    question: 'Can we launch in English and add Arabic later?',
+    answer:
+      'Yes: we code the layout to follow the reading direction, so Arabic pages can be added later without rebuilding the design. This site is built the same way: it starts in English, and its layout is ready for Arabic. If you want both languages at launch, we build them together, with a true right-to-left layout for Arabic.',
+  },
+  {
+    // 63 words; first sentence 21
+    id: 'can-another-developer-work-on-a-custom-website',
+    topic: 'ownership',
+    question: 'Can another developer work on our website later?',
+    answer:
+      'Yes: the code belongs to your business, and any developer who knows Next.js, TypeScript and Tailwind CSS can work on it. We build on your accounts and hand over full access at launch, so nothing is locked to us. If you would rather hand the routine work to us, the Website Care Plan covers hosting, security, backups, updates and small content changes.',
+  },
+  {
+    // 60 words; first sentence 22
+    id: 'how-does-a-custom-website-handle-consent',
+    topic: 'data-privacy',
+    question: 'How does the website handle visitor consent?',
+    answer:
+      'Every custom-coded site includes analytics, consent and conversion tracking, set up with Consent Mode v2, so your tags follow each visitor’s choice. Visitors can change that choice at any time. This site works the same way: “Cookie settings” sits at the bottom of every page. If you also want click-ID capture and offline conversion upload, add Analytics & Tracking Setup.',
+  },
+];

@@ -127,7 +127,7 @@ A row is never deleted, and an ID is never reused.
 
 | ID | URL | Type | Cluster | Cat. | Intent | Tier | Phase | Wave | Status | Index | Needs |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| R060 | `/services/custom-coded-websites` | Service 🔥 (flagship) | Websites | 2.1 | A fast, custom-coded website built to rank in search and AI search | T2 | P6 | W1 | planned | index | — |
+| R060 | `/services/custom-coded-websites` | Service 🔥 (flagship) | Websites | 2.1 | A fast, custom-coded website built to rank in search and AI search | T2 | P6 | W1 | live | index | — |
 | R061 | `/services/landing-pages-cro` | Service ⭐ | Websites | 2.2 | Landing pages and conversion-rate optimisation | T2 | P6 | W2 | planned | index | — |
 | R062 | `/services/ecommerce-websites` | Service ⭐ | Websites | 2.3 | A custom e-commerce website | T2 | P6 | W2 | planned | index | — |
 | R063 | `/services/website-redesign-migration` | Service ⭐ | Websites | 2.4 | Redesign or migrate an existing website without losing rankings | T2 | P6 | W2 | planned | index | — |
@@ -262,3 +262,4 @@ The blueprint's draft slugs (for example `web-development`, `ai-chatbots`, `/aud
 | 2026-10-07 | R179, `/shell/mega-menu` (P6 part A2): the mega menu's full panel as a fragment, loaded on intent (decision 0026, L8) | Owner (the P6 part A plan, Q2 (b), 2026-10-07) |
 | 2026-10-08 | R010 `/services` and R027 `/services/speed-to-lead-system` → live (P6 part A2, S11: the services hub and the pilot service page) | Owner (the P6 part A plan, Q3: Speed-to-Lead System, 2026-10-07) |
 | 2026-10-09 | R029, R031, R032, R033, R034, R038, R051, R068, R070, R076 → live (service batch 1 from the pilot template: the standing plan `docs/plans/2026-10-08-service-pages-standing-plan.md`, decision 0029) | Owner ("start service batch", 2026-10-09) |
+| 2026-10-10 | R060 `/services/custom-coded-websites` → live (the flagship Websites page on its own route, with Code ↔ Page and the build terminal: `docs/plans/2026-10-10-flagship-websites-page.md`) | Owner ("approved", 2026-10-10) |

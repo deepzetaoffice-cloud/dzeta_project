@@ -1,0 +1,280 @@
+/* The flagship Websites page's own rules (decision 0026 §4: a template's stylesheet, imported by its
+   route only, never in the shared sheet; the plan docs/plans/2026-10-10-flagship-websites-page.md).
+   Tokens only, logical properties only. Two effects: Code ↔ Page (story-before-after) and the build
+   terminal (story-terminal), with the story controls. */
+
+/* ── Code ↔ Page ─────────────────────────────────────────────────────────────────────────────────
+   Without JavaScript the two sides sit one above the other. RevealSlider marks the figure
+   [data-enhanced] and writes --dz-reveal: the sides stack in one frame and the code side is clipped
+   to the inline-start part of it. */
+.dz-codepage-frame {
+  display: grid;
+  gap: 1rem;
+}
+
+.dz-codepage-page,
+.dz-codepage-code {
+  position: relative;
+  overflow: hidden;
+  border: var(--dz-glass-edge-width) solid var(--dz-hairline);
+  border-radius: var(--dz-radius-lg);
+}
+
+.dz-codepage-page {
+  display: grid;
+  background: var(--dz-bg);
+}
+
+/* The hero at a picture's scale; pointer events off (the side is inert) */
+.dz-codepage-canvas {
+  zoom: 0.5;
+  align-self: center;
+  pointer-events: none;
+}
+
+@media (width >= 64rem) {
+  .dz-codepage-canvas {
+    zoom: 0.75;
+  }
+}
+
+.dz-codepage-tag {
+  position: absolute;
+  inset-block-start: 0.75rem;
+  inset-inline-end: 0.75rem;
+  z-index: 1;
+  padding: 0.125rem 0.625rem;
+  border-radius: var(--dz-radius-pill);
+  background: var(--dz-surface);
+  color: var(--dz-text-muted);
+  font-family: var(--dz-font-mono);
+  font-size: var(--dz-text-caption);
+  line-height: var(--dz-text-caption-leading);
+}
+
+.dz-codepage-code {
+  background: var(--dz-navy-900);
+  color: var(--dz-text);
+}
+
+.dz-codepage-code pre {
+  margin: 0;
+  padding: 2.75rem 1.25rem 1.25rem;
+  font-family: var(--dz-font-mono);
+  font-size: 0.6875rem;
+  line-height: 1.5;
+  white-space: pre;
+  overflow: hidden;
+}
+
+/* The code side's tag sits at its start corner, where the code stays visible */
+.dz-codepage-code .dz-codepage-tag {
+  inset-inline-start: 0.75rem;
+  inset-inline-end: auto;
+}
+
+.dz-tok-comment {
+  color: var(--dz-mist);
+}
+
+.dz-tok-string {
+  color: var(--dz-ok);
+}
+
+.dz-tok-tag {
+  color: var(--dz-cyan);
+}
+
+.dz-tok-keyword {
+  color: var(--dz-violet-soft);
+}
+
+.dz-tok-attr {
+  color: var(--dz-sky);
+}
+
+[data-codepage][data-enhanced] .dz-codepage-frame {
+  position: relative;
+  grid-template-areas: 'stack';
+  gap: 0;
+}
+
+[data-codepage][data-enhanced] .dz-codepage-page,
+[data-codepage][data-enhanced] .dz-codepage-code {
+  grid-area: stack;
+}
+
+[data-codepage][data-enhanced] .dz-codepage-code {
+  clip-path: inset(0 calc(100% - var(--dz-reveal, 50%)) 0 0);
+}
+
+[dir='rtl'] [data-codepage][data-enhanced] .dz-codepage-code {
+  clip-path: inset(0 0 0 calc(100% - var(--dz-reveal, 50%)));
+}
+
+/* The seam between the two sides, in the signal gradient */
+[data-codepage][data-enhanced] .dz-codepage-frame::after {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: var(--dz-reveal, 50%);
+  z-index: 2;
+  inline-size: var(--dz-focus-width);
+  background: var(--dz-grad-signal);
+  pointer-events: none;
+}
+
+.dz-codepage-range {
+  display: block;
+  inline-size: 100%;
+  min-block-size: var(--dz-target-min);
+  margin-block-start: 0.75rem;
+  accent-color: var(--dz-cyan);
+}
+
+.dz-codepage-range:focus-visible {
+  outline: var(--dz-focus-width) solid var(--dz-focus);
+  outline-offset: var(--dz-focus-offset);
+}
+
+/* ── The build terminal ──────────────────────────────────────────────────────────────────────────
+   A macOS-style window (glass-frost); every line is in the HTML and shows by default. Once the
+   controls run, [data-playable] hides the lines not yet replayed. */
+.dz-term {
+  margin: 0;
+  overflow: hidden;
+  border-radius: var(--dz-radius-lg);
+}
+
+/* A solid window on the glass edge: over a light page the translucent tint turns mid-grey and its
+   muted text would fall under 4.5:1 (the header's lesson, 2026-10-09) */
+.dz-term.dz-glass {
+  background: var(--dz-navy-850);
+}
+
+.dz-term-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-block-end: var(--dz-glass-edge-width) solid var(--dz-hairline);
+}
+
+.dz-term-lights {
+  display: inline-flex;
+  gap: 0.5rem;
+}
+
+.dz-term-lights span {
+  inline-size: 0.75rem;
+  block-size: 0.75rem;
+  border-radius: var(--dz-radius-pill);
+  background: var(--dz-bad);
+}
+
+.dz-term-lights span:nth-child(2) {
+  background: var(--dz-warn);
+}
+
+.dz-term-lights span:nth-child(3) {
+  background: var(--dz-ok);
+}
+
+.dz-term-title {
+  color: var(--dz-text-muted);
+  font-family: var(--dz-font-mono);
+  font-size: var(--dz-text-caption);
+}
+
+.dz-term-body {
+  display: grid;
+  gap: 0.125rem;
+  margin: 0;
+  padding: 1rem 1.25rem;
+  list-style: none;
+  background: var(--dz-navy-900);
+  color: var(--dz-text);
+  font-family: var(--dz-font-mono);
+  font-size: var(--dz-text-caption);
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.dz-term-line--command {
+  margin-block-start: 0.75rem;
+  color: var(--dz-text-strong);
+}
+
+.dz-term-line--command:first-child {
+  margin-block-start: 0;
+}
+
+.dz-term-line--ok {
+  color: var(--dz-ok);
+}
+
+.dz-term-line--note {
+  color: var(--dz-mist);
+}
+
+.dz-term-prompt {
+  color: var(--dz-cyan);
+}
+
+[data-terminal][data-playable] .dz-term-line {
+  transition:
+    opacity var(--dz-dur-fast) var(--dz-ease-out),
+    translate var(--dz-dur-fast) var(--dz-ease-out);
+}
+
+[data-terminal][data-playable] .dz-term-line:not([data-on]) {
+  opacity: 0;
+  translate: 0 0.25rem;
+}
+
+.dz-term-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem 0;
+}
+
+.dz-term-controls[hidden] {
+  display: none;
+}
+
+.dz-term-controls button {
+  min-block-size: var(--dz-target-min);
+  padding-inline: 1rem;
+  border: var(--dz-glass-edge-width) solid var(--dz-hairline);
+  border-radius: var(--dz-radius-pill);
+  background: transparent;
+  color: var(--dz-text-strong);
+  font-size: var(--dz-text-small);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.dz-term-controls button:disabled {
+  color: var(--dz-text-muted);
+  cursor: default;
+}
+
+.dz-term-controls button:focus-visible {
+  outline: var(--dz-focus-width) solid var(--dz-focus);
+  outline-offset: var(--dz-focus-offset);
+}
+
+.dz-term-recorded {
+  padding: 0.75rem 1rem 1rem;
+  color: var(--dz-text-muted);
+  font-family: var(--dz-font-mono);
+  font-size: var(--dz-text-caption);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-terminal][data-playable] .dz-term-line {
+    transition: none;
+  }
+}
