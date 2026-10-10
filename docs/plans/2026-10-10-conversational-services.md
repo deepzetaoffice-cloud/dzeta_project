@@ -49,7 +49,8 @@ seven services that are conversations, with the story the design spec gives them
 | Section | Effect ID | Cost → mitigation |
 |---|---|---|
 | §3 How it works | `story-chat` | CSS one-shot (opacity/translate) on the shared observer's `.is-in`; complete without JS and when reduced; Replay in the ≤ 2 KB island; template stylesheet only, Home untouched |
-| §7 Try it | the demo stub (existing) | Loads on first use (the existing lazy stub) |
+
+§7 Try it uses the existing demo stub, which loads on first use; it is a component, not an effect.
 
 ## Dependencies, risks
 - **No dependency.**
