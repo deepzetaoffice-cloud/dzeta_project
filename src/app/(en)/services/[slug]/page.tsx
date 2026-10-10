@@ -25,9 +25,12 @@ export const dynamicParams = false;
 
 const services: readonly CatalogueService[] = catalogueServices;
 
+// Pages with their own route (the flagship plan: /services/custom-coded-websites) are never built here
+const OWN_ROUTE = new Set(['custom-coded-websites']);
+
 export function generateStaticParams() {
   return Object.keys(servicePages)
-    .filter((slug) => isLivePath(`/services/${slug}`))
+    .filter((slug) => !OWN_ROUTE.has(slug) && isLivePath(`/services/${slug}`))
     .map((slug) => ({ slug }));
 }
 

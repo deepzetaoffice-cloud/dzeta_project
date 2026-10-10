@@ -3,6 +3,7 @@
 // use. Copy comes from the page's file (src/content/en/services/<slug>.ts) and the template's shared
 // labels; the service's name, pillar and every service named by number come from the catalogue
 // (10 §2). Links only to live pages, built from the route helpers (06 §2.4, 04 §1.4).
+import type { ReactNode } from 'react';
 import { Icon } from '@/components/icons/Icon';
 import { TIER_2, type Tier2Name } from '@/components/icons/registry';
 import { DemoStub } from '@/components/demos/DemoStub';
@@ -26,20 +27,26 @@ const section = 'mx-auto max-w-page px-gutter py-section';
 // answer (both the LCP, visible at first paint, 13 §3 rule 2), the primary CTA and the demo stub.
 // Below 640 px the icon takes the 48 px Tier 2 size and the top tightens, so the European consent
 // banner at 360 × 640 stays clear of the H1. data-view-service tells the tracking runtime which
-// service this page is (view_service, 09).
-export function ServiceHero({ content, service }: ServiceSectionProps) {
+// service this page is (view_service, 09). `preview` renders the same hero as a picture inside the
+// Websites page's Code ↔ Page slider (the flagship plan): no H1, no ids, no tracking attributes; the
+// slider wraps it inert and hidden from assistive technology.
+export function ServiceHero({ content, service, preview = false }: ServiceSectionProps & { preview?: boolean }) {
   const icon = service.slug && Object.hasOwn(TIER_2, service.slug) ? (service.slug as Tier2Name) : undefined;
+  const Heading = preview ? 'p' : 'h1';
   return (
     <section
-      aria-labelledby="service-heading"
+      aria-labelledby={preview ? undefined : 'service-heading'}
       className="mx-auto max-w-page px-gutter pt-3 pb-section sm:pt-8"
-      data-view-service={service.slug}
-      data-view-pillar={service.pillar}
+      data-view-service={preview ? undefined : service.slug}
+      data-view-pillar={preview ? undefined : service.pillar}
     >
       {icon ? <Icon name={icon} size={64} className="size-12 sm:size-16" /> : null}
-      <h1 id="service-heading" className="mt-3 text-h1 text-balance sm:mt-4 sm:text-statement">
+      <Heading
+        id={preview ? undefined : 'service-heading'}
+        className="mt-3 text-h1 text-balance sm:mt-4 sm:text-statement"
+      >
         {content.heading}
-      </h1>
+      </Heading>
       <p className="mt-6 max-w-measure text-lead">{content.answer}</p>
       <div className="mt-8 flex flex-wrap items-center gap-4">
         <CtaButton href={auditHref()} label={shellContent.cta} variant="primary" />
@@ -68,8 +75,9 @@ export function ServiceProblem({ content }: ServiceSectionProps) {
   );
 }
 
-// §3 How it works: the visible step list beside the labelled example story-flow (13 §4.8, 10 §3.6)
-export function ServiceHow({ content }: ServiceSectionProps) {
+// §3 How it works: the visible step list beside the labelled example story-flow (13 §4.8, 10 §3.6),
+// or above the page's own story, full width, when it brings one (the Websites page's Code ↔ Page)
+export function ServiceHow({ content, story }: ServiceSectionProps & { story?: ReactNode }) {
   const { how } = content;
   return (
     <section aria-labelledby="service-how" className={section} data-fx-once="">
@@ -77,8 +85,8 @@ export function ServiceHow({ content }: ServiceSectionProps) {
         {how.heading}
       </h2>
       <p className="mt-4 max-w-measure text-lead">{how.lede}</p>
-      <div className="mt-10 grid gap-10 lg:grid-cols-2 lg:items-center">
-        <ol aria-label={serviceTemplate.stepsLabel} className="grid gap-4">
+      <div className={story ? 'mt-10' : 'mt-10 grid gap-10 lg:grid-cols-2 lg:items-center'}>
+        <ol aria-label={serviceTemplate.stepsLabel} className={story ? 'grid gap-4 lg:grid-cols-2' : 'grid gap-4'}>
           {how.steps.map((step, index) => (
             <li key={step.title} className="flex items-baseline gap-3">
               <span className="font-mono text-caption text-fg-muted">{String(index + 1).padStart(2, '0')}</span>
@@ -89,11 +97,15 @@ export function ServiceHow({ content }: ServiceSectionProps) {
             </li>
           ))}
         </ol>
-        <StoryFlow
-          label={how.exampleLabel}
-          nodes={how.steps.map((step) => step.title)}
-          description={`${how.exampleLabel}: ${how.steps.map((step) => step.title).join(', ')}.`}
-        />
+        {story ? (
+          <div className="mt-10">{story}</div>
+        ) : (
+          <StoryFlow
+            label={how.exampleLabel}
+            nodes={how.steps.map((step) => step.title)}
+            description={`${how.exampleLabel}: ${how.steps.map((step) => step.title).join(', ')}.`}
+          />
+        )}
       </div>
     </section>
   );

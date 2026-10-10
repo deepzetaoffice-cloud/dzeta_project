@@ -14,6 +14,7 @@ import {
   reviewReputationAutomationFaq,
   salesFollowUpNurtureFaq,
   speedToLeadSystemFaq,
+  customCodedWebsitesFaq,
   type FaqQuestion,
 } from '@/content/en/faq-bank';
 import { speedToLeadSystem } from '@/content/en/services/speed-to-lead-system';
@@ -27,6 +28,7 @@ import { aiShoppingVisibility } from '@/content/en/services/ai-shopping-visibili
 import { aiCitationAeoGeo } from '@/content/en/services/ai-citation-aeo-geo';
 import { localAiDominance } from '@/content/en/services/local-ai-dominance';
 import { aiAdCreative } from '@/content/en/services/ai-ad-creative';
+import { customCodedWebsites } from '@/content/en/services/custom-coded-websites';
 import type { ServicePageContent } from '@/content/en/services/types';
 
 /** One service page: its copy and its FAQ questions (most-asked first) */
@@ -47,4 +49,5 @@ export const servicePages: Readonly<Record<string, ServicePage>> = {
   'ai-citation-aeo-geo': { content: aiCitationAeoGeo, faq: aiCitationAeoGeoFaq },
   'local-ai-dominance': { content: localAiDominance, faq: localAiDominanceFaq },
   'ai-ad-creative': { content: aiAdCreative, faq: aiAdCreativeFaq },
+  'custom-coded-websites': { content: customCodedWebsites, faq: customCodedWebsitesFaq },
 };

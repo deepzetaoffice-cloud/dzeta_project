@@ -295,6 +295,24 @@ export const TIER_2 = {
     ],
     pixel: { x: 11.25, y: 9.25, size: 2.6 },
   },
+  'custom-coded-websites': {
+    name: 'Custom-Coded High-Performance Websites',
+    catalogue: '2.1',
+    pillar: 'web',
+    pixelIs: 'the pixel-perfect result of hand-written code',
+    motion: 'pop',
+    flip: false, // a code window: code reads left to right in every language, and <■> is symmetric (§9)
+    shapes: [
+      // The page in its browser window, and the hand-written code on it
+      { kind: 'rect', x: 3.75, y: 4.75, width: 16.5, height: 14.5, rx: 2.25 },
+      { kind: 'path', d: 'M3.75 8.75h16.5M9 11.5l-2.5 2.5 2.5 2.5M15 11.5l2.5 2.5-2.5 2.5' },
+      { kind: 'dot', cx: 6.5, cy: 6.75, r: 0.75 },
+      { kind: 'dot', cx: 8.75, cy: 6.75, r: 0.75 },
+      { kind: 'dot', cx: 11, cy: 6.75, r: 0.75 },
+    ],
+    // Between the brackets, (12, 14), to within 0.05: the 0.25 grid can't centre a 2.6 pixel exactly
+    pixel: { x: 10.75, y: 12.75, size: 2.6 },
+  },
   'ai-citation-aeo-geo': {
     name: 'AI Citation & Answer Engine Optimisation (AEO/GEO)',
     catalogue: '4A.1',

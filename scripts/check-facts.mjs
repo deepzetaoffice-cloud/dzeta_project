@@ -60,7 +60,9 @@ const ALLOWED_NUMBERS = new Set([
   '60 seconds', // facts §6: Speed-to-Lead reply target (service design)
   '24/7', // facts §6: availability of AI agents (service design)
   '2.5', // facts §6: Google "good" LCP threshold (public definition)
+  '2.5 s', // the same fact with its unit (catalogue 2.1: "LCP under 2.5 s"; the flagship plan)
   '200', // facts §6: Google "good" INP threshold
+  '200 ms', // the same fact with its unit (catalogue 2.1: "INP under 200 ms")
   '0.1', // facts §6: Google "good" CLS threshold
 ]);
 
@@ -68,6 +70,10 @@ export function findUnsourcedNumbers(relPath, text) {
   // The internal review page states its own display size (the icon gallery's 128 px) — a design
   // fact of that page, not a business claim.
   if (relPath.replace(/\\/g, '/') === 'src/content/en/shell-review.ts') return [];
+  // The Websites page's build terminal replays a dated recording of this site's own run (its real
+  // output, with its date and commit): measurements of our own build, not claims (the owner,
+  // 2026-10-10, the flagship plan's question 1). Only that file is exempt.
+  if (relPath.replace(/\\/g, '/') === 'src/content/en/services/build-run.ts') return [];
   // Strip comments, then keep only quoted prose (strings with a space — sentences, not IDs).
   const noComments = text.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
   const strings = [...noComments.matchAll(/(['"`])((?:\1|[^])*?)\1/g)].map((m) => m[2]);
