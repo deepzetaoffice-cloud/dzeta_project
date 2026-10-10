@@ -58,3 +58,5 @@ its own plan.
 ## Progress notes
 
 (batches record themselves here)
+
+- **Batch 1 (2026-10-09, `content/services-batch-1`):** 1B.3, 1B.5, 1B.6, 1C.1, 1C.2, 1D.3, 1I.2, 4A.1, 4A.3, 4B.6 live (R029, R031–R034, R038, R051, R068, R070, R076). Beyond the copy: the template names each page's demo (`tryIt.demoId`, optional), eight new Tier 2 icons, six headings shortened to clear the European banner at 360 px, and the header's unlinked items in the link colour (the owner). Gates: build, schema/seo/links/facts, e2e services + themes 101/101, Home lhci (perf 96, LCP 2,717 ms). Deferred: the conversational services (1A.1, 1A.2) wait for a `story-chat` variant of the template; 2.1 waits for its spec extras; 1F.2 waits for APPROVED citations.

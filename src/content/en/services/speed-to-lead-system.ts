@@ -153,6 +153,8 @@ export const speedToLeadSystem: ServicePageContent = {
     heading: 'See it from your lead’s side',
     line: 'The speed-to-lead test will let you leave your number and get a WhatsApp reply from our own automation, just as your leads would. The test is still being built and goes live in a later update of this site.',
     trigger: 'Take the speed-to-lead test',
+    demoId: 'speed-to-lead',
+    icon: 'send',
   },
 
   // 8 · UAE specifics: Deepzeta AI's own practice only (catalogue §9: consent wording and a way to

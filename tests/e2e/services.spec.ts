@@ -1,27 +1,35 @@
 import { expect, test } from '@playwright/test';
 import { consentContent } from '../../src/content/en/legal/consent';
-import { servicesHubFaq, speedToLeadSystemFaq } from '../../src/content/en/faq-bank';
+import { services as catalogue, type CatalogueService } from '../../src/content/catalogue';
+import { servicesHubFaq } from '../../src/content/en/faq-bank';
+import { servicePages } from '../../src/content/en/services';
+import { isLivePath } from '../../src/lib/routes';
 import { seriousAxeViolations } from './helpers/axe';
 import { fromCountry, stubGtm } from './helpers/tracking';
 
-// The services hub (R010) and the service template's pilot, Speed-to-Lead System (R027) (P6 part A2,
-// S11; docs/design/services-hub.md, service-page.md, faq.md; 13 §3): the LCP H1 at first paint, one
+// The services hub (R010) and every live service page from the template, the pilot Speed-to-Lead
+// System (R027) first (P6 part A2, S11; the service batches, decision 0029: a page joins these tests
+// when its registry row turns live, with no edit here; docs/design/services-hub.md, service-page.md,
+// faq.md; 13 §3): the LCP H1 at first paint, one
 // H1, the visible breadcrumb, the FAQ (keyboard, no-JS), the demo stub, axe, Reduce effects, the
 // European banner clear of the H1 at 360 × 640, no sideways scroll on a phone, and only live services
 // built or linked. view_service lives in tracking.spec.ts with the other events.
 
 const HUB = '/services';
 const PILOT = '/services/speed-to-lead-system';
+const catalogueServices: readonly CatalogueService[] = catalogue;
+
+// Each live service page: the catalogue name is its breadcrumb's current item (serviceTrail)
+const SERVICE_PAGES = Object.entries(servicePages)
+  .filter(([slug]) => isLivePath(`/services/${slug}`))
+  .map(([slug, page]) => {
+    const name = catalogueServices.find((service) => service.slug === slug)?.name ?? slug;
+    return { path: `/services/${slug}`, name, current: name, trail: ['Home', 'Services'], faq: page.faq };
+  });
 const PAGES = [
   { path: HUB, name: 'the services hub', current: 'Services', trail: ['Home'], faq: servicesHubFaq },
-  {
-    path: PILOT,
-    name: 'Speed-to-Lead System',
-    current: 'Speed-to-Lead System',
-    trail: ['Home', 'Services'],
-    faq: speedToLeadSystemFaq,
-  },
-] as const;
+  ...SERVICE_PAGES,
+];
 
 test.beforeEach(async ({ page }) => {
   await stubGtm(page);

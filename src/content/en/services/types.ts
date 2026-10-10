@@ -4,6 +4,9 @@
 // src/content/catalogue.ts (10 §2). FAQ questions live in src/content/en/faq-bank.ts (engine §6.1).
 import type { Pillar } from '@/components/icons/registry';
 
+/** The demos a service page can offer (07 §4): the AI agent, the workflow explorer, the ROI calculator, the speed-to-lead test, AI View */
+export type ServiceDemoId = 'ai-agent' | 'workflow-explorer' | 'roi-calculator' | 'speed-to-lead' | 'ai-view';
+
 /** One row of the problem → outcome rows (story-before-after): at most 5 */
 export type BeforeAfterRow = { before: string; after: string };
 
@@ -37,8 +40,19 @@ export type ServicePageContent = {
     goodFit: readonly string[];
     decisionAid: readonly { question: string; answer: string }[];
   };
-  /** "Try it": the demo stub's lead-in (the live demo comes in P7) */
-  tryIt: { heading: string; line: string; trigger: string };
+  /**
+   * "Try it": the matching demo's stub (07 §4; the live demo comes in P7) and its lead-in. Left out
+   * when no demo matches the service: the hero then shows the audit CTA alone
+   */
+  tryIt?: {
+    heading: string;
+    line: string;
+    trigger: string;
+    /** The demo (demo_open's demo_id) */
+    demoId: ServiceDemoId;
+    /** The trigger's Tier 1 icon */
+    icon: 'send' | 'arrow' | 'check' | 'globe' | 'chevron';
+  };
   /** "UAE specifics": Deepzeta AI's own practice; external facts only from APPROVED citation rows */
   uae: { heading: string; points: readonly string[] };
   /** "Pairs well with": other services by catalogue number, one line each */

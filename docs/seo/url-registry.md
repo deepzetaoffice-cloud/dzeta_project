@@ -98,16 +98,16 @@ A row is never deleted, and an ID is never reused.
 | R026 | `/services/custom-ai-agents` | Service ⭐ | AI Automation | 1A.7 | A custom AI agent built for a specific business task | T2 | P6 | W2 | planned | index | — |
 | R027 | `/services/speed-to-lead-system` | Service 🔥 | AI Automation | 1B.1 | Reply to every new lead within 60 seconds (a design target, facts §6) | T2 | P6 | W1 | live | index | — |
 | R028 | `/services/ai-lead-qualification-scoring` | Service ⭐ | AI Automation | 1B.2 | Qualify and score leads automatically so sales calls the best first | T2 | P6 | W2 | planned | index | — |
-| R029 | `/services/automated-quotation-tracking` | Service 🔥 | AI Automation | 1B.3 | Send quotes fast and track every quote until it's won or lost | T2 | P6 | W1 | planned | index | — |
+| R029 | `/services/automated-quotation-tracking` | Service 🔥 | AI Automation | 1B.3 | Send quotes fast and track every quote until it's won or lost | T2 | P6 | W1 | live | index | — |
 | R030 | `/services/proposal-automation` | Service ⭐ | AI Automation | 1B.4 | Generate proposals automatically from templates and CRM data | T2 | P6 | W2 | planned | index | — |
-| R031 | `/services/sales-follow-up-nurture` | Service ⭐ | AI Automation | 1B.5 | Automatic follow-up and nurture sequences so no lead goes cold | T2 | P6 | W2 | planned | index | — |
-| R032 | `/services/crm-setup-automation` | Service ⭐ | AI Automation | 1B.6 | Set up a CRM (HubSpot, Zoho and others) and automate it | T2 | P6 | W2 | planned | index | — |
-| R033 | `/services/booking-automation-system` | Service 🔥 | AI Automation | 1C.1 | Let customers book appointments automatically, any time | T2 | P6 | W1 | planned | index | — |
-| R034 | `/services/appointment-reminders-no-show-reduction` | Service ⭐ | AI Automation | 1C.2 | Automatic reminders that cut missed appointments | T2 | P6 | W2 | planned | index | — |
+| R031 | `/services/sales-follow-up-nurture` | Service ⭐ | AI Automation | 1B.5 | Automatic follow-up and nurture sequences so no lead goes cold | T2 | P6 | W2 | live | index | — |
+| R032 | `/services/crm-setup-automation` | Service ⭐ | AI Automation | 1B.6 | Set up a CRM (HubSpot, Zoho and others) and automate it | T2 | P6 | W2 | live | index | — |
+| R033 | `/services/booking-automation-system` | Service 🔥 | AI Automation | 1C.1 | Let customers book appointments automatically, any time | T2 | P6 | W1 | live | index | — |
+| R034 | `/services/appointment-reminders-no-show-reduction` | Service ⭐ | AI Automation | 1C.2 | Automatic reminders that cut missed appointments | T2 | P6 | W2 | live | index | — |
 | R035 | `/services/viewing-site-visit-scheduling` | Service ⭐ | AI Automation | 1C.3 | Schedule property viewings and site visits automatically | T2 | P6 | W2 | planned | index | — |
 | R036 | `/services/ai-customer-support-automation` | Service ⭐ | AI Automation | 1D.1 | Answer common customer support questions with AI, with human handover | T2 | P6 | W2 | planned | index | — |
 | R037 | `/services/ticketing-complaint-tracking` | Service ⭐ | AI Automation | 1D.2 | Track every complaint and ticket until it's resolved | T2 | P6 | W2 | planned | index | — |
-| R038 | `/services/review-reputation-automation` | Service 🔥 | AI Automation | 1D.3 | Ask happy customers for reviews automatically and respond to reviews | T2 | P6 | W1 | planned | index | — |
+| R038 | `/services/review-reputation-automation` | Service 🔥 | AI Automation | 1D.3 | Ask happy customers for reviews automatically and respond to reviews | T2 | P6 | W1 | live | index | — |
 | R039 | `/services/loyalty-renewal-win-back-automation` | Service ⭐ | AI Automation | 1D.4 | Automate renewals, loyalty and win-back messages | T2 | P6 | W2 | planned | index | — |
 | R040 | `/services/job-work-order-management` | Service ⭐ | AI Automation | 1E.1 | Automate jobs and work orders from request to completion | T2 | P6 | W2 | planned | index | — |
 | R041 | `/services/preventive-maintenance-scheduling` | Service ⭐ | AI Automation | 1E.2 | Schedule maintenance contracts and preventive maintenance automatically | T2 | P6 | W2 | planned | index | — |
@@ -120,7 +120,7 @@ A row is never deleted, and an ID is never reused.
 | R048 | `/services/email-whatsapp-marketing-automation` | Service ⭐ | AI Automation | 1H.1 | Automated email and WhatsApp marketing campaigns | T2 | P6 | W2 | planned | index | — |
 | R049 | `/services/ai-content-engine` | Service ⭐ | AI Automation | 1H.2 | An AI engine that drafts on-brand content at scale, with human review | T2 | P6 | W2 | planned | index | — |
 | R050 | `/services/store-operations-automation` | Service ⭐ | AI Automation | 1I.1 | Automate online store operations (orders, stock, customer updates) | T2 | P6 | W2 | planned | index | — |
-| R051 | `/services/ai-shopping-visibility` | Service 🔥 | AI Automation | 1I.2 | Get products found by AI shopping assistants (agentic commerce readiness) | T2 | P6 | W1 | planned | index | — |
+| R051 | `/services/ai-shopping-visibility` | Service 🔥 | AI Automation | 1I.2 | Get products found by AI shopping assistants (agentic commerce readiness) | T2 | P6 | W1 | live | index | — |
 | R052 | `/services/automated-business-dashboards` | Service ⭐ | AI Automation | 1J.1 | Live dashboards that pull business numbers together automatically | T2 | P6 | W2 | planned | index | — |
 
 ### 3.4 Websites, Software, Growth & Ranking, other services
@@ -135,15 +135,15 @@ A row is never deleted, and an ID is never reused.
 | R065 | `/services/client-customer-portals` | Service ⭐ | Software | 3.2 | A secure portal for clients or customers | T2 | P6 | W2 | planned | index | — |
 | R066 | `/services/internal-tools-admin-dashboards` | Service ⭐ | Software | 3.3 | Internal tools and admin dashboards for the team | T2 | P6 | W2 | planned | index | — |
 | R067 | `/services/custom-software-development` | Service ⭐ | Software | 3.4 | Custom software built around how the business works | T2 | P6 | W2 | planned | index | — |
-| R068 | `/services/ai-citation-aeo-geo` | Service 🔥 | Growth & Ranking | 4A.1 | Get cited by AI answer engines (AEO/GEO) | T2 | P6 | W1 | planned | index | — |
+| R068 | `/services/ai-citation-aeo-geo` | Service 🔥 | Growth & Ranking | 4A.1 | Get cited by AI answer engines (AEO/GEO) | T2 | P6 | W1 | live | index | — |
 | R069 | `/services/programmatic-seo` | Service ⭐ | Growth & Ranking | 4A.2 | Programmatic SEO done safely, with real data per page | T2 | P6 | W2 | planned | index | — |
-| R070 | `/services/local-ai-dominance` | Service 🔥 | Growth & Ranking | 4A.3 | Win local and AI search in English and Arabic, hyperlocally | T2 | P6 | W1 | planned | index | — |
+| R070 | `/services/local-ai-dominance` | Service 🔥 | Growth & Ranking | 4A.3 | Win local and AI search in English and Arabic, hyperlocally | T2 | P6 | W1 | live | index | — |
 | R071 | `/services/performance-seo-retainer` | Service ⭐ | Growth & Ranking | 4A.4 | An ongoing SEO retainer measured on performance | T2 | P6 | W2 | planned | index | — |
 | R072 | `/services/google-ads` | Service ⭐ | Growth & Ranking | 4B.1 | Google Ads management | T2 | P6 | W2 | planned | index | — |
 | R073 | `/services/meta-ads` | Service ⭐ | Growth & Ranking | 4B.2 | Meta Ads (Facebook and Instagram) management | T2 | P6 | W2 | planned | index | — |
 | R074 | `/services/tiktok-snapchat-ads` | Service ⭐ | Growth & Ranking | 4B.3 | TikTok and Snapchat Ads management | T2 | P6 | W2 | planned | index | — |
 | R075 | `/services/linkedin-ads` | Service ⭐ | Growth & Ranking | 4B.4 | LinkedIn Ads for B2B | T2 | P6 | W2 | planned | index | — |
-| R076 | `/services/ai-ad-creative` | Service 🔥 | Growth & Ranking | 4B.6 | AI-assisted ad creative production | T2 | P6 | W1 | planned | index | — |
+| R076 | `/services/ai-ad-creative` | Service 🔥 | Growth & Ranking | 4B.6 | AI-assisted ad creative production | T2 | P6 | W1 | live | index | — |
 | R077 | `/services/social-media-management` | Service ⭐ | Growth & Ranking | 4C.1 | Social media management | T2 | P6 | W2 | planned | index | — |
 | R078 | `/services/content-creation` | Service ⭐ | Growth & Ranking | 4C.2 | Content creation for social and web | T2 | P6 | W2 | planned | index | — |
 | R079 | `/services/graphic-design` | Service ⭐ | Growth & Ranking | 4C.3 | Graphic design | T2 | P6 | W2 | planned | index | — |
@@ -261,3 +261,4 @@ The blueprint's draft slugs (for example `web-development`, `ai-chatbots`, `/aud
 | 2026-09-30 | R165, `/shell-review` (P2): the shell review page, never built in production | Owner (P2 plan approval) |
 | 2026-10-07 | R179, `/shell/mega-menu` (P6 part A2): the mega menu's full panel as a fragment, loaded on intent (decision 0026, L8) | Owner (the P6 part A plan, Q2 (b), 2026-10-07) |
 | 2026-10-08 | R010 `/services` and R027 `/services/speed-to-lead-system` → live (P6 part A2, S11: the services hub and the pilot service page) | Owner (the P6 part A plan, Q3: Speed-to-Lead System, 2026-10-07) |
+| 2026-10-09 | R029, R031, R032, R033, R034, R038, R051, R068, R070, R076 → live (service batch 1 from the pilot template: the standing plan `docs/plans/2026-10-08-service-pages-standing-plan.md`, decision 0029) | Owner ("start service batch", 2026-10-09) |

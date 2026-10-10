@@ -110,6 +110,56 @@
             "@type": "ListItem",
             "name": "Speed-to-Lead System",
             "url": "https://deepzeta.ai/services/speed-to-lead-system#service"
+          },
+          {
+            "@type": "ListItem",
+            "name": "Automated Quotation & Quote Tracking System",
+            "url": "https://deepzeta.ai/services/automated-quotation-tracking#service"
+          },
+          {
+            "@type": "ListItem",
+            "name": "Sales Follow-Up & Nurture Sequences",
+            "url": "https://deepzeta.ai/services/sales-follow-up-nurture#service"
+          },
+          {
+            "@type": "ListItem",
+            "name": "CRM Setup & Automation",
+            "url": "https://deepzeta.ai/services/crm-setup-automation#service"
+          },
+          {
+            "@type": "ListItem",
+            "name": "Booking Automation System",
+            "url": "https://deepzeta.ai/services/booking-automation-system#service"
+          },
+          {
+            "@type": "ListItem",
+            "name": "Appointment Reminder & No-Show Reduction",
+            "url": "https://deepzeta.ai/services/appointment-reminders-no-show-reduction#service"
+          },
+          {
+            "@type": "ListItem",
+            "name": "Review & Reputation Automation",
+            "url": "https://deepzeta.ai/services/review-reputation-automation#service"
+          },
+          {
+            "@type": "ListItem",
+            "name": "AI Shopping Visibility (Agentic Commerce Readiness)",
+            "url": "https://deepzeta.ai/services/ai-shopping-visibility#service"
+          },
+          {
+            "@type": "ListItem",
+            "name": "AI Citation & Answer Engine Optimisation (AEO/GEO)",
+            "url": "https://deepzeta.ai/services/ai-citation-aeo-geo#service"
+          },
+          {
+            "@type": "ListItem",
+            "name": "Local AI Dominance (Bilingual, Hyperlocal)",
+            "url": "https://deepzeta.ai/services/local-ai-dominance#service"
+          },
+          {
+            "@type": "ListItem",
+            "name": "AI Ad Creative Production",
+            "url": "https://deepzeta.ai/services/ai-ad-creative#service"
           }
         ]
       },
@@ -123,6 +173,76 @@
             "itemOffered": {
               "@id": "https://deepzeta.ai/services/speed-to-lead-system#service",
               "name": "Speed-to-Lead System"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@id": "https://deepzeta.ai/services/automated-quotation-tracking#service",
+              "name": "Automated Quotation & Quote Tracking System"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@id": "https://deepzeta.ai/services/sales-follow-up-nurture#service",
+              "name": "Sales Follow-Up & Nurture Sequences"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@id": "https://deepzeta.ai/services/crm-setup-automation#service",
+              "name": "CRM Setup & Automation"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@id": "https://deepzeta.ai/services/booking-automation-system#service",
+              "name": "Booking Automation System"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@id": "https://deepzeta.ai/services/appointment-reminders-no-show-reduction#service",
+              "name": "Appointment Reminder & No-Show Reduction"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@id": "https://deepzeta.ai/services/review-reputation-automation#service",
+              "name": "Review & Reputation Automation"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@id": "https://deepzeta.ai/services/ai-shopping-visibility#service",
+              "name": "AI Shopping Visibility (Agentic Commerce Readiness)"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@id": "https://deepzeta.ai/services/ai-citation-aeo-geo#service",
+              "name": "AI Citation & Answer Engine Optimisation (AEO/GEO)"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@id": "https://deepzeta.ai/services/local-ai-dominance#service",
+              "name": "Local AI Dominance (Bilingual, Hyperlocal)"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@id": "https://deepzeta.ai/services/ai-ad-creative#service",
+              "name": "AI Ad Creative Production"
             }
           }
         ]

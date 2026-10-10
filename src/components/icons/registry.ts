@@ -131,7 +131,11 @@ export const TIER_1 = {
   },
 } as const satisfies Record<string, Tier1Icon>;
 
-// Tier 2: the prototype's service icons. All five are catalogue §1, the AI Automation pillar.
+// Tier 2: the prototype's five service icons (catalogue §1, the AI Automation pillar), and the icons
+// drawn for the service pages from batch 1 on, each placed after its catalogue neighbour. A key is the
+// service's slug in src/content/catalogue.ts, which the service hero looks up. The new drawings keep
+// horizontal and vertical line centres on .25 or .75 (§3; C39), and every pixel 0.75 clear of every
+// line, so none needs a knockout mask in IconDefs, which ships on every page.
 export const TIER_2 = {
   'whatsapp-ai-agent': {
     name: 'WhatsApp AI Agent',
@@ -197,6 +201,39 @@ export const TIER_2 = {
     pixel: { x: 14.5, y: 9, size: 2.6 },
     knockout: true, // overlaps the dial by 0.55, measured
   },
+  'automated-quotation-tracking': {
+    name: 'Automated Quotation & Quote Tracking System',
+    catalogue: '1B.3',
+    pillar: 'ai',
+    pixelIs: 'the quote, accepted',
+    motion: 'pop',
+    flip: true, // a status list and text-line placeholders mirror (§9)
+    shapes: [
+      { kind: 'rect', x: 4.75, y: 2.75, width: 14.5, height: 18.5, rx: 2.25 },
+      // Its status: sent, then viewed (they blink in turn), then the pixel, accepted
+      { kind: 'dot', cx: 8.5, cy: 7.25, r: 0.9, blink: 'early' },
+      { kind: 'dot', cx: 8.5, cy: 11.75, r: 0.9, blink: 'late' },
+      { kind: 'path', d: 'M11.5 7.25h4.75M11.5 11.75h3.25M11.5 16.25h4.75' },
+    ],
+    pixel: { x: 7.25, y: 15, size: 2.6 },
+  },
+  'sales-follow-up-nurture': {
+    name: 'Sales Follow-Up & Nurture Sequences',
+    catalogue: '1B.5',
+    pillar: 'ai',
+    pixelIs: "the lead's reply, where the sequence stops",
+    motion: 'pop',
+    flip: true, // chat-bubble tails mirror (§9)
+    shapes: [
+      // Two follow-ups go out (only the last of a group has a tail), then the reply comes back
+      { kind: 'rect', x: 6.75, y: 3.75, width: 13.5, height: 4, rx: 1.25 },
+      {
+        kind: 'path',
+        d: 'M14 10.25h5a1.25 1.25 0 0 1 1.25 1.25v4.25l-1.5-1.5H14a1.25 1.25 0 0 1-1.25-1.25V11.5A1.25 1.25 0 0 1 14 10.25zM5 13.75h4a1.25 1.25 0 0 1 1.25 1.25v3.5A1.25 1.25 0 0 1 9 19.75H5.25l-1.5 1.5V15A1.25 1.25 0 0 1 5 13.75z',
+      },
+    ],
+    pixel: { x: 5.75, y: 15.5, size: 2.6 },
+  },
   'crm-setup-automation': {
     name: 'CRM Setup & Automation',
     catalogue: '1B.6',
@@ -212,6 +249,98 @@ export const TIER_2 = {
     ],
     pixel: { x: 16.5, y: 12.25, size: 2.6 },
     knockout: true, // 0.40 from the card's edge, measured
+  },
+  'appointment-reminders-no-show-reduction': {
+    name: 'Appointment Reminder & No-Show Reduction',
+    catalogue: '1C.2',
+    pillar: 'ai',
+    pixelIs: 'the reminder that rings in time, so the client turns up',
+    motion: 'pop',
+    flip: false, // a bell has no direction
+    shapes: [{ kind: 'path', d: 'M4.75 16.25l2-2V11a5.5 5.5 0 0 1 11 0v3.25l2 2zM12.25 3.25v2.25' }],
+    // The clapper
+    pixel: { x: 10.75, y: 18, size: 3 },
+  },
+  'review-reputation-automation': {
+    name: 'Review & Reputation Automation',
+    catalogue: '1D.3',
+    pillar: 'ai',
+    pixelIs: 'the fifth star: a new five-star review',
+    motion: 'pop',
+    flip: true, // a bubble's tail, text-line placeholders and a rating in reading order mirror (§9)
+    shapes: [
+      // The customer's words, and their rating under them
+      {
+        kind: 'path',
+        d: 'M5 3.25h14a1.25 1.25 0 0 1 1.25 1.25v7A1.25 1.25 0 0 1 19 12.75h-9.25l-3 3v-3H5a1.25 1.25 0 0 1-1.25-1.25v-7A1.25 1.25 0 0 1 5 3.25zM7.25 6.75h9.5M7.25 9.25h5.5',
+      },
+      { kind: 'dot', cx: 5.25, cy: 19.25, r: 1 },
+      { kind: 'dot', cx: 8.5, cy: 19.25, r: 1 },
+      { kind: 'dot', cx: 11.75, cy: 19.25, r: 1 },
+      { kind: 'dot', cx: 15, cy: 19.25, r: 1 },
+    ],
+    pixel: { x: 17, y: 18, size: 2.6 },
+  },
+  'ai-shopping-visibility': {
+    name: 'AI Shopping Visibility (Agentic Commerce Readiness)',
+    catalogue: '1I.2',
+    pillar: 'ai',
+    pixelIs: 'your product, in the cart the AI assistant fills',
+    motion: 'pop',
+    flip: true, // a cart faces the way it rolls, forward in the reading direction (§9)
+    shapes: [
+      { kind: 'path', d: 'M3.25 4.75h2.5v11.5h12.5M5.75 6.75h14.5v3.5l-4 4H5.75' },
+      { kind: 'dot', cx: 8.25, cy: 19.25, r: 1 },
+      { kind: 'dot', cx: 16.25, cy: 19.25, r: 1 },
+    ],
+    pixel: { x: 11.25, y: 9.25, size: 2.6 },
+  },
+  'ai-citation-aeo-geo': {
+    name: 'AI Citation & Answer Engine Optimisation (AEO/GEO)',
+    catalogue: '4A.1',
+    pillar: 'ranking',
+    pixelIs: 'your business, cited inside the AI answer',
+    motion: 'pop',
+    flip: false, // a search lens never flips (§9)
+    shapes: [
+      { kind: 'circle', cx: 10.75, cy: 10.75, r: 6.75 },
+      { kind: 'path', d: 'M15.75 15.75l4.5 4.5M7.75 8.75h6M7.75 11.75h2.5' },
+    ],
+    pixel: { x: 12, y: 10.5, size: 2.6 },
+  },
+  'local-ai-dominance': {
+    name: 'Local AI Dominance (Bilingual, Hyperlocal)',
+    catalogue: '4A.3',
+    pillar: 'ranking',
+    pixelIs: 'you, dropping onto the map',
+    motion: 'pop',
+    flip: false, // a map pin never flips (§9)
+    shapes: [
+      { kind: 'path', d: 'M12 19.75s-6.25-5.25-6.25-10.5a6.25 6.25 0 0 1 12.5 0c0 5.25-6.25 10.5-6.25 10.5z' },
+      { kind: 'path', d: 'M4.75 21.25h4.25M15 21.25h4.25' },
+    ],
+    // In the pin's head, (12, 9.25), to within 0.05: the 0.25 grid can't centre a 3.4 pixel exactly
+    pixel: { x: 10.25, y: 7.5, size: 3.4 },
+  },
+  'ai-ad-creative': {
+    name: 'AI Ad Creative Production',
+    catalogue: '4B.6',
+    pillar: 'ranking',
+    pixelIs: 'the winning creative, the one that stops the scroll',
+    motion: 'pop',
+    flip: false, // a stack of pictures has no direction
+    shapes: [
+      // The variations behind it
+      {
+        kind: 'path',
+        d: 'M7.25 7.75V6.5a2.25 2.25 0 0 1 2.25-2.25h8.5a2.25 2.25 0 0 1 2.25 2.25v8a2.25 2.25 0 0 1-2.25 2.25h-1.25',
+        soft: true,
+      },
+      { kind: 'rect', x: 3.75, y: 7.75, width: 13, height: 12.5, rx: 2.25 },
+      { kind: 'path', d: 'M6.75 19.5l5-5 4.25 4.25' },
+    ],
+    // The sun over the hill
+    pixel: { x: 6.5, y: 10.5, size: 2.6 },
   },
 } as const satisfies Record<string, Tier2Icon>;
 

@@ -6,6 +6,7 @@ import { Icon, type IconProps } from '@/components/icons/Icon';
 import { CLUSTER, clusterBoxes } from '@/components/icons/Cluster';
 import { CLEARANCE, IconDefs } from '@/components/icons/IconDefs';
 import { PILLARS, TIER_1, TIER_2, TIER_3, type Pillar, type Shape } from '@/components/icons/registry';
+import { services, type CatalogueService } from '@/content/catalogue';
 
 // The Icon Master Rules as tests (P1 plan, section E; conflict C36: the registry is the source of
 // truth, so these checks stand in for the Figma master and SVGO).
@@ -97,7 +98,10 @@ describe('Tier 2 icons', () => {
     );
     expect(CATALOGUE).toMatch(heading);
     expect(icon.pillar).toBe(PILLAR_BY_SECTION[icon.catalogue[0] ?? '']);
-    expect(name).toBe(slug(icon.name));
+    // The key is the service's slug in the typed catalogue, which the hub and the service hero look
+    // the icon up by (a slug can be shorter than the name, e.g. local-ai-dominance).
+    const service: CatalogueService | undefined = services.find((entry) => entry.number === icon.catalogue);
+    expect(name).toBe(service?.slug);
   });
 
   it.each(tier2)('%s: one pixel, lit, sized and placed by the rules', (name, icon) => {

@@ -182,3 +182,581 @@ export const speedToLeadSystemFaq: readonly FaqQuestion[] = [
       'If you want us to keep it running, the AI Ops Retainer looks after your Speed-to-Lead System once it is live. It covers monitoring, fixes, updates and prompt improvements, plus a monthly report of hours saved and results. It also adds new small automations each month, such as connecting a new lead source.',
   },
 ];
+
+// The questions on the Automated Quotation & Quote Tracking System page (R029): 8, the lead service
+// range of 6–8 (engine §3); cost and timeline first (§6.2 rule 3). Each first sentence stands alone
+// (≤ 25 words); each answer is 40–90 words and names at most one other service. Sources: catalogue
+// 0.1 (the written summary and quote), 1B.3, 1K.1 (retention and access rules in every automation
+// project), 6.1 (the AI Ops Retainer), §8 (CRMs, accounting) and §9 (no guaranteed results).
+export const automatedQuotationTrackingFaq: readonly FaqQuestion[] = [
+  {
+    id: 'what-does-quote-tracking-cost',
+    topic: 'cost',
+    question: 'How much does an automated quotation system cost?',
+    answer:
+      'We price it after a free AI audit, because the cost depends on your setup. The main drivers are how many places quotes start from, how complex your price lists and rules are, and how many approval levels you need. E-signature, deposit payments and turning accepted quotes into jobs or invoices each add to the build.',
+  },
+  {
+    id: 'how-long-does-quote-tracking-take',
+    topic: 'timeline',
+    question: 'How long does it take to automate our quoting?',
+    answer:
+      'We confirm a timeframe after the free AI audit, once we have seen your price lists and quote templates. Branded quotes sent by email, with view tracking, are a smaller build than adding approvals, e-signature, deposits and automatic jobs or invoices. The audit ends with a written summary of next steps and our price for the build.',
+  },
+  {
+    id: 'can-quote-tracking-start-from-our-crm',
+    topic: 'integrations',
+    question: 'Can a quote start from a deal in our CRM?',
+    answer:
+      'Yes: a quote can start from a deal in HubSpot, Zoho CRM, Pipedrive, Salesforce or Odoo. It can also start from a form, a WhatsApp chat or an email. The client’s details come across from the deal, so nobody retypes them. When the client accepts, the quote can become an invoice in Zoho Books, QuickBooks, Xero or Odoo.',
+  },
+  {
+    id: 'can-quote-tracking-send-arabic-quotes',
+    topic: 'arabic',
+    question: 'Can quotes go out in Arabic as well as English?',
+    answer:
+      'Yes: each quote can be produced in Arabic or English, with the same logo, terms and VAT details. Item names and terms are written once in both languages, in your templates, so nobody translates a quote under pressure. You choose the language for each client.',
+  },
+  {
+    id: 'who-sets-quote-tracking-prices-and-limits',
+    topic: 'ownership',
+    question: 'Who controls the prices, discount limits and approvers?',
+    answer:
+      'You do: the price lists, discount limits and approvers are your settings, not ours. You decide which discount level or quote value needs approval, and who approves it. A quote over either limit stays in Draft until that person approves, edits or rejects it, and the salesperson sees the decision.',
+  },
+  {
+    id: 'what-does-quote-tracking-record',
+    topic: 'data-privacy',
+    question: 'What does view tracking record about our clients?',
+    answer:
+      'View tracking records when a client opens the quote link, how many times, and for how long. It is there to show your team where each quote stands. Retention and access rules come with every automation project we build, so you decide who sees the tracking and how long it is kept.',
+  },
+  {
+    id: 'will-quote-tracking-raise-our-win-rate',
+    topic: 'results',
+    question: 'Will automating our quotes raise our win rate?',
+    answer:
+      'We can’t promise a higher win rate: whether a client accepts depends on your price and your offer. What you get is visibility: the dashboard shows quote value, win rate, average time to close and lost reasons for each salesperson. You see what changes after launch, measured on your own quotes, not on someone else’s numbers.',
+  },
+  {
+    id: 'what-if-quote-tracking-prices-change',
+    topic: 'support',
+    question: 'What happens when our prices or terms change?',
+    answer:
+      'You update the price list or the terms in one place, and new quotes use them from then on. Approval limits and reminder schedules can be adjusted as your process changes. For bigger changes, such as a new quote type or a new place quotes start from, the AI Ops Retainer covers updates and new small automations each month.',
+  },
+];
+
+// The questions on the Sales Follow-Up & Nurture Sequences page (R031): 7, the core service range of
+// 5–7 (engine §3); cost and timeline first (§6.2 rule 3). Each first sentence stands alone (≤ 25
+// words); each answer is 40–90 words and names no other service. Sources: catalogue 1B.5, 1K.1
+// (retention and access rules in every automation project), §8 (CRMs, booking tools) and §9 (consent
+// and a human).
+export const salesFollowUpNurtureFaq: readonly FaqQuestion[] = [
+  {
+    id: 'what-do-nurture-sequences-cost',
+    topic: 'cost',
+    question: 'How much do automated follow-up sequences cost?',
+    answer:
+      'The cost depends on your sequences, so we price them after a free AI audit. The drivers are how many sequences and paths you need, which channels each one uses, and where your leads come from. Writing messages in Arabic and English, and connecting your CRM and calendar, also shape the build.',
+  },
+  {
+    id: 'how-soon-can-nurture-sequences-run',
+    topic: 'timeline',
+    question: 'How soon can our first sequence be running?',
+    answer:
+      'There is no standard timeframe: we set one after the free AI audit, when your sequences are mapped. A single WhatsApp sequence for one kind of enquiry is a smaller build than branching sequences across WhatsApp, email and SMS. You can start with one sequence and add more once you see how your leads respond.',
+  },
+  {
+    id: 'will-nurture-sequences-annoy-leads',
+    topic: 'results',
+    question: 'Won’t automatic follow-ups annoy our leads?',
+    answer:
+      'Not if they stop at the right moment and are easy to leave. Every sequence ends as soon as the lead replies or books, so nobody is chased after answering. You set how many steps there are and how far apart they go out, and each message offers a simple way to opt out.',
+  },
+  {
+    id: 'what-starts-and-stops-a-nurture-sequence',
+    topic: 'integrations',
+    question: 'What starts a sequence, and what stops it?',
+    answer:
+      'A sequence starts when a lead fills in a website form, reaches a stage in your CRM, or doesn’t answer a first reply. It stops when the lead replies, books or opts out, with bookings read from Cal.com, Google Calendar or Outlook. Sequences connect to HubSpot, Zoho CRM, Pipedrive, Salesforce and Odoo.',
+  },
+  {
+    id: 'can-nurture-sequences-run-in-arabic',
+    topic: 'arabic',
+    question: 'Can a sequence message Arabic-speaking leads in Arabic?',
+    answer:
+      'Yes: each message can be written in Arabic and English, and the sequence sends the version that matches the lead. A lead who first wrote to you in Arabic keeps hearing from you in Arabic. Both versions are written for your business, not translated word for word.',
+  },
+  {
+    id: 'how-do-nurture-sequences-handle-consent',
+    topic: 'data-privacy',
+    question: 'How are consent and opt-outs handled in a sequence?',
+    answer:
+      'Every sequence includes consent wording, and an opt-out removes the lead from every step that follows. Retention and access rules are agreed with you before launch, so you decide how long message history is kept and which of your staff can read it.',
+  },
+  {
+    id: 'who-writes-nurture-sequence-messages',
+    topic: 'ownership',
+    question: 'Who writes the messages, and can we change them later?',
+    answer:
+      'We draft the messages with you, in your tone, and nothing goes out until you approve it. The sequences run in your own accounts, so they are yours to keep. Messages can be edited, or a sequence paused, whenever your offer changes.',
+  },
+];
+
+// The questions on the CRM Setup & Automation page (R032): 6, within the core service range of 5–7
+// (engine §3; the page's word count keeps it under 1,400); cost and timeline first (§6.2 rule 3).
+// None repeats the pilot's "Does it work with the CRM we already use?". Each first sentence stands
+// alone (≤ 25 words); each answer is 40–90 words and names no other service. Sources: catalogue
+// 1B.6, 1K.1 (retention and access rules, a record of what each system uses), §8 (the CRMs; Odoo
+// under both CRM and Accounting & ERP).
+export const crmSetupAutomationFaq: readonly FaqQuestion[] = [
+  {
+    id: 'what-does-crm-setup-cost',
+    topic: 'cost',
+    question: 'How much does CRM setup and automation cost?',
+    answer:
+      'Each CRM project is priced after a free AI audit, once we know your CRM, channels and data. The main drivers are how many pipelines and channels you connect, and how much existing data needs cleaning first. Any CRM licence fees are separate from our work and stay in your company’s name.',
+  },
+  {
+    id: 'how-long-does-crm-setup-take',
+    topic: 'timeline',
+    question: 'How long does it take to set up a CRM?',
+    answer:
+      'The timeframe depends on your data as much as the CRM, so we set it after the free AI audit. Setting up pipelines in a new CRM is a smaller job than moving years of spreadsheets, cleaning duplicates and connecting calls, email and WhatsApp. Switching over happens only after the new setup is checked with you.',
+  },
+  {
+    id: 'which-crm-does-crm-setup-recommend',
+    topic: 'integrations',
+    question: 'Which CRM should we choose for our business?',
+    answer:
+      'The right CRM depends on how you sell and what else you run, so we recommend one after mapping your process. If you already use Odoo for accounting, its CRM keeps sales and finance in one system. If your team already knows a CRM, improving it may be the better first step. We set up and automate HubSpot, Zoho CRM, Pipedrive, Salesforce and Odoo.',
+  },
+  {
+    id: 'who-owns-the-crm-after-crm-setup',
+    topic: 'ownership',
+    question: 'Who owns the CRM account and the data in it?',
+    answer:
+      'Your company does: the CRM account is opened in your name, and every contact, deal and note in it is yours. We work as invited users with the access you give us, and you can remove that access at any time. The automations that write to the CRM are documented, so another team could run them.',
+  },
+  {
+    id: 'can-crm-setup-keep-arabic-records',
+    topic: 'arabic',
+    question: 'Can the CRM hold Arabic names and conversations?',
+    answer:
+      'Yes: names, notes and WhatsApp messages in Arabic are kept as written, alongside English records. A logged WhatsApp conversation stays in the language the client used, so whoever picks up the deal sees exactly what was said. Stage and task names can follow the language your team works in.',
+  },
+  {
+    id: 'what-does-crm-setup-enrichment-add',
+    topic: 'data-privacy',
+    question: 'What does data enrichment add, and who controls it?',
+    answer:
+      'Enrichment fills gaps in your records, such as a missing company name or job title, from sources you approve. Like every automation we build, enrichment comes with retention and access rules and a record of what data each step uses. You decide which staff see which records.',
+  },
+];
+
+// The questions on the Booking Automation System page (/services/booking-automation-system, R033): 7,
+// the lead service range of 6–8 (engine §3); cost and timeline first (§6.2 rule 3). Each answer's
+// first sentence stands alone (≤ 25 words); each answer is 40–90 words and names at most one other
+// service. Sources: catalogue 0.1 (the written summary and quote), 1A.1 and 1A.2 (Arabic and
+// English), 1B.6, 1C.1, 1C.2, 1K.1 (data rules in every automation project), 6.1, §8 (calendars),
+// and facts §3 (the audit's meeting types: a phone call, Google Meet or an office visit).
+export const bookingAutomationSystemFaq: readonly FaqQuestion[] = [
+  {
+    id: 'what-does-booking-automation-cost',
+    topic: 'cost',
+    question: 'What does a Booking Automation System cost?',
+    answer:
+      'We quote the Booking Automation System after a free AI audit, because the price depends on your setup. The main drivers are how many staff, rooms, vehicles or pieces of equipment the calendar covers, which channels customers book through, and whether you take deposits online. Syncing a practice-management system adds its own work. The audit ends with a written summary, next steps and a quote.',
+  },
+  {
+    id: 'how-long-does-booking-automation-take',
+    topic: 'timeline',
+    question: 'How long does it take to set up online booking?',
+    answer:
+      'We confirm a timeframe after the free AI audit, once we know your channels and calendars. A booking page with confirmations and reminders is a smaller build than booking on WhatsApp and by phone, with deposits, a waitlist and a practice-management system to sync. The audit itself is a short phone call, a Google Meet or an office visit.',
+  },
+  {
+    id: 'does-booking-automation-sync-with-my-calendar',
+    topic: 'integrations',
+    question: 'Will it sync with the calendar or clinic system we already use?',
+    answer:
+      'Bookings sync with Google Calendar, Outlook and practice-management systems, so your team keeps the calendar it already knows. Every booking, change and cancellation is written there automatically, and availability is read back in real time. We confirm the connection to your exact system during the free AI audit. If you also want each customer in a CRM, CRM Setup & Automation adds one.',
+  },
+  {
+    id: 'does-booking-automation-work-in-arabic',
+    topic: 'arabic',
+    question: 'Can customers book in Arabic?',
+    answer:
+      'Yes: the booking page, confirmations and reminders can all be written in Arabic and English, and you choose which each customer receives. Booking on WhatsApp or by phone works in both languages too, because the AI agents behind them reply in Arabic and English. Whatever language a booking is made in, it lands in the same calendar for your team.',
+  },
+  {
+    id: 'will-booking-automation-stop-no-shows',
+    topic: 'results',
+    question: 'Will online booking get rid of no-shows?',
+    answer:
+      'No booking system can stop every no-show, and we don’t promise to. Reminders by WhatsApp, SMS and email, easy self-service rescheduling and a waitlist are built to reduce no-shows and fill cancelled slots. We will share real figures only once we have measured them on live systems. For a fuller reminder series and automatic rebooking, add Appointment Reminder & No-Show Reduction.',
+  },
+  {
+    id: 'where-does-booking-automation-keep-data',
+    topic: 'data-privacy',
+    question: 'Where are our customers’ booking details kept?',
+    answer:
+      'Booking details are kept in the calendar and systems you choose, such as Google Calendar, Outlook or your practice-management system. As in every automation project we build, the data rules are part of the job: consent wording, who can access what, how long data is kept, and a record of what each AI step uses. You decide which staff can see which bookings.',
+  },
+  {
+    id: 'can-we-block-time-in-booking-automation',
+    topic: 'support',
+    question: 'Can our team block time or change hours after launch?',
+    answer:
+      'Yes: availability is read from your own calendar in real time, so blocking time there closes those slots to customers. Days off and holidays work the same way, with no call to us needed. For changes to the automation itself, the AI Ops Retainer covers monitoring, fixes, updates and new small automations each month.',
+  },
+];
+
+// The questions on the Appointment Reminder & No-Show Reduction page
+// (/services/appointment-reminders-no-show-reduction, R034): 6, the core service range of 5–7 (engine
+// §3); cost and timeline first (§6.2 rule 3). Each answer's first sentence stands alone (≤ 25 words);
+// each answer is 40–90 words and names at most one other service. No figure for the no-show change:
+// none is measured (facts §5). Sources: catalogue 0.1 (the written summary and quote), 1A.3, 1C.1,
+// 1C.2, 1K.1 (included with every automation project), §8 (calendars, messaging).
+export const appointmentRemindersNoShowReductionFaq: readonly FaqQuestion[] = [
+  {
+    id: 'what-do-appointment-reminders-cost',
+    topic: 'cost',
+    question: 'How is the price of appointment reminders worked out?',
+    answer:
+      'We price Appointment Reminder & No-Show Reduction after a free AI audit, based on your setup. The main drivers are which calendar or practice-management system the reminders read from, which channels they use, and how rebooking should work for your services. Reminder calls by an AI voice are a separate service. You receive the quote with the written summary that follows the audit.',
+  },
+  {
+    id: 'how-soon-can-appointment-reminders-start',
+    topic: 'timeline',
+    question: 'How quickly can reminders be running for our appointments?',
+    answer:
+      'We set a timeframe after the free AI audit, once we have seen where your appointments are kept. Reminders that read from Google Calendar or Outlook are a smaller build than ones connected to a practice-management system with rebooking follow-ups. The wording and timing of each reminder are agreed with you during the build.',
+  },
+  {
+    id: 'how-much-do-appointment-reminders-reduce-no-shows',
+    topic: 'results',
+    question: 'How much will reminders reduce our no-shows?',
+    answer:
+      'We can’t predict your drop in no-shows in advance, and we won’t promise a figure. Reminders, one-tap rescheduling and rebooking follow-ups are built to turn silent no-shows into confirmations, new times or rebookings. The fairest measure is your own diary: compare missed appointments before and after the reminders start.',
+  },
+  {
+    id: 'which-calendars-work-with-appointment-reminders',
+    topic: 'integrations',
+    question: 'Which calendars and booking systems can the reminders work with?',
+    answer:
+      'Reminders can read appointments from Google Calendar, Outlook, Cal.com and practice-management systems. They go out through the WhatsApp Business API, SMS or email, and each confirmation or new time is written back to the same calendar. Whether your particular system allows a connection is one of the things the free AI audit checks.',
+  },
+  {
+    id: 'can-appointment-reminders-be-in-arabic',
+    topic: 'arabic',
+    question: 'Can patients get their reminders in Arabic?',
+    answer:
+      'Yes: every reminder can be written in Arabic, English or both, and you set the language for each customer. The one-tap confirm and reschedule options work the same way in either language. If a patient replies in Arabic with a question, the message is passed straight to your team.',
+  },
+  {
+    id: 'what-data-do-appointment-reminders-use',
+    topic: 'data-privacy',
+    question: 'What customer information do the reminders use?',
+    answer:
+      'The reminders use only what they need: the customer’s name, phone number or email, and the appointment time. AI Compliance Setup (UAE PDPL), included with every automation project, adds consent wording, retention and access rules, and a record of the data the system uses. Customers can stop the reminders at any time.',
+  },
+];
+
+// The questions on the Review & Reputation Automation page (/services/review-reputation-automation,
+// R038): 7, the lead service range of 6–8 (engine §3); cost and timeline first (§6.2 rule 3). Each
+// answer's first sentence stands alone (≤ 25 words); each answer is 40–90 words and names at most
+// one other service. No rating or ranking promise (catalogue §9). Sources: catalogue 1D.3, 1H.2
+// (Arabic and English drafts reviewed by a person), 1K.1 (data rules), §8 (CRMs, messaging).
+export const reviewReputationAutomationFaq: readonly FaqQuestion[] = [
+  {
+    id: 'what-does-review-automation-cost',
+    topic: 'cost',
+    question: 'What does Review & Reputation Automation cost?',
+    answer:
+      'Review & Reputation Automation is priced after a free AI audit, because the cost depends on how your business runs. The drivers are what triggers each request, such as your calendar, CRM or job system, how many locations you have, and which channels the requests use. After the audit, you get the quote in writing with clear next steps.',
+  },
+  {
+    id: 'how-soon-can-review-automation-start',
+    topic: 'timeline',
+    question: 'How soon can review requests start going out?',
+    answer:
+      'We give a timeframe after the free AI audit, once we know what should trigger each request. Sending requests from a booking calendar is a smaller build than connecting a job system, adding manager alerts and drafting replies to Google reviews. You choose the wording of each request and how soon after a service it goes out.',
+  },
+  {
+    id: 'will-review-automation-raise-our-rating',
+    topic: 'results',
+    question: 'Will this raise our Google rating?',
+    answer:
+      'Nobody can promise a higher Google rating, because your customers write the reviews. What the system changes is the routine: requests go out after a service, complaints reach your manager quickly, and each new Google review gets a drafted reply. The monthly report lets you follow reviews, ratings and replies over time and judge the change yourself.',
+  },
+  {
+    id: 'what-does-review-automation-connect-to',
+    topic: 'integrations',
+    question: 'Which review sites and business systems does it connect to?',
+    answer:
+      'Review & Reputation Automation drafts replies to Google reviews and takes its trigger from your calendar, CRM or job system. Requests go out through the WhatsApp Business API, SMS or email, and the CRMs we connect include HubSpot, Zoho CRM, Pipedrive, Salesforce and Odoo. If another review site matters to you, raise it in the free AI audit and we will check what it allows.',
+  },
+  {
+    id: 'can-review-automation-reply-in-arabic',
+    topic: 'arabic',
+    question: 'Can the AI reply to reviews written in Arabic?',
+    answer:
+      'Yes: the AI drafts replies in Arabic or English, so each reply can match the language of the review. Your manager reads every draft before it is posted and can adjust the tone. Review requests themselves can go out in Arabic, English or both, set for each customer.',
+  },
+  {
+    id: 'what-data-does-review-automation-use',
+    topic: 'data-privacy',
+    question: 'What customer data does review automation use?',
+    answer:
+      'Review requests use the contact details your calendar, CRM or job system already holds, plus the date of the service. Every project we build also carries our data rules: consent wording, limits on who sees what and for how long, and a log of what each AI step does. Because your manager approves every reply, a person checks for private details before anything goes public.',
+  },
+  {
+    id: 'what-does-review-automation-do-with-complaints',
+    topic: 'support',
+    question: 'What happens when a customer replies that they are unhappy?',
+    answer:
+      'An unhappy reply triggers an alert to your manager straight away, with the customer’s message, so they can call and put things right. Draft replies to public reviews still wait for approval, so nothing goes out in a hurry or in anger.',
+  },
+];
+
+// The questions on the AI Shopping Visibility page (/services/ai-shopping-visibility, R051): 8, the
+// lead service range of 6–8 (engine §3); cost and timeline first (§6.2 rule 3). Each first sentence
+// stands alone (≤ 25 words); each answer is 40–90 words and names at most one other service.
+// Sources: catalogue 0.1 (the written summary, next steps and a quote), 1I.2, 1I.3 (translations
+// reviewed by a human), 2.3, §8 and §9 (no guaranteed results); Home's ownership answer. The ids
+// carry the service's stem; none repeats a question on Home, the hub or the pilot.
+export const aiShoppingVisibilityFaq: readonly FaqQuestion[] = [
+  {
+    id: 'what-does-ai-shopping-visibility-cost',
+    topic: 'cost',
+    question: 'How much does AI Shopping Visibility cost?',
+    answer:
+      'The price depends on your catalogue, so we quote it after a free AI audit. The main drivers are how many products and categories need restructuring, how many feeds and marketplaces we manage, and how much product data is missing today. A store with clean data needs less work than one with sparse titles and no attributes.',
+  },
+  {
+    id: 'how-long-does-ai-shopping-visibility-take',
+    topic: 'timeline',
+    question: 'How long does it take to get a catalogue ready?',
+    answer:
+      'We give a timeframe only after the free AI audit, once we have seen your catalogue and feeds. Restructuring a focused range is a smaller job than a store with deep categories and several marketplaces. The audit ends with a written summary, next steps and a quote, so you see the plan before any work begins.',
+  },
+  {
+    id: 'can-ai-shopping-visibility-promise-recommendations',
+    topic: 'results',
+    question: 'Can you make ChatGPT recommend our products?',
+    answer:
+      'No: nobody can promise that ChatGPT or any AI assistant will recommend a product. The assistant decides what it shows, not us and not you. What we control is your side: clear, structured, accurate product data in every feed, and monitoring that shows where your products appear. We report what we measure, never invented numbers.',
+  },
+  {
+    id: 'does-ai-shopping-visibility-work-with-shopify',
+    topic: 'integrations',
+    question: 'Does it work with Shopify and WooCommerce?',
+    answer:
+      'Yes: AI Shopping Visibility works with stores on Shopify, WooCommerce or a custom build. We work in your existing store and feeds, including Merchant Center and the marketplaces you already sell on, so there is no need to change platform. If the store itself needs rebuilding, E-Commerce Websites covers Shopify, WooCommerce and custom stores.',
+  },
+  {
+    id: 'can-ai-shopping-visibility-cover-arabic',
+    topic: 'arabic',
+    question: 'Can our product data be in Arabic as well as English?',
+    answer:
+      'Yes: product titles, descriptions and attributes can be prepared in Arabic and English, so the store reads correctly in both. Where translations are needed, Product Content Automation writes them with AI and a person reviews every one before it reaches your store or feeds.',
+  },
+  {
+    id: 'does-ai-shopping-visibility-need-customer-data',
+    topic: 'data-privacy',
+    question: 'Do you need access to our customer data?',
+    answer:
+      'No: AI Shopping Visibility works on product data, not on your customers’ personal data. We need access to your product catalogue, your feeds and your Merchant Center account, with permissions that cover only that work. You choose the access level, and you can remove it at any time.',
+  },
+  {
+    id: 'who-controls-the-ai-shopping-visibility-feeds',
+    topic: 'ownership',
+    question: 'Who controls our product feeds and Merchant Center account?',
+    answer:
+      'You do: your feeds, your Merchant Center account and your product data stay in your business’s name. We work inside your accounts and document every change we make to the catalogue and feeds. If you later move the work in-house or to another team, nothing has to be rebuilt or handed back.',
+  },
+  {
+    id: 'what-happens-after-ai-shopping-visibility-set-up',
+    topic: 'support',
+    question: 'What happens after the catalogue is restructured?',
+    answer:
+      'Monitoring continues after launch: we watch where your products appear in AI shopping assistants and keep your feeds in line with the store. When you add products or change prices, the feeds follow. You see what changed and what we fixed, so you can judge the work on real observations.',
+  },
+];
+
+// The questions on the AEO/GEO page (/services/ai-citation-aeo-geo, R068): 7, the lead service
+// range of 6–8 (engine §3); cost and timeline first (§6.2 rule 3). Each first sentence stands alone
+// (≤ 25 words); each answer is 40–90 words and names at most one other service. Sources: catalogue
+// 4A.1, 4A.4, §9 (no guaranteed results); the blueprint's monthly test; the Arabic practice of
+// Home's answer (written natively, never translated as an afterthought). The ids carry the stem
+// "aeo-geo"; none repeats a question on Home (its results and Arabic questions are general), the hub
+// or the pilot.
+export const aiCitationAeoGeoFaq: readonly FaqQuestion[] = [
+  {
+    id: 'what-does-aeo-geo-cost',
+    topic: 'cost',
+    question: 'How much does AEO/GEO cost?',
+    answer:
+      'AEO/GEO is quoted after a free AI audit, because the work depends on your site. The main drivers are how many services and pages need direct answers, how much schema your site already has, and whether you need comparison pages. A site with structured data in place needs less set-up than one starting from nothing.',
+  },
+  {
+    id: 'when-does-aeo-geo-start-working',
+    topic: 'timeline',
+    question: 'How long before AI engines start mentioning us?',
+    answer:
+      'There is no fixed timeframe for AI engines to mention a business, so we don’t promise one. The set-up work itself has a schedule, agreed after the free AI audit. When AI engines pick up the changes is their decision, so the monthly tests record what they say about you and how it changes.',
+  },
+  {
+    id: 'how-is-aeo-geo-measured',
+    topic: 'results',
+    question: 'How do you measure whether AEO/GEO is working?',
+    answer:
+      'We measure it with monthly AI visibility tests: the same buyer questions asked to ChatGPT, Gemini and Perplexity, with the answers recorded. You see whether your business is named, how it is described and whether your pages are cited. No one can guarantee a mention, so we report what the engines actually say.',
+  },
+  {
+    id: 'does-aeo-geo-replace-seo',
+    topic: 'integrations',
+    question: 'Does AEO/GEO replace our SEO work?',
+    answer:
+      'No: AEO/GEO builds on SEO rather than replacing it. We treat fast, crawlable pages and clean technical SEO as the base, and AEO/GEO adds the entity, schema and direct-answer layer on top. If you also want SEO work every month, the Performance SEO Retainer covers technical SEO, content and links.',
+  },
+  {
+    id: 'can-aeo-geo-cover-arabic',
+    topic: 'arabic',
+    question: 'Do you write Arabic answers for AI engines too?',
+    answer:
+      'Yes: direct answers, FAQs and entity details can be written in Arabic and English, each written natively rather than translated word for word. The AI visibility tests can then ask the same questions in both languages, so you see how your business is described to Arabic-speaking and English-speaking buyers.',
+  },
+  {
+    id: 'what-access-does-aeo-geo-need',
+    topic: 'data-privacy',
+    question: 'What access to our website do you need?',
+    answer:
+      'We need edit access to your website’s pages and structured data, or a developer on your side who can apply our changes. We don’t need your customer records: AEO/GEO works on public content. Every change is listed, so you can see what was added to your pages and why.',
+  },
+  {
+    id: 'is-aeo-geo-ongoing',
+    topic: 'support',
+    question: 'Is AEO/GEO a one-off project or ongoing?',
+    answer:
+      'Both: the set-up is a project, and the monthly AI visibility tests and reporting continue after it. Each report shows what AI engines say about your business, what changed since the last test and the fixes we recommend next. If a test shows you described wrongly, we trace the source and correct what is in your control.',
+  },
+];
+
+// The questions on the Local AI Dominance page (/services/local-ai-dominance, R070): 7, the lead
+// service range of 6–8 (engine §3); cost and timeline first (§6.2 rule 3). Each first sentence
+// stands alone (≤ 25 words); each answer is 40–90 words and names at most one other service.
+// Sources: catalogue 4A.3, 1H.4, 2.1 (local SEO setup per area or emirate), §9 (no guaranteed
+// results); Home's Arabic practice (written natively, never translated as an afterthought). The ids
+// carry the stem "local-ai-dominance"; none repeats a question on Home, the hub, the pilot or 4A.1.
+export const localAiDominanceFaq: readonly FaqQuestion[] = [
+  {
+    id: 'what-does-local-ai-dominance-cost',
+    topic: 'cost',
+    question: 'How much does Local AI Dominance cost?',
+    answer:
+      'Local AI Dominance is priced after a free AI audit, because it depends on your footprint. The main drivers are how many areas and emirates you serve, how many branches or profiles you have, and how far your business details have drifted across directories. A business with one branch in one area needs less work than a chain across emirates.',
+  },
+  {
+    id: 'when-does-local-ai-dominance-show-in-the-map-pack',
+    topic: 'timeline',
+    question: 'How soon will we appear in the map pack?',
+    answer:
+      'No one can promise when, or whether, a business moves up the map pack, so we don’t give a date. The set-up work on your profile, citations and areas follows a schedule agreed after the free AI audit. From then on we track where you appear in each area, so you can see the trend.',
+  },
+  {
+    id: 'is-a-local-ai-dominance-arabic-profile-worth-it',
+    topic: 'arabic',
+    question: 'Is an Arabic profile worth it if most of our customers speak English?',
+    answer:
+      'If any of your customers search in Arabic, an Arabic profile meets them in their own language. We write the Arabic natively, not by translating the English word for word, and keep both versions consistent. We look at your customers and areas in the free AI audit before recommending it.',
+  },
+  {
+    id: 'can-local-ai-dominance-get-ai-recommendations',
+    topic: 'results',
+    question: 'Will AI assistants recommend us to people nearby?',
+    answer:
+      'Nobody can promise what an AI assistant recommends for a local search. The part we can work on is your local facts: your areas, services, hours and contact details, clear and consistent in Arabic and English, on your profile and in directories. We then ask AI assistants local questions and show you how they describe your business.',
+  },
+  {
+    id: 'does-local-ai-dominance-start-from-our-listings',
+    topic: 'integrations',
+    question: 'We already have a profile and a website. Do we start again?',
+    answer:
+      'No: Local AI Dominance starts from what you already have. Your Google Business Profile, website and directory listings are checked and corrected, not replaced, and your website’s contact details are matched to them. If you need a new website, Custom-Coded High-Performance Websites include local SEO set-up for each area or emirate served.',
+  },
+  {
+    id: 'who-owns-the-local-ai-dominance-profile',
+    topic: 'ownership',
+    question: 'Do we keep ownership of our Google Business Profile?',
+    answer:
+      'Yes: your Google Business Profile stays owned by your business. We work with the access you grant, and you can withdraw it at any time. The work covers your public business details, not your customers’ personal data, and every change to your profile and listings is recorded so you can see what we did.',
+  },
+  {
+    id: 'who-updates-the-local-ai-dominance-profile',
+    topic: 'support',
+    question: 'Who keeps our profile up to date after set-up?',
+    answer:
+      'You can keep your profile up to date yourself, or hand the routine work to us. Google Business Profile Automation adds scheduled posts and offers, a Q&A and review response workflow, and photo and information updates. Your team then spends its time on customers, not on the profile.',
+  },
+];
+
+// The questions on the AI Ad Creative Production page (/services/ai-ad-creative, R076): 7, the lead
+// service range of 6–8 (engine §3); cost and timeline first (§6.2 rule 3). Each first sentence
+// stands alone (≤ 25 words); each answer is 40–90 words and names at most one other service.
+// Sources: catalogue 4B.2, 4B.6, 4C.2, 6.3, 4E (made in-house, replaced when fatigued; attribution
+// you can audit yourself), §9 (no guaranteed results); Home's data answer (never sold). The ids
+// carry the stem "ai-ad-creative"; none repeats a question on Home, the hub or the pilot.
+export const aiAdCreativeFaq: readonly FaqQuestion[] = [
+  {
+    id: 'what-does-ai-ad-creative-cost',
+    topic: 'cost',
+    question: 'How much does AI Ad Creative Production cost?',
+    answer:
+      'AI Ad Creative Production is quoted after a free AI audit, based on what your campaigns need. The main drivers are the formats you want, such as video, UGC-style, static or 3D, how many variations each round needs, and how often creatives are replaced. Motion and 3D work takes more production than static ads.',
+  },
+  {
+    id: 'how-fast-is-ai-ad-creative-delivered',
+    topic: 'timeline',
+    question: 'How quickly can new creatives be ready?',
+    answer:
+      'We confirm turnaround times after the free AI audit, once we know your formats, volumes and approval steps. The first round takes the most set-up, because it settles your brand rules and formats. Replacements then follow the same brief and rules, so they don’t start from scratch.',
+  },
+  {
+    id: 'will-ai-ad-creative-lower-cost-per-lead',
+    topic: 'results',
+    question: 'Will new creatives lower our cost per lead?',
+    answer:
+      'No one can promise that new creatives will lower your cost per lead, so we don’t. What they give you is the means to test: many variations, measured in your own ad accounts, with tired ads replaced when performance drops. You read the results in your own accounts, so you can check every number yourself.',
+  },
+  {
+    id: 'can-ai-ad-creative-be-in-arabic',
+    topic: 'arabic',
+    question: 'Can the ads be made in Arabic?',
+    answer:
+      'Yes: ad copy and on-screen text can be in Arabic, English or both, so you can match each audience. The Arabic is written natively, not translated word for word, and right-to-left text is laid out properly in video, static and motion formats. Where a campaign targets both audiences, each language gets its own version rather than a crowded mix.',
+  },
+  {
+    id: 'does-ai-ad-creative-need-ad-account-access',
+    topic: 'integrations',
+    question: 'Do you need access to our ad accounts?',
+    answer:
+      'Access to your ad accounts helps, because performance decides which creatives are replaced. With it, we see how each variation performs. Without it, your team shares the results and we work from those. If your tracking needs fixing first, Analytics & Tracking Setup covers GA4, Google Tag Manager and the Meta Conversions API.',
+  },
+  {
+    id: 'what-happens-to-ai-ad-creative-brand-files',
+    topic: 'data-privacy',
+    question: 'What happens to the product photos and brand files we send?',
+    answer:
+      'Your product photos, footage and brand files are used to make your creatives, and we never sell them. You decide which assets we may use, and you can ask us to stop using any of them at any time. No creative goes live without your approval, and you name who on your team receives and signs off drafts.',
+  },
+  {
+    id: 'who-keeps-ai-ad-creative-fresh',
+    topic: 'support',
+    question: 'Who keeps the creatives fresh after the first round?',
+    answer:
+      'Ongoing production keeps the loop running: new variations are made as results come in, and tired ads are replaced when their performance drops. Each round builds on what the last one taught. If you want the campaigns managed as well, Meta Ads (Facebook & Instagram) covers lead ads, catalogue ads and Advantage+ campaigns.',
+  },
+];

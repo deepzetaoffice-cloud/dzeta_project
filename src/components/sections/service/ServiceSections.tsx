@@ -43,7 +43,9 @@ export function ServiceHero({ content, service }: ServiceSectionProps) {
       <p className="mt-6 max-w-measure text-lead">{content.answer}</p>
       <div className="mt-8 flex flex-wrap items-center gap-4">
         <CtaButton href={auditHref()} label={shellContent.cta} variant="primary" />
-        <DemoStub demoId="speed-to-lead" label={content.tryIt.trigger} icon="send" />
+        {content.tryIt ? (
+          <DemoStub demoId={content.tryIt.demoId} label={content.tryIt.trigger} icon={content.tryIt.icon} />
+        ) : null}
       </div>
     </section>
   );
@@ -164,20 +166,24 @@ export function ServiceFit({ content }: ServiceSectionProps) {
   );
 }
 
-// §7 Try it (the stub; P7 builds the test), §8 UAE specifics, §9 Pairs well with
+// §7 Try it (the matching demo's stub, when the service has one; P7 builds the demos), §8 UAE
+// specifics, §9 Pairs well with
 export function ServiceTryUaePairs({ content }: ServiceSectionProps) {
+  const { tryIt } = content;
   return (
-    <section aria-labelledby="service-try" className={section} data-fx-once="">
-      <div className="dz-glass rounded-2xl p-6">
-        <h2 id="service-try" className="text-h3 text-balance">
-          {content.tryIt.heading}
-        </h2>
-        <p className="mt-2 max-w-measure text-fg-muted">{content.tryIt.line}</p>
-        <div className="mt-4">
-          <DemoStub demoId="speed-to-lead" label={content.tryIt.trigger} icon="send" />
+    <section aria-labelledby={tryIt ? 'service-try' : 'service-uae'} className={section} data-fx-once="">
+      {tryIt ? (
+        <div className="dz-glass mb-section rounded-2xl p-6">
+          <h2 id="service-try" className="text-h3 text-balance">
+            {tryIt.heading}
+          </h2>
+          <p className="mt-2 max-w-measure text-fg-muted">{tryIt.line}</p>
+          <div className="mt-4">
+            <DemoStub demoId={tryIt.demoId} label={tryIt.trigger} icon={tryIt.icon} />
+          </div>
         </div>
-      </div>
-      <div className="mt-section grid gap-10 lg:grid-cols-2">
+      ) : null}
+      <div className="grid gap-10 lg:grid-cols-2">
         <div>
           <h2 id="service-uae" className="text-h2 text-balance">
             {content.uae.heading}
