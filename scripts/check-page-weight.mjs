@@ -10,9 +10,10 @@
 //   (OWN_JS_HOME, within Home's 11 KB cap, 0021), so third-party tags never count against it (C54).
 // Third-party requests and bytes are capped per region profile (07 §2, C5's measurement): the
 // European profile (no country: the banner, nothing granted) allows GTM only — 1 request, 160 KB —
-// and the UAE campaign profile (consent granted by default) 4 requests, 350 KB (lighthouserc.cjs's
-// own assertions cover the same numbers per run; this gate reads the run's URL to tell the profiles
-// apart). Fonts and images have their own lhci assertions (lighthouserc.cjs).
+// and the UAE campaign profile (consent granted by default) 4 requests, 350 KB. This gate alone counts
+// the requests, because it can keep GTM's own telemetry pings apart (C74); lighthouserc.cjs asserts the
+// bytes per run. It reads the run's URL to tell the profiles apart. Fonts and images have their own
+// lhci assertions (lighthouserc.cjs).
 
 import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -28,10 +29,16 @@ const { FRAMEWORK_JS_BASELINE, HOME_OWN_JS_CAP } = lhciConfig.budget;
 
 // Third-party caps per region profile (07 §2, C5). The UAE campaign profile runs on 127.0.0.1 so its
 // runs stay apart from the European ones (lighthouserc.row.cjs); everything else is the European build.
+// GTM's own telemetry pings (googletagmanager.com/a?…, 59 B Images, sent by gtm.js itself, not by any
+// vendor tag) are counted apart: one run in five can send 5 or 6 of them (2026-10-10), which no tag of
+// ours controls (C74). Their bytes still count. So Europe allows gtm.js alone, 1 request.
 export const THIRD_PARTY_LIMITS = {
   row: { requests: 4, bytes: 350 * 1024 },
-  // 2, not 1: gtm.js plus, in some runs, GTM's own telemetry pixel (googletagmanager.com/a?, 59 B).
-  europe: { requests: 2, bytes: 160 * 1024 },
+  europe: { requests: 1, bytes: 160 * 1024 },
+};
+export const isGtmTelemetry = (url) => {
+  const { hostname, pathname } = new URL(url);
+  return hostname === 'www.googletagmanager.com' && pathname === '/a';
 };
 export const thirdPartyLimitFor = (url) =>
   new URL(url).hostname === '127.0.0.1' ? THIRD_PARTY_LIMITS.row : THIRD_PARTY_LIMITS.europe;
@@ -61,7 +68,7 @@ export function partyBytes(lhr) {
   if (!Array.isArray(items)) throw new Error('no network-requests audit in this Lighthouse result');
   const origin = new URL(lhr.finalDisplayedUrl ?? lhr.requestedUrl).origin;
   const first = { document: 0, stylesheet: 0, script: 0 };
-  const third = { bytes: 0, script: 0, requests: 0 };
+  const third = { bytes: 0, script: 0, requests: 0, telemetry: 0 };
   for (const item of items) {
     if (!/^https?:/.test(item.url)) continue;
     const size = item.transferSize ?? 0;
@@ -70,7 +77,8 @@ export function partyBytes(lhr) {
       if (type) first[type] += size;
     } else {
       third.bytes += size;
-      third.requests += 1;
+      if (isGtmTelemetry(item.url)) third.telemetry += 1;
+      else third.requests += 1;
       if (type === 'script') third.script += size;
     }
   }
@@ -132,8 +140,8 @@ function main() {
   for (const row of rows) {
     console.log(
       `  ${row.pass ? 'ok  ' : 'FAIL'} ${row.url}  first party: HTML + CSS + JS ${row.bytes} B of ${row.limit} B, ` +
-        `JS ${row.script} B of ${row.jsLimit} B · third party: ${row.third.requests} requests, ${row.third.bytes} B ` +
-        `(JS ${row.third.script} B)`,
+        `JS ${row.script} B of ${row.jsLimit} B · third party: ${row.third.requests} requests ` +
+        `(+${row.third.telemetry} GTM telemetry), ${row.third.bytes} B (JS ${row.third.script} B)`,
     );
   }
   if (!pass) {

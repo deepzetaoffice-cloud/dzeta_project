@@ -10,6 +10,7 @@ import {
   partyBytes,
   REVIEW_FIRST_LOAD_LIMIT,
   THIRD_PARTY_LIMITS,
+  isGtmTelemetry,
   thirdPartyLimitFor,
 } from '../../scripts/check-page-weight.mjs';
 
@@ -59,7 +60,7 @@ describe('check:page-weight', () => {
     const result = page(3000, 3500, 140000, [gtm]);
     expect(partyBytes(result)).toEqual({
       first: { document: 3000, stylesheet: 3500, script: 140000 },
-      third: { bytes: 90000, script: 90000, requests: 1 },
+      third: { bytes: 90000, script: 90000, requests: 1, telemetry: 0 },
     });
     expect(checkRuns([{ name: 'r', lhr: result }]).pass).toBe(true);
   });
@@ -109,8 +110,8 @@ describe('check:page-weight', () => {
   });
 
   it('caps third-party requests and bytes per region profile (07 §2, C5’s measurement)', () => {
-    // Europe: 2, not 1 — gtm.js plus, in some runs, GTM's own telemetry pixel (59 B)
-    expect(THIRD_PARTY_LIMITS.europe).toEqual({ requests: 2, bytes: 160 * 1024 });
+    // Europe: gtm.js alone; GTM's own telemetry pings (59 B) are counted apart (C74)
+    expect(THIRD_PARTY_LIMITS.europe).toEqual({ requests: 1, bytes: 160 * 1024 });
     expect(THIRD_PARTY_LIMITS.row).toEqual({ requests: 4, bytes: 350 * 1024 });
     expect(thirdPartyLimitFor('http://localhost:3000/')).toBe(THIRD_PARTY_LIMITS.europe);
     expect(thirdPartyLimitFor('http://localhost:3000/shell-review')).toBe(THIRD_PARTY_LIMITS.europe);
@@ -132,7 +133,14 @@ describe('check:page-weight', () => {
     const euOver = { name: 'euOver', lhr: page(1000, 1000, 140_519, [gtm, gtmPing, gtag]) };
     expect(checkRuns([eu]).pass).toBe(true);
     expect(checkRuns([euOver]).pass).toBe(false);
-    expect(checkRuns([euOver]).rows[0]!.third.requests).toBe(3);
+    expect(checkRuns([euOver]).rows[0]!.third).toMatchObject({ requests: 2, telemetry: 1 });
+    // C74 (2026-10-10): a run where gtm.js sends six telemetry pings still passes; their bytes count
+    const pings = Array.from({ length: 6 }, (_, i) => ({ ...gtmPing, url: `${gtmPing.url}&n=${i}` }));
+    const euPings = checkRuns([{ name: 'euPings', lhr: page(1000, 1000, 140_519, [gtm, ...pings]) }]);
+    expect(euPings.pass).toBe(true);
+    expect(euPings.rows[0]!.third).toMatchObject({ requests: 1, telemetry: 6, bytes: 133_405 + 6 * 59 });
+    expect(isGtmTelemetry('https://www.googletagmanager.com/a?v=3')).toBe(true);
+    expect(isGtmTelemetry('https://www.googletagmanager.com/gtag/js?id=G-X')).toBe(false);
     // The UAE profile: GTM + the Google tag + a collect pass; a 350 KB run fails on bytes
     const collect = { url: 'https://region1.google-analytics.com/g/collect', resourceType: 'Ping', transferSize: 200 };
     const row = {
