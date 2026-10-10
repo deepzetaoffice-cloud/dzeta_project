@@ -110,3 +110,9 @@ the FAQ (6–8, lead service: 1,200–1,800 words), and the CTA.
   - **The recording:** 23 real lines from `b7da24a` (build, schema, SEO, links). Home's Lighthouse step is left out for now: both runs today failed only `resource-summary.third-party.count`, because GTM's own telemetry ping (`googletagmanager.com/a`) fired 5–6 times in one run of five. Home's own numbers held (Performance 96, LCP 2,719 ms). The owner decides the follow-up.
   - **Measured:** the island is 1,120 B gzip, on this route only.
   - **Gates:** typecheck, lint, tokens, facts, build, schema, SEO and links PASS; e2e websites + services + themes 116/116.
+  - **Merged** (`d455c6a`, 2026-10-10).
+- **2026-10-10, the follow-up** (`fix/gtm-gate-icon-motion`, the owner: "fix the GTM gate, keep custom-coded, do it best motion"):
+  - C74, the gate fix: GTM's telemetry pings are counted apart.
+  - The copy says "custom-coded".
+  - The icon's approved story ("Brackets nudge → pop").
+  - The terminal re-recorded from `b79f7bb` with Home's Lighthouse step: all 15 runs pass; Home Performance 96, LCP 2,713 ms.
