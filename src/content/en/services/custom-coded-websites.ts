@@ -38,7 +38,7 @@ export const customCodedWebsites: ServicePageContent = {
   heading: 'Custom-coded websites built to load fast',
   // 58 words: the full catalogue name, what it is (2.1's stack, no page builders or templates), the
   // outcome (Core Web Vitals, SEO, GEO and AI ranking built in) and who it's for (2.1's "Best for")
-  answer: `Custom-Coded High-Performance Websites by ${siteConfig.brandName} are hand-coded in Next.js, TypeScript and Tailwind CSS, with no page builders or templates. Every page is built to pass Core Web Vitals, with SEO, GEO and AI ranking built in during development. They suit any UAE business that wants a website that brings leads and sales, not just an online brochure.`,
+  answer: `Custom-Coded High-Performance Websites by ${siteConfig.brandName} are custom-coded in Next.js, TypeScript and Tailwind CSS, with no page builders or templates. Every page is built to pass Core Web Vitals, with SEO, GEO and AI ranking built in during development. They suit any UAE business that wants a website that brings leads and sales, not just an online brochure.`,
 
   // 2 · The problem it solves (before-after, 5 rows; 2.1's four lists). The lede is 40 words
   problem: {
