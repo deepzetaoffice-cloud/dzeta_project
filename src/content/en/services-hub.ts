@@ -58,7 +58,7 @@ export const servicesHub: ServicesHubContent = {
       // 41 words: sub-groups 1B, 1D–1H; 1A.1, 1A.2 and 1A.4 (Arabic and English); 1B.3, 1C.1, 1F.1, 1B.6
       ai: 'AI Automation takes repetitive work off your team across sales, service, operations, finance, HR and marketing. AI agents answer customers on WhatsApp, phone and chat in Arabic and English, and automations send quotes, book appointments, chase invoices and update your CRM.',
       // 40 words: section 2's standard and the catalogue's highlights
-      web: 'Every website we build is hand-coded, with no page builders or templates, and built to pass Core Web Vitals on every page. SEO, GEO and AI ranking go in during development, ready for Google and AI engines from launch day.',
+      web: 'Every website we build is custom-coded, with no page builders or templates, and built to pass Core Web Vitals on every page. SEO, GEO and AI ranking go in during development, ready for Google and AI engines from launch day.',
       // 40 words: 3.1 (roles, integrations), 3.2, 3.3 (spreadsheets), 3.4 (around how the business works)
       software:
         'Software covers the jobs off-the-shelf tools don’t fit. We build web applications, client portals, internal tools and admin dashboards around how your business works, with user roles and links to your CRM, ERP, payments and WhatsApp. Spreadsheets become proper tools.',

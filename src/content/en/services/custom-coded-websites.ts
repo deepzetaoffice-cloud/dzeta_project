@@ -38,7 +38,7 @@ export const customCodedWebsites: ServicePageContent = {
   heading: 'Custom-coded websites built to load fast',
   // 58 words: the full catalogue name, what it is (2.1's stack, no page builders or templates), the
   // outcome (Core Web Vitals, SEO, GEO and AI ranking built in) and who it's for (2.1's "Best for")
-  answer: `Custom-Coded High-Performance Websites by ${siteConfig.brandName} are hand-coded in Next.js, TypeScript and Tailwind CSS, with no page builders or templates. Every page is built to pass Core Web Vitals, with SEO, GEO and AI ranking built in during development. They suit any UAE business that wants a website that brings leads and sales, not just an online brochure.`,
+  answer: `Custom-Coded High-Performance Websites by ${siteConfig.brandName} are custom-coded in Next.js, TypeScript and Tailwind CSS, with no page builders or templates. Every page is built to pass Core Web Vitals, with SEO, GEO and AI ranking built in during development. They suit any UAE business that wants a website that brings leads and sales, not just an online brochure.`,
 
   // 2 · The problem it solves (before-after, 5 rows; 2.1's four lists). The lede is 40 words
   problem: {
@@ -249,9 +249,9 @@ export const customCodedWebsitesExtras: WebsitesExtras = {
   },
   terminal: {
     heading: 'Watch this site run its own checks',
-    // 30 words (≤ 40): what the run is, and that it is replayed, not live. It names only the steps the
-    // recording holds (build-run.ts); Home's Lighthouse step joins when its run is recorded
-    lede: 'This is a recording of a real run of this site’s own build and quality checks: the build, then the structured-data, SEO and link checks. It is replayed, not live.',
+    // 35 words (≤ 40): what the run is, and that it is replayed, not live. It names only the steps the
+    // recording holds (build-run.ts)
+    lede: 'This is a recording of a real run of this site’s own build and quality checks: the build, the structured-data, SEO and link checks, then the homepage’s Lighthouse checks. It is replayed, not live.',
     windowTitle: `${siteConfig.brandName} · build and checks`,
     recordedLabel: 'Recorded on {date} from commit {commit}',
     controls: {

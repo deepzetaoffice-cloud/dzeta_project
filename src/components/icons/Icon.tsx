@@ -34,7 +34,16 @@ function LineShape({ shape, className = '' }: { shape: Shape; className?: string
   const classes = (base: string) => [base, className].filter(Boolean).join(' ');
   switch (shape.kind) {
     case 'path':
-      return <path className={classes(shape.soft ? 'dz-ln dz-ln--soft' : 'dz-ln')} d={shape.d} />;
+      return (
+        <path
+          className={classes(
+            ['dz-ln', shape.soft ? 'dz-ln--soft' : '', shape.nudge ? `dz-ln--nudge-${shape.nudge}` : '']
+              .filter(Boolean)
+              .join(' '),
+          )}
+          d={shape.d}
+        />
+      );
     case 'rect':
       return (
         <rect
