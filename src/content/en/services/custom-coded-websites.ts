@@ -249,8 +249,9 @@ export const customCodedWebsitesExtras: WebsitesExtras = {
   },
   terminal: {
     heading: 'Watch this site run its own checks',
-    // 34 words (≤ 40): what the run is, and that it is replayed, not live
-    lede: 'This is a recording of a real run of this site’s own build and quality checks: the build, the structured-data, SEO and link checks, then the homepage’s Lighthouse result. It is replayed, not live.',
+    // 30 words (≤ 40): what the run is, and that it is replayed, not live. It names only the steps the
+    // recording holds (build-run.ts); Home's Lighthouse step joins when its run is recorded
+    lede: 'This is a recording of a real run of this site’s own build and quality checks: the build, then the structured-data, SEO and link checks. It is replayed, not live.',
     windowTitle: `${siteConfig.brandName} · build and checks`,
     recordedLabel: 'Recorded on {date} from commit {commit}',
     controls: {

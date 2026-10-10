@@ -801,7 +801,7 @@ export const customCodedWebsitesFaq: readonly FaqQuestion[] = [
     topic: 'results',
     question: 'How will we know the new website is really fast?',
     answer:
-      'You get a performance report at launch, so you see the measured speed rather than a promise. Every page is built to pass Core Web Vitals: LCP under 2.5 s, INP under 200 ms and CLS under 0.1, and the report shows where your pages stand on each. On this page, the build recording replays a real run of this site’s own checks, including its homepage’s Lighthouse result.',
+      'You get a performance report at launch, so you see the measured speed rather than a promise. Every page is built to pass Core Web Vitals, whose thresholds are LCP under 2.5 s, INP under 200 ms and CLS under 0.1 on each page, and the report shows where your pages stand. On this page, the build recording replays a real run of this site’s own build and checks.',
   },
   {
     // 57 words; first sentence 21

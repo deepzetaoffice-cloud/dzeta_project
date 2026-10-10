@@ -102,3 +102,11 @@ the FAQ (6–8, lead service: 1,200–1,800 words), and the CTA.
 **Answered (owner, 2026-10-10):** 1. yes, `build-run.ts` alone is exempt; 2. the full run; 3. agreed.
 
 ## Progress
+- **2026-10-10, built** (`b7da24a` + the recording):
+  - **Deviations:**
+    - `ServiceSections.tsx` took two small props (an addition to the allowed files): the hero's `preview` mode, and How's `story` slot, which puts Code ↔ Page full width under the steps.
+    - The terminal window is solid navy on the glass edge; translucent glass over a light page failed contrast, as the header did.
+    - `check:facts` also takes the unit forms `2.5 s` and `200 ms` (the same facts §6 thresholds).
+  - **The recording:** 23 real lines from `b7da24a` (build, schema, SEO, links). Home's Lighthouse step is left out for now: both runs today failed only `resource-summary.third-party.count`, because GTM's own telemetry ping (`googletagmanager.com/a`) fired 5–6 times in one run of five. Home's own numbers held (Performance 96, LCP 2,719 ms). The owner decides the follow-up.
+  - **Measured:** the island is 1,120 B gzip, on this route only.
+  - **Gates:** typecheck, lint, tokens, facts, build, schema, SEO and links PASS; e2e websites + services + themes 116/116.
