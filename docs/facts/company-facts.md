@@ -89,8 +89,10 @@ These are for building and deploying only. They never appear in page content, th
 |---|---|---|---|
 | Primary market | UAE first, then GCC | CONFIRMED | Blueprint D3 |
 | Primary conversion | Book a free AI automation audit | CONFIRMED | Blueprint D5 |
-| Free AI audit booking | A 30-minute call, with a 30-minute gap after it in the calendar, bookable Monday to Saturday, 10:00–17:00 GST (the catalogue's 0.1 says "30–45 minute"; the booking length is 30) | CONFIRMED | Owner, 2026-10-07 (decision 0027) |
-| Audit meeting types | A phone call (Deepzeta calls the visitor at the booked time), Google Meet, or an office visit | CONFIRMED | Owner, 2026-10-07 (decision 0027) |
+| Free AI audit length | 30 minutes | CONFIRMED | Owner, 2026-10-07 (decision 0027). The catalogue's 0.1 says "30–45 minute"; the booked length is 30 |
+| Free AI audit booking hours | Monday to Saturday, 10:00–17:00 GST | CONFIRMED | Owner, 2026-10-07 (decision 0027). The last start is 16:30 |
+| Free AI audit calendar gap | 30 minutes after each audit (internal; not said to visitors) | CONFIRMED | Owner, 2026-10-07 (decision 0027) |
+| Audit meeting types | A phone call (Deepzeta AI calls the visitor at the booked time), Google Meet, or an office visit | CONFIRMED | Owner, 2026-10-07 (decision 0027) |
 | Secondary contact | WhatsApp (floating button) | CONFIRMED | Blueprint D5 |
 | Business model | Hybrid: custom projects + fixed-scope packages with "starting from" prices | PROPOSED | Blueprint D4 (awaiting final confirmation) |
 | Services | See `Planning Folder/For Ai/DeepZeta Services Catalogue.md` (names used exactly) | CONFIRMED | Catalogue v1.1 |

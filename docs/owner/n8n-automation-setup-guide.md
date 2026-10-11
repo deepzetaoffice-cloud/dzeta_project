@@ -50,7 +50,7 @@ In Supabase (project `deepzeta-automation`) live the database, the gateway that 
 
 ## Before you start (from the base guide)
 
-- [ ] **Part 1** · Google Workspace: `hello@deepzeta.ai` works.
+- [ ] **Part 1** · Google Workspace: `hello@deepzeta.ai` works. **Not needed to start:** until Workspace is active, the calendar and the email steps use `deepzeta.office@gmail.com` (the owner, 2026-10-11). Moving to `hello@deepzeta.ai` later means sharing its calendar with the service account and changing the Calendar ID.
 - [ ] **Part 2** · Meta Business + the WhatsApp app, and **Part 7** · the number registered (the short version for +971 54 547 6335 is Part 0 below). **Stop before any webhook step:** in this guide the webhook goes to the gateway (Part D below), never to n8n.
 - [ ] **Part 3** · Cal.com account and the `free-ai-audit` event type.
 - [ ] **Part 4** · the n8n Cloud plan.
@@ -137,11 +137,11 @@ There's nothing called a "Cloud API" to create on its own. You get it by making 
 3. ⚠️ This key opens the whole database. It goes **only** into n8n (Part B).
 
 **A4 · A Google "service account"** (lets the agent read and write your calendar)
-1. Go to `console.cloud.google.com`, signed in as hello@deepzeta.ai. Top bar → **project picker** → **New project** → name it `deepzeta-automation` → **Create**.
-2. Open **APIs & Services** → **Library**, search **Google Calendar API**, and click **Enable**.
-3. Open **IAM & Admin** → **Service Accounts** → **Create service account**. Name it `deepzeta-calendar`, then **Create and continue** → **Done**.
+1. Go to `console.cloud.google.com`, signed in as **deepzeta.office@gmail.com** (until Workspace is active). If Google asks, accept the terms and choose the UAE; no billing is needed. Top bar → **project picker** → **New project** → name it `deepzeta-automation` → **Create**, and make sure it's selected in the top bar.
+2. Search **Google Calendar API** in the top search bar, open it and click **Enable**.
+3. Search **Service Accounts**, open it → **Create service account**. Name it `deepzeta-calendar`, then **Create and continue** → **Done** (no role needed).
 4. Click the new account → **Keys** → **Add key** → **Create new key** → **JSON** → **Create**. A file downloads. **That file is a secret:** store it in your password manager, then delete it from Downloads after Part B.
-5. Copy the service account's **email** (ends in `.iam.gserviceaccount.com`). It isn't a secret, and you'll need it in Part E.
+5. Copy the service account's **email** (ends in `.iam.gserviceaccount.com`). It isn't a secret: send it to Claude, and you'll need it in Part E.
 
 **A5 · Meta values** (Part 0 step 8, and the app's **App settings → Basic**) ✅ Done 2026-10-11
 - **Secret:** the **permanent access token** (the System User token), and the **App Secret** (App Dashboard → **App settings** → **Basic** → **App secret** → **Show**).
@@ -167,9 +167,9 @@ There's nothing called a "Cloud API" to create on its own. You get it by making 
 | 5 | `Gateway → n8n secret` | **Header Auth** | **Name** `x-deepzeta-secret` · **Value** = A6 "Gateway forward secret" |
 | 6 | `Knowledge form login` | **Basic Auth** | A username and a strong password you choose. It protects the knowledge upload form |
 
-Email uses your existing `Gmail · hello@deepzeta.ai` (base guide C2). Claude switches the stack's email steps to it.
+**Email:** until Workspace is active, add a 7th credential: type **Gmail OAuth2 API**, name `Gmail · deepzeta.office`, click **Sign in with Google** and choose deepzeta.office@gmail.com. Claude switches the stack's email steps to it. Later it becomes `Gmail · hello@deepzeta.ai` (base guide C2).
 
-When all six are saved, tell Claude **"credentials done"**. Claude links them to the workflows: it sees only the names, never the secrets. If a node still shows a red warning, open it and pick the credential from its dropdown.
+When all seven are saved, tell Claude **"credentials done"**. Claude links them to the workflows: it sees only the names, never the secrets. If a node still shows a red warning, open it and pick the credential from its dropdown.
 
 ## Part C · Two secrets into Supabase (the SQL editor)
 
@@ -218,17 +218,17 @@ from public.settings where key = 'meta';
 ## Part E · Google Calendar and Cal.com on one diary
 
 **E1 · Share your calendar with the agent**
-1. In Google Calendar (hello@deepzeta.ai), click **Settings** (gear).
+1. In Google Calendar (deepzeta.office@gmail.com until Workspace is active), click **Settings** (gear).
 2. Under **Settings for my calendars**, click your main calendar. Your real meetings will then block slots too.
 3. Open **Share with specific people or groups** → **Add people and groups**, and paste the service account email (A4.5).
 4. Set the permission to **Make changes to events**, then click **Send**.
 
 **E2 · The Calendar ID**
-- On the same page, open **Integrate calendar** and find **Calendar ID**. For a main calendar it's usually `hello@deepzeta.ai`.
+- On the same page, open **Integrate calendar** and find **Calendar ID**. For a main calendar it's the account's address: `deepzeta.office@gmail.com` for now.
 - Send it to Claude.
 
 **E3 · Cal.com uses the same calendar**
-1. In Cal.com, open **Settings** → **Calendars** and connect Google (hello@deepzeta.ai).
+1. In Cal.com, open **Settings** → **Calendars** and connect Google (the same account as E1).
 2. Turn on **Check for conflicts** for that calendar, and choose it under **Add events to**.
 3. Open the event type `free-ai-audit` and set:
    - **Duration:** 30 minutes
