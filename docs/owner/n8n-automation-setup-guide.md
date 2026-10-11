@@ -72,11 +72,15 @@ Start here, because Meta's checks can take days. The detailed clicks are in base
 - So when the agent hands a chat to your team, you reply from a **personal WhatsApp** through the link in the alert. The agent has already told the customer that a team member will contact them from their own number.
 - ⚠️ The number must **not** be on WhatsApp when you add it. If anyone installs WhatsApp on that SIM first, it won't register.
 
-**Where you are (2026-10-10, from your screenshots):**
+**Where you are (2026-10-11, from your screenshots):**
 - ✅ Business portfolio **Deepzeta Ai** (ID 1770981930839063), with Facebook, Instagram, Threads and WhatsApp connected. The portfolio's name is internal; customers see the WhatsApp display name.
 - ✅ WhatsApp Business Account **Deepzeta Digital Solutions** (ID 1432051959064319). "Review in progress" is normal for a new account.
+  - WhatsApp Manager's account switcher lists only the accounts you're assigned to. If it shows only Meta's **Test WhatsApp Business Account** (ID 2299220527520305, created with the app; leave it), open this account directly: `business.facebook.com/latest/whatsapp_manager/phone_numbers?business_id=1770981930839063&asset_id=1432051959064319`.
+  - Or assign yourself to it: Settings → WhatsApp accounts → this account → **People** → **Assign people** → full control.
+- ✅ App **Deepzeta Connect** (App ID 1573718627333039), WhatsApp use case only.
+- ✅ **+971 54 547 6335** added, code-verified and **registered for the Cloud API** (2026-10-11, `success: true`). **Phone number ID 1460584370460068.** Its display name is **Deepzeta Digital Solutions**; it can be changed to "Deepzeta AI" later (⚙ → Profile, reviewed by Meta).
 - ⏳ Business verification started (documents step).
-- ⬜ No app yet, no phone number yet.
+- ⬜ Still open: step 7 (payment method) and step 8 (system user and permanent token).
 
 There's nothing called a "Cloud API" to create on its own. You get it by making one Meta app with the WhatsApp use case and registering your number to it (steps 1–5). You don't use the WhatsApp Business app on a phone at all.
 
