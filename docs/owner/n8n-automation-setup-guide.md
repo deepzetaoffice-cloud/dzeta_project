@@ -207,9 +207,9 @@ When all seven are saved, tell Claude **"credentials done"**. Claude links them 
 
 The settings and the Deepzeta client row are in (plan step S3, 2026-10-11). Deepzeta's Client ID is **`DZ-0000`** (the stack's agency row, created when the stack was built).
 
-1. In Supabase, open the project → **SQL Editor** → **New query**.
-2. Paste the block, replace each `PASTE_…` with the value from your password manager, then click **Run**.
-3. Afterwards, **clear the editor and don't save the snippet.**
+1. Go to `supabase.com`, open the project **deepzeta-automation**, then **SQL Editor** in the left sidebar → **+ New query**.
+2. Paste a block, replace each `PASTE_…` with the value from your password manager (keep the single quotes around it), then click **Run** (or Ctrl+Enter).
+3. Afterwards, clear the editor (Ctrl+A, Delete). If the query stays in the left list (e.g. "Untitled query"), open its **⋯** menu → **Delete**.
 
 **C1 · The gateway's secrets**
 ```sql
@@ -217,9 +217,10 @@ update public.settings
 set value = value
   || jsonb_build_object('forward_secret', 'PASTE_GATEWAY_FORWARD_SECRET')
   || jsonb_build_object('verify_token', 'PASTE_META_VERIFY_TOKEN')
-where key = 'meta';
+where key = 'meta'
+returning key;
 ```
-✅ "Success", 1 row updated. The forward secret must be **identical** to credential 5 in Part B.
+✅ One row: `meta`. The forward secret must be **identical** to credential 5 in Part B.
 
 **C2 · Deepzeta's WhatsApp token and app secret** (they go into the Vault, encrypted)
 ```sql
@@ -227,13 +228,7 @@ select public.set_client_secrets('DZ-0000', 'PASTE_WHATSAPP_PERMANENT_TOKEN', 'P
 ```
 ✅ It returns `saved`.
 
-**Check (shows only true or false, never the secret):**
-```sql
-select (value ? 'forward_secret') as forward_secret_set,
-       (value ? 'verify_token')   as verify_token_set
-from public.settings where key = 'meta';
-```
-✅ Both say `true`.
+**Then tell Claude "Part C done".** Claude checks it without seeing anything secret: only the values' lengths (yours are 48 characters; the stack's old verify token was 36) and that the Vault entries exist.
 
 ## Part D · Point Meta's webhook at the gateway
 
