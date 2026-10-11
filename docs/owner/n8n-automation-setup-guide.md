@@ -79,8 +79,11 @@ Start here, because Meta's checks can take days. The detailed clicks are in base
   - Or assign yourself to it: Settings → WhatsApp accounts → this account → **People** → **Assign people** → full control.
 - ✅ App **Deepzeta Connect** (App ID 1573718627333039), WhatsApp use case only.
 - ✅ **+971 54 547 6335** added, code-verified and **registered for the Cloud API** (2026-10-11, `success: true`). **Phone number ID 1460584370460068.** Its display name is **Deepzeta Digital Solutions**; it can be changed to "Deepzeta AI" later (⚙ → Profile, reviewed by Meta).
-- ⏳ Business verification started (documents step).
-- ⬜ Still open: step 7 (payment method) and step 8 (system user and permanent token).
+- ✅ **Payment method** on Deepzeta Digital Solutions: a Mastercard, billed in AED (2026-10-11).
+- ✅ **System user** `deepzeta-automation` and its **permanent token**, saved in your password manager (2026-10-11).
+- ⏳ Business verification started (documents step). It isn't needed to go on.
+
+**Part 0 is done.** Next: Part A (the keys).
 
 There's nothing called a "Cloud API" to create on its own. You get it by making one Meta app with the WhatsApp use case and registering your number to it (steps 1–5). You don't use the WhatsApp Business app on a phone at all.
 
@@ -103,11 +106,12 @@ There's nothing called a "Cloud API" to create on its own. You get it by making 
    - display name **Deepzeta AI**, and your business category (Meta reviews the display name; "Pending review" is normal)
    - number **+971 54 547 6335**, with the code by **SMS** or **voice call**, typed in
 6. **Register it for the Cloud API.** Meta: adding a number in WhatsApp Manager does **not** register it. Registration is one call with a **6-digit PIN** you choose, made in Meta's **Graph API Explorer** in your browser. Tell Claude when you reach this step: you'll get the exact clicks then. Keep the PIN in your password manager, and never paste the PIN or a token into the chat.
-7. **Payment method:** WhatsApp Manager → **Payment settings** → add a card (Meta charges for template messages).
-8. **System user and permanent token** (business.facebook.com → **Settings** → **Users** → **System users** → **Add**, role **Admin**):
-   - **Assign assets:** the app (full control) and the WhatsApp account (full control).
-   - **Generate token:** choose the app, set it to never expire, and tick `business_management`, `whatsapp_business_messaging` and `whatsapp_business_management`.
-   - Copy the token straight into your password manager.
+7. **Payment method:** Settings → WhatsApp accounts → Deepzeta Digital Solutions → **Summary** → **Payment settings** → **Add payment method**. Meta charges for some message types. The currency usually can't be changed later.
+8. **System user and permanent token** (business.facebook.com → **Settings** → **Users** → **System users** → **Add**):
+   - **Name and role:** name `deepzeta-automation`, role **Employee**. Employee is safer than Admin: the token can only touch the two assets below. Switch to Admin only if Meta refuses to generate the token.
+   - **Assign assets:** the app **Deepzeta Connect** (full control) and the WhatsApp account **Deepzeta Digital Solutions** (full control). Not the Test account.
+   - **Generate token:** app Deepzeta Connect, expiration **Never**, permissions `whatsapp_business_messaging` and `whatsapp_business_management` only.
+   - Meta shows the token once: copy it straight into your password manager as "WhatsApp permanent token (Deepzeta Connect)".
 9. Send Claude the **Phone number ID**. It isn't a secret. The WhatsApp Business Account ID is already known: 1432051959064319. It shows in **Step 2. Production setup** once the number is added. If it doesn't:
    - Open **Tools** → **Graph API Explorer**, choose **Deepzeta Connect**, add the permission `whatsapp_business_management`, and click **Generate Access Token**.
    - Run **GET** `1432051959064319/phone_numbers`. Your number's `"id"` is the Phone number ID.
