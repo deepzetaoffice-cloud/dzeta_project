@@ -243,3 +243,48 @@ None.
   - **The facts:** the audit booking row is split into length, booking hours and an internal calendar gap; the meeting types say "Deepzeta AI".
   - **The test:** `tests/unit/agent-knowledge.test.ts` (10 tests) pins the file to a fresh generation, checks every FAQ list in the bank, and keeps unconfirmed, external and old-brand text out.
   - **Gates:** `npm test` 568/568, typecheck, lint, check:tokens, check:contrast, check:facts and prettier pass.
+- **2026-10-11 · S3 done** (Supabase, through the connector; read back after the write):
+  - **The 2026-10-07 reading was wrong:** the table summary shows estimated row counts (0). The stack already held its builder's defaults from 2026-10-01: seven `settings` keys and the agency row **`DZ-0000`** (not DZ-0001), active and paid until 2099-12-31. S3 updated them instead of inserting; the guide's Part C now says `DZ-0000`.
+  - **`global_rules`** are shared by every future client, so only three generic lines were added: say once that it's an AI, ask people not to share sensitive data, and hand off on legal or refund questions and after two failed answers. The builder's text (any language, Emirati Arabic, the JSON shape) stays.
+  - **Deepzeta's own rules** (no prices, the meeting type first, confirm slot and type, email optional, the hand-off wording, no payments, no follow-ups) live in the client row's `config.rules`, which `Build Prompt` appends (S4).
+  - **The client row:** "Deepzeta AI", the WhatsApp IDs, the S2 business profile, booking on, `calendar_id` deepzeta.office@gmail.com, `team_emails` deepzeta.office@gmail.com, and `config`: Mon–Sat 10:00–17:00, the audit at 30 minutes plus a 30-minute buffer, 120 minutes' minimum notice, 30 days ahead, the three meeting types with the office address, `meet_link` empty, the reminder template `dz_booking_reminder` (EN, AR), and 12 months' retention.
+  - **`agency`:** name "Deepzeta AI", alerts to deepzeta.office@gmail.com, WhatsApp 971545476335. **`meta`:** `graph_version` v26.0 (Meta's latest, checked 2026-10-11); the existing webhook secrets are untouched.
+  - **`payment_details`** held `[BANK NAME]`, `[IBAN]` and `[SWIFT]` placeholders, which the agent could have sent to a visitor. It now holds a safe interim message; real details wait for the first paying client (a register row).
+- **2026-10-11 · S4, the part that needs no credentials** (n8n, through the connector; each update is a named version in n8n's history):
+  - **`DZ · Inbound WhatsApp`:**
+    - **Found broken:** `Build Prompt` and `Build Payment Details Reply` didn't parse (raw line breaks inside JavaScript strings), so the agent would have failed on its first message. Both were rewritten with the same logic, and `Parse & Polish Reply`'s fence regex was fixed (`^\s*`). Every Code node in all eight `DZ ·` workflows now parses (checked offline).
+    - **`Build Prompt`:** "Bookable hours" (not "Opening hours", which the office keeps at 08:00–17:00), the meeting types, `config.rules` last, and the agency payment note only when `config.payments_enabled`.
+    - **Models:** `deepseek-flash` at temperature 0.3. Voice notes go to `gpt-transcribe` first (an HTTP request: n8n's OpenAI node has no model choice and always uses `whisper-1`); on an error the same file goes to the existing `whisper-1` node. n8n's OpenAI node lists `ogg` as supported, so the `.ogg` risk is smaller than 0030 feared; check 4 still tests it.
+    - **The tools:** `check_availability` and `book_appointment` pass `meeting_type`; `book_appointment` also passes an optional `customer_email`.
+  - **`DZ · Booking Tools`:** the two inputs. The type must be a configured one, and the email is checked. The calendar event's title, location and description carry the type and the email. The booking notes and the team alert carry the type. The confirmation tells the agent how the meeting happens.
+  - **Meet links:** a service account can't create Meet links or invite guests on a Gmail calendar (no domain-wide delegation outside Workspace). Google Meet bookings therefore use `config.meet_link`, a fixed room the owner creates (a register row); until then the alert asks the team to send the link.
+  - **`DZ · Scheduled Jobs`:** the summary uses `deepseek-flash` and keeps the email and the enquiry's details.
+  - **Waiting for the owner's credentials (Part B):** the Gmail steps (the SMTP nodes become Gmail, the customer's email confirmation, alerts to deepzeta.office@gmail.com), linking every credential, and the error workflow setting (n8n accepts only a published `DZ · Error Alerts`).
+  - **Waiting for the owner's approval:** the retention migration below.
+
+**The retention migration (S4), for the owner's approval before it's applied:**
+
+```sql
+-- Clears the memory (summary and name) of contacts silent for config.summary_retention_months (default 12)
+create or replace function public.purge_old_summaries()
+returns integer
+language plpgsql
+set search_path to 'public'
+as $function$
+declare n int;
+begin
+  update public.contacts ct
+     set summary = null, summary_updated_at = null, name = null
+    from public.clients c
+   where c.id = ct.client_id
+     and (ct.summary is not null or ct.name is not null)
+     and coalesce(greatest(ct.last_inbound_at, ct.last_outbound_at), ct.created_at)
+         < now() - make_interval(months => coalesce(nullif(c.config->>'summary_retention_months', '')::int, 12));
+  get diagnostics n = row_count;
+  return n;
+end $function$;
+revoke execute on function public.purge_old_summaries() from public, anon, authenticated;
+grant execute on function public.purge_old_summaries() to service_role;
+-- Daily at 23:25 UTC (03:25 in Dubai), ten minutes after purge-old-messages
+select cron.schedule('purge-old-summaries', '25 23 * * *', 'select public.purge_old_summaries()');
+```

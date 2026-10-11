@@ -173,7 +173,7 @@ When all seven are saved, tell Claude **"credentials done"**. Claude links them 
 
 ## Part C · Two secrets into Supabase (the SQL editor)
 
-Do this **after Claude says the settings and the Deepzeta client row are in** (plan step S3). Claude will also confirm the Client ID, which should be `DZ-0001`.
+The settings and the Deepzeta client row are in (plan step S3, 2026-10-11). Deepzeta's Client ID is **`DZ-0000`** (the stack's agency row, created when the stack was built).
 
 1. In Supabase, open the project → **SQL Editor** → **New query**.
 2. Paste the block, replace each `PASTE_…` with the value from your password manager, then click **Run**.
@@ -191,7 +191,7 @@ where key = 'meta';
 
 **C2 · Deepzeta's WhatsApp token and app secret** (they go into the Vault, encrypted)
 ```sql
-select public.set_client_secrets('DZ-0001', 'PASTE_WHATSAPP_PERMANENT_TOKEN', 'PASTE_META_APP_SECRET');
+select public.set_client_secrets('DZ-0000', 'PASTE_WHATSAPP_PERMANENT_TOKEN', 'PASTE_META_APP_SECRET');
 ```
 ✅ It returns `saved`.
 
@@ -225,7 +225,7 @@ from public.settings where key = 'meta';
 
 **E2 · The Calendar ID**
 - On the same page, open **Integrate calendar** and find **Calendar ID**. For a main calendar it's the account's address: `deepzeta.office@gmail.com` for now.
-- Send it to Claude.
+- **Already set by Claude** (plan S3, 2026-10-11). Tell Claude only if you share a different calendar.
 
 **E3 · Cal.com uses the same calendar**
 1. In Cal.com, open **Settings** → **Calendars** and connect Google (the same account as E1).
