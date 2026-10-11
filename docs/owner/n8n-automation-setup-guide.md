@@ -136,12 +136,38 @@ There's nothing called a "Cloud API" to create on its own. You get it by making 
 2. Find the **secret** key (labelled `service_role` or "secret"), reveal it, and copy it into your password manager.
 3. ⚠️ This key opens the whole database. It goes **only** into n8n (Part B).
 
-**A4 · A Google "service account"** (lets the agent read and write your calendar)
-1. Go to `console.cloud.google.com`, signed in as **deepzeta.office@gmail.com** (until Workspace is active). If Google asks, accept the terms and choose the UAE; no billing is needed. Top bar → **project picker** → **New project** → name it `deepzeta-automation` → **Create**, and make sure it's selected in the top bar.
-2. Search **Google Calendar API** in the top search bar, open it and click **Enable**.
-3. Search **Service Accounts**, open it → **Create service account**. Name it `deepzeta-calendar`, then **Create and continue** → **Done** (no role needed).
-4. Click the new account → **Keys** → **Add key** → **Create new key** → **JSON** → **Create**. A file downloads. **That file is a secret:** store it in your password manager, then delete it from Downloads after Part B.
-5. Copy the service account's **email** (ends in `.iam.gserviceaccount.com`). It isn't a secret: send it to Claude, and you'll need it in Part E.
+**A4 · A Google "service account"** (a robot account that lets the agent read and write your calendar). Everything as **deepzeta.office@gmail.com** until Workspace is active.
+
+*A4.1 · The project*
+1. Open `console.cloud.google.com` in Chrome. The round picture at the top right must be deepzeta.office@gmail.com; if not, click it and switch account.
+2. First visit only: a welcome box asks for your **Country** (choose **United Arab Emirates**) and the **Terms of Service**. Tick, then **Agree and continue**. If Google offers a free trial that asks for a card, close it: no billing is needed.
+3. Top left, next to "Google Cloud", click the **project picker** ("Select a project"). In the window, click **New project**.
+4. **Project name** `deepzeta-automation`, **Location** "No organization". Click **Create**.
+5. After about 10 seconds, open the project picker again and click **deepzeta-automation**. ✅ The top bar shows deepzeta-automation.
+
+*A4.2 · The Calendar API*
+6. Type `Google Calendar API` in the top search bar and open it.
+7. Click **Enable**. ✅ The API's page opens and shows it's enabled.
+
+*A4.3 · The robot account*
+8. Type `Service accounts` in the top search bar and open **Service accounts** (IAM & Admin).
+9. Click **+ Create service account**.
+10. **Service account name** `deepzeta-calendar` (the ID fills in by itself). Click **Create and continue**.
+11. **Permissions (optional):** choose nothing, click **Continue**. **Principals with access (optional):** leave empty, click **Done**. ✅ The list shows deepzeta-calendar with an email ending in `.iam.gserviceaccount.com`.
+
+*A4.4 · Its key (a secret)*
+12. Click the deepzeta-calendar **email** in the list, then the **Keys** tab.
+13. Click **Add key** → **Create new key** → **JSON** → **Create**. A `.json` file downloads; click **Close**. If Google says key creation is disabled, stop and tell Claude.
+14. Save the file in your password manager as "Google service account key (deepzeta-calendar)": attach it, or open it with Notepad (right-click → **Open with** → **Notepad**, then Ctrl+A, Ctrl+C) and paste the whole text into a secure note. Google never shows this key again. **Never send it to Claude or by email.** Delete it from Downloads (and the Recycle Bin) after Part B.
+
+*A4.5 · The robot's email (not a secret)*
+15. Copy the deepzeta-calendar email from the Service accounts list and send it to Claude.
+
+*A4.6 · Share your calendar with the robot* (the same step as Part E1)
+16. Open `calendar.google.com`, then the **gear** (top right) → **Settings**.
+17. In the left column, under **Settings for my calendars**, click your main calendar.
+18. Find **Share with specific people or groups** → **+ Add people and groups**. Paste the robot's email, set **Make changes to events**, then click **Send** (if Google warns about sharing, send anyway). Don't tick "Make available to public". ✅ The robot's email is listed with "Make changes to events".
+19. The Calendar ID is already set (`deepzeta.office@gmail.com`). Tell Claude **"A4 done"** with the robot's email.
 
 **A5 · Meta values** (Part 0 step 8, and the app's **App settings → Basic**) ✅ Done 2026-10-11
 - **Secret:** the **permanent access token** (the System User token), and the **App Secret** (App Dashboard → **App settings** → **Basic** → **App secret** → **Show**).
@@ -217,7 +243,7 @@ from public.settings where key = 'meta';
 
 ## Part E · Google Calendar and Cal.com on one diary
 
-**E1 · Share your calendar with the agent**
+**E1 · Share your calendar with the agent** (already done if you followed A4.6)
 1. In Google Calendar (deepzeta.office@gmail.com until Workspace is active), click **Settings** (gear).
 2. Under **Settings for my calendars**, click your main calendar. Your real meetings will then block slots too.
 3. Open **Share with specific people or groups** → **Add people and groups**, and paste the service account email (A4.5).

@@ -262,7 +262,9 @@ None.
   - **Waiting for the owner's credentials (Part B):** the Gmail steps (the SMTP nodes become Gmail, the customer's email confirmation, alerts to deepzeta.office@gmail.com), linking every credential, and the error workflow setting (n8n accepts only a published `DZ · Error Alerts`).
   - **Waiting for the owner's approval:** the retention migration below.
 
-**The retention migration (S4), for the owner's approval before it's applied:**
+- **2026-10-11 · the retention migration applied** (the owner: "approve cleanup"): `purge_old_summaries` and the daily cron job `purge-old-summaries` (23:25 UTC) exist; EXECUTE only for `postgres` and `service_role`; a first run cleared 0 rows; the security advisors show only the existing INFO notes (RLS on with no policies, the service-role-only design), nothing new. The guide's A4 is now click by click, with the calendar sharing (E1) folded in as A4.6.
+
+**The retention migration (S4), as applied:**
 
 ```sql
 -- Clears the memory (summary and name) of contacts silent for config.summary_retention_months (default 12)
