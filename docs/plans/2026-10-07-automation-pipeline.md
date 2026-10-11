@@ -81,21 +81,22 @@ Decision: [0027](../decisions/0027-automation-pipeline.md)
 | `docs/owner/n8n-setup-guide.md` | MODIFY | Part 6 points to `DZ · Error Alerts`. Part 9 describes the extended `DZ · Cal.com Bookings`. Part 10 is marked superseded, with a pointer to the new guide |
 | `docs/owner/pre-launch-register.md` | APPEND-ONLY | Rows: the live test script passed, the privacy policy names the four processors, the legal check, spend limits, the follow-ups decision |
 | `docs/facts/company-facts.md` | MODIFY (only the rows the owner confirms) | Phone and WhatsApp +971 54 547 6335 (CONFIRMED 2026-10-07), the meeting types, the audit's length, gap and booking hours, the team email |
-| `docs/facts/external-sources.md` | APPEND-ONLY | PROPOSED rows: Meta's customer-service window and template rule, and OpenAI's API data handling, each with its official source and the date checked |
+| `docs/facts/external-sources.md` | APPEND-ONLY | PROPOSED rows: Meta's customer-service window and template rule, and DeepSeek's API data handling (decision 0030), each with its official source and the date checked |
 | `docs/facts/agent-knowledge.md` | CREATE | The generated knowledge: what the agent knows, reviewed by the owner |
 | `scripts/build-agent-knowledge.mjs` | CREATE | The generator (catalogue + CONFIRMED facts + FAQ bank) |
 | `package.json` | MODIFY (scripts only) | `agent:knowledge` |
 | `tests/unit/agent-knowledge.test.ts` | CREATE | Pins the knowledge to its sources |
-| `docs/content-drafts/legal/privacy-policy.md` | MODIFY | Names OpenAI (US), Supabase (Mumbai) and n8n (Frankfurt) beside DeepSeek (China), for the owner's re-approval |
+| `docs/content-drafts/legal/privacy-policy.md` | MODIFY | Names Supabase (Mumbai) and n8n (Frankfurt) beside DeepSeek (China); no OpenAI (decision 0030). For the owner's re-approval |
 
 **External systems, changed through the connectors (no repo files):**
 
 | System | Action | Purpose |
 |---|---|---|
 | n8n `DZ · Booking Tools` | MODIFY | A `meeting_type` input (phone_call / google_meet / office_visit): validated, written to the event (title, location, Meet link) and returned in the confirmation. An optional `customer_email`: when it's given, a Gmail confirmation goes to the customer |
-| n8n `DZ · Scheduled Jobs` | MODIFY | The summary prompt keeps the name, email, what they asked for and the enquiry's details. It still never keeps medical, ID or payment details |
+| n8n `DZ · Scheduled Jobs` | MODIFY | The summary prompt keeps the name, email, what they asked for and the enquiry's details. It still never keeps medical, ID or payment details. The model `deepseek-chat` becomes `deepseek-flash` (decision 0030) |
 | Supabase migration `purge_old_summaries` | CREATE | One function that clears `summary` and `name` on contacts silent for `config.summary_retention_months` (default 12), and one daily cron job beside `purge-old-messages` |
-| n8n `DZ · Inbound WhatsApp` | MODIFY | The `check_availability` and `book_appointment` tool definitions pass `meeting_type`. Nothing else changes |
+| n8n `DZ · Inbound WhatsApp` | MODIFY | The `check_availability` and `book_appointment` tool definitions pass `meeting_type`. Decision 0030 (DeepSeek only): `Safety Check (OpenAI Moderation)` becomes a DeepSeek classification call (JSON: ok / abuse / self-harm, the same strike, refusal and crisis paths); `search_knowledge` and `OpenAI Embeddings` are removed and the client's whole knowledge goes into the agent's instructions; `Transcribe Voice Note` is removed and a voice note gets `voice_failed`; the model `deepseek-chat` becomes `deepseek-flash` |
+| n8n `DZ · Knowledge Upload (form)` | MODIFY | Decision 0030: the two `OpenAI Embeddings` steps and the vector-store inserts are removed; each upload saves the client's knowledge as plain text (`Replace ALL` replaces it) for the agent's instructions. The `kb_documents` change is shown to the owner first |
 | n8n `DZ · Team Alert`, `DZ · Scheduled Jobs`, `DZ · Error Alerts`, `DZ · Knowledge Upload (form)`, `DZ · Booking Tools` | MODIFY | Email steps move from SMTP to the Gmail credential (`hello@deepzeta.ai`). Customer-facing "DeepZeta" text becomes "Deepzeta AI" (C29) |
 | n8n `DZ · Cal.com Bookings` | CREATE | Base guide Part 9, extended: a Team Alert, plus the `dz_booking_confirmed` template when the booker gave a WhatsApp number and consent |
 | Every `DZ ·` workflow | MODIFY (settings) | Error workflow = `DZ · Error Alerts` |
@@ -143,7 +144,7 @@ Decision: [0027](../decisions/0027-automation-pipeline.md)
    - **The agency client row:**
      - "Deepzeta AI"; `is_agency`, `is_active`; `paid_until` 2099-12-31 (needed by the inbound gate; billing skips agency rows)
      - tone, `default_language` en, and the `business_profile` from S2
-     - booking on, `calendar_id`, voice notes transcribed
+     - booking on, `calendar_id`; voice notes not transcribed (decision 0030: the `voice_failed` reply)
      - `team_emails` = deepzeta.office@gmail.com, and `team_whatsapp` empty until the owner gives the number
      - the WhatsApp IDs and `calendar_id`, added later (Owner inputs)
      - `config`:
@@ -234,3 +235,4 @@ None.
   - Decision 0027 is ACCEPTED, recorded as C72 (renumbered from C69 at the merge), with the `CLAUDE.md` state line written.
   - The plan moved to its own worktree (`D:\DeepZeta Ai\Website DeepZeta-automation`, branch `feat/automation-track-a`), apart from the P6 session.
   - Additions: the customer email confirmation, the summary content, and the 12-month retention migration.
+- **2026-10-11:** the owner finished Part 0 (the number +971 54 547 6335 registered on the Cloud API: Phone number ID 1460584370460068, WhatsApp account 1432051959064319, app Deepzeta Connect 1573718627333039; the payment method; the system user token) and A1, A3, A5, A6. **Decision 0030:** DeepSeek is the only AI. OpenAI's three jobs (moderation, voice transcription, knowledge embeddings) are replaced as the external-systems table now says, and the guide drops A2 and credential 3. S2–S4 stay to do.
