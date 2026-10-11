@@ -179,11 +179,13 @@ There's nothing called a "Cloud API" to create on its own. You get it by making 
 
 ## Part B · Credentials in n8n
 
+✅ Done 2026-10-11: all seven saved (with n8n's default names, which is fine: each type appears once). Claude linked them to every workflow (51 nodes), moved the email steps to Gmail and checked that nothing is missing.
+
 **How to add a credential:**
 1. In n8n, open the left sidebar → **Overview** → the **Credentials** tab.
 2. Top right, click **Create** ▾ → **Credential** (or the arrow next to **Create workflow** → **Create credential**).
 3. Search the type, choose it, and click **Continue**.
-4. Rename it: click its default name at the top left (e.g. "Supabase account") and paste the name from the table. Copy the names from this guide or the chat: they contain `·` and `→`.
+4. Optional: rename it (click its default name at the top left, e.g. "Supabase account"). Claude finds credentials by type, so the default names work.
 5. Fill in the fields and click **Save**. ✅ It saves with no red error; most types also say "Connection tested successfully".
 
 **Credential 4, the private key:** open the A4 JSON file with Notepad, press Ctrl+F and search `BEGIN PRIVATE KEY`. Select from the first `-----BEGIN PRIVATE KEY-----` to the end of `-----END PRIVATE KEY-----` (the dashes included), copy and paste. The `\n` marks inside are fine. After it saves, delete the JSON file from Downloads and the Recycle Bin (your password manager keeps the copy).
@@ -302,6 +304,7 @@ Whenever services or facts change, Claude regenerates the file and you upload it
 
 For each workflow: open it, click **Publish** (top right), then open **⋯** → **Settings** → **Error workflow** = `DZ · Error Alerts` (Claude may have set it already).
 
+0. `DZ · Error Alerts` **first**: n8n only accepts a published workflow as the error workflow. It runs only when another workflow fails. Tell Claude when it's published, and Claude sets it as the error workflow on the others.
 1. `DZ · Send WhatsApp`
 2. `DZ · Team Alert`
 3. `DZ · Booking Tools`
@@ -310,7 +313,7 @@ For each workflow: open it, click **Publish** (top right), then open **⋯** →
 6. `DZ · Cal.com Bookings`
 7. `DZ · Inbound WhatsApp`: **last**. From this moment, real messages get answers.
 
-`DZ · Error Alerts` doesn't need publishing: it runs whenever another workflow fails. **Leave off:** `DZ · Renew Client (form)` and the Showcase flow.
+**Leave off:** `DZ · Renew Client (form)` (billing: its email steps still use the old SMTP sender) and the Showcase flow.
 
 ## Part I · The end-to-end test (13 checks, from your personal phone)
 

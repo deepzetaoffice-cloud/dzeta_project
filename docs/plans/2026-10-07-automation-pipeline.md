@@ -266,6 +266,15 @@ None.
 
 - **2026-10-11 · A4 done:** the service account `deepzeta-calendar@spry-kingdom-511305-m8.iam.gserviceaccount.com` (Google Cloud project deepzeta-automation, ID spry-kingdom-511305-m8), the Calendar API on, deepzeta.office@gmail.com's main calendar shared with "Make changes to events". Part A is complete; Part B (the credentials) is next.
 
+- **2026-10-11 · Part B done and S4 finished** (n8n through the connector, then re-read and checked offline):
+  - The owner saved all seven credentials (n8n's default names; one per type). A6 had not been saved: the owner made the two random secrets then (letters and digits, 48 characters).
+  - **Linked:** 51 nodes across the seven in-scope workflows each carry the credential of their type (Supabase, DeepSeek, OpenAI, Google service account, Header Auth, Basic Auth, Gmail), including the new `gpt-transcribe` node. `DZ · Renew Client (form)` is left as it is (billing, out of scope, stays off).
+  - **Gmail:** the six SMTP nodes in scope (Team Alert, Error Alerts, Scheduled Jobs ×2, Knowledge Upload ×2) are Gmail nodes on the deepzeta.office credential, sender "Deepzeta AI"; team mail goes to deepzeta.office@gmail.com.
+  - **The customer's email confirmation:** `DZ · Booking Tools` sends it after the calendar event when the customer gave an email and the client's `config.email_confirmations` is true (set for DZ-0000); the agent mentions the email only then.
+  - **Brand (C29):** the Team Alert footer and the knowledge form's title say "Deepzeta AI"; the form's Client ID hint is DZ-0000.
+  - **Check:** every node that needs a credential has one, no SMTP node remains in scope, and every Code node parses (all seven re-read after the update).
+  - **Left:** the error workflow setting waits for the owner to publish `DZ · Error Alerts` (guide Part H, step 0).
+
 **The retention migration (S4), as applied:**
 
 ```sql
