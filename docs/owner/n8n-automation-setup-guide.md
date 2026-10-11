@@ -30,7 +30,7 @@ flowchart LR
 
 | In n8n | In plain words |
 |---|---|
-| `DZ · Inbound WhatsApp` | Reads each message, waits a moment so 3 quick messages get one answer, checks safety, lets the AI answer from Deepzeta's knowledge, and saves what it learned about the visitor. A voice note gets a polite reply asking the visitor to type (decision 0030: DeepSeek can't transcribe audio) |
+| `DZ · Inbound WhatsApp` | Reads each message, waits a moment so 3 quick messages get one answer, turns voice notes into text in the language spoken, checks safety, lets the AI answer in the customer's language, and saves what it learned about the visitor |
 | `DZ · Booking Tools` | Checks your calendar, offers free times, and books only the slot the visitor confirms. It can't double-book |
 | `DZ · Send WhatsApp` | Sends every WhatsApp message and logs it |
 | `DZ · Team Alert` | Emails and WhatsApps your team about bookings, hand-offs and urgent cases |
@@ -121,12 +121,15 @@ There's nothing called a "Cloud API" to create on its own. You get it by making 
 
 ## Part A · Collect the keys (into your password manager only)
 
-**A1 · DeepSeek API key** (the only AI: the answers, the safety check and the memory summaries; [decision 0030](../decisions/0030-deepseek-only-ai.md)) ✅ Done 2026-10-11
+**A1 · DeepSeek API key** (writes every answer and the memory summaries; [decision 0030](../decisions/0030-ai-providers.md)) ✅ Done 2026-10-11
 1. Go to `platform.deepseek.com`, sign in, and open **API keys** → **Create new API key**.
 2. Name it `deepzeta-n8n`, then copy it into your password manager.
 3. Check whether there is a spend limit or prepaid balance option, and keep the balance small.
 
-**A2 · removed.** OpenAI isn't used (decision 0030, the owner, 2026-10-11).
+**A2 · OpenAI API key** (listens and checks: voice notes in any language, the safety check, knowledge search; never writes an answer; decision 0030)
+1. Go to `platform.openai.com`, sign in, and open **API keys** → **Create new secret key**.
+2. Name it `deepzeta-n8n`, with permissions **All**, then copy it into your password manager.
+3. In **Settings** → **Limits** (or **Billing**), set a **monthly budget** you're comfortable with, and add a payment method if it asks.
 
 **A3 · Supabase secret key** ✅ Done 2026-10-11
 1. Go to `supabase.com`, then the project **deepzeta-automation** → **Project Settings** (gear) → **API Keys**.
@@ -159,14 +162,14 @@ There's nothing called a "Cloud API" to create on its own. You get it by making 
 |---|---|---|---|
 | 1 | `Supabase · deepzeta-automation` | **Supabase API** | **Host** `https://pqeyzigrltisuusbvxsl.supabase.co` · **Service Role Secret** = A3 |
 | 2 | `DeepSeek · deepzeta` | **DeepSeek** | **API Key** = A1 |
-| 3 | — | — | Removed: no OpenAI (decision 0030) |
+| 3 | `OpenAI · deepzeta` | **OpenAI** | **API Key** = A2 |
 | 4 | `Google Calendar · service account` | **Google Service Account API** | **Service Account Email** = A4.5 · **Private Key** = the `private_key` value from the JSON file (the long text, including the `BEGIN` and `END` lines) · turn on **Set up for use in HTTP Request node** · **Scopes** `https://www.googleapis.com/auth/calendar` |
 | 5 | `Gateway → n8n secret` | **Header Auth** | **Name** `x-deepzeta-secret` · **Value** = A6 "Gateway forward secret" |
 | 6 | `Knowledge form login` | **Basic Auth** | A username and a strong password you choose. It protects the knowledge upload form |
 
 Email uses your existing `Gmail · hello@deepzeta.ai` (base guide C2). Claude switches the stack's email steps to it.
 
-When all five are saved (1, 2, 4, 5 and 6), tell Claude **"credentials done"**. Claude links them to the workflows: it sees only the names, never the secrets. If a node still shows a red warning, open it and pick the credential from its dropdown.
+When all six are saved, tell Claude **"credentials done"**. Claude links them to the workflows: it sees only the names, never the secrets. If a node still shows a red warning, open it and pick the credential from its dropdown.
 
 ## Part C · Two secrets into Supabase (the SQL editor)
 
@@ -288,7 +291,7 @@ The agent goes live for real customers only after **every check passes** and you
 | 1 | "What services do you offer?" | An English reply. Service names match the site, it says it's an AI assistant, and it ends with a next step |
 | 2 | The same question in Arabic | The reply is in Arabic |
 | 3 | Three quick messages: "hi" · "I run a clinic" · "can you help with WhatsApp?" | **One** combined reply |
-| 4 | A voice note asking about the free audit | A polite reply, in your language, asking you to type the message (decision 0030: no transcription) |
+| 4 | A voice note asking about the free audit (try one in Arabic and one in another language you speak) | A text reply that answers it, in the language you spoke. If it says it couldn't hear the note, tell Claude: the voice-note format needs a conversion step (decision 0030) |
 | 5 | "What's the weather in Tokyo?" | One polite line back to Deepzeta's services |
 | 6 | "How much does it cost?" | No invented price. It offers the free audit |
 | 7 | "I want to book an audit" | It asks **phone call / Google Meet / office visit** first, then the day. It offers 2–3 times between 10:00 and 16:30, asks your name and email (email optional), and **asks you to confirm one exact slot and type**. It books only after your "yes" |
@@ -306,9 +309,9 @@ After each check, open n8n → **Executions**: the run is green. Send Claude the
 - [ ] Every Part H workflow is published, with the Error workflow set on each.
 - [ ] No node shows a red credential warning.
 - [ ] Templates **Approved**: `team_alert`, `dz_booking_reminder` (EN + AR), `dz_booking_confirmed`, `dz_lead_welcome`.
-- [ ] Spend limit: DeepSeek's prepaid balance kept small (the only AI provider, decision 0030).
+- [ ] Spend limits are set: OpenAI monthly budget, and DeepSeek's balance kept small.
 - [ ] Keys are only in your password manager, n8n and the Supabase Vault (Part C). The Google JSON file is deleted from Downloads.
-- [ ] Privacy: the privacy policy names DeepSeek (China), Supabase (India) and n8n (EU), and you've done your legal check (decisions 0027 and 0030).
+- [ ] Privacy: the privacy policy names DeepSeek (China), OpenAI (US), Supabase (India) and n8n (EU), and you've done your legal check (decisions 0027 and 0030).
 - [ ] All 13 checks in Part I passed, and you've confirmed the agent works as you expect. This is the go-live condition.
 - [ ] The team WhatsApp number sent to Claude. Until then, team alerts are email only.
 - [ ] Backups: n8n → each workflow → **⋯** → **Download**, then send the files to Claude. They are kept **out of the public repo** while it's public, because they contain the agent's internal rules.
@@ -319,7 +322,7 @@ After each check, open n8n → **Executions**: the run is green. Send Claude the
 - Supabase → **Table Editor** → `contacts`, sorted by `strikes`: check that no real customer was blocked by mistake.
 - `delivery_failures`: empty, or explained.
 - `bookings` matches your Google Calendar.
-- DeepSeek usage is within budget.
+- DeepSeek and OpenAI usage are within budget.
 - Spot-read 3 conversations (`messages`): answers are correct and nothing sensitive is stored.
 
 ## Common problems

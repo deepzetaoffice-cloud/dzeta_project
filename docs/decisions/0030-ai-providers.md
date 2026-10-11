@@ -1,33 +1,41 @@
-# 0030 · DeepSeek is the only AI provider, everywhere
+# 0030 · AI providers: DeepSeek writes, OpenAI listens and checks
 
-Status: ACCEPTED (owner, 2026-10-11: "we will use DeepSeek instead of OpenAI with the same API key … change to DeepSeek API completely for the automation and other tools that we use in the website and n8n")
+Status: ACCEPTED (owner, 2026-10-11)
+
+**History:** on the same day, before this record reached `main`, the owner first chose DeepSeek alone. That would have left voice notes untranscribed. The owner then decided: "we must understand the voice notes from the customer … in their language … our system must be strong and perfect. I think we need OpenAI API." The final answers:
+- **OpenAI role:** all three jobs.
+- **Reply language:** the customer's language.
 
 ## Context
 
-- [Decision 0016](0016-ai-provider-deepseek.md) made DeepSeek the site's AI provider: the AI agent demo, the Social Media Content Planner and pSEO drafting. No Anthropic API use remains in the plans. The remaining mentions are crawler rules, "tools we work with" lists and historical records.
-- [Decision 0027](0027-automation-pipeline.md) added OpenAI to the WhatsApp agent stack for three jobs, never the answers. The live n8n workflows were checked on 2026-10-11:
-  - **moderation:** `Safety Check (OpenAI Moderation)` in `DZ · Inbound WhatsApp`
+- [Decision 0016](0016-ai-provider-deepseek.md) made DeepSeek the site's AI provider: the AI agent demo, the Social Media Content Planner and pSEO drafting. **No Anthropic API use remains.** The remaining mentions are crawler rules, "tools we work with" lists and historical records.
+- [Decision 0027](0027-automation-pipeline.md) gave OpenAI three supporting jobs in the WhatsApp agent stack. The live n8n workflows were checked on 2026-10-11:
+  - **moderation:** `Safety Check (OpenAI Moderation)` in `DZ · Inbound WhatsApp`, `omni-moderation-latest`
   - **voice-note transcription:** `Transcribe Voice Note`
-  - **knowledge embeddings:** `OpenAI Embeddings` (`text-embedding-3-small`, 1536 dimensions) in `DZ · Inbound WhatsApp` (search) and twice in `DZ · Knowledge Upload` (saving). They feed the Supabase vector store `kb_documents` / `match_documents`.
-  - `DZ · Scheduled Jobs` already uses DeepSeek only (memory summaries).
-- DeepSeek's API, checked on 2026-10-11 ([api-docs.deepseek.com](https://api-docs.deepseek.com/)), offers chat models only: `deepseek-flash` and `deepseek-v4-pro`, with a 1M-token context and context caching. It offers **no embeddings, no speech-to-text and no moderation endpoint**.
+  - **knowledge embeddings:** `text-embedding-3-small`, 1536 dimensions, in `DZ · Inbound WhatsApp` and `DZ · Knowledge Upload`. They feed the Supabase vector store `kb_documents` / `match_documents`.
+
+  DeepSeek writes every reply and the memory summaries (`DZ · Scheduled Jobs`).
+- DeepSeek's API (checked on 2026-10-11) offers chat models only: `deepseek-flash` and `deepseek-v4-pro`. It has no embeddings, speech-to-text or moderation endpoint.
+- OpenAI's speech-to-text guide (checked on 2026-10-11) recommends `gpt-transcribe` for "transcribing recorded speech in its original language". `whisper-1` supports 98 languages. Files can be up to 25 MB.
 
 ## Decision
 
-1. **DeepSeek is the only AI provider** for the WhatsApp agent stack, the website's AI tools and n8n. One account, one API key (the owner's A1). OpenAI is removed, and so are its key, its n8n credential and its spend limit.
-2. **The three OpenAI jobs, replaced:**
-   - **Moderation:** a short DeepSeek classification call before the agent (`deepseek-flash`, JSON out: ok, abuse or self-harm). It keeps the strikes, the polite fixed refusal and the caring fixed reply with a team alert (0027).
-   - **Knowledge:** no embeddings. A client's whole knowledge is given to the agent in its instructions. It is small (Deepzeta's is a few thousand words), and DeepSeek's context caching makes the repeat cheap. The vector search tool and the embedding steps in `DZ · Knowledge Upload` are removed; knowledge is saved as plain text per client. A client whose knowledge outgrows this gets Postgres full-text search in Supabase later. That is still no other vendor, and it gets its own plan.
-   - **Voice notes:** DeepSeek can't transcribe audio. A voice note gets the fixed reply `voice_failed` (EN/AR), politely asking the customer to type the message, and is logged. ⚠️ **The trade-off:** many UAE customers send voice notes. The owner can later approve a speech-to-text provider in a new decision.
-3. **Model names:** the stack's `deepseek-chat` becomes `deepseek-flash`, DeepSeek's current name, in S4.
+1. **DeepSeek writes, everywhere.** Every reply the WhatsApp agent sends, the memory summaries, and the website's AI tools (0016). The model name `deepseek-chat` becomes `deepseek-flash`, DeepSeek's current name, in S4.
+2. **OpenAI listens and checks, in the WhatsApp agent only, and never writes a reply.** These are 0027's three jobs, kept as built:
+   - **voice notes,** transcribed in the language spoken, with `gpt-transcribe` (`whisper-1` as the fallback)
+   - **the safety check,** with OpenAI's moderation model (free, multilingual)
+   - **knowledge search,** with OpenAI embeddings over each client's own knowledge
+3. **The agent understands and replies in the customer's language,** whatever it is: English, Arabic, Hindi, Urdu, Malayalam, Tagalog, Russian, Chinese and others. This replaces the plan's "EN/AR" rule.
+   - The fixed messages (opt-out, errors, refusals) stay English and Arabic.
+   - A customer can always ask for a person.
 
 ## Consequences
 
-- **Supersedes** 0027's OpenAI items: the moderation row, OpenAI as a processor, "Extends 0016: OpenAI is a second AI vendor", and OpenAI in the cost line. The rest of 0027 stands.
-- **[C72](../ai/conflict-register.md)'s part (2)** (0016 named DeepSeek as the only AI) is true again.
-- **Processors** in the privacy policy: DeepSeek (China), Supabase (India), n8n (EU). OpenAI (US) is removed.
+- **0027 stands as written**, with two changes: its language rule (point 3) and the transcription model (point 2).
+- **Processors** in the privacy policy: DeepSeek (China), OpenAI (US), Supabase (India) and n8n (EU).
+- **The owner's keys:** A1 (DeepSeek) and A2 (OpenAI, with a monthly usage limit).
+- **Risk: the voice-note format.** WhatsApp sends voice notes as `.ogg` (Opus). OpenAI's current guide lists `mp3`, `mp4`, `mpeg`, `mpga`, `m4a`, `wav` and `webm`, not `ogg`. The stack sends `.ogg` as built. Part I's check 4 tests it with a real voice note before go-live. If OpenAI rejects the file, S4 adds a conversion step, and the agent never stays silent: it falls back to `voice_failed`.
 - **Updated with this decision:**
-  - the automation plan (S4's edits, the allowed files, the progress note)
-  - the owner's guide: Part A2 and credential 3 removed; Part I's voice-note check; Part J; the weekly check
-  - the pre-launch register's privacy and spend-limit rows
-- **Track B** (the website agent, P7) and Deepzeta Sync's tools use DeepSeek only, as 0016 already says.
+  - the automation plan: the external-systems table, the language rule in S3, the progress note
+  - the owner's guide: A2, credential 3, check 4, Part J, the weekly check
+  - the pre-launch register: the privacy and spend-limit rows
