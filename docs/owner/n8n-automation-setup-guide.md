@@ -136,7 +136,7 @@ There's nothing called a "Cloud API" to create on its own. You get it by making 
 2. Find the **secret** key (labelled `service_role` or "secret"), reveal it, and copy it into your password manager.
 3. ⚠️ This key opens the whole database. It goes **only** into n8n (Part B).
 
-**A4 · A Google "service account"** (a robot account that lets the agent read and write your calendar). Everything as **deepzeta.office@gmail.com** until Workspace is active.
+**A4 · A Google "service account"** (a robot account that lets the agent read and write your calendar). Everything as **deepzeta.office@gmail.com** until Workspace is active. ✅ Done 2026-10-11: `deepzeta-calendar@spry-kingdom-511305-m8.iam.gserviceaccount.com` (project deepzeta-automation, ID spry-kingdom-511305-m8), calendar shared.
 
 *A4.1 · The project*
 1. Open `console.cloud.google.com` in Chrome. The round picture at the top right must be deepzeta.office@gmail.com; if not, click it and switch account.
@@ -180,16 +180,20 @@ There's nothing called a "Cloud API" to create on its own. You get it by making 
 ## Part B · Credentials in n8n
 
 **How to add a credential:**
-1. In n8n, open the left sidebar → **Overview**.
-2. Top right, click **Create** ▾ → **Credential**.
-3. Search the type, fill in the fields, and click **Save**. ✅ It saves with no red error.
+1. In n8n, open the left sidebar → **Overview** → the **Credentials** tab.
+2. Top right, click **Create** ▾ → **Credential** (or the arrow next to **Create workflow** → **Create credential**).
+3. Search the type, choose it, and click **Continue**.
+4. Rename it: click its default name at the top left (e.g. "Supabase account") and paste the name from the table. Copy the names from this guide or the chat: they contain `·` and `→`.
+5. Fill in the fields and click **Save**. ✅ It saves with no red error; most types also say "Connection tested successfully".
+
+**Credential 4, the private key:** open the A4 JSON file with Notepad, press Ctrl+F and search `BEGIN PRIVATE KEY`. Select from the first `-----BEGIN PRIVATE KEY-----` to the end of `-----END PRIVATE KEY-----` (the dashes included), copy and paste. The `\n` marks inside are fine. After it saves, delete the JSON file from Downloads and the Recycle Bin (your password manager keeps the copy).
 
 | # | Name (type it exactly) | Type to search | What goes in |
 |---|---|---|---|
 | 1 | `Supabase · deepzeta-automation` | **Supabase API** | **Host** `https://pqeyzigrltisuusbvxsl.supabase.co` · **Service Role Secret** = A3 |
 | 2 | `DeepSeek · deepzeta` | **DeepSeek** | **API Key** = A1 |
 | 3 | `OpenAI · deepzeta` | **OpenAI** | **API Key** = A2 |
-| 4 | `Google Calendar · service account` | **Google Service Account API** | **Service Account Email** = A4.5 · **Private Key** = the `private_key` value from the JSON file (the long text, including the `BEGIN` and `END` lines) · turn on **Set up for use in HTTP Request node** · **Scopes** `https://www.googleapis.com/auth/calendar` |
+| 4 | `Google Calendar · service account` | **Google Service Account API** | **Service Account Email** `deepzeta-calendar@spry-kingdom-511305-m8.iam.gserviceaccount.com` (A4.5) · **Impersonate a User** off · **Private Key** = the `private_key` value from the JSON file (the long text, including the `BEGIN` and `END` lines) · turn on **Set up for use in HTTP Request node** · **Scopes** `https://www.googleapis.com/auth/calendar` |
 | 5 | `Gateway → n8n secret` | **Header Auth** | **Name** `x-deepzeta-secret` · **Value** = A6 "Gateway forward secret" |
 | 6 | `Knowledge form login` | **Basic Auth** | A username and a strong password you choose. It protects the knowledge upload form |
 

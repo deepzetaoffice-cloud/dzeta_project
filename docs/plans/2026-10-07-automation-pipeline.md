@@ -264,6 +264,8 @@ None.
 
 - **2026-10-11 · the retention migration applied** (the owner: "approve cleanup"): `purge_old_summaries` and the daily cron job `purge-old-summaries` (23:25 UTC) exist; EXECUTE only for `postgres` and `service_role`; a first run cleared 0 rows; the security advisors show only the existing INFO notes (RLS on with no policies, the service-role-only design), nothing new. The guide's A4 is now click by click, with the calendar sharing (E1) folded in as A4.6.
 
+- **2026-10-11 · A4 done:** the service account `deepzeta-calendar@spry-kingdom-511305-m8.iam.gserviceaccount.com` (Google Cloud project deepzeta-automation, ID spry-kingdom-511305-m8), the Calendar API on, deepzeta.office@gmail.com's main calendar shared with "Make changes to events". Part A is complete; Part B (the credentials) is next.
+
 **The retention migration (S4), as applied:**
 
 ```sql
