@@ -126,7 +126,7 @@ There's nothing called a "Cloud API" to create on its own. You get it by making 
 2. Name it `deepzeta-n8n`, then copy it into your password manager.
 3. Check whether there is a spend limit or prepaid balance option, and keep the balance small.
 
-**A2 · OpenAI API key** (listens and checks: voice notes in any language, the safety check, knowledge search; never writes an answer; decision 0030)
+**A2 · OpenAI API key** (listens and checks: voice notes in any language, the safety check, knowledge search; never writes an answer; decision 0030) ✅ Done 2026-10-11
 1. Go to `platform.openai.com`, sign in, and open **API keys** → **Create new secret key**.
 2. Name it `deepzeta-n8n`, with permissions **All**, then copy it into your password manager.
 3. In **Settings** → **Limits** (or **Billing**), set a **monthly budget** you're comfortable with, and add a payment method if it asks.
