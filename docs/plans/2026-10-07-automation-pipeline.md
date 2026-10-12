@@ -281,6 +281,8 @@ None.
   - **The app secret (`wa_app_secret:DZ-0000`) is wrong:** 98 characters with symbols, where a Meta App Secret is 32 hexadecimal characters. The gateway checks every webhook's signature with it, so it must be re-entered before Part D (one-line SQL in the chat, the token left untouched).
   - `config.meet_link` = https://meet.google.com/aoo-ssoq-jkh (Owner inputs above).
 
+- **2026-10-12 · a second retention job** (the privacy page plan `docs/plans/2026-10-12-privacy-page.md`, question 3, owner approved): `purge_old_contacts()` deletes WhatsApp contacts, their bookings and any leftover messages once a contact has been silent for `config.contact_retention_months` (default 24); cron `purge-old-contacts` daily at 23:35 UTC; EXECUTE for `postgres` and `service_role` only; first run deleted nothing; advisors unchanged. Calendar events are cleared by the owner once a year. The owner also moved `/privacy` ahead of the conversational services, so the Meta app can go Live (guide Part D).
+
 **The retention migration (S4), as applied:**
 
 ```sql
