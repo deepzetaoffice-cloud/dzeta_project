@@ -288,6 +288,25 @@ None.
 - **2026-10-12 · Part D done:** `/privacy` merged to `main` (`0696165`) and live; the owner published the Meta app (Live); Meta's webhook verification reached the gateway and got 200 (edge logs, 08:25 UTC); `messages` subscribed (v26.0). Open: the Step 2 checklist shows "Add payment to send business-initiated messages" unticked, to check before the templates are used.
 
 - **2026-10-12 · the sales brief and stage 1 (knowledge):** the owner approved all 8 topics of the sales brief, which are in `docs/facts/sales-knowledge.md`. The plan `docs/plans/2026-10-12-hours-and-agent-knowledge.md` (APPROVED) moved the hours to Monday to Friday sitewide and added the approved answers, the Google Business Profile and the owner's own edits to the generator; `agent-knowledge.md` is regenerated for the owner's review (Part G). The owner also approved stage 2 (the agent's rules, the expert follow-up, and six safety fixes) and stage 3 (testing).
+- **2026-10-12 · stage 2 done (Supabase and n8n; the workflows stay unpublished):**
+  - Supabase migration `stage2_expert_followup_and_safety` (in the project's migration history):
+    - `contacts` gains `lead_priority`, `expert_followup_at` and `last_strike_at`
+    - strikes now expire after 30 days, and a mute is logged
+    - `wa_batch` returns the blocked-word list
+    - `apply_ai_result` saves the priority and the follow-up time
+    - a `safety_events` log (no message text) with `rpc_log_safety_event`, EXECUTE for `service_role` only, and a cron `purge-safety-events` (90 days, 23:45 UTC)
+  - `settings`:
+    - `moderation.blocked_keywords` holds 42 words and phrases (English, Arabic, Arabizi, Hindi/Urdu), editable by the owner (guide, "Edit the blocked words")
+    - `global_rules` gains three output fields for every client: `expert_followup`, `lead_priority` and `lead_details`
+  - DZ-0000 `config.rules`: 14 rules covering the name "Deepzeta AI Agent", the sales playbook (`sales-knowledge.md`), the expert follow-up, and the earlier booking, price and payment rules. `business_profile` has been regenerated.
+  - `DZ · Inbound WhatsApp` (53 → 62 nodes):
+    - DeepSeek runs in JSON mode
+    - **Classify Safety** adds the blocked words and reports a failed safety check, which **Log: Safety Check Down** records
+    - **Record Strike** passes the reason; **Muted Now?** → **Alert Team: Contact Muted**
+    - **Check Reply (OpenAI Moderation)** sits before **Parse & Polish Reply**. That step now holds back an unreadable reply, a flagged one, a price or a promised result: the customer gets the holding message, and the team gets a hand-off alert with the held-back text, logged by **Reply Held Back?** → **Log Reply Event**. It also cuts replies at 1,000 characters on a full sentence.
+    - **Expert Follow-up Requested?** → **Alert Team: Expert Follow-up**, titled 🔥 HOT, Warm or Cold lead
+  - Checked: both code nodes passed 27 local cases (English, Arabic and Hindi words with innocent lookalikes, prices in four forms, negated and plain promises in English and Arabic, broken JSON, long replies), and the deployed workflow matched the tested code. Every Code node compiles, the new credentials and wiring are in place, and the workflow is still inactive (34 checks). Open for stage 3: DeepSeek's JSON mode together with tool calls, tested live.
+  - The guide's Part G Client ID is corrected to `DZ-0000`, a section "Edit the blocked words" is added, and the weekly check now covers `safety_events` and the expert follow-ups.
 
 **The retention migration (S4), as applied:**
 

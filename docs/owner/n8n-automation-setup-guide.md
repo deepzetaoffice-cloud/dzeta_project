@@ -290,10 +290,10 @@ Do this when Claude has generated `docs/facts/agent-knowledge.md` and **you've r
 1. Open `DZ · Knowledge Upload (form)` in n8n. It must be published (Part H).
 2. Open its first node and copy the **Production URL**.
 3. Open that URL and log in with `Knowledge form login`. Fill in the form:
-   - **Client ID:** `DZ-0001`
+   - **Client ID:** `DZ-0000`
    - **What to do:** **Replace ALL knowledge for this client**
    - **Files:** `agent-knowledge.md`
-4. Click **Update knowledge**. ✅ An email "Knowledge updated: DZ-0001 Deepzeta AI" arrives at hello@.
+4. Click **Update knowledge**. ✅ An email "Knowledge updated: DZ-0000 Deepzeta AI" arrives at hello@.
 
 Whenever services or facts change, Claude regenerates the file and you upload it again with **Replace ALL**.
 
@@ -318,7 +318,7 @@ The agent goes live for real customers only after **every check passes** and you
 
 | # | Send | ✅ Expected |
 |---|---|---|
-| 1 | "What services do you offer?" | An English reply. Service names match the site, it says it's an AI assistant, and it ends with a next step |
+| 1 | "What services do you offer?" | An English reply. Service names match the site, it introduces itself as the **Deepzeta AI Agent (an AI)**, and it ends with a next step |
 | 2 | The same question in Arabic | The reply is in Arabic |
 | 3 | Three quick messages: "hi" · "I run a clinic" · "can you help with WhatsApp?" | **One** combined reply |
 | 4 | A voice note asking about the free audit (try one in Arabic and one in another language you speak) | A text reply that answers it, in the language you spoke. If it says it couldn't hear the note, tell Claude: the voice-note format needs a conversion step (decision 0030) |
@@ -329,10 +329,12 @@ The agent goes live for real customers only after **every check passes** and you
 | 9 | Book on the website's Cal.com page (WhatsApp number + tick box) | Cal.com's email, `dz_booking_confirmed` on WhatsApp and a team alert. Then ask the WhatsApp agent for that same time: **it isn't offered** |
 | 10 | An abusive message (**from a second phone**: strikes can mute a number) | The fixed polite refusal, with no AI answer |
 | 11 | Next day: "Hi again" | The reply shows it remembers you |
-| 12 | "I want to speak to a person" | It says a member of the team will contact you shortly from their own WhatsApp number. deepzeta.office@gmail.com gets a hand-off alert with a link that opens the chat on your phone |
+| 12 | "I want to speak to a person" | It says one of our experts will contact you shortly, by a call from +971 54 547 6335 or on WhatsApp from their own number. deepzeta.office@gmail.com gets a hand-off alert with a link that opens the chat on your phone |
 | 13 | "STOP" | The opt-out message |
 
 After each check, open n8n → **Executions**: the run is green. Send Claude the 13 results. Claude checks the runs and the database rows, and records them in the plan.
+
+Before these 13 checks, Claude runs the **sales test set** (stage 3). It covers timelines, doubts and objections, the expert follow-up with its 🔥 Hot / Warm / Cold alert, prices and promised results held back, the blocked words, and other languages.
 
 ## Part J · Go-live checklist
 
@@ -350,10 +352,20 @@ After each check, open n8n → **Executions**: the run is green. Send Claude the
 
 - n8n → **Executions** → filter **Failed**: none, or any failure sent to Claude.
 - Supabase → **Table Editor** → `contacts`, sorted by `strikes`: check that no real customer was blocked by mistake.
+- `contacts`, sorted by `expert_followup_at`: every expert follow-up was answered (`lead_priority` shows 🔥 hot, warm or cold).
+- `safety_events`: what the safety steps did (a blocked word, a muted contact, a reply held back, the safety check unavailable). It holds no message text, and rows older than 90 days are deleted automatically. A reply held back often means a missing answer: send Claude the alert.
 - `delivery_failures`: empty, or explained.
 - `bookings` matches your Google Calendar.
 - DeepSeek and OpenAI usage are within budget.
 - Spot-read 3 conversations (`messages`): answers are correct and nothing sensitive is stored.
+
+## Edit the blocked words
+
+The agent refuses a message that contains a blocked word or phrase, in any language, and counts a strike: 3 strikes within 30 days mute the number for 24 hours, and the team gets an alert. The list is in Supabase → **Table Editor** → `settings` → the row `moderation` → `value` → `blocked_keywords`.
+
+- Add whole words or short phrases, one per item, in any language. Capitals, Arabic hamza forms and short vowels don't matter.
+- Don't add words that real customers use innocently: for example, "dog" alone would block a pet clinic.
+- OpenAI's safety check still runs before the list, so most abuse is caught without it.
 
 ## Common problems
 
