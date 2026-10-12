@@ -67,6 +67,7 @@ Decision: [0027](../decisions/0027-automation-pipeline.md)
   - the **WhatsApp Business Account ID**
 - **The Google Calendar shared** with the service account, and its **Calendar ID** (guide Part E). This is added to the row the same way.
 - **The team WhatsApp number** for alerts is still to come (a pre-launch register row). Until then, alerts go by email only.
+- **The fixed Google Meet room** for audit calls (the owner, 2026-10-12): **https://meet.google.com/aoo-ssoq-jkh**, created as deepzeta.office@gmail.com. It is `clients.config.meet_link` for DZ-0000: Google Meet bookings put it in the calendar event, the agent's confirmation and the customer's email. If it ever changes, update that one value.
 
 ## Allowed files
 
@@ -274,6 +275,11 @@ None.
   - **Brand (C29):** the Team Alert footer and the knowledge form's title say "Deepzeta AI"; the form's Client ID hint is DZ-0000.
   - **Check:** every node that needs a credential has one, no SMTP node remains in scope, and every Code node parses (all seven re-read after the update).
   - **Left:** the error workflow setting waits for the owner to publish `DZ · Error Alerts` (guide Part H, step 0).
+
+- **2026-10-12 · Part C done, one value to redo; the Meet room set:**
+  - Checked by length and format only, never the values: the gateway forward secret and the Meta verify token are 48 letters and digits each and differ; the WhatsApp token (`wa_token:DZ-0000`, 207 characters) has an access token's format.
+  - **The app secret (`wa_app_secret:DZ-0000`) is wrong:** 98 characters with symbols, where a Meta App Secret is 32 hexadecimal characters. The gateway checks every webhook's signature with it, so it must be re-entered before Part D (one-line SQL in the chat, the token left untouched).
+  - `config.meet_link` = https://meet.google.com/aoo-ssoq-jkh (Owner inputs above).
 
 **The retention migration (S4), as applied:**
 

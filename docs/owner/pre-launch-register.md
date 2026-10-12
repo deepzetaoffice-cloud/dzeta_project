@@ -76,7 +76,7 @@
 | ☐ | The WhatsApp agent's **13-check test passed and verified by you** | Your go-live condition (decision 0027): customers get the agent only after this | Before switching `DZ · Inbound WhatsApp` on for customers | Automation guide **Part I** |
 | ☐ | The privacy policy names **DeepSeek (China), OpenAI (US), Supabase (India) and n8n (EU)**, and your legal check is done | Visitor messages are processed and stored by these four (UAE PDPL; decisions 0027 and 0030) | Before the agent goes live | Automation guide **Part J**; the privacy-policy draft (Track A updates it) |
 | ☐ | **Spend limits:** an OpenAI monthly budget, and a small DeepSeek balance | The agent's AI calls are metered | Before the agent goes live | Automation guide **Part A** |
-| ☐ | **A fixed Google Meet link** for audit calls (meet.google.com → New meeting → Create a meeting for later, signed in as deepzeta.office@gmail.com), sent to Claude | The robot calendar account can't create Meet links on a Gmail calendar, so Google Meet bookings use one fixed room. Until then, the team alert asks you to send the link by hand | Before the agent goes live | Chat (not a secret). Claude sets `config.meet_link` |
+| ☑ | **A fixed Google Meet link** for audit calls (meet.google.com → New meeting → Create a meeting for later, signed in as deepzeta.office@gmail.com), sent to Claude | The robot calendar account can't create Meet links on a Gmail calendar, so Google Meet bookings use one fixed room. Until then, the team alert asks you to send the link by hand | Before the agent goes live | **Done 2026-10-12:** https://meet.google.com/aoo-ssoq-jkh, set as `config.meet_link` (the automation plan's Owner inputs) |
 | ☐ | **Real bank details** in the `payment_details` setting, before the first paying client | It holds a safe interim message today, so the agent never sends placeholder bank details. Claude then switches on `config.payments_enabled` | Before the first paying client | Supabase SQL editor (Claude gives the SQL) |
 
 ## 6. Sessions still parked (Claude reminds you)
@@ -106,3 +106,4 @@
 | 2026-10-09 | Build Mode (decision 0029): the PSI row in section 3 is now the only performance check for non-Home page types (Performance ≥ 70) |
 | 2026-10-11 | WhatsApp: the number is registered on the Cloud API, with the payment method and the system user token (Part 0 done). Decision 0030 (final): DeepSeek writes every reply; OpenAI keeps voice notes (any language), the safety check and knowledge search, so the privacy and spend-limit rows name both |
 | 2026-10-11 | Track A S3–S4: two rows added in section 5 (a fixed Google Meet link; real bank details before the first paying client) |
+| 2026-10-12 | The Google Meet row ticked ☑ (the owner sent the room link) |
