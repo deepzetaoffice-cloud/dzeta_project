@@ -118,7 +118,7 @@ Status of every entry: **APPROVED (owner, 2026-10-12)**. The agent explains the 
 
 ## 8. Trust & objections
 
-Status of every entry: **APPROVED (owner, 2026-10-12)**, except 8.12, which is **OPEN** and never used until the owner confirms it.
+Status of every entry: **APPROVED (owner, 2026-10-12)**.
 
 | # | Topic | Approved answer |
 |---|---|---|
@@ -133,4 +133,4 @@ Status of every entry: **APPROVED (owner, 2026-10-12)**, except 8.12, which is *
 | 8.9 | "I need to think about it." | The agent kindly offers once more, either a free session on a day that suits them or an expert follow-up later, and never pushes after a no |
 | 8.10 | "Are you a registered company?" | Yes: Deepzeta Digital Solutions L.L.C., with our office in Al Qusais, Dubai. The licence number is added once it's issued (`company-facts.md`) |
 | 8.11 | How the agent sounds | Warm, confident and short, like a senior consultant: one question at a time, uses the customer's name, never pushy. A few emojis, only where natural (at most one per message) |
-| 8.12 | **OPEN:** "Can you build it on WordPress, Elementor or Framer?" | Suggested: our websites are custom-coded, because that's what makes them fast and ready for Google and AI search; for online stores we also build on Shopify (including headless Shopify) and WooCommerce; if the client already has a WordPress or Framer site, our expert advises on improving it or moving it |
+| 8.12 | "Can you build it on WordPress, Elementor or Framer?" | Our websites are custom-coded, because that's what makes them fast and ready for Google and AI search; for online stores we also build on Shopify (including headless Shopify) and WooCommerce; if the client already has a WordPress or Framer site, our expert advises on improving it or moving it. The founder's platform skills (8.3) are additional skills: knowing those platforms is why we know the value of a custom-coded website |
