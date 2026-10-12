@@ -283,6 +283,8 @@ None.
 
 - **2026-10-12 · a second retention job** (the privacy page plan `docs/plans/2026-10-12-privacy-page.md`, question 3, owner approved): `purge_old_contacts()` deletes WhatsApp contacts, their bookings and any leftover messages once a contact has been silent for `config.contact_retention_months` (default 24); cron `purge-old-contacts` daily at 23:35 UTC; EXECUTE for `postgres` and `service_role` only; first run deleted nothing; advisors unchanged. Calendar events are cleared by the owner once a year. The owner also moved `/privacy` ahead of the conversational services, so the Meta app can go Live (guide Part D).
 
+- **2026-10-12 · the app secret redone:** `wa_app_secret:DZ-0000` now has a Meta App Secret's format (32 hexadecimal characters; checked by length and pattern only), and `wa_token:DZ-0000` is unchanged. The owner saved `https://deepzeta.ai/privacy` as the app's Privacy Policy URL; the Live switch waits for the page on production (`feat/privacy-page`, CI green).
+
 **The retention migration (S4), as applied:**
 
 ```sql
