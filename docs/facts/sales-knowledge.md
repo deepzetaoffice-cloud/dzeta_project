@@ -81,3 +81,19 @@ Status of every entry: **APPROVED (owner, 2026-10-12)**.
 | 5.5 | Website & AI Search Health Check | Both: the free session gives the first look at the website and its AI visibility, and the full Health Check is a separate paid service, quoted after the free session |
 | 5.6 | Common doubts | **"Can you guarantee first place on Google?"** As 2.7: no one can honestly guarantee rankings. **"What is GEO / AI search?"** Being named and recommended when people ask ChatGPT, Gemini, Perplexity or Google's AI answers about your service; we set the business up so these engines understand and cite it. **"SEO or ads first?"** Ads bring leads quickly while you pay; SEO and AI search build traffic that keeps coming; our expert recommends the right mix for your goals and budget in the free session. **"Do you do Arabic SEO?"** Yes, in Arabic and English, including Google Maps for each area and emirate. **"Can you get us more reviews?"** We never buy or write fake reviews; we set up automatic review requests to your real customers |
 | 5.7 | What the agent asks a growth lead | The website link; the main services, and the areas or emirates they serve; who their customers are; whether they're on Google Maps; whether they run ads now, and where; their main competitors; the goal (calls, bookings or sales); languages |
+
+## 6. Social media & content
+
+Status of every entry: **APPROVED (owner, 2026-10-12)**.
+
+| # | Topic | Approved answer |
+|---|---|---|
+| 6.1 | Platforms we manage | Instagram, Facebook, TikTok, LinkedIn, Snapchat, X and YouTube; we focus on the ones where the client's customers are |
+| 6.2 | What a social media package covers | Strategy and a monthly content calendar; designs, reels and short videos; Arabic and English captions; posting; replies to comments and messages; a monthly performance report. The number of posts per month is set in each package after the free session; the agent never promises a number |
+| 6.3 | How fast we start | Strategy and the first month's calendar within 1 week; the first posts live within 1–2 weeks of kickoff |
+| 6.4 | The monthly flow | 1. Review of the brand, the audience and competitors · 2. The month's content calendar · 3. The client approves the posts before anything goes live, always · 4. Creation and posting · 5. Replies to comments and messages · 6. The monthly report |
+| 6.5 | Photo and video shoots | It depends on the package |
+| 6.6 | Reply times for comments and messages | Within working hours (Monday to Friday); with our Social Media Automation, instant replies 24/7 |
+| 6.7 | Ownership | The accounts stay in the client's name and we get partner access. All content we create for the client is theirs to keep |
+| 6.8 | Common doubts | **"How many followers will I get?"** We never promise follower numbers or buy followers; we create content that brings enquiries, and report reach, engagement and leads every month. **"Do you use AI to make content?"** AI helps us create faster, and a person reviews every post before it goes out. **"Can you run our ads too?"** Yes: Meta, TikTok, Snapchat and LinkedIn ads. **"Do you work with influencers?"** Yes: we find and vet influencers, manage the campaign and track the results |
+| 6.9 | What the agent asks a social media lead | Which platforms they're on (the links); what they sell, and to whom; who posts now; the goal (awareness, enquiries or sales); whether they have photos and videos, or need shoots; languages; whether they also want ads; any launch date |
