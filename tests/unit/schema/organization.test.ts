@@ -55,7 +55,7 @@ describe('organizationNode', () => {
     expect((org.sameAs as string[]).length).toBe(9);
   });
 
-  it('opening hours equal the fact, Monday–Saturday 08:00–17:00', () => {
+  it('opening hours equal the fact, Monday–Friday 08:00–17:00', () => {
     expect(org.openingHoursSpecification).toEqual([
       {
         '@type': 'OpeningHoursSpecification',

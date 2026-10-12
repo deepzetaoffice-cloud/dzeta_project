@@ -428,7 +428,7 @@ export const privacyPolicy = {
         {
           kind: 'p',
           lead: 'How to ask:',
-          text: `email ${email} from the address we know you by, or tell us how else we can confirm it's you. We acknowledge every request within 24 hours on business days (Monday to Saturday) and answer fully within the time the law allows.`,
+          text: `email ${email} from the address we know you by, or tell us how else we can confirm it's you. We acknowledge every request within 24 hours on business days (Monday to Friday) and answer fully within the time the law allows.`,
         },
         {
           kind: 'p',

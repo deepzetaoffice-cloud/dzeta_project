@@ -42,7 +42,7 @@ The owner asked to change only the brand and related topics. Several of the refe
 | `{address}` | Office #202, Al Hilal Bank Building, Al Qusais 2, Dubai, United Arab Emirates |
 | `{email}` | hello@deepzeta.ai |
 | `{phone}`, `{whatsapp}` | +971 54 547 6335 (CONFIRMED, facts §2) |
-| `{hours}` | Monday to Saturday, 8:00 AM to 5:00 PM (GST) |
+| `{hours}` | Monday to Friday, 8:00 AM to 5:00 PM (GST) |
 | `{lastUpdated}` | 12 October 2026 (`2026-10-12`, the owner's re-approval) |
 
 ---
@@ -246,7 +246,7 @@ You can ask us to:
 
 You can also withdraw your consent at any time (§18).
 
-**How to ask:** email {email} from the address we know you by, or tell us how else we can confirm it's you. We acknowledge every request within 24 hours on business days (Monday to Saturday) and answer fully within the time the law allows.
+**How to ask:** email {email} from the address we know you by, or tell us how else we can confirm it's you. We acknowledge every request within 24 hours on business days (Monday to Friday) and answer fully within the time the law allows.
 
 If you're unhappy with our answer, you can complain to the UAE Data Office, the authority that supervises the PDPL.
 

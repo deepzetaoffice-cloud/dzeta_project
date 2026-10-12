@@ -67,6 +67,7 @@ Decision: [0027](../decisions/0027-automation-pipeline.md)
   - the **WhatsApp Business Account ID**
 - **The Google Calendar shared** with the service account, and its **Calendar ID** (guide Part E). This is added to the row the same way.
 - **The team WhatsApp number** for alerts is still to come (a pre-launch register row). Until then, alerts go by email only.
+- **The fixed Google Meet room** for audit calls (the owner, 2026-10-12): **https://meet.google.com/aoo-ssoq-jkh**, created as deepzeta.office@gmail.com. It is `clients.config.meet_link` for DZ-0000: Google Meet bookings put it in the calendar event, the agent's confirmation and the customer's email. If it ever changes, update that one value.
 
 ## Allowed files
 
@@ -81,22 +82,22 @@ Decision: [0027](../decisions/0027-automation-pipeline.md)
 | `docs/owner/n8n-setup-guide.md` | MODIFY | Part 6 points to `DZ · Error Alerts`. Part 9 describes the extended `DZ · Cal.com Bookings`. Part 10 is marked superseded, with a pointer to the new guide |
 | `docs/owner/pre-launch-register.md` | APPEND-ONLY | Rows: the live test script passed, the privacy policy names the four processors, the legal check, spend limits, the follow-ups decision |
 | `docs/facts/company-facts.md` | MODIFY (only the rows the owner confirms) | Phone and WhatsApp +971 54 547 6335 (CONFIRMED 2026-10-07), the meeting types, the audit's length, gap and booking hours, the team email |
-| `docs/facts/external-sources.md` | APPEND-ONLY | PROPOSED rows: Meta's customer-service window and template rule, and OpenAI's API data handling, each with its official source and the date checked |
+| `docs/facts/external-sources.md` | APPEND-ONLY | PROPOSED rows: Meta's customer-service window and template rule, and OpenAI's and DeepSeek's API data handling (decision 0030), each with its official source and the date checked |
 | `docs/facts/agent-knowledge.md` | CREATE | The generated knowledge: what the agent knows, reviewed by the owner |
 | `scripts/build-agent-knowledge.mjs` | CREATE | The generator (catalogue + CONFIRMED facts + FAQ bank) |
 | `package.json` | MODIFY (scripts only) | `agent:knowledge` |
 | `tests/unit/agent-knowledge.test.ts` | CREATE | Pins the knowledge to its sources |
-| `docs/content-drafts/legal/privacy-policy.md` | MODIFY | Names OpenAI (US), Supabase (Mumbai) and n8n (Frankfurt) beside DeepSeek (China), for the owner's re-approval |
+| `docs/content-drafts/legal/privacy-policy.md` | MODIFY | Names OpenAI (US), Supabase (Mumbai) and n8n (Frankfurt) beside DeepSeek (China) (decisions 0027 and 0030). For the owner's re-approval |
 
 **External systems, changed through the connectors (no repo files):**
 
 | System | Action | Purpose |
 |---|---|---|
 | n8n `DZ · Booking Tools` | MODIFY | A `meeting_type` input (phone_call / google_meet / office_visit): validated, written to the event (title, location, Meet link) and returned in the confirmation. An optional `customer_email`: when it's given, a Gmail confirmation goes to the customer |
-| n8n `DZ · Scheduled Jobs` | MODIFY | The summary prompt keeps the name, email, what they asked for and the enquiry's details. It still never keeps medical, ID or payment details |
+| n8n `DZ · Scheduled Jobs` | MODIFY | The summary prompt keeps the name, email, what they asked for and the enquiry's details. It still never keeps medical, ID or payment details. The model `deepseek-chat` becomes `deepseek-flash` (decision 0030) |
 | Supabase migration `purge_old_summaries` | CREATE | One function that clears `summary` and `name` on contacts silent for `config.summary_retention_months` (default 12), and one daily cron job beside `purge-old-messages` |
-| n8n `DZ · Inbound WhatsApp` | MODIFY | The `check_availability` and `book_appointment` tool definitions pass `meeting_type`. Nothing else changes |
-| n8n `DZ · Team Alert`, `DZ · Scheduled Jobs`, `DZ · Error Alerts`, `DZ · Knowledge Upload (form)`, `DZ · Booking Tools` | MODIFY | Email steps move from SMTP to the Gmail credential (`hello@deepzeta.ai`). Customer-facing "DeepZeta" text becomes "Deepzeta AI" (C29) |
+| n8n `DZ · Inbound WhatsApp` | MODIFY | The `check_availability` and `book_appointment` tool definitions pass `meeting_type`. Decision 0030: OpenAI's three jobs stay as built (moderation, embeddings, transcription); `Transcribe Voice Note` uses `gpt-transcribe` (`whisper-1` as the fallback), with a conversion step only if OpenAI rejects WhatsApp's `.ogg`; the model `deepseek-chat` becomes `deepseek-flash` |
+| n8n `DZ · Team Alert`, `DZ · Scheduled Jobs`, `DZ · Error Alerts`, `DZ · Knowledge Upload (form)`, `DZ · Booking Tools` | MODIFY | Email steps move from SMTP to the Gmail credential (`deepzeta.office@gmail.com` until Google Workspace is active, then `hello@deepzeta.ai`; the owner, 2026-10-11). Customer-facing "DeepZeta" text becomes "Deepzeta AI" (C29) |
 | n8n `DZ · Cal.com Bookings` | CREATE | Base guide Part 9, extended: a Team Alert, plus the `dz_booking_confirmed` template when the booker gave a WhatsApp number and consent |
 | Every `DZ ·` workflow | MODIFY (settings) | Error workflow = `DZ · Error Alerts` |
 | Supabase `settings` | INSERT (non-secret values) | `meta` (`n8n_inbound_url`, `n8n_jobs_url`, `graph_version`), `global_rules`, `fixed_messages`, `moderation`, `agency`, `jobs` |
@@ -128,7 +129,7 @@ Decision: [0027](../decisions/0027-automation-pipeline.md)
      - **ask the meeting type before checking availability**
      - **confirm the exact slot and type before `book_appointment`**
      - when booking, ask for the visitor's name, and their email (optional) for the confirmation
-     - reply in the visitor's language (EN/AR)
+     - understand and reply in the customer's language, whatever it is (decision 0030); the fixed messages stay EN/AR
      - steer off-topic questions back in one polite line
      - tell new contacts it is an AI assistant
      - ask visitors not to share sensitive personal data (medical, ID, payment)
@@ -143,7 +144,7 @@ Decision: [0027](../decisions/0027-automation-pipeline.md)
    - **The agency client row:**
      - "Deepzeta AI"; `is_agency`, `is_active`; `paid_until` 2099-12-31 (needed by the inbound gate; billing skips agency rows)
      - tone, `default_language` en, and the `business_profile` from S2
-     - booking on, `calendar_id`, voice notes transcribed
+     - booking on, `calendar_id`, voice notes transcribed in the language spoken (decision 0030)
      - `team_emails` = deepzeta.office@gmail.com, and `team_whatsapp` empty until the owner gives the number
      - the WhatsApp IDs and `calendar_id`, added later (Owner inputs)
      - `config`:
@@ -234,3 +235,102 @@ None.
   - Decision 0027 is ACCEPTED, recorded as C72 (renumbered from C69 at the merge), with the `CLAUDE.md` state line written.
   - The plan moved to its own worktree (`D:\DeepZeta Ai\Website DeepZeta-automation`, branch `feat/automation-track-a`), apart from the P6 session.
   - Additions: the customer email confirmation, the summary content, and the 12-month retention migration.
+- **2026-10-11:** the owner finished Part 0 (the number +971 54 547 6335 registered on the Cloud API: Phone number ID 1460584370460068, WhatsApp account 1432051959064319, app Deepzeta Connect 1573718627333039; the payment method; the system user token) and A1, A3, A5, A6. **Decision 0030** (final the same day): DeepSeek writes every reply; OpenAI keeps its three supporting jobs (voice notes in any language with `gpt-transcribe`, moderation, embeddings); the agent replies in the customer's language. The owner first chose DeepSeek alone, then reversed it because voice notes must be understood. Open risk: WhatsApp's `.ogg` against OpenAI's listed formats, tested at check 4. S2–S4 stay to do.
+- **2026-10-11 (later):** A2 done (the OpenAI key). The owner chose `deepzeta.office@gmail.com` for the calendar and the email steps until Google Workspace is active (guide A4, Part B, Part E), and said "start now" for S2–S4.
+- **2026-10-11 · S2 done** (a 2026-10-07 draft, never committed, brought up to date on this branch):
+  - **The generator:** `scripts/build-agent-knowledge.mjs` (`npm run agent:knowledge`) writes `docs/facts/agent-knowledge.md`, 68,097 characters. The business profile is 957 of 1,500 characters.
+  - **What it reads:** the typed catalogue names, the catalogue's descriptions, the CONFIRMED facts in `FACT_LABELS` (the phone is in: it is CONFIRMED since the cta-set plan), the industries, **every published FAQ** (Home, the hub and the 12 service pages, verbatim), and the founder.
+  - **What it leaves out:** the e-invoicing deadline and phase sentences (external facts), the catalogue's §7.6 and §9, the "30–45 minute" line, and the internal calendar gap.
+  - **The facts:** the audit booking row is split into length, booking hours and an internal calendar gap; the meeting types say "Deepzeta AI".
+  - **The test:** `tests/unit/agent-knowledge.test.ts` (10 tests) pins the file to a fresh generation, checks every FAQ list in the bank, and keeps unconfirmed, external and old-brand text out.
+  - **Gates:** `npm test` 568/568, typecheck, lint, check:tokens, check:contrast, check:facts and prettier pass.
+- **2026-10-11 · S3 done** (Supabase, through the connector; read back after the write):
+  - **The 2026-10-07 reading was wrong:** the table summary shows estimated row counts (0). The stack already held its builder's defaults from 2026-10-01: seven `settings` keys and the agency row **`DZ-0000`** (not DZ-0001), active and paid until 2099-12-31. S3 updated them instead of inserting; the guide's Part C now says `DZ-0000`.
+  - **`global_rules`** are shared by every future client, so only three generic lines were added: say once that it's an AI, ask people not to share sensitive data, and hand off on legal or refund questions and after two failed answers. The builder's text (any language, Emirati Arabic, the JSON shape) stays.
+  - **Deepzeta's own rules** (no prices, the meeting type first, confirm slot and type, email optional, the hand-off wording, no payments, no follow-ups) live in the client row's `config.rules`, which `Build Prompt` appends (S4).
+  - **The client row:** "Deepzeta AI", the WhatsApp IDs, the S2 business profile, booking on, `calendar_id` deepzeta.office@gmail.com, `team_emails` deepzeta.office@gmail.com, and `config`: Mon–Sat 10:00–17:00, the audit at 30 minutes plus a 30-minute buffer, 120 minutes' minimum notice, 30 days ahead, the three meeting types with the office address, `meet_link` empty, the reminder template `dz_booking_reminder` (EN, AR), and 12 months' retention.
+  - **`agency`:** name "Deepzeta AI", alerts to deepzeta.office@gmail.com, WhatsApp 971545476335. **`meta`:** `graph_version` v26.0 (Meta's latest, checked 2026-10-11); the existing webhook secrets are untouched.
+  - **`payment_details`** held `[BANK NAME]`, `[IBAN]` and `[SWIFT]` placeholders, which the agent could have sent to a visitor. It now holds a safe interim message; real details wait for the first paying client (a register row).
+- **2026-10-11 · S4, the part that needs no credentials** (n8n, through the connector; each update is a named version in n8n's history):
+  - **`DZ · Inbound WhatsApp`:**
+    - **Found broken:** `Build Prompt` and `Build Payment Details Reply` didn't parse (raw line breaks inside JavaScript strings), so the agent would have failed on its first message. Both were rewritten with the same logic, and `Parse & Polish Reply`'s fence regex was fixed (`^\s*`). Every Code node in all eight `DZ ·` workflows now parses (checked offline).
+    - **`Build Prompt`:** "Bookable hours" (not "Opening hours", which the office keeps at 08:00–17:00), the meeting types, `config.rules` last, and the agency payment note only when `config.payments_enabled`.
+    - **Models:** `deepseek-flash` at temperature 0.3. Voice notes go to `gpt-transcribe` first (an HTTP request: n8n's OpenAI node has no model choice and always uses `whisper-1`); on an error the same file goes to the existing `whisper-1` node. n8n's OpenAI node lists `ogg` as supported, so the `.ogg` risk is smaller than 0030 feared; check 4 still tests it.
+    - **The tools:** `check_availability` and `book_appointment` pass `meeting_type`; `book_appointment` also passes an optional `customer_email`.
+  - **`DZ · Booking Tools`:** the two inputs. The type must be a configured one, and the email is checked. The calendar event's title, location and description carry the type and the email. The booking notes and the team alert carry the type. The confirmation tells the agent how the meeting happens.
+  - **Meet links:** a service account can't create Meet links or invite guests on a Gmail calendar (no domain-wide delegation outside Workspace). Google Meet bookings therefore use `config.meet_link`, a fixed room the owner creates (a register row); until then the alert asks the team to send the link.
+  - **`DZ · Scheduled Jobs`:** the summary uses `deepseek-flash` and keeps the email and the enquiry's details.
+  - **Waiting for the owner's credentials (Part B):** the Gmail steps (the SMTP nodes become Gmail, the customer's email confirmation, alerts to deepzeta.office@gmail.com), linking every credential, and the error workflow setting (n8n accepts only a published `DZ · Error Alerts`).
+  - **Waiting for the owner's approval:** the retention migration below.
+
+- **2026-10-11 · the retention migration applied** (the owner: "approve cleanup"): `purge_old_summaries` and the daily cron job `purge-old-summaries` (23:25 UTC) exist; EXECUTE only for `postgres` and `service_role`; a first run cleared 0 rows; the security advisors show only the existing INFO notes (RLS on with no policies, the service-role-only design), nothing new. The guide's A4 is now click by click, with the calendar sharing (E1) folded in as A4.6.
+
+- **2026-10-11 · A4 done:** the service account `deepzeta-calendar@spry-kingdom-511305-m8.iam.gserviceaccount.com` (Google Cloud project deepzeta-automation, ID spry-kingdom-511305-m8), the Calendar API on, deepzeta.office@gmail.com's main calendar shared with "Make changes to events". Part A is complete; Part B (the credentials) is next.
+
+- **2026-10-11 · Part B done and S4 finished** (n8n through the connector, then re-read and checked offline):
+  - The owner saved all seven credentials (n8n's default names; one per type). A6 had not been saved: the owner made the two random secrets then (letters and digits, 48 characters).
+  - **Linked:** 51 nodes across the seven in-scope workflows each carry the credential of their type (Supabase, DeepSeek, OpenAI, Google service account, Header Auth, Basic Auth, Gmail), including the new `gpt-transcribe` node. `DZ · Renew Client (form)` is left as it is (billing, out of scope, stays off).
+  - **Gmail:** the six SMTP nodes in scope (Team Alert, Error Alerts, Scheduled Jobs ×2, Knowledge Upload ×2) are Gmail nodes on the deepzeta.office credential, sender "Deepzeta AI"; team mail goes to deepzeta.office@gmail.com.
+  - **The customer's email confirmation:** `DZ · Booking Tools` sends it after the calendar event when the customer gave an email and the client's `config.email_confirmations` is true (set for DZ-0000); the agent mentions the email only then.
+  - **Brand (C29):** the Team Alert footer and the knowledge form's title say "Deepzeta AI"; the form's Client ID hint is DZ-0000.
+  - **Check:** every node that needs a credential has one, no SMTP node remains in scope, and every Code node parses (all seven re-read after the update).
+  - **Left:** the error workflow setting waits for the owner to publish `DZ · Error Alerts` (guide Part H, step 0).
+
+- **2026-10-12 · Part C done, one value to redo; the Meet room set:**
+  - Checked by length and format only, never the values: the gateway forward secret and the Meta verify token are 48 letters and digits each and differ; the WhatsApp token (`wa_token:DZ-0000`, 207 characters) has an access token's format.
+  - **The app secret (`wa_app_secret:DZ-0000`) is wrong:** 98 characters with symbols, where a Meta App Secret is 32 hexadecimal characters. The gateway checks every webhook's signature with it, so it must be re-entered before Part D (one-line SQL in the chat, the token left untouched).
+  - `config.meet_link` = https://meet.google.com/aoo-ssoq-jkh (Owner inputs above).
+
+- **2026-10-12 · a second retention job** (the privacy page plan `docs/plans/2026-10-12-privacy-page.md`, question 3, owner approved): `purge_old_contacts()` deletes WhatsApp contacts, their bookings and any leftover messages once a contact has been silent for `config.contact_retention_months` (default 24); cron `purge-old-contacts` daily at 23:35 UTC; EXECUTE for `postgres` and `service_role` only; first run deleted nothing; advisors unchanged. Calendar events are cleared by the owner once a year. The owner also moved `/privacy` ahead of the conversational services, so the Meta app can go Live (guide Part D).
+
+- **2026-10-12 · the app secret redone:** `wa_app_secret:DZ-0000` now has a Meta App Secret's format (32 hexadecimal characters; checked by length and pattern only), and `wa_token:DZ-0000` is unchanged. The owner saved `https://deepzeta.ai/privacy` as the app's Privacy Policy URL; the Live switch waits for the page on production (`feat/privacy-page`, CI green).
+
+- **2026-10-12 · Part D done:** `/privacy` merged to `main` (`0696165`) and live; the owner published the Meta app (Live); Meta's webhook verification reached the gateway and got 200 (edge logs, 08:25 UTC); `messages` subscribed (v26.0). Open: the Step 2 checklist shows "Add payment to send business-initiated messages" unticked, to check before the templates are used.
+
+- **2026-10-12 · the sales brief and stage 1 (knowledge):** the owner approved all 8 topics of the sales brief, which are in `docs/facts/sales-knowledge.md`. The plan `docs/plans/2026-10-12-hours-and-agent-knowledge.md` (APPROVED) moved the hours to Monday to Friday sitewide and added the approved answers, the Google Business Profile and the owner's own edits to the generator; `agent-knowledge.md` is regenerated for the owner's review (Part G). The owner also approved stage 2 (the agent's rules, the expert follow-up, and six safety fixes) and stage 3 (testing).
+- **2026-10-12 · stage 2 done (Supabase and n8n; the workflows stay unpublished):**
+  - Supabase migration `stage2_expert_followup_and_safety` (in the project's migration history):
+    - `contacts` gains `lead_priority`, `expert_followup_at` and `last_strike_at`
+    - strikes now expire after 30 days, and a mute is logged
+    - `wa_batch` returns the blocked-word list
+    - `apply_ai_result` saves the priority and the follow-up time
+    - a `safety_events` log (no message text) with `rpc_log_safety_event`, EXECUTE for `service_role` only, and a cron `purge-safety-events` (90 days, 23:45 UTC)
+  - `settings`:
+    - `moderation.blocked_keywords` holds 42 words and phrases (English, Arabic, Arabizi, Hindi/Urdu), editable by the owner (guide, "Edit the blocked words")
+    - `global_rules` gains three output fields for every client: `expert_followup`, `lead_priority` and `lead_details`
+  - DZ-0000 `config.rules`: 14 rules covering the name "Deepzeta AI Agent", the sales playbook (`sales-knowledge.md`), the expert follow-up, and the earlier booking, price and payment rules. `business_profile` has been regenerated.
+  - `DZ · Inbound WhatsApp` (53 → 62 nodes):
+    - DeepSeek runs in JSON mode
+    - **Classify Safety** adds the blocked words and reports a failed safety check, which **Log: Safety Check Down** records
+    - **Record Strike** passes the reason; **Muted Now?** → **Alert Team: Contact Muted**
+    - **Check Reply (OpenAI Moderation)** sits before **Parse & Polish Reply**. That step now holds back an unreadable reply, a flagged one, a price or a promised result: the customer gets the holding message, and the team gets a hand-off alert with the held-back text, logged by **Reply Held Back?** → **Log Reply Event**. It also cuts replies at 1,000 characters on a full sentence.
+    - **Expert Follow-up Requested?** → **Alert Team: Expert Follow-up**, titled 🔥 HOT, Warm or Cold lead
+  - Checked: both code nodes passed 27 local cases (English, Arabic and Hindi words with innocent lookalikes, prices in four forms, negated and plain promises in English and Arabic, broken JSON, long replies), and the deployed workflow matched the tested code. Every Code node compiles, the new credentials and wiring are in place, and the workflow is still inactive (34 checks). Open for stage 3: DeepSeek's JSON mode together with tool calls, tested live.
+  - The guide's Part G Client ID is corrected to `DZ-0000`, a section "Edit the blocked words" is added, and the weekly check now covers `safety_events` and the expert follow-ups.
+
+**The retention migration (S4), as applied:**
+
+```sql
+-- Clears the memory (summary and name) of contacts silent for config.summary_retention_months (default 12)
+create or replace function public.purge_old_summaries()
+returns integer
+language plpgsql
+set search_path to 'public'
+as $function$
+declare n int;
+begin
+  update public.contacts ct
+     set summary = null, summary_updated_at = null, name = null
+    from public.clients c
+   where c.id = ct.client_id
+     and (ct.summary is not null or ct.name is not null)
+     and coalesce(greatest(ct.last_inbound_at, ct.last_outbound_at), ct.created_at)
+         < now() - make_interval(months => coalesce(nullif(c.config->>'summary_retention_months', '')::int, 12));
+  get diagnostics n = row_count;
+  return n;
+end $function$;
+revoke execute on function public.purge_old_summaries() from public, anon, authenticated;
+grant execute on function public.purge_old_summaries() to service_role;
+-- Daily at 23:25 UTC (03:25 in Dubai), ten minutes after purge-old-messages
+select cron.schedule('purge-old-summaries', '25 23 * * *', 'select public.purge_old_summaries()');
+```
