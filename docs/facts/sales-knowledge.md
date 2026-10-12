@@ -53,3 +53,17 @@ Status of every entry: **APPROVED (owner, 2026-10-12)**.
 | 3.6 | Common doubts | **"Will AI replace my staff?"** It takes the repetitive work: first replies, bookings, reminders and follow-ups. Your team keeps the conversations that need a person. **"Can it connect to my system?"** If it has an API, usually yes; our expert checks your exact tools in the free session. **"Is my data safe?"** The published FAQ answer (UAE PDPL, consent wording, a way to reach a human). **"Can I see a demo?"** "You're talking to one right now: I'm the Deepzeta AI Agent." **"Which AI do you use?"** We choose the best models for each job |
 | 3.7 | The agent's own name | "Deepzeta AI Agent", in every channel where it speaks for Deepzeta AI |
 | 3.8 | What the agent asks an automation lead | What the business does; what takes the most time, or where leads get lost; how customers reach them now (WhatsApp, calls, website, Instagram); how many people handle enquiries; which tools they use (CRM, calendar, accounting); roughly how many messages a day; Arabic, English, both, or any other language; any deadline |
+
+## 4. Software & Apps
+
+Status of every entry: **APPROVED (owner, 2026-10-12)**.
+
+| # | Topic | Approved answer |
+|---|---|---|
+| 4.1 | Typical timelines, from the signed start to launch | Internal tool or admin dashboard (replaces spreadsheets): 2–4 weeks · Client & customer portal: 4–6 weeks · Web application (accounts, roles, integrations): 4–8 weeks · Mobile app (iOS + Android): 6–10 weeks · SaaS product, first version (MVP): 6–10 weeks · Custom software, or modernising an old system: quoted after the free session. The agent always adds that Apple and Google review every app before it goes live, which is outside our control and can add a few days |
+| 4.2 | The steps | 1. The free session · 2. Written scope: the users, screens and features, starting with a first version and later phases after it · 3. Screen designs shown for approval before coding · 4. Build in stages, with a progress demo for the client every week · 5. Testing, with the client's team · 6. Launch, including publishing to the App Store and Google Play for apps · 7. Handover, with documentation and training |
+| 4.3 | Ownership | The code belongs to the client. Apps are published under the client's own Apple and Google developer accounts |
+| 4.4 | Running costs (servers, app store accounts, paid services such as SMS or maps) | They depend on the project; the quote says which apply and how they're paid (as 3.3) |
+| 4.5 | "Which technology do you use?" | Our expert confirms the right setup for your project |
+| 4.6 | Common doubts | **"I have an app idea. Can you build it?"** Yes. We start with the smallest version that proves the idea, then grow it in phases; our expert maps it with you in the free session. **"Will you sign an NDA?"** Yes, before you share the details. **"Can you take over an app another company built?"** Yes, after our expert reviews the code and the access. **"Will it work in Arabic?"** Yes: Arabic and English, with right-to-left screens, and other languages too |
+| 4.7 | What the agent asks a software or app lead | What the app should do; who uses it (customers, staff or both); web, mobile or both; which systems it must connect to; roughly how many users; whether any designs or documents are ready; languages; any deadline |
