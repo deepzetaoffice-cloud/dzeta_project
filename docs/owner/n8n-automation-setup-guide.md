@@ -271,16 +271,18 @@ select public.set_client_secrets('DZ-0000', 'PASTE_WHATSAPP_PERMANENT_TOKEN', 'P
 
 ## Part F · WhatsApp templates to approve
 
-Open **WhatsApp Manager** → **Message templates** → **Create template** (as in base guide 2.7). Claude gives you the final wording, and each template must reach **Approved**.
+Open **WhatsApp Manager** → **Message templates** → **Create template** (as in base guide 2.7). Each template must reach **Approved**. The live workflows use these two (checked 2026-10-12), with the language codes `en` and `ar`: pick **English** and **Arabic**, never "English (US)" or "English (UK)".
 
-| Name (exact) | Category | Language | Body (draft) | Used for |
+| Name (exact) | Category | Language | Body (final) | Used for |
 |---|---|---|---|---|
-| `team_alert` | Utility | English | "Deepzeta AI alert for {{1}}: {{2}}" | Team alerts: bookings, hand-offs, urgent cases |
-| `dz_booking_reminder` | Utility | English **and** Arabic | "Hi {{1}}, a reminder of your {{2}} on {{3}} with {{4}}. Reply here if you need to change it." | The reminder about 24 hours before a WhatsApp booking |
-| `dz_booking_confirmed` | Utility | English | "Hi {{1}}, your {{2}} with Deepzeta AI is confirmed for {{3}} ({{4}}). Reply here if you need to change it." | Website (Cal.com) bookings, when the visitor ticked the WhatsApp box |
+| `team_alert` | Utility | English | New alert from your Deepzeta AI assistant for {{1}}: {{2}}. Please check your email for the full details. | WhatsApp alerts to the team number (bookings, hand-offs, expert follow-ups, urgent cases), once you've given that number |
+| `dz_booking_reminder` | Utility | English | Hi {{1}}, this is a reminder of your {{2}} on {{3}} with {{4}}. If you need to change it, just reply to this message. | The reminder about 24 hours before a WhatsApp booking |
+| `dz_booking_reminder` | Utility | Arabic | مرحباً {{1}}، هذا تذكير بموعدك ({{2}}) يوم {{3}} مع {{4}}. إذا احتجت إلى تغيير الموعد، فقط رد على هذه الرسالة. | The same reminder, for customers who write in Arabic |
 
-- **Keep** `dz_lead_welcome` from the base guide.
-- **Not needed:** `dz_blocked_reply` (the visitor has just written, so a normal reply is allowed) and any follow-up templates (follow-ups stay off at launch).
+Sample values Meta asks for: `team_alert` {{1}} Deepzeta AI, {{2}} Customer needs the team: Ahmed asked to speak to a person · `dz_booking_reminder` {{1}} Ahmed, {{2}} Free AI Automation Audit, {{3}} Monday 13 Oct 2026 11:00, {{4}} Deepzeta AI (Arabic: {{1}} أحمد, and the rest the same).
+
+- **Later, when their workflows exist:** `dz_booking_confirmed` (website bookings through Cal.com), `dz_lead_welcome`, the follow-up templates (follow-ups stay off at launch), and the billing templates `renewal_reminder` and `service_paused` (paying clients).
+- **Not needed:** `dz_blocked_reply` (the visitor has just written, so a normal reply is allowed).
 - If Meta re-categorises a template as Marketing, or rejects it, send Claude the reason.
 
 ## Part G · Load what the agent knows
@@ -340,7 +342,7 @@ Before these 13 checks, Claude runs the **sales test set** (stage 3). It covers 
 
 - [ ] Every Part H workflow is published, with the Error workflow set on each.
 - [ ] No node shows a red credential warning.
-- [ ] Templates **Approved**: `team_alert`, `dz_booking_reminder` (EN + AR), `dz_booking_confirmed`, `dz_lead_welcome`.
+- [ ] Templates **Approved**: `team_alert` and `dz_booking_reminder` (English + Arabic). The others in Part F wait for their workflows.
 - [ ] Spend limits are set: OpenAI monthly budget, and DeepSeek's balance kept small.
 - [ ] Keys are only in your password manager, n8n and the Supabase Vault (Part C). The Google JSON file is deleted from Downloads.
 - [ ] Privacy: the privacy policy names DeepSeek (China), OpenAI (US), Supabase (India) and n8n (EU), and you've done your legal check (decisions 0027 and 0030).
