@@ -226,7 +226,7 @@ const P1_TIER_1 = ['arrow', 'send', 'check', 'menu', 'close', 'globe'];
 describe('Tier 1 icons drawn from P2 on', () => {
   const fresh = tier1.filter(([name]) => !P1_TIER_1.includes(name));
 
-  it("are the chevron and the external link (P2), and Home's four step and four industry icons (P5)", () => {
+  it("are the chevron and the external link (P2), Home's four step and four industry icons (P5), and the privacy page's three (P6)", () => {
     expect(fresh.map(([name]) => name)).toEqual([
       'chevron',
       'external-link',
@@ -238,6 +238,9 @@ describe('Tier 1 icons drawn from P2 on', () => {
       'industry-commerce',
       'industry-property',
       'industry-services',
+      'lock',
+      'mail',
+      'shield',
     ]);
   });
 

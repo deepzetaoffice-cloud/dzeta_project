@@ -38,6 +38,7 @@ describe('siteConfig equals the facts file', () => {
   it('names, contact and address (facts §1–§2)', () => {
     expect(siteConfig.brandName).toBe(confirmed('Brand name'));
     expect(siteConfig.legalName).toBe(confirmed('Legal company name'));
+    expect(siteConfig.licenceAuthority).toBe(confirmed('Trade licence issuing authority'));
     expect(siteConfig.positioningLine).toBe(confirmed('Positioning line'));
     expect(siteConfig.email).toBe(confirmed('Public contact email'));
     expect(siteConfig.address).toBe(confirmed('Full address, one line (display)'));
@@ -60,6 +61,7 @@ describe('siteConfig equals the facts file', () => {
     for (const [key, name] of [
       ['phone', 'Phone (international format)'],
       ['whatsapp', 'WhatsApp number'],
+      ['licenceNumber', 'Trade licence number'],
     ] as const) {
       if (fact(name).status.startsWith('CONFIRMED')) expect(siteConfig[key], key).toBe(fact(name).value);
       else expect(siteConfig[key], key).toBeNull();

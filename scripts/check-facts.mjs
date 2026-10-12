@@ -74,6 +74,10 @@ export function findUnsourcedNumbers(relPath, text) {
   // output, with its date and commit): measurements of our own build, not claims (the owner,
   // 2026-10-10, the flagship plan's question 1). Only that file is exempt.
   if (relPath.replace(/\\/g, '/') === 'src/content/en/services/build-run.ts') return [];
+  // The privacy policy states its own terms: its retention periods and response times, the law's
+  // number and its "Last updated" date. They are the owner's approved commitments and a law's name,
+  // not business claims (the owner, 2026-10-12, the privacy page plan's question 2). Only that file.
+  if (relPath.replace(/\\/g, '/') === 'src/content/en/legal/privacy.ts') return [];
   // Strip comments, then keep only quoted prose (strings with a space — sentences, not IDs).
   const noComments = text.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
   const strings = [...noComments.matchAll(/(['"`])((?:\1|[^])*?)\1/g)].map((m) => m[2]);

@@ -13,7 +13,7 @@ export const ROUTES = {
   R002: { path: '/free-ai-audit', live: false },
   R003: { path: '/about', live: false },
   R005: { path: '/contact', live: false },
-  R006: { path: '/privacy', live: false },
+  R006: { path: '/privacy', live: true },
   R007: { path: '/terms', live: false },
   R008: { path: '/editorial-policy', live: false },
   // The services hub and the pillars (§3.2)

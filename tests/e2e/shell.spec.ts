@@ -590,7 +590,10 @@ test.describe('The footer, The Landing (footer.md; P2 plan, L)', () => {
       if (path === REVIEW) {
         await expect(nav.getByRole('list')).toHaveCount(1 + navigation.footer.length);
       } else if (ROUTES.R010.live) {
-        await expect(nav.getByRole('list')).toHaveCount(1);
+        // The Services column, then each footer group with a live link (04 §1.4): the Company group
+        // since /privacy (R006) shipped
+        const liveGroups = navigation.footer.filter((group) => group.links.some((link) => ROUTES[link.route].live));
+        await expect(nav.getByRole('list')).toHaveCount(1 + liveGroups.length);
       } else {
         await expect(nav).toHaveCount(0);
       }
