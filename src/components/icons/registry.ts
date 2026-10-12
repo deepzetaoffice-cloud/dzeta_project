@@ -130,6 +130,23 @@ export const TIER_1 = {
     flip: false,
     d: 'M4.25 6.75a2.5 2.5 0 0 1 2.5-2.5h11a2.5 2.5 0 0 1 2.5 2.5v11a2.5 2.5 0 0 1-2.5 2.5h-11a2.5 2.5 0 0 1-2.5-2.5zM12.25 9v6.5M9 12.25h6.5',
   },
+  // The privacy policy's "At a glance" cards (the privacy page plan, question 1); /terms and /contact
+  // reuse them. Plain line icons, centred on x 12.25 so the lines sit on .25/.75 (§3, C39). None mirrors.
+  // Lock: a padlock with its keyhole — your data stays with us.
+  lock: {
+    flip: false,
+    d: 'M7 10.75h10.5a1.25 1.25 0 0 1 1.25 1.25v7a1.25 1.25 0 0 1-1.25 1.25h-10.5a1.25 1.25 0 0 1-1.25-1.25v-7a1.25 1.25 0 0 1 1.25-1.25zM8.75 10.75V7.75a3.5 3.5 0 0 1 7 0v3M12.25 14.5v2.5',
+  },
+  // Mail: an envelope with its flap.
+  mail: {
+    flip: false,
+    d: 'M6 5.75h12a2.25 2.25 0 0 1 2.25 2.25v8a2.25 2.25 0 0 1-2.25 2.25h-12a2.25 2.25 0 0 1-2.25-2.25v-8a2.25 2.25 0 0 1 2.25-2.25zM3.75 8l8.25 5 8.25-5',
+  },
+  // Shield: a shield with a check — protected by law.
+  shield: {
+    flip: false,
+    d: 'M12 3.75l7.25 2.75v5.25c0 4.5-3 7.75-7.25 8.75-4.25-1-7.25-4.25-7.25-8.75V6.5zM9.25 12.25l2 2 3.75-3.75',
+  },
 } as const satisfies Record<string, Tier1Icon>;
 
 // Tier 2: the prototype's five service icons (catalogue §1, the AI Automation pillar), and the icons

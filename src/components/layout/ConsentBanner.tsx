@@ -11,7 +11,9 @@ import { isLive, routePath } from '@/lib/routes';
 // - Accept all and Reject all are the same size and weight (consent-copy.md principle 2); neither is
 //   on the action gradient, so the one-gradient-CTA rule holds (C42). Choose settings opens the second
 //   layer. TrackingRuntime handles the three buttons (data-consent-action).
-// - The privacy policy link appears once /privacy (R006) is live (04 §1.4).
+// - The privacy policy link appears once /privacy (R006) is live (04 §1.4), in the actions row after
+//   Choose settings: on its own line it made the banner cover seven H1s at 360 × 640 (the owner moved
+//   it there, 2026-10-12, the privacy page plan). Accept all stays the banner's first Tab stop.
 // - Its content sits in a data-nosnippet <div>: the banner is in every page's HTML (hidden by CSS for
 //   most visitors), so its text must never become a search snippet or an AI answer. Google honours the
 //   attribute on div, span and section, not on aside.
@@ -33,13 +35,6 @@ export function ConsentBanner() {
           {banner.title}
         </p>
         <p className="mt-2 text-small">{banner.body}</p>
-        {isLive('R006') ? (
-          <p className="mt-1 text-small">
-            <a href={routePath('R006')} className="dz-underline dz-target text-link">
-              {banner.policyLink}
-            </a>
-          </p>
-        ) : null}
         <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2">
           <button type="button" data-consent-action="accept" className="dz-consent-button dz-press font-bold">
             {banner.acceptAll}
@@ -54,6 +49,14 @@ export function ConsentBanner() {
           >
             {banner.choose}
           </button>
+          {isLive('R006') ? (
+            <a
+              href={routePath('R006')}
+              className="dz-underline dz-target ms-1 inline-flex min-h-11 items-center text-small font-medium text-link"
+            >
+              {banner.policyLink}
+            </a>
+          ) : null}
         </div>
       </div>
     </aside>
