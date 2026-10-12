@@ -12,7 +12,9 @@ import {
   FACT_LABELS,
   OUTPUT,
   buildAgentKnowledge,
+  SALES_MD,
   parseFacts,
+  parseSalesKnowledge,
   publishedFaqs,
 } from '../../scripts/build-agent-knowledge.mjs';
 
@@ -27,6 +29,7 @@ const factsMd = read(FACTS_MD);
 const generated = buildAgentKnowledge({
   factsMd,
   catalogueMd: read(CATALOGUE_MD),
+  salesMd: read(SALES_MD),
   catalogue: { pillars, services, starterOffers, bundles },
   industryData: { industryGroups, industries, bestFitAutomations },
   faq: publishedFaqs(faqBank),
@@ -35,6 +38,11 @@ const generated = buildAgentKnowledge({
 // Every page's FAQ list, read straight from the bank (not through the generator)
 const everyFaq = Object.values(faqBank).filter(Array.isArray).flat();
 const knowledge = read(OUTPUT);
+// The owner's approved answers (sales-knowledge.md): owner facts, so they may carry years (the founder's
+// story); everything else is checked for external facts.
+const SALES_HEADING = '## How we work: the approved answers';
+const salesPart = knowledge.slice(knowledge.indexOf(SALES_HEADING), knowledge.indexOf('## Frequently asked questions'));
+const catalogueAndFaqs = knowledge.replace(salesPart, '');
 
 describe('agent knowledge', () => {
   it('the committed file equals a fresh generation (npm run agent:knowledge)', () => {
@@ -68,9 +76,9 @@ describe('agent knowledge', () => {
     for (const marker of ['[[TODO', 'PENDING', 'UNKNOWN', 'PROPOSED']) expect(knowledge).not.toContain(marker);
   });
 
-  it('states no external fact: no amounts, months or years (except the founding date)', () => {
-    const body = knowledge.replace(/^- Founded: .*$/m, '');
-    expect(body).not.toMatch(/\bAED\b|\$\s?\d/);
+  it('states no external fact: no amounts anywhere; no months or years outside the founding date and the approved answers', () => {
+    expect(knowledge).not.toMatch(/\bAED\b|\$\s?\d/);
+    const body = catalogueAndFaqs.replace(/^- Founded: .*$/m, '');
     expect(body).not.toMatch(/\b(?:19|20)\d{2}\b/);
     expect(body).not.toMatch(
       /\b(?:January|February|March|April|June|July|August|September|October|November|December)\b/,
@@ -88,6 +96,42 @@ describe('agent knowledge', () => {
     const outsideUrls = knowledge.replace(/[\w.-]*deepzeta\.ai[\w/.-]*/g, '');
     expect(outsideUrls).not.toMatch(/\bdeepzeta\b/);
     expect(outsideUrls).not.toMatch(/\bDeepzeta\b(?! AI| Digital)/);
+  });
+
+  it("carries every approved sales answer, without the owner's internal notes", () => {
+    expect(salesPart.length).toBeGreaterThan(0);
+    const rows = parseSalesKnowledge(read(SALES_MD)).flatMap((s) => s.rows);
+    expect(rows.length).toBeGreaterThan(50);
+    for (const { topic } of rows.filter((row) => row.topic !== 'Our highlights')) {
+      expect(salesPart, topic).toContain(`- ${topic.replace(/\*\*/g, '').replace(/\s*\([^()]*\)/g, '')}`);
+    }
+    expect(salesPart).not.toMatch(/\(owner,|`|\(as \d/);
+  });
+
+  it('takes only APPROVED sections, and never an OPEN row', () => {
+    const md = [
+      '## 1. Approved',
+      'Status of every entry: **APPROVED (owner, 2026-10-12)**.',
+      '| # | Topic | Approved answer |',
+      '|---|---|---|',
+      '| 1.1 | Kept | Yes |',
+      '| 1.2 | **OPEN:** Waiting | Maybe |',
+      '## 2. Draft',
+      'Status of every entry: **DRAFT**.',
+      '| 2.1 | Never | No |',
+    ].join('\n');
+    expect(parseSalesKnowledge(md)).toEqual([
+      { number: '1', title: 'Approved', approved: true, rows: [{ id: '1.1', topic: 'Kept', answer: 'Yes' }] },
+    ]);
+  });
+
+  it("uses the owner's highlights (sales-knowledge 9.3)", () => {
+    expect(knowledge).toContain(
+      '- High performance: every page passes Core Web Vitals, with beautiful custom designs\n',
+    );
+    expect(knowledge).toContain(
+      "- Detailed research and discussion of every client's requirements, for the best growth results\n",
+    );
   });
 
   it('keeps the business profile short and inside the file', () => {

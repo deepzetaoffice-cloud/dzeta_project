@@ -287,6 +287,8 @@ None.
 
 - **2026-10-12 · Part D done:** `/privacy` merged to `main` (`0696165`) and live; the owner published the Meta app (Live); Meta's webhook verification reached the gateway and got 200 (edge logs, 08:25 UTC); `messages` subscribed (v26.0). Open: the Step 2 checklist shows "Add payment to send business-initiated messages" unticked, to check before the templates are used.
 
+- **2026-10-12 · the sales brief and stage 1 (knowledge):** the owner approved all 8 topics of the sales brief, which are in `docs/facts/sales-knowledge.md`. The plan `docs/plans/2026-10-12-hours-and-agent-knowledge.md` (APPROVED) moved the hours to Monday to Friday sitewide and added the approved answers, the Google Business Profile and the owner's own edits to the generator; `agent-knowledge.md` is regenerated for the owner's review (Part G). The owner also approved stage 2 (the agent's rules, the expert follow-up, and six safety fixes) and stage 3 (testing).
+
 **The retention migration (S4), as applied:**
 
 ```sql

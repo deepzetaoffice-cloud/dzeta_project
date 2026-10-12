@@ -40,3 +40,4 @@ Outside the repo: the DZ-0000 row's `business_profile` in Supabase takes the reg
 None.
 
 ## Progress
+- 2026-10-12: steps 1–4 done (main merged in; facts, site, privacy page, generator, knowledge). Full local `npm run verify` green: 580 unit tests, 310 e2e, `lhci` with Home at 198,154 B of 204,800 B. `business_profile` in Supabase follows after the commit.

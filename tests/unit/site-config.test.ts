@@ -48,12 +48,16 @@ describe('siteConfig equals the facts file', () => {
     const fact = confirmed('Opening hours');
     const { display, days, opens, closes } = siteConfig.openingHours;
     expect(display).toBe(fact);
-    const parts = /^(\w+) to (\w+), (\d\d:\d\d)–(\d\d:\d\d) .*; closed (\w+)$/.exec(fact);
+    const parts = /^(\w+) to (\w+), (\d\d:\d\d)–(\d\d:\d\d) .*; closed (.+)$/.exec(fact);
     expect(parts, `can't read the hours "${fact}"`).not.toBeNull();
-    const [, first, last, from, to, closed] = parts!;
+    const [, first, last, from, to, closedDays] = parts!;
     const week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     expect(days).toEqual(week.slice(week.indexOf(first!), week.indexOf(last!) + 1));
-    expect(days).not.toContain(closed);
+    // "closed Sunday" or "closed Saturday and Sunday": every closed day is a weekday name, never open.
+    for (const closed of closedDays!.split(/, | and /)) {
+      expect(week, closed).toContain(closed);
+      expect(days).not.toContain(closed);
+    }
     expect([opens, closes]).toEqual([from, to]);
   });
 

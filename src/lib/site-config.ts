@@ -42,8 +42,8 @@ export const siteConfig = {
   // visible, 0019). The other fields are the same fact in parts, for P4's openingHoursSpecification
   // (schema.org day names); site-config.test.ts checks that both say the same thing.
   openingHours: {
-    display: 'Monday to Saturday, 08:00–17:00 GST (UTC+4); closed Sunday',
-    days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+    display: 'Monday to Friday, 08:00–17:00 GST (UTC+4); closed Saturday and Sunday',
+    days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
     opens: '08:00',
     closes: '17:00',
   },

@@ -10,6 +10,9 @@
 //   - src/content/en/faq-bank.ts: every published FAQ answer (Home's, the hub's and each service
 //     page's), verbatim
 //   - src/lib/site-config.ts: the founder
+//   - docs/facts/sales-knowledge.md: the owner's APPROVED sales answers (a section whose status line
+//     says APPROVED; a row marked OPEN never), with internal notes in brackets left out; the "Our
+//     highlights" row rewrites and extends the catalogue's highlights instead (owner, 2026-10-12)
 // Left out on purpose: catalogue sentences with dates or amounts (external facts need an APPROVED
 // row in docs/facts/external-sources.md first), the catalogue's compliance notes (§7.6) and naming
 // rules (§9), and the audit's "30–45 minute" line (the booked length is a fact: 30 minutes).
@@ -24,6 +27,7 @@ import { pathToFileURL } from 'node:url';
 export const OUTPUT = 'docs/facts/agent-knowledge.md';
 export const CATALOGUE_MD = 'Planning Folder/For Ai/DeepZeta Services Catalogue.md';
 export const FACTS_MD = 'docs/facts/company-facts.md';
+export const SALES_MD = 'docs/facts/sales-knowledge.md';
 // The client row's business_profile is read into every prompt, so it stays short.
 export const BUSINESS_PROFILE_MAX = 1500;
 
@@ -37,6 +41,7 @@ export const FACT_LABELS = [
   ['Trade licence issuing authority', 'Licensed by'],
   ['Full address, one line (display)', 'Office address'],
   ['Opening hours', 'Opening hours'],
+  ['Google Business Profile URL', 'Google Business Profile'],
   ['Phone (international format)', 'Phone'],
   ['Public contact email', 'Email'],
   ['Domain / canonical site URL', 'Website'],
@@ -58,7 +63,7 @@ const EXTERNAL_FACT =
 // The rules the agent follows whatever it's asked (00 N3; catalogue §9; facts §3 and §5).
 const NEVER = [
   'Prices are not published yet. Never quote, estimate or compare a price, fee or package. Every project is scoped and quoted after the free AI automation audit.',
-  'There are no published case studies, client names, reviews or results yet. Never mention or invent any.',
+  'There are no published case studies, client names, reviews or results yet. Never mention or invent any. The only examples to share are the ones in the approved answers: deepzeta.ai and the two websites built by our team.',
   'Never promise guaranteed rankings, leads or results.',
   'Never state deadlines, legal requirements, regulator rules or amounts from outside sources, such as e-invoicing dates. Offer the free audit, or a member of the team, instead.',
   'Never give medical, legal, tax or financial advice.',
@@ -88,6 +93,53 @@ export function publishedFaqs(faqBank) {
     .sort((a, b) => (a === 'homeFaq' ? -1 : b === 'homeFaq' ? 1 : a < b ? -1 : 1));
   const seen = new Set();
   return lists.flatMap((name) => faqBank[name]).filter((q) => !seen.has(q.id) && seen.add(q.id));
+}
+
+// The owner's sales answers: each "## N. Title" section whose status line says APPROVED, with its
+// table rows ("| N.N | Topic | Answer |"); a row that says OPEN is never taken (sales-knowledge rules).
+/** @returns {{ number: string, title: string, approved: boolean, rows: { id: string, topic: string, answer: string }[] }[]} */
+export function parseSalesKnowledge(md) {
+  const sections = [];
+  let current = null;
+  for (const line of md.split(/\r?\n/)) {
+    const heading = line.match(/^## (\d+)\. (.+)$/);
+    if (heading) {
+      current = { number: heading[1], title: heading[2], approved: false, rows: [] };
+      sections.push(current);
+      continue;
+    }
+    if (!current) continue;
+    if (/Status of every entry: \*\*APPROVED\b/.test(line)) current.approved = true;
+    const cells = line.startsWith('| ')
+      ? line
+          .split('|')
+          .slice(1, -1)
+          .map((cell) => cell.trim())
+      : [];
+    if (cells.length === 3 && /^\d+\.\d+$/.test(cells[0]) && !/\bOPEN\b/.test(line)) {
+      current.rows.push({ id: cells[0], topic: cells[1], answer: cells[2] });
+    }
+  }
+  return sections.filter((s) => s.approved && s.rows.length);
+}
+
+// A note for the owner, in brackets, that the agent doesn't need: a source or date ("owner, …"), a
+// file name in code marks, or a cross-reference ("as 2.7", "8.3").
+const INTERNAL_NOTE = /\s*\((?:[^()]*\bowner\b[^()]*|[^()]*`[^()]*|(?:as |see )?\d+\.\d+)\)/g;
+
+// The catalogue's highlights with the owner's wording (sales-knowledge 9.3): a sentence that starts
+// with a highlight's label replaces that bullet; any other sentence becomes a new bullet after them.
+function withHighlights(intro, sentences) {
+  const lines = [...intro];
+  let last = lines.findLastIndex((line) => line.startsWith('- '));
+  for (const sentence of sentences) {
+    const label = sentence.match(/^([^:]+):/)?.[1];
+    const at = label ? lines.findIndex((line) => line.startsWith(`- ${label}:`)) : -1;
+    const bullet = `- ${sentence.replace(/\.$/, '')}`;
+    if (at >= 0) lines[at] = bullet;
+    else lines.splice(++last, 0, bullet);
+  }
+  return lines;
 }
 
 // Markdown the agent shouldn't echo: links become their text, bold and code marks go.
@@ -168,8 +220,14 @@ function itemLines(catalogue, number, { dropComposition = false } = {}) {
     .filter(Boolean);
 }
 
-export function buildAgentKnowledge({ factsMd, catalogueMd, catalogue, industryData, faq, siteConfig }) {
+export function buildAgentKnowledge({ factsMd, catalogueMd, salesMd, catalogue, industryData, faq, siteConfig }) {
   const facts = parseFacts(factsMd);
+  const sales = parseSalesKnowledge(salesMd);
+  const isHighlights = (row) => row.topic === 'Our highlights';
+  const highlights = sales
+    .flatMap((s) => s.rows)
+    .filter(isHighlights)
+    .flatMap((row) => row.answer.split(/(?<=\.)\s+/));
   const confirmed = FACT_LABELS.flatMap(([label, shown]) => {
     const row = facts.get(label);
     return row && row.status.startsWith('CONFIRMED') && row.value !== '—' ? [[label, shown, plain(row.value)]] : [];
@@ -192,6 +250,7 @@ export function buildAgentKnowledge({ factsMd, catalogueMd, catalogue, industryD
       fact('Public contact email') && `Email: ${fact('Public contact email')}`,
       fact('Phone (international format)') && `Phone: ${fact('Phone (international format)')}`,
       fact('Domain / canonical site URL') && `Website: ${fact('Domain / canonical site URL')}`,
+      fact('Google Business Profile URL') && `Google Business Profile: ${fact('Google Business Profile URL')}`,
     ]
       .filter(Boolean)
       .join(' · ') + '.',
@@ -226,7 +285,7 @@ export function buildAgentKnowledge({ factsMd, catalogueMd, catalogue, industryD
     '',
     `## About ${fact('Brand name')}`,
     '',
-    ...parsed.intro.map(cleanLine).filter(Boolean),
+    ...withHighlights(parsed.intro.map(cleanLine).filter(Boolean), highlights),
     '',
     '## Company and contact details',
     '',
@@ -279,7 +338,24 @@ export function buildAgentKnowledge({ factsMd, catalogueMd, catalogue, industryD
   push('', '## Tools and platforms we work with', '');
   for (const [category, list] of parsed.platforms) push(`- ${category}: ${plain(list)}`);
 
-  push('', '## Frequently asked questions', '');
+  push(
+    '',
+    '## How we work: the approved answers',
+    '',
+    `These are ${fact('Brand name')}'s own answers on timelines, process, terms and common doubts. Where a frequently asked question below says something more general, give these answers.`,
+    '',
+  );
+  for (const section of sales) {
+    const rows = section.rows.filter((row) => !isHighlights(row));
+    if (!rows.length) continue;
+    push(`### ${plain(section.title)}`, '');
+    for (const row of rows) {
+      push(`- ${plain(row.topic).replace(INTERNAL_NOTE, '')}: ${plain(row.answer.replace(INTERNAL_NOTE, ''))}`);
+    }
+    push('');
+  }
+
+  push('## Frequently asked questions', '');
   for (const q of faq) push(`### ${q.question}`, q.answer, '');
 
   push(`## What ${fact('Brand name')} never says or does`, '', ...NEVER.map((rule) => `- ${rule}`), '');
@@ -299,6 +375,7 @@ async function main() {
   const { markdown, businessProfile } = buildAgentKnowledge({
     factsMd: readFileSync(join(root, FACTS_MD), 'utf8'),
     catalogueMd: readFileSync(join(root, CATALOGUE_MD), 'utf8'),
+    salesMd: readFileSync(join(root, SALES_MD), 'utf8'),
     catalogue,
     industryData,
     faq: publishedFaqs(faqBank),

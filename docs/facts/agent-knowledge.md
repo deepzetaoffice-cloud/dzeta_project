@@ -9,10 +9,10 @@ the sources, regenerate, have the owner review it, then upload it with "Replace 
 Deepzeta AI (Deepzeta Digital Solutions L.L.C.), AI Digital Solutions.
 Deepzeta AI builds online growth for every business.
 Service pillars: AI Automation (Make the business run itself); Websites (Custom-coded, high-performance sites built to rank and convert); Software (Custom tools that scale); Growth & Ranking (Get found, get chosen).
-Main offer: the Free AI Automation Audit. Length: 30 minutes. Booking hours: Monday to Saturday, 10:00–17:00 GST. Meeting types: A phone call (Deepzeta AI calls the visitor at the booked time), Google Meet, or an office visit.
-Primary market: UAE first, then GCC.
-Office: Office #202, Al Hilal Bank Building, Al Qusais 2, Dubai, United Arab Emirates. Opening hours: Monday to Saturday, 08:00–17:00 GST (UTC+4); closed Sunday.
-Email: hello@deepzeta.ai · Phone: +971 54 547 6335 · Website: https://deepzeta.ai.
+Main offer: the Free AI Automation Audit. Length: 30 minutes. Booking hours: Monday to Friday, 10:00–17:00 GST. Meeting types: A phone call (Deepzeta AI calls the visitor at the booked time), Google Meet, or an office visit.
+Primary market: UAE, then GCC, then worldwide.
+Office: Office #202, Al Hilal Bank Building, Al Qusais 2, Dubai, United Arab Emirates. Opening hours: Monday to Friday, 08:00–17:00 GST (UTC+4); closed Saturday and Sunday.
+Email: hello@deepzeta.ai · Phone: +971 54 547 6335 · Website: https://deepzeta.ai · Google Business Profile: https://share.google/MoFRpm3UUJkskqRyT.
 Founder: Jamsheed Khalid.
 Prices are not published: every project is scoped and quoted after the free audit.
 <!-- business-profile:end -->
@@ -26,9 +26,10 @@ We do this in three connected ways:
 3. AI automation and growth services that turn the traffic into customers, and customers into repeat revenue.
 Our highlights
 - Custom code only: no templates, no page builders, no bloat
-- High performance: every page passes Core Web Vitals (LCP under 2.5 s, INP under 200 ms, CLS under 0.1)
+- High performance: every page passes Core Web Vitals, with beautiful custom designs
 - Search-ready by design: SEO, GEO and AI ranking built in from the first line of code
 - Growth-focused: every website is built to bring leads and sales, not just to look good
+- Detailed research and discussion of every client's requirements, for the best growth results
 
 ## Company and contact details
 
@@ -39,14 +40,15 @@ Our highlights
 - Founded: 2026-08-02
 - Licensed by: Dubai Department of Economy and Tourism (DET)
 - Office address: Office #202, Al Hilal Bank Building, Al Qusais 2, Dubai, United Arab Emirates
-- Opening hours: Monday to Saturday, 08:00–17:00 GST (UTC+4); closed Sunday
+- Opening hours: Monday to Friday, 08:00–17:00 GST (UTC+4); closed Saturday and Sunday
+- Google Business Profile: https://share.google/MoFRpm3UUJkskqRyT
 - Phone: +971 54 547 6335
 - Email: hello@deepzeta.ai
 - Website: https://deepzeta.ai
-- Primary market: UAE first, then GCC
+- Primary market: UAE, then GCC, then worldwide
 - Service structure: The four pillars: AI Automation · Websites · Software · Growth & Ranking
 - Free AI audit length: 30 minutes
-- Free AI audit booking hours: Monday to Saturday, 10:00–17:00 GST
+- Free AI audit booking hours: Monday to Friday, 10:00–17:00 GST
 - Free AI audit meeting types: A phone call (Deepzeta AI calls the visitor at the booked time), Google Meet, or an office visit
 - Founder: Jamsheed Khalid
 
@@ -54,7 +56,7 @@ Our highlights
 
 The Free AI Automation Audit is free. It can be booked right here in this chat.
 - Length: 30 minutes
-- Booking hours: Monday to Saturday, 10:00–17:00 GST
+- Booking hours: Monday to Friday, 10:00–17:00 GST
 - Meeting types: A phone call (Deepzeta AI calls the visitor at the booked time), Google Meet, or an office visit
 
 ## Starter offers
@@ -722,6 +724,109 @@ Ongoing care or add-on
 - Web: Next.js, TypeScript, Tailwind CSS, Vercel
 - Analytics: GA4, Google Tag Manager, Meta Conversions API, LinkedIn Insight
 
+## How we work: the approved answers
+
+These are Deepzeta AI's own answers on timelines, process, terms and common doubts. Where a frequently asked question below says something more general, give these answers.
+
+### Expert follow-up: "an expert will call or WhatsApp you"
+
+- Who contacts the customer: "One of our experts". The agent gives no team names
+- Response time: Within 2 working hours during Monday to Friday, 10:00–17:00 GST; outside those hours, the next working morning
+- Callback hours: Monday to Friday, 10:00–17:00 GST
+- How the expert contacts them: A phone call from the main number (+971 54 547 6335; calls work on it as normal), or a WhatsApp message from the expert's own number, which the agent tells the customer first
+- What the agent collects first: Name, business name, what they need (service or goal), how urgent it is, the preferred channel (call or WhatsApp) and a good time; email optional
+- When the agent offers what: Booking the free session first, for anyone who sounds ready. The expert follow-up when the customer asks for a price, timeline or proposal for their own project, has a complex or technical project, would rather talk now than book, or has asked something the agent couldn't answer twice. When unsure, both choices in one short message
+- Lead priority in the team's alert: 🔥 Hot: wants to start within a month, or asks for a proposal. Warm: interested, no date. Cold: researching. The priority leads the alert's subject
+- What the agent never says to a lead: No prices, no guaranteed rankings or results, no invented clients or examples (already in the rules)
+
+### Websites
+
+- Typical timelines, from the signed start to launch: Landing page (one page, for ads): 2 days · Business website, 5–10 pages, one language: 3–5 days · Bilingual (English + Arabic), or 10+ pages with service and area pages: 1–2 weeks · E-commerce store (Shopify / WooCommerce): 3–5 weeks · Fully custom e-commerce: 4–6 weeks · Redesign and migration of an existing site: 2–3 weeks. The agent always adds that revisions and extra updates can add days or weeks, and that the exact timeline is confirmed after the free session
+- The steps: 1. The free session, then a written summary with next steps and a quote · 2. Agreement and kickoff · 3. Structure and content plan: the pages, and the searches each page should win · 4. Design, shown to the client for approval before any coding · 5. Build: the code, speed, SEO/GEO and tracking · 6. Review and changes, with 2 revision rounds included · 7. Launch, with a performance report. The agent doesn't add the Website Care Plan as a step of the process
+- What the client provides: Whatever the client already has (logo, brand colours, texts, photos, domain, hosting) is welcome, and we work with it. If they don't have a logo or brand yet, we create it: logos, colour assets and brand foundations (our Branding & Positioning service). We also write the website texts from the client's information and find suitable photos
+- What's included: The website package includes the domain and hosting; if the client already has them, we use theirs. Typically included: design and code, mobile, speed, technical SEO, structured data, AI-search (GEO) setup, local SEO, analytics with consent, lead forms, WhatsApp/CRM-ready, and the launch report. Every package is shaped around the client's needs after the free session; ongoing SEO and content, ads and photo shoots are separate services, added when the client needs them
+- Ownership: The code belongs to the client, built on the client's accounts, with full access at launch
+- "Can I edit the website myself?": It depends on the project: either we add a simple editor for texts, images and blog posts, or our team makes the changes for you
+- Common doubts: "Why not Wix or WordPress, it's cheaper?" Custom code carries only what the page needs, so it's faster and built for Google and AI search, with no template limits. "Will I rank first on Google?" No one can honestly guarantee rankings; SEO is built in from the first line of code, and our Growth & Ranking services push further. "Do you have examples?" deepzeta.ai is our own first case study, and two more websites built by our team can be shared: wasleen.com and dubaiapprovalconsultants.com. Nothing else about them is shared, and no results are claimed. We never share a client's details, code or credentials with anyone (data protection)
+- What the agent asks a website lead: What the business does; whether they have a website now (the link); the main goal (calls, bookings, sales); English, Arabic or both; whether texts and photos are ready; any deadline
+
+### AI Automation
+
+- Typical timelines, from the signed start to go-live: One simple workflow (reminders, review requests, lead alerts): 2–5 days · WhatsApp AI Agent (answers, qualifies, books): 1–2 weeks · AI Voice Receptionist: 2–3 weeks · Speed-to-Lead System with CRM Setup & Automation: 1–2 weeks · A bundle such as AI Front Desk: 3–5 weeks · Custom AI Agents, or links to ERP and accounting systems: 3–6 weeks. The agent always adds that Meta's approval of the WhatsApp number and message templates is outside our control and can add a few days
+- The steps: 1. The free session (the audit): we map the processes and rank the top opportunities · 2. Written scope and quote · 3. Access and setup: the client's WhatsApp, CRM and calendar accounts · 4. Build and connect · 5. Testing with real scenarios; the client's team also tests before go-live · 6. Go-live, with a hand-off to the client's team for anything the AI shouldn't handle · 7. Handover, with documentation and training
+- Running costs (Meta's WhatsApp message charges, AI usage, the automation platform, phone lines for voice): They depend on the project. The quote says which apply, and whether the client pays them directly in their own accounts or they're included in a monthly fee
+- How it works, in the agent's words: It answers only from the business's own information. It replies in the customer's language, including voice notes. It books straight into the calendar. When it doesn't know, or the topic is sensitive, it hands over to the team with a summary. Every conversation is logged
+- "What if the AI gives a wrong answer?": It only uses the information the business approves. It says when it doesn't know, and hands sensitive topics to a person. We test it before go-live, and in the first 2 days after go-live our whole team examines and tests the full system and reviews the conversations
+- Common doubts: "Will AI replace my staff?" It takes the repetitive work: first replies, bookings, reminders and follow-ups. Your team keeps the conversations that need a person. "Can it connect to my system?" If it has an API, usually yes; our expert checks your exact tools in the free session. "Is my data safe?" The published FAQ answer (UAE PDPL, consent wording, a way to reach a human). "Can I see a demo?" "You're talking to one right now: I'm the Deepzeta AI Agent." "Which AI do you use?" We choose the best models for each job
+- The agent's own name: "Deepzeta AI Agent", in every channel where it speaks for Deepzeta AI
+- What the agent asks an automation lead: What the business does; what takes the most time, or where leads get lost; how customers reach them now (WhatsApp, calls, website, Instagram); how many people handle enquiries; which tools they use (CRM, calendar, accounting); roughly how many messages a day; Arabic, English, both, or any other language; any deadline
+
+### Software & Apps
+
+- Typical timelines, from the signed start to launch: Internal tool or admin dashboard (replaces spreadsheets): 2–4 weeks · Client & customer portal: 4–6 weeks · Web application (accounts, roles, integrations): 4–8 weeks · Mobile app (iOS + Android): 6–10 weeks · SaaS product, first version (MVP): 6–10 weeks · Custom software, or modernising an old system: quoted after the free session. The agent always adds that Apple and Google review every app before it goes live, which is outside our control and can add a few days
+- The steps: 1. The free session · 2. Written scope: the users, screens and features, starting with a first version and later phases after it · 3. Screen designs shown for approval before coding · 4. Build in stages, with a progress demo for the client every week · 5. Testing, with the client's team · 6. Launch, including publishing to the App Store and Google Play for apps · 7. Handover, with documentation and training
+- Ownership: The code belongs to the client. Apps are published under the client's own Apple and Google developer accounts
+- Running costs (servers, app store accounts, paid services such as SMS or maps): They depend on the project; the quote says which apply and how they're paid
+- "Which technology do you use?": Our expert confirms the right setup for your project
+- Common doubts: "I have an app idea. Can you build it?" Yes. We start with the smallest version that proves the idea, then grow it in phases; our expert maps it with you in the free session. "Will you sign an NDA?" Yes, before you share the details. "Can you take over an app another company built?" Yes, after our expert reviews the code and the access. "Will it work in Arabic?" Yes: Arabic and English, with right-to-left screens, and other languages too
+- What the agent asks a software or app lead: What the app should do; who uses it (customers, staff or both); web, mobile or both; which systems it must connect to; roughly how many users; whether any designs or documents are ready; languages; any deadline
+
+### Growth & Ranking (SEO, AI search, local, ads)
+
+- How fast things happen: Technical SEO & Schema Audit, the report and fix list: 3–5 days · Google Business Profile optimised (Arabic + English): within 1 week · AI-search (GEO) setup on the website: 1–2 weeks · Ad campaigns live, after access and platform approval: 3–5 days. The agent always adds: ads can bring leads from the first week; SEO and AI-search results build over months, not days; we report progress every month
+- The steps (SEO and GEO): 1. The free session · 2. Audit and a fix list, ranked by impact · 3. Technical fixes and structured data · 4. A content plan: the pages, FAQs and searches to win · 5. Google Business Profile and local listings · 6. Monthly work, with a monthly report on rankings, traffic, AI visibility and leads
+- Ad budget: Paid by the client directly to Google, Meta and the other platforms, in the client's own ad accounts. Our management is quoted separately. Our expert recommends a budget in the free session; the agent never states a budget figure
+- Ownership: The ad accounts, Google Business Profile, Search Console and Analytics stay in the client's name, and we get access
+- Website & AI Search Health Check: Both: the free session gives the first look at the website and its AI visibility, and the full Health Check is a separate paid service, quoted after the free session
+- Common doubts: "Can you guarantee first place on Google?" No one can honestly guarantee rankings; SEO is built in from the first line of code, and our Growth & Ranking services push further. "What is GEO / AI search?" Being named and recommended when people ask ChatGPT, Gemini, Perplexity or Google's AI answers about your service; we set the business up so these engines understand and cite it. "SEO or ads first?" Ads bring leads quickly while you pay; SEO and AI search build traffic that keeps coming; our expert recommends the right mix for your goals and budget in the free session. "Do you do Arabic SEO?" Yes, in Arabic and English, including Google Maps for each area and emirate. "Can you get us more reviews?" We never buy or write fake reviews; we set up automatic review requests to your real customers
+- What the agent asks a growth lead: The website link; the main services, and the areas or emirates they serve; who their customers are; whether they're on Google Maps; whether they run ads now, and where; their main competitors; the goal (calls, bookings or sales); languages
+
+### Social media & content
+
+- Platforms we manage: Instagram, Facebook, TikTok, LinkedIn, Snapchat, X and YouTube; we focus on the ones where the client's customers are
+- What a social media package covers: Strategy and a monthly content calendar; designs, reels and short videos; Arabic and English captions; posting; replies to comments and messages; a monthly performance report. The number of posts per month is set in each package after the free session; the agent never promises a number
+- How fast we start: Strategy and the first month's calendar within 1 week; the first posts live within 1–2 weeks of kickoff
+- The monthly flow: 1. Review of the brand, the audience and competitors · 2. The month's content calendar · 3. The client approves the posts before anything goes live, always · 4. Creation and posting · 5. Replies to comments and messages · 6. The monthly report
+- Photo and video shoots: It depends on the package
+- Reply times for comments and messages: Within working hours (Monday to Friday); with our Social Media Automation, instant replies 24/7
+- Ownership: The accounts stay in the client's name and we get partner access. All content we create for the client is theirs to keep
+- Common doubts: "How many followers will I get?" We never promise follower numbers or buy followers; we create content that brings enquiries, and report reach, engagement and leads every month. "Do you use AI to make content?" AI helps us create faster, and a person reviews every post before it goes out. "Can you run our ads too?" Yes: Meta, TikTok, Snapchat and LinkedIn ads. "Do you work with influencers?" Yes: we find and vet influencers, manage the campaign and track the results
+- What the agent asks a social media lead: Which platforms they're on (the links); what they sell, and to whom; who posts now; the goal (awareness, enquiries or sales); whether they have photos and videos, or need shoots; languages; whether they also want ads; any launch date
+
+### Delivery, support & commercial terms
+
+- Payment terms for projects (websites, automations, apps): They depend on the project and are set in the quote
+- Monthly services (SEO, ads management, social media, care plans): Paid monthly, in advance
+- How clients pay: Bank transfer; the details come with the invoice. Payments in the chat stay off
+- A written agreement: Every project starts with a signed quote or agreement: the scope, the timeline and the payment terms. Any VAT is shown on the quote
+- Fixes after launch: 14 days of free fixes for anything that doesn't work as agreed; after that, the Website Care Plan or a monthly support plan
+- Minimum term for monthly services: None: month to month
+- Notice to stop a monthly service: 30 days
+- Extra work: Anything beyond the agreed scope is quoted separately and starts only after the client's OK
+- Point of contact: One person from our team is the client's contact for the whole project
+- Clients outside the UAE: Yes: we work with clients in the GCC and worldwide, with meetings on Google Meet
+- Common doubts: "Can I start small?" Yes: one project first, like a single automation or a landing page, and more later. "Do you have packages?" Yes, ready bundles such as AI Front Desk, Quote-to-Cash System, Get Found by AI and Launch Pack; our expert shapes one around the client's needs. "Can I get a discount?" Prices and offers are discussed with our expert in the quote; the agent then offers the expert follow-up. Refunds, complaints and legal questions always go to the team (the hand-off rule)
+
+### Trust & objections
+
+- "Why Deepzeta AI?": Three things under one roof that usually take three agencies: a fast, custom-coded website, Google and AI-search ranking built in from the first line of code, and automations that turn visitors into customers. And every project starts with detailed research into the client's business
+- "You're a new company.": Yes, as a licensed company we're new: Deepzeta Digital Solutions L.L.C. was founded in Dubai in 2026. The vision and expertise behind it go back to 2012, when our founder, Jamsheed Khalid, started computer engineering; he graduated in 2015. He runs several businesses in the UAE himself, so he knows a business owner's pain, and our goal is every client's business growth. Our work is the proof: this agent, our own website, and the websites our team built (wasleen.com and dubaiapprovalconsultants.com)
+- The founder's expertise (for "who is behind Deepzeta AI?" or "do you know X?"; the agent summarises and gives detail only when asked): Software development, web application development, software testing, ethical hacking, technical SEO and GEO, digital growth strategy. Technologies: Next.js, React.js, PostgreSQL, Python, JavaScript, C++, PHP; APIs, integrations and authentication. Platforms: Framer, Elementor, WordPress, WooCommerce, Shopify and headless Shopify. Ads: Google, Meta, Microsoft, TikTok, LinkedIn and ChatGPT ads. Creative tools: Adobe software, DaVinci Resolve, Canva, CapCut, and Blender 3D with Python scripts
+- "Do you have reviews or client references?": We protect our clients' privacy, so we only share work they've allowed us to show. You can also test this agent and our website yourself. No testimonials are mentioned
+- "Is it worth it for a small business?": Yes. Start with the one thing that pays back fastest, like instant WhatsApp replies or appointment reminders. The free session shows what to automate first, with the hours and money it could save
+- "We don't have technical staff.": You don't need any: we build it, connect it to the tools you already use, and train your team. Our own team has a dedicated group for each area: development, social media, AI automation and mobile apps; the agent gives no names or numbers
+- "We already have an agency.": We can work alongside them, or take over one part, like the automations or AI search
+- "Others are cheaper.": We never speak badly about other companies. What's different: custom code, ranking and AI search built in, automations that bring leads, and a focus on the client's business growth, not just on delivering a project
+- "I need to think about it.": The agent kindly offers once more, either a free session on a day that suits them or an expert follow-up later, and never pushes after a no
+- "Are you a registered company?": Yes: Deepzeta Digital Solutions L.L.C., with our office in Al Qusais, Dubai. The licence number is added once it's issued
+- How the agent sounds: Warm, confident and short, like a senior consultant: one question at a time, uses the customer's name, never pushy. A few emojis, only where natural (at most one per message)
+- "Can you build it on WordPress, Elementor or Framer?": Our websites are custom-coded, because that's what makes them fast and ready for Google and AI search; for online stores we also build on Shopify (including headless Shopify) and WooCommerce; if the client already has a WordPress or Framer site, our expert advises on improving it or moving it. The founder's platform skills are additional skills: knowing those platforms is why we know the value of a custom-coded website
+
+### Languages and highlights
+
+- "Do the AI agents work in all languages?": Yes. Our AI agents recognise the customer's language from their first message, including voice notes in any language, and reply in that language
+- "Do the AI agents work in Arabic as well as English?": Yes. AI agents that talk to customers are built bilingual, Arabic and English, because UAE customers message in both, often in the same conversation. AI models with strong native Arabic support, including the UAE's own Jais and Falcon, are among the platforms we build with. Arabic-first flows are designed Arabic-first, never translated as an afterthought
+
 ## Frequently asked questions
 
 ### What does the free AI automation audit include?
@@ -1015,7 +1120,7 @@ If you want us to keep it running, the AI Ops Retainer looks after your Speed-to
 ## What Deepzeta AI never says or does
 
 - Prices are not published yet. Never quote, estimate or compare a price, fee or package. Every project is scoped and quoted after the free AI automation audit.
-- There are no published case studies, client names, reviews or results yet. Never mention or invent any.
+- There are no published case studies, client names, reviews or results yet. Never mention or invent any. The only examples to share are the ones in the approved answers: deepzeta.ai and the two websites built by our team.
 - Never promise guaranteed rankings, leads or results.
 - Never state deadlines, legal requirements, regulator rules or amounts from outside sources, such as e-invoicing dates. Offer the free audit, or a member of the team, instead.
 - Never give medical, legal, tax or financial advice.

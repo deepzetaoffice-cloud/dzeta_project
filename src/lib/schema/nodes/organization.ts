@@ -70,7 +70,7 @@ export function organizationNode({ id, logoId, url, founderId, catalogId }: Orga
     logo: { '@id': logoId },
     founder: { '@id': founderId },
     sameAs: siteConfig.social.map((profile) => profile.url),
-    // Facts §2, Monday–Saturday 08:00–17:00 GST. The dayOfWeek names are schema.org's.
+    // Facts §2, Monday–Friday 08:00–17:00 GST. The dayOfWeek names are schema.org's.
     openingHoursSpecification: [
       {
         '@type': 'OpeningHoursSpecification',

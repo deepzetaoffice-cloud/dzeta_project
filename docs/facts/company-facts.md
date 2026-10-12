@@ -1,6 +1,6 @@
 # Company Facts (single source of truth)
 
-> **Applies to:** every page, schema node, footer, contact detail and piece of copy · **Precedence:** the only allowed source of business facts · **Last reviewed:** 2026-10-08
+> **Applies to:** every page, schema node, footer, contact detail and piece of copy · **Precedence:** the only allowed source of business facts · **Last reviewed:** 2026-10-12
 
 **Rules for agents**
 - Use only values marked **CONFIRMED**. A value marked **UNKNOWN** must never be guessed, approximated or filled with something plausible.
@@ -35,11 +35,11 @@
 | Phone (international format) | +971 54 547 6335 | CONFIRMED (owner, 2026-10-08; Deepzeta's main contact number) |
 | WhatsApp number | +971 54 547 6335 | CONFIRMED (owner, 2026-10-08; decision 0027; the same number as the phone, on Meta's WhatsApp Cloud API, so it can't be used in the WhatsApp app). **Live on WhatsApp only once Track A registers it**: the site's WhatsApp button and `wa.me` links wait until then |
 | Public contact email | hello@deepzeta.ai | CONFIRMED (owner, 2026-09-29) |
-| Opening hours | Monday to Saturday, 08:00–17:00 GST (UTC+4); closed Sunday | CONFIRMED (owner, 2026-09-29) |
-| Google Business Profile URL | — | PENDING (created once the full licence is issued) |
+| Opening hours | Monday to Friday, 08:00–17:00 GST (UTC+4); closed Saturday and Sunday | CONFIRMED (owner, 2026-09-29; Monday to Friday since 2026-10-12) |
+| Google Business Profile URL | https://share.google/MoFRpm3UUJkskqRyT | CONFIRMED (owner, 2026-10-12). The site doesn't show it yet: the footer, the contact page and the schema `sameAs` take it in their own change |
 | Social profiles (`sameAs`) | See §2.1 | CONFIRMED |
 
-**Values that aren't confirmed yet are one variable each, never scattered.** They are the trade licence number, office pin and Google Business Profile (owner, 2026-09-29).
+**Values that aren't confirmed yet are one variable each, never scattered.** They are the trade licence number and the office pin (owner, 2026-09-29); the Google Business Profile was confirmed on 2026-10-12.
 - Code reads every fact from one typed site config (`src/lib/site-config.ts`, built in P0/P4). A PENDING or UNKNOWN fact is `null` there.
 - Everything that uses it hides itself while it's `null`:
   - schema `telephone`, `contactPoint`, `geo` and `hasCredential`
@@ -87,10 +87,10 @@ These are for building and deploying only. They never appear in page content, th
 
 | Fact | Value | Status | Source |
 |---|---|---|---|
-| Primary market | UAE first, then GCC | CONFIRMED | Blueprint D3 |
+| Primary market | UAE, then GCC, then worldwide | CONFIRMED | Blueprint D3; widened to worldwide by the owner, 2026-10-12 |
 | Primary conversion | Book a free AI automation audit | CONFIRMED | Blueprint D5 |
 | Free AI audit length | 30 minutes | CONFIRMED | Owner, 2026-10-07 (decision 0027). The catalogue's 0.1 says "30–45 minute"; the booked length is 30 |
-| Free AI audit booking hours | Monday to Saturday, 10:00–17:00 GST | CONFIRMED | Owner, 2026-10-07 (decision 0027). The last start is 16:30 |
+| Free AI audit booking hours | Monday to Friday, 10:00–17:00 GST | CONFIRMED | Owner, 2026-10-07 (decision 0027); Monday to Friday since 2026-10-12. The last start is 16:30 |
 | Free AI audit calendar gap | 30 minutes after each audit (internal; not said to visitors) | CONFIRMED | Owner, 2026-10-07 (decision 0027) |
 | Audit meeting types | A phone call (Deepzeta AI calls the visitor at the booked time), Google Meet, or an office visit | CONFIRMED | Owner, 2026-10-07 (decision 0027) |
 | Secondary contact | WhatsApp (floating button) | CONFIRMED | Blueprint D5 |
@@ -110,6 +110,8 @@ These are for building and deploying only. They never appear in page content, th
 
 Bios for the founder and any team members are still UNKNOWN (owner to provide). Profile URLs are copied exactly as written here.
 
+The founder's background, given by the owner on 2026-10-12, is in `sales-knowledge.md` 8.2–8.3: computer engineering from 2012, graduated in 2015, and his skills. The WhatsApp agent may use it. The website's bio and the Credentials cell above stay UNKNOWN until the owner approves a bio text. The team: a dedicated team for each area (development, social media, AI automation, mobile apps; owner, 2026-10-12); names and numbers are UNKNOWN.
+
 ### 4.1 The founder's other companies
 
 Source: owner, 2026-09-29.
@@ -125,6 +127,7 @@ Source: owner, 2026-09-29.
 - These are **separate businesses** from Deepzeta AI. Never share their name, address, phone or Google Business Profile with Deepzeta AI's NAP, and never add them to Deepzeta AI's `sameAs`.
 - They appear only in the founder's visible bio (About page) and in his Person schema (08 §3), with the URLs exactly as written here.
 - Wasleen is not a Deepzeta AI client or case study unless the owner confirms that, with publishable results (§5).
+- Deepzeta's team built www.wasleen.com and www.dubaiapprovalconsultants.com (owner, 2026-10-12). The WhatsApp agent may share those two as "websites built by our team" (`sales-knowledge.md` 2.7), with no results claimed. They aren't case studies (§5).
 
 ## 5. Proof
 
