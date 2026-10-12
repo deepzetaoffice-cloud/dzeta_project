@@ -67,3 +67,17 @@ Status of every entry: **APPROVED (owner, 2026-10-12)**.
 | 4.5 | "Which technology do you use?" | Our expert confirms the right setup for your project |
 | 4.6 | Common doubts | **"I have an app idea. Can you build it?"** Yes. We start with the smallest version that proves the idea, then grow it in phases; our expert maps it with you in the free session. **"Will you sign an NDA?"** Yes, before you share the details. **"Can you take over an app another company built?"** Yes, after our expert reviews the code and the access. **"Will it work in Arabic?"** Yes: Arabic and English, with right-to-left screens, and other languages too |
 | 4.7 | What the agent asks a software or app lead | What the app should do; who uses it (customers, staff or both); web, mobile or both; which systems it must connect to; roughly how many users; whether any designs or documents are ready; languages; any deadline |
+
+## 5. Growth & Ranking (SEO, AI search, local, ads)
+
+Status of every entry: **APPROVED (owner, 2026-10-12)**.
+
+| # | Topic | Approved answer |
+|---|---|---|
+| 5.1 | How fast things happen | Technical SEO & Schema Audit, the report and fix list: 3–5 days · Google Business Profile optimised (Arabic + English): within 1 week · AI-search (GEO) setup on the website: 1–2 weeks · Ad campaigns live, after access and platform approval: 3–5 days. The agent always adds: ads can bring leads from the first week; SEO and AI-search results build over months, not days; we report progress every month |
+| 5.2 | The steps (SEO and GEO) | 1. The free session · 2. Audit and a fix list, ranked by impact · 3. Technical fixes and structured data · 4. A content plan: the pages, FAQs and searches to win · 5. Google Business Profile and local listings · 6. Monthly work, with a monthly report on rankings, traffic, AI visibility and leads |
+| 5.3 | Ad budget | Paid by the client directly to Google, Meta and the other platforms, in the client's own ad accounts. Our management is quoted separately. Our expert recommends a budget in the free session; the agent never states a budget figure |
+| 5.4 | Ownership | The ad accounts, Google Business Profile, Search Console and Analytics stay in the client's name, and we get access |
+| 5.5 | Website & AI Search Health Check | Both: the free session gives the first look at the website and its AI visibility, and the full Health Check is a separate paid service, quoted after the free session |
+| 5.6 | Common doubts | **"Can you guarantee first place on Google?"** As 2.7: no one can honestly guarantee rankings. **"What is GEO / AI search?"** Being named and recommended when people ask ChatGPT, Gemini, Perplexity or Google's AI answers about your service; we set the business up so these engines understand and cite it. **"SEO or ads first?"** Ads bring leads quickly while you pay; SEO and AI search build traffic that keeps coming; our expert recommends the right mix for your goals and budget in the free session. **"Do you do Arabic SEO?"** Yes, in Arabic and English, including Google Maps for each area and emirate. **"Can you get us more reviews?"** We never buy or write fake reviews; we set up automatic review requests to your real customers |
+| 5.7 | What the agent asks a growth lead | The website link; the main services, and the areas or emirates they serve; who their customers are; whether they're on Google Maps; whether they run ads now, and where; their main competitors; the goal (calls, bookings or sales); languages |
