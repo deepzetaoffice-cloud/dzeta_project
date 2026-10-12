@@ -32,6 +32,8 @@ Four kinds of block are emitted. Every other row above is a reserved pattern tha
 - **The services hub** (`/services`, R010; `graphs/servicesHub.ts`): the CollectionPage, `#itemlist` and `#catalog` (both list the live services only; each offer's `itemOffered` → its `#service`), `#breadcrumb` and `#faq`.
 - **A service page** (`/services/<slug>`; the pilot R027 today; `graphs/service.ts`): `#service` (`provider` → `#organization`, the organization's `areaServed`, `serviceType` = the pillar's name; no `offers` while no price is published; no parent pillar until its page is live), the WebPage (`mainEntity` → `#service`, `breadcrumb` → `#breadcrumb`), `#breadcrumb` and `#faq`. No HowTo: the visible steps describe how the system runs, not steps the reader follows (C11 read strictly; the P6 part A plan).
 
+- **A legal page** (`/privacy`, R006, since 2026-10-12; `graphs/legal.ts`, which `/terms` reuses): the WebPage (`dateModified` = the page's "Last updated" date, `breadcrumb` → `#breadcrumb`; no `mainEntity`), `#breadcrumb` and `#faq`. No "PrivacyPolicy" type: schema.org has none (C30).
+
 `check:schema` resolves each reference within its page, or against a node another built page defines (the hub's `#catalog`, a service's `#service`), and checks every BreadcrumbList item against the built pages.
 
 ## Conventions (spec §1's decisions)

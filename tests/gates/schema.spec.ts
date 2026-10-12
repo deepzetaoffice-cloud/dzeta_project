@@ -54,6 +54,7 @@ test('golden fixtures match the rendered graphs', async ({ request, baseURL }) =
     { url: served + '/', fixture: 'tests/fixtures/schema/home.json' },
     { url: served + '/services', fixture: 'tests/fixtures/schema/services-hub.json' },
     { url: served + '/services/speed-to-lead-system', fixture: 'tests/fixtures/schema/service.json' },
+    { url: served + '/privacy', fixture: 'tests/fixtures/schema/privacy.json' },
   ];
   for (const { url, fixture } of fixtures) {
     const html = await (await request.get(url)).text();

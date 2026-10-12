@@ -29,6 +29,9 @@ export type FounderCompany = { name: string; url: string; hasOffice: boolean };
 export const siteConfig = {
   brandName: BRAND_NAME, // facts §1 (conflict C29), kept in brand.ts (imported above)
   legalName: 'Deepzeta Digital Solutions L.L.C.', // facts §1 (decision D2)
+  licenceAuthority: 'Dubai Department of Economy and Tourism (DET)', // facts §1 (the privacy policy, §2)
+  // Facts §1: PENDING until the full licence is issued; the privacy policy hides its sentence while null
+  licenceNumber: null as string | null,
   positioningLine: 'Deepzeta AI builds online growth for every business.', // facts §1
   email: 'hello@deepzeta.ai', // facts §2
   // Facts §2, the one-line display. The hash before the office number is written \u0023, because

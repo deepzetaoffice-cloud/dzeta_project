@@ -1,0 +1,192 @@
+[
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "ProfessionalService",
+        "@id": "https://deepzeta.ai/#organization",
+        "name": "Deepzeta AI",
+        "legalName": "Deepzeta Digital Solutions L.L.C.",
+        "url": "https://deepzeta.ai",
+        "email": "hello@deepzeta.ai",
+        "telephone": "+971 54 547 6335",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+971 54 547 6335",
+          "contactType": "customer service",
+          "availableLanguage": "en",
+          "areaServed": "AE"
+        },
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Office #202, Al Hilal Bank Building, Al Qusais 2",
+          "addressLocality": "Dubai",
+          "addressRegion": "Dubai",
+          "addressCountry": "AE"
+        },
+        "foundingDate": "2026-08-02",
+        "logo": {
+          "@id": "https://deepzeta.ai/#logo"
+        },
+        "founder": {
+          "@id": "https://deepzeta.ai/#person-jamsheed-khalid"
+        },
+        "sameAs": [
+          "https://www.linkedin.com/company/deepzeta-ai-digital-solutions-dubai/",
+          "https://www.instagram.com/deepzeta.ai/",
+          "https://www.facebook.com/DeepzetaAi/",
+          "https://www.youtube.com/@DeepzetaAiAgency",
+          "https://www.tiktok.com/@deepzeta.ai",
+          "https://x.com/Deep_Zeta",
+          "https://www.threads.com/@deepzeta.ai",
+          "https://www.snapchat.com/@deepzeta.ai",
+          "https://www.pinterest.com/deepzeta_ai/"
+        ],
+        "openingHoursSpecification": [
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+            "opens": "08:00",
+            "closes": "17:00"
+          }
+        ],
+        "areaServed": {
+          "@type": "Country",
+          "name": "United Arab Emirates",
+          "sameAs": "https://www.wikidata.org/wiki/Q878"
+        },
+        "hasOfferCatalog": {
+          "@id": "https://deepzeta.ai/services#catalog"
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://deepzeta.ai/#website",
+        "url": "https://deepzeta.ai",
+        "name": "Deepzeta AI",
+        "publisher": {
+          "@id": "https://deepzeta.ai/#organization"
+        },
+        "inLanguage": "en"
+      },
+      {
+        "@type": "ImageObject",
+        "@id": "https://deepzeta.ai/#logo",
+        "url": "https://deepzeta.ai/brand/deepzeta-logo-512.png",
+        "width": 512,
+        "height": 512
+      }
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "@id": "https://deepzeta.ai/privacy",
+        "url": "https://deepzeta.ai/privacy",
+        "name": "Privacy Policy: How We Protect Your Data",
+        "isPartOf": {
+          "@id": "https://deepzeta.ai/#website"
+        },
+        "about": {
+          "@id": "https://deepzeta.ai/#organization"
+        },
+        "inLanguage": "en",
+        "description": "Deepzeta AI collects only the personal data it needs to answer your enquiry and deliver your project, and never sells it. Analytics and marketing cookies wait for your permission if you visit from the EEA, the UK or Switzerland; elsewhere they're on until you switch them off in Cookie settings. Email hello@deepzeta.ai to use your UAE PDPL rights.",
+        "breadcrumb": {
+          "@id": "https://deepzeta.ai/privacy#breadcrumb"
+        },
+        "dateModified": "2026-10-12"
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": "https://deepzeta.ai/privacy#breadcrumb",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "name": "Home",
+            "item": "https://deepzeta.ai"
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Privacy policy",
+            "item": "https://deepzeta.ai/privacy"
+          }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://deepzeta.ai/privacy#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Does Deepzeta AI sell my personal data?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. We never sell or rent your personal data, and we never give it to other companies for their own marketing. Service providers such as our hosting and email companies process it only to run our services for you."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What data do you collect when I book a free AI audit?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Your name, your WhatsApp number, the time you choose, how you'd like to meet and what you'd like to discuss, plus your email if you want a confirmation by email. We use this only to prepare and hold your audit, and we delete booking records 24 months after our last contact."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Do you use cookies?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Essential cookies keep the site secure and working. Analytics and marketing cookies wait for your permission if you visit from the EEA, the UK or Switzerland, and are on elsewhere. You can change your choice at any time from \"Cookie settings\" at the bottom of every page."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Which companies process my data for you?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Our main service providers are Vercel (hosting), Google (email, calendar and analytics), n8n (automation), Supabase (our WhatsApp records), DeepSeek and OpenAI (our WhatsApp AI assistant), Meta (WhatsApp and ad measurement) and Microsoft (ad measurement). Section 7 lists what each one does for us and which data it handles."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is my data stored in the UAE?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Not always. Some of our providers store or process data outside the UAE: in the European Union, India, the United States and China. We transfer data only as the UAE PDPL allows and choose providers that commit to protecting it. Section 8 names the provider in each place."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What happens when I message you on WhatsApp?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Our AI assistant replies first and tells you it's an AI. DeepSeek writes its replies, and OpenAI turns voice notes into text and checks messages for safety. We delete messages after 90 days and clear the assistant's short summary of your enquiry 12 months after your last message. Ask for a person at any time."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How long do you keep my data?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Only as long as we need it. For example, enquiries that don't become projects are kept for 24 months after our last contact, and billing records for as long as UAE tax and accounting laws require. Section 12 lists every period."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How do I see, correct or delete my data?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Email hello@deepzeta.ai and tell us what you need. We'll confirm it's you, then answer within the time the UAE PDPL allows. You can also withdraw consent or unsubscribe from marketing emails at any time."
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

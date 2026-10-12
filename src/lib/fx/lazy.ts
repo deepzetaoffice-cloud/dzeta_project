@@ -18,6 +18,8 @@ const MODULES: Record<string, () => Promise<{ enhance: (scope: ParentNode) => vo
   demo: () => import('@/components/demos/demo-enhance').then((m) => ({ enhance: m.enhanceDemos })),
   // The mega menu's full panel, fetched when a visitor reaches for the Services button (L8, decision 0026)
   mega: () => import('@/components/layout/mega-enhance').then((m) => ({ enhance: m.enhanceMega })),
+  // The legal pages' contents: the section in view (the privacy page plan)
+  toc: () => import('@/components/sections/legal/toc-enhance').then((m) => ({ enhance: m.enhanceToc })),
 };
 
 // One shared observer: a region enters the viewport → arm its trigger; the first pointerover,

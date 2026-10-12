@@ -1,6 +1,7 @@
 # Privacy Policy: content and layout (DRAFT)
 
 > **Status:** Final wording approved by the owner, 2026-09-29. **Changed 2026-09-30:** the AI provider is now DeepSeek, which stores data in China (decision 0016; §6, §7, §8, Q4–Q6), so the wording needs the owner's re-approval. Before `/privacy` ships, the P7 check of whether DeepSeek trains on API inputs (0016) must be done, and §6 and Q6 updated if it does. **Changed 2026-10-02 (P3, conflict C52):** consent by region: analytics and marketing wait for permission in the EEA, the UK and Switzerland and are on elsewhere until switched off (the hero, at a glance, §3, §4, §5, §9, Table E, §18, Q3 and Part 3 note 2); approved by the owner with the P3 plan (section N). **Changed 2026-10-02 (P3 part B's close):** four sentences that still said optional cookies wait for consent everywhere now name the region (§1's "In short", Table C's Google row and its ad networks row, FAQ Q4, which also gains a closing sentence to reach the 40-word floor); approved by the owner, 2026-10-02. **Changed 2026-10-02 (P3 part C, C1e):** the ad networks named are now Meta and Microsoft Advertising (Table C's ad-networks row, Table D's Marketing row, FAQ Q4, the "differs" row and Part 3 note 2); Google Ads and LinkedIn are postponed until after launch, and each name comes back in the same change that adds it to the container; approved by the owner with the part C plan (Q3, all recommendations). No external legal review (the owner's decision). Values in `{braces}` are variables from the site config; build dependencies are listed in Part 3.
+> **Changed 2026-10-12 (the privacy page plan, `docs/plans/2026-10-12-privacy-page.md`), so it states what runs today:** the phone and WhatsApp number show; Table C and Q4 list only active providers (Cloudflare, Upstash, Cal.com and PageSpeed Insights return with the features that use them); §6 and Q6 describe the WhatsApp AI assistant (decisions 0027, 0030), and the demo and tools return when they ship; §8 and Q5 add India (Supabase, Mumbai); Table E matches the deletion jobs that run; Q2 describes booking on WhatsApp; §18 adds STOP on WhatsApp. Decision 0016's check is done: DeepSeek's API terms give it no stated right to train on what we send (external sources S013); OpenAI doesn't train on API data (S012). **Re-approved by the owner, 2026-10-12** (with S001, S002, S007, S012, S014 and S015; hello@deepzeta.ai confirmed working; old calendar events cleared by the owner once a year).
 > **Moves to:** `src/content/en/legal/privacy.ts` (typed content) in P6. The page is `/privacy` (T2).
 > **Adapted from:** the owner's other site's privacy page (`Planning Folder/For Ai/Other project references only/privacy-policy-content-and-layout.md`).
 
@@ -40,9 +41,9 @@ The owner asked to change only the brand and related topics. Several of the refe
 | `{licenceNumber}` | `null` (UNKNOWN) |
 | `{address}` | Office #202, Al Hilal Bank Building, Al Qusais 2, Dubai, United Arab Emirates |
 | `{email}` | hello@deepzeta.ai |
-| `{phone}`, `{whatsapp}` | `null` (PENDING) |
+| `{phone}`, `{whatsapp}` | +971 54 547 6335 (CONFIRMED, facts §2) |
 | `{hours}` | Monday to Saturday, 8:00 AM to 5:00 PM (GST) |
-| `{lastUpdated}` | the date the owner approves the final text |
+| `{lastUpdated}` | 12 October 2026 (`2026-10-12`, the owner's re-approval) |
 
 ---
 
@@ -96,7 +97,7 @@ The owner asked to change only the brand and related topics. Several of the refe
 
 ### 1 · `introduction` · Introduction
 
-This Privacy Policy explains how {legalName}, trading as {brandName} ("{brandName}", "we", "us"), collects, uses, shares and protects your personal data when you visit this website, use our demos and tools, contact us or work with us.
+This Privacy Policy explains how {legalName}, trading as {brandName} ("{brandName}", "we", "us"), collects, uses, shares and protects your personal data when you visit this website, message us on WhatsApp, contact us or work with us.
 
 We handle personal data in line with the UAE Federal Decree-Law No. 45 of 2021 on the Protection of Personal Data (the "PDPL") and the other UAE laws that apply to us.
 
@@ -116,20 +117,19 @@ We collect the smallest amount of personal data that does the job. We don't ask 
 
 | Category | Examples | When |
 |---|---|---|
-| Contact details | Name, business name, email, phone or WhatsApp number | You book an audit, fill in a form, book a call or message us |
-| Your request | The service you're interested in, your message, your website address, answers you give in our tools | You send a form or use a tool |
-| Booking details | Meeting time, time zone, notes you add | You book a call |
-| Conversations | Emails and WhatsApp messages with us | You contact us or we reply |
+| Contact details | Name, business name, email, phone or WhatsApp number, your WhatsApp profile name | You message us, email us or book an audit |
+| Your request | The service you're interested in and your message | You message us or email us |
+| Booking details | Meeting time, how you'd like to meet, the email you give for a confirmation, notes | You book a call |
+| Conversations | Emails and WhatsApp messages with us, including voice notes and their written transcript | You contact us or we reply |
+| What our assistant remembers | A short summary of your enquiry: your name, your email if you gave it, and what you asked | You chat with our WhatsApp assistant |
 | Project and billing records | Scope, quotes, invoices, payment status | You become a client |
 | How you found us | Campaign tags (UTM) and ad click IDs saved with your form | You arrive from a link or an ad and send a form |
 | Technical data | IP address, browser, device, pages visited, approximate location (city level) | You visit the site. Analytics data: with your consent if you're in the EEA, the UK or Switzerland; elsewhere unless you switch it off. |
-| AI demo and tool inputs | What you type into the AI agent demo or the Social Media Content Planner | You use them |
 
 ### 4 · `how-we-collect` · How we collect it
 
-- **From you:** through our forms, booking page, email, WhatsApp and the tools on this site.
+- **From you:** through WhatsApp, email and phone calls.
 - **Automatically:** through essential cookies and, if you allow them, analytics and marketing cookies (§9). If you visit from outside the EEA, the UK and Switzerland, analytics and marketing are on until you switch them off.
-- **From your public website:** when you ask the Website & AI Search Health Check to review a web address, we read that public page. We never log in or collect personal data from it.
 
 ### 5 · `how-we-use` · How we use it, and why we're allowed to
 
@@ -138,6 +138,7 @@ We collect the smallest amount of personal data that does the job. We don't ask 
 | Purpose | Data used | Basis |
 |---|---|---|
 | Reply to you, prepare and schedule your free AI audit | Contact details, your request, booking details | Your request (steps before a contract) |
+| Answer your WhatsApp messages with our AI assistant, and remember your enquiry | Your messages and voice notes, contact details, the assistant's summary | Your request (steps before a contract) |
 | Deliver and support your project | Contact details, project records, conversations | Our contract with you |
 | Invoicing, tax and accounting | Billing records | UAE legal obligations |
 | Keep the site secure and stop spam and abuse | Technical data | Needed to run the site safely |
@@ -148,11 +149,13 @@ We collect the smallest amount of personal data that does the job. We don't ask 
 
 We don't use your data for anything unrelated to these purposes without asking you first.
 
-### 6 · `ai-features` · AI features and tools
+### 6 · `ai-features` · Our WhatsApp AI assistant
 
-- **AI agent demo:** a demonstration. What you type is sent to our AI provider (DeepSeek) to generate replies. Please don't share personal or sensitive information in it. We don't keep demo conversations in our records.
-- **Social Media Content Planner:** your answers about your business are sent to our AI provider to write your plan. If you ask for the full plan, we also receive your email address.
-- **Website & AI Search Health Check:** checks the public page at the address you give, using Google PageSpeed Insights and our own checks. If you ask for the full report, we receive your email address.
+- **Who replies:** when you message us on WhatsApp, an AI assistant replies first and tells you it's an AI. It answers from what we've written about our services, and it can book your free AI automation audit.
+- **How it works:** your messages go to DeepSeek, which writes the assistant's replies. OpenAI turns voice notes into text, checks messages for safety, and helps the assistant find the right answer in what we've written. OpenAI doesn't use what we send it to train its models.
+- **What it remembers:** a short summary of your enquiry (your name, your email if you gave it, and what you asked), so you don't have to repeat yourself. We delete the messages themselves after 90 days, and clear the summary 12 months after your last message.
+- **Talking to a person:** ask for a person at any time. If the assistant can't help, it passes your enquiry to our team, and a team member replies from their own WhatsApp number.
+- **Please don't share** medical, ID or payment details in the chat.
 - **No automated decisions:** we don't make decisions about you, with legal or similarly significant effects, based only on automated processing.
 
 ### 7 · `sharing` · Who we share it with
@@ -165,13 +168,12 @@ We use a small number of service providers to run this website and our services.
 
 | Provider | What they do for us | Data involved |
 |---|---|---|
-| Vercel | Hosts this website | Technical data; forms as they pass through |
-| Google | Email and our customer records (Google Workspace); tag management and analytics (Google Tag Manager, Google Analytics; with your consent in the EEA, the UK and Switzerland); speed checks (PageSpeed Insights) | Contact details, requests, conversations; analytics data; the web address you check |
-| n8n | Runs our automations: passes your enquiry to our records and our email | Contact details, your request |
-| DeepSeek | Powers the AI agent demo and the Content Planner | What you type into them |
-| Cloudflare | Spam protection on forms (Turnstile) | Browser and device signals |
-| Upstash | Short-term limits that stop form abuse | IP address, kept briefly |
-| Cal.com | Call booking | Name, email, booking details |
+| Vercel | Hosts this website | Technical data |
+| Google | Our email and calendar (Gmail, Google Calendar); tag management and analytics (Google Tag Manager, Google Analytics; with your consent in the EEA, the UK and Switzerland) | Contact details, requests, conversations, booking details; analytics data |
+| n8n | Runs our automations: our WhatsApp assistant's steps, team alerts and booking emails | Your messages, contact and booking details |
+| Supabase | Stores our WhatsApp conversations, the assistant's summary of your enquiry, and bookings | Phone number, profile name, messages, booking details |
+| DeepSeek | Writes our WhatsApp assistant's replies | Your messages and the conversation so far |
+| OpenAI | Turns voice notes into text, checks messages for safety, and finds answers in what we've written | Your messages and voice notes |
 | Meta (WhatsApp Business Platform) | WhatsApp messages with us | Phone number, profile name, messages |
 | Meta, Microsoft Advertising (with marketing consent in the EEA, the UK and Switzerland; on elsewhere until you switch them off) | Measure whether our ads work | Cookie identifiers; a hashed (scrambled) email or phone after you send a form |
 
@@ -180,7 +182,7 @@ We may also disclose personal data when UAE law, a court or a competent authorit
 
 ### 8 · `international-transfers` · Where your data is stored
 
-Some of our providers store or process data outside the UAE, for example in the European Union, the United States or China. When that happens, we transfer it only as the PDPL allows, and we choose providers that commit to protecting it.
+Some of our providers store or process data outside the UAE: in the European Union (n8n), India (Supabase), the United States (OpenAI, Google, Meta, Microsoft and Vercel) and China (DeepSeek). When that happens, we transfer it only as the PDPL allows, and we choose providers that commit to protecting it.
 
 ### 9 · `cookies` · Cookies and similar technologies
 
@@ -223,10 +225,10 @@ We keep personal data only as long as we need it for the purpose you gave it for
 | Enquiries that don't become projects | 24 months after our last contact |
 | Client project records | For the project, then as long as UAE law requires |
 | Billing and accounting records | As long as UAE tax and accounting laws require |
-| WhatsApp and email conversations | 24 months after the last message, or longer as part of a client project record |
-| Booking records | 24 months |
-| Tool results without a report request | Until your result is shown, and no longer than 30 days |
-| Spam-protection and abuse limits | Up to 24 hours |
+| WhatsApp messages | 90 days |
+| Our WhatsApp assistant's summary of your enquiry | 12 months after your last message |
+| Your WhatsApp number and booking records | 24 months after our last contact |
+| Email conversations | 24 months after the last message, or longer as part of a client project record |
 | Analytics data | 14 months |
 | Your cookie choice | 12 months |
 | How you found us (campaign tags and ad click IDs, in your browser) | 90 days |
@@ -278,6 +280,7 @@ For any privacy question or request:
 Where we rely on your consent or your choice (analytics and marketing cookies, marketing emails, WhatsApp follow-ups you opted into), you can withdraw it at any time:
 - **Cookies:** change your choice in "Cookie settings" at the bottom of every page.
 - **Emails:** use the unsubscribe link in any email.
+- **WhatsApp:** send STOP, and we won't send you follow-up messages.
 - **Anything else:** email {email}.
 
 Withdrawing consent doesn't affect what we did before you withdrew it. We may still need to keep some records that the law requires.
@@ -290,19 +293,19 @@ Withdrawing consent doesn't affect what we did before you withdrew it. We may st
 No. We never sell or rent your personal data, and we never give it to other companies for their own marketing. Service providers such as our hosting and email companies process it only to run our services for you.
 
 **Q2. What data do you collect when I book a free AI audit?**
-Your name, business name, email, phone or WhatsApp number, the service you're interested in and your message. If you arrived from a link or an ad, we also save the campaign tag. We use this only to prepare and schedule your audit.
+Your name, your WhatsApp number, the time you choose, how you'd like to meet and what you'd like to discuss, plus your email if you want a confirmation by email. We use this only to prepare and hold your audit, and we delete booking records 24 months after our last contact.
 
 **Q3. Do you use cookies?**
 Yes. Essential cookies keep the site secure and working. Analytics and marketing cookies wait for your permission if you visit from the EEA, the UK or Switzerland, and are on elsewhere. You can change your choice at any time from "Cookie settings" at the bottom of every page.
 
 **Q4. Which companies process my data for you?**
-Our main service providers are Vercel (hosting), Google (email, customer records and analytics), n8n (automation), DeepSeek (AI demos), Cloudflare (spam protection), Upstash (abuse limits), Cal.com (booking), Meta (WhatsApp and ad measurement) and Microsoft (ad measurement). Section 7 lists what each one does for us and which data it handles.
+Our main service providers are Vercel (hosting), Google (email, calendar and analytics), n8n (automation), Supabase (our WhatsApp records), DeepSeek and OpenAI (our WhatsApp AI assistant), Meta (WhatsApp and ad measurement) and Microsoft (ad measurement). Section 7 lists what each one does for us and which data it handles.
 
 **Q5. Is my data stored in the UAE?**
-Not always. Some of our providers store or process data outside the UAE, for example in the European Union, the United States or China. We transfer data only as the UAE PDPL allows and choose providers that commit to protecting it.
+Not always. Some of our providers store or process data outside the UAE: in the European Union, India, the United States and China. We transfer data only as the UAE PDPL allows and choose providers that commit to protecting it. Section 8 names the provider in each place.
 
-**Q6. What happens to what I type into the AI agent demo?**
-It's sent to our AI provider, DeepSeek, to generate the replies you see. The demo is for trying our AI, so please don't share personal or sensitive information in it.
+**Q6. What happens when I message you on WhatsApp?**
+Our AI assistant replies first and tells you it's an AI. DeepSeek writes its replies, and OpenAI turns voice notes into text and checks messages for safety. We delete messages after 90 days and clear the assistant's short summary of your enquiry 12 months after your last message. Ask for a person at any time.
 
 **Q7. How long do you keep my data?**
 Only as long as we need it. For example, enquiries that don't become projects are kept for 24 months after our last contact, and billing records for as long as UAE tax and accounting laws require. Section 12 lists every period.
@@ -339,7 +342,8 @@ These keep the promises in this policy true. They are checked by the plans named
 1. **Cookie list (P3):** "Cookie settings" lists every cookie's name, provider and lifetime, generated from the live GTM container. Nothing loads that isn't listed.
 2. **Consent (P3):** for visitors from the EEA, the UK and Switzerland, no analytics or marketing tag runs before consent; for others they run until switched off. Server-side conversion events (Meta now; LinkedIn and Google offline import when they start) with hashed contact details go only for leads whose consent state at sending includes Marketing (chosen, or the default outside Europe) (`consent-copy.md` §5).
 3. **Providers:** Table C and FAQ Q4 list only providers that are active. Adding or removing a provider changes this page in the same pull request.
-4. **AI demo (P7):** demo conversations are not written to our records (§6).
-5. **Retention:** Table E is carried out as written. The GA4 data-retention setting is 14 months; spam and abuse limits expire within 24 hours; tool results expire within 30 days.
+4. **AI demo (P7):** when the demo ships, §6 describes it again, and demo conversations are not written to our records.
+5. **Retention:** Table E is carried out as written. The GA4 data-retention setting is 14 months. In Supabase, three daily jobs keep the WhatsApp rows true: `purge-old-messages` (90 days), `purge-old-summaries` (12 months after the last message) and `purge-old-contacts` (WhatsApp numbers and bookings, 24 months after the last contact; the privacy page plan, question 3; live since 2026-10-12). Booking events in the Google Calendar are cleared by the owner once a year (a pre-launch register row). When forms and tools ship, their rows (spam limits, tool results) come back with them.
 6. **Variables:** `{licenceNumber}`, `{phone}` and `{whatsapp}` stay hidden while they are `null` (facts file §2).
 7. **Data requests:** requests to {email} are acknowledged within 24 hours on business days, as §13 promises.
+8. **The WhatsApp assistant (§6):** the facts it states come from the external sources S012 (OpenAI) and S013 (DeepSeek, decision 0016's check), and from the stack's own settings (decisions 0027, 0030). A change of AI provider or of a deletion period changes §6, Table C, Table E and the FAQ in the same change.

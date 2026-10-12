@@ -71,7 +71,7 @@ A row is never deleted, and an ID is never reused.
 | R003 | `/about` | About | Company | — | Who runs Deepzeta AI, where it is, how it works | T2 | P6 | W1 | planned | index | Founder bio |
 | R004 | `/about/jamsheed-khalid` | Founder profile | Company | — | Who Jamsheed Khalid is (founder, author) | T2 | P6 | W3 | planned | index | Bio, photo, credentials |
 | R005 | `/contact` | Contact | Company | — | How to reach Deepzeta AI (office, hours, channels) | T2 | P6 | W1 | planned | index | Phone, WhatsApp (variables) |
-| R006 | `/privacy` | Legal | Company | — | How Deepzeta AI handles personal data (UAE PDPL) | T2 | P6 | W1 | planned | index | — |
+| R006 | `/privacy` | Legal | Company | — | How Deepzeta AI handles personal data (UAE PDPL) | T2 | P6 | W1 | live | index | — |
 | R007 | `/terms` | Legal | Company | — | Terms for using the site, the audit and the tools | T2 | P6 | W1 | planned | index | — |
 | R008 | `/editorial-policy` | Editorial policy | Company | — | How Deepzeta AI writes, reviews and uses AI in its content | T2 | P6 | W1 | planned | index | Owner approval of the process description |
 
