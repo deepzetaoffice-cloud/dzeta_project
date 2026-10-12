@@ -73,3 +73,4 @@ Phase: P6 (registry W1) · Branch: `feat/privacy-page` · Page tier: standard (T
 ## Progress
 
 - 2026-10-12: plan drafted, then approved with questions 1–3 answered (a).
+- 2026-10-12 · steps 1–2 done: decision 0016's check and the providers' facts from official pages (external sources S012–S015); the draft brought to today's truth; the owner re-approved the wording and approved S001, S002, S007, S012, S014 and S015 ("Last updated" 12 October 2026), confirmed hello@deepzeta.ai receives email, and chose a yearly clear-out of old calendar events (a register row). The `purge_old_contacts` migration is applied (daily at 23:35 UTC; first run deleted nothing; advisors unchanged).
