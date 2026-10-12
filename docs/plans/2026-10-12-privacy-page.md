@@ -1,5 +1,5 @@
 # Plan: the privacy policy page (`/privacy`, R006)
-Status: DRAFT
+Status: APPROVED (owner, 2026-10-12; questions 1–3 answered (a))
 Phase: P6 (registry W1) · Branch: `feat/privacy-page` · Page tier: standard (T2)
 
 ## Goal
@@ -32,6 +32,8 @@ Phase: P6 (registry W1) · Branch: `feat/privacy-page` · Page tier: standard (T
 | `src/lib/routes.ts` | MODIFY | R006 `live: true`: the footer's "Privacy" and the consent banner's policy link appear |
 | `docs/seo/url-registry.md` | MODIFY (R006's status only) | `planned` → `live` |
 | `docs/owner/pre-launch-register.md` | MODIFY (tick) + APPEND-ONLY | Tick the privacy row on approval; a row for Meta's Privacy Policy URL and the Live switch |
+| Supabase migration `purge_old_contacts` (external; question 3) | CREATE | Bookings and WhatsApp contacts with no contact for 24 months are deleted; a daily cron job beside `purge-old-summaries`. Shown to the owner before it's applied |
+| `docs/plans/2026-10-07-automation-pipeline.md` | MODIFY (Progress only) | Records the migration on Track A's side |
 
 ## Steps
 
@@ -66,6 +68,8 @@ Phase: P6 (registry W1) · Branch: `feat/privacy-page` · Page tier: standard (T
 2. **The facts gate:** the policy's periods (12, 14, 24 months, 90 and 30 days, 24 hours, 18 years) and "Decree-Law No. 45" are commitments and a law's name, not business claims. (a) Exempt `src/content/en/legal/privacy.ts`, as `build-run.ts` is (recommended); or (b) add each number to the allowlist.
 3. **Bookings and WhatsApp numbers** have no automatic deletion today. (a) Delete them 24 months after the last contact, by extending the cleanup job (a small Track A migration; it matches the draft's 24 months) (recommended); or (b) the policy says they're kept until you ask us to delete them.
 
+**Answers (owner, 2026-10-12):** 1 (a) three new icons; 2 (a) exempt the privacy content file; 3 (a) delete after 24 months.
+
 ## Progress
 
-- 2026-10-12: plan drafted.
+- 2026-10-12: plan drafted, then approved with questions 1–3 answered (a).

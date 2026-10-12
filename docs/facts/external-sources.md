@@ -23,6 +23,10 @@
 | S009 | UET's consent-relevant first-party cookies | `_uetsid`, `_uetvid`, `_uetsid_exp`, `_uetvid_exp` (lifetimes not stated by Microsoft) | https://learn.microsoft.com/en-us/microsoft-advertising/entitlements/hlp_ba_conc_uet_consentfaq | 2026-10-02 | PROPOSED | withdrawn on Marketing off (`consent.ts`); hidden in Cookie settings until lifetimes are sourced |
 | S010 | GA4's first-party cookies and their lifetime | `_ga` and `_ga_<container-id>`, 24 months | https://support.google.com/analytics/answer/11397207 | 2026-10-02 | PROPOSED | Cookie settings' Analytics list (`vendors.ts`) |
 | S011 | Meta's browser cookies (`_fbp`, `_fbc`) are set by its pixel | — | https://developers.facebook.com/docs/meta-pixel/implementation/gdpr (Meta publishes no lifetime list) | 2026-10-02 | PROPOSED | withdrawn on Marketing off (`consent.ts`) |
+| S012 | OpenAI doesn't use data sent to its API to train or improve its models (unless the customer opts in) | Since 2023-03-01 | https://developers.openai.com/api/docs/guides/your-data | 2026-10-12 | PROPOSED | `/privacy` §6 (decision 0030) |
+| S013 | DeepSeek's Open Platform (API) terms: a developer's own personal data follows DeepSeek's privacy policy (§5.5), which doesn't cover the end users of the developer's application; the terms give DeepSeek no stated right to use API inputs to train its models | Terms released 2026-04-22, effective 2026-04-29 | https://cdn.deepseek.com/policies/en-US/deepseek-open-platform-terms-of-service.html · https://cdn.deepseek.com/policies/en-US/deepseek-privacy-policy.html | 2026-10-12 | PROPOSED | decision 0016's check before `/privacy` ships (not page copy: an absence isn't stated as a promise) |
+| S014 | n8n Cloud runs on Microsoft Azure, and its data is hosted in the European Union | EU | https://n8n.io/security/ | 2026-10-12 | PROPOSED | `/privacy` §8, Q5 |
+| S015 | The UAE Data Office's responsibilities include "preparing systems for complaints and grievances related to data" (the official support for S002) | — | https://u.ae/en/about-the-uae/digital-uae/data/data-protection-laws | 2026-10-12 | PROPOSED | `/privacy` §13 |
 
 ## Change log
 
@@ -31,3 +35,4 @@
 | 2026-09-30 | Created with the first proposed entries | Owner (plan approval, 2026-09-30); entries await approval one by one |
 | 2026-09-30 | S007 added: DeepSeek's data location, for the privacy policy (decision 0016) | Proposed; awaits the owner's approval |
 | 2026-10-02 | S008–S011 added (P3 part C, C1d): Microsoft's UET host and cookies, GA4's cookies, Meta's cookies — for the CSP, the withdraw lists and Cookie settings | Proposed; awaits the owner's approval |
+| 2026-10-12 | S012–S015 added for `/privacy` (the privacy page plan, step 1): OpenAI's API data use, DeepSeek's API terms (decision 0016's check), n8n Cloud's EU hosting, the UAE Data Office's complaint role. S007 re-checked: unchanged (DeepSeek's privacy policy, "Last Update: Feb 10, 2026", stores personal data in the People's Republic of China). Supabase's region is our own setting, not an external fact: `ap-south-1` (Mumbai, India), read from the project on 2026-10-12 | Proposed; awaits the owner's approval |
