@@ -303,14 +303,16 @@ Whenever services or facts change, Claude regenerates the file and you upload it
 
 For each workflow: open it, click **Publish** (top right), then open **⋯** → **Settings** → **Error workflow** = `DZ · Error Alerts` (Claude may have set it already).
 
-0. `DZ · Error Alerts` **first**: n8n only accepts a published workflow as the error workflow. It runs only when another workflow fails. Tell Claude when it's published, and Claude sets it as the error workflow on the others.
+0. `DZ · Error Alerts` **first**: n8n only accepts a published workflow as the error workflow. It runs only when another workflow fails. **Done 2026-10-12**: Claude set it as the error workflow on the six below.
 1. `DZ · Send WhatsApp`
 2. `DZ · Team Alert`
 3. `DZ · Booking Tools`
 4. `DZ · Knowledge Upload (form)`, then do Part G
 5. `DZ · Scheduled Jobs`
-6. `DZ · Cal.com Bookings`
-7. `DZ · Inbound WhatsApp`: **last**. From this moment, real messages get answers.
+6. **Test mode first:** send Claude the phone numbers you'll test from (your personal phone and a second phone). Claude puts them in `config.test_numbers`. While that list has numbers, only they get the agent. Anyone else gets the polite "our team will get back to you shortly" message once a day, and their messages are still saved.
+7. `DZ · Inbound WhatsApp`: **last**. Messages from your test numbers now get answers. Go-live is when Claude empties the test list, after stage 3 and Part I pass.
+
+(`DZ · Cal.com Bookings` comes later, with the Cal.com step; it doesn't exist yet.)
 
 **Leave off:** `DZ · Renew Client (form)` (billing: its email steps still use the old SMTP sender) and the Showcase flow.
 

@@ -307,6 +307,12 @@ None.
     - **Expert Follow-up Requested?** → **Alert Team: Expert Follow-up**, titled 🔥 HOT, Warm or Cold lead
   - Checked: both code nodes passed 27 local cases (English, Arabic and Hindi words with innocent lookalikes, prices in four forms, negated and plain promises in English and Arabic, broken JSON, long replies), and the deployed workflow matched the tested code. Every Code node compiles, the new credentials and wiring are in place, and the workflow is still inactive (34 checks). Open for stage 3: DeepSeek's JSON mode together with tool calls, tested live.
   - The guide's Part G Client ID is corrected to `DZ-0000`, a section "Edit the blocked words" is added, and the weekly check now covers `safety_events` and the expert follow-ups.
+- **2026-10-12 · merged and Part H0:**
+  - The owner approved the knowledge file and said "merge": `main` is at `cf7b47d`, and production shows the Monday-to-Friday hours (footer and `/privacy`, checked live).
+  - Part F: `dz_booking_reminder` in English and Arabic is submitted and in review. Meta flagged `team_alert` as Marketing in two wordings, most likely because `{{2}}` holds a whole free-text alert. It waits for a redesign with fixed blanks, before the team number is used; until then team alerts are email only.
+  - Part H0: `DZ · Error Alerts` is published (active), and it's set as the error workflow on the 6 workflows in use (`DZ · Renew Client` stays off).
+  - The migration `wa_inbound_test_mode` lets `config.test_numbers`, while non-empty, limit the AI to those numbers; everyone else gets the paused notice once a day. It's empty until the owner sends the test numbers.
+  - The owner's n8n screen showed "19 hours left" on the Cloud trial (0/1000 executions): a paid plan is needed before the workflows can keep running.
 
 **The retention migration (S4), as applied:**
 
