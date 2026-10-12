@@ -275,7 +275,7 @@ Open **WhatsApp Manager** → **Message templates** → **Create template** (as 
 
 | Name (exact) | Category | Language | Body (final) | Used for |
 |---|---|---|---|---|
-| `team_alert` | Utility | English | This is an automatic account alert for {{1}}: {{2}}. The full details have been sent to your registered email address. (The first wording, "New alert from your Deepzeta AI assistant…", was flagged by Meta as Marketing on 2026-10-12.) | WhatsApp alerts to the team number (bookings, hand-offs, expert follow-ups, urgent cases), once you've given that number |
+| `team_alert` | Utility | English | **Waiting (2026-10-12):** Meta flagged two wordings as Marketing ("New alert from your Deepzeta AI assistant…" and "This is an automatic account alert…"), most likely because {{2}} carries a whole free-text alert. Team alerts go by email until Claude redesigns this one; it only matters once the team WhatsApp number exists | WhatsApp alerts to the team number |
 | `dz_booking_reminder` | Utility | English | Hi {{1}}, this is a reminder of your {{2}} on {{3}} with {{4}}. If you need to change it, just reply to this message. | The reminder about 24 hours before a WhatsApp booking |
 | `dz_booking_reminder` | Utility | Arabic | مرحباً {{1}}، هذا تذكير بموعدك ({{2}}) يوم {{3}} مع {{4}}. إذا احتجت إلى تغيير الموعد، فقط رد على هذه الرسالة. | The same reminder, for customers who write in Arabic |
 
@@ -342,7 +342,7 @@ Before these 13 checks, Claude runs the **sales test set** (stage 3). It covers 
 
 - [ ] Every Part H workflow is published, with the Error workflow set on each.
 - [ ] No node shows a red credential warning.
-- [ ] Templates **Approved**: `team_alert` and `dz_booking_reminder` (English + Arabic). The others in Part F wait for their workflows.
+- [ ] Templates **Approved**: `dz_booking_reminder` (English + Arabic). `team_alert` waits for its redesign and the team number; the others in Part F wait for their workflows.
 - [ ] Spend limits are set: OpenAI monthly budget, and DeepSeek's balance kept small.
 - [ ] Keys are only in your password manager, n8n and the Supabase Vault (Part C). The Google JSON file is deleted from Downloads.
 - [ ] Privacy: the privacy policy names DeepSeek (China), OpenAI (US), Supabase (India) and n8n (EU), and you've done your legal check (decisions 0027 and 0030).
