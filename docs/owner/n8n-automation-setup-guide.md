@@ -275,7 +275,7 @@ Open **WhatsApp Manager** → **Message templates** → **Create template** (as 
 
 | Name (exact) | Category | Language | Body (final) | Used for |
 |---|---|---|---|---|
-| `team_alert` | Utility | English | New alert from your Deepzeta AI assistant for {{1}}: {{2}}. Please check your email for the full details. | WhatsApp alerts to the team number (bookings, hand-offs, expert follow-ups, urgent cases), once you've given that number |
+| `team_alert` | Utility | English | This is an automatic account alert for {{1}}: {{2}}. The full details have been sent to your registered email address. (The first wording, "New alert from your Deepzeta AI assistant…", was flagged by Meta as Marketing on 2026-10-12.) | WhatsApp alerts to the team number (bookings, hand-offs, expert follow-ups, urgent cases), once you've given that number |
 | `dz_booking_reminder` | Utility | English | Hi {{1}}, this is a reminder of your {{2}} on {{3}} with {{4}}. If you need to change it, just reply to this message. | The reminder about 24 hours before a WhatsApp booking |
 | `dz_booking_reminder` | Utility | Arabic | مرحباً {{1}}، هذا تذكير بموعدك ({{2}}) يوم {{3}} مع {{4}}. إذا احتجت إلى تغيير الموعد، فقط رد على هذه الرسالة. | The same reminder, for customers who write in Arabic |
 
