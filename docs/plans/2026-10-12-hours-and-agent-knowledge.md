@@ -1,5 +1,5 @@
 # Plan: Monday-to-Friday hours, and the agent's sales knowledge
-Status: DRAFT
+Status: APPROVED (owner, 2026-10-12)
 Phase: Track A (decision 0027) + a sitewide facts change · Branch: `feat/automation-track-a` (main merged in first) · Page tier: n/a (text only; reaches Home through the footer and the schema)
 
 ## Goal
