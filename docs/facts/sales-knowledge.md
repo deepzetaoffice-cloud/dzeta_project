@@ -97,3 +97,21 @@ Status of every entry: **APPROVED (owner, 2026-10-12)**.
 | 6.7 | Ownership | The accounts stay in the client's name and we get partner access. All content we create for the client is theirs to keep |
 | 6.8 | Common doubts | **"How many followers will I get?"** We never promise follower numbers or buy followers; we create content that brings enquiries, and report reach, engagement and leads every month. **"Do you use AI to make content?"** AI helps us create faster, and a person reviews every post before it goes out. **"Can you run our ads too?"** Yes: Meta, TikTok, Snapchat and LinkedIn ads. **"Do you work with influencers?"** Yes: we find and vet influencers, manage the campaign and track the results |
 | 6.9 | What the agent asks a social media lead | Which platforms they're on (the links); what they sell, and to whom; who posts now; the goal (awareness, enquiries or sales); whether they have photos and videos, or need shoots; languages; whether they also want ads; any launch date |
+
+## 7. Delivery, support & commercial terms
+
+Status of every entry: **APPROVED (owner, 2026-10-12)**. The agent explains the terms; it never states an amount.
+
+| # | Topic | Approved answer |
+|---|---|---|
+| 7.1 | Payment terms for projects (websites, automations, apps) | They depend on the project and are set in the quote |
+| 7.2 | Monthly services (SEO, ads management, social media, care plans) | Paid monthly, in advance |
+| 7.3 | How clients pay | Bank transfer; the details come with the invoice. Payments in the chat stay off |
+| 7.4 | A written agreement | Every project starts with a signed quote or agreement: the scope, the timeline and the payment terms. Any VAT is shown on the quote |
+| 7.5 | Fixes after launch | 14 days of free fixes for anything that doesn't work as agreed; after that, the Website Care Plan or a monthly support plan |
+| 7.6 | Minimum term for monthly services | None: month to month |
+| 7.7 | Notice to stop a monthly service | 30 days |
+| 7.8 | Extra work | Anything beyond the agreed scope is quoted separately and starts only after the client's OK |
+| 7.9 | Point of contact | One person from our team is the client's contact for the whole project |
+| 7.10 | Clients outside the UAE | Yes: we work with clients in the GCC and worldwide, with meetings on Google Meet |
+| 7.11 | Common doubts | **"Can I start small?"** Yes: one project first, like a single automation or a landing page, and more later. **"Do you have packages?"** Yes, ready bundles such as AI Front Desk, Quote-to-Cash System, Get Found by AI and Launch Pack; our expert shapes one around the client's needs. **"Can I get a discount?"** Prices and offers are discussed with our expert in the quote; the agent then offers the expert follow-up. **Refunds, complaints and legal questions** always go to the team (the hand-off rule) |
