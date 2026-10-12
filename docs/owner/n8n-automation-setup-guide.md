@@ -232,6 +232,8 @@ select public.set_client_secrets('DZ-0000', 'PASTE_WHATSAPP_PERMANENT_TOKEN', 'P
 
 ## Part D · Point Meta's webhook at the gateway
 
+✅ Done 2026-10-12: the app is Published (Live), the callback verified (the gateway answered Meta's check with 200), `messages` subscribed on v26.0. Other subscribed fields are harmless: the gateway processes `messages` only. In the current dashboard the webhook sits in **Use cases → Customize → Basic setup → Step 2. Production setup**, and going Live is **Publish** in the left menu (button in the lower right).
+
 1. Go to `developers.facebook.com` → **My Apps** → your app → **WhatsApp** → **Configuration**.
 2. Under **Webhook**, click **Edit**:
    - **Callback URL:** `https://pqeyzigrltisuusbvxsl.supabase.co/functions/v1/whatsapp-gateway`

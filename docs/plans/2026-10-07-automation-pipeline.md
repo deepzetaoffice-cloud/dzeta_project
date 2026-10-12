@@ -285,6 +285,8 @@ None.
 
 - **2026-10-12 · the app secret redone:** `wa_app_secret:DZ-0000` now has a Meta App Secret's format (32 hexadecimal characters; checked by length and pattern only), and `wa_token:DZ-0000` is unchanged. The owner saved `https://deepzeta.ai/privacy` as the app's Privacy Policy URL; the Live switch waits for the page on production (`feat/privacy-page`, CI green).
 
+- **2026-10-12 · Part D done:** `/privacy` merged to `main` (`0696165`) and live; the owner published the Meta app (Live); Meta's webhook verification reached the gateway and got 200 (edge logs, 08:25 UTC); `messages` subscribed (v26.0). Open: the Step 2 checklist shows "Add payment to send business-initiated messages" unticked, to check before the templates are used.
+
 **The retention migration (S4), as applied:**
 
 ```sql
