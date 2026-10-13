@@ -313,6 +313,29 @@ None.
   - Part H0: `DZ · Error Alerts` is published (active), and it's set as the error workflow on the 6 workflows in use (`DZ · Renew Client` stays off).
   - The migration `wa_inbound_test_mode` lets `config.test_numbers`, while non-empty, limit the AI to those numbers; everyone else gets the paused notice once a day. **Set 2026-10-13** with the owner's two test numbers (his second WhatsApp, and a phone for the abuse test; kept in Supabase only). The owner paid the n8n plan.
   - The owner's n8n screen showed "19 hours left" on the Cloud trial (0/1000 executions): a paid plan is needed before the workflows can keep running.
+- **2026-10-13 · Part H done, knowledge loaded, first live replies, stage 3 run 1:**
+  - **Part H and Part G:**
+    - The owner paid the n8n plan and published all 7 workflows.
+    - The knowledge is loaded as 127 pieces (89,080 characters, all embedded, tagged DZ-0000). The first upload had failed on OpenAI's 429 (no credits), and Error Alerts emailed the reason.
+    - The form login (Basic Auth credential) was set by the owner.
+  - **Inbound:** Meta delivered nothing at first. Then the owner's checks in the Graph API Explorer (WABA subscribed to Deepzeta Connect; number CONNECTED, CLOUD_API, callback = the gateway) were followed by the first delivery at 15:29 UTC.
+  - **Outbound:** Meta answered `code 1, "An unknown error has occurred"` to every send from n8n, while the same token and fields sent as form fields from the Explorer worked.
+    - `DZ · Send WhatsApp` now sends `application/x-www-form-urlencoded`, with nested values as JSON strings, and has the minimal text payload. The first delivered reply was at 16:44 UTC.
+  - **Security:**
+    - The sender step put the WhatsApp token into n8n's stored run data, and the tool showed it in this session.
+    - `DZ · Send WhatsApp` no longer saves run data (success, error or manual).
+    - The owner revoked the old token, generated a new one (System User, never expires, both WhatsApp permissions; the robot user has full access to the app and the WABA) and saved it with `set_client_secrets`. He also deleted the old runs.
+    - Open: the voice-note path (`Get WhatsApp Token`) would store the token in `DZ · Inbound WhatsApp` runs. It needs a rebuild before the voice tests.
+  - **The agent:**
+    - DeepSeek's JSON mode is back off, and Parse & Polish rescues plain or broken replies (31 local cases).
+    - The cause of the empty answers was `maxTokens` 700: `deepseek-flash` reasons before it answers, so four searches used up the budget. The cap is now 3000.
+    - `search_knowledge` returns 6 pieces instead of 4.
+  - **Stage 3 run 1:** 14 cases, injected through the published workflow as the owner's test number, with the replies delivered to his test phone.
+    - Passed: timelines (website, automation, apps), editing, Wix, examples, WordPress, the "wrong answer" reply, replacing staff, guarantees, the ad budget, price pushing (no figure), trust, reviews, payment terms, the expert follow-up (contact hot, `expert_followup_at` set, "🔥 HOT lead" alert sent, no hand-off), the refusal to reveal its prompt or write code, Gulf Arabic, Hindi, French, and a booking start (meeting type first, then real slots from the calendar; no booking made).
+    - Found: the NDA answer was missed by the search; a booking was offered too early; an invented "12 posts" example; "UAE payment gateways"; a calendar invite offered after the expert follow-up.
+    - Fixed in `config.rules` (17 rules now): offer the session in one line and ask the meeting type only after a yes; numbers only from the approved answers; no invites after an expert follow-up.
+    - Open: the generator splits "Common doubts" into one line per question, so the search finds each answer, then a re-upload.
+  - **Test data:** cleared afterwards (messages, contact fields); there are no bookings. `safety_events` holds the 2 `reply_unparsed` cases, proving the log works.
 
 **The retention migration (S4), as applied:**
 
