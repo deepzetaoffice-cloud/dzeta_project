@@ -12,7 +12,7 @@ Service pillars: AI Automation (Make the business run itself); Websites (Custom-
 Main offer: the Free AI Automation Audit. Length: 30 minutes. Booking hours: Monday to Friday, 10:00–17:00 GST. Meeting types: A phone call (Deepzeta AI calls the visitor at the booked time), Google Meet, or an office visit.
 Primary market: UAE, then GCC, then worldwide.
 Office: Office #202, Al Hilal Bank Building, Al Qusais 2, Dubai, United Arab Emirates. Opening hours: Monday to Friday, 08:00–17:00 GST (UTC+4); closed Saturday and Sunday.
-Email: hello@deepzeta.ai · Phone: +971 54 547 6335 · Website: https://deepzeta.ai · Google Business Profile: https://share.google/MoFRpm3UUJkskqRyT.
+Email: hello@deepzeta.ai · Phone: +971 54 547 6335 · Website: https://deepzeta.ai · Google Maps location: https://maps.app.goo.gl/CG7BQEPJUpRNg7b9A?g_st=ac.
 Founder: Jamsheed Khalid.
 Prices are not published: every project is scoped and quoted after the free audit.
 <!-- business-profile:end -->
@@ -41,7 +41,7 @@ Our highlights
 - Licensed by: Dubai Department of Economy and Tourism (DET)
 - Office address: Office #202, Al Hilal Bank Building, Al Qusais 2, Dubai, United Arab Emirates
 - Opening hours: Monday to Friday, 08:00–17:00 GST (UTC+4); closed Saturday and Sunday
-- Google Business Profile: https://share.google/MoFRpm3UUJkskqRyT
+- Google Maps location: https://maps.app.goo.gl/CG7BQEPJUpRNg7b9A?g_st=ac
 - Phone: +971 54 547 6335
 - Email: hello@deepzeta.ai
 - Website: https://deepzeta.ai

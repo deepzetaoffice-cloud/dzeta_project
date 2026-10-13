@@ -36,7 +36,7 @@
 | WhatsApp number | +971 54 547 6335 | CONFIRMED (owner, 2026-10-08; decision 0027; the same number as the phone, on Meta's WhatsApp Cloud API, so it can't be used in the WhatsApp app). **Live on WhatsApp only once Track A registers it**: the site's WhatsApp button and `wa.me` links wait until then |
 | Public contact email | hello@deepzeta.ai | CONFIRMED (owner, 2026-09-29) |
 | Opening hours | Monday to Friday, 08:00–17:00 GST (UTC+4); closed Saturday and Sunday | CONFIRMED (owner, 2026-09-29; Monday to Friday since 2026-10-12) |
-| Google Business Profile URL | https://share.google/MoFRpm3UUJkskqRyT | CONFIRMED (owner, 2026-10-12). The site doesn't show it yet: the footer, the contact page and the schema `sameAs` take it in their own change |
+| Google Business Profile URL | https://maps.app.goo.gl/CG7BQEPJUpRNg7b9A?g_st=ac | CONFIRMED (owner, 2026-10-12; this Google Maps link replaced the share.google link on 2026-10-13). The site doesn't show it yet: the footer, the contact page and the schema `sameAs` take it in their own change |
 | Social profiles (`sameAs`) | See §2.1 | CONFIRMED |
 
 **Values that aren't confirmed yet are one variable each, never scattered.** They are the trade licence number and the office pin (owner, 2026-09-29); the Google Business Profile was confirmed on 2026-10-12.

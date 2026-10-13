@@ -41,7 +41,7 @@ export const FACT_LABELS = [
   ['Trade licence issuing authority', 'Licensed by'],
   ['Full address, one line (display)', 'Office address'],
   ['Opening hours', 'Opening hours'],
-  ['Google Business Profile URL', 'Google Business Profile'],
+  ['Google Business Profile URL', 'Google Maps location'],
   ['Phone (international format)', 'Phone'],
   ['Public contact email', 'Email'],
   ['Domain / canonical site URL', 'Website'],
@@ -250,7 +250,7 @@ export function buildAgentKnowledge({ factsMd, catalogueMd, salesMd, catalogue, 
       fact('Public contact email') && `Email: ${fact('Public contact email')}`,
       fact('Phone (international format)') && `Phone: ${fact('Phone (international format)')}`,
       fact('Domain / canonical site URL') && `Website: ${fact('Domain / canonical site URL')}`,
-      fact('Google Business Profile URL') && `Google Business Profile: ${fact('Google Business Profile URL')}`,
+      fact('Google Business Profile URL') && `Google Maps location: ${fact('Google Business Profile URL')}`,
     ]
       .filter(Boolean)
       .join(' · ') + '.',
