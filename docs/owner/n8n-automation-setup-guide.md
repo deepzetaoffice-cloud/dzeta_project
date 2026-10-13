@@ -295,7 +295,7 @@ Do this when Claude has generated `docs/facts/agent-knowledge.md` and **you've r
    - **Client ID:** `DZ-0000`
    - **What to do:** **Replace ALL knowledge for this client**
    - **Files:** `agent-knowledge.md`
-4. Click **Update knowledge**. ✅ An email "Knowledge updated: DZ-0000 Deepzeta AI" arrives at hello@.
+4. Click **Update knowledge**. ✅ An email "Knowledge updated: DZ-0000 Deepzeta AI" arrives at deepzeta.office@gmail.com.
 
 Whenever services or facts change, Claude regenerates the file and you upload it again with **Replace ALL**.
 

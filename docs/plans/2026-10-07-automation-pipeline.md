@@ -311,7 +311,7 @@ None.
   - The owner approved the knowledge file and said "merge": `main` is at `cf7b47d`, and production shows the Monday-to-Friday hours (footer and `/privacy`, checked live).
   - Part F: `dz_booking_reminder` in English and Arabic is submitted and in review. Meta flagged `team_alert` as Marketing in two wordings, most likely because `{{2}}` holds a whole free-text alert. It waits for a redesign with fixed blanks, before the team number is used; until then team alerts are email only.
   - Part H0: `DZ · Error Alerts` is published (active), and it's set as the error workflow on the 6 workflows in use (`DZ · Renew Client` stays off).
-  - The migration `wa_inbound_test_mode` lets `config.test_numbers`, while non-empty, limit the AI to those numbers; everyone else gets the paused notice once a day. It's empty until the owner sends the test numbers.
+  - The migration `wa_inbound_test_mode` lets `config.test_numbers`, while non-empty, limit the AI to those numbers; everyone else gets the paused notice once a day. **Set 2026-10-13** with the owner's two test numbers (his second WhatsApp, and a phone for the abuse test; kept in Supabase only). The owner paid the n8n plan.
   - The owner's n8n screen showed "19 hours left" on the Cloud trial (0/1000 executions): a paid plan is needed before the workflows can keep running.
 
 **The retention migration (S4), as applied:**
