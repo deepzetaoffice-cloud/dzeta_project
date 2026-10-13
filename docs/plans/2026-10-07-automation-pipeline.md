@@ -342,6 +342,13 @@ None.
   - Voice notes are paused (`voice_notes = block`) until the voice step stops putting the WhatsApp token into n8n run data. Customers get "Sorry, I can't open voice notes, photos or videos here. Could you type your question for me?" (EN, AR, FR in `fixed_messages.media_unsupported`).
   - Still open: the voice rebuild (a Supabase edge function that downloads the media, so n8n never holds the token), then `voice_notes = transcribe`; the generator's one-line-per-question split and a re-upload (the NDA answer); the `team_alert` template redesign and the team number; `dz_booking_reminder` approval (in review).
 
+- **2026-10-13 · the voice step rebuilt; Meta's media lookup fails:**
+  - The new Supabase function `whatsapp-media` (verify_jwt off; the `x-deepzeta-secret` header checked, with 403 on a missing or wrong secret, both tested) fetches the media with the vault token and returns only the bytes. In `DZ · Inbound WhatsApp`, `Get WhatsApp Token` and `Get Voice Note URL` are removed, and `Download Voice Note` calls the function (the Header Auth credential), so n8n no longer holds the token for voice notes. `voice_notes = transcribe` again, and `media_unsupported` is back to "photos or videos".
+  - Meta answers `GET /{media-id}` with `code 1, "An unknown error has occurred"` (HTTP 500) for the owner's voice note 893220387208579:
+    - from the function: v26.0 and v23.0, unversioned, with a Bearer header or a query token
+    - from the Graph API Explorer with the owner's own login token: fbtrace_ids ASP-Du7dH8se-TgvdIqAzRD and AWHUebu6ZKRnJTM0-b-dMoq
+  - So the fault is on Meta's side. Until it clears, customers' voice notes get `fixed.voice_failed` ("could you type it"). The owner may file a bug at developers.facebook.com/support/bugs with these IDs. Claude retries the same media ID later.
+
 **The retention migration (S4), as applied:**
 
 ```sql
