@@ -336,6 +336,11 @@ None.
     - Fixed in `config.rules` (17 rules now): offer the session in one line and ask the meeting type only after a yes; numbers only from the approved answers; no invites after an expert follow-up.
     - Open: the generator splits "Common doubts" into one line per question, so the search finds each answer, then a re-upload.
   - **Test data:** cleared afterwards (messages, contact fields); there are no bookings. `safety_events` holds the 2 `reply_unparsed` cases, proving the log works.
+- **2026-10-13 · LIVE (the owner: "Turn on to make it live for all our clients. Test is finished now"):**
+  - `config.test_numbers` removed: every message to +971 54 547 6335 gets the agent. All 7 workflows are active on their latest published versions, and the site's WhatsApp links point at `wa.me/971545476335`.
+  - Go-live condition: decision 0027 asked for the 13 phone checks first; the owner chose to go live after stage 3 run 1. The remaining checks (voice, a real booking, abuse from the second phone, memory the next day, STOP) are a register row.
+  - Voice notes are paused (`voice_notes = block`) until the voice step stops putting the WhatsApp token into n8n run data. Customers get "Sorry, I can't open voice notes, photos or videos here. Could you type your question for me?" (EN, AR, FR in `fixed_messages.media_unsupported`).
+  - Still open: the voice rebuild (a Supabase edge function that downloads the media, so n8n never holds the token), then `voice_notes = transcribe`; the generator's one-line-per-question split and a re-upload (the NDA answer); the `team_alert` template redesign and the team number; `dz_booking_reminder` approval (in review).
 
 **The retention migration (S4), as applied:**
 
