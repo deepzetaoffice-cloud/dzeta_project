@@ -20,7 +20,7 @@ The site is deepzeta's proof of work. **A page that fails a hard limit does not 
 | Lighthouse Performance (mobile) | per tier | T1 Home ≥ 95, asserted by `lhci` on every change that can reach Home · **every other page: 70 in PageSpeed Insights on production**, checked before launch (the pre-launch register); no lab gate ([decision 0029](../decisions/0029-build-mode.md), Build Mode). The T2/T3 lists and their motion toolkits are unchanged (decisions 0005, 0011). Unlisted pages = standard. |
 | Lighthouse Accessibility / Best Practices / SEO | 100 | ≥ 95 |
 
-*Tiers:* every metric in this table is asserted in the lab on Home and the review page, which carry the shared shell and runtime that every page uses. On every other page, CLS ≤ 0.1, LCP, INP and TBT are hard limits for **real visitors** (field data: PSI and CrUX on production, the pre-launch register), with no lab gate ([decision 0029](../decisions/0029-build-mode.md)). The tier changes the score floor and the motion toolkit allowed.
+*Tiers:* every metric in this table is asserted in the lab on Home and the review page, which carry the shared shell and runtime that every page uses. On every other page, CLS ≤ 0.1, LCP, INP and TBT are hard limits for **real visitors** (field data: PSI and CrUX on production, the pre-launch register), with no lab gate ([decision 0029](../decisions/0029-build-mode.md)). The tier changes the score floor and the motion toolkit allowed. **The Designer Studio pages (`/studio` and `/studio/<slug>`) are exempt** from the tier floors, the page-weight caps and the Core Web Vitals limits ([decision 0031](../decisions/0031-designer-studio-performance-exempt.md)): they are `noindex` showcases, built limitless.
 
 *Reconciliation:* the advisory said LCP < 1.5 s, INP < 100 ms, CLS < 0.05; the performance constraint says < 2.5 s / < 200 ms / < 0.1. We aim for the first and never cross the second (blueprint decision). FID is obsolete; INP replaces it.
 
@@ -33,7 +33,7 @@ The site is deepzeta's proof of work. **A page that fails a hard limit does not 
 | HTML + CSS + JS loaded before the first interaction | ≤ framework baseline + 50 KB (≈ 186 KB today) | Hard limit (decision 0014). Code started by an explicit visitor action ("Launch", "Play", "Open") never loads on first view and is budgeted per feature in its plan (decision 0008) |
 | JavaScript on first load | Framework baseline (136.4 KB) + ≤ 5 KB growth, plus our own code: ≤ 11 KB on Home, ≤ 25 KB on T2 and T3 pages | Hard limit: the baseline + 5 KB growth (decision 0014), asserted by `lhci` on each tested page (Home today). Home's cap was 10 KB until P3 added the sitewide tracking runtime ([decision 0021](../decisions/0021-analytics-and-consent.md)) |
 | First-party JS on Home at first load (effects, UI and tracking) | ≤ 11 KB | Validated by the effects feasibility gate ([04](04-build-sequence.md) §2; caps in [13](13-experience-design.md) §7); raised from 10 KB for the tracking runtime ([decision 0021](../decisions/0021-analytics-and-consent.md)) |
-| Fonts (subset; variable, or one static weight when that keeps the target, 0015) | ≈ 60 KB total | Hard limit 70 KB on deepzeta pages. Studio concept routes load their own fonts within their T3 page budget (decision 0008) |
+| Fonts (subset; variable, or one static weight when that keeps the target, 0015) | ≈ 60 KB total | Hard limit 70 KB on deepzeta pages. Studio concept routes load their own fonts with no page budget (decision 0031) |
 | Images per page (above the fold) | ≤ 200 KB, hero ≤ 120 KB | Hard limit |
 | Render-blocking third-party or font files | 0 | Hard limit |
 | Third-party scripts before consent/interaction | GTM only | Hard limit |
@@ -91,7 +91,7 @@ The site is deepzeta's proof of work. **A page that fails a hard limit does not 
 | Story graphics (`story-*`) | ≤ 2 KB shared controls + ≤ 6 KB each | CSS/SVG on Home; play once; controls for stories longer than 5 s |
 | The Assembly (Home hero) | ~0 KB beyond the shared observer (CSS 3D) | Starts on first scroll; static cluster under Reduce effects |
 | `glass-live` / `glass-liquid` | GPU cost while content scrolls behind | Capped count per viewport; falls back to `glass-frost` |
-| Designer Studio: Device Stage and concept sites | Each concept's full weight | Loads only on open, inside a sandboxed iframe; concepts are T3 with Core Web Vitals hard limits |
+| Designer Studio: Device Stage and concept sites | Each concept's full weight | Loads only on open, inside a sandboxed iframe; no performance floor, weight ceiling or Core Web Vitals lab gate (decision 0031) |
 | Deepzeta Sync (tools) | Server-side checks and AI calls; small client wizard | Server work only; rate limit + Turnstile; the report renders after results |
 | App demo | The app shell | Loads only on "Launch"; its budget is set in its plan |
 

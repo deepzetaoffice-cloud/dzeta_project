@@ -46,6 +46,7 @@ Status: PROPOSED | ACCEPTED (owner, date) | SUPERSEDED by NNNN
 | [0028](0028-standard-tier-and-light-verification.md) | The standard page tier: 70 for every page except Home; light verification (per-page lhci removed, per-commit verify:fast, verify:ci on branch pushes, standing plans for template copies); CLS and the a11y/bp/seo floors stay; LCP/INP/TBT are field-data limits; 0020's 86 line stands for Home only | ACCEPTED; §1's lab floor, §4–§6's spot-checks and batches of 6 superseded by 0029 |
 | [0029](0029-build-mode.md) | Build Mode: Home's performance, design and SEO/GEO never relaxed; one template plan per page type (batches of up to 10), short plans for unique builds, none for small fixes; gates by risk (`lhci` only when a change can reach Home, no lab gate on other pages: 70 in PSI on production); records only for real decisions; short reports; parallel tracks | ACCEPTED |
 | [0030](0030-ai-providers.md) | AI providers: DeepSeek writes every reply (the WhatsApp agent, the summaries, the website's tools); OpenAI listens and checks in the WhatsApp agent only (voice notes in any language with `gpt-transcribe`, moderation, embeddings); the agent replies in the customer's language; no Anthropic API | ACCEPTED |
+| [0031](0031-designer-studio-performance-exempt.md) | Designer Studio is performance-exempt: `/studio` and `/studio/<slug>` carry no Lighthouse floor, page-weight ceiling or Core Web Vitals lab gate; limitless design within the honesty and accessibility rules | ACCEPTED |
 
 ## Open business decisions (from the blueprint)
 

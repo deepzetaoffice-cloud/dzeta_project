@@ -195,7 +195,7 @@ A row is never deleted, and an ID is never reused.
 | R129 | `/resources/uae-e-invoicing-guide` | Guide | Resources | — | UAE e-invoicing: what businesses need to know and when | T2 | P8 | W3 | planned | index | Official dates in the citation register |
 | R130 | `/resources/ai-automation-for-small-business-uae` | Guide | Resources | — | Where a small UAE business should start with AI automation | T2 | P8 | W3 | planned | index | — |
 | R131 | `/resources/rss.xml` | Feed | Resources | — | RSS feed for guides and comparisons | — | P8 | W3 | planned | — | — |
-| R140 | `/studio` | Studio index | Studio | — | Concept website designs by Deepzeta AI | T2 | P8 | W3 | planned | index | — |
+| R140 | `/studio` | Studio index | Studio | — | Concept website designs by Deepzeta AI | exempt | P8 | W3 | planned | index | — |
 
 ### 3.7 Blocked (waiting for owner facts)
 
@@ -263,3 +263,4 @@ The blueprint's draft slugs (for example `web-development`, `ai-chatbots`, `/aud
 | 2026-10-08 | R010 `/services` and R027 `/services/speed-to-lead-system` → live (P6 part A2, S11: the services hub and the pilot service page) | Owner (the P6 part A plan, Q3: Speed-to-Lead System, 2026-10-07) |
 | 2026-10-09 | R029, R031, R032, R033, R034, R038, R051, R068, R070, R076 → live (service batch 1 from the pilot template: the standing plan `docs/plans/2026-10-08-service-pages-standing-plan.md`, decision 0029) | Owner ("start service batch", 2026-10-09) |
 | 2026-10-10 | R060 `/services/custom-coded-websites` → live (the flagship Websites page on its own route, with Code ↔ Page and the build terminal: `docs/plans/2026-10-10-flagship-websites-page.md`) | Owner ("approved", 2026-10-10) |
+| 2026-10-16 | R140 `/studio` and R160 `/studio/<slug>` → performance-exempt (no Lighthouse floor, page-weight ceiling or Core Web Vitals lab gate; limitless design): decision 0031 | Owner (in chat, 2026-10-16) |

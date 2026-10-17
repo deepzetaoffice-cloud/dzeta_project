@@ -32,7 +32,7 @@ Every plan must name which part of this North Star it serves. If a task serves n
 
 | # | Rule | Why |
 |---|---|---|
-| N1 | **Performance is a feature, equal to visual quality.** Hard limits in [07-performance-budget.md](07-performance-budget.md) are never traded for effects. | A slow site contradicts the business's core claim. |
+| N1 | **Performance is a feature, equal to visual quality.** Hard limits in [07-performance-budget.md](07-performance-budget.md) are never traded for effects — except the Designer Studio pages (`/studio`, `/studio/<slug>`), the named performance-exempt showcase (decision 0031). | A slow site contradicts the business's core claim. |
 | N2 | **Custom code only.** No templates, page builders, UI kits or themes. | It is our highlight and our promise. |
 | N3 | **Never invent facts.** No made-up stats, clients, reviews, awards, dates, prices or credentials. Unknown means ask or omit. | Trust, legal safety, and Google/AI-engine penalties. |
 | N4 | **Plan once, then build fast.** One approved plan per template (it covers every page built from it) or per unique build; small fixes take a one-line plan (see [04-build-sequence.md](04-build-sequence.md) §4, Build Mode, [decision 0029](../decisions/0029-build-mode.md)). | Prevents sprawl and false edits without stalling the build. |
