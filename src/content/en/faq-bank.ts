@@ -796,13 +796,13 @@ export const customCodedWebsitesFaq: readonly FaqQuestion[] = [
       'Custom code lets each page carry only the code it needs, with no page builder, theme or unused plugins behind it. It is what lets every page be optimised for mobile networks and measured against Core Web Vitals. The design, the layout and the structured data are made for your business, not fitted into a template. This page shows it: the Code ↔ Page view reveals the real code behind its opening section.',
   },
   {
-    // 78 words; first sentence 17. The thresholds (facts §6) as the measure, reported at launch, never
+    // 74 words; first sentence 17. The thresholds (facts §6) as the measure, reported at launch, never
     // a promised result
     id: 'how-do-we-know-a-custom-website-is-fast',
     topic: 'results',
     question: 'How will we know the new website is really fast?',
     answer:
-      'You get a performance report at launch, so you see the measured speed rather than a promise. Every page is optimised for mobile networks and measured against Core Web Vitals, whose good thresholds are LCP under 2.5 s, INP under 200 ms and CLS under 0.1 on each page, and the report shows where your pages stand. On this page, the build recording replays a real run of this site’s own build and checks, including its homepage’s Lighthouse checks.',
+      'You get a performance report at launch, so you see the measured speed rather than a promise. Every page is optimised for mobile networks and measured against Core Web Vitals, whose good thresholds are LCP under 2.5 s, INP under 200 ms and CLS under 0.1 on each page, and the report shows where your pages stand. On this page, the build recording replays a real run of this site’s own build and checks.',
   },
   {
     // 57 words; first sentence 21

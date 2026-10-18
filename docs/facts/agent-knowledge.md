@@ -1010,7 +1010,7 @@ The scope decides it: the pages, the languages and the integrations, so we set a
 Custom code lets each page carry only the code it needs, with no page builder, theme or unused plugins behind it. It is what lets every page be optimised for mobile networks and measured against Core Web Vitals. The design, the layout and the structured data are made for your business, not fitted into a template. This page shows it: the Code ↔ Page view reveals the real code behind its opening section.
 
 ### How will we know the new website is really fast?
-You get a performance report at launch, so you see the measured speed rather than a promise. Every page is optimised for mobile networks and measured against Core Web Vitals, whose good thresholds are LCP under 2.5 s, INP under 200 ms and CLS under 0.1 on each page, and the report shows where your pages stand. On this page, the build recording replays a real run of this site’s own build and checks, including its homepage’s Lighthouse checks.
+You get a performance report at launch, so you see the measured speed rather than a promise. Every page is optimised for mobile networks and measured against Core Web Vitals, whose good thresholds are LCP under 2.5 s, INP under 200 ms and CLS under 0.1 on each page, and the report shows where your pages stand. On this page, the build recording replays a real run of this site’s own build and checks.
 
 ### Can we launch in English and add Arabic later?
 Yes: we code the layout to follow the reading direction, so Arabic pages can be added later without rebuilding the design. This site is built the same way: it starts in English, and its layout is ready for Arabic. If you want both languages at launch, we build them together, with a true right-to-left layout for Arabic.

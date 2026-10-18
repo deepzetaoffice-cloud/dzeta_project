@@ -121,7 +121,7 @@ function organizationExcerpt(): string {
   return JSON.stringify({ '@context': 'https://schema.org', ...picked }, null, 2);
 }
 
-// The recorded build's lines the code layer replays (build-run.ts: commit b79f7bb, a real run)
+// The recorded build's lines the code layer replays (build-run.ts: a real run, its commit and date)
 const CODE_LINES = buildRun.lines
   .filter(
     (line) =>
