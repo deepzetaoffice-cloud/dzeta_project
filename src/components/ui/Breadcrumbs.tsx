@@ -5,14 +5,15 @@ import { routePath, type RouteId } from '@/lib/routes';
 // helpers (06 §2.4, C67), Home first, the current page last as text with aria-current="page". The
 // BreadcrumbList schema reads the same trail through fullTrail(), so the two can't drift (08 §3.7).
 // Logical CSS only, so it reads right to left in Arabic. `onColor` is the C diagram mono label inside a
-// hero stage (Figma 58:34, 59:34: "HOME / SERVICES"), white on the stage gradient.
+// hero stage (Figma 58:34, 59:34: "HOME / SERVICES"), white on the stage gradient; `mono` is the same
+// label on a light hero (Figma 61:34).
 
 export type Crumb = { route: RouteId; label: string };
 
 export type BreadcrumbsProps = {
   /** The trail after Home: each ancestor, then the current page (rendered as text) */
   trail: readonly Crumb[];
-  tone?: 'default' | 'onColor';
+  tone?: 'default' | 'onColor' | 'mono';
   className?: string;
 };
 
@@ -29,12 +30,13 @@ export function Breadcrumbs({
 }: BreadcrumbsProps) {
   const crumbs = fullTrail(trail);
   const onColor = tone === 'onColor';
+  const mono = onColor || tone === 'mono';
   return (
     <nav aria-label={shellContent.breadcrumbLabel} className={className}>
       <ol
         className={
-          onColor
-            ? 'flex flex-wrap items-center gap-x-3 font-mono text-label text-on-color uppercase'
+          mono
+            ? `flex flex-wrap items-center gap-x-3 font-mono text-label uppercase ${onColor ? 'text-on-color' : 'text-ink-secondary'}`
             : 'flex flex-wrap items-center gap-x-2 gap-y-1 text-small'
         }
       >
@@ -43,7 +45,7 @@ export function Breadcrumbs({
           return (
             <li
               key={crumb.route}
-              className={onColor ? 'inline-flex items-center gap-x-3' : 'inline-flex items-center gap-x-2'}
+              className={mono ? 'inline-flex items-center gap-x-3' : 'inline-flex items-center gap-x-2'}
             >
               {last ? (
                 <span aria-current="page">{crumb.label}</span>
@@ -53,7 +55,7 @@ export function Breadcrumbs({
                     href={routePath(crumb.route)}
                     className={[
                       'inline-flex items-center underline-offset-4 hover:underline',
-                      onColor ? 'min-h-8' : 'min-h-11',
+                      mono ? 'min-h-8' : 'min-h-11',
                     ].join(' ')}
                   >
                     {crumb.label}

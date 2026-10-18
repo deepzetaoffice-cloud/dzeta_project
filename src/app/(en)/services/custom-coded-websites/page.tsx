@@ -1,16 +1,9 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { DemoPanelTemplate } from '@/components/demos/DemoStub';
 import { CodePage } from '@/components/sections/CodePage';
 import { Faq } from '@/components/sections/Faq';
-import {
-  ServiceDeliverables,
-  ServiceFit,
-  ServiceHero,
-  ServiceHow,
-  ServiceProblem,
-  ServiceTryUaePairs,
-} from '@/components/sections/service/ServiceSections';
+import { FlagshipDeliverables, FlagshipHero, FlagshipHow } from '@/components/sections/service/FlagshipSections';
+import { ServiceFit, ServiceProblem, ServiceTryUaePairs } from '@/components/sections/service/ServiceSections';
 import { StoryTerminal } from '@/components/sections/StoryTerminal';
 import { JsonLd } from '@/components/seo/JsonLd';
 import { services as catalogueServices, type CatalogueService } from '@/content/catalogue';
@@ -22,11 +15,10 @@ import { isLivePath, routeIdForPath } from '@/lib/routes';
 import { serviceGraph, serviceTrail } from '@/lib/schema/graphs/service';
 import { pageMetadata } from '@/lib/seo/page-seo';
 
-// The flagship service page, Custom-Coded High-Performance Websites (catalogue 2.1, R060; the plan
-// docs/plans/2026-10-10-flagship-websites-page.md). The service template's sections in engine §3.1's
-// order, with the spec's two extras (docs/design/service-page.md): Code ↔ Page beside the How-it-works
-// steps, and the build terminal as the page's proof. Its own route, so its stylesheet and its story
-// controls load here only and Home stays as it is (C73); the [slug] route skips this slug.
+// The flagship service page, Custom-Coded High-Performance Websites (catalogue 2.1, R060;
+// docs/design/custom-coded-websites.md; Figma 60:34). Engine §3.1's order around the page's three
+// signature moments, one per viewport: the laptop, Code ↔ Page and the build terminal. Its scene
+// (src/lib/fx/flagship.ts) loads on this page only; the [slug] route skips this slug.
 const SLUG = 'custom-coded-websites';
 const PATH = `/services/${SLUG}`;
 
@@ -54,26 +46,22 @@ export default function CustomCodedWebsitesPage() {
   const data = found();
   if (!data) notFound();
   const { page, service, route } = data;
-  const props = { content: page.content, service };
+  const props = { content: page.content, service, extras: customCodedWebsitesExtras };
   return (
     <>
       {/* The page block: Service, WebPage (mainEntity → #service), BreadcrumbList, FAQPage */}
       <JsonLd graph={serviceGraph(SLUG, route)} />
-      <ServiceHero {...props} trail={serviceTrail(SLUG, route)} />
-      <ServiceProblem {...props} />
-      <ServiceHow {...props} story={<CodePage {...props} labels={customCodedWebsitesExtras.codePage} />} />
-      <ServiceDeliverables {...props} />
-      <ServiceFit {...props} />
-      {/* §7 Proof: the build terminal (the page's demo slot; AI View can join in P7) */}
-      <section aria-labelledby="service-proof" className="mx-auto max-w-page px-gutter py-section">
-        <h2 id="service-proof" className="max-w-measure text-h2 text-balance">
-          {customCodedWebsitesExtras.terminal.heading}
-        </h2>
-        <p className="mt-4 max-w-measure text-lead text-ink-secondary">{customCodedWebsitesExtras.terminal.lede}</p>
-        <div className="mt-10">
-          <StoryTerminal run={buildRun} labels={customCodedWebsitesExtras.terminal} />
-        </div>
-      </section>
+      <FlagshipHero {...props} trail={serviceTrail(SLUG, route)} />
+      <CodePage {...props} />
+      <ServiceProblem {...props} index={2} />
+      <FlagshipHow {...props} />
+      <FlagshipDeliverables {...props} />
+      <StoryTerminal
+        run={buildRun}
+        labels={customCodedWebsitesExtras.terminal}
+        eyebrow={customCodedWebsitesExtras.proofEyebrow}
+      />
+      <ServiceFit {...props} index={6} aidOnly />
       <ServiceTryUaePairs {...props} />
       {/* The FAQ module (faq.md): zero JS for the base; its enhancement loads on use */}
       <div data-fx-lazy="faq" className="mx-auto max-w-page px-gutter py-section">
@@ -81,13 +69,11 @@ export default function CustomCodedWebsitesPage() {
           heading={page.content.faq.heading}
           lede={page.content.faq.lede}
           questions={page.faq}
-          index={5}
+          index={7}
           eyebrow={serviceTemplate.eyebrows.faq}
           layout="stacked"
         />
       </div>
-      {/* The demo stubs' panel, once per page that has a trigger */}
-      {page.content.tryIt ? <DemoPanelTemplate /> : null}
     </>
   );
 }

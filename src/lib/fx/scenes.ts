@@ -9,6 +9,9 @@ const MODULES: Record<string, () => Promise<Scene>> = {
   'home-hero': () => import('./home'),
   'hub-dots': () => import('./hub'),
   'service-flow': () => import('./service'),
+  flagship: () => import('./flagship'),
+  privacy: () => import('./privacy'),
+  'not-found': () => import('./shapes'),
 };
 
 let stops: (() => void)[] = [];

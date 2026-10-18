@@ -241,8 +241,13 @@ export const customCodedWebsites: ServicePageContent = {
 // own build and checks (build-run.ts), so neither carries an "Example" label (10 §3.6); the terminal
 // says plainly that it is a recording, never live.
 export const customCodedWebsitesExtras: WebsitesExtras = {
+  // Figma 60:34's own labels (approved with the file)
+  hero: { tag: 'Flagship', seeCode: 'See the code behind this page' },
+  proofEyebrow: 'Proof',
   codePage: {
     label: 'Code ↔ Page',
+    heading: 'The page and the code that renders it',
+    hint: 'Reveal the code behind the page: drag the handle, or use ← → when it has focus.',
     // 30 words, one sentence
     caption:
       'The page side is this page’s real opening section; the code side is the source code that renders it, read from this site’s repository each time the site is built.',

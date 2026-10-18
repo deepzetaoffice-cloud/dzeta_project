@@ -3,8 +3,6 @@
 // shared labels; the service's name, pillar and every service named by number come from the catalogue
 // (10 §2). Links only to live pages (04 §1.4). No signature moment: the flow diagram is the page's one
 // explanatory moment, and src/lib/fx/service.ts lights its steps in order on view (section-reveal).
-// CodePage reads ServiceHero's source from this file at build time, so it shows the real code.
-import type { ReactNode } from 'react';
 import type { Pillar } from '@/components/icons/registry';
 import { DemoStub } from '@/components/demos/DemoStub';
 import { BeforeAfter } from '@/components/sections/BeforeAfter';
@@ -116,12 +114,13 @@ export function ServiceHero({
   );
 }
 
-export function ServiceProblem({ content }: ServiceSectionProps) {
+// `index`: the section's place in the page's numbered sequence (the flagship page puts Code ↔ Page first)
+export function ServiceProblem({ content, index = 1 }: ServiceSectionProps & { index?: number }) {
   return (
     <section aria-labelledby="service-problem" className={section}>
       <SectionHeading
         id="service-problem"
-        index={1}
+        index={index}
         eyebrow={serviceTemplate.eyebrows.problem}
         heading={content.problem.heading}
         lede={content.problem.lede}
@@ -152,8 +151,8 @@ function diagramRows(steps: readonly FlowStep[]): { step: FlowStep; number: numb
 
 // §03 How it works (the C diagram language): the steps as a visible ordered list beside the system
 // diagram, an example labelled as one (10 §3.6). The diagram repeats the list, so it's hidden from
-// screen readers. `story` replaces the diagram (the flagship page's Code ↔ Page).
-export function ServiceHow({ content, story }: ServiceSectionProps & { story?: ReactNode }) {
+// screen readers.
+export function ServiceHow({ content }: ServiceSectionProps) {
   const { how } = content;
   const caption = how.figure
     ? `${serviceTemplate.figureLabel} — ${how.figure} · ${serviceTemplate.figureExample}`
@@ -183,28 +182,24 @@ export function ServiceHow({ content, story }: ServiceSectionProps & { story?: R
               </li>
             ))}
           </ol>
-          {story ? (
-            <div className="dz-svc-diagram-area">{story}</div>
-          ) : (
-            <div aria-hidden="true" className="dz-svc-diagram-area dz-svc-diagram">
-              <div className="dz-svc-rows">
-                {diagramRows(how.steps).map((row) => (
-                  <div key={row[0]?.number} className="dz-svc-row">
-                    {row.map(({ step, number }) => (
-                      <div key={number} className="dz-svc-node" data-flow-node={number}>
-                        <p className="text-h4 text-ink">{step.node?.label ?? step.title}</p>
-                        {step.node?.line ? <p className="text-caption text-ink-secondary">{step.node.line}</p> : null}
-                      </div>
-                    ))}
-                  </div>
-                ))}
-              </div>
-              <p className="inline-flex min-h-8 w-fit items-center gap-2 rounded-full border border-line bg-surface px-3 font-mono text-label text-ink-secondary uppercase">
-                <span className="size-1.5 rounded-full bg-accent-signal" />
-                {how.exampleLabel}
-              </p>
+          <div aria-hidden="true" className="dz-svc-diagram-area dz-svc-diagram">
+            <div className="dz-svc-rows">
+              {diagramRows(how.steps).map((row) => (
+                <div key={row[0]?.number} className="dz-svc-row">
+                  {row.map(({ step, number }) => (
+                    <div key={number} className="dz-svc-node" data-flow-node={number}>
+                      <p className="text-h4 text-ink">{step.node?.label ?? step.title}</p>
+                      {step.node?.line ? <p className="text-caption text-ink-secondary">{step.node.line}</p> : null}
+                    </div>
+                  ))}
+                </div>
+              ))}
             </div>
-          )}
+            <p className="inline-flex min-h-8 w-fit items-center gap-2 rounded-full border border-line bg-surface px-3 font-mono text-label text-ink-secondary uppercase">
+              <span className="size-1.5 rounded-full bg-accent-signal" />
+              {how.exampleLabel}
+            </p>
+          </div>
         </figure>
       </div>
     </section>
@@ -268,41 +263,54 @@ export function ServiceDeliverables({ content }: ServiceSectionProps) {
   );
 }
 
-// §05 Is it right for you?: the catalogue's fits on the pillar's wash, then the decision aid
-export function ServiceFit({ content, service }: ServiceSectionProps) {
+// §05 Is it right for you?: the catalogue's fits on the pillar's wash, then the decision aid.
+// `aidOnly`: the decision aid alone, in two columns (the flagship page, Figma 60:34)
+export function ServiceFit({
+  content,
+  service,
+  index = 4,
+  aidOnly = false,
+}: ServiceSectionProps & { index?: number; aidOnly?: boolean }) {
   const { fit } = content;
+  const aid = (
+    <dl className="grid gap-card-gap sm:grid-cols-2">
+      {fit.decisionAid.map((entry) => (
+        <div key={entry.question} className="rounded-2xl border border-line bg-surface p-5 lg:p-6">
+          <dt className="font-semibold text-ink">{entry.question}</dt>
+          <dd className="mt-2 text-small text-ink-secondary">{entry.answer}</dd>
+        </div>
+      ))}
+    </dl>
+  );
   return (
     <section aria-labelledby="service-fit" className={section}>
       <SectionHeading
         id="service-fit"
-        index={4}
+        index={index}
         eyebrow={serviceTemplate.eyebrows.fit}
         heading={fit.heading}
         lede={fit.lede}
       />
-      <div className="mt-12 grid gap-card-gap lg:grid-cols-[minmax(0,22.5rem)_minmax(0,1fr)] lg:items-start">
-        <div
-          className={`grid gap-4 rounded-2xl p-6 ${service.pillar ? PILLAR_WASH[service.pillar] : 'bg-violet-soft'}`}
-        >
-          <h3 className="font-mono text-label text-ink uppercase">{serviceTemplate.goodFitLabel}</h3>
-          <ul className="grid gap-3.5 text-small text-ink">
-            {fit.goodFit.map((item) => (
-              <li key={item} className="flex items-start gap-3">
-                {service.pillar ? <PillarMark pillar={service.pillar} className="mt-1.5 size-2" /> : null}
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
+      {aidOnly ? (
+        <div className="mt-12">{aid}</div>
+      ) : (
+        <div className="mt-12 grid gap-card-gap lg:grid-cols-[minmax(0,22.5rem)_minmax(0,1fr)] lg:items-start">
+          <div
+            className={`grid gap-4 rounded-2xl p-6 ${service.pillar ? PILLAR_WASH[service.pillar] : 'bg-violet-soft'}`}
+          >
+            <h3 className="font-mono text-label text-ink uppercase">{serviceTemplate.goodFitLabel}</h3>
+            <ul className="grid gap-3.5 text-small text-ink">
+              {fit.goodFit.map((item) => (
+                <li key={item} className="flex items-start gap-3">
+                  {service.pillar ? <PillarMark pillar={service.pillar} className="mt-1.5 size-2" /> : null}
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          {aid}
         </div>
-        <dl className="grid gap-card-gap sm:grid-cols-2">
-          {fit.decisionAid.map((entry) => (
-            <div key={entry.question} className="rounded-2xl border border-line bg-surface p-5 lg:p-6">
-              <dt className="font-semibold text-ink">{entry.question}</dt>
-              <dd className="mt-2 text-small text-ink-secondary">{entry.answer}</dd>
-            </div>
-          ))}
-        </dl>
-      </div>
+      )}
     </section>
   );
 }

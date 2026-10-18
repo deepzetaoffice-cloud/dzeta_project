@@ -1,7 +1,9 @@
-// The legal pages' sections (/privacy; docs/design/privacy.md; Figma 61:34): the hero, the glance
-// cards, the policy with its contents, the contact block and the related pages. Copy from the page's
-// content file, rendered from its blocks, never shortened. Phase C: base tokens only; Phase D adds the
-// Figma look, the sticky contents and drape.
+// The legal pages' sections (/privacy; docs/design/privacy.md; Figma 61:34 desktop, 61:594 mobile): the
+// hero on its drape, the glance cards, the policy with its sticky contents, the contact card and the
+// related pages. Copy from the page's content file, rendered from its blocks, never shortened.
+// src/lib/fx/privacy.ts (the page's scene) adds `drape` to the hero and marks the section being read
+// in the contents.
+import { Breadcrumbs, type Crumb } from '@/components/ui/Breadcrumbs';
 import { Glyph, glyphFor } from '@/components/ui/Glyph';
 import { whatsappHref } from '@/components/ui/CtaButton';
 import type { LegalBlock, LegalGlanceCard, LegalSection } from '@/content/en/legal/privacy';
@@ -10,48 +12,65 @@ import { siteConfig } from '@/lib/site-config';
 
 const EYEBROW = 'font-mono text-label uppercase text-ink-secondary';
 
-// A glance card's glyph, by the content's interface name (05 §6)
+// A glance card's glyph on its violet-soft tile, by the content's interface name (05 §6)
 function CardGlyph({ name }: { name: LegalGlanceCard['icon'] }) {
   const glyph = glyphFor(name);
-  return glyph ? <Glyph name={glyph} className="text-violet" /> : null;
+  return glyph ? (
+    <span className="inline-flex size-10 items-center justify-center rounded-md bg-violet-soft text-violet">
+      <Glyph name={glyph} className="size-5" />
+    </span>
+  ) : null;
 }
 
 export type LegalHeroProps = {
-  eyebrow: string;
+  trail: readonly Crumb[];
   heading: string;
   answer: string;
   lastUpdatedLabel: string;
   lastUpdated: { iso: string; display: string };
 };
 
-// Block 1: the H1 and the direct answer are the LCP, visible at first paint (13 §3), no entrance motion
-export function LegalHero({ eyebrow, heading, answer, lastUpdatedLabel, lastUpdated }: LegalHeroProps) {
+// Block 1, on the drape (Figma "Hero · Drape Background"): soft pleats drawn in CSS, which a canvas
+// takes over (drape) while effects are on. The H1 and the direct answer are the LCP, visible at first
+// paint (13 §3), no entrance motion; the pleats stay pale behind the text, so it keeps its contrast.
+export function LegalHero({ trail, heading, answer, lastUpdatedLabel, lastUpdated }: LegalHeroProps) {
   return (
-    <section aria-labelledby="legal-heading" className="mx-auto max-w-page px-gutter pt-8 pb-section">
-      <p className={EYEBROW}>{eyebrow}</p>
-      <h1 id="legal-heading" className="mt-3 text-hero-line text-balance">
-        {heading}
-      </h1>
-      <p className="mt-6 max-w-measure text-lead">{answer}</p>
-      <p className="mt-4 text-small text-ink-secondary">
-        {lastUpdatedLabel} <time dateTime={lastUpdated.iso}>{lastUpdated.display}</time>
-      </p>
+    <section aria-labelledby="legal-heading" className="px-stage-inset">
+      <div
+        data-fx-scene="privacy"
+        className="dz-drape relative mx-auto max-w-page overflow-hidden rounded-stage bg-surface"
+      >
+        <span aria-hidden="true" className="dz-drape-pleats" />
+        <canvas aria-hidden="true" className="dz-drape-canvas" hidden />
+        <span aria-hidden="true" className="dz-drape-veil" />
+        <div className="relative mx-auto grid max-w-[51.25rem] justify-items-center gap-5 px-gutter pt-10 pb-12 text-center lg:pt-12 lg:pb-14">
+          <Breadcrumbs trail={trail} tone="mono" className="" />
+          <h1 id="legal-heading" className="text-hero-line text-balance">
+            {heading}
+          </h1>
+          <p className="text-lead text-ink">{answer}</p>
+          <p className="inline-flex min-h-8 items-center gap-2 rounded-full bg-violet-soft px-3 text-caption text-violet">
+            <span aria-hidden="true" className="size-1.5 rounded-full bg-accent-violet" />
+            {lastUpdatedLabel} · <time dateTime={lastUpdated.iso}>{lastUpdated.display}</time>
+          </p>
+        </div>
+      </div>
     </section>
   );
 }
 
 export function LegalGlance({ heading, cards }: { heading: string; cards: readonly LegalGlanceCard[] }) {
   return (
-    <section aria-labelledby="legal-glance" className="mx-auto max-w-page px-gutter">
-      <h2 id="legal-glance" className="sr-only">
+    <section aria-labelledby="legal-glance" className="mx-auto max-w-page px-gutter pt-section">
+      <h2 id="legal-glance" className="text-h3 text-ink">
         {heading}
       </h2>
-      <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <ul className="mt-8 grid gap-card-gap sm:grid-cols-2 lg:grid-cols-4">
         {cards.map((card) => (
-          <li key={card.title} className="rounded-lg border border-line bg-surface p-6">
+          <li key={card.title} className="grid content-start gap-3 rounded-2xl border border-line bg-surface p-6">
             <CardGlyph name={card.icon} />
-            <h3 className="mt-4 text-h4">{card.title}</h3>
-            <p className="mt-2 text-small">{card.line}</p>
+            <h3 className="mt-1 text-h4 text-ink">{card.title}</h3>
+            <p className="text-small text-ink-secondary">{card.line}</p>
           </li>
         ))}
       </ul>
@@ -162,30 +181,26 @@ export type LegalBodyProps = {
 // references ("§9", "Section 7") read.
 export function LegalBody({ contentsLabel, contentsHeading, sections, note }: LegalBodyProps) {
   const contents = (
-    <ol className="mt-3 grid gap-1 text-small">
-      {sections.map((section, index) => (
+    <ol className="mt-3 grid gap-0.5 text-small">
+      {sections.map((section) => (
         <li key={section.id}>
-          <a
-            href={`#${section.id}`}
-            className="inline-flex min-h-11 items-center text-ink-secondary hover:text-ink"
-            data-toc-link={section.id}
-          >
-            {index + 1}. {section.title}
+          <a href={`#${section.id}`} className="dz-toc-link" data-toc-link={section.id}>
+            {section.title}
           </a>
         </li>
       ))}
     </ol>
   );
   return (
-    <div className="mx-auto max-w-page px-gutter py-section" data-fx-lazy="toc">
-      <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,3fr)]">
+    <div className="mx-auto max-w-page px-gutter py-section">
+      <div className="grid gap-10 lg:grid-cols-[minmax(0,20rem)_minmax(0,1fr)] lg:gap-12">
         <nav aria-label={contentsLabel} className="lg:sticky lg:top-32 lg:self-start">
-          <details className="rounded-lg border border-line bg-surface px-5 lg:hidden">
+          <details className="rounded-2xl border border-line bg-surface px-5 pb-2 lg:hidden">
             <summary className="flex min-h-14 cursor-pointer items-center font-semibold">{contentsHeading}</summary>
             {contents}
           </details>
-          <div className="hidden lg:block">
-            <p className={EYEBROW}>{contentsHeading}</p>
+          <div className="hidden rounded-2xl border border-line bg-surface p-4 lg:block">
+            <p className={`px-3 pt-1 ${EYEBROW}`}>{contentsHeading}</p>
             {contents}
           </div>
         </nav>
@@ -199,7 +214,7 @@ export function LegalBody({ contentsLabel, contentsHeading, sections, note }: Le
               data-legal-section=""
             >
               <h2 id={`${section.id}-heading`} className="text-h3 text-balance">
-                {index + 1}. {section.title}
+                {index + 1} · {section.title}
               </h2>
               {section.blocks.map((block, blockIndex) => (
                 <Block key={blockIndex} block={block} tableId={`${section.id}-table-${blockIndex}`} />
@@ -221,74 +236,73 @@ export type LegalContactProps = {
   contactPage: string;
 };
 
-export function LegalContact({ heading, body, email, whatsapp, contactPage }: LegalContactProps) {
-  const wa = whatsappHref();
-  return (
-    <section aria-labelledby="legal-contact" className="mx-auto max-w-page px-gutter py-section">
-      <div className="rounded-lg border border-line bg-surface p-8">
-        <h2 id="legal-contact" className="text-h2 text-balance">
-          {heading}
-        </h2>
-        <p className="mt-4 max-w-measure text-lead">{body}</p>
-        <ul className="mt-6 flex flex-wrap gap-3">
-          <li>
-            <a
-              href={`mailto:${siteConfig.email}`}
-              className="dz-press inline-flex min-h-11 items-center rounded-full bg-action px-5 text-button-m text-on-color"
-            >
-              {email}
-            </a>
-          </li>
-          {wa ? (
-            <li>
-              <a
-                href={wa}
-                className="dz-press inline-flex min-h-11 items-center rounded-full border border-line-strong px-5 text-button-m"
-              >
-                {whatsapp}
-              </a>
-            </li>
-          ) : null}
-          {isLive('R005') ? (
-            <li>
-              <a
-                href={routePath('R005')}
-                className="dz-press inline-flex min-h-11 items-center rounded-full border border-line-strong px-5 text-button-m"
-              >
-                {contactPage}
-              </a>
-            </li>
-          ) : null}
-        </ul>
-      </div>
-    </section>
-  );
-}
-
 export type LegalRelatedProps = {
   heading: string;
   links: readonly { route: RouteId; title: string; line: string }[];
 };
 
-// Block 6: related pages, each only once it's live; the block hides itself while none is
-export function LegalRelated({ heading, links }: LegalRelatedProps) {
-  const live = links.filter((link) => isLive(link.route));
-  if (live.length === 0) return null;
+// Block 4: "Questions about your data?" on the stage, then the related pages, each only once it's
+// live, its title the link (no "Open": 08 §2.9). While none is live, the contact card takes the row.
+export function LegalContact({ contact, related }: { contact: LegalContactProps; related: LegalRelatedProps }) {
+  const wa = whatsappHref();
+  const live = related.links.filter((link) => isLive(link.route));
+  const button = 'dz-press dz-button-on-color min-h-11 px-5 text-button-m';
   return (
-    <section aria-labelledby="legal-related" className="mx-auto max-w-page px-gutter pb-section">
-      <h2 id="legal-related" className="text-h3">
-        {heading}
-      </h2>
-      <ul className="mt-6 grid gap-4 md:grid-cols-3">
+    <section aria-labelledby="legal-contact" className="mx-auto max-w-page px-gutter pb-section">
+      <div className="grid gap-card-gap md:grid-cols-2 lg:grid-cols-4">
+        <div
+          className={[
+            'grid content-start gap-4 rounded-2xl bg-(image:--dz-grad-stage) p-6 text-on-color lg:p-8',
+            live.length === 0 ? 'md:col-span-2 lg:col-span-4' : '',
+          ].join(' ')}
+        >
+          <h2 id="legal-contact" className="text-h3 text-balance text-on-color">
+            {contact.heading}
+          </h2>
+          <p className="max-w-measure text-small">{contact.body}</p>
+          <p className="font-semibold">{siteConfig.email}</p>
+          <ul className="flex flex-wrap gap-3">
+            <li>
+              <a href={`mailto:${siteConfig.email}`} className={button}>
+                {contact.email}
+                <Glyph name="mail" className="size-4.5" />
+              </a>
+            </li>
+            {wa ? (
+              <li>
+                <a href={wa} className={button}>
+                  {contact.whatsapp}
+                </a>
+              </li>
+            ) : null}
+            {isLive('R005') ? (
+              <li>
+                <a href={routePath('R005')} className={button}>
+                  {contact.contactPage}
+                </a>
+              </li>
+            ) : null}
+          </ul>
+        </div>
+        {live.length > 0 ? (
+          <h2 id="legal-related" className="sr-only">
+            {related.heading}
+          </h2>
+        ) : null}
         {live.map((link) => (
-          <li key={link.route} className="rounded-lg border border-line bg-surface p-6">
-            <a href={routePath(link.route)} className="text-h4">
-              {link.title}
-            </a>
-            <p className="mt-2 text-small">{link.line}</p>
-          </li>
+          <article
+            key={link.route}
+            className="dz-hover-lift relative grid content-start gap-2 rounded-2xl border border-line bg-surface p-6"
+          >
+            <h3 className="text-h4 text-ink">
+              <a href={routePath(link.route)} className="after:absolute after:inset-0">
+                {link.title}
+              </a>
+            </h3>
+            <p className="text-small text-ink-secondary">{link.line}</p>
+          </article>
         ))}
-      </ul>
+      </div>
     </section>
   );
 }

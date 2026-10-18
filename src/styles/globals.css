@@ -8,6 +8,8 @@
 @import './home.css';
 /* The services hub and the service template (services-hub.md, service-page.md) */
 @import './services.css';
+/* The privacy policy, the 404 and the error page (privacy.md, not-found.md) */
+@import './pages.css';
 
 /* The fx variant (13 §2.10–§2.11). Motion and hidden start states exist only inside it, so every
    effect rests in its final state otherwise (13 §3.8). It holds while no device setting asks for less

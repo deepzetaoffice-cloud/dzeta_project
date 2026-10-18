@@ -80,10 +80,18 @@ export type ServicePageContent = {
  * service page"; the plan docs/plans/2026-10-10-flagship-websites-page.md)
  */
 export type WebsitesExtras = {
-  /** "Code ↔ Page" (story-before-after) beside the How-it-works steps */
+  /** The hero's extras (Figma 60:34): the tag after the catalogue number, and the link to Code ↔ Page */
+  hero: { tag: string; seeCode: string };
+  /** The proof section's C diagram eyebrow (the steps' eyebrow is how.exampleLabel) */
+  proofEyebrow: string;
+  /** "Code ↔ Page" (code-page-compare): the page's real opening section beside its real source */
   codePage: {
-    /** The figure's visible label, e.g. "Code ↔ Page" */
+    /** The figure's visible label, e.g. "Code ↔ Page" (also the section's eyebrow) */
     label: string;
+    /** The section's heading */
+    heading: string;
+    /** The line under the slider: how to move it */
+    hint: string;
     /** One sentence under it: what the two sides are (the real hero, its real source) */
     caption: string;
     /** The two sides' names */

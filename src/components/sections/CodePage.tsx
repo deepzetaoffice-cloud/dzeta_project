@@ -1,42 +1,70 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { ServiceHero, type ServiceSectionProps } from '@/components/sections/service/ServiceSections';
-import type { WebsitesExtras } from '@/content/en/services/types';
+import { SectionHeading } from '@/components/sections/SectionHeading';
+import { CODE_PAGE_ID, FlagshipHero, type FlagshipProps } from '@/components/sections/service/FlagshipSections';
 
-// "Code ↔ Page" (docs/design/custom-coded-websites.md §02): this page's real opening section beside
-// the real source that renders it, read from the repository at build time, never typed by hand
-// (10 §3.6). Phase C shows both sides; Phase D adds code-page-compare (13 §4.4), the drag handle.
+// "Code ↔ Page" (docs/design/custom-coded-websites.md §02; code-page-compare, 13 §4.4): this page's real
+// opening section beside the real source that renders it, read from the repository at build time,
+// never typed by hand (10 §3.6). One box, two layers: the page underneath, the code over it, clipped
+// from the inline start to the handle (--dz-split). The handle is a native range input, so it drags,
+// takes ← → in 5% steps and has a name; src/lib/fx/flagship.ts moves the clip with it and plays the
+// one hint on first view. Without JavaScript the split rests at the middle.
 
-const SOURCE = 'src/components/sections/service/ServiceSections.tsx';
+const SOURCE = 'src/components/sections/service/FlagshipSections.tsx';
 
-/** The hero's source as it ships: from `export function ServiceHero` to its closing brace */
+/** The hero's source as it ships: from `export function FlagshipHero` to its closing brace */
 function heroSource(): string {
   const text = readFileSync(join(process.cwd(), SOURCE), 'utf8').replace(/\r\n/g, '\n');
-  const start = text.indexOf('export function ServiceHero');
+  const start = text.indexOf('export function FlagshipHero');
   const end = text.indexOf('\n}\n', start);
-  if (start < 0 || end < 0) throw new Error(`ServiceHero not found in ${SOURCE}`);
+  if (start < 0 || end < 0) throw new Error(`FlagshipHero not found in ${SOURCE}`);
   return text.slice(start, end + 2);
 }
 
-export function CodePage({ labels, ...hero }: ServiceSectionProps & { labels: WebsitesExtras['codePage'] }) {
+export function CodePage(props: FlagshipProps) {
+  const labels = props.extras.codePage;
   return (
-    <figure data-codepage="">
-      <div className="grid gap-card-gap lg:grid-cols-2">
-        <div className="rounded-lg border border-line bg-surface" aria-hidden="true" inert>
-          <span className="block px-5 pt-4 font-mono text-label text-ink-tertiary uppercase">{labels.pageLabel}</span>
-          <ServiceHero {...hero} preview />
+    <section aria-labelledby="code-page-heading" id={CODE_PAGE_ID} className="mx-auto max-w-page px-gutter py-section">
+      <SectionHeading
+        id="code-page-heading"
+        index={1}
+        eyebrow={labels.label}
+        heading={labels.heading}
+        lede={labels.caption}
+      />
+      <figure className="mt-12" data-compare="">
+        <div className="dz-compare">
+          {/* The page side repeats the hero above, so it's hidden from screen readers and can't take focus */}
+          <div className="dz-compare-page" aria-hidden="true" inert>
+            <FlagshipHero {...props} preview />
+          </div>
+          <div className="dz-compare-code" dir="ltr">
+            <pre className="font-mono text-small">
+              <code>{heroSource()}</code>
+            </pre>
+          </div>
+          <span aria-hidden="true" className="dz-compare-tag dz-compare-tag-page">
+            {labels.pageLabel}
+          </span>
+          <span aria-hidden="true" className="dz-compare-tag dz-compare-tag-code">
+            {labels.codeLabel}
+          </span>
+          <span aria-hidden="true" className="dz-compare-handle">
+            <span className="dz-compare-knob" />
+          </span>
+          <input
+            type="range"
+            min={0}
+            max={100}
+            step={5}
+            defaultValue={50}
+            aria-label={labels.sliderLabel}
+            className="dz-compare-range"
+            data-compare-range=""
+          />
         </div>
-        <div className="overflow-hidden rounded-lg bg-inverse text-on-color">
-          <span className="block px-5 pt-4 font-mono text-label uppercase">{labels.codeLabel}</span>
-          <pre className="overflow-x-auto p-5 font-mono text-small">
-            <code>{heroSource()}</code>
-          </pre>
-        </div>
-      </div>
-      <figcaption className="mt-4 max-w-measure text-small">
-        <span className="font-semibold text-ink">{labels.label}</span>{' '}
-        <span className="text-ink-secondary">{labels.caption}</span>
-      </figcaption>
-    </figure>
+        <figcaption className="mt-4 text-small text-ink-secondary">{labels.hint}</figcaption>
+      </figure>
+    </section>
   );
 }
