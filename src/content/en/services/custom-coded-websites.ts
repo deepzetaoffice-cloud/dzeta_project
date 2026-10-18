@@ -40,6 +40,9 @@ export const customCodedWebsites: ServicePageContent = {
   // outcome (Core Web Vitals, SEO, GEO and AI ranking built in) and who it's for (2.1's "Best for")
   answer: `Custom-Coded High-Performance Websites by ${siteConfig.brandName} are custom-coded in Next.js, TypeScript and Tailwind CSS, with no page builders or templates. Every page is built to pass Core Web Vitals, with SEO, GEO and AI ranking built in during development. They suit any UAE business that wants a website that brings leads and sales, not just an online brochure.`,
 
+  // The hero photo (service-page.md, the media plan)
+  heroPhotoAlt: 'A laptop and a phone showing the same website on a white desk, the Dubai skyline behind them',
+
   // 2 · The problem it solves (before-after, 5 rows; 2.1's four lists). The lede is 40 words
   problem: {
     heading: 'When your website is only a brochure',

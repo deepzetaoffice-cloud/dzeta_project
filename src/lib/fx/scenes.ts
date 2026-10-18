@@ -7,6 +7,8 @@ type Scene = { start: () => () => void };
 
 const MODULES: Record<string, () => Promise<Scene>> = {
   'home-hero': () => import('./home'),
+  'hub-dots': () => import('./hub'),
+  'service-flow': () => import('./service'),
 };
 
 let stops: (() => void)[] = [];

@@ -31,6 +31,9 @@ export const reviewReputationAutomation: ServicePageContent = {
   // 58 words: what it is, the outcome, who it's for (1D.3's "Best for")
   answer: `Review & Reputation Automation by ${siteConfig.brandName} asks customers for a review at the right moment after a service, alerts your manager when someone is unhappy, and drafts replies to your Google reviews for you to approve. It is for UAE clinics, restaurants, hotels and service companies that want reviews requested and answered without chasing them by hand.`,
 
+  // The hero photo (service-page.md, the media plan)
+  heroPhotoAlt: 'A hand holding up a phone that shows five stars, over a dinner plate at a restaurant in Dubai',
+
   // 2 · The problem it solves (before-after, at most 5 rows; catalogue 1D.3's four capabilities, the
   // monitoring and the report as two rows). Lede: 37 words
   problem: {

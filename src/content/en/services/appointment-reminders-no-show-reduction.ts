@@ -29,6 +29,9 @@ export const appointmentRemindersNoShowReduction: ServicePageContent = {
   // 57 words: what it is, the outcome, who it's for (catalogue 7.5: Healthcare & Dentists)
   answer: `Appointment Reminder & No-Show Reduction by ${siteConfig.brandName} sends each customer a series of reminders before their appointment, each with a one-tap way to confirm or reschedule. If someone still misses the visit, the system follows up automatically to rebook them. It is for UAE clinics, dentists and service businesses that lose hours to empty appointment slots.`,
 
+  // The hero photo (service-page.md, the media plan)
+  heroPhotoAlt: 'A smartwatch lit up on a driver’s wrist at the wheel, the Dubai skyline at sunset ahead',
+
   // 2 · The problem it solves (before-after, at most 5 rows; catalogue 1C.2's three capabilities).
   // Lede: 35 words
   problem: {

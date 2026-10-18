@@ -36,6 +36,10 @@ export const aiAdCreative: ServicePageContent = {
   // it's for (7.5 E-Commerce & Beauty, 7.2 consumer brands; the 4B channels)
   answer: `AI Ad Creative Production by ${siteConfig.brandName} makes AI-assisted video, UGC-style and static ads, plus 3D and motion graphics, for your campaigns. You get many variations to test, and tired creatives are replaced when their performance drops. It is for e-commerce, beauty and consumer brands that run paid ads on Meta, Google, TikTok or Snapchat.`,
 
+  // The hero photo (service-page.md, the media plan)
+  heroPhotoAlt:
+    'A small studio set up to shoot a perfume bottle against a violet backdrop, with a camera, a softbox and a laptop',
+
   // 2 · The problem it solves (before-after, at most 5 rows; 4B.6's three items and 4E's Creative
   // stage). The lede is 34 words
   problem: {

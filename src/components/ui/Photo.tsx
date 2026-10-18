@@ -23,7 +23,9 @@ export function Photo({ asset, sizes, className, priority = false }: PhotoProps)
       alt={asset.decorative ? '' : (asset.alt ?? '')}
       sizes={sizes}
       className={className}
-      priority={priority}
+      preload={priority}
+      loading={priority ? 'eager' : undefined}
+      fetchPriority={priority ? 'high' : undefined}
     />
   );
 }

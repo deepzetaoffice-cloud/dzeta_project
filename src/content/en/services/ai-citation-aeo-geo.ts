@@ -35,6 +35,9 @@ export const aiCitationAeoGeo: ServicePageContent = {
   // (4A.1's list) and who it's for (5.3: "any local or B2B business")
   answer: `AI Citation & Answer Engine Optimisation (AEO/GEO) by ${siteConfig.brandName} is built to get your business named and recommended by ChatGPT, Gemini, Perplexity and Google AI Overviews. We set up your entity and schema, llms.txt and direct-answer content, then test every month how AI engines describe you. It suits local and B2B businesses in the UAE.`,
 
+  // The hero photo (service-page.md, the media plan)
+  heroPhotoAlt: 'A laptop and a notebook on a marble table, on a terrace in Dubai Design District',
+
   // 2 · The problem it solves (before-after, at most 5 rows; 4A.1's four items, the entity item in
   // two rows). The lede (30 words) names what the work starts from, not how an engine behaves
   problem: {

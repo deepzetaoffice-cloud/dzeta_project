@@ -29,6 +29,9 @@ export const automatedQuotationTracking: ServicePageContent = {
   // 60 words: what it is, the outcome, who it's for (1B.3's "Best for" line)
   answer: `The Automated Quotation & Quote Tracking System by ${siteConfig.brandName} turns an enquiry into a branded quote, sends it by email or WhatsApp and shows you when the client opens it. Reminders follow up until the quote is accepted, rejected or expires. It is for UAE businesses in technical services, fit-out, construction and maintenance, and for B2B suppliers and agencies.`,
 
+  // The hero photo (service-page.md, the media plan)
+  heroPhotoAlt: 'Hands signing on a tablet beside rolled-up plans, a hard hat and a coffee, in a Dubai office',
+
   // 2 · The problem it solves (before-after, at most 5 rows; catalogue 1B.3's list). Lede: 40 words
   problem: {
     heading: 'Where quotes stall',

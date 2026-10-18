@@ -31,6 +31,10 @@ export const crmSetupAutomation: ServicePageContent = {
   // 58 words: what it is, the outcome, who it's for
   answer: `CRM Setup & Automation by ${siteConfig.brandName} sets up HubSpot, Zoho CRM, Pipedrive, Salesforce or Odoo around how you sell, with pipelines, stages, tasks and reminders. Leads from forms, calls, email and WhatsApp are entered automatically, duplicates are cleaned up, and dashboards show the pipeline. It is for UAE sales teams who keep leads in spreadsheets and inboxes.`,
 
+  // The hero photo (service-page.md, the media plan)
+  heroPhotoAlt:
+    'Hands typing on a laptop that shows a sales pipeline board, in an office overlooking the Dubai skyline',
+
   // 2 · The problem it solves (before-after, 5 rows; catalogue 1B.6's five capabilities). Lede: 38
   // words
   problem: {

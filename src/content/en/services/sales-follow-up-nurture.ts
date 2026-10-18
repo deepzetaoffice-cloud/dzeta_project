@@ -30,6 +30,10 @@ export const salesFollowUpNurture: ServicePageContent = {
   // 58 words: what it is, the outcome, who it's for
   answer: `Sales Follow-Up & Nurture Sequences by ${siteConfig.brandName} keep in touch with each lead through a series of WhatsApp, email and SMS messages. The next message depends on how the lead responds, and the sequence stops by itself when they reply or book. It is for UAE businesses whose leads need more than one message before they decide.`,
 
+  // The hero photo (service-page.md, the media plan)
+  heroPhotoAlt:
+    'Seen from behind, a person with a coffee checks a phone on a palm-lined street in a Dubai business district',
+
   // 2 · The problem it solves (before-after, at most 5 rows; catalogue 1B.5's three capabilities).
   // Lede: 38 words
   problem: {

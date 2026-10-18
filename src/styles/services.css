@@ -1,0 +1,239 @@
+/* The services hub and the service template (docs/design/services-hub.md, service-page.md; Figma
+   58:34, 59:34). Tokens only (05 §1); every motion rests in its final state outside the fx variant
+   (13 §3 rules 8 and 10). The flow panel reuses Home's diagram classes (home.css, §05). */
+
+@layer components {
+  /* The two tables (the hub's chooser, the template's before and after): a white panel whose rows stack
+     below 640 px, never a sideways scroll */
+  .dz-table-panel {
+    overflow: hidden;
+    border: var(--dz-border-width) solid var(--dz-color-border-default);
+    border-radius: var(--dz-radius-xl);
+    background-color: var(--dz-color-bg-surface);
+  }
+
+  .dz-table-panel table {
+    inline-size: 100%;
+    border-collapse: collapse;
+  }
+
+  .dz-table-panel tbody tr + tr {
+    border-block-start: var(--dz-border-width) solid var(--dz-color-border-default);
+  }
+
+  .dz-table-panel tbody tr:first-child {
+    @variant sm {
+      border-block-start: var(--dz-border-width) solid var(--dz-color-border-default);
+    }
+  }
+
+  .dz-chooser-row {
+    @variant fx {
+      transition: background-color var(--dz-motion-duration-base) var(--dz-motion-ease-out);
+    }
+  }
+
+  .dz-chooser-row:has(a:is(:hover, :focus-visible)) {
+    background-color: var(--dz-color-bg-violet-soft);
+  }
+
+  /* §01 dot-field (KokonutUI BG-01): a field of dots on the stage. The base dots are still; the spot
+     layer brightens the dots near the pointer (src/lib/fx/hub.ts sets data-spot and --dz-spot-x/y,
+     only for a fine pointer with effects on); a hovered or focused pillar chip lights its pillar's
+     dots and dims the others. Decorative: it carries no content. */
+  .dz-dots {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, var(--dz-p-white-16) 0.09375rem, transparent 0.125rem);
+    background-size: 1.75rem 1.75rem;
+    pointer-events: none;
+  }
+
+  .dz-dots-spot {
+    background-image: radial-gradient(circle, var(--dz-p-white-92) 0.09375rem, transparent 0.125rem);
+    opacity: 0;
+    mask-image: radial-gradient(circle 14rem at var(--dz-spot-x) var(--dz-spot-y), var(--dz-p-white), transparent);
+    @variant fx {
+      transition: opacity var(--dz-motion-duration-base) var(--dz-motion-ease-out);
+    }
+  }
+
+  .dz-hub-hero[data-spot] .dz-dots-spot {
+    opacity: 1;
+  }
+
+  .dz-dots-pillar {
+    --dz-dot: var(--dz-color-accent-ai);
+    background-image: radial-gradient(circle, var(--dz-dot) 0.125rem, transparent 0.15625rem);
+    background-size: 12.25rem 8.75rem;
+    opacity: 0.7;
+    @variant fx {
+      transition: opacity var(--dz-motion-duration-base) var(--dz-motion-ease-out);
+    }
+  }
+
+  .dz-dots-ai {
+    background-position: 1.75rem 3.5rem;
+  }
+
+  .dz-dots-web {
+    --dz-dot: var(--dz-color-accent-websites);
+    background-position: 7rem 0;
+  }
+
+  .dz-dots-software {
+    --dz-dot: var(--dz-color-accent-software);
+    background-position: 3.5rem 7rem;
+  }
+
+  .dz-dots-ranking {
+    --dz-dot: var(--dz-color-accent-violet-on-dark);
+    background-position: 8.75rem 5.25rem;
+  }
+
+  .dz-hub-hero:has([data-hub-pillar]:is(:hover, :focus-visible)) .dz-dots-pillar {
+    opacity: 0.15;
+  }
+
+  .dz-hub-hero:has([data-hub-pillar='ai']:is(:hover, :focus-visible)) .dz-dots-ai,
+  .dz-hub-hero:has([data-hub-pillar='web']:is(:hover, :focus-visible)) .dz-dots-web,
+  .dz-hub-hero:has([data-hub-pillar='software']:is(:hover, :focus-visible)) .dz-dots-software,
+  .dz-hub-hero:has([data-hub-pillar='ranking']:is(:hover, :focus-visible)) .dz-dots-ranking {
+    opacity: 1;
+  }
+
+  /* hover-lift on a live service in the hub's lists: the link rises 2 px under a pointer */
+  .dz-hub-link {
+    @variant fx {
+      transition: translate var(--dz-motion-duration-base) var(--dz-motion-ease-out);
+      @media (hover: hover) and (pointer: fine) {
+        &:hover {
+          translate: 0 -0.125rem;
+        }
+      }
+    }
+  }
+
+  /* §01 The service hero: the stage takes the page's pillar as a glow behind the photo, so it never
+     sits under the white text */
+  .dz-svc-hero {
+    --dz-svc-accent: var(--dz-color-accent-violet-on-dark);
+  }
+
+  .dz-svc-hero[data-pillar='ai'] {
+    --dz-svc-accent: var(--dz-color-accent-ai);
+  }
+
+  .dz-svc-hero[data-pillar='web'] {
+    --dz-svc-accent: var(--dz-color-accent-websites);
+  }
+
+  .dz-svc-hero[data-pillar='software'] {
+    --dz-svc-accent: var(--dz-color-accent-software);
+  }
+
+  .dz-svc-glow {
+    position: absolute;
+    inset-block-end: -16rem;
+    inset-inline-end: -12rem;
+    inline-size: 44rem;
+    block-size: 36rem;
+    border-radius: var(--dz-radius-full);
+    background-image: radial-gradient(closest-side, var(--dz-svc-accent), transparent);
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  /* §03 The flow panel: the caption and the steps in the first column, the diagram beside them */
+  .dz-svc-panel {
+    @variant lg {
+      grid-template-columns: 22.5rem minmax(0, 1fr);
+      grid-template-rows: auto 1fr;
+      column-gap: 3.5rem;
+      row-gap: var(--dz-space-4);
+    }
+  }
+
+  .dz-svc-caption,
+  .dz-svc-steps {
+    @variant lg {
+      grid-column: 1;
+    }
+  }
+
+  .dz-svc-diagram-area {
+    @variant lg {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+    }
+  }
+
+  .dz-svc-diagram {
+    display: none;
+    @variant lg {
+      display: grid;
+      align-content: space-between;
+      gap: var(--dz-space-8);
+    }
+  }
+
+  .dz-svc-rows {
+    position: relative;
+    display: grid;
+    gap: var(--dz-space-12);
+    padding-block-start: var(--dz-space-4);
+    &::before {
+      content: '';
+      position: absolute;
+      inset-block: 3.75rem 2.75rem;
+      inset-inline-start: calc(50% - 0.0625rem);
+      inline-size: 0.125rem;
+      background-color: var(--dz-color-border-strong);
+    }
+  }
+
+  .dz-svc-row {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    gap: var(--dz-space-4);
+    &::before {
+      content: '';
+      position: absolute;
+      inset-block-start: 50%;
+      inset-inline: 15%;
+      block-size: 0.125rem;
+      background-color: var(--dz-color-border-strong);
+    }
+  }
+
+  .dz-svc-node {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    align-content: center;
+    gap: var(--dz-space-1);
+    inline-size: 30%;
+    min-block-size: 5.5rem;
+    padding: var(--dz-space-4) var(--dz-space-5);
+    border: var(--dz-border-width-strong) solid var(--dz-color-accent-violet);
+    border-radius: var(--dz-radius-xl);
+    background-color: var(--dz-color-bg-surface);
+    @variant fx {
+      transition:
+        border-color var(--dz-motion-duration-story) var(--dz-motion-ease-out),
+        background-color var(--dz-motion-duration-story) var(--dz-motion-ease-out),
+        box-shadow var(--dz-motion-duration-base) var(--dz-motion-ease-out);
+    }
+  }
+
+  .dz-flow[data-armed] .dz-svc-node[data-state='active'] {
+    border-color: var(--dz-color-accent-signal);
+    background-color: var(--dz-color-bg-wash-ai);
+    box-shadow: var(--dz-elevation-2);
+  }
+
+  .dz-flow[data-armed] .dz-svc-node[data-state='upcoming'] {
+    border-color: var(--dz-color-border-default);
+  }
+}

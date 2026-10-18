@@ -13,9 +13,9 @@ import {
 } from '@/components/sections/service/ServiceSections';
 import { StoryTerminal } from '@/components/sections/StoryTerminal';
 import { JsonLd } from '@/components/seo/JsonLd';
-import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { services as catalogueServices, type CatalogueService } from '@/content/catalogue';
 import { servicePages } from '@/content/en/services';
+import { serviceTemplate } from '@/content/en/services/template';
 import { buildRun } from '@/content/en/services/build-run';
 import { customCodedWebsitesExtras } from '@/content/en/services/custom-coded-websites';
 import { isLivePath, routeIdForPath } from '@/lib/routes';
@@ -59,8 +59,7 @@ export default function CustomCodedWebsitesPage() {
     <>
       {/* The page block: Service, WebPage (mainEntity → #service), BreadcrumbList, FAQPage */}
       <JsonLd graph={serviceGraph(SLUG, route)} />
-      <Breadcrumbs trail={serviceTrail(SLUG, route)} />
-      <ServiceHero {...props} />
+      <ServiceHero {...props} trail={serviceTrail(SLUG, route)} />
       <ServiceProblem {...props} />
       <ServiceHow {...props} story={<CodePage {...props} labels={customCodedWebsitesExtras.codePage} />} />
       <ServiceDeliverables {...props} />
@@ -78,7 +77,14 @@ export default function CustomCodedWebsitesPage() {
       <ServiceTryUaePairs {...props} />
       {/* The FAQ module (faq.md): zero JS for the base; its enhancement loads on use */}
       <div data-fx-lazy="faq" className="mx-auto max-w-page px-gutter py-section">
-        <Faq heading={page.content.faq.heading} lede={page.content.faq.lede} questions={page.faq} />
+        <Faq
+          heading={page.content.faq.heading}
+          lede={page.content.faq.lede}
+          questions={page.faq}
+          index={5}
+          eyebrow={serviceTemplate.eyebrows.faq}
+          layout="stacked"
+        />
       </div>
       {/* The demo stubs' panel, once per page that has a trigger */}
       {page.content.tryIt ? <DemoPanelTemplate /> : null}

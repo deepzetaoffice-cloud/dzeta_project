@@ -8,11 +8,19 @@ import type { Pillar } from '@/components/icons/registry';
 // - `square`: one small pixel, the bullet before a pillar's services and footer links. Set its size
 //   (a size-* class).
 
-const FILL: Record<Pillar, string> = {
+// Each pillar's gradient fill and its light wash (05 §2), for the surfaces that carry a pillar's colour
+export const PILLAR_FILL: Record<Pillar, string> = {
   ai: 'bg-(image:--dz-grad-pillar-ai)',
   web: 'bg-(image:--dz-grad-pillar-websites)',
   software: 'bg-(image:--dz-grad-pillar-software)',
   ranking: 'bg-(image:--dz-grad-pillar-growth)',
+};
+
+export const PILLAR_WASH: Record<Pillar, string> = {
+  ai: 'bg-wash-ai',
+  web: 'bg-wash-websites',
+  software: 'bg-wash-software',
+  ranking: 'bg-wash-growth',
 };
 
 // The four pixels in the mark's 23.04 × 28.8 frame (Figma), as shares of its width and height; every
@@ -35,7 +43,7 @@ export function PillarMark({ pillar, shape = 'square', className }: PillarMarkPr
         className={['relative inline-block aspect-[4/5] shrink-0', className].filter(Boolean).join(' ')}
       >
         {PIXELS.map((place) => (
-          <span key={place} className={`absolute aspect-square rounded-[33%] ${place} ${FILL[pillar]}`} />
+          <span key={place} className={`absolute aspect-square rounded-[33%] ${place} ${PILLAR_FILL[pillar]}`} />
         ))}
       </span>
     );
@@ -43,7 +51,7 @@ export function PillarMark({ pillar, shape = 'square', className }: PillarMarkPr
   return (
     <span
       aria-hidden="true"
-      className={['inline-block shrink-0 rounded-[25%]', FILL[pillar], className].filter(Boolean).join(' ')}
+      className={['inline-block shrink-0 rounded-[25%]', PILLAR_FILL[pillar], className].filter(Boolean).join(' ')}
     />
   );
 }

@@ -18,6 +18,7 @@ export const servicesHub: ServicesHubContent = {
   heading: 'AI automation, websites, software and growth services',
   // 43 words; the positioning line (facts §1) and the market (facts §3)
   answer: `${siteConfig.brandName} builds online growth for every business, starting with the UAE, through four pillars: AI Automation, Websites, Software, and Growth & Ranking. Find your service by problem or by pillar. Not sure? A free AI automation audit shows what to automate first.`,
+  findByProblem: 'Find your service by problem',
 
   // "Which service do you need?": problems in the owner's words, each to a lead or core service
   // that the catalogue says solves it (1B.1, 1A.2 "after hours and during peak times", 1A.1, 1B.3,
@@ -42,8 +43,10 @@ export const servicesHub: ServicesHubContent = {
 
   // "Start here": the catalogue's starter offers (§0), each line from its own entry
   startHere: {
+    eyebrow: 'Starter offers',
     heading: 'Start here',
     lede: 'From a free first look to an in-depth review.',
+    freeLabel: 'Free',
     items: [
       { offerNumber: '0.1', line: 'Shows what to automate first, with estimated hours and money saved.' },
       { offerNumber: '0.2', line: 'A full review for larger companies before a major AI project.' },
@@ -53,12 +56,14 @@ export const servicesHub: ServicesHubContent = {
 
   // The four pillar directories: one 40–75-word lede each, written from the pillar's own sections
   pillars: {
+    eyebrow: 'Four pillars',
     heading: 'Every service, by pillar',
     ledes: {
       // 41 words: sub-groups 1B, 1D–1H; 1A.1, 1A.2 and 1A.4 (Arabic and English); 1B.3, 1C.1, 1F.1, 1B.6
       ai: 'AI Automation takes repetitive work off your team across sales, service, operations, finance, HR and marketing. AI agents answer customers on WhatsApp, phone and chat in Arabic and English, and automations send quotes, book appointments, chase invoices and update your CRM.',
-      // 40 words: section 2's standard and the catalogue's highlights
-      web: 'Every website we build is custom-coded, with no page builders or templates, and built to pass Core Web Vitals on every page. SEO, GEO and AI ranking go in during development, ready for Google and AI engines from launch day.',
+      // 43 words: section 2's standard and the catalogue's highlights. What we do, never a promised
+      // score (10 §3.7; services-hub.md's flag): optimised for mobile, measured at launch.
+      web: 'Every website we build is custom-coded, with no page builders or templates, optimised for mobile networks and measured against Core Web Vitals at launch. SEO, GEO and AI ranking go in during development, ready for Google and AI engines from launch day.',
       // 40 words: 3.1 (roles, integrations), 3.2, 3.3 (spreadsheets), 3.4 (around how the business works)
       software:
         'Software covers the jobs off-the-shelf tools don’t fit. We build web applications, client portals, internal tools and admin dashboards around how your business works, with user roles and links to your CRM, ERP, payments and WhatsApp. Spreadsheets become proper tools.',
@@ -71,6 +76,7 @@ export const servicesHub: ServicesHubContent = {
   // "Ongoing care": section 6, in catalogue order (6.1 AI Ops Retainer; the add-ons 6.2–6.4 have no
   // pillar page, so the hub is where they are listed)
   care: {
+    eyebrow: 'Retainer and add-ons',
     heading: 'Ongoing care',
     lede: 'The AI Ops Retainer monitors, fixes and improves your automations and AI agents every month. Training, tracking setup and priority support can be added to any project.',
     catalogueNumbers: ['6.1', '6.2', '6.3', '6.4'],
@@ -78,11 +84,13 @@ export const servicesHub: ServicesHubContent = {
 
   // "Solutions": the six bundles (§5) are listed by the component from the catalogue
   solutions: {
+    eyebrow: 'Bundles',
     heading: 'Solutions',
     lede: 'Solutions package several services into one system built around one business problem.',
   },
 
   faq: {
+    eyebrow: 'FAQ',
     heading: 'Questions about our services',
     lede: 'Straight answers before you choose.',
   },

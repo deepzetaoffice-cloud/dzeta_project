@@ -13,6 +13,8 @@ import { shellContent } from '@/content/en/shell';
 // - With `index` and `eyebrow`, the heading takes the C diagram eyebrow (Home's [ 09 ] FAQ).
 // - `askAgent` replaces the audit link with "Ask our AI agent" (Home, Figma), which opens the agent
 //   (agentHref(): WhatsApp until the website agent ships).
+// - `stacked` (the services hub and the service pages, Figma 58:34, 59:34): the heading above and the
+//   questions full width under it, with no link of its own; the footer's finale follows straight after.
 
 export type FaqSectionProps = {
   /** The section's H2 and one-sentence intro (the page's copy) */
@@ -23,15 +25,19 @@ export type FaqSectionProps = {
   index?: number;
   eyebrow?: string;
   askAgent?: string;
+  layout?: 'split' | 'stacked';
 };
 
-export function Faq({ heading, lede, questions, index, eyebrow, askAgent }: FaqSectionProps) {
+export function Faq({ heading, lede, questions, index, eyebrow, askAgent, layout = 'split' }: FaqSectionProps) {
+  const stacked = layout === 'stacked';
   return (
     <section
       aria-labelledby="faq-heading"
-      className="grid gap-10 lg:grid-cols-[minmax(0,28.75rem)_minmax(0,1fr)] lg:gap-14"
+      className={stacked ? 'grid gap-10' : 'grid gap-10 lg:grid-cols-[minmax(0,28.75rem)_minmax(0,1fr)] lg:gap-14'}
     >
-      <div className="grid content-start gap-4 lg:sticky lg:top-32 lg:self-start">
+      <div
+        className={stacked ? 'grid content-start gap-4' : 'grid content-start gap-4 lg:sticky lg:top-32 lg:self-start'}
+      >
         {index !== undefined && eyebrow ? (
           <SectionHeading id="faq-heading" index={index} eyebrow={eyebrow} heading={heading} lede={lede} />
         ) : (
@@ -42,7 +48,7 @@ export function Faq({ heading, lede, questions, index, eyebrow, askAgent }: FaqS
             <p className="text-lead text-ink-secondary">{lede}</p>
           </>
         )}
-        {askAgent ? (
+        {stacked ? null : askAgent ? (
           <a href={agentHref()} className="dz-press dz-button-secondary mt-2 w-fit px-5">
             {askAgent}
             <Glyph name="arrow-up-right" className="size-4.5" />

@@ -32,6 +32,9 @@ export const aiShoppingVisibility: ServicePageContent = {
   // it covers (1I.2's four items) and who it's for (5.4: online stores and D2C brands)
   answer: `AI Shopping Visibility (Agentic Commerce Readiness) by ${siteConfig.brandName} is built to help your products appear and get recommended in AI shopping assistants such as ChatGPT Shopping and Google AI Mode. We restructure your product feed, add product schema and rich attributes, manage Merchant Center and marketplace feeds, and monitor visibility. It is for online stores and D2C brands.`,
 
+  // The hero photo (service-page.md, the media plan)
+  heroPhotoAlt: 'A hand holding a phone with a shopping chat open in a Dubai mall, shopping bags behind it',
+
   // 2 · The problem it solves (before-after, at most 5 rows; 1I.2's four items). The lede (37 words)
   // speaks of what a catalogue "can" leave out, never of how a given assistant behaves
   problem: {

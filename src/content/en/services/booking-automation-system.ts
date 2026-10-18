@@ -28,6 +28,9 @@ export const bookingAutomationSystem: ServicePageContent = {
   // 52 words: what it is, the outcome, who it's for (1C.1's "Best for")
   answer: `The Booking Automation System by ${siteConfig.brandName} lets customers book, reschedule and cancel online, on WhatsApp or by phone, choosing from your real-time availability. Confirmations, calendar invites and reminders go out automatically. It is for UAE clinics, salons, gyms, consultants, car services and training centres that still arrange every appointment by hand.`,
 
+  // The hero photo (service-page.md, the media plan)
+  heroPhotoAlt: 'Hands holding a phone at a clinic’s front desk, a tablet calendar beside it',
+
   // 2 · The problem it solves (before-after, at most 5 rows; catalogue 1C.1's list). Lede: 39 words
   problem: {
     heading: 'Where bookings get stuck',
