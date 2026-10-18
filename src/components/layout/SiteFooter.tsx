@@ -134,7 +134,7 @@ export function SiteFooter({ review = false }: SiteFooterProps) {
             </h2>
             <p className="max-w-[38.75rem] text-lead">{shellContent.finaleLine}</p>
             <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-              <CtaButton variant="primary" href={auditHref()} label={shellContent.cta} className="dz-finale-cta" />
+              <CtaButton variant="primary" href={auditHref()} label={shellContent.cta} className="dz-cta-rim" />
               {whatsapp ? (
                 <a href={whatsapp} className="dz-press dz-button-on-color">
                   {shellContent.whatsappLabel}

@@ -6,6 +6,7 @@ import {
   BuildItself,
   HowWeWork,
   IndustryTiles,
+  ProofExamples,
   RoiTeaser,
   WorkflowExplorer,
 } from '@/components/sections/home/MidSections';
@@ -29,7 +30,8 @@ export const metadata: Metadata = pageMetadata({
 // inside SiteShell's <main>. All copy is typed data (src/content/en/*.ts); the sections read the
 // catalogue and the industry groups, never retyping a name (10 §2). The page schema block (WebPage,
 // the pillars' ItemList, FAQPage) sits beside the sitewide one from the layout. The FAQ's and the
-// demos' enhancements load on use (src/lib/fx/lazy.ts). Phase D rebuilds each section to its frame.
+// demos' enhancements load on use (src/lib/fx/lazy.ts); the scenes start as they near the screen
+// (data-fx-scene, src/lib/fx/scenes.ts). Each section is built to its Figma frame (Phase D2).
 export default function HomePage() {
   return (
     <>
@@ -40,11 +42,19 @@ export default function HomePage() {
       <FourDoors />
       <WorkflowExplorer />
       <BuildItself />
+      <ProofExamples />
       <HowWeWork />
       <IndustryTiles />
       <RoiTeaser />
       <div data-fx-lazy="faq" className="mx-auto max-w-page px-gutter py-section">
-        <Faq heading={faqSection.heading} lede={faqSection.lede} questions={homeFaq} />
+        <Faq
+          heading={faqSection.heading}
+          lede={faqSection.lede}
+          questions={homeFaq}
+          index={9}
+          eyebrow={faqSection.eyebrow}
+          askAgent={faqSection.askAgent}
+        />
       </div>
       <FinalCta />
       {/* The demo stubs' panel, once per page: hidden until a trigger clones it (src/lib/fx/demo.ts) */}

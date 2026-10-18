@@ -68,6 +68,8 @@
   --dz-p-violet-300: #b9a2ff;
   --dz-p-violet-100: #efe9ff;
   --dz-p-ink-scrim-24: #0b0a2a3d;
+  /* Figma's photo scrim (the industry cards: ink at 78% at the foot) */
+  --dz-p-ink-scrim-78: #0b0a2ac7;
   /* Not Figma variables: the effect styles' glow colours (Glow/Violet, Glow/White, Glow/Cyan) */
   --dz-p-glow-violet-50: #6430fa80;
   --dz-p-glow-white-55: #ffffff8c;
@@ -94,8 +96,10 @@
   --dz-color-bg-wash-growth: var(--dz-p-wash-growth);
   --dz-color-bg-chat-wallpaper: var(--dz-p-whatsapp-wallpaper);
   --dz-color-bg-chat-bubble-own: var(--dz-p-whatsapp-bubble);
+  --dz-color-text-chat-status: var(--dz-p-whatsapp-green);
   --dz-color-bg-violet-soft: var(--dz-p-violet-100);
   --dz-color-bg-scrim: var(--dz-p-ink-scrim-24);
+  --dz-color-bg-photo-scrim: var(--dz-p-ink-scrim-78);
   --dz-color-text-primary: var(--dz-p-ink-950);
   --dz-color-text-secondary: var(--dz-p-ink-600);
   --dz-color-text-tertiary: var(--dz-p-ink-500);
@@ -369,6 +373,10 @@
   --color-accent-websites: var(--dz-color-accent-websites);
   --color-accent-software: var(--dz-color-accent-software);
   --color-accent-growth: var(--dz-color-accent-growth);
+  --color-accent-violet: var(--dz-color-accent-violet);
+  --color-accent-online: var(--dz-color-accent-online);
+  --color-accent-signal: var(--dz-color-accent-signal);
+  --color-accent-violet-on-dark: var(--dz-color-accent-violet-on-dark);
   --color-line: var(--dz-color-border-default);
   --color-line-strong: var(--dz-color-border-strong);
   --color-line-on-color: var(--dz-color-border-on-color);

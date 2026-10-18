@@ -4,6 +4,8 @@
 @import 'tailwindcss' source('..');
 /* The tokens and the Tailwind mapping. Raw values live only there (check:tokens). */
 @import './tokens.css';
+/* Home's sections (docs/design/home.md) */
+@import './home.css';
 
 /* The fx variant (13 §2.10–§2.11). Motion and hidden start states exist only inside it, so every
    effect rests in its final state otherwise (13 §3.8). It holds while no device setting asks for less
@@ -697,10 +699,6 @@
     @variant md {
       font-size: 2rem;
     }
-  }
-
-  .dz-finale-cta {
-    border: var(--dz-border-width-strong) solid var(--dz-color-border-on-color);
   }
 
   .dz-finale-glow {

@@ -17,29 +17,32 @@ export type DemoStubProps = {
   label: string;
   /** The trigger's glyph, by the content's interface name */
   icon?: Tier1Name;
-  /** On the stage: the On colour button style (05 §7) */
-  onColor?: boolean;
+  /** The button's look (05 §7): Secondary on white, On colour over the stage (border only, C85), or
+      Inverse (ink, the final CTA's test card) */
+  tone?: 'secondary' | 'onColor' | 'inverse';
   className?: string;
 };
 
-export function DemoStub({ demoId, label, icon = 'arrow', onColor = false, className }: DemoStubProps) {
+const LOOK = {
+  secondary: 'min-h-14 border-line-strong bg-surface px-6 text-button-l text-ink',
+  onColor: 'min-h-14 border-line-on-color px-6 text-button-l text-on-color',
+  inverse: 'min-h-11 border-transparent bg-action-inverse px-5 text-button-m text-on-color',
+} as const;
+
+export function DemoStub({ demoId, label, icon = 'arrow', tone = 'secondary', className }: DemoStubProps) {
   const glyph = glyphFor(icon);
-  const look = onColor ? 'border-line-on-color text-on-color' : 'border-line-strong bg-surface text-ink';
   return (
     <button
       type="button"
-      className={[
-        'dz-press inline-flex min-h-14 items-center gap-2 rounded-full border px-6 text-button-l',
-        look,
-        className,
-      ]
+      className={['dz-press inline-flex items-center gap-2 rounded-full border', LOOK[tone], className]
         .filter(Boolean)
         .join(' ')}
       data-demo={demoId}
       data-fx-lazy="demo"
     >
-      {glyph ? <Glyph name={glyph} className="size-5" /> : null}
-      {label}
+      {tone === 'inverse' ? label : null}
+      {glyph ? <Glyph name={glyph} className={tone === 'inverse' ? 'size-4.5' : 'size-5'} /> : null}
+      {tone === 'inverse' ? null : label}
     </button>
   );
 }

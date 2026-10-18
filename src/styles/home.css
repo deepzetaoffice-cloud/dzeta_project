@@ -1,0 +1,1859 @@
+/* Home's sections (docs/design/home.md; Figma 50:35 desktop, 56:810 mobile; effects 13 §4.3). Tokens
+   only (05 §1); every motion rests in its final state outside the fx variant (13 §3 rules 8 and 10). */
+
+@layer components {
+  /* Numbers drawn as decoration beside their labels (C80: signal orange marks, never carries meaning
+     alone). Generated content with empty alt text, so a screen reader hears the label only. */
+  .dz-num::before {
+    content: attr(data-num);
+    content: attr(data-num) / '';
+  }
+
+  .dz-num-bracket::before {
+    content: '[ ' attr(data-num) ' ]';
+    content: '[ ' attr(data-num) ' ]' / '';
+    color: var(--dz-color-text-signal);
+  }
+
+  .dz-num-signal {
+    color: var(--dz-color-text-signal);
+  }
+
+  /* A 32 px control face inside a 44 px hit area (Icon button 33:239) */
+  .dz-hit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 2.75rem;
+    block-size: 2.75rem;
+    border-radius: var(--dz-radius-full);
+  }
+
+  .dz-hit-face {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 2rem;
+    block-size: 2rem;
+    border: var(--dz-border-width) solid var(--dz-color-border-on-color);
+    border-radius: var(--dz-radius-full);
+    color: var(--dz-color-text-on-color);
+  }
+
+  .dz-hit-face-quiet {
+    border-color: var(--dz-color-border-default);
+    color: var(--dz-color-text-secondary);
+  }
+
+  .dz-hit[aria-pressed='true'] .dz-rotator-pause-icon,
+  .dz-hit[aria-pressed='false'] .dz-rotator-play-icon {
+    display: none;
+  }
+
+  .dz-icon-lg {
+    inline-size: 3.25rem;
+    block-size: 3.25rem;
+  }
+
+  /* The audit CTA's rim on colour (Figma: the Primary button over the stage) */
+  .dz-cta-rim {
+    border: var(--dz-border-width-strong) solid var(--dz-color-border-on-color);
+  }
+
+  /* hover-lift: cards rise 4 px under a pointer */
+  .dz-hover-lift {
+    @variant fx {
+      transition:
+        translate var(--dz-motion-duration-base) var(--dz-motion-ease-out),
+        box-shadow var(--dz-motion-duration-base) var(--dz-motion-ease-out);
+      @media (hover: hover) and (pointer: fine) {
+        &:hover {
+          translate: 0 -0.25rem;
+          box-shadow: var(--dz-elevation-2);
+        }
+      }
+    }
+  }
+
+  /* §01 The hero stage */
+  .dz-hero {
+    padding-block-end: 0;
+  }
+
+  .dz-hero-paths path {
+    stroke: var(--dz-color-border-on-color);
+    stroke-width: 1;
+    opacity: 0.5;
+    @variant fx {
+      transition: translate var(--dz-motion-duration-story) var(--dz-motion-ease-out);
+    }
+  }
+
+  .dz-hero-glow {
+    position: absolute;
+    border-radius: var(--dz-radius-full);
+    background-image: radial-gradient(closest-side, var(--dz-p-glow-white-55), transparent);
+    pointer-events: none;
+  }
+
+  .dz-hero-glow-a {
+    inset-block-start: -15rem;
+    inset-inline-start: -16.25rem;
+    inline-size: 45rem;
+    block-size: 35rem;
+    opacity: 0.55;
+  }
+
+  .dz-hero-glow-b {
+    inset-block-start: 52.5rem;
+    inset-inline-end: -16.25rem;
+    inline-size: 40rem;
+    block-size: 32.5rem;
+    opacity: 0.35;
+  }
+
+  /* hero-word-rotator: the previous phrase fading above, the slab with the current phrase, its glow
+     and the logo pixels that pop as a phrase lands */
+  .dz-rotator-prev {
+    font-family: var(--dz-font-family-display);
+    font-size: var(--dz-font-size-h3);
+    font-weight: var(--dz-font-weight-medium);
+    line-height: var(--dz-leading-h3);
+    letter-spacing: var(--dz-tracking-h2);
+    opacity: 0.22;
+    filter: blur(0.0625rem);
+    white-space: nowrap;
+  }
+
+  .dz-rotator-slot {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 100%;
+    min-block-size: calc(var(--dz-font-size-hero-word) * 2.3);
+    @variant md {
+      min-block-size: calc(var(--dz-font-size-hero-word) * 1.7);
+    }
+  }
+
+  .dz-rotator-glow {
+    position: absolute;
+    inset: -10% 10%;
+    border-radius: var(--dz-radius-full);
+    background-image: radial-gradient(closest-side, var(--dz-p-glow-violet-50), transparent);
+    opacity: 0.8;
+  }
+
+  .dz-slab {
+    position: relative;
+    display: inline-block;
+    max-inline-size: 100%;
+    padding: 0.06em 0.36em 0.14em;
+    border-radius: var(--dz-radius-xl);
+    background-color: var(--dz-slab-1);
+    box-shadow: var(--dz-elevation-2), var(--dz-glow-violet);
+    color: var(--dz-color-text-violet);
+    font-family: var(--dz-font-family-display);
+    font-size: var(--dz-font-size-hero-word);
+    font-weight: var(--dz-font-weight-semibold);
+    line-height: var(--dz-leading-hero-word);
+    letter-spacing: var(--dz-tracking-hero-word);
+    rotate: 1.5deg;
+    text-wrap: balance;
+    @variant fx {
+      transition: background-color var(--dz-motion-duration-base) var(--dz-motion-ease-out);
+    }
+  }
+
+  .dz-slab[data-slab='2'] {
+    background-color: var(--dz-slab-2);
+  }
+
+  .dz-slab[data-slab='3'] {
+    background-color: var(--dz-slab-3);
+  }
+
+  .dz-slab[data-slab='4'] {
+    background-color: var(--dz-slab-4);
+  }
+
+  .dz-slab[data-slab='5'] {
+    background-color: var(--dz-slab-5);
+  }
+
+  .dz-slab[data-slab='6'] {
+    background-color: var(--dz-slab-6);
+  }
+
+  .dz-slab-word {
+    display: inline-block;
+    perspective: 40rem;
+  }
+
+  .dz-burst {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-end: 4%;
+    inline-size: 4.375rem;
+    block-size: 5rem;
+    & > span {
+      position: absolute;
+      border-radius: 14%;
+    }
+    & > span:nth-child(1) {
+      inset-block-start: 0.125rem;
+      inset-inline-start: 1.875rem;
+      inline-size: 1rem;
+      block-size: 1rem;
+      background-color: var(--dz-color-text-on-color);
+    }
+    & > span:nth-child(2) {
+      inset-block-start: 1.375rem;
+      inset-inline-start: 0.375rem;
+      inline-size: 1.375rem;
+      block-size: 1.375rem;
+      background-color: var(--dz-color-accent-violet-on-dark);
+    }
+    & > span:nth-child(3) {
+      inset-block-start: 2rem;
+      inset-inline-start: 2.5rem;
+      inline-size: 0.6875rem;
+      block-size: 0.6875rem;
+      background-color: var(--dz-slab-2);
+    }
+    & > span:nth-child(4) {
+      inset-block-start: 3.25rem;
+      inset-inline-start: 1.25rem;
+      inline-size: 0.875rem;
+      block-size: 0.875rem;
+      background-color: var(--dz-color-text-on-color);
+    }
+    @variant max-md {
+      inline-size: 2.25rem;
+      block-size: 2.5rem;
+      scale: 0.5;
+      transform-origin: 100% 0;
+    }
+  }
+
+  .dz-rotator-progress {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    & > span {
+      inline-size: 1.375rem;
+      block-size: 0.3125rem;
+      border-radius: var(--dz-radius-xs);
+      background-color: var(--dz-color-text-on-color);
+      opacity: 0.3;
+      @variant fx {
+        transition:
+          inline-size var(--dz-motion-duration-base) var(--dz-motion-ease-out),
+          opacity var(--dz-motion-duration-base) var(--dz-motion-ease-out);
+      }
+    }
+    & > span[data-active] {
+      inline-size: 2.75rem;
+      opacity: 1;
+    }
+  }
+
+  /* The AI input (KokonutUI AI-02, restyled) */
+  .dz-agent-field {
+    display: flex;
+    align-items: center;
+    gap: var(--dz-space-3);
+    inline-size: 100%;
+    min-block-size: 3.75rem;
+    padding-block: var(--dz-space-1);
+    padding-inline: var(--dz-space-5) var(--dz-space-1);
+    border-radius: var(--dz-radius-full);
+    background-color: var(--dz-color-bg-surface);
+    filter: drop-shadow(0 var(--dz-elevation-2-y) calc(var(--dz-elevation-2-blur) / 2) var(--dz-color-shadow-ink));
+    @variant md {
+      min-block-size: 4.5rem;
+      padding-inline: var(--dz-space-6) var(--dz-space-2);
+    }
+    &:focus-within {
+      outline: var(--dz-focus-width) solid var(--dz-color-border-focus);
+      outline-offset: var(--dz-focus-offset);
+    }
+  }
+
+  .dz-agent-send {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    inline-size: 3rem;
+    block-size: 3rem;
+    border-radius: var(--dz-radius-full);
+    background-color: var(--dz-color-action-primary);
+    color: var(--dz-color-text-on-color);
+    @variant md {
+      inline-size: 3.5rem;
+      block-size: 3.5rem;
+    }
+  }
+
+  /* message-to-booking: the scene's frame, laid out as Figma 50:215 (desktop) and 56:956 (mobile) */
+  .dz-scene {
+    position: relative;
+    margin-block-start: var(--dz-space-12);
+  }
+
+  .dz-scene-frame {
+    position: relative;
+    max-inline-size: 88rem;
+    block-size: 32.5rem;
+    margin-inline: auto;
+    @variant lg {
+      block-size: 35rem;
+    }
+  }
+
+  .dz-scene-chip {
+    position: absolute;
+    inset-block-start: -2.5rem;
+    inset-inline-start: 50%;
+    translate: -50% 0;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--dz-space-2);
+    min-block-size: 2.25rem;
+    padding-inline: var(--dz-space-3);
+    border: var(--dz-border-width) solid var(--dz-color-border-on-color);
+    border-radius: var(--dz-radius-full);
+    font-size: var(--dz-font-size-caption);
+    font-weight: var(--dz-font-weight-medium);
+    white-space: nowrap;
+    @variant lg {
+      inset-block-start: 1.25rem;
+      inset-inline-start: 13.9%;
+      translate: none;
+    }
+  }
+
+  [dir='rtl'] .dz-scene-chip {
+    @variant max-lg {
+      translate: 50% 0;
+    }
+  }
+
+  .dz-scene-stack {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: 0.875rem;
+    inline-size: 15rem;
+    block-size: 4.5rem;
+    @variant lg {
+      inset-block-start: 4.375rem;
+      inset-inline-start: 12.8%;
+      inline-size: 21.25rem;
+      block-size: 6.5rem;
+    }
+  }
+
+  .dz-scene-note {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    display: flex;
+    align-items: center;
+    gap: var(--dz-space-3);
+    inline-size: 100%;
+    min-block-size: 3.8rem;
+    padding: var(--dz-space-3) var(--dz-space-4);
+    border-radius: var(--dz-radius-lg);
+    background-color: var(--dz-color-bg-surface);
+    box-shadow: var(--dz-elevation-1);
+    z-index: 2;
+    @variant lg {
+      inline-size: 20rem;
+      min-block-size: 4.75rem;
+    }
+  }
+
+  .dz-scene-note-mid,
+  .dz-scene-note-back {
+    opacity: 0.7;
+    z-index: 1;
+  }
+
+  .dz-scene-note-mid {
+    inset-block-start: 0.875rem;
+    inset-inline-start: 0.5rem;
+    inline-size: calc(100% - 1rem);
+    @variant max-lg {
+      display: none;
+    }
+    @variant lg {
+      inline-size: 19rem;
+    }
+  }
+
+  .dz-scene-note-back {
+    inset-block-start: 1.75rem;
+    inset-inline-start: 1rem;
+    inline-size: calc(100% - 2rem);
+    z-index: 0;
+    @variant max-lg {
+      display: none;
+    }
+    @variant lg {
+      inline-size: 18rem;
+    }
+  }
+
+  /* The phone (Mock/Phone · WhatsApp example 3:41), in CSS 3D: the body, its edge for depth, and the
+     screen as real HTML. --dz-phone-turn is the drag's rotation; --dz-phone-scale fits it to phones. */
+  .dz-phone-stage {
+    --dz-phone-scale: 0.86;
+    position: absolute;
+    inset-block-start: 4.375rem;
+    inset-inline-start: 50%;
+    inline-size: 19.5rem;
+    block-size: 40.3rem;
+    margin-inline-start: -9.75rem;
+    perspective: 75rem;
+    scale: var(--dz-phone-scale);
+    transform-origin: 50% 0;
+    touch-action: pan-y;
+    cursor: grab;
+    @variant lg {
+      --dz-phone-scale: 1;
+      inset-block-start: 0.625rem;
+      inset-inline-start: 34.1%;
+      margin-inline-start: 0;
+    }
+  }
+
+  .dz-phone {
+    --dz-phone-turn: 0deg;
+    --dz-phone-tilt: 0deg;
+    position: relative;
+    inline-size: 100%;
+    block-size: 100%;
+    transform-style: preserve-3d;
+    rotate: z 6deg;
+    transform: rotateY(var(--dz-phone-turn)) rotateX(var(--dz-phone-tilt));
+  }
+
+  .dz-phone-edge {
+    position: absolute;
+    inset: 0;
+    border-radius: 3.375rem;
+    background-color: var(--dz-p-ink-700);
+    transform: translateZ(-0.75rem);
+    box-shadow: var(--dz-elevation-3);
+  }
+
+  .dz-phone-body {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    padding: 0.65rem;
+    border: 0.13rem solid var(--dz-p-ink-700);
+    border-radius: 3.375rem;
+    background-color: var(--dz-p-ink-900);
+    transform: translateZ(0);
+  }
+
+  .dz-phone-screen {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: 2.75rem;
+    background-color: var(--dz-color-bg-chat-wallpaper);
+    color: var(--dz-color-text-primary);
+  }
+
+  .dz-phone-top {
+    display: grid;
+    justify-items: center;
+    gap: 0.65rem;
+    padding: 0.78rem 1.04rem;
+    background-color: var(--dz-color-bg-surface);
+  }
+
+  .dz-phone-island {
+    inline-size: 6rem;
+    block-size: 1.7rem;
+    border-radius: var(--dz-radius-md);
+    background-color: var(--dz-p-ink-900);
+  }
+
+  .dz-phone-avatar {
+    inline-size: 2.34rem;
+    block-size: 2.34rem;
+    flex-shrink: 0;
+    border-radius: var(--dz-radius-full);
+    background-image: var(--dz-grad-pillar-ai);
+  }
+
+  .dz-phone-name {
+    font-size: 0.975rem;
+    font-weight: var(--dz-font-weight-semibold);
+    line-height: var(--dz-leading-ui);
+  }
+
+  .dz-phone-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    color: var(--dz-color-text-secondary);
+    font-size: var(--dz-font-size-caption);
+  }
+
+  /* WhatsApp's green as the online dot; the words stay readable ink (AA) */
+  .dz-phone-online {
+    inline-size: 0.5rem;
+    block-size: 0.5rem;
+    border-radius: var(--dz-radius-full);
+    background-color: var(--dz-color-text-chat-status);
+  }
+
+  .dz-letter {
+    display: inline-block;
+    white-space: pre;
+  }
+
+  .dz-phone-chat {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.65rem;
+    padding: 1.04rem 0.78rem;
+    font-size: 0.91rem;
+    line-height: 1.35;
+  }
+
+  .dz-phone-label {
+    align-self: center;
+    padding: 0.26rem 0.65rem;
+    border-radius: var(--dz-radius-sm);
+    background-color: var(--dz-color-bg-glass-header);
+    color: var(--dz-color-text-secondary);
+    font-family: var(--dz-font-family-mono);
+    font-size: 0.65rem;
+    letter-spacing: var(--dz-tracking-label);
+    text-transform: uppercase;
+  }
+
+  .dz-bubble {
+    max-inline-size: 12.1rem;
+    padding: 0.585rem 0.78rem;
+    border-radius: 0.91rem;
+    border-start-start-radius: 0.26rem;
+    background-color: var(--dz-color-bg-surface);
+    box-shadow: var(--dz-elevation-1);
+    text-align: start;
+  }
+
+  .dz-bubble-own {
+    align-self: flex-end;
+    border-start-start-radius: 0.91rem;
+    border-start-end-radius: 0.26rem;
+    background-color: var(--dz-color-bg-chat-bubble-own);
+  }
+
+  .dz-phone-booked {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.52rem;
+    align-self: center;
+    padding: 0.52rem 0.91rem;
+    border-radius: var(--dz-radius-full);
+    background-color: var(--dz-color-bg-surface);
+    box-shadow: var(--dz-elevation-1);
+    font-size: 0.845rem;
+    font-weight: var(--dz-font-weight-semibold);
+  }
+
+  .dz-phone-input {
+    display: flex;
+    align-items: center;
+    gap: 0.52rem;
+    padding: 0.65rem 0.65rem 0.91rem;
+  }
+
+  .dz-phone-field {
+    flex: 1;
+    padding: 0.65rem 0.91rem;
+    border-radius: var(--dz-radius-full);
+    background-color: var(--dz-color-bg-surface);
+    color: var(--dz-color-text-tertiary);
+    font-size: 0.91rem;
+    text-align: start;
+  }
+
+  .dz-phone-send {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 2.47rem;
+    block-size: 2.47rem;
+    border-radius: var(--dz-radius-full);
+    background-color: var(--dz-p-whatsapp-green);
+    color: var(--dz-color-text-on-color);
+  }
+
+  .dz-scene-drag {
+    position: absolute;
+    inset-block-start: 29.375rem;
+    inset-inline-start: 61%;
+    display: none;
+    min-block-size: 2.25rem;
+    align-items: center;
+    padding-inline: var(--dz-space-3);
+    border: var(--dz-border-width) solid var(--dz-color-border-on-color);
+    border-radius: var(--dz-radius-full);
+    font-size: var(--dz-font-size-caption);
+    font-weight: var(--dz-font-weight-medium);
+    @variant lg {
+      display: inline-flex;
+    }
+  }
+
+  /* The scene's example cards (Mock/Calendar card 3:66, Mock/CRM card 3:88) */
+  .dz-mock {
+    position: absolute;
+    display: grid;
+    gap: 0.75rem;
+    inline-size: 16.25rem;
+    padding: 1rem 1.125rem 1.125rem;
+    border-radius: var(--dz-radius-lg);
+    background-color: var(--dz-color-bg-surface);
+    box-shadow: var(--dz-elevation-2);
+    color: var(--dz-color-text-primary);
+    text-align: start;
+  }
+
+  .dz-mock-title {
+    font-size: var(--dz-font-size-nav);
+    font-weight: var(--dz-font-weight-semibold);
+  }
+
+  .dz-mock-label {
+    color: var(--dz-color-text-secondary);
+    font-family: var(--dz-font-family-mono);
+    font-size: var(--dz-font-size-label);
+    letter-spacing: var(--dz-tracking-label);
+    text-transform: uppercase;
+  }
+
+  .dz-mock-day {
+    inline-size: 2.125rem;
+    color: var(--dz-color-text-secondary);
+    font-family: var(--dz-font-family-mono);
+    font-size: var(--dz-font-size-label);
+  }
+
+  .dz-slot {
+    flex: 1;
+    padding: 0.4375rem 0.625rem;
+    border-radius: var(--dz-radius-sm);
+    background-color: var(--dz-color-bg-surface-muted);
+    color: var(--dz-color-text-secondary);
+    font-size: var(--dz-font-size-caption);
+    font-weight: var(--dz-font-weight-medium);
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .dz-slot-locked {
+    background-image: var(--dz-grad-pillar-ai);
+    color: var(--dz-color-text-on-vibrant);
+    font-weight: var(--dz-font-weight-semibold);
+  }
+
+  .dz-mock-calendar {
+    inset-block-start: 15rem;
+    inset-inline-end: 0;
+    rotate: -3deg;
+    scale: 0.63;
+    transform-origin: 100% 0;
+    @variant lg {
+      inset-block-start: 1.65rem;
+      inset-inline-start: 66%;
+      inset-inline-end: auto;
+      scale: 1;
+      rotate: 3deg;
+    }
+  }
+
+  .dz-mock-crm {
+    display: none;
+    @variant lg {
+      display: grid;
+      inset-block-start: 15.625rem;
+      inset-inline-start: 69.8%;
+      rotate: -3deg;
+    }
+  }
+
+  /* The scrubber (Scrubber 35:417, C diagram language): a track with its steps as buttons; active in
+     signal orange, done in violet, upcoming muted */
+  .dz-scene-scrub {
+    position: absolute;
+    inset-block-start: 26.875rem;
+    inset-inline: var(--dz-space-4);
+    display: grid;
+    gap: var(--dz-space-2);
+    padding: var(--dz-space-3) var(--dz-space-4);
+    border-radius: var(--dz-radius-xl);
+    background-color: var(--dz-color-bg-glass-header);
+    color: var(--dz-color-text-primary);
+    text-align: start;
+    @variant lg {
+      inset-block-start: 21.25rem;
+      inset-inline: 10% auto;
+      inline-size: 25rem;
+      padding: var(--dz-space-4) var(--dz-space-6);
+    }
+  }
+
+  .dz-scrubber {
+    position: relative;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    &::before {
+      content: '';
+      position: absolute;
+      inset-block-start: 0.5rem;
+      inset-inline: 0.3125rem;
+      block-size: 0.125rem;
+      background-color: var(--dz-color-border-strong);
+    }
+  }
+
+  .dz-scrub-step {
+    position: relative;
+    display: grid;
+    justify-items: start;
+    gap: 0.375rem;
+    min-block-size: 2.75rem;
+    padding-block-start: 0;
+    color: var(--dz-color-text-tertiary);
+    font-family: var(--dz-font-family-mono);
+    font-size: var(--dz-font-size-label);
+    letter-spacing: var(--dz-tracking-label);
+    text-align: start;
+    text-transform: uppercase;
+  }
+
+  .dz-scrubber li:last-child .dz-scrub-step {
+    justify-items: end;
+    text-align: end;
+  }
+
+  .dz-scrub-dot {
+    position: relative;
+    inline-size: 1.125rem;
+    block-size: 1.125rem;
+    border: var(--dz-border-width-strong) solid var(--dz-color-border-strong);
+    border-radius: var(--dz-radius-full);
+    background-color: var(--dz-color-bg-surface);
+  }
+
+  [data-step] .dz-scrub-step[data-state='done'] {
+    color: var(--dz-color-text-violet);
+  }
+
+  [data-step] .dz-scrub-step[data-state='done'] .dz-scrub-dot {
+    border-color: var(--dz-color-accent-violet);
+    background-color: var(--dz-color-accent-violet);
+  }
+
+  [data-step] .dz-scrub-step[data-state='active'] {
+    color: var(--dz-color-text-primary);
+  }
+
+  [data-step] .dz-scrub-step[data-state='active'] .dz-scrub-dot {
+    border-color: var(--dz-color-accent-signal);
+    background-color: var(--dz-color-accent-signal);
+  }
+
+  /* The scene's parts appear step by step only while the script runs it (data-scene-armed);
+     otherwise every part shows, the story's final state */
+  [data-scene-armed] [data-scene-part] {
+    @variant fx {
+      transition:
+        opacity var(--dz-motion-duration-story) var(--dz-motion-ease-out),
+        translate var(--dz-motion-duration-story) var(--dz-motion-ease-out);
+    }
+  }
+
+  [data-scene-armed][data-step='1'] [data-scene-part='2'],
+  [data-scene-armed][data-step='1'] [data-scene-part='3'],
+  [data-scene-armed][data-step='1'] [data-scene-part='4'],
+  [data-scene-armed][data-step='2'] [data-scene-part='3'],
+  [data-scene-armed][data-step='2'] [data-scene-part='4'],
+  [data-scene-armed][data-step='3'] [data-scene-part='4'] {
+    opacity: 0;
+    translate: 0 0.75rem;
+  }
+
+  /* §02 The platform strip (marquee) */
+  .dz-marquee-track {
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+    padding-inline: var(--dz-layout-gutter);
+    @variant lg {
+      justify-content: flex-start;
+      padding-inline: 0;
+      mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+    }
+  }
+
+  .dz-marquee-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--dz-space-2) var(--dz-space-5);
+    max-inline-size: 30rem;
+    @variant lg {
+      flex-shrink: 0;
+      flex-wrap: nowrap;
+      gap: var(--dz-space-8);
+      max-inline-size: none;
+      padding-inline-end: var(--dz-space-8);
+    }
+  }
+
+  .dz-marquee-copy {
+    display: none;
+  }
+
+  .dz-platform {
+    background-image: var(--dz-grad-stage);
+    background-clip: text;
+    color: transparent;
+    font-family: var(--dz-font-family-display);
+    font-size: var(--dz-font-size-lead);
+    font-weight: var(--dz-font-weight-medium);
+    line-height: var(--dz-leading-h3);
+    letter-spacing: var(--dz-tracking-h3);
+    white-space: nowrap;
+    @variant lg {
+      font-size: var(--dz-font-size-h3);
+    }
+  }
+
+  .dz-marquee-pause {
+    @variant max-lg {
+      display: none;
+    }
+  }
+
+  .dz-marquee {
+    @variant fx {
+      @variant lg {
+        & .dz-marquee-copy {
+          display: flex;
+        }
+        & .dz-marquee-row {
+          animation: dz-marquee 40s linear infinite;
+        }
+        &:is(:hover, :focus-within, [data-paused]) .dz-marquee-row {
+          animation-play-state: paused;
+        }
+      }
+    }
+  }
+
+  :root:not([data-effects='reduced']) .dz-marquee-pause {
+    @media not (prefers-reduced-motion: no-preference) {
+      display: none;
+    }
+  }
+
+  :root[data-effects='reduced'] .dz-marquee-pause {
+    display: none;
+  }
+
+  /* §03 Problem → outcome (problem-reveal) */
+  .dz-problem {
+    position: relative;
+    display: grid;
+    overflow: hidden;
+    border: var(--dz-border-width) solid var(--dz-color-border-default);
+    border-radius: var(--dz-radius-xl);
+    background-color: var(--dz-color-bg-surface);
+    @variant lg {
+      grid-template-columns: 28.75rem auto minmax(0, 1fr);
+    }
+  }
+
+  .dz-problem-today {
+    display: grid;
+    align-content: start;
+    gap: 0.625rem;
+    padding: var(--dz-space-5);
+    background-color: var(--dz-color-bg-surface-muted);
+    @variant lg {
+      padding: var(--dz-space-8);
+    }
+  }
+
+  .dz-problem-pain {
+    color: var(--dz-color-text-secondary);
+    font-family: var(--dz-font-family-display);
+    font-size: var(--dz-font-size-h3);
+    font-weight: var(--dz-font-weight-medium);
+    line-height: var(--dz-leading-h3);
+    letter-spacing: var(--dz-tracking-h3);
+    text-decoration-line: line-through;
+    text-decoration-color: transparent;
+    @variant fx {
+      transition: text-decoration-color var(--dz-motion-duration-story) var(--dz-motion-ease-out);
+    }
+  }
+
+  .dz-problem[data-open] .dz-problem-pain {
+    text-decoration-color: currentColor;
+  }
+
+  .dz-problem-arrow {
+    display: none;
+    @variant lg {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-inline: -1.5rem;
+      z-index: 1;
+    }
+    & > svg {
+      box-sizing: content-box;
+      padding: 0.875rem;
+      border: var(--dz-border-width) solid var(--dz-color-border-default);
+      border-radius: var(--dz-radius-full);
+      background-color: var(--dz-color-bg-surface);
+      @variant fx {
+        transition:
+          background-color var(--dz-motion-duration-base) var(--dz-motion-ease-out),
+          color var(--dz-motion-duration-base) var(--dz-motion-ease-out);
+      }
+    }
+  }
+
+  .dz-problem[data-open] .dz-problem-arrow > svg {
+    border-color: var(--dz-color-action-primary);
+    background-color: var(--dz-color-action-primary);
+    color: var(--dz-color-text-on-color);
+  }
+
+  .dz-problem-with {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    align-content: start;
+    gap: 0.625rem;
+    padding: var(--dz-space-5);
+    @variant lg {
+      padding-block: var(--dz-space-8);
+      padding-inline: calc(var(--dz-space-8) + 1.5rem) var(--dz-space-8);
+    }
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background-color: var(--dz-color-bg-violet-soft);
+      opacity: 0;
+    }
+    @variant fx {
+      &::before {
+        clip-path: inset(0 100% 0 0);
+        transition:
+          clip-path 420ms var(--dz-motion-ease-out),
+          opacity var(--dz-motion-duration-base) var(--dz-motion-ease-out);
+      }
+    }
+  }
+
+  [dir='rtl'] .dz-problem-with {
+    @variant fx {
+      &::before {
+        clip-path: inset(0 0 0 100%);
+      }
+    }
+  }
+
+  .dz-problem[data-open] .dz-problem-with::before {
+    opacity: 1;
+    clip-path: inset(0);
+  }
+
+  .dz-problem-label {
+    color: var(--dz-color-text-tertiary);
+  }
+
+  .dz-problem[data-open] .dz-problem-label,
+  .dz-problem[data-open] .dz-problem-toggle {
+    color: var(--dz-color-text-violet);
+  }
+
+  .dz-problem-toggle {
+    color: var(--dz-color-text-primary);
+    text-align: start;
+    cursor: pointer;
+  }
+
+  .dz-problem-toggle::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    @variant lg {
+      inset-inline-start: -28.75rem;
+    }
+  }
+
+  .dz-problem[data-open] {
+    border-width: 0.125rem;
+    border-color: var(--dz-color-accent-violet);
+    box-shadow: var(--dz-elevation-2);
+  }
+
+  .dz-problem:not([data-open]) .dz-problem-answer {
+    display: none;
+  }
+
+  /* §04 The four doors (pixels-to-doors, door-tilt) */
+  .dz-doors-pixels {
+    display: flex;
+    gap: var(--dz-space-1);
+    @variant lg {
+      justify-content: center;
+      gap: var(--dz-space-2);
+    }
+  }
+
+  .dz-doors {
+    display: flex;
+    gap: var(--dz-space-4);
+    margin-block-start: var(--dz-space-8);
+    margin-inline: calc(-1 * var(--dz-layout-gutter));
+    padding: var(--dz-space-3) var(--dz-layout-gutter) var(--dz-space-8);
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--dz-layout-gutter);
+    scrollbar-width: none;
+    @variant lg {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: var(--dz-space-6);
+      margin-block-start: var(--dz-space-12);
+      margin-inline: 0;
+      padding: var(--dz-space-8) 0;
+      overflow: visible;
+    }
+  }
+
+  .dz-door-slot {
+    flex: 0 0 min(19.875rem, 82%);
+    scroll-snap-align: start;
+    perspective: 62.5rem;
+    @variant lg {
+      rotate: var(--dz-door-rotate, 0deg);
+      translate: 0 var(--dz-door-shift, 0rem);
+    }
+  }
+
+  .dz-door-slot[data-door='1'] {
+    --dz-door-rotate: 3deg;
+    --dz-door-shift: 2.5rem;
+  }
+
+  .dz-door-slot[data-door='2'] {
+    --dz-door-rotate: -2deg;
+  }
+
+  .dz-door-slot[data-door='3'] {
+    --dz-door-rotate: 2deg;
+    --dz-door-shift: 2.5rem;
+  }
+
+  .dz-door-slot[data-door='4'] {
+    --dz-door-rotate: -3deg;
+  }
+
+  .dz-door {
+    --dz-tilt-x: 0deg;
+    --dz-tilt-y: 0deg;
+    display: grid;
+    align-content: start;
+    gap: var(--dz-space-4);
+    block-size: 100%;
+    padding: var(--dz-space-4) var(--dz-space-4) 1.625rem;
+    border-radius: var(--dz-radius-2xl);
+    filter: drop-shadow(0 1.875rem 1.875rem var(--dz-color-shadow-ink));
+    transform: rotateX(var(--dz-tilt-x)) rotateY(var(--dz-tilt-y));
+    @variant fx {
+      transition: transform var(--dz-motion-duration-base) var(--dz-motion-ease-out);
+    }
+  }
+
+  .dz-door-media {
+    position: relative;
+    overflow: hidden;
+    block-size: 13.75rem;
+    border-radius: var(--dz-radius-lg);
+  }
+
+  .dz-door-tone {
+    position: absolute;
+    inset: 0;
+    opacity: 0.55;
+    mix-blend-mode: multiply;
+  }
+
+  .dz-door-number {
+    font-family: var(--dz-font-family-display);
+    font-size: var(--dz-font-size-h2);
+    font-weight: var(--dz-font-weight-medium);
+    line-height: var(--dz-leading-h2);
+    letter-spacing: var(--dz-tracking-h2);
+    opacity: 0.45;
+  }
+
+  .dz-door-bullet {
+    flex-shrink: 0;
+    inline-size: 0.4375rem;
+    block-size: 0.4375rem;
+    margin-block-start: 0.5rem;
+    border-radius: 0.09375rem;
+    background-color: currentColor;
+  }
+
+  /* §05 How an automation works (workflow-connect) */
+  .dz-flow-panel {
+    position: relative;
+    display: grid;
+    gap: var(--dz-space-6);
+    overflow: hidden;
+    padding: var(--dz-space-5);
+    border: var(--dz-border-width) solid var(--dz-color-border-default);
+    border-radius: var(--dz-radius-xl);
+    background-color: var(--dz-color-bg-surface);
+    background-image:
+      linear-gradient(var(--dz-color-bg-canvas) 0.0625rem, transparent 0.0625rem),
+      linear-gradient(to right, var(--dz-color-bg-canvas) 0.0625rem, transparent 0.0625rem);
+    background-size: 2.5rem 2.5rem;
+    @variant lg {
+      padding: var(--dz-space-8) var(--dz-space-10);
+      border-radius: var(--dz-radius-stage);
+    }
+  }
+
+  .dz-flow-body {
+    display: grid;
+    gap: var(--dz-space-8);
+    @variant lg {
+      grid-template-columns: 22.5rem minmax(0, 1fr);
+      gap: 3.5rem;
+    }
+  }
+
+  .dz-steps {
+    display: grid;
+  }
+
+  .dz-step {
+    display: flex;
+    gap: var(--dz-space-3);
+    padding-block-end: var(--dz-space-3);
+  }
+
+  .dz-step-rail {
+    position: relative;
+    flex-shrink: 0;
+    inline-size: 0.875rem;
+    &::before {
+      content: '';
+      position: absolute;
+      inset-block-start: 0.125rem;
+      inset-inline-start: 0.125rem;
+      inline-size: 0.625rem;
+      block-size: 0.625rem;
+      border-radius: var(--dz-radius-full);
+      background-color: var(--dz-color-accent-violet);
+    }
+    &::after {
+      content: '';
+      position: absolute;
+      inset-block: 0.875rem -0.75rem;
+      inset-inline-start: 0.375rem;
+      inline-size: 0.125rem;
+      background-color: var(--dz-color-accent-violet);
+    }
+  }
+
+  .dz-step:last-child .dz-step-rail::after {
+    display: none;
+  }
+
+  .dz-step-label {
+    color: var(--dz-color-text-violet);
+  }
+
+  .dz-step-text {
+    color: var(--dz-color-text-primary);
+  }
+
+  .dz-flow[data-armed] .dz-step[data-state='active'] .dz-step-text {
+    font-weight: var(--dz-font-weight-semibold);
+  }
+
+  .dz-flow[data-armed] .dz-step[data-state='active'] .dz-step-label {
+    color: var(--dz-color-text-primary);
+  }
+
+  .dz-flow[data-armed] .dz-step[data-state='active'] .dz-num {
+    color: var(--dz-color-text-signal);
+  }
+
+  .dz-flow[data-armed] .dz-step[data-state='active'] .dz-step-rail::before {
+    background-color: var(--dz-color-accent-signal);
+  }
+
+  .dz-flow[data-armed] .dz-step[data-state='upcoming'] :is(.dz-step-label, .dz-step-text) {
+    color: var(--dz-color-text-tertiary);
+  }
+
+  .dz-flow[data-armed] .dz-step[data-state='upcoming'] .dz-step-rail::before {
+    border: var(--dz-border-width-strong) solid var(--dz-color-border-strong);
+    background-color: var(--dz-color-bg-surface);
+  }
+
+  .dz-flow[data-armed] .dz-step:is([data-state='upcoming'], [data-state='active']) .dz-step-rail::after {
+    background-color: var(--dz-color-border-strong);
+  }
+
+  .dz-flow-diagram {
+    position: relative;
+    display: none;
+    block-size: 32.5rem;
+    @variant lg {
+      display: block;
+    }
+  }
+
+  .dz-node {
+    position: absolute;
+    display: grid;
+    gap: var(--dz-space-2);
+    inline-size: min(14.375rem, 27%);
+    padding: var(--dz-space-5);
+    border: var(--dz-border-width) solid var(--dz-color-accent-violet);
+    border-radius: var(--dz-radius-xl);
+    background-color: var(--dz-color-bg-wash-ai);
+    @variant fx {
+      transition:
+        opacity var(--dz-motion-duration-story) var(--dz-motion-ease-out),
+        translate var(--dz-motion-duration-story) var(--dz-motion-ease-out),
+        box-shadow var(--dz-motion-duration-base) var(--dz-motion-ease-out);
+    }
+  }
+
+  .dz-node-number {
+    color: var(--dz-color-text-violet);
+    font-family: var(--dz-font-family-mono);
+    font-size: var(--dz-font-size-label);
+    font-weight: var(--dz-font-weight-medium);
+  }
+
+  .dz-node-1 {
+    inset-block-start: 2.5rem;
+    inset-inline-start: 3.5%;
+  }
+
+  .dz-node-2 {
+    inset-block-start: 2.5rem;
+    inset-inline-start: 37.2%;
+  }
+
+  .dz-node-3 {
+    inset-block-start: 2.5rem;
+    inset-inline-start: 70.9%;
+  }
+
+  .dz-node-4 {
+    inset-block-start: 18.75rem;
+    inset-inline-start: 70.9%;
+  }
+
+  .dz-node-5 {
+    inset-block-start: 18.75rem;
+    inset-inline-start: 37.2%;
+  }
+
+  .dz-flow[data-armed] .dz-node[data-state='active'] {
+    border: 0.125rem solid var(--dz-color-accent-signal);
+    background-color: var(--dz-color-bg-wash-software);
+    box-shadow: var(--dz-elevation-2);
+  }
+
+  .dz-flow[data-armed] .dz-node[data-state='active'] .dz-node-number {
+    color: var(--dz-color-text-signal);
+  }
+
+  .dz-flow[data-armed] .dz-node[data-state='upcoming'] {
+    border-color: var(--dz-color-border-default);
+    background-color: var(--dz-color-bg-surface);
+    @variant fx {
+      translate: 0 0.75rem;
+    }
+  }
+
+  .dz-flow[data-armed] .dz-node[data-state='upcoming'] .dz-node-number {
+    color: var(--dz-color-text-tertiary);
+  }
+
+  /* The connectors draw by scale (13 §3 rule 1) in signal orange; still, they show finished */
+  .dz-link {
+    position: absolute;
+    background-color: var(--dz-color-accent-signal);
+    @variant fx {
+      transition: scale var(--dz-motion-duration-story) var(--dz-motion-ease-out);
+    }
+  }
+
+  .dz-link-1,
+  .dz-link-2 {
+    inset-block-start: 6.25rem;
+    block-size: 0.125rem;
+    transform-origin: 0 50%;
+  }
+
+  .dz-link-1 {
+    inset-inline: calc(3.5% + min(14.375rem, 27%)) calc(100% - 37.2%);
+  }
+
+  .dz-link-2 {
+    inset-inline: calc(37.2% + min(14.375rem, 27%)) calc(100% - 70.9%);
+  }
+
+  .dz-link-3 {
+    inset-block: 11.25rem calc(100% - 18.75rem);
+    inset-inline-start: calc(70.9% + min(14.375rem, 27%) / 2);
+    inline-size: 0.125rem;
+    transform-origin: 50% 0;
+  }
+
+  .dz-link-4 {
+    inset-block-start: 22.5rem;
+    inset-inline: calc(37.2% + min(14.375rem, 27%)) calc(100% - 70.9%);
+    block-size: 0.125rem;
+    transform-origin: 100% 50%;
+  }
+
+  [dir='rtl'] .dz-link-1,
+  [dir='rtl'] .dz-link-2 {
+    transform-origin: 100% 50%;
+  }
+
+  [dir='rtl'] .dz-link-4 {
+    transform-origin: 0 50%;
+  }
+
+  .dz-flow[data-armed] .dz-link[data-state='upcoming'] {
+    background-color: var(--dz-color-border-strong);
+    @variant fx {
+      scale: 0 1;
+    }
+  }
+
+  .dz-flow[data-armed] .dz-link-3[data-state='upcoming'] {
+    @variant fx {
+      scale: 1 0;
+    }
+  }
+
+  .dz-flow-scrub {
+    display: none;
+    @variant lg {
+      display: block;
+      margin-inline-start: calc(22.5rem + 3.5rem);
+      max-inline-size: 44rem;
+    }
+  }
+
+  .dz-scrubber-wide .dz-scrub-step {
+    font-size: var(--dz-font-size-label);
+  }
+
+  /* §06 This page is the proof (exploded-layers) */
+  .dz-ai-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.875rem;
+    inline-size: fit-content;
+    min-block-size: 3.25rem;
+    padding-inline: var(--dz-space-4);
+    border: var(--dz-border-width) solid var(--dz-color-border-default);
+    border-radius: var(--dz-radius-full);
+    background-color: var(--dz-color-bg-surface);
+    color: var(--dz-color-text-primary);
+    font-size: var(--dz-font-size-button-m);
+    font-weight: var(--dz-font-weight-bold);
+  }
+
+  .dz-ai-toggle[aria-checked='true'] .dz-switch-track {
+    background-color: var(--dz-color-action-primary);
+  }
+
+  .dz-ai-toggle[aria-checked='true'] .dz-switch-track .dz-switch-thumb {
+    translate: 1.25rem 0;
+  }
+
+  [dir='rtl'] .dz-ai-toggle[aria-checked='true'] .dz-switch-track .dz-switch-thumb {
+    translate: -1.25rem 0;
+  }
+
+  .dz-stamp {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--dz-space-3);
+    inline-size: fit-content;
+    padding: var(--dz-space-3) var(--dz-space-5);
+    border-radius: var(--dz-radius-lg);
+    background-color: var(--dz-color-bg-violet-soft);
+    color: var(--dz-color-text-violet);
+  }
+
+  .dz-stamp-value {
+    font-family: var(--dz-font-family-display);
+    font-size: var(--dz-font-size-h3);
+    font-weight: var(--dz-font-weight-medium);
+    line-height: var(--dz-leading-h3);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .dz-layers {
+    --dz-layer-gap: 5rem;
+    position: relative;
+    block-size: 26.25rem;
+    @variant lg {
+      --dz-layer-gap: 8.125rem;
+      block-size: 45rem;
+    }
+  }
+
+  .dz-layers-callout {
+    position: absolute;
+    inset-block-start: -1.625rem;
+    inset-inline-end: 8%;
+    z-index: 5;
+    padding: var(--dz-space-2) var(--dz-space-3);
+    border-radius: var(--dz-radius-full);
+    background-color: var(--dz-color-action-primary);
+    color: var(--dz-color-text-on-color);
+    font-size: var(--dz-font-size-caption);
+    font-weight: var(--dz-font-weight-medium);
+    opacity: 0;
+    @variant fx {
+      transition: opacity var(--dz-motion-duration-base) var(--dz-motion-ease-out);
+    }
+  }
+
+  .dz-layer {
+    position: absolute;
+    inset-inline-start: calc(var(--dz-layer-i) * var(--dz-space-1));
+    inset-block-start: calc(var(--dz-layer-i) * var(--dz-layer-gap));
+    inline-size: min(35rem, 92%);
+    block-size: min(18.75rem, 44vw);
+    overflow: hidden;
+    padding: 3.5rem var(--dz-space-6) var(--dz-space-6);
+    border-radius: var(--dz-radius-xl);
+    box-shadow: var(--dz-elevation-3);
+    rotate: -4deg;
+    @variant lg {
+      inset-inline-start: calc(33.75% - var(--dz-layer-i) * 6.25%);
+      inline-size: 66%;
+      block-size: 18.75rem;
+    }
+    @variant fx {
+      transition:
+        translate var(--dz-motion-duration-story) var(--dz-motion-ease-out),
+        opacity var(--dz-motion-duration-base) var(--dz-motion-ease-out);
+    }
+  }
+
+  .dz-layer-seo {
+    --dz-layer-i: 0;
+    background-color: var(--dz-color-bg-wash-websites);
+  }
+
+  .dz-layer-schema {
+    --dz-layer-i: 1;
+    border: var(--dz-border-width) solid var(--dz-color-border-default);
+    background-color: var(--dz-color-bg-surface);
+  }
+
+  .dz-layer-code {
+    --dz-layer-i: 2;
+    background-color: var(--dz-color-bg-inverse);
+  }
+
+  .dz-layer-design {
+    --dz-layer-i: 3;
+    background-image: var(--dz-grad-stage);
+  }
+
+  .dz-layer-tag {
+    position: absolute;
+    inset-block-start: 0.875rem;
+    inset-inline-start: var(--dz-space-4);
+    padding: var(--dz-space-1) var(--dz-space-3);
+    border-radius: var(--dz-radius-full);
+    background-color: var(--dz-color-bg-surface);
+    color: var(--dz-color-text-primary);
+    font-family: var(--dz-font-family-mono);
+    font-size: var(--dz-font-size-label);
+    letter-spacing: var(--dz-tracking-label);
+    text-transform: uppercase;
+  }
+
+  .dz-layer-tag-violet {
+    background-color: var(--dz-color-bg-violet-soft);
+    color: var(--dz-color-text-violet);
+  }
+
+  .dz-layer-tag-dark {
+    border: var(--dz-border-width) solid var(--dz-color-border-on-color);
+    background-color: transparent;
+    color: var(--dz-color-text-on-color);
+  }
+
+  .dz-layer-shape {
+    position: absolute;
+    border-radius: var(--dz-radius-sm);
+    background-color: var(--dz-color-bg-surface);
+  }
+
+  .dz-layer-shape-a {
+    inset-block-start: 36.7%;
+    inset-inline-start: 23%;
+    inline-size: 53.6%;
+    block-size: 14.7%;
+    rotate: 1.5deg;
+  }
+
+  .dz-layer-shape-b {
+    inset-block-start: 57.3%;
+    inset-inline-start: 17.9%;
+    inline-size: 64.3%;
+    block-size: 7.3%;
+    opacity: 0.85;
+  }
+
+  .dz-layer-shape-c {
+    inset-block-start: 74%;
+    inset-inline-start: 26.8%;
+    inline-size: 46.4%;
+    block-size: 13.3%;
+    border-radius: var(--dz-radius-full);
+  }
+
+  /* exploded-layers on scroll: the stack closes up until the section is in view, then fans apart */
+  [data-fx-proof][data-armed]:not([data-exploded]) .dz-layer {
+    @variant fx {
+      translate: 0 calc((1.5 - var(--dz-layer-i)) * var(--dz-layer-gap) * 0.45);
+    }
+  }
+
+  /* The AI view: the layers an engine reads (SEO, Schema) come forward; Design and Code fade back */
+  [data-fx-proof][data-ai-view] .dz-layers-callout {
+    opacity: 1;
+  }
+
+  [data-fx-proof][data-ai-view] :is(.dz-layer-design, .dz-layer-code) {
+    opacity: 0.18;
+  }
+
+  [data-fx-proof][data-ai-view] :is(.dz-layer-seo, .dz-layer-schema) {
+    z-index: 4;
+    box-shadow: var(--dz-elevation-3), var(--dz-glow-violet);
+  }
+
+  /* §09 Industries (industry-rail, industry-flip) */
+  .dz-rail-viewport {
+    margin-inline: calc(-1 * var(--dz-layout-gutter));
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--dz-layout-gutter);
+    scrollbar-width: none;
+    @variant lg {
+      margin-inline: 0;
+      scroll-padding-inline: 0;
+    }
+  }
+
+  .dz-rail {
+    display: flex;
+    gap: var(--dz-space-4);
+    inline-size: max-content;
+    padding: 0.625rem var(--dz-layout-gutter) var(--dz-space-8);
+    @variant lg {
+      gap: var(--dz-space-6);
+      padding-inline: 0;
+    }
+  }
+
+  .dz-industry {
+    position: relative;
+    inline-size: min(18.75rem, 80vw);
+    block-size: 27.5rem;
+    scroll-snap-align: start;
+    perspective: 90rem;
+    @variant lg {
+      inline-size: 26.25rem;
+      block-size: 35rem;
+    }
+  }
+
+  .dz-industry-inner {
+    position: relative;
+    inline-size: 100%;
+    block-size: 100%;
+    transform-style: preserve-3d;
+    @variant fx {
+      transition: transform var(--dz-motion-duration-story) var(--dz-motion-ease-in-out);
+    }
+  }
+
+  .dz-industry-front,
+  .dz-industry-back {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    border-radius: var(--dz-radius-2xl);
+    box-shadow: var(--dz-elevation-2);
+    backface-visibility: hidden;
+  }
+
+  .dz-industry-photo {
+    position: absolute;
+    inset: -1.875rem;
+    @variant fx {
+      will-change: transform;
+    }
+  }
+
+  .dz-industry-scrim {
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(to bottom, transparent 35%, var(--dz-color-bg-photo-scrim) 100%);
+  }
+
+  .dz-industry-copy {
+    position: absolute;
+    inset-inline: var(--dz-space-5);
+    inset-block-end: 4.75rem;
+    display: grid;
+    gap: 0.625rem;
+    color: var(--dz-color-text-on-color);
+    @variant lg {
+      inset-inline: var(--dz-space-6);
+    }
+  }
+
+  .dz-industry-back {
+    display: flex;
+    flex-direction: column;
+    gap: var(--dz-space-4);
+    padding: var(--dz-space-6) var(--dz-space-5) 5rem;
+    border: 0.125rem solid var(--dz-color-accent-violet);
+    background-color: var(--dz-color-bg-violet-soft);
+    transform: rotateY(180deg);
+  }
+
+  .dz-industry[data-flipped='true'] .dz-industry-inner {
+    transform: rotateY(180deg);
+  }
+
+  [dir='rtl'] .dz-industry[data-flipped='true'] .dz-industry-inner,
+  [dir='rtl'] .dz-industry-back {
+    transform: rotateY(-180deg);
+  }
+
+  /* Under Reduce effects the flip is a cross-fade */
+  :root[data-effects='reduced'] .dz-industry-inner,
+  :root[data-effects='reduced'] .dz-industry-back {
+    transform: none;
+  }
+
+  :root[data-effects='reduced'] .dz-industry-back {
+    opacity: 0;
+    transition: opacity 200ms;
+  }
+
+  :root[data-effects='reduced'] .dz-industry[data-flipped='true'] .dz-industry-back {
+    opacity: 1;
+  }
+
+  .dz-industry-flip {
+    position: absolute;
+    background-color: var(--dz-color-bg-photo-scrim);
+    inset-inline-start: var(--dz-space-5);
+    inset-block-end: var(--dz-space-5);
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 2.75rem;
+    padding-inline: var(--dz-space-3);
+    border: var(--dz-border-width) solid var(--dz-color-border-on-color);
+    border-radius: var(--dz-radius-full);
+    color: var(--dz-color-text-on-color);
+    font-size: var(--dz-font-size-caption);
+    font-weight: var(--dz-font-weight-medium);
+    @variant lg {
+      inset-inline-start: var(--dz-space-6);
+      inset-block-end: var(--dz-space-6);
+    }
+  }
+
+  .dz-industry[data-flipped='true'] .dz-industry-flip {
+    border-color: var(--dz-color-accent-violet);
+    background-color: var(--dz-color-bg-surface);
+    color: var(--dz-color-text-violet);
+  }
+
+  /* §10 The ROI calculator (roi-count-up) */
+  .dz-roi {
+    display: grid;
+    overflow: hidden;
+    border: var(--dz-border-width) solid var(--dz-color-border-default);
+    border-radius: var(--dz-radius-xl);
+    background-color: var(--dz-color-bg-surface);
+    @variant lg {
+      grid-template-columns: minmax(0, 1fr) 35rem;
+      border-radius: var(--dz-radius-stage);
+    }
+  }
+
+  .dz-roi-value {
+    color: var(--dz-color-text-violet);
+    font-family: var(--dz-font-family-display);
+    font-size: var(--dz-font-size-h3);
+    font-weight: var(--dz-font-weight-medium);
+    line-height: var(--dz-leading-h3);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .dz-range {
+    --dz-range-fill: 25%;
+    inline-size: 100%;
+    max-inline-size: 37.5rem;
+    block-size: 1.75rem;
+    appearance: none;
+    background: transparent;
+    cursor: pointer;
+    &::-webkit-slider-runnable-track {
+      block-size: 0.75rem;
+      border-radius: var(--dz-radius-full);
+      background-image: linear-gradient(
+        to right,
+        var(--dz-color-action-primary) var(--dz-range-fill),
+        var(--dz-color-bg-surface-muted) var(--dz-range-fill)
+      );
+    }
+    &::-moz-range-track {
+      block-size: 0.75rem;
+      border-radius: var(--dz-radius-full);
+      background-color: var(--dz-color-bg-surface-muted);
+    }
+    &::-moz-range-progress {
+      block-size: 0.75rem;
+      border-radius: var(--dz-radius-full);
+      background-color: var(--dz-color-action-primary);
+    }
+    &::-webkit-slider-thumb {
+      appearance: none;
+      inline-size: 1.75rem;
+      block-size: 1.75rem;
+      margin-block-start: -0.5rem;
+      border: 0.1875rem solid var(--dz-color-action-primary);
+      border-radius: var(--dz-radius-full);
+      background-color: var(--dz-color-bg-surface);
+    }
+    &::-moz-range-thumb {
+      inline-size: 1.375rem;
+      block-size: 1.375rem;
+      border: 0.1875rem solid var(--dz-color-action-primary);
+      border-radius: var(--dz-radius-full);
+      background-color: var(--dz-color-bg-surface);
+    }
+  }
+
+  [dir='rtl'] .dz-range::-webkit-slider-runnable-track {
+    background-image: linear-gradient(
+      to left,
+      var(--dz-color-action-primary) var(--dz-range-fill),
+      var(--dz-color-bg-surface-muted) var(--dz-range-fill)
+    );
+  }
+
+  .dz-roi-result {
+    display: grid;
+    align-content: start;
+    gap: var(--dz-space-4);
+    padding: var(--dz-space-6) var(--dz-space-5);
+    background-image: var(--dz-grad-stage);
+    color: var(--dz-color-text-on-color);
+    @variant lg {
+      padding: 3.5rem 2.8rem;
+    }
+  }
+
+  .dz-roi-total {
+    font-family: var(--dz-font-family-display);
+    font-size: var(--dz-font-size-hero-line);
+    font-weight: var(--dz-font-weight-medium);
+    line-height: var(--dz-leading-hero-line);
+    letter-spacing: var(--dz-tracking-hero-line);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  /* The FAQ items (FAQ item 35:333): the open one white, the rest muted */
+  .dz-faq {
+    padding-inline: var(--dz-space-6);
+    border-radius: var(--dz-radius-lg);
+    background-color: var(--dz-color-bg-surface-muted);
+    @variant fx {
+      transition: background-color var(--dz-motion-duration-base) var(--dz-motion-ease-out);
+      interpolate-size: allow-keywords;
+      &::details-content {
+        block-size: 0;
+        overflow-y: clip;
+        transition:
+          block-size var(--dz-motion-duration-base) var(--dz-motion-ease-out),
+          content-visibility var(--dz-motion-duration-base) allow-discrete;
+      }
+      &[open]::details-content {
+        block-size: auto;
+      }
+    }
+  }
+
+  .dz-faq[open] {
+    background-color: var(--dz-color-bg-surface);
+  }
+}
+
+@keyframes dz-marquee {
+  to {
+    translate: -100% 0;
+  }
+}

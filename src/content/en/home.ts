@@ -10,6 +10,11 @@ import { siteConfig } from '@/lib/site-config';
 export const heroAnswer = {
   // H1 ≤ 70 characters (engine §2 hero-answer); the statement, the page's LCP element (13 §3 rule 2)
   heading: 'AI automation and custom-coded websites for UAE businesses',
+  // The H1's visible tail (home.md §01): the rotator's phrase stands in for the lead-in, which stays
+  // in the H1 for crawlers and screen readers, visually hidden. Always the end of `heading`.
+  headingTail: 'for UAE businesses',
+  // The location chip over the headline (Figma 50:159)
+  location: 'Based in Dubai · serving the UAE first, then the GCC',
   // The direct answer, 40–60 words, naming Deepzeta AI, what we build and where (engine §3.1)
   answer: `${siteConfig.brandName} builds online growth for every business: custom-coded, high-performance websites with SEO and AI search visibility built in, and AI automation systems that answer customers, follow up leads and run daily operations. Based in Dubai, serving the UAE first, then the GCC.`,
   // The secondary CTA beside the primary (home.md §01; the primary is the shell's audit CTA)
@@ -19,10 +24,80 @@ export const heroAnswer = {
   proofHeading: 'A customer writes. The system answers.',
 } as const;
 
+// The hero's rotating phrase (decision 0033 §3; the owner's own six phrases, in order; Figma 50:162).
+// Decorative and aria-hidden beside the stable H1; its pause button is labelled (WCAG 2.2.2).
+export const heroRotator = {
+  phrases: [
+    'Business-centric',
+    'Growth formula',
+    'Branding',
+    'Custom-coded websites',
+    'AI Automation',
+    'Social media strategy',
+  ],
+  pause: 'Pause the rotating phrase',
+  play: 'Play the rotating phrase',
+  // The chip beside the counter, to How we work (§08)
+  seeHow: 'See how we work',
+} as const;
+
+// The hero's AI input (Figma 50:191, KokonutUI AI-02): it opens the website agent once that ships
+// (P7). Until then sending opens WhatsApp with the visitor's text, and the note says so; never a fake
+// chat. The chips fill the input.
+export const heroAgent = {
+  label: 'Your question for our AI agent',
+  placeholder: 'Ask our AI agent anything, in Arabic or English…',
+  mode: 'WhatsApp mode',
+  send: 'Send to our AI agent on WhatsApp',
+  note: 'Our website agent is on its way. Until then, sending opens WhatsApp with your message.',
+  chips: ['Automate my WhatsApp', 'Build my custom website', 'Get found by AI engines'],
+} as const;
+
+// The hero's scene, from message to booking (home.md §01; Figma 50:215; 10 §3.6: an example, so it
+// says so). Times and days are separate strings, joined where they show.
+export const heroScene = {
+  label: 'Example conversation',
+  drag: 'Drag to rotate',
+  scrub: 'Scroll to run the example',
+  steps: ['Message', 'Reply', 'Booked', 'CRM'],
+  notification: { title: 'WhatsApp · new message', text: 'Hi, do you have anything available this week?' },
+  phone: {
+    business: 'Your business',
+    status: 'AI agent · online',
+    customer: 'Hi, do you have anything available this week?',
+    agent: 'Yes — I can book you in on Tuesday at 4pm. Shall I confirm?',
+    booked: 'Booked',
+    input: 'Message',
+  },
+  booking: { day: 'Tuesday', time: '16:00' },
+  calendar: {
+    title: 'Calendar',
+    week: 'This week',
+    days: [
+      { day: 'Mon', slots: ['10:00', '13:00'] },
+      { day: 'Tue', slots: ['10:00', '16:00'] },
+      { day: 'Wed', slots: ['11:00', '15:00'] },
+    ],
+    locked: 'Locked',
+  },
+  crm: {
+    label: 'CRM · lead record',
+    title: 'New lead · WhatsApp',
+    status: 'Status',
+    booking: 'Booking',
+    next: 'Next step',
+    nextValue: 'Reminder before the visit',
+    notified: 'Team notified',
+  },
+} as const;
+
 // §02 The proof strip (home.md): platform names as plain text, catalogue §8; no client logos or
 // partner badges (they appear only once confirmed, facts §5)
 export const proofStrip = {
   heading: 'The platforms we build on',
+  // The marquee's pause button (WCAG 2.2.2)
+  pause: 'Pause the platform names',
+  play: 'Play the platform names',
   // One row of category labels + platform names, plain text (catalogue §8, byte for byte)
   categories: [
     { label: 'Automation', platforms: ['n8n', 'Make', 'Zapier'] },
@@ -37,6 +112,8 @@ export const proofStrip = {
 // each with a 40–75-word answer. Outcomes use allowlisted design targets only (facts §6); no
 // measured results (none exist yet, facts §5)
 export const problemOutcome = {
+  // The section's mono eyebrow (the C diagram language; its number comes from the page order)
+  eyebrow: 'Three leaks',
   heading: 'Sound familiar?',
   // The labels over each row's two sides (BeforeAfter)
   beforeLabel: 'Today',
@@ -68,46 +145,93 @@ export const problemOutcome = {
 // §04 The four doors (home.md): the four pillars (C6), names and promises from the catalogue,
 // exactly (10 §2); AI Automation and Websites lead (facts §3)
 export const fourDoors = {
+  eyebrow: 'Four pillars',
   heading: 'Four ways we build your growth',
   lede: 'Everything Deepzeta AI does stands on one of four pillars. Each has its own services, its own systems and one promise.',
   // One line per door, written from the catalogue's promise; the doors link to their pillar pages
   // once those ship (P6); until then they are cards (04 §1.4)
   doorsNote: 'Each pillar has its own page with every service in it.',
+  // Three of each pillar's lead services on its door (Figma 51:305), by registry row; the names come
+  // from navigation.ts, never retyped
+  services: {
+    ai: ['R020', 'R027', 'R033'],
+    web: ['R060', 'R061', 'R062'],
+    software: ['R064', 'R065', 'R066'],
+    ranking: ['R068', 'R070', 'R076'],
+  },
+  // Each door's photo (P01–P04), what it shows: hands, devices and places, never a face
+  photoAlt: {
+    ai: 'A hand holding a phone at a sunlit Dubai café table with coffee and dates',
+    web: 'A laptop on a desk before a wide window over Dubai Marina',
+    software: 'A gloved hand holding a rugged tablet with charts in a Jebel Ali warehouse',
+    ranking: 'A boutique street lined with palms and lit shopfronts in Dubai at dusk',
+  },
 } as const;
 
-// §05 The workflow explorer teaser (home.md): the section's own text; one example workflow's
-// final state (the owner's choice, open question 3). The interactive tabs are the P7 demo
+// §05 How an automation works (home.md; Figma 51:408): one example workflow, end to end, its five
+// steps as a visible ordered list (13 §4.8) and the diagram's nodes with their pillar chips. The real
+// n8n recording (SR01) joins the scene once it's recorded; until then the scene ends on the diagram.
 export const workflowExplorer = {
+  eyebrow: 'Example workflow',
   heading: 'See an automation run',
-  lede: 'This is one workflow, end to end: a customer asks on WhatsApp, an AI agent understands and answers, the booking lands in the calendar and the CRM updates itself. The interactive explorer with more workflows comes with the live demos.',
-  // The visible step list (13 §4.8: every story has a visible HTML step list)
+  lede: 'This is one workflow, end to end: a customer asks on WhatsApp, an AI agent understands and answers, the booking lands in the calendar and the CRM updates itself.',
+  // The figure's label and caption (its number is set where it shows)
+  figureLabel: 'Fig.',
+  figure: 'One workflow, end to end · example',
+  // The steps: the list's label, its line, and the diagram node's short line and pillar
   steps: [
-    'A customer messages on WhatsApp, any time of day.',
-    'The AI agent understands the question and answers in seconds.',
-    'The booking is made and confirmed in the calendar.',
-    'The CRM record is updated, and the team is notified.',
+    {
+      label: 'Lead',
+      text: 'A customer messages on WhatsApp, any time of day.',
+      node: 'WhatsApp message in',
+      pillar: 'ai',
+    },
+    {
+      label: 'AI reply',
+      text: 'The AI agent understands the question and answers in seconds.',
+      node: 'Answers in Arabic or English',
+      pillar: 'ai',
+    },
+    {
+      label: 'Booking + CRM',
+      text: 'The booking is made and confirmed in the calendar; the CRM record is updated and the team is notified.',
+      node: 'Calendar and CRM updated',
+      pillar: 'software',
+    },
+    { label: 'Reminder', text: 'A reminder goes out before the visit.', node: 'Before the visit', pillar: 'web' },
+    {
+      label: 'Review',
+      text: 'After the visit, a review request goes out at the right moment.',
+      node: 'Request after the visit',
+      pillar: 'ranking',
+    },
   ],
-  // The static story-flow's own label (10 §3.6: an example flow carries the label)
-  flowLabel: 'Example workflow',
-  // The flow's nodes, one or two words each (StoryFlow; the last is the outcome)
-  nodes: ['Message', 'AI agent', 'Calendar', 'CRM'],
+  // The scrubber's accessible name; its steps are buttons that jump the scene
+  scrubLabel: 'Run the example step by step',
 } as const;
 
-// §06 Proof: "Watch this page build itself" (home.md; C19: until real case-study figures exist)
+// §06 Proof: "Watch this page build itself" (home.md; Figma 52:411; C19: until real case-study
+// figures exist). The layers show this page's own title, description, H1, step list and JSON-LD, and
+// a recorded run of this site's build (build-run.ts); the stamp is this visit's real LCP, never a
+// promised score (10 §3.7).
 export const buildItself = {
+  eyebrow: 'This page is the proof',
   heading: 'Watch this page build itself',
   lede: 'A website should prove what it claims. This page is custom-coded, fast and readable by AI engines — and instead of a marketing claim, it shows its own real measurements, live, from this visit.',
-  // The pinned scene's steps (13 §5: grid → wireframe → type → glass → content → schema tags → stamp)
-  steps: [
-    'The grid and the page skeleton arrive first.',
-    'Type and layout settle into place.',
-    'Glass surfaces and the pixel accents land.',
-    'The content layer becomes readable text.',
-    'The schema tags tell machines what it all means.',
-    'The stamp shows this visit\u2019s real LCP.',
-  ],
-  // The stamp's label; the value itself is this visit's real measurement (lazy, P5)
+  toggle: 'How AI reads this page',
+  aiView: 'AI view on: the page as an engine reads it',
+  // The stamp's label and notes; the value itself is this visit's real measurement
   stampLabel: 'This visit\u2019s LCP',
+  stampNote: 'measured live',
+  stampPending: 'measuring',
+  layers: [
+    { name: 'Design', line: 'Type, colour and layout, from one design system' },
+    { name: 'Code', line: 'Custom code, no page builder or template' },
+    { name: 'Schema', line: 'The schema tags tell machines what it all means.' },
+    { name: 'SEO', line: 'Titles, answers and links an AI engine can quote' },
+  ],
+  // The code layer's caption: the recording it replays (build-run.ts gives the commit and the date)
+  recorded: 'A recorded run of this site\u2019s build · commit',
 } as const;
 
 // §06 (below the pinned scene) — the illustrative proof examples (C18, 10 §3.6). No real client
@@ -115,6 +239,7 @@ export const buildItself = {
 // outcomes written in words only. No invented numbers (check:facts fails on unlisted figures); the
 // one figure that may appear is the allowlisted "60 seconds" Speed-to-Lead design target (facts §6).
 export const illustrativeProof = {
+  eyebrow: 'Concepts',
   // The block's heading (an H3, so the section's H2 order in home.spec.ts is untouched) and label
   heading: 'The kind of system we build',
   // The honesty label carried on every concept card (C18; 10 §3.6: "Concept by Deepzeta AI · fictional business")
@@ -154,8 +279,12 @@ export const illustrativeProof = {
 
 // §07 How we work (home.md): Audit → Build → Launch → Improve. No timeframes — none confirmed
 export const howWeWork = {
+  eyebrow: 'Audit → Build → Launch → Improve',
   heading: 'How we work',
-  lede: 'Four steps, whether we are building a website, a automation system or both. It starts with a free audit and it never ends in a handover you did not agree to.',
+  lede: 'Four steps, whether we are building a website, an automation system or both. It starts with a free audit and it never ends in a handover you did not agree to.',
+  // The audit-session photo beside the steps (P21; hands and a process map, no faces)
+  photoAlt: 'Hands drawing a process map with sticky notes beside a laptop in a Dubai office',
+  photoBadge: 'Photo',
   steps: [
     { title: 'Audit', text: 'We map your sales, operations and admin, and show which automations pay back first.' },
     { title: 'Build', text: 'We design and custom-code the system around how your business actually works.' },
@@ -164,11 +293,23 @@ export const howWeWork = {
   ],
 } as const;
 
-// §08 The ROI calculator teaser (home.md): the formula shown, no money figures (the visitor's own
-// inputs arrive with the P7 calculator; 10 §3.6)
+// §10 The ROI calculator (home.md; Figma 53:508): computed only from the visitor's own numbers, with
+// its formula always shown (10 §3.6). The starting values are example inputs and say so; they are
+// numbers in code, never a claim.
 export const roiTeaser = {
+  eyebrow: 'Your numbers only',
   heading: 'What is manual work really costing you?',
   lede: 'The calculator uses your own numbers, and shows its formula: hours saved each week, multiplied by the cost of that hour, projected over a year. No assumptions, no invented benchmarks.',
+  inputsLabel: 'Example inputs — move the sliders to your numbers',
+  hoursLabel: 'Hours spent on this task each week',
+  hoursUnit: 'h',
+  rateLabel: 'Cost of one hour of that work',
+  currency: 'AED',
+  weeksLabel: 'Weeks in a year',
+  weeksUnit: 'weeks',
+  resultLabel: 'Yearly value of automating this one task',
+  defaults: { hours: 6, rate: 120, weeks: 52 },
+  ranges: { hours: { min: 1, max: 40, step: 1 }, rate: { min: 20, max: 500, step: 10 } },
   formulaLabel: 'The formula',
   formula:
     'Hours saved each week \u00d7 cost of that hour \u00d7 the weeks in a year = the yearly value of automating one task',
@@ -177,14 +318,33 @@ export const roiTeaser = {
 
 // §09 Industries (home.md): the four catalogue industry groups (R101–R104), names exactly
 export const industries = {
+  eyebrow: 'Four industry groups',
   heading: 'Built for your industry',
   lede: 'Deepzeta AI serves every industry, with ready-made automations for four broad groups. Each group has its own page with the best-fit automations for the businesses in it.',
+  // Each card's group label before its catalogue number, the flip control and the back face. The
+  // automations are the catalogue's best-fit table (§7.5) for the group's industries.
+  groupLabel: 'Group',
+  flip: 'Flip to see the automations',
+  flipBack: 'Back to the photo',
+  backHeading: 'Ready-made automations for this group',
+  seePage: 'See the group page',
+  previous: 'Previous industry group',
+  next: 'Next industry group',
+  // One photo per group (P05–P08): hands, devices and spaces, never a face
+  photoAlt: {
+    '7.1': 'Hands arranging cards on a glass table between two laptops in a DIFC meeting room',
+    '7.2': 'Hands packing an order into a box beside a label printer in a Dubai studio',
+    '7.3': 'A hand holding a phone and keys in an empty Dubai apartment with skyline windows',
+    '7.4': 'Gloved hands holding a tablet in a bright Dubai dental clinic treatment room',
+  },
 } as const;
 
 // §10 FAQ (home.md, faq.md, engine §6): the section wrapper; the questions live in faq-bank.ts
 export const faqSection = {
+  eyebrow: 'FAQ',
   heading: 'Questions, answered',
   lede: 'The questions UAE business owners ask before automating — answered directly. Can\u2019t find yours? Ask us.',
+  askAgent: 'Ask our AI agent',
 } as const;
 
 // §11 The final CTA (home.md): the audit offer beside the 60-second test stub; the footer's
@@ -194,6 +354,7 @@ export const finalCta = {
   lede: 'In one session we map your sales, operations and admin, and show which automations pay back first. No obligation, no jargon.',
   // The speed-to-lead test stub (demo 4; the real test is P7). "60 seconds" is the facts §6
   // service design target, phrased exactly as the allowlist entry has it.
+  testEyebrow: 'Demo',
   testTitle: 'The speed-to-lead test',
   testLine: 'Send us a message as a customer would. Our speed-to-lead target: a reply within 60 seconds.',
   testCta: 'Take the speed-to-lead test',
