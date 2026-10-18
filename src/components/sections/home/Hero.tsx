@@ -117,7 +117,10 @@ export function Hero() {
             </div>
           </div>
 
-          <p className="max-w-[51.25rem] text-lead">{heroAnswer.answer}</p>
+          {/* With the H1, the page's LCP candidate (the owner, 2026-10-19): static from first paint */}
+          <p className="max-w-[51.25rem] text-lead" data-hero-answer="">
+            {heroAnswer.answer}
+          </p>
 
           <form
             className="dz-agent grid w-full max-w-[45rem] justify-items-center gap-2.5"
