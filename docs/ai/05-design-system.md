@@ -214,7 +214,7 @@ GSAP and Motion read these values from the CSS custom properties (or a typed mir
 - **The logo:**
   - Header and light surfaces: the owner's `DeepZeta_Wordmark_D_As_Symbol_Plus_Pixels_WhiteBG.svg` (Figma `2:337`). Dark plates: the locked logo.
   - Both are served as they are, scaled only, never edited, recoloured or redrawn.
-  - Adding the white-background files to the repo needs the owner's approval (C78).
+  - The white-background files are locked in `src/brand/white-bg/` (C78); the header's wordmark is served at `/brand/deepzeta-wordmark-light.svg`, shown at its crop's ratio (910 × 210) with `object-fit: cover`, since the file's canvas is square.
   - In the stacked and domain lockups the tagline is near-white, so they sit only where the tagline may disappear.
 
 ---

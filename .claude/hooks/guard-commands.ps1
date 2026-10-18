@@ -22,7 +22,7 @@ $rules = @(
     @{ Pattern = '(^|[\s;&|])rm\s+-[a-zA-Z]*r[a-zA-Z]*f|(^|[\s;&|])rm\s+-[a-zA-Z]*f[a-zA-Z]*r'; Why = 'Recursive forced deletion is not allowed.' },
     @{ Pattern = 'Remove-Item\b.*-Recurse'; Why = 'Recursive deletion is not allowed.' },
     # Order-independent: the protected name and a write/move/delete operation may appear in any order.
-    @{ Pattern = '^(?=.*(deepZeta Ai Logo|Coded Logo SVG))(?=.*(sed\s+-i|>|Set-Content|Out-File|Add-Content|Move-Item|Remove-Item|Copy-Item|Rename-Item|\bmv\b|\brm\b|\bcp\b|\btee\b))'; Why = 'The logo SVG is locked.' },
+    @{ Pattern = '^(?=.*(deepZeta Ai Logo|Coded Logo SVG|brand.white-bg))(?=.*(sed\s+-i|>|Set-Content|Out-File|Add-Content|Move-Item|Remove-Item|Copy-Item|Rename-Item|\bmv\b|\brm\b|\bcp\b|\btee\b))'; Why = 'The logo SVG is locked.' },
     @{ Pattern = '^(?=.*\.env(?!\.example)\b)(?=.*(sed\s+-i|>|Set-Content|Out-File|Add-Content|Move-Item|Copy-Item|\bmv\b|\bcp\b|\btee\b))'; Why = 'Environment files are never written by agents.' }
 )
 

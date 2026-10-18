@@ -71,7 +71,7 @@ Every plan must name which part of this North Star it serves. If a task serves n
 | Visual design (tokens, components, screens, motion spec, media plan) | Figma "Deepzeta AI · Website v3", file `tYw7bSV9m4zX2vrVs7XYpE` | Approved by the owner 2026-10-18 (decision 0033); [05](05-design-system.md), [13](13-experience-design.md) and `docs/design/` are written from it |
 | Effects, motion, interaction (effect IDs) | [docs/ai/13-experience-design.md](13-experience-design.md) | Website v3 "Spectrum", decision 0033 |
 | Surface designs (header, footer, each page) | [docs/design/](../design/README.md) | Website v3 "Spectrum", decision 0033 |
-| Logo | `Planning Folder/For Ai/deepZeta Ai Logo/Coded Logo SVG Do not touch the code.svg` (dark backgrounds); the owner's white-background variants join as locked files once approved (C78) | **Locked, never edited** |
+| Logo | `Planning Folder/For Ai/deepZeta Ai Logo/Coded Logo SVG Do not touch the code.svg` (dark backgrounds) and the owner's eight white-background logos in `src/brand/white-bg/` (light surfaces; added 2026-10-18, C78) | **Locked, never edited** |
 | Content system, internal links, FAQ, E-E-A-T, robots/llms content, pSEO | [docs/seo/seo-geo-domination-engine.md](../seo/seo-geo-domination-engine.md) | Owner-approved 2026-09-30 |
 | Every URL (planned, live, reserved, retired) | [docs/seo/url-registry.md](../seo/url-registry.md) | APPEND-ONLY |
 | External facts (laws, platform rules, vendor facts) | [docs/facts/external-sources.md](../facts/external-sources.md) | Only APPROVED rows are used |
@@ -84,7 +84,7 @@ If two sources disagree, the conflict register decides. If it doesn't cover the 
 ## 5. Protected files (never edit without the owner's explicit approval in the current request)
 
 - `Planning Folder/**`: read-only source material
-- The logo SVG (above): never edited, reformatted or "optimised"
+- The logo SVGs (above, both folders): never edited, reformatted or "optimised"; served as they are, scaled only
 - `docs/ai/**`, `CLAUDE.md`, `AGENTS.md`, `.claude/**`: the rule system itself
 - `docs/design/*.md`: the approved surface design specs (prototypes in `docs/design/prototypes/` are not protected; they are never a source)
 - `docs/seo/*.md`: the SEO/GEO Domination Engine and the URL registry
