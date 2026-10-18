@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import { SiteDocument } from '@/components/layout/SiteDocument';
 import { shellReviewContent } from '@/content/en/shell-review';
 import { brandedTitle } from '@/lib/seo/title';
+import { siteUrl } from '@/lib/url';
 import { siteViewport } from '@/lib/viewport';
 import '@/styles/globals.css';
 
@@ -10,6 +11,8 @@ import '@/styles/globals.css';
 // without going dynamic (C30), so the review page gets the same document from here. Never indexed:
 // the page is noindex, never linked, and 404 in production (registry R165).
 export const metadata: Metadata = {
+  // It skips the English layout, so it sets its own base for the OG image's absolute URL.
+  metadataBase: new URL(siteUrl()),
   title: brandedTitle(shellReviewContent.title),
   description: shellReviewContent.description,
   robots: { index: false, follow: false },

@@ -1,11 +1,11 @@
-// The service template's sections (/services/<slug>; engine §3.1's order; docs/design/service-page.md;
-// the P6 part A plan, S8 and S11). Server components; the demo stub and the FAQ enhancement load on
-// use. Copy comes from the page's file (src/content/en/services/<slug>.ts) and the template's shared
-// labels; the service's name, pillar and every service named by number come from the catalogue
-// (10 §2). Links only to live pages, built from the route helpers (06 §2.4, 04 §1.4).
+// The service template's sections (/services/<slug>; docs/design/service-page.md; Figma 59:34). Copy
+// from the page's file (src/content/en/services/<slug>.ts) and the template's shared labels; the
+// service's name, pillar and every service named by number come from the catalogue (10 §2). Links only
+// to live pages (04 §1.4). Phase C: the semantic sections, base tokens only; Phase D adds the Figma look.
+// CodePage reads ServiceHero's source from this file at build time, so it shows the real code.
 import type { ReactNode } from 'react';
-import { Icon } from '@/components/icons/Icon';
-import { TIER_2, type Tier2Name } from '@/components/icons/registry';
+import { Glyph } from '@/components/ui/Glyph';
+import { PillarMark } from '@/components/ui/PillarMark';
 import { DemoStub } from '@/components/demos/DemoStub';
 import { BeforeAfter } from '@/components/sections/BeforeAfter';
 import { StoryFlow } from '@/components/sections/StoryFlow';
@@ -23,15 +23,7 @@ export type ServiceSectionProps = { content: ServicePageContent; service: Catalo
 
 const section = 'mx-auto max-w-page px-gutter py-section';
 
-// §1 The hero: the Tier 2 icon, the one statement H1 (h1 size below 640 px, as Home), the direct
-// answer (both the LCP, visible at first paint, 13 §3 rule 2), the primary CTA and the demo stub.
-// Below 640 px the icon takes the 48 px Tier 2 size and the top tightens, so the European consent
-// banner at 360 × 640 stays clear of the H1. data-view-service tells the tracking runtime which
-// service this page is (view_service, 09). `preview` renders the same hero as a picture inside the
-// Websites page's Code ↔ Page slider (the flagship plan): no H1, no ids, no tracking attributes; the
-// slider wraps it inert and hidden from assistive technology.
 export function ServiceHero({ content, service, preview = false }: ServiceSectionProps & { preview?: boolean }) {
-  const icon = service.slug && Object.hasOwn(TIER_2, service.slug) ? (service.slug as Tier2Name) : undefined;
   const Heading = preview ? 'p' : 'h1';
   return (
     <section
@@ -40,10 +32,10 @@ export function ServiceHero({ content, service, preview = false }: ServiceSectio
       data-view-service={preview ? undefined : service.slug}
       data-view-pillar={preview ? undefined : service.pillar}
     >
-      {icon ? <Icon name={icon} size={64} className="size-12 sm:size-16" /> : null}
+      {service.pillar ? <PillarMark pillar={service.pillar} className="size-6" /> : null}
       <Heading
         id={preview ? undefined : 'service-heading'}
-        className="mt-3 text-h1 text-balance sm:mt-4 sm:text-statement"
+        className="mt-3 text-hero-line text-balance sm:mt-4 sm:text-hero-line"
       >
         {content.heading}
       </Heading>
@@ -58,10 +50,9 @@ export function ServiceHero({ content, service, preview = false }: ServiceSectio
   );
 }
 
-// §2 The problem it solves: story-before-after rows
 export function ServiceProblem({ content }: ServiceSectionProps) {
   return (
-    <section aria-labelledby="service-problem" className={section} data-fx-once="">
+    <section aria-labelledby="service-problem" className={section}>
       <h2 id="service-problem" className="max-w-measure text-h2 text-balance">
         {content.problem.heading}
       </h2>
@@ -75,12 +66,10 @@ export function ServiceProblem({ content }: ServiceSectionProps) {
   );
 }
 
-// §3 How it works: the visible step list beside the labelled example story-flow (13 §4.8, 10 §3.6),
-// or above the page's own story, full width, when it brings one (the Websites page's Code ↔ Page)
 export function ServiceHow({ content, story }: ServiceSectionProps & { story?: ReactNode }) {
   const { how } = content;
   return (
-    <section aria-labelledby="service-how" className={section} data-fx-once="">
+    <section aria-labelledby="service-how" className={section}>
       <h2 id="service-how" className="max-w-measure text-h2 text-balance">
         {how.heading}
       </h2>
@@ -89,10 +78,10 @@ export function ServiceHow({ content, story }: ServiceSectionProps & { story?: R
         <ol aria-label={serviceTemplate.stepsLabel} className={story ? 'grid gap-4 lg:grid-cols-2' : 'grid gap-4'}>
           {how.steps.map((step, index) => (
             <li key={step.title} className="flex items-baseline gap-3">
-              <span className="font-mono text-caption text-fg-muted">{String(index + 1).padStart(2, '0')}</span>
+              <span className="font-mono text-caption text-ink-secondary">{String(index + 1).padStart(2, '0')}</span>
               <span>
-                <span className="font-bold text-fg-strong">{step.title}</span>{' '}
-                <span className="text-fg-muted">{step.text}</span>
+                <span className="font-bold text-ink">{step.title}</span>{' '}
+                <span className="text-ink-secondary">{step.text}</span>
               </span>
             </li>
           ))}
@@ -114,7 +103,7 @@ export function ServiceHow({ content, story }: ServiceSectionProps & { story?: R
 // §4 What you get, §5 Works with
 export function ServiceDeliverables({ content }: ServiceSectionProps) {
   return (
-    <section aria-labelledby="service-get" className={section} data-fx-once="">
+    <section aria-labelledby="service-get" className={section}>
       <div className="grid gap-10 lg:grid-cols-2">
         <div>
           <h2 id="service-get" className="text-h2 text-balance">
@@ -123,7 +112,7 @@ export function ServiceDeliverables({ content }: ServiceSectionProps) {
           <ul className="mt-6 grid gap-3">
             {content.deliverables.items.map((item) => (
               <li key={item} className="flex items-start gap-3">
-                <Icon name="check" size={20} className="mt-1 shrink-0" />
+                <Glyph name="check" className="mt-0.5 size-5 text-violet" />
                 <span>{item}</span>
               </li>
             ))}
@@ -136,7 +125,7 @@ export function ServiceDeliverables({ content }: ServiceSectionProps) {
           <p className="mt-4 max-w-measure">{content.worksWith.lede}</p>
           <ul className="mt-6 flex flex-wrap gap-2">
             {content.worksWith.platforms.map((platform) => (
-              <li key={platform} className="dz-chip inline-flex items-center">
+              <li key={platform} className="inline-flex items-center">
                 {platform}
               </li>
             ))}
@@ -151,25 +140,25 @@ export function ServiceDeliverables({ content }: ServiceSectionProps) {
 export function ServiceFit({ content }: ServiceSectionProps) {
   const { fit } = content;
   return (
-    <section aria-labelledby="service-fit" className={section} data-fx-once="">
+    <section aria-labelledby="service-fit" className={section}>
       <h2 id="service-fit" className="max-w-measure text-h2 text-balance">
         {fit.heading}
       </h2>
       <p className="mt-4 max-w-measure text-lead">{fit.lede}</p>
       <div className="mt-8 grid gap-6 lg:grid-cols-2">
-        <ul className="dz-glass grid content-start gap-3 rounded-2xl p-6">
+        <ul className="grid content-start gap-3 rounded-lg p-6">
           {fit.goodFit.map((item) => (
             <li key={item} className="flex items-start gap-3">
-              <Icon name="check" size={20} className="mt-1 shrink-0" />
+              <Glyph name="check" className="mt-0.5 size-5 text-violet" />
               <span>{item}</span>
             </li>
           ))}
         </ul>
-        <dl className="dz-glass grid content-start gap-4 rounded-2xl p-6">
+        <dl className="grid content-start gap-4 rounded-lg p-6">
           {fit.decisionAid.map((entry) => (
             <div key={entry.question}>
-              <dt className="font-bold text-fg-strong">{entry.question}</dt>
-              <dd className="mt-1 text-fg-muted">{entry.answer}</dd>
+              <dt className="font-bold text-ink">{entry.question}</dt>
+              <dd className="mt-1 text-ink-secondary">{entry.answer}</dd>
             </div>
           ))}
         </dl>
@@ -183,13 +172,13 @@ export function ServiceFit({ content }: ServiceSectionProps) {
 export function ServiceTryUaePairs({ content }: ServiceSectionProps) {
   const { tryIt } = content;
   return (
-    <section aria-labelledby={tryIt ? 'service-try' : 'service-uae'} className={section} data-fx-once="">
+    <section aria-labelledby={tryIt ? 'service-try' : 'service-uae'} className={section}>
       {tryIt ? (
-        <div className="dz-glass mb-section rounded-2xl p-6">
+        <div className="mb-section rounded-lg p-6">
           <h2 id="service-try" className="text-h3 text-balance">
             {tryIt.heading}
           </h2>
-          <p className="mt-2 max-w-measure text-fg-muted">{tryIt.line}</p>
+          <p className="mt-2 max-w-measure text-ink-secondary">{tryIt.line}</p>
           <div className="mt-4">
             <DemoStub demoId={tryIt.demoId} label={tryIt.trigger} icon={tryIt.icon} />
           </div>
@@ -203,7 +192,7 @@ export function ServiceTryUaePairs({ content }: ServiceSectionProps) {
           <ul className="mt-6 grid gap-3">
             {content.uae.points.map((point) => (
               <li key={point} className="flex items-start gap-3">
-                <Icon name="check" size={20} className="mt-1 shrink-0" />
+                <Glyph name="check" className="mt-0.5 size-5 text-violet" />
                 <span>{point}</span>
               </li>
             ))}
@@ -220,16 +209,16 @@ export function ServiceTryUaePairs({ content }: ServiceSectionProps) {
               const href = pair.slug ? livePath(`/services/${pair.slug}`) : undefined;
               return (
                 <li key={item.catalogueNumber}>
-                  <p className="font-bold text-fg-strong">
+                  <p className="font-bold text-ink">
                     {href ? (
-                      <a href={href} className="dz-underline dz-target">
+                      <a href={href} className="text-link underline-offset-4 hover:underline">
                         {pair.name}
                       </a>
                     ) : (
                       pair.name
                     )}
                   </p>
-                  <p className="mt-1 text-small text-fg-muted">{item.line}</p>
+                  <p className="mt-1 text-small text-ink-secondary">{item.line}</p>
                 </li>
               );
             })}

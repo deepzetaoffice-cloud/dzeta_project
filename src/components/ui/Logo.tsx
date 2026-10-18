@@ -96,7 +96,7 @@ export function Logo({ variant, className, label }: LogoProps) {
     // swap sides. The logo never mirrors (11 §1).
     <span
       dir="ltr"
-      className={`inline-flex items-center gap-0.5 forced-colors:bg-navy forced-colors:forced-color-adjust-none ${className}`}
+      className={`inline-flex items-center gap-0.5 forced-colors:bg-inverse forced-colors:forced-color-adjust-none ${className}`}
       {...name}
     >
       {variant === 'inline' && <InlineLockup />}

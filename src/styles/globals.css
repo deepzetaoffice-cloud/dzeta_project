@@ -1,23 +1,14 @@
-/* Global stylesheet. Tailwind v4 is CSS-first: there is no tailwind.config.js (docs/ai/05 §1).
-   source('..') limits class detection to src/ (the path is relative to this file). Without it
-   Tailwind also scans Planning Folder/ and docs/, and ships their example classes, including raw
-   hex values, in the site's CSS. */
+/* Global stylesheet, Website v3 (docs/ai/05; decision 0033). Tailwind v4 is CSS-first: there is no
+   tailwind.config.js (05 §1). source('..') limits class detection to src/ (the path is relative to
+   this file), so Planning Folder/ and docs/ never ship their example classes. */
 @import 'tailwindcss' source('..');
-/* The tokens and the Tailwind mapping (decision 0015). Raw values live only there. */
+/* The tokens and the Tailwind mapping. Raw values live only there (check:tokens). */
 @import './tokens.css';
-/* Montserrat's size-matched fallback faces, one per weight (P2 plan, section D) */
-@import './font-fallbacks.css';
-/* Effects: the glass ladder and each effect's CSS, static by default (docs/ai/13; P2 plan, C3) */
-@import './effects.css';
-/* Icons: lines, pixel, states and stories (Icon Master Rules; P1 plan, D5) */
-@import './icons.css';
 
-/* The fx variant (P2 plan, C3). Motion, live glass, pointer effects and hidden start states exist only
-   inside it, so every effect rests in its static final state (13 §3.3). It holds while no device
-   setting asks for less (this media condition is FX_MEDIA in src/lib/fx/preferences.ts; a unit test
-   keeps the two equal) and Reduce effects is off (data-effects on <html>: the init script and
-   preferences.ts). Write `@variant fx` inside a rule: at the top level, Tailwind 4.3.3 writes a
-   `:scope` selector, which never matches. */
+/* The fx variant (13 §2.10–§2.11). Motion and hidden start states exist only inside it, so every
+   effect rests in its final state otherwise (13 §3.8). It holds while no device setting asks for less
+   (this media condition is FX_MEDIA in src/lib/fx/preferences.ts) and Reduce effects is off
+   (data-effects on <html>: the init script and preferences.ts). Write `@variant fx` inside a rule. */
 @custom-variant fx {
   @media (prefers-reduced-motion: no-preference) and (prefers-contrast: no-preference) and (forced-colors: none) {
     &:where(:root:not([data-effects='reduced']) *) {
@@ -28,30 +19,27 @@
 
 @layer base {
   html {
-    background-color: var(--dz-bg);
-    color: var(--dz-text);
-    font-family: var(--dz-font-sans);
-    /* An anchor's target lands clear of the sticky header (P2 plan, B2). */
-    scroll-padding-block-start: calc(var(--dz-header-height) + 2 * var(--dz-header-inset));
+    background-color: var(--dz-color-bg-canvas);
+    color: var(--dz-color-text-primary);
+    font-family: var(--dz-font-family-body);
+    -webkit-text-size-adjust: 100%;
+    /* An anchor's target lands clear of the sticky header. */
+    scroll-padding-block-start: calc(var(--dz-layout-header-height) + 2 * var(--dz-layout-stage-inset));
   }
 
-  /* The page doesn't scroll behind a modal dialog, the mobile sheet (P2 plan, J1); the stable gutter
-     keeps it from shifting sideways when its scrollbar goes. */
+  /* The page doesn't scroll behind a modal dialog (the mobile menu, Cookie settings); the stable
+     gutter keeps it from shifting sideways when its scrollbar goes. */
   html:has(dialog:modal) {
     overflow: hidden;
     scrollbar-gutter: stable;
   }
 
+  /* viewportFit 'cover' (src/lib/viewport.ts): the content stays inside an iPhone's safe area in
+     landscape. Both sides take the larger inset: logical padding would swap them in RTL. */
   body {
-    font-size: var(--dz-text-body);
-    line-height: var(--dz-text-body-leading);
-  }
-
-  /* An element that carries a theme paints its own surface, so a navy footer stays navy on a
-     light page (05 §2). */
-  [data-theme] {
-    background-color: var(--dz-bg);
-    color: var(--dz-text);
+    font-size: var(--dz-font-size-body);
+    line-height: var(--dz-leading-body);
+    padding-inline: max(env(safe-area-inset-left), env(safe-area-inset-right));
   }
 
   h1,
@@ -60,16 +48,340 @@
   h4,
   h5,
   h6 {
-    color: var(--dz-text-strong);
+    color: var(--dz-color-text-primary);
     text-wrap: balance;
-    /* A long word (a service name, a URL) breaks instead of pushing the page sideways at large sizes
-       on a narrow screen (WCAG 1.4.10 reflow; 0015). */
+    /* A long word (a service name, a URL) breaks instead of pushing the page sideways (WCAG 1.4.10). */
     overflow-wrap: break-word;
   }
 
-  /* Visible focus in both themes (05 §7): ice on dark, royal on light */
+  h1,
+  h2,
+  h3 {
+    font-family: var(--dz-font-family-display);
+  }
+
+  /* Visible focus everywhere (05 §4): 2 px of border/focus with a 2 px white gap, so it shows on the
+     stage and on light (focus-ring, 13 §4.1). */
   :focus-visible {
-    outline: var(--dz-focus-width) solid var(--dz-focus);
+    outline: var(--dz-focus-width) solid var(--dz-color-border-focus);
     outline-offset: var(--dz-focus-offset);
+    box-shadow: 0 0 0 var(--dz-focus-offset) var(--dz-color-bg-surface);
+  }
+
+  /* Below 1,280 px an anchor or a focused control scrolls clear of the sticky CTA bar; from there,
+     clear of the floating WhatsApp button (conversion-path.md). */
+  html {
+    @variant max-xl {
+      scroll-padding-block-end: calc(
+        var(--dz-sticky-height) + env(safe-area-inset-bottom) + var(--dz-focus-width) + var(--dz-focus-offset)
+      );
+    }
+    @variant xl {
+      scroll-padding-block-end: calc(
+        max(var(--dz-space-5), env(safe-area-inset-bottom)) + var(--dz-space-16) + var(--dz-focus-width) +
+          var(--dz-focus-offset)
+      );
+    }
+  }
+}
+
+@layer components {
+  /* press-scale (13 §4.1): everything you can press scales to 0.97 while pressed. */
+  .dz-press {
+    @variant fx {
+      transition: scale var(--dz-motion-duration-press) var(--dz-motion-ease-out);
+      &:active {
+        scale: var(--dz-motion-scale-press);
+      }
+    }
+  }
+
+  /* The mobile menu (header.md): a full-screen native modal dialog (tracking.spec.ts opens
+     dialog.dz-sheet). mobile-menu-sheet: the panel moves in from −4% with an opacity fade. */
+  .dz-sheet {
+    position: fixed;
+    inset: 0;
+    inline-size: 100%;
+    max-inline-size: 100%;
+    block-size: 100dvh;
+    max-block-size: 100dvh;
+    margin: 0;
+    padding: 0;
+    padding-inline: max(env(safe-area-inset-left), env(safe-area-inset-right));
+    border: 0;
+    background-color: var(--dz-color-bg-canvas);
+    color: var(--dz-color-text-primary);
+    overflow-y: auto;
+    @variant fx {
+      transition:
+        display var(--dz-motion-duration-menu) allow-discrete,
+        overlay var(--dz-motion-duration-menu) allow-discrete;
+    }
+  }
+
+  .dz-sheet::backdrop {
+    background: none;
+  }
+
+  .dz-sheet-panel {
+    min-block-size: 100%;
+    padding-block-end: max(var(--dz-space-6), env(safe-area-inset-bottom));
+    @variant fx {
+      transition:
+        opacity var(--dz-motion-duration-menu) var(--dz-motion-ease-drawer),
+        translate var(--dz-motion-duration-menu) var(--dz-motion-ease-drawer);
+    }
+  }
+
+  .dz-sheet:not([open]) {
+    @variant fx {
+      pointer-events: none;
+    }
+  }
+
+  .dz-sheet:not([open]) .dz-sheet-panel {
+    @variant fx {
+      opacity: 0;
+      translate: 0 -4%;
+    }
+  }
+
+  .dz-sheet[open] .dz-sheet-panel {
+    @variant fx {
+      @starting-style {
+        opacity: 0;
+        translate: 0 -4%;
+      }
+    }
+  }
+
+  /* The sticky CTA bar (conversion-path.md), below 1,280 px: shown (data-shown, src/lib/fx/cta.ts)
+     while no in-page audit CTA is on screen. It slides with a transform, never shows without
+     JavaScript, and hides while a modal is open or the consent banner asks. */
+  .dz-sticky {
+    position: fixed;
+    inset-inline: 0;
+    inset-block-end: 0;
+    z-index: var(--dz-layer-sticky);
+    padding-block: var(--dz-space-3) max(var(--dz-space-3), env(safe-area-inset-bottom));
+    padding-inline: max(var(--dz-layout-gutter), env(safe-area-inset-left), env(safe-area-inset-right));
+    translate: 0 100%;
+    visibility: hidden;
+    @variant xl {
+      display: none;
+    }
+  }
+
+  :root[data-cta-armed] .dz-sticky {
+    @variant fx {
+      transition:
+        translate var(--dz-motion-duration-base) var(--dz-motion-ease-out),
+        visibility var(--dz-motion-duration-base);
+    }
+  }
+
+  .dz-sticky[data-shown],
+  .dz-sticky:focus-within {
+    translate: none;
+    visibility: visible;
+  }
+
+  :root:has(dialog:modal) .dz-sticky,
+  :root[data-consent='ask'] .dz-sticky {
+    translate: 0 100%;
+    visibility: hidden;
+  }
+
+  /* The consent banner (conversion-path.md; 09 §2.7): shown only while <html> carries
+     data-consent="ask", set before the first paint. Full width at the bottom on a phone; a corner
+     panel at the inline end from 640 px. It fades out after a choice; at once under Reduce effects. */
+  .dz-consent {
+    display: none;
+    position: fixed;
+    inset-inline: 0;
+    inset-block-end: 0;
+    z-index: var(--dz-layer-consent);
+    padding-block: var(--dz-space-5) max(var(--dz-space-5), env(safe-area-inset-bottom));
+    padding-inline: max(var(--dz-layout-gutter), env(safe-area-inset-left), env(safe-area-inset-right));
+    border-block-start: var(--dz-border-width) solid var(--dz-color-border-default);
+    background-color: var(--dz-color-bg-surface);
+    box-shadow: var(--dz-elevation-3);
+    /* Never taller than the window: at 320 px wide (400% zoom) it scrolls inside itself (WCAG 1.4.10). */
+    max-block-size: 100dvh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    opacity: 0;
+    @variant fx {
+      transition:
+        display var(--dz-motion-duration-base) allow-discrete,
+        opacity var(--dz-motion-duration-base) var(--dz-motion-ease-out);
+    }
+    @variant sm {
+      inset-inline-start: auto;
+      inset-inline-end: max(var(--dz-layout-gutter), env(safe-area-inset-left), env(safe-area-inset-right));
+      inset-block-end: max(var(--dz-layout-gutter), env(safe-area-inset-bottom));
+      max-inline-size: 26rem;
+      max-block-size: calc(100dvh - var(--dz-layout-gutter) * 2);
+      padding: var(--dz-space-5);
+      border: var(--dz-border-width) solid var(--dz-color-border-default);
+      border-radius: var(--dz-radius-lg);
+    }
+  }
+
+  :root[data-consent='ask'] .dz-consent {
+    display: block;
+    opacity: 1;
+  }
+
+  /* The banner's two choices, the same size and weight (Secondary buttons, 05 §7), and Cookie
+     settings' three. */
+  .dz-consent-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-block-size: 2.75rem;
+    padding-inline: var(--dz-space-6);
+    border: var(--dz-border-width) solid var(--dz-color-border-strong);
+    border-radius: var(--dz-radius-full);
+    background-color: var(--dz-color-bg-surface);
+    color: var(--dz-color-text-primary);
+    font-size: var(--dz-font-size-button-m);
+    font-weight: var(--dz-font-weight-bold);
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        border-color: var(--dz-color-text-primary);
+      }
+    }
+  }
+
+  @media (forced-colors: active) {
+    .dz-consent-button {
+      border-color: ButtonText;
+    }
+  }
+
+  /* Cookie settings: a modal dialog, full height on a phone, a centred panel over the scrim from 640 px. */
+  .dz-consent-dialog {
+    position: fixed;
+    inset: 0;
+    inline-size: 100%;
+    max-inline-size: 100%;
+    block-size: 100dvh;
+    max-block-size: 100dvh;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--dz-color-text-primary);
+    overflow-y: auto;
+    @variant sm {
+      inline-size: min(calc(100% - var(--dz-layout-gutter) * 2), 36rem);
+      block-size: fit-content;
+      max-block-size: calc(100dvh - var(--dz-layout-gutter) * 2);
+      margin: auto;
+    }
+  }
+
+  .dz-consent-dialog::backdrop {
+    background-color: var(--dz-color-bg-scrim);
+  }
+
+  .dz-consent-panel {
+    min-block-size: 100%;
+    padding-block: max(var(--dz-layout-gutter), env(safe-area-inset-top))
+      max(var(--dz-layout-gutter), env(safe-area-inset-bottom));
+    padding-inline: max(var(--dz-layout-gutter), env(safe-area-inset-left), env(safe-area-inset-right));
+    background-color: var(--dz-color-bg-surface);
+    @variant sm {
+      min-block-size: auto;
+      padding: var(--dz-space-8);
+      border-radius: var(--dz-radius-lg);
+      box-shadow: var(--dz-elevation-3);
+    }
+  }
+
+  .dz-consent-table {
+    border-collapse: collapse;
+    & th,
+    & td {
+      padding-block: var(--dz-space-1);
+      padding-inline-end: var(--dz-space-3);
+      border-block-end: var(--dz-border-width) solid var(--dz-color-border-default);
+      text-align: start;
+      vertical-align: top;
+    }
+  }
+
+  /* The Reduce effects switch (footer.md; 13 §2.11) */
+  .dz-switch-track {
+    position: relative;
+    display: inline-block;
+    inline-size: 2.75rem;
+    block-size: 1.5rem;
+    border-radius: var(--dz-radius-full);
+    background-color: var(--dz-color-border-strong);
+    @variant fx {
+      transition: background-color var(--dz-motion-duration-fast) var(--dz-motion-ease-out);
+    }
+  }
+
+  .dz-switch-thumb {
+    position: absolute;
+    inset-block-start: 0.125rem;
+    inset-inline-start: 0.125rem;
+    inline-size: 1.25rem;
+    block-size: 1.25rem;
+    border-radius: var(--dz-radius-full);
+    background-color: var(--dz-color-bg-surface);
+    box-shadow: var(--dz-elevation-1);
+    @variant fx {
+      transition: translate var(--dz-motion-duration-fast) var(--dz-motion-ease-out);
+    }
+  }
+
+  [aria-checked='true'] > .dz-switch-track {
+    background-color: var(--dz-color-action-primary);
+  }
+
+  [aria-checked='true'] > .dz-switch-track .dz-switch-thumb {
+    translate: 1.25rem 0;
+  }
+
+  [dir='rtl'] [aria-checked='true'] > .dz-switch-track .dz-switch-thumb {
+    translate: -1.25rem 0;
+  }
+
+  @media (forced-colors: active) {
+    .dz-switch-track {
+      border: var(--dz-border-width) solid ButtonText;
+    }
+  }
+}
+
+/* The Reduce effects switch works once the runtime has started (preferences.ts marks <html>); until
+   then it's hidden in place, so the legal line doesn't move. */
+:root:not([data-prefs='ready']) .dz-display {
+  visibility: hidden;
+}
+
+/* The footer's Cookie settings button works once the tracking runtime has started; until then it's
+   hidden in place (09 §2.7; consent.spec.ts). */
+:root:not([data-tracking='ready']) .dz-cookie-settings {
+  visibility: hidden;
+}
+
+/* The floating WhatsApp button gives way while the consent banner asks (conversion-path.md). */
+:root[data-consent='ask'] [data-wa-float] {
+  visibility: hidden;
+}
+
+/* While the consent banner shows, the page's end and any focused control scroll clear of it (WCAG
+   2.4.11). The tracking runtime keeps --dz-consent-height at how far the banner reaches up from the
+   window's bottom. The focus offset counts twice: once for the ring, once as slack, because Chrome
+   rounds the scroll position to whole pixels. */
+:root[data-consent='ask'] {
+  scroll-padding-block-end: calc(var(--dz-consent-height) + var(--dz-focus-width) + 2 * var(--dz-focus-offset));
+  & body {
+    padding-block-end: var(--dz-consent-height);
   }
 }

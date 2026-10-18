@@ -21,17 +21,16 @@
     "brand:icons": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/build-brand-icons.mjs",
     "tracking:build": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/build-tracking.mjs",
     "agent:knowledge": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/build-agent-knowledge.mjs",
-    "fonts:fallback": "node scripts/measure-font-fallback.mjs",
     "check:schema": "playwright test --project=gate-schema",
     "check:seo": "playwright test --project=gate-seo",
     "check:links": "playwright test --project=gate-links",
     "test": "vitest run",
     "test:e2e": "playwright test --project=e2e",
-    "lhci": "node scripts/lhci-run.mjs",
-    "measure:weight": "node scripts/measure-prod-weight.mjs",
     "verify:fast": "npm run typecheck && npm run lint && npm run check:tokens && npm run check:contrast",
-    "verify:ci": "npm run verify:fast && npm run format:check && npm run check:facts && npm run check:rules && npm run check:effects && npm run test && npm run build && npm run check:schema && npm run check:seo && npm run check:links && npm run test:e2e",
-    "verify": "npm run verify:fast && npm run format:check && npm run check:facts && npm run check:rules && npm run check:effects && npm run test && npm run build && npm run check:schema && npm run check:seo && npm run check:links && npm run test:e2e && npm run lhci"
+    "verify:ci": "npm run verify:fast && npm run format:check && npm run check:facts && npm run check:rules && npm run check:effects && npm run knip && npm run test && npm run build && npm run check:schema && npm run check:seo && npm run check:links && npm run test:e2e",
+    "verify": "npm run verify:fast && npm run format:check && npm run check:facts && npm run check:rules && npm run check:effects && npm run knip && npm run test && npm run build && npm run check:schema && npm run check:seo && npm run check:links && npm run test:e2e",
+    "knip": "knip",
+    "analyze": "next experimental-analyze --output"
   },
   "dependencies": {
     "next": "16.3.7",
@@ -40,7 +39,6 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "4.13.0",
-    "@lhci/cli": "0.15.1",
     "@playwright/test": "1.63.0",
     "@tailwindcss/postcss": "4.3.3",
     "@types/node": "24.19.0",
@@ -49,6 +47,7 @@
     "eslint": "9.39.5",
     "eslint-config-next": "16.3.7",
     "eslint-config-prettier": "10.1.8",
+    "knip": "6.39.0",
     "prettier": "3.9.9",
     "tailwindcss": "4.3.3",
     "typescript": "6.0.3",

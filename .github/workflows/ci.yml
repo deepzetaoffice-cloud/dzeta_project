@@ -1,6 +1,6 @@
-# The full gate set on every pull request to main and on manual runs (docs/ai/03 §5). Pushes to other
-# branches run verify:ci — everything but lhci (decision 0028) — so iteration pushes stay fast while
-# the merge gate stays complete. main itself is protected (docs/ai/12 §1).
+# The gates on every push to a branch other than main (verify:ci) and the full set on pull requests to
+# main and manual runs (verify; docs/ai/03 §5). Performance is reported, never gated (N1, decision
+# 0033), so there is no Lighthouse step. main itself is protected (docs/ai/12 §1).
 name: CI
 
 on:
@@ -20,18 +20,17 @@ concurrency:
 jobs:
   verify:
     name: verify
-    # Pinned, not ubuntu-latest: a silent runner upgrade would shift the Lighthouse baseline (07 §5).
+    # Pinned, not ubuntu-latest: a silent runner upgrade would change font rendering in the e2e runs.
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     env:
       NEXT_TELEMETRY_DISABLED: '1'
-      # CI isn't a Vercel deployment, so it builds as indexable and Lighthouse's SEO audit sees a
-      # real page (plan section A). Vercel previews stay noindex whatever this says.
+      # CI isn't a Vercel deployment, so it builds as indexable and the SEO gates see a real page.
+      # Vercel previews stay noindex whatever this says.
       NEXT_PUBLIC_SITE_URL: http://localhost:3000
       SITE_INDEXING: 'on'
-      # The real container (C5): a public ID — it ships in every page's HTML. CI's lhci measures the
-      # real gtm.js (third-party caps, lighthouserc.cjs) and e2e stubs it (09 §4), so CI never sends
-      # data. The Internal Traffic filter (guide B7) keeps CI's runs out of the reports.
+      # The real container (C5): a public ID — it ships in every page's HTML. e2e stubs gtm.js (09 §4),
+      # so CI never sends data. The Internal Traffic filter (guide B7) keeps CI's runs out of the reports.
       NEXT_PUBLIC_GTM_ID: GTM-5MR4S8R2
     steps:
       - uses: actions/checkout@v7
@@ -46,56 +45,8 @@ jobs:
       - name: Install the Playwright browser
         run: npx playwright install --with-deps chromium
 
-      - name: Run the gates (full on PRs and manual runs; verify:ci, without lhci, on branch pushes)
+      - name: Run the gates (verify:ci on branch pushes; the full verify on PRs and manual runs)
         run: npm run ${{ github.event_name == 'push' && 'verify:ci' || 'verify' }}
-
-      # Also posted as annotations: they're public on a public repo, while job logs need admin rights.
-      - name: Print the Lighthouse runs (the baseline record, decision 0014)
-        if: always()
-        run: |
-          node --input-type=module -e "
-          import { existsSync, readdirSync, readFileSync } from 'node:fs';
-          const dir = '.lighthouseci';
-          if (!existsSync(dir)) { console.log('No Lighthouse results: an earlier gate failed before lhci.'); process.exit(0); }
-          const kb = (b) => (b / 1024).toFixed(1) + ' KB';
-          const files = readdirSync(dir).filter((n) => /^lhr-.*\.json$/.test(n));
-          const pages = {};
-          files.forEach((f) => {
-            const lhr = JSON.parse(readFileSync(dir + '/' + f, 'utf8'));
-            const a = lhr.audits;
-            const t = Object.fromEntries(a['resource-summary'].details.items.map((i) => [i.resourceType, i.transferSize]));
-            // Each run's page: 127.0.0.1 is Home as a visitor from the UAE (lighthouserc.row.cjs)
-            const line = [
-              lhr.requestedUrl.replace('http://', ''),
-              'perf ' + Math.round(lhr.categories.performance.score * 100),
-              'a11y ' + Math.round(lhr.categories.accessibility.score * 100),
-              'bp ' + Math.round(lhr.categories['best-practices'].score * 100),
-              'seo ' + Math.round(lhr.categories.seo.score * 100),
-              'LCP ' + Math.round(a['largest-contentful-paint'].numericValue) + ' ms',
-              'TBT ' + Math.round(a['total-blocking-time'].numericValue) + ' ms',
-              'CLS ' + a['cumulative-layout-shift'].numericValue.toFixed(3),
-              'JS ' + kb(t.script ?? 0),
-              'CSS ' + kb(t.stylesheet ?? 0),
-              'HTML ' + kb(t.document ?? 0),
-              'fonts ' + kb(t.font ?? 0),
-              'total ' + kb(t.total ?? 0),
-              (lhr.environment.hostUserAgent.match(/Chrome\/[\d.]+/) ?? ['Chrome ?'])[0],
-              'benchmarkIndex ' + Math.round(lhr.environment.benchmarkIndex),
-              // The calibrated CPU slowdown (decision 0025; scripts/lhci-run.mjs)
-              'CPU ' + lhr.configSettings.throttling.cpuSlowdownMultiplier + 'x',
-            ].join(' | ');
-            console.log(line);
-            const page = lhr.requestedUrl.replace('http://', '');
-            (pages[page] ??= []).push({ line, lcp: Math.round(a['largest-contentful-paint'].numericValue), perf: Math.round(lhr.categories.performance.score * 100) });
-          });
-          // One annotation per page, since GitHub shows at most 10 per step (15 runs would lose the last
-          // page): the median-LCP run's line, then every run's LCP and score. No comma or colon in a title.
-          const label = (p) => p.startsWith('127.0.0.1') ? 'Home (UAE campaign landing)' : p.endsWith('/shell-review') ? 'Review page (Europe)' : p.endsWith(':3000/') ? 'Home (Europe)' : p.slice(p.indexOf('/')) + ' (Europe)';
-          for (const [page, runs] of Object.entries(pages)) {
-            const median = runs.slice().sort((x, y) => x.lcp - y.lcp)[Math.floor(runs.length / 2)];
-            const every = 'every run: LCP ' + runs.map((r) => r.lcp).join(', ') + ' ms; perf ' + runs.map((r) => r.perf).join(', ');
-            console.log('::notice title=Lighthouse ' + label(page) + ' ' + runs.length + ' runs::median run: ' + median.line + ' | ' + every);
-          }"
 
       - name: Keep the reports
         if: always()
@@ -104,6 +55,5 @@ jobs:
           name: reports
           path: |
             playwright-report/
-            .lighthouseci/
           if-no-files-found: ignore
           retention-days: 14

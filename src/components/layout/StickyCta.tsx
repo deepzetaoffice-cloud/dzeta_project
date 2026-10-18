@@ -1,16 +1,17 @@
 import { auditHref, CtaButton } from '@/components/ui/CtaButton';
 import { shellContent } from '@/content/en/shell';
 
-// The sticky CTA bar (docs/design/conversion-path.md; P2 plan, M), below 1024 px. It carries the
-// gradient CTA while no in-page primary CTA is on screen: cta.ts shows it (data-shown) and hides it
-// again as the hero's or the finale's CTA comes into view, so a view never shows two (C42). It slides
-// in with a transform, stays clear of the home indicator (safe areas, viewportFit 'cover'), and hides
-// while the sheet or any modal is open (effects.css). Without JavaScript it never shows.
-// The floating WhatsApp button lifts above it once the number is confirmed (the 360 px priority list).
+// The sticky CTA bar (docs/design/conversion-path.md; C83), below 1,280 px: a white pill with the
+// violet audit button. src/lib/fx/cta.ts shows it (data-shown) while no in-page audit CTA is on screen
+// and hides it again as the hero's or the finale's comes into view. It slides with a transform, stays
+// clear of the home indicator, and hides while a modal is open or the consent banner asks
+// (globals.css). Without JavaScript it never shows.
 export function StickyCta() {
   return (
-    <div data-theme="dark" data-fx-sticky="" className="dz-sticky dz-glass">
-      <CtaButton variant="primary" href={auditHref()} label={shellContent.cta} wide />
+    <div data-fx-sticky="" className="dz-sticky">
+      <div className="rounded-full bg-surface p-1.5 shadow-2">
+        <CtaButton variant="primary" size="m" href={auditHref()} label={shellContent.cta} wide />
+      </div>
     </div>
   );
 }

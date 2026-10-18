@@ -94,6 +94,10 @@
   - violet on every slab, as large text: the rotating phrase is display type
   - the focus ring
 - **White text fails on the AI Automation and Websites pillar starts**, so text on those fills is ink (`text/on-vibrant`).
+- **Three usage rules from the gate (C85):**
+  - On the stage's 16% glass fill, only large labels (≥ 18.67 px bold); otherwise an On colour control drops the fill for a `border/on-color` edge.
+  - Error text sits only on white surfaces.
+  - A form field's edge is `--dz-color-border-field` (ink/500, 4.95:1), never `border/strong` (1.7:1).
 - **Reported, never failing:** the pillar pixels and signal orange, which never carry meaning alone (C38, C80).
 - **Status colours** are the light-canvas set above.
 

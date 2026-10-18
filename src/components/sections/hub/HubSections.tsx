@@ -1,10 +1,8 @@
-// The services hub's sections (/services, R010; docs/design/services-hub.md; the P6 part A plan, S8
-// and S11). Server components only: the page has no client JavaScript of its own (the FAQ module's
-// enhancement is the module's, loaded on use). Copy comes from src/content/en/services-hub.ts; every
-// service, offer and bundle name from the catalogue, byte for byte (10 §2). A service whose page is
-// live is a link built from the route helpers (06 §2.4); the rest stay plain text (04 §1.4).
-import { Icon } from '@/components/icons/Icon';
-import { TIER_2, type Tier2Name, type Tier3Name } from '@/components/icons/registry';
+// The services hub's sections (/services, R010; docs/design/services-hub.md; Figma 58:34). Copy from
+// services-hub.ts; every service name, pillar and offer from the catalogue (10 §2). A service links
+// only while its page is live (04 §1.4). Phase C: the semantic sections, base tokens only; Phase D adds
+// the Figma look, dot-field and hover-lift.
+import { PillarMark } from '@/components/ui/PillarMark';
 import { auditHref, CtaButton } from '@/components/ui/CtaButton';
 import {
   bundles,
@@ -27,7 +25,7 @@ const serviceHref = (service: CatalogueService) => (service.slug ? livePath(`/se
 function ServiceName({ service, className }: { service: CatalogueService; className?: string }) {
   const href = serviceHref(service);
   return href ? (
-    <a href={href} className={`dz-underline dz-target ${className ?? ''}`}>
+    <a href={href} className={['text-link underline-offset-4 hover:underline', className].filter(Boolean).join(' ')}>
       {service.name}
     </a>
   ) : (
@@ -39,7 +37,7 @@ function ServiceName({ service, className }: { service: CatalogueService; classN
 export function HubHero() {
   return (
     <section aria-labelledby="hub-heading" className="mx-auto max-w-page px-gutter pt-8 pb-section">
-      <h1 id="hub-heading" className="text-h1 text-balance sm:text-statement">
+      <h1 id="hub-heading" className="text-hero-line text-balance sm:text-hero-line">
         {servicesHub.heading}
       </h1>
       <p className="mt-6 max-w-measure text-lead">{servicesHub.answer}</p>
@@ -54,7 +52,7 @@ export function HubHero() {
 export function HubChooser() {
   const { chooser } = servicesHub;
   return (
-    <section aria-labelledby="hub-chooser" className="mx-auto max-w-page px-gutter py-section" data-fx-once="">
+    <section aria-labelledby="hub-chooser" className="mx-auto max-w-page px-gutter py-section">
       <h2 id="hub-chooser" className="max-w-measure text-h2 text-balance">
         {chooser.heading}
       </h2>
@@ -63,10 +61,10 @@ export function HubChooser() {
         <caption className="sr-only">{chooser.caption}</caption>
         <thead className="sr-only sm:not-sr-only">
           <tr>
-            <th scope="col" className="pb-3 text-start text-small font-medium text-fg-muted">
+            <th scope="col" className="pb-3 text-start text-small font-medium text-ink-secondary">
               {chooser.problemHeader}
             </th>
-            <th scope="col" className="pb-3 text-start text-small font-medium text-fg-muted">
+            <th scope="col" className="pb-3 text-start text-small font-medium text-ink-secondary">
               {chooser.serviceHeader}
             </th>
           </tr>
@@ -76,11 +74,11 @@ export function HubChooser() {
             const service = byNumber(row.catalogueNumber);
             if (!service) return null;
             return (
-              <tr key={row.problem} className="grid gap-1 border-t border-hairline py-3 sm:table-row">
+              <tr key={row.problem} className="grid gap-1 border-t border-line py-3 sm:table-row">
                 <th scope="row" className="text-start font-normal sm:py-3 sm:pe-6">
                   {row.problem}
                 </th>
-                <td className="font-medium text-fg-strong sm:py-3">
+                <td className="font-medium text-ink sm:py-3">
                   <ServiceName service={service} />
                 </td>
               </tr>
@@ -92,13 +90,10 @@ export function HubChooser() {
   );
 }
 
-// §4 Start here: the starter offers (catalogue §0), each linked while its page is live. Until R002
-// ships, the hero's audit CTA (and the footer's finale) stands in for the audit: one gradient CTA in
-// view (C42)
 export function HubStartHere() {
   const { startHere } = servicesHub;
   return (
-    <section aria-labelledby="hub-start" className="mx-auto max-w-page px-gutter py-section" data-fx-once="">
+    <section aria-labelledby="hub-start" className="mx-auto max-w-page px-gutter py-section">
       <h2 id="hub-start" className="max-w-measure text-h2 text-balance">
         {startHere.heading}
       </h2>
@@ -109,17 +104,17 @@ export function HubStartHere() {
           if (!offer) return null;
           const href = livePath(offer.path);
           return (
-            <li key={offer.number} className="dz-glass rounded-2xl p-6">
+            <li key={offer.number} className="rounded-lg p-6">
               <h3 className="text-h4">
                 {href ? (
-                  <a href={href} className="dz-underline dz-target">
+                  <a href={href} className="text-link underline-offset-4 hover:underline">
                     {offer.name}
                   </a>
                 ) : (
                   offer.name
                 )}
               </h3>
-              <p className="mt-2 text-small text-fg-muted">{item.line}</p>
+              <p className="mt-2 text-small text-ink-secondary">{item.line}</p>
             </li>
           );
         })}
@@ -128,13 +123,10 @@ export function HubStartHere() {
   );
 }
 
-// §5 The four pillar directories, in catalogue order: the Tier 3 head, the name and promise, the lede,
-// then every lead and core service by sub-group (Websites and Software have none). Add-ons stay on
-// the pillar pages (registry §3.4).
 export function HubDirectories() {
   const { pillars: copy } = servicesHub;
   return (
-    <section aria-labelledby="hub-pillars" className="mx-auto max-w-page px-gutter py-section" data-fx-once="">
+    <section aria-labelledby="hub-pillars" className="mx-auto max-w-page px-gutter py-section">
       <h2 id="hub-pillars" className="max-w-measure text-h2 text-balance">
         {copy.heading}
       </h2>
@@ -157,15 +149,15 @@ export function HubDirectories() {
             <section
               key={pillar.pixel}
               aria-labelledby={titleId}
-              className={`dz-glass dz-t3-host dz-pillar--${pillar.pixel} rounded-2xl p-6`}
+              className="rounded-lg border border-line bg-surface p-6"
             >
               <div className="flex items-start gap-4">
-                <Icon name={pillar.slug as Tier3Name} size={64} />
+                <PillarMark pillar={pillar.pixel} className="mt-2 size-6" />
                 <div className="grid gap-1 pt-1">
                   <h3 id={titleId} className="text-h3">
                     {pillar.name}
                   </h3>
-                  <p className="text-small text-fg-muted">{pillar.promise}</p>
+                  <p className="text-small text-ink-secondary">{pillar.promise}</p>
                 </div>
               </div>
               <p className="mt-4 max-w-measure">{copy.ledes[pillar.pixel]}</p>
@@ -173,15 +165,11 @@ export function HubDirectories() {
                 .filter((group) => group.items.length > 0)
                 .map((group) => (
                   <div key={group.key} className="mt-6">
-                    {group.title ? <h4 className="text-small font-bold text-fg-strong">{group.title}</h4> : null}
+                    {group.title ? <h4 className="text-small font-bold text-ink">{group.title}</h4> : null}
                     <ul className="mt-2 grid gap-1.5 text-small">
                       {group.items.map((service) => (
                         <li key={service.number} className="flex items-center gap-2">
-                          {service.slug && Object.hasOwn(TIER_2, service.slug) ? (
-                            <Icon name={service.slug as Tier2Name} size={20} />
-                          ) : (
-                            <span aria-hidden="true" className="dz-mega-pixel" />
-                          )}
+                          <PillarMark pillar={pillar.pixel} className="size-2" />
                           <ServiceName service={service} />
                         </li>
                       ))}
@@ -201,7 +189,7 @@ export function HubDirectories() {
 export function HubCareAndSolutions() {
   const { care, solutions } = servicesHub;
   return (
-    <section aria-labelledby="hub-care" className="mx-auto max-w-page px-gutter py-section" data-fx-once="">
+    <section aria-labelledby="hub-care" className="mx-auto max-w-page px-gutter py-section">
       <div className="grid gap-10 lg:grid-cols-2">
         <div>
           <h2 id="hub-care" className="text-h2 text-balance">
@@ -212,7 +200,7 @@ export function HubCareAndSolutions() {
             {care.catalogueNumbers.map((number) => {
               const service = byNumber(number);
               return service ? (
-                <li key={number} className="font-medium text-fg-strong">
+                <li key={number} className="font-medium text-ink">
                   <ServiceName service={service} />
                 </li>
               ) : null;
@@ -228,9 +216,9 @@ export function HubCareAndSolutions() {
             {bundles.map((bundle) => {
               const href = livePath(`/solutions/${bundle.slug}`);
               return (
-                <li key={bundle.number} className="font-medium text-fg-strong">
+                <li key={bundle.number} className="font-medium text-ink">
                   {href ? (
-                    <a href={href} className="dz-underline dz-target">
+                    <a href={href} className="text-link underline-offset-4 hover:underline">
                       {bundle.name}
                     </a>
                   ) : (

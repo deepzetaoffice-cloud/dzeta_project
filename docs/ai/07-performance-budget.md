@@ -26,7 +26,7 @@ The habits below stay because they cost nothing visually, and because a fast pag
 | Report | How | Where it goes |
 |---|---|---|
 | Lighthouse (mobile) for Home and one changed page | Lighthouse in Chrome DevTools or PageSpeed Insights on the Vercel preview | The branch's short report (02 §5): the four scores and LCP, INP (or TBT), CLS |
-| Bundle report | `@next/bundle-analyzer` (added in Phase C) | The branch's report: first-load JS per route, and what grew |
+| Bundle report | `npm run analyze` (`next experimental-analyze --output`, Next's built-in Turbopack analyzer; no extra dependency) | The branch's report: first-load JS per route, and what grew |
 | Field data, after launch | PageSpeed Insights / CrUX on production | The pre-launch register and the monthly check |
 
 A number that looks wrong is a **fix task proposed in the report**, never a blocked merge. The owner decides whether it's worth doing.

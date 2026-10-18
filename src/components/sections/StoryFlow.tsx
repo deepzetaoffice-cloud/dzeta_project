@@ -1,11 +1,9 @@
 import { Fragment } from 'react';
 
-// story-flow (13 §4.8), shared since P6 part A2 (S8): extracted from Home §05, its markup and look
-// unchanged. Glass nodes, frost connectors, the travelling pixel at rest on the outcome (its final
-// state; the draw-in plays once in view). The diagram is an image to assistive tech (role="img",
-// described by `description`); the page always carries the visible step list beside it (13 §4.8:
-// every story has a visible HTML step list), so nothing is only in the picture. Every flow that
-// isn't a real run carries its label ("Example workflow", 10 §3.6).
+// A labelled example flow in the diagram language (13 §1, the C diagrams): numbered nodes joined by
+// connectors, labelled "Example" (10 §3.6). The visible step list beside it carries the steps as text
+// (08 §2.11), so the figure is an image with a one-line description. Phase C: static; Phase D adds
+// workflow-connect on Home and the Diagram step states.
 
 export type StoryFlowProps = {
   /** The flow's label, e.g. "Example workflow" (10 §3.6) */
@@ -18,21 +16,23 @@ export type StoryFlowProps = {
 
 export function StoryFlow({ label, nodes, description }: StoryFlowProps) {
   return (
-    <div className="dz-story-flow dz-glass" role="img" aria-label={description} data-fx-once="">
-      <span className="dz-flow-label font-mono text-caption uppercase tracking-eyebrow text-fg-muted">{label}</span>
-      <div className="dz-flow-nodes" aria-hidden="true">
+    <div className="rounded-lg border border-line bg-surface p-6" role="img" aria-label={description}>
+      <span className="font-mono text-label text-ink-tertiary uppercase">{label}</span>
+      <div className="mt-4 flex flex-wrap items-center gap-2" aria-hidden="true">
         {nodes.map((node, index) => (
           <Fragment key={node}>
-            {index > 0 && <span className="dz-flow-line" />}
+            {index > 0 ? <span className="h-px w-6 bg-line-strong" /> : null}
             <span
-              className={index === nodes.length - 1 ? 'dz-flow-node dz-flow-node--end' : 'dz-flow-node'}
-              data-flow-node={index + 1}
+              className={[
+                'inline-flex items-center gap-2 rounded-md border px-3 py-2 text-small',
+                index === nodes.length - 1 ? 'border-violet text-violet' : 'border-line text-ink',
+              ].join(' ')}
             >
+              <span className="font-mono text-step text-ink-tertiary">{String(index + 1).padStart(2, '0')}</span>
               {node}
             </span>
           </Fragment>
         ))}
-        <span className="dz-flow-pixel" />
       </div>
     </div>
   );

@@ -20,8 +20,7 @@ import { buildRun } from '@/content/en/services/build-run';
 import { customCodedWebsitesExtras } from '@/content/en/services/custom-coded-websites';
 import { isLivePath, routeIdForPath } from '@/lib/routes';
 import { serviceGraph, serviceTrail } from '@/lib/schema/graphs/service';
-import { absoluteUrl } from '@/lib/url';
-import '@/styles/templates/websites.css';
+import { pageMetadata } from '@/lib/seo/page-seo';
 
 // The flagship service page, Custom-Coded High-Performance Websites (catalogue 2.1, R060; the plan
 // docs/plans/2026-10-10-flagship-websites-page.md). The service template's sections in engine §3.1's
@@ -44,11 +43,11 @@ function found() {
 export function generateMetadata(): Metadata {
   const data = found();
   if (!data) return {};
-  return {
+  return pageMetadata({
     title: data.page.content.title,
     description: data.page.content.description,
-    alternates: { canonical: absoluteUrl(PATH) },
-  };
+    path: PATH,
+  });
 }
 
 export default function CustomCodedWebsitesPage() {
@@ -67,11 +66,11 @@ export default function CustomCodedWebsitesPage() {
       <ServiceDeliverables {...props} />
       <ServiceFit {...props} />
       {/* §7 Proof: the build terminal (the page's demo slot; AI View can join in P7) */}
-      <section aria-labelledby="service-proof" className="mx-auto max-w-page px-gutter py-section" data-fx-once="">
+      <section aria-labelledby="service-proof" className="mx-auto max-w-page px-gutter py-section">
         <h2 id="service-proof" className="max-w-measure text-h2 text-balance">
           {customCodedWebsitesExtras.terminal.heading}
         </h2>
-        <p className="mt-4 max-w-measure text-lead">{customCodedWebsitesExtras.terminal.lede}</p>
+        <p className="mt-4 max-w-measure text-lead text-ink-secondary">{customCodedWebsitesExtras.terminal.lede}</p>
         <div className="mt-10">
           <StoryTerminal run={buildRun} labels={customCodedWebsitesExtras.terminal} />
         </div>

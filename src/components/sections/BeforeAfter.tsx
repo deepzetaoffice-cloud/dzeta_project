@@ -1,9 +1,7 @@
-// story-before-after (13 §4.8), shared since P6 part A2 (S8): extracted from Home §03, its markup and
-// look unchanged. Each row is a glass card: the situation today, the connector the Zeta Pixel travels
-// (transform and opacity only), and the outcome; an optional note under it. The rows are plain HTML,
-// so every word is readable without the motion (Reduce effects shows the final state).
+// "Today → With Deepzeta AI" rows (Home §03, the service template's problem section). Phase C: both
+// sides shown, as under reduced motion; Phase D adds problem-reveal (13 §4.3) on Home.
 
-export type BeforeAfterRow = { before: string; after: string; note?: string };
+type BeforeAfterRow = { before: string; after: string; note?: string };
 
 export type BeforeAfterProps = {
   /** The label over each row's first side, e.g. "Today" */
@@ -15,22 +13,18 @@ export type BeforeAfterProps = {
 
 export function BeforeAfter({ beforeLabel, afterLabel, rows }: BeforeAfterProps) {
   return (
-    <div className="mt-10 grid gap-6">
+    <div className="mt-10 grid gap-card-gap">
       {rows.map((row) => (
-        <article key={row.before} className="dz-before-after dz-glass" data-fx-once="">
-          <div className="dz-ba-side dz-ba-side--problem">
-            <h3 className="font-mono text-caption uppercase tracking-eyebrow text-fg-muted">{beforeLabel}</h3>
-            <p className="mt-1.5 text-h4">{row.before}</p>
+        <article key={row.before} className="grid gap-4 rounded-lg border border-line bg-surface p-6 md:grid-cols-2">
+          <div>
+            <h3 className="font-mono text-label text-ink-tertiary uppercase">{beforeLabel}</h3>
+            <p className="mt-2 text-h4 text-ink-secondary">{row.before}</p>
           </div>
-          {/* The connector: the Zeta Pixel travels it (transform/opacity only) */}
-          <div className="dz-ba-connector" aria-hidden="true">
-            <span className="dz-ba-pixel" />
+          <div>
+            <h3 className="font-mono text-label text-violet uppercase">{afterLabel}</h3>
+            <p className="mt-2 text-h4">{row.after}</p>
           </div>
-          <div className="dz-ba-side dz-ba-side--outcome">
-            <h3 className="font-mono text-caption uppercase tracking-eyebrow text-fg-muted">{afterLabel}</h3>
-            <p className="mt-1.5 text-h4 font-bold">{row.after}</p>
-          </div>
-          {row.note && <p className="dz-ba-answer mt-4 max-w-measure text-small text-fg-muted">{row.note}</p>}
+          {row.note ? <p className="max-w-measure text-small text-ink-secondary md:col-span-2">{row.note}</p> : null}
         </article>
       ))}
     </div>

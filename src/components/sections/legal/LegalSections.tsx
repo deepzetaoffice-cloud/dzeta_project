@@ -1,15 +1,20 @@
-// The legal pages' sections (/privacy, R006; /terms reuses them; the privacy page plan and the draft's
-// Part 1 layout, docs/content-drafts/legal/privacy-policy.md). Server components only. A legal page
-// stays calm: no scroll-reveal; glass-tint on the "At a glance" cards and hover-underline on links
-// (the plan's effect register). The contents list is real anchor links that work without JavaScript;
-// toc-enhance.ts, loaded on use, marks the section in view. Logical CSS only (legal.css).
-import { Icon } from '@/components/icons/Icon';
+// The legal pages' sections (/privacy; docs/design/privacy.md; Figma 61:34): the hero, the glance
+// cards, the policy with its contents, the contact block and the related pages. Copy from the page's
+// content file, rendered from its blocks, never shortened. Phase C: base tokens only; Phase D adds the
+// Figma look, the sticky contents and drape.
+import { Glyph, glyphFor } from '@/components/ui/Glyph';
 import { whatsappHref } from '@/components/ui/CtaButton';
 import type { LegalBlock, LegalGlanceCard, LegalSection } from '@/content/en/legal/privacy';
 import { isLive, routePath, type RouteId } from '@/lib/routes';
 import { siteConfig } from '@/lib/site-config';
 
-const EYEBROW = 'font-mono text-caption uppercase tracking-eyebrow text-fg-muted';
+const EYEBROW = 'font-mono text-label uppercase text-ink-secondary';
+
+// A glance card's glyph, by the content's interface name (05 §6)
+function CardGlyph({ name }: { name: LegalGlanceCard['icon'] }) {
+  const glyph = glyphFor(name);
+  return glyph ? <Glyph name={glyph} className="text-violet" /> : null;
+}
 
 export type LegalHeroProps = {
   eyebrow: string;
@@ -24,18 +29,17 @@ export function LegalHero({ eyebrow, heading, answer, lastUpdatedLabel, lastUpda
   return (
     <section aria-labelledby="legal-heading" className="mx-auto max-w-page px-gutter pt-8 pb-section">
       <p className={EYEBROW}>{eyebrow}</p>
-      <h1 id="legal-heading" className="mt-3 text-h1 text-balance">
+      <h1 id="legal-heading" className="mt-3 text-hero-line text-balance">
         {heading}
       </h1>
       <p className="mt-6 max-w-measure text-lead">{answer}</p>
-      <p className="mt-4 text-small text-fg-muted">
+      <p className="mt-4 text-small text-ink-secondary">
         {lastUpdatedLabel} <time dateTime={lastUpdated.iso}>{lastUpdated.display}</time>
       </p>
     </section>
   );
 }
 
-// Block 2: four glass-tint cards, each with a Tier 1 icon (real HTML text)
 export function LegalGlance({ heading, cards }: { heading: string; cards: readonly LegalGlanceCard[] }) {
   return (
     <section aria-labelledby="legal-glance" className="mx-auto max-w-page px-gutter">
@@ -44,8 +48,8 @@ export function LegalGlance({ heading, cards }: { heading: string; cards: readon
       </h2>
       <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {cards.map((card) => (
-          <li key={card.title} className="dz-glass dz-legal-card">
-            <Icon name={card.icon} size={24} className="text-link" />
+          <li key={card.title} className="rounded-lg border border-line bg-surface p-6">
+            <CardGlyph name={card.icon} />
             <h3 className="mt-4 text-h4">{card.title}</h3>
             <p className="mt-2 text-small">{card.line}</p>
           </li>
@@ -61,10 +65,10 @@ function Block({ block, tableId }: { block: LegalBlock; tableId: string }) {
       return (
         <p className="mt-4">
           {block.strong ? (
-            <strong className="text-fg-strong">{block.text}</strong>
+            <strong className="text-ink">{block.text}</strong>
           ) : (
             <>
-              {block.lead ? <strong className="text-fg-strong">{block.lead}</strong> : null}
+              {block.lead ? <strong className="text-ink">{block.lead}</strong> : null}
               {block.lead ? ' ' : null}
               {block.text}
             </>
@@ -73,10 +77,10 @@ function Block({ block, tableId }: { block: LegalBlock; tableId: string }) {
       );
     case 'list':
       return (
-        <ul className="dz-legal-list mt-4">
+        <ul className="mt-4 grid list-disc gap-2 ps-6">
           {block.items.map((item) => (
             <li key={item.lead ?? item.text}>
-              {item.lead ? <strong className="text-fg-strong">{item.lead}</strong> : null}
+              {item.lead ? <strong className="text-ink">{item.lead}</strong> : null}
               {item.lead ? ' ' : null}
               {item.text}
             </li>
@@ -87,10 +91,17 @@ function Block({ block, tableId }: { block: LegalBlock; tableId: string }) {
       // A table scrolls sideways inside its own box on small screens, never the page (Part 1). The box
       // is focusable so a keyboard can scroll it, and named by the table's caption.
       return (
-        // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- a box that scrolls sideways must take keyboard focus (WCAG 2.1.1; axe scrollable-region-focusable)
-        <div className="dz-legal-table mt-6" role="region" aria-labelledby={tableId} tabIndex={0}>
-          <table>
-            <caption id={tableId}>{block.caption}</caption>
+        <div
+          className="mt-6 overflow-x-auto rounded-md border border-line"
+          role="region"
+          aria-labelledby={tableId}
+          // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex -- a box that scrolls sideways must take keyboard focus (WCAG 2.1.1; axe scrollable-region-focusable)
+          tabIndex={0}
+        >
+          <table className="w-full text-start text-small [&_td]:border-t [&_td]:border-line [&_td]:p-3 [&_th]:p-3 [&_th]:text-start">
+            <caption id={tableId} className="p-3 text-start font-semibold">
+              {block.caption}
+            </caption>
             <thead>
               <tr>
                 {block.head.map((cell) => (
@@ -122,12 +133,12 @@ function Block({ block, tableId }: { block: LegalBlock; tableId: string }) {
       return (
         <>
           <p className="mt-4">
-            <strong className="text-fg-strong">{block.label}</strong>
+            <strong className="text-ink">{block.label}</strong>
           </p>
-          <ul className="dz-legal-list mt-2">
+          <ul className="mt-2 grid list-disc gap-2 ps-6">
             {block.items.map((source) => (
               <li key={source.href}>
-                <a href={source.href} className="dz-underline dz-target text-link">
+                <a href={source.href} className="text-link">
                   {source.label}
                 </a>{' '}
                 ({source.publisher})
@@ -151,10 +162,14 @@ export type LegalBodyProps = {
 // references ("§9", "Section 7") read.
 export function LegalBody({ contentsLabel, contentsHeading, sections, note }: LegalBodyProps) {
   const contents = (
-    <ol className="dz-legal-toc-list">
+    <ol className="mt-3 grid gap-1 text-small">
       {sections.map((section, index) => (
         <li key={section.id}>
-          <a href={`#${section.id}`} className="dz-target" data-toc-link={section.id}>
+          <a
+            href={`#${section.id}`}
+            className="inline-flex min-h-11 items-center text-ink-secondary hover:text-ink"
+            data-toc-link={section.id}
+          >
             {index + 1}. {section.title}
           </a>
         </li>
@@ -163,24 +178,24 @@ export function LegalBody({ contentsLabel, contentsHeading, sections, note }: Le
   );
   return (
     <div className="mx-auto max-w-page px-gutter py-section" data-fx-lazy="toc">
-      <div className="dz-legal-layout">
-        <nav aria-label={contentsLabel} className="dz-legal-toc">
-          <details className="dz-legal-toc-mobile">
-            <summary className="dz-target">{contentsHeading}</summary>
+      <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,3fr)]">
+        <nav aria-label={contentsLabel} className="lg:sticky lg:top-32 lg:self-start">
+          <details className="rounded-lg border border-line bg-surface px-5 lg:hidden">
+            <summary className="flex min-h-14 cursor-pointer items-center font-semibold">{contentsHeading}</summary>
             {contents}
           </details>
-          <div className="dz-legal-toc-desktop">
+          <div className="hidden lg:block">
             <p className={EYEBROW}>{contentsHeading}</p>
             {contents}
           </div>
         </nav>
-        <div className="dz-legal-sections">
+        <div className="grid max-w-measure gap-12">
           {sections.map((section, index) => (
             <section
               key={section.id}
               id={section.id}
               aria-labelledby={`${section.id}-heading`}
-              className="dz-legal-section"
+              className="scroll-mt-32"
               data-legal-section=""
             >
               <h2 id={`${section.id}-heading`} className="text-h3 text-balance">
@@ -191,7 +206,7 @@ export function LegalBody({ contentsLabel, contentsHeading, sections, note }: Le
               ))}
             </section>
           ))}
-          <p className="dz-legal-note mt-section text-small text-fg-muted">{note}</p>
+          <p className="mt-section text-small text-ink-secondary">{note}</p>
         </div>
       </div>
     </div>
@@ -206,33 +221,40 @@ export type LegalContactProps = {
   contactPage: string;
 };
 
-// Block 5: the contact block. Email always; WhatsApp while its fact is set; the contact page once it's
-// live (04 §1.4). Outline buttons: the page's one gradient CTA stays the audit's (05 §2).
 export function LegalContact({ heading, body, email, whatsapp, contactPage }: LegalContactProps) {
   const wa = whatsappHref();
   return (
     <section aria-labelledby="legal-contact" className="mx-auto max-w-page px-gutter py-section">
-      <div className="dz-glass dz-legal-contact">
+      <div className="rounded-lg border border-line bg-surface p-8">
         <h2 id="legal-contact" className="text-h2 text-balance">
           {heading}
         </h2>
         <p className="mt-4 max-w-measure text-lead">{body}</p>
         <ul className="mt-6 flex flex-wrap gap-3">
           <li>
-            <a href={`mailto:${siteConfig.email}`} className="dz-legal-button">
+            <a
+              href={`mailto:${siteConfig.email}`}
+              className="dz-press inline-flex min-h-11 items-center rounded-full bg-action px-5 text-button-m text-on-color"
+            >
               {email}
             </a>
           </li>
           {wa ? (
             <li>
-              <a href={wa} className="dz-legal-button">
+              <a
+                href={wa}
+                className="dz-press inline-flex min-h-11 items-center rounded-full border border-line-strong px-5 text-button-m"
+              >
                 {whatsapp}
               </a>
             </li>
           ) : null}
           {isLive('R005') ? (
             <li>
-              <a href={routePath('R005')} className="dz-legal-button">
+              <a
+                href={routePath('R005')}
+                className="dz-press inline-flex min-h-11 items-center rounded-full border border-line-strong px-5 text-button-m"
+              >
                 {contactPage}
               </a>
             </li>
@@ -259,8 +281,8 @@ export function LegalRelated({ heading, links }: LegalRelatedProps) {
       </h2>
       <ul className="mt-6 grid gap-4 md:grid-cols-3">
         {live.map((link) => (
-          <li key={link.route} className="dz-glass dz-legal-card">
-            <a href={routePath(link.route)} className="dz-underline dz-target text-h4">
+          <li key={link.route} className="rounded-lg border border-line bg-surface p-6">
+            <a href={routePath(link.route)} className="text-h4">
               {link.title}
             </a>
             <p className="mt-2 text-small">{link.line}</p>

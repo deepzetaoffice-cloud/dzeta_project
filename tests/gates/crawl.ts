@@ -68,6 +68,25 @@ export async function crawlSite(browser: Browser, baseUrl: string): Promise<Page
           // The visible text of the page body, whitespace-normalised: the visible-parity check
           // (P5) reads it — schema values that must mirror the page (the FAQ Q&A) are searched in it.
           bodyText: (document.querySelector('main')?.textContent ?? '').replace(/\s+/g, ' ').trim(),
+          // The SEO contract (08 §7): the social tags, and every image and video as served
+          meta: all('meta[property^="og:"], meta[name^="twitter:"]').reduce<Record<string, string[]>>((map, el) => {
+            const key = el.getAttribute('property') ?? el.getAttribute('name') ?? '';
+            map[key] = [...(map[key] ?? []), el.getAttribute('content') ?? ''];
+            return map;
+          }, {}),
+          images: all('img').map((el) => ({
+            src: el.getAttribute('src') ?? '',
+            alt: el.getAttribute('alt'),
+            width: el.getAttribute('width'),
+            height: el.getAttribute('height'),
+          })),
+          videos: all('video').map((el) => ({
+            src: el.getAttribute('src') ?? el.querySelector('source')?.getAttribute('src') ?? '',
+            poster: el.getAttribute('poster'),
+            captions: el.querySelectorAll('track[kind="captions"], track[kind="subtitles"]').length,
+            loop: el.hasAttribute('loop'),
+            muted: el.hasAttribute('muted'),
+          })),
         };
       });
 

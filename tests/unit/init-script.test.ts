@@ -3,8 +3,8 @@ import { describe, expect, it } from 'vitest';
 import { initScript } from '@/lib/fx/init-script';
 import { EFFECTS_KEY, FX_MEDIA, REDUCED_TRANSPARENCY, resolveEffects, THEME_KEY } from '@/lib/fx/preferences';
 
-// The no-flash script (P2 plan, C2 and O) runs here against fake browser objects: the same string
-// the page inlines. Every combination of stored choice, hint and device setting must give the result
+// The no-flash script (C40; v3 sets Reduce effects only, decision 0033) runs here against fake browser
+// objects: the same string the page inlines. Every combination of stored choice, hint and device setting must give the result
 // the runtime's own rule gives (resolveEffects), so the two can't drift apart.
 
 type Setup = {
@@ -58,26 +58,20 @@ function run({
 }
 
 describe('the no-flash script', () => {
-  it('leaves a first visit dark, with effects on, and changes nothing', () => {
+  it('leaves a first visit with effects on, and changes nothing', () => {
     const { attributes, meta, added } = run();
     expect([...attributes]).toEqual([]);
     expect(meta.content).toBe('dark');
     expect(added).toEqual([]);
   });
 
-  it('applies a stored light theme and turns the color-scheme meta to light', () => {
-    const { attributes, meta } = run({ theme: 'light' });
-    expect(attributes.get('data-theme')).toBe('light');
-    expect(meta.content).toBe('light');
-  });
-
-  it('adds a light color-scheme meta if the page has none', () => {
-    const { added } = run({ theme: 'light', hasMeta: false });
-    expect(added).toEqual([{ name: 'color-scheme', content: 'light' }]);
-  });
-
-  it('ignores anything but "light" in the theme key: every first visit is dark (05 §1)', () => {
-    for (const theme of ['dark', 'LIGHT', '', 'x']) expect(run({ theme }).attributes.has('data-theme')).toBe(false);
+  it('never sets a theme: v3 is light only, so a stored theme from before v3 is ignored (C77)', () => {
+    for (const theme of ['light', 'dark']) {
+      const { attributes, added } = run({ theme });
+      expect(attributes.has('data-theme')).toBe(false);
+      expect(added).toEqual([]);
+    }
+    expect(THEME_KEY).toBe('dz-theme');
   });
 
   it('survives blocked storage, and still applies the device hints', () => {

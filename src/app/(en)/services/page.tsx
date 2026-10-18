@@ -13,15 +13,15 @@ import { servicesHubFaq } from '@/content/en/faq-bank';
 import { servicesHub } from '@/content/en/services-hub';
 import { routePath } from '@/lib/routes';
 import { servicesHubGraph, servicesHubTrail } from '@/lib/schema/graphs/servicesHub';
-import { absoluteUrl } from '@/lib/url';
+import { pageMetadata } from '@/lib/seo/page-seo';
 
 // The services hub (/services, R010; docs/design/services-hub.md; the P6 part A plan, S11). T2. The
 // layout's title template adds the brand (08 §1).
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: servicesHub.title,
   description: servicesHub.description,
-  alternates: { canonical: absoluteUrl(routePath('R010')) },
-};
+  path: routePath('R010'),
+});
 
 export default function ServicesHubPage() {
   return (

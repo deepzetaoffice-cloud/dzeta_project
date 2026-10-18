@@ -1,63 +1,47 @@
-import { ClusterLayers } from '@/components/icons/Cluster';
-import type { Pillar } from '@/components/icons/registry';
-import { CallButton } from '@/components/layout/CallButton';
-import { DisplayControls } from '@/components/layout/DisplayControls';
-import { auditHref, CtaButton } from '@/components/ui/CtaButton';
+import { auditHref, CtaButton, telHref, whatsappHref } from '@/components/ui/CtaButton';
+import { Logo } from '@/components/ui/Logo';
+import { Switch } from '@/components/ui/Switch';
 import { navigation, type NavLink } from '@/content/en/navigation';
 import { consentContent } from '@/content/en/legal/consent';
 import { shellContent } from '@/content/en/shell';
 import { isShown, navHref } from '@/lib/routes';
-import { siteConfig, type SocialKey } from '@/lib/site-config';
+import { siteConfig } from '@/lib/site-config';
 
-// The footer "The Landing" (docs/design/footer.md; P2 plan, L), on every page, navy in both themes.
-// - The finale: The Landing (the logo's four pixels assemble once the finale enters, scroll-assemble;
-//   its rest state is the assembled cluster), the headline at the display size (C41) and the primary
-//   CTA. cta.ts counts that CTA in the hand-off (C42). WhatsApp floats site-wide instead (decision
-//   0024); the finale keeps the audit CTA.
-// - The body: the link columns, one per pillar in its pixel colour (C6), then Company, Resources and
-//   Legal; only live links render (04 §1.4), and a column with none isn't shown. The review page shows
-//   every link as a placeholder fragment, as the header does (plan A3).
-// - The company block from siteConfig (facts §1–§2); the phone shows once it's confirmed, never before.
-// - The social links: Deepzeta's letter tiles in each platform's colour (C49), named "Deepzeta AI on
-//   LinkedIn" and so on, in a new tab (facts §2.1 rules). The letters are decorative.
-// - The display controls (Q2) and the legal line, whose year is written by hand (02 §1.5), with Cookie
-//   settings for every visitor (P3 plan, E): TrackingRuntime opens the panel; hidden in place until it can.
-// No heading but the finale's <h2>: column titles label their lists, so the footer adds nothing to a
-// page's outline (plan L4). The language switch is mounted here in P11, with its behaviour.
+// The footer (docs/design/footer.md; Figma 39:1070). Phase C: the structure and every contract; Phase
+// D adds the Figma look, beams, the giant wordmark and wordmark-spotlight.
+// - The audit panel (the finale): the <h2>, its line and the audit CTA (`footer [data-cta="primary"]`,
+//   cta_location finale), then WhatsApp and Call once their facts are confirmed.
+// - The sections, in a <nav> named "Footer": Services (the hub and the pillar pages), then Company,
+//   Resources and Legal. Only live links render (04 §1.4), and a section with none isn't shown. The
+//   review page shows every link as a placeholder fragment, as the header does.
+// - The contact block from siteConfig (facts §1–§2) in an <address>, with the opening hours after it.
+// - The social links, named "Deepzeta AI on LinkedIn" and so on, in a new tab (facts §2.1).
+// - The legal line: the copyright and the legal name, the Reduce effects switch, and Cookie settings
+//   for every visitor (09 §2.7): TrackingRuntime opens the panel; hidden in place until it can.
+// - No newsletter yet: it ships with its service and its promise line (C84).
 
-// The tiles' letters (C49): each platform's best-known short form; Threads takes its own @, as TikTok has T.
-const LETTERS = {
-  linkedin: 'in',
-  instagram: 'Ig',
-  facebook: 'f',
-  youtube: 'YT',
-  tiktok: 'T',
-  x: 'X',
-  threads: '@',
-  snapchat: 'S',
-  pinterest: 'P',
-} as const satisfies Record<SocialKey, string>;
+type Column = { id: string; title: string; links: NavLink[] };
 
-type Column = { id: string; title: string; pillar?: Pillar; links: NavLink[] };
-
-// The Services column (L9, decision 0026; footer.md): the hub and the pillar pages, each while its page
-// is live, not every service. As some sixty services ship, the footer on every page stays the same
-// size; the hub lists them all.
 function footerColumns(review: boolean): Column[] {
   const services = {
     id: 'services',
     title: navigation.servicesLabel,
     links: [
-      { route: 'R010' as const, label: navigation.hubLabel },
       ...navigation.columns.map((column) => ({ route: column.route, label: column.name })),
+      { route: 'R010' as const, label: navigation.hubLabel },
     ],
+  };
+  const solutions = {
+    id: 'solutions',
+    title: navigation.solutions.label,
+    links: navigation.solutions.items.map((item) => ({ route: item.route, label: item.name })),
   };
   const groups = navigation.footer.map((group) => ({
     id: group.title.toLowerCase(),
     title: group.title,
     links: [...group.links],
   }));
-  return [services, ...groups]
+  return [services, solutions, ...groups]
     .map((column) => ({ ...column, links: column.links.filter((link) => isShown(link.route, review)) }))
     .filter((column) => column.links.length > 0);
 }
@@ -66,37 +50,54 @@ export type SiteFooterProps = { review?: boolean };
 
 export function SiteFooter({ review = false }: SiteFooterProps) {
   const columns = footerColumns(review);
+  const whatsapp = whatsappHref();
+  const tel = telHref();
   return (
-    <footer data-theme="dark" className="dz-footer">
-      <div className="mx-auto max-w-page px-gutter pt-chapter pb-section">
-        <span className="dz-landing block" data-fx-once="">
-          <ClusterLayers />
-        </span>
-        <h2 className="mt-8 max-w-measure text-display">{shellContent.finaleHeading}</h2>
-        <p className="mt-6 max-w-measure text-lead">{shellContent.finaleLine}</p>
-        <CtaButton variant="primary" href={auditHref()} label={shellContent.cta} className="mt-8" />
+    <footer className="px-stage-inset pb-stage-inset">
+      <div className="mx-auto max-w-page rounded-stage bg-(image:--dz-grad-stage) px-gutter py-section text-on-color">
+        <h2 className="max-w-measure text-h2 text-on-color">{shellContent.finaleHeading}</h2>
+        <p className="mt-4 max-w-measure text-lead">{shellContent.finaleLine}</p>
+        <div className="mt-8 flex flex-wrap items-center gap-3">
+          <CtaButton variant="primary" href={auditHref()} label={shellContent.cta} />
+          {whatsapp ? (
+            <a
+              href={whatsapp}
+              className="dz-press inline-flex min-h-14 items-center rounded-full border border-line-on-color px-6 text-button-l"
+            >
+              {shellContent.whatsappLabel}
+            </a>
+          ) : null}
+          {tel ? (
+            <a
+              href={tel}
+              className="dz-press inline-flex min-h-14 items-center rounded-full border border-line-on-color px-6 text-button-l"
+            >
+              {shellContent.callLabel} {siteConfig.phone}
+            </a>
+          ) : null}
+        </div>
       </div>
-      <div className="mx-auto grid max-w-page gap-12 px-gutter pb-12">
+      <div className="mx-auto grid max-w-page gap-12 px-gutter pt-16 pb-10">
+        <div className="grid gap-4">
+          <span className="inline-flex w-fit rounded-full bg-inverse px-4 py-2">
+            <Logo variant="inline" label={siteConfig.brandName} className="h-7" />
+          </span>
+          <p className="max-w-measure text-ink-secondary">{siteConfig.positioningLine}</p>
+        </div>
         {columns.length > 0 ? (
           <nav
             aria-label={shellContent.footerNavLabel}
-            className="grid grid-cols-1 gap-x-8 gap-y-10 border-t border-hairline pt-12 sm:grid-cols-2 lg:grid-cols-4"
+            className="grid grid-cols-1 gap-x-8 gap-y-10 border-t border-line pt-10 sm:grid-cols-2 lg:grid-cols-5"
           >
             {columns.map((column) => (
               <div key={column.id}>
-                <p id={`dz-footer-${column.id}`} className="flex items-center gap-1 font-medium text-fg-strong">
-                  {column.pillar ? (
-                    <span className={`dz-mega-pixel dz-pillar--${column.pillar}`} aria-hidden="true" />
-                  ) : null}
+                <p id={`dz-footer-${column.id}`} className="font-semibold text-ink">
                   {column.title}
                 </p>
                 <ul aria-labelledby={`dz-footer-${column.id}`} className="mt-2">
                   {column.links.map((link) => (
-                    <li key={link.route} className="flex min-h-11 items-center py-1">
-                      <a
-                        href={navHref(link.route, review)}
-                        className="dz-underline dz-target text-small text-fg hover:text-fg-strong"
-                      >
+                    <li key={link.route} className="flex min-h-11 items-center">
+                      <a href={navHref(link.route, review)} className="text-small text-ink-secondary hover:text-ink">
                         {link.label}
                       </a>
                     </li>
@@ -106,85 +107,66 @@ export function SiteFooter({ review = false }: SiteFooterProps) {
             ))}
           </nav>
         ) : null}
-        <div className="grid gap-10 border-t border-hairline pt-12 md:grid-cols-[minmax(0,1fr)_auto] md:items-start">
-          <div className="grid gap-6">
-            {/* One block per line: inline spans would reach crawlers and text readers that ignore CSS
-                as one run (the brand name glued to the address), which garbles the NAP (P2 step 16).
-                The opening hours follow as their own line, outside <address>, which is for contact
-                details (P3 plan, A; facts §2). */}
-            <div className="grid gap-1 text-small">
-              <address className="grid gap-1 not-italic">
-                <p className="font-bold text-fg-strong">{siteConfig.brandName}</p>
-                <p>{siteConfig.address}</p>
+        <div className="grid gap-8 border-t border-line pt-10 md:grid-cols-2">
+          {/* One block per line: inline spans would reach crawlers and text readers that ignore CSS as
+              one run, which garbles the NAP. The opening hours follow as their own line, outside
+              <address>, which is for contact details (facts §2). */}
+          <div className="grid gap-1 text-small">
+            <address className="grid gap-1 not-italic">
+              <p className="font-semibold text-ink">{siteConfig.brandName}</p>
+              <p>{siteConfig.address}</p>
+              <p>
+                <a href={`mailto:${siteConfig.email}`} className="text-link underline underline-offset-4">
+                  {siteConfig.email}
+                </a>
+              </p>
+              {tel ? (
                 <p>
-                  <a href={`mailto:${siteConfig.email}`} className="dz-underline dz-target text-link">
-                    {siteConfig.email}
+                  <a href={tel} className="inline-flex min-h-11 items-center text-link underline underline-offset-4">
+                    {siteConfig.phone}
                   </a>
                 </p>
-                {/* The Call button (decision 0024): the phone as a deliberate contact CTA, the
-                    number still real text inside <address> for NAP parity. It hides itself while
-                    the phone fact is unconfirmed. */}
-                <CallButton />
-              </address>
-              <p>
-                {shellContent.hoursLabel}: {siteConfig.openingHours.display}
-              </p>
-            </div>
-            <ul className="flex flex-wrap gap-1">
-              {siteConfig.social.map((profile) => (
-                <li key={profile.key}>
-                  <a
-                    href={profile.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`dz-social dz-social--${profile.key} dz-press`}
-                  >
-                    {/* The name is real text, so text readers and crawlers get it too, not only an
-                        aria-label; the tile's letters are a logotype and stay hidden (P2 step 16). */}
-                    <span className="sr-only">
-                      {shellContent.socialLinkName(siteConfig.brandName, profile.platform)}
-                    </span>
-                    <span className="dz-social-glow" aria-hidden="true" />
-                    <span className="dz-social-tile" aria-hidden="true">
-                      <span className="dz-social-sheen" />
-                    </span>
-                    {profile.key === 'tiktok' ? (
-                      <>
-                        <span className="dz-social-letter dz-social-split dz-social-split--cyan" aria-hidden="true">
-                          {LETTERS.tiktok}
-                        </span>
-                        <span className="dz-social-letter dz-social-split dz-social-split--red" aria-hidden="true">
-                          {LETTERS.tiktok}
-                        </span>
-                      </>
-                    ) : null}
-                    <span className="dz-social-letter" aria-hidden="true">
-                      {LETTERS[profile.key]}
-                    </span>
-                  </a>
-                </li>
-              ))}
-            </ul>
+              ) : null}
+            </address>
+            <p>
+              {shellContent.hoursLabel}: {siteConfig.openingHours.display}
+            </p>
           </div>
-          <div className="w-full md:w-72">
-            <DisplayControls place="footer" />
-          </div>
+          <ul className="flex flex-wrap content-start gap-x-5 gap-y-1">
+            {siteConfig.social.map((profile) => (
+              <li key={profile.key}>
+                <a
+                  href={profile.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={shellContent.socialLinkName(siteConfig.brandName, profile.platform)}
+                  className="inline-flex min-h-11 items-center text-small text-ink-secondary hover:text-ink"
+                >
+                  {profile.platform} <span aria-hidden="true">↗</span>
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
-        {/* md+ clearance below the last row: its Cookie settings button sits at the inline end,
-            exactly under the floating WhatsApp button's corner; at the document end the scroll
-            clamp would park it (and its 44 px tap cross) under the float, so the row keeps the
-            document ending that much lower (the phone wraps the button to the line start, clear). */}
-        <div className="flex flex-wrap items-center justify-between gap-x-8 gap-y-2 md:pb-16">
-          <p className="text-small text-fg-muted">
+        <div className="flex flex-wrap items-center justify-between gap-x-8 gap-y-2 border-t border-line pt-6">
+          <p className="text-small text-ink-secondary">
             {shellContent.copyright} {siteConfig.legalName}
           </p>
-          <button
-            type="button"
-            data-consent-settings=""
-            className="dz-cookie-settings dz-underline dz-target text-small font-medium text-link"
-          >
-            {consentContent.footer.cookieSettings}
-          </button>
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-1">
+            <div role="group" aria-label={shellContent.displayLabel} className="dz-display grid">
+              <Switch kind="effects" label={shellContent.reduceEffects} note="dz-footer-effects-note" />
+              <p id="dz-footer-effects-note" className="sr-only">
+                {shellContent.deviceSettingNote}
+              </p>
+            </div>
+            <button
+              type="button"
+              data-consent-settings=""
+              className="dz-cookie-settings inline-flex min-h-11 items-center text-small font-medium text-link underline underline-offset-4"
+            >
+              {consentContent.footer.cookieSettings}
+            </button>
+          </div>
         </div>
       </div>
     </footer>

@@ -4,9 +4,12 @@ import {
   duplicateMetaProblems,
   isNoindex,
   linkProblems,
+  mediaFileName,
+  mediaProblemsIn,
   navLinkProblems,
   schemaProblems,
   seoProblems,
+  sitemapProblems,
   type PageData,
   type SchemaOptions,
 } from '../gates/rules';
@@ -92,9 +95,10 @@ describe('seoProblems (check:seo)', () => {
       { titles: ['DeepZeta Services for Clinics and Retail | Deepzeta AI'] },
       /exactly once/,
     ],
-    ['a short title', { titles: ['Home | Deepzeta AI'] }, /50–60/],
+    ['a short title', { titles: ['Home | Deepzeta AI'] }, /30–60/],
     ['two titles', { titles: ['a | Deepzeta AI', 'b | Deepzeta AI'] }, /one <title>/],
-    ['a short description', { descriptions: ['Too short.'] }, /140–160/],
+    ['a short description', { descriptions: ['Too short.'] }, /120–160/],
+    ['a long description', { descriptions: ['x'.repeat(161)] }, /120–160/],
     ['two H1s', { h1Count: 2 }, /one H1/],
     ['no H1', { h1Count: 0 }, /one H1/],
     ['a keywords meta', { keywordsMetaCount: 1 }, /keywords/],
@@ -105,6 +109,76 @@ describe('seoProblems (check:seo)', () => {
     ['a canonical to another page', { url: `${origin}/pricing`, canonicals: [origin] }, /self-referencing/],
   ])('fails %s', (_label, overrides, message) => {
     expect(seoProblems(pageData(overrides), options).join('\n')).toMatch(message);
+  });
+});
+
+describe('the SEO contract in the built HTML (08 §7)', () => {
+  const title = 'AI Automation and Custom Websites in the UAE | Deepzeta AI';
+  const social = {
+    'og:title': [title],
+    'og:description': ['x'.repeat(150)],
+    'og:url': [origin],
+    'og:type': ['website'],
+    'og:locale': ['en_AE'],
+    'og:image': [`${origin}/opengraph-image.jpg`],
+    'twitter:card': ['summary_large_image'],
+  };
+
+  it('passes a page whose social tags match its title, description and canonical', () => {
+    expect(seoProblems(pageData({ meta: social }), options)).toEqual([]);
+  });
+
+  it('fails social tags that disagree or are missing', () => {
+    const problems = seoProblems(pageData({ meta: { ...social, 'og:url': [`${origin}/x`], 'og:image': [] } }), options);
+    expect(problems.join('\n')).toMatch(/og:url[\s\S]*og:image/);
+  });
+
+  it('reads the file name behind a next/image URL, without its width', () => {
+    expect(
+      mediaFileName(
+        '/_next/image?url=%2Fmedia%2Fspeed-to-lead-whatsapp-notification-dubai-night-1600w.avif&w=1920&q=75',
+      ),
+    ).toBe('speed-to-lead-whatsapp-notification-dubai-night');
+  });
+
+  it('fails images without alt, size or a descriptive name, and videos without a poster or captions', () => {
+    const problems = mediaProblemsIn(
+      pageData({
+        images: [
+          { src: '/media/IMG_0042.jpg', alt: null, width: null, height: '600' },
+          { src: '/media/door-ai-whatsapp-cafe-dubai.jpg', alt: 'x'.repeat(126), width: '800', height: '600' },
+        ],
+        videos: [{ src: '/media/founder.mp4', poster: null, captions: 0, loop: false, muted: false }],
+      }),
+    );
+    expect(problems.join('\n')).toMatch(
+      /no alt[\s\S]*width and height[\s\S]*kebab-case[\s\S]*126 characters[\s\S]*no poster[\s\S]*no captions/,
+    );
+  });
+
+  it('passes a decorative image (alt="") and a muted loop with a poster', () => {
+    const problems = mediaProblemsIn(
+      pageData({
+        images: [{ src: '/media/door-ai-whatsapp-cafe-dubai.jpg', alt: '', width: '800', height: '600' }],
+        videos: [
+          {
+            src: '/media/door-ai-whatsapp-cafe-dubai-loop.mp4',
+            poster: '/p.jpg',
+            captions: 0,
+            loop: true,
+            muted: true,
+          },
+        ],
+      }),
+    );
+    expect(problems).toEqual([]);
+  });
+
+  it('fails a sitemap that misses an indexable page or lists another', () => {
+    const problems = sitemapProblems([`${origin}/services`, `${origin}/old`], [`${origin}/`, `${origin}/services`]);
+    expect(problems.join('\n')).toMatch(
+      /missing from the sitemap: https:\/\/deepzeta\.ai[\s\S]*isn't an indexable built page: https:\/\/deepzeta\.ai\/old/,
+    );
   });
 });
 

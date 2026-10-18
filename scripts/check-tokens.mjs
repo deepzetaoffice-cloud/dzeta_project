@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Token and direction gate (docs/ai/03 · check:tokens). No dependencies.
 // Fails on, anywhere in src/:
-//   - raw colours or px values outside src/styles/tokens.css (docs/ai/05 §1)
+//   - raw colours, px values or easing curves outside src/styles/tokens.css (docs/ai/05 §1)
 //   - physical-direction classes or properties, which break RTL (docs/ai/11 §1)
 //   - Google Fonts hosts, since fonts are self-hosted through next/font (docs/ai/05 §3, lesson 1)
 
@@ -79,6 +79,13 @@ const RULES = [
     pattern: /\[[^\]\s]*\d+px[^\]\s]*\]/,
     appliesTo: ({ isCss }) => !isCss,
     message: 'Tailwind arbitrary px value: use a token or the Tailwind scale (docs/ai/05 §1).',
+  },
+  {
+    id: 'raw-easing',
+    // GSAP, Motion and CSS read the --dz-motion-ease-* tokens (05 §5); a curve is never written in code
+    pattern: /cubic-bezier\(/,
+    appliesTo: ({ isTokensFile, isContent }) => !isTokensFile && !isContent,
+    message: 'Raw easing curve: use a --dz-motion-ease-* token from src/styles/tokens.css (docs/ai/05 §5).',
   },
   {
     id: 'physical-class',

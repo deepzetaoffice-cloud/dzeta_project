@@ -16,7 +16,7 @@ import { services as catalogueServices, type CatalogueService } from '@/content/
 import { servicePages } from '@/content/en/services';
 import { isLivePath, routeIdForPath } from '@/lib/routes';
 import { serviceGraph, serviceTrail } from '@/lib/schema/graphs/service';
-import { absoluteUrl } from '@/lib/url';
+import { pageMetadata } from '@/lib/seo/page-seo';
 
 // The service template (/services/<slug>; engine §3.1; docs/design/service-page.md; the P6 part A
 // plan, S11). T2. Only live service pages are built (dynamicParams = false): any other slug is a 404,
@@ -49,11 +49,11 @@ function pageFor(slug: string) {
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const found = pageFor((await params).slug);
   if (!found) return {};
-  return {
+  return pageMetadata({
     title: found.page.content.title,
     description: found.page.content.description,
-    alternates: { canonical: absoluteUrl(found.path) },
-  };
+    path: found.path,
+  });
 }
 
 export default async function ServicePage({ params }: { params: Params }) {
@@ -77,7 +77,7 @@ export default async function ServicePage({ params }: { params: Params }) {
       <div data-fx-lazy="faq" className="mx-auto max-w-page px-gutter py-section">
         <Faq heading={page.content.faq.heading} lede={page.content.faq.lede} questions={page.faq} />
       </div>
-      {/* The demo stubs' panel, once per page: hidden until a trigger clones it (demo-enhance.ts) */}
+      {/* The demo stubs' panel, once per page: hidden until a trigger clones it (src/lib/fx/demo.ts) */}
       <DemoPanelTemplate />
     </>
   );

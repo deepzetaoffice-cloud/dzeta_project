@@ -1,22 +1,14 @@
-// Home §05–§09 (P5 S5; docs/design/home.md; engine §3.1 orders 5–9). Effects by ID (13 §4):
-// §05 shows one example workflow's static story-flow final state + the visible step list (the
-// owner's resolved open question 3; the interactive tabs are the P7 demo); §06 is the page's one
-// scroll-pinned-scene (≤ 250vh) with a depth-css laptop — every step is real HTML, the final
-// stamp shows this visit's real LCP (read lazily by the enhancement, S6); §07 how we work with
-// the four Tier 1 step icons and scroll-reveal; §08 the ROI teaser with the formula shown
-// (story-data's honesty rule: only the visitor's own inputs, never shown here); §09 the four
-// industry-group tiles (hover-window, Tier 1 icons, Icon Master Rules §14.2).
-import { Icon } from '@/components/icons/Icon';
+// Home §05–§10 (docs/design/home.md; Figma 50:35): the example workflow, this page is the proof, the
+// concepts, how we work, the ROI teaser and the industries. Phase C: the semantic sections, every
+// content field in place, base tokens only. Phase D adds the Figma look and workflow-connect,
+// exploded-layers, lcp-stamp, industry-rail, industry-flip and roi-count-up.
 import { StoryFlow } from '@/components/sections/StoryFlow';
 import { industryGroups } from '@/content/emirates-industries';
 import { buildItself, howWeWork, illustrativeProof, industries, roiTeaser, workflowExplorer } from '@/content/en/home';
 
-// §05 The workflow explorer teaser: the visible step list (13 §4.8) and one static story-flow
-// final state (CSS/SVG only — the Home version never uses GSAP, 07 §4). The flow diagram is the
-// steps as glass nodes with frost connectors; the pixel is the customer's request travelling.
 export function WorkflowExplorer() {
   return (
-    <section aria-labelledby="flow-heading" className="mx-auto max-w-page px-gutter py-section" data-fx-once="">
+    <section aria-labelledby="flow-heading" className="mx-auto max-w-page px-gutter py-section">
       <h2 id="flow-heading" className="max-w-measure text-h2 text-balance">
         {workflowExplorer.heading}
       </h2>
@@ -26,12 +18,11 @@ export function WorkflowExplorer() {
         <ol className="grid gap-3">
           {workflowExplorer.steps.map((step, index) => (
             <li key={step} className="flex items-baseline gap-3">
-              <span className="font-mono text-caption text-fg-muted">{String(index + 1).padStart(2, '0')}</span>
+              <span className="font-mono text-caption text-ink-secondary">{String(index + 1).padStart(2, '0')}</span>
               <span className="text-body">{step}</span>
             </li>
           ))}
         </ol>
-        {/* The static story-flow (shared since P6 part A2): its final state; the draw-in plays once in view */}
         <StoryFlow
           label={workflowExplorer.flowLabel}
           nodes={workflowExplorer.nodes}
@@ -42,83 +33,33 @@ export function WorkflowExplorer() {
   );
 }
 
-// §06 Proof: "Watch this page build itself" (C19: until real case-study figures exist, facts §5).
-// The page's one pinned scene (13 §4.4's rules: at most 1 per page, ≤ 250vh, overflow-clip
-// ancestors, no content-visibility, unpins on short viewports/zoom/Reduce effects). Every step is
-// reachable HTML in normal flow; the scrub is native scroll-driven CSS inside @supports.
 export function BuildItself() {
   return (
     <>
-      <section aria-labelledby="build-heading" className="dz-pinned-scene border-y border-hairline">
-        <div className="dz-pin-stage mx-auto max-w-page px-gutter py-section">
-          <h2 id="build-heading" className="max-w-measure text-h2 text-balance">
-            {buildItself.heading}
-          </h2>
-          <p className="mt-4 max-w-measure text-lead">{buildItself.lede}</p>
-          {/* The depth-css laptop: a CSS 3D frame; the screen shows the steps as they scrub in.
-              Each layer is a real, small CSS drawing (13 §5: grid → wireframe → type → glass →
-              content → schema tags); the stamp (this visit's real LCP) fills lazily (S6). */}
-          <div className="dz-laptop mt-10" aria-hidden="true">
-            <div className="dz-laptop-screen">
-              <div className="dz-laptop-desktop">
-                <span className="dz-lap-layer dz-lap-layer--grid" />
-                <span className="dz-lap-layer dz-lap-layer--wire">
-                  <span className="dz-lap-wire dz-lap-wire--a" />
-                  <span className="dz-lap-wire dz-lap-wire--b" />
-                  <span className="dz-lap-wire dz-lap-wire--c" />
-                  <span className="dz-lap-wire dz-lap-wire--d" />
-                </span>
-                <span className="dz-lap-layer dz-lap-layer--type">
-                  <span className="dz-lap-type-h">Your business, running itself.</span>
-                  <span className="dz-lap-type-p">Custom code, search built in, automation that follows up.</span>
-                </span>
-                <span className="dz-lap-layer dz-lap-layer--glass">
-                  <span className="dz-lap-glass" />
-                </span>
-                <span className="dz-lap-layer dz-lap-layer--content">
-                  <span className="dz-lap-btn" />
-                  <span className="dz-lap-px" />
-                </span>
-                <span className="dz-lap-layer dz-lap-layer--schema">
-                  <span className="dz-lap-tag dz-lap-tag--a">H1 · WebPage</span>
-                  <span className="dz-lap-tag dz-lap-tag--b">Service</span>
-                  <span className="dz-lap-tag dz-lap-tag--c">FAQPage</span>
-                </span>
-              </div>
-              <div className="dz-laptop-base" />
-            </div>
-          </div>
-          {/* The steps as a visible list (13 §4.8); the stamp sits after it */}
-          <ol className="mt-8 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-            {buildItself.steps.map((step, index) => (
-              <li key={step} className="flex items-baseline gap-3 text-small">
-                <span className="font-mono text-caption text-fg-muted">{String(index + 1).padStart(2, '0')}</span>
-                {step}
-              </li>
-            ))}
-          </ol>
-          <p className="dz-lcp-stamp dz-glass mt-8 inline-flex items-baseline gap-3 px-5 py-4">
-            <span className="font-mono text-caption uppercase tracking-eyebrow text-fg-muted">
-              {buildItself.stampLabel}
-            </span>
-            {/* The real value lands here by the lazy enhancement; the honest fallback names itself */}
-            <span className="text-h3 font-bold" data-lcp-value>
-              not measured in this browser
-            </span>
-          </p>
-        </div>
+      <section aria-labelledby="build-heading" className="mx-auto max-w-page px-gutter py-section">
+        <h2 id="build-heading" className="max-w-measure text-h2 text-balance">
+          {buildItself.heading}
+        </h2>
+        <p className="mt-4 max-w-measure text-lead text-ink-secondary">{buildItself.lede}</p>
+        <ol className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {buildItself.steps.map((step, index) => (
+            <li
+              key={step}
+              className="flex items-baseline gap-3 rounded-md border border-line bg-surface p-4 text-small"
+            >
+              <span className="font-mono text-step text-violet">{String(index + 1).padStart(2, '0')}</span>
+              {step}
+            </li>
+          ))}
+        </ol>
       </section>
-      {/* The illustrative proof examples: labeled concepts behind a native <details> "Show" button.
-          No new JS, no new H2 (an H3 keeps home.spec.ts's section order intact), zero LCP cost. */}
+      {/* The illustrative proof examples: labelled concepts, never presented as clients (C18) */}
       <ProofExamples />
     </>
   );
 }
 
-// §06 (below the pinned scene): the illustrative proof examples (C18; 10 §3.6). Each concept card
-// is a native <details>, so "Show" works without JavaScript, is keyboard-operable and crawlable.
-// The section is labelled by an H3 (not a new H2, so the home e2e's section-order assertion holds).
-export function ProofExamples() {
+function ProofExamples() {
   return (
     <section aria-labelledby="proof-examples-heading" className="mx-auto max-w-page px-gutter py-section">
       <h3 id="proof-examples-heading" className="text-h3 text-balance">
@@ -127,25 +68,21 @@ export function ProofExamples() {
       <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {illustrativeProof.cards.map((card, index) => (
           <li key={card.name}>
-            <details className="dz-glass group rounded-2xl" open={index === 0}>
-              <summary className="flex cursor-pointer list-none items-start justify-between gap-3 rounded-2xl p-5">
+            <details className="group rounded-lg" open={index === 0}>
+              <summary className="flex cursor-pointer list-none items-start justify-between gap-3 rounded-lg p-5">
                 <span className="block">
-                  <span className="block font-mono text-caption uppercase tracking-eyebrow text-fg-muted">
-                    {card.industry}
-                  </span>
+                  <span className="block font-mono text-label uppercase text-ink-secondary">{card.industry}</span>
                   <span className="mt-1 block text-h4">{card.name}</span>
                 </span>
-                <span className="font-mono text-caption text-fg-muted">
+                <span className="font-mono text-caption text-ink-secondary">
                   <span className="group-open:hidden">{illustrativeProof.show}</span>
                   <span className="hidden group-open:inline">{illustrativeProof.hide}</span>
                 </span>
               </summary>
               <div className="px-5 pb-5">
-                <p className="font-mono text-caption uppercase tracking-eyebrow text-fg-muted">
-                  {illustrativeProof.conceptLabel}
-                </p>
-                <p className="mt-2 text-body text-fg-strong">{card.outcome}</p>
-                <p className="mt-3 text-small text-fg-muted">{card.detail}</p>
+                <p className="font-mono text-label uppercase text-ink-secondary">{illustrativeProof.conceptLabel}</p>
+                <p className="mt-2 text-body text-ink">{card.outcome}</p>
+                <p className="mt-3 text-small text-ink-secondary">{card.detail}</p>
               </div>
             </details>
           </li>
@@ -155,23 +92,19 @@ export function ProofExamples() {
   );
 }
 
-// §07 How we work: Audit → Build → Launch → Improve, the four Tier 1 step icons (the owner's
-// resolved open question 1). No timeframes — none confirmed (facts). scroll-reveal through the
-// shared observer.
 export function HowWeWork() {
-  const stepIcons = ['audit', 'build', 'launch', 'improve'] as const;
   return (
-    <section aria-labelledby="how-heading" className="mx-auto max-w-page px-gutter py-section" data-fx-once="">
+    <section aria-labelledby="how-heading" className="mx-auto max-w-page px-gutter py-section">
       <h2 id="how-heading" className="text-h2 text-balance">
         {howWeWork.heading}
       </h2>
       <p className="mt-4 max-w-measure text-lead">{howWeWork.lede}</p>
       <ol className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {howWeWork.steps.map((step, index) => (
-          <li key={step.title} className="dz-glass rounded-2xl p-5">
-            <Icon name={stepIcons[index] ?? 'audit'} size={24} />
+          <li key={step.title} className="rounded-lg p-5">
+            <span className="font-mono text-step text-violet">{String(index + 1).padStart(2, '0')}</span>
             <h3 className="mt-3 text-h4">{step.title}</h3>
-            <p className="mt-1.5 text-small text-fg-muted">{step.text}</p>
+            <p className="mt-1.5 text-small text-ink-secondary">{step.text}</p>
           </li>
         ))}
       </ol>
@@ -179,42 +112,32 @@ export function HowWeWork() {
   );
 }
 
-// §08 The ROI calculator teaser: the formula shown (story-data's honesty rule), no money figures
-// — the visitor's own inputs arrive with the P7 calculator. The result panel is glass-live (one
-// per viewport here: the only one on the page).
 export function RoiTeaser() {
   return (
-    <section aria-labelledby="roi-heading" className="mx-auto max-w-page px-gutter py-section" data-fx-once="">
+    <section aria-labelledby="roi-heading" className="mx-auto max-w-page px-gutter py-section">
       <h2 id="roi-heading" className="max-w-measure text-h2 text-balance">
         {roiTeaser.heading}
       </h2>
       <p className="mt-4 max-w-measure text-lead">{roiTeaser.lede}</p>
-      <div className="dz-glass dz-glass--live dz-roi-panel mt-8 rounded-2xl p-6">
-        <h3 className="font-mono text-caption uppercase tracking-eyebrow text-fg-muted">{roiTeaser.formulaLabel}</h3>
-        {/* story-data: the formula is the visual; no invented numbers anywhere */}
-        <p className="dz-roi-formula mt-2 text-h4 text-balance">{roiTeaser.formula}</p>
+      <div className="mt-8 rounded-lg p-6">
+        <h3 className="font-mono text-label uppercase text-ink-secondary">{roiTeaser.formulaLabel}</h3>
+        <p className="mt-2 text-h4 text-balance">{roiTeaser.formula}</p>
       </div>
     </section>
   );
 }
 
-// §09 Industries: four calm tiles, one per catalogue industry group (R101–R104), Tier 1 icons
-// (§14.2), hover-window. Tiles, not links, until the industry pages ship (P6; 04 §1.4).
 export function IndustryTiles() {
-  const groupIcons = ['industry-b2b', 'industry-commerce', 'industry-property', 'industry-services'] as const;
   return (
-    <section aria-labelledby="industries-heading" className="mx-auto max-w-page px-gutter py-section" data-fx-once="">
+    <section aria-labelledby="industries-heading" className="mx-auto max-w-page px-gutter py-section">
       <h2 id="industries-heading" className="text-h2 text-balance">
         {industries.heading}
       </h2>
       <p className="mt-4 max-w-measure text-lead">{industries.lede}</p>
       <ul className="mt-10 grid gap-6 sm:grid-cols-2">
-        {industryGroups.map((group, index) => (
-          <li key={group.slug} className="dz-industry-tile dz-glass" data-fx-pointer="">
-            <div className="flex items-start gap-4">
-              <Icon name={groupIcons[index] ?? 'industry-b2b'} size={24} className="mt-1" />
-              <h3 className="text-h4">{group.name}</h3>
-            </div>
+        {industryGroups.map((group) => (
+          <li key={group.slug} className="rounded-lg border border-line bg-surface p-6">
+            <h3 className="text-h4">{group.name}</h3>
           </li>
         ))}
       </ul>

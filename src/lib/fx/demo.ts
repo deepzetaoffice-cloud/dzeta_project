@@ -1,5 +1,5 @@
-// The demo stub enhancement (P5 S6, moved out of home-enhance.ts in P6 part A2, S8). Loaded by the
-// shared lazy loader (fx/lazy.ts) on the first pointer, focus or click on a demo trigger — each
+// The demo stub enhancement (P5 S6; moved to src/lib/fx/ in the v3 rebuild, decision 0033). Loaded by the
+// shared lazy loader (lazy.ts) on the first pointer, focus or click on a demo trigger — each
 // trigger is its own region — never at first load. No React: it clones the page's server-rendered
 // panel (DemoPanelTemplate). demo_open fires when a panel actually opens (the enhancement owns the
 // event; the click path in clicks.ts only arms the pending trigger).
@@ -24,7 +24,7 @@ export function enhanceDemos(scope: ParentNode): void {
       }
       panel = document.createElement('div');
       panel.dataset.demoPanel = demoId;
-      panel.className = 'dz-demo-mount';
+      panel.className = 'mt-4';
       panel.append(template.cloneNode(true));
       trigger.after(panel);
       trackEvent('demo_open', { demo_id: demoId });

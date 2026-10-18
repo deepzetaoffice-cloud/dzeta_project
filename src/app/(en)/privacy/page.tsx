@@ -12,16 +12,15 @@ import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { privacyFaq, privacyPolicy } from '@/content/en/legal/privacy';
 import { routePath } from '@/lib/routes';
 import { legalPageGraph } from '@/lib/schema/graphs/legal';
-import { absoluteUrl } from '@/lib/url';
-import '@/styles/templates/legal.css';
+import { pageMetadata } from '@/lib/seo/page-seo';
 
 // The privacy policy (/privacy, R006; the privacy page plan, docs/plans/2026-10-12-privacy-page.md;
 // the draft's Part 1 layout). T2. The layout's title template adds the brand (08 §1).
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: privacyPolicy.title,
   description: privacyPolicy.description,
-  alternates: { canonical: absoluteUrl(routePath('R006')) },
-};
+  path: routePath('R006'),
+});
 
 const trail = [{ route: 'R006', label: privacyPolicy.breadcrumb }] as const;
 

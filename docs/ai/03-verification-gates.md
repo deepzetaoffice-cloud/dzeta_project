@@ -33,7 +33,7 @@ A gate is a **command with a pass condition**. Work is done only when the requir
 | `npm run verify:fast` | `typecheck` + `lint` + `check:tokens` + `check:contrast` | pass |
 | `npm run verify` | everything above, in order | pass |
 
-**Information only, never a gate (N1, [07](07-performance-budget.md) §2):** a Lighthouse report and the bundle report (`@next/bundle-analyzer`), attached to each branch's report.
+**Information only, never a gate (N1, [07](07-performance-budget.md) §2):** a Lighthouse report and the bundle report (`npm run analyze`: Next's built-in Turbopack analyzer, `next experimental-analyze --output`), attached to each branch's report.
 
 ---
 

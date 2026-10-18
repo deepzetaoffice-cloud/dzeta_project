@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { Icon } from '@/components/icons/Icon';
+import { Glyph } from '@/components/ui/Glyph';
 import { Switch } from '@/components/ui/Switch';
 import { consentContent } from '@/content/en/legal/consent';
 import { EFFECTS_KEY, THEME_KEY } from '@/lib/fx/preferences';
@@ -70,7 +70,7 @@ function CookieList({ rows, id, group }: { rows: Row[]; id: string; group: strin
   if (rows.length === 0) return null;
   return (
     <div className="mt-3">
-      <p id={id} className="text-small font-medium text-fg-strong">
+      <p id={id} className="text-small font-medium text-ink">
         {settings.cookiesHeading}
       </p>
       <div className="mt-1 overflow-x-auto">
@@ -126,7 +126,7 @@ export default function ConsentSettings({ gtm, onClose }: ConsentSettingsProps) 
   };
 
   const group = (key: 'analytics' | 'marketing') => (
-    <section aria-label={settings[key].name} className="border-t border-hairline pt-4">
+    <section aria-label={settings[key].name} className="border-t border-line pt-4">
       <div className="flex items-center justify-between gap-4">
         <Switch
           label={settings[key].name}
@@ -134,7 +134,7 @@ export default function ConsentSettings({ gtm, onClose }: ConsentSettingsProps) 
           onCheckedChange={(on) => setChoice((current) => ({ ...current, [key]: on }))}
           className="font-bold"
         />
-        <span aria-hidden="true" className="text-small text-fg-muted">
+        <span aria-hidden="true" className="text-small text-ink-secondary">
           {choice[key] ? settings.toggleOn : settings.toggleOff}
         </span>
       </div>
@@ -150,7 +150,7 @@ export default function ConsentSettings({ gtm, onClose }: ConsentSettingsProps) 
       className="dz-consent-dialog"
       onClose={() => onClose(saved.current ? settings.saved : null)}
     >
-      <div data-theme="dark" className="dz-consent-panel dz-glass dz-glass--live dz-glass--muted">
+      <div className="dz-consent-panel">
         <div className="flex items-start justify-between gap-4">
           <h2 id="dz-settings-title" className="text-h3">
             {settings.title}
@@ -159,19 +159,19 @@ export default function ConsentSettings({ gtm, onClose }: ConsentSettingsProps) 
             type="button"
             aria-label={settings.close}
             onClick={() => dialog.current?.close()}
-            className="dz-press -me-2 inline-flex size-11 shrink-0 items-center justify-center rounded-pill text-fg-strong"
+            className="dz-press -me-2 inline-flex size-11 shrink-0 items-center justify-center rounded-full text-ink"
           >
-            <Icon name="close" size={24} />
+            <Glyph name="close" />
           </button>
         </div>
         <p className="mt-2 text-small">{settings.intro}</p>
         <div className="mt-6 grid gap-5">
           <section aria-labelledby="dz-settings-essential" className="pt-1">
             <div className="flex min-h-11 items-center justify-between gap-4">
-              <p id="dz-settings-essential" className="font-bold text-fg-strong">
+              <p id="dz-settings-essential" className="font-bold text-ink">
                 {settings.essential.name}
               </p>
-              <span className="text-small font-medium text-fg-strong">{settings.essential.state}</span>
+              <span className="text-small font-medium text-ink">{settings.essential.state}</span>
             </div>
             <p className="mt-1 text-small">{settings.essential.body}</p>
             <CookieList
@@ -183,7 +183,7 @@ export default function ConsentSettings({ gtm, onClose }: ConsentSettingsProps) 
           {group('analytics')}
           {group('marketing')}
         </div>
-        <div className="mt-6 flex flex-wrap gap-3 border-t border-hairline pt-5">
+        <div className="mt-6 flex flex-wrap gap-3 border-t border-line pt-5">
           <button type="button" onClick={() => apply(choice)} className="dz-consent-button dz-press font-bold">
             {settings.save}
           </button>
