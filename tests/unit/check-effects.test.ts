@@ -9,13 +9,14 @@ const library = [
   '|---|---|---|',
   '| `glass-frost` | Baked frost | Everywhere |',
   '| `hover-underline` | Text link | uses `glass-frost` too |',
+  '| `marquee` | A one-word ID (the v3 motion spec) | Platform strip |',
   '## 5. Compositions',
   '| `the-assembly` | not a library row |',
 ].join('\n');
 
 describe('check:effects', () => {
   it('reads the library IDs from the first column of 13 §4 tables only', () => {
-    expect([...libraryIds(library)]).toEqual(['glass-frost', 'hover-underline']);
+    expect([...libraryIds(library)]).toEqual(['glass-frost', 'hover-underline', 'marquee']);
   });
 
   it('reads citations from the Effect ID column of an Effect register', () => {

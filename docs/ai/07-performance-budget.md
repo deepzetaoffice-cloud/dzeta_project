@@ -1,104 +1,73 @@
-# 07 · Performance Budget
+# 07 · Performance: Guidance and Reporting
 
-> **Applies to:** every page, component, asset and third-party script · **Precedence:** below 00 (N1 makes this a non-negotiable) · **Last reviewed:** 2026-10-09 (Build Mode, decision 0029)
+> **Applies to:** every page, component, asset and third-party script · **Precedence:** below 00 (N1: measured and reported, never a blocker) · **Last reviewed:** 2026-10-18 (Website v3, decision 0033)
 
-The site is deepzeta's proof of work. **A page that fails a hard limit does not ship.**
+Performance is **information, not a gate** ([decision 0033](../decisions/0033-redesign-v3.md)). No page has a Lighthouse floor, a weight limit or a byte cap, and no number here blocks a merge. Visual ambition comes first.
 
-**Test conditions:** mobile, budget Android class device, slow 4G. Lighthouse mobile emulation in CI (`lhci`), with the CPU slowdown calibrated to the machine's speed (4 × benchmarkIndex ÷ 4,000, [decision 0025](../decisions/0025-lighthouse-cpu-calibration.md)), and PageSpeed Insights/CrUX field data after launch. Studio-laptop results don't count.
+The habits below stay because they cost nothing visually, and because a fast page still helps every visitor. Core Web Vitals are also a small Google ranking signal.
 
 ---
 
-## 1. Core Web Vitals
+## 1. What changed in v3
 
-| Metric | Target (internal) | Hard limit (never cross) |
+- **Removed:**
+  - the Lighthouse floors and the page tiers (0005, 0011, 0028)
+  - the Home page-weight limit, the JavaScript, font, image and effect byte caps (0014, 0021's Home cap, the old 13 §7)
+  - the regression rule and the exception limit (0020)
+  - the lab allowances and the CPU calibration (0022's TBT row, 0023, 0025)
+  - the Designer Studio exemption (0031, now moot)
+- **Deleted in Phase C:** `lhci`, `lighthouserc*.cjs`, `scripts/lhci-run.mjs`, `scripts/check-page-weight.mjs`, `scripts/measure-prod-weight.mjs` and `@lhci/cli`.
+- **The copy rule ([10](10-content-voice.md) §3):** no page promises a Lighthouse or PageSpeed score. A Core Web Vitals result is claimed only when a real measurement shows it (N3).
+
+---
+
+## 2. Reporting (every branch, information only)
+
+| Report | How | Where it goes |
 |---|---|---|
-| **LCP** (largest contentful paint) | ≤ 1.5 s | ≤ 2.5 s |
-| **INP** (interaction to next paint) | ≤ 100 ms | ≤ 200 ms |
-| **CLS** (cumulative layout shift) | ≤ 0.05 | ≤ 0.1 |
-| TTFB | ≤ 200 ms (static/edge) | ≤ 600 ms |
-| TBT (lab proxy for INP) | ≤ 100 ms | ≤ 200 ms |
-| Lighthouse Performance (mobile) | per tier | T1 Home ≥ 95, asserted by `lhci` on every change that can reach Home · **every other page: 70 in PageSpeed Insights on production**, checked before launch (the pre-launch register); no lab gate ([decision 0029](../decisions/0029-build-mode.md), Build Mode). The T2/T3 lists and their motion toolkits are unchanged (decisions 0005, 0011). Unlisted pages = standard. |
-| Lighthouse Accessibility / Best Practices / SEO | 100 | ≥ 95 |
+| Lighthouse (mobile) for Home and one changed page | Lighthouse in Chrome DevTools or PageSpeed Insights on the Vercel preview | The branch's short report (02 §5): the four scores and LCP, INP (or TBT), CLS |
+| Bundle report | `@next/bundle-analyzer` (added in Phase C) | The branch's report: first-load JS per route, and what grew |
+| Field data, after launch | PageSpeed Insights / CrUX on production | The pre-launch register and the monthly check |
 
-*Tiers:* every metric in this table is asserted in the lab on Home and the review page, which carry the shared shell and runtime that every page uses. On every other page, CLS ≤ 0.1, LCP, INP and TBT are hard limits for **real visitors** (field data: PSI and CrUX on production, the pre-launch register), with no lab gate ([decision 0029](../decisions/0029-build-mode.md)). The tier changes the score floor and the motion toolkit allowed. **The Designer Studio pages (`/studio` and `/studio/<slug>`) are exempt** from the tier floors, the page-weight caps and the Core Web Vitals limits ([decision 0031](../decisions/0031-designer-studio-performance-exempt.md)): they are `noindex` showcases, built limitless.
-
-*Reconciliation:* the advisory said LCP < 1.5 s, INP < 100 ms, CLS < 0.05; the performance constraint says < 2.5 s / < 200 ms / < 0.1. We aim for the first and never cross the second (blueprint decision). FID is obsolete; INP replaces it.
+A number that looks wrong is a **fix task proposed in the report**, never a blocked merge. The owner decides whether it's worth doing.
 
 ---
 
-## 2. Page weight (compressed)
-
-| Budget | Limit | Status |
-|---|---|---|
-| HTML + CSS + JS loaded before the first interaction | ≤ framework baseline + 50 KB (≈ 186 KB today) | Hard limit (decision 0014). Code started by an explicit visitor action ("Launch", "Play", "Open") never loads on first view and is budgeted per feature in its plan (decision 0008) |
-| JavaScript on first load | Framework baseline (136.4 KB) + ≤ 5 KB growth, plus our own code: ≤ 11 KB on Home, ≤ 25 KB on T2 and T3 pages | Hard limit: the baseline + 5 KB growth (decision 0014), asserted by `lhci` on each tested page (Home today). Home's cap was 10 KB until P3 added the sitewide tracking runtime ([decision 0021](../decisions/0021-analytics-and-consent.md)) |
-| First-party JS on Home at first load (effects, UI and tracking) | ≤ 11 KB | Validated by the effects feasibility gate ([04](04-build-sequence.md) §2; caps in [13](13-experience-design.md) §7); raised from 10 KB for the tracking runtime ([decision 0021](../decisions/0021-analytics-and-consent.md)) |
-| Fonts (subset; variable, or one static weight when that keeps the target, 0015) | ≈ 60 KB total | Hard limit 70 KB on deepzeta pages. Studio concept routes load their own fonts with no page budget (decision 0031) |
-| Images per page (above the fold) | ≤ 200 KB, hero ≤ 120 KB | Hard limit |
-| Render-blocking third-party or font files | 0 | Hard limit |
-| Third-party scripts before consent/interaction | GTM only | Hard limit |
-| Third-party requests before consent (Europe, measured at C5 with the real container) | ≤ 1 request (gtm.js) and ≤ 160 KB; GTM's own 59 B telemetry pings (`googletagmanager.com/a`) are counted apart, their bytes included ([C74](conflict-register.md)); every vendor tag waits for consent | Hard limit, asserted per run after `lhci`: the bytes by `lhci`, the requests by `scripts/check-page-weight.mjs` (Europe profile) |
-| Third-party requests outside Europe (C5's measurement: GTM + the Google tag + GA4's collect; Meta and UET load on the production host only, measured by PSI after launch) | ≤ 4 requests (GTM's telemetry pings apart, C74), ≤ 350 KB | Hard limit, asserted per run after `lhci` (the bytes by `lhci`, the requests by `scripts/check-page-weight.mjs`; UAE campaign profile); that profile's TBT lab allowance is 275 ms and its Performance floor 0.93 ([decision 0023](../decisions/0023-row-profile-tbt-and-performance-allowance.md)) — the granted third-party scripts' execution cost is intrinsic to the TBT window, with GTM deferred past first paint (0022), while §1's ≤ 200 ms and 0.95 stand for every page and profile |
-
-**The framework baseline (decision 0014, C8 resolved).**
-- P0 measured an empty page: the Next.js 16.3.7 / React 19.3 runtime alone is 136.4 KB of JavaScript, so the old 50 KB target can't be met with Next.js.
-- The runtime is a fixed, watched baseline. `lhci` fails if it grows by more than 5 KB, so every Next.js upgrade shows its cost. Raising the baseline needs the owner's approval in a new decision.
-- Our own first-load JavaScript is budgeted on top of it, per page. Each plan that adds client code states its measured size and raises that page's `lhci` allowance, within the limits above.
-
-**Units (decision 0014).** The KB in the first two rows are KiB (1,024 bytes) of transfer size, as Lighthouse reports it: compressed, HTTP response headers included. The lab figures come from `next start` (gzip). The live figure is measured with `scripts/measure-prod-weight.mjs` (C65's method: the response as served, Brotli, every HTTP/1.1 header counted). Vercel's Brotli shrinks the HTML well but not the JS and CSS, so neither measure is always the stricter one: the hard limit holds on both, except where an allowance in the conflict register says otherwise (C64).
-
-**Where the caps are asserted (decisions 0028, 0029):** on Home and the review page, by `lhci` and `scripts/check-page-weight.mjs`, on every change that can reach Home (03 §2). Other pages aren't measured in the lab. A plan that adds client code to a standard page still states its measured size against the caps above, and Home's caps guard the shared shell and runtime.
-
----
-
-## 3. Rules that keep us inside the budget
+## 3. Habits that stay
 
 **Images and media**
-- AVIF/WebP via `next/image`, explicit dimensions, correct `sizes`. `priority` only on the LCP image.
-- The hero visual is SVG/CSS (the locked logo's Z mark and the CSS-built Assembly, [13](13-experience-design.md) §5), so it's light and sharp and never competes with the text LCP element.
-- No autoplay video. Video only on interaction, with a poster image.
+- Through `MediaAsset` and `next/image` only (08 §7): AVIF and WebP, explicit width and height, a correct `sizes`, served at 800, 1200, 1600 and 2400 px.
+- `priority` only on the image that is the page's LCP element, when it is one. The hero's H1 is the usual LCP element (13 §3).
+- **Video:** muted loops start only when their card is in view and pause off-screen and in a hidden tab. Each has a poster, `preload="none"` until it nears the viewport, and the photo as its fallback. No sound ever autoplays.
+- **3D:** `three` and React Three Fiber load by dynamic import, only in sections with a scene, after the first paint. Each scene has a 2400 px poster for reduced motion, Save-Data and devices without WebGL2. A scene renders on demand and stops off-screen.
 
 **Fonts**
-- `next/font/local` with the committed font files (0015), variable or one static weight, subset to the characters needed, `display: swap`. No Google Fonts `<link>`.
+- Self-hosted through `next/font` (Unbounded, Figtree, Geist Mono; [05](05-design-system.md) §3): latin subset, `display: swap`. No Google Fonts `<link>`, and no request goes to Google at runtime.
 
 **JavaScript**
 - Server Components by default; client components small and deep in the tree.
-- Heavy widgets load on interaction/visibility: chat agent on tap, booking on open, calculator only on pages that use it.
-- Before adding a dependency, check its compressed size (in the plan).
-- No blocking work on the main thread in event handlers; break up long tasks.
+- Heavy widgets load on interaction or visibility: the agent chat on tap, the ROI calculator in view, a scroll scene's library when its section nears the viewport.
+- Note each new dependency's compressed size in its commit.
+- No blocking work in event handlers; break up long tasks.
 
 **CSS and motion**
-- Transform/opacity only; no animating layout properties; no infinite animations; live `backdrop-filter` only within the glass-ladder limits ([05](05-design-system.md) §5 rule 6, [13](13-experience-design.md) §4.1).
-- Reserve space for anything that loads late (aspect-ratio boxes, min-heights) so CLS stays near 0.
+- Animate transform, opacity, clip-path and filter only ([13](13-experience-design.md) §3).
+- Pause anything off-screen or in a hidden tab.
+- Reserve space for anything that loads late (aspect-ratio boxes, min-heights), so layout shift stays near 0. A pinned scene's height is set before its script loads.
 
 **Third parties**
-- GTM loads with normal priority (see [09](09-analytics-tracking.md)); other vendors load after consent and/or idle. Nothing else in the head.
-- Every third party added needs a plan with its measured cost.
+- GTM loads as [09](09-analytics-tracking.md) sets out (deferred past the first paint, never idle-deferred, decision 0022). Other vendors load after consent and/or idle. Nothing else goes in the head.
+- Every third party added needs a plan.
 
 ---
 
-## 4. Live demo and effect costs (targets; each plan must measure and confirm them)
+## 4. Demo and effect costs (to watch, never caps)
 
 | Demo / effect | Cost | Mitigation |
 |---|---|---|
-| deepzeta AI agent | 60–150 KB chat script | Light button first; load chat only on tap |
-| ROI calculator | ~5 KB | Plain JS, only on pages that use it |
-| Workflow explorer (`story-flow`) | Main-thread animation risk on low-end phones | Home: SVG + CSS only (T2 pages may use GSAP islands); plays once, pauses if scrolled away mid-play; static when reduced motion |
-| 60-second speed-to-lead test | ~0 on page (server-side) | Consent wording, rate limits, spam protection |
-| Header speed chip + Page Nutrition Label | ~1 KB chip + `web-vitals`; the label's code on open | Reads browser performance data after load; the chip reserves its space; the label loads when opened |
-| AI View ("See how AI reads this page") | A small script on first use + one `llms.txt` fetch | Built when opened; reads the page's own JSON-LD; no duplicate indexable text |
-| Shared pointer controller | ≤ 1.5 KB | Fine pointers only, while a target is in view; rAF-batched; stops when the tab is hidden |
-| Story graphics (`story-*`) | ≤ 2 KB shared controls + ≤ 6 KB each | CSS/SVG on Home; play once; controls for stories longer than 5 s |
-| The Assembly (Home hero) | ~0 KB beyond the shared observer (CSS 3D) | Starts on first scroll; static cluster under Reduce effects |
-| `glass-live` / `glass-liquid` | GPU cost while content scrolls behind | Capped count per viewport; falls back to `glass-frost` |
-| Designer Studio: Device Stage and concept sites | Each concept's full weight | Loads only on open, inside a sandboxed iframe; no performance floor, weight ceiling or Core Web Vitals lab gate (decision 0031) |
-| Deepzeta Sync (tools) | Server-side checks and AI calls; small client wizard | Server work only; rate limit + Turnstile; the report renders after results |
-| App demo | The app shell | Loads only on "Launch"; its budget is set in its plan |
-
----
-
-## 5. Regression rule
-
-The baselines and this rule are asserted on Home and the review page ([decisions 0028](../decisions/0028-standard-tier-and-light-verification.md) and [0029](../decisions/0029-build-mode.md)): a change that drops either's mobile Performance score by **more than 2 points**, takes it below its **floor**, or breaks any hard limit **blocks the merge** (`lhci` assertions), unless the owner approves an exception recorded in the conflict register. Standard pages have no lab gate; a production PSI check under 70 makes a fix task before launch.
-
-The owner's exception limit ([decision 0020](../decisions/0020-performance-exception-limit.md)): for Home, an exception never takes it below Performance 86, and LCP only a little over 2.5 s. Beyond that, the change is reworked, not excepted.
+| The website AI agent | A chat script | The AI input renders first; the chat code loads on the first focus or tap |
+| `message-to-booking`, `workflow-connect`, `exploded-layers`, `macbook-scroll` (3D) | `three` + React Three Fiber + a GLB (≤ ~5 MB, Draco) | Dynamic import after first paint, in view only; poster under reduced motion, Save-Data and no WebGL2 |
+| Pinned scroll scenes | GSAP ScrollTrigger + Lenis | Loaded with their section; no pin under reduced motion or on short viewports |
+| Door and industry video loops | A 720p MP4/WebM each | In view only, paused off-screen, poster first |
+| `drape`, `shape-throw` (WebGL or physics) | Their KokonutUI code and its dependencies | Loaded on intent or in view; static fallback |
+| ROI calculator | Small | Only on pages that show it |

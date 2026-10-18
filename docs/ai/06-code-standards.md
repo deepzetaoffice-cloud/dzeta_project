@@ -1,6 +1,6 @@
 # 06 · Code Standards
 
-> **Applies to:** all source code · **Precedence:** below 00 · **Last reviewed:** 2026-10-02
+> **Applies to:** all source code · **Precedence:** below 00 · **Last reviewed:** 2026-10-18 (§5, decision 0033)
 
 ---
 
@@ -13,14 +13,14 @@
 | Styling | Tailwind CSS v4, CSS-first `@theme` tokens | No `tailwind.config.js`, no CSS-in-JS, no Sass |
 | i18n | English at launch; Arabic routing added in P11 (library chosen by decision record then) | Architecture RTL-ready now |
 | Content | Typed data/MDX in `src/content/` | Copy never hardcoded in components |
-| Motion | Native CSS/SVG/View Transitions first; GSAP only on page tier T2/T3; WebGL/Rive only on T3, plus one post-LCP WebGL moment on Home | Page tiers in decision 0005 |
+| Motion | CSS first; GSAP (ScrollTrigger, SplitText, MotionPath) and Lenis for scroll scenes; React Three Fiber for 3D, lazy; Motion inside copied KokonutUI and Aceternity components | Decision 0033; effects by ID ([13](13-experience-design.md)) |
 | Forms | Native `<form>` + Server Actions + `useActionState`; Zod on the server | No React Hook Form |
 | Spam / rate limit | Cloudflare Turnstile (on form focus) + Upstash Redis rate limit | Serverless-safe store (§4) |
 | Automation | n8n (hosting per decision 0004), called only from the server via signed webhook; workflow JSON in the repo | Decision 0004 |
 | CRM / email | Google Sheets v0 + Gmail (Workspace) via n8n; HubSpot/Zoho later | Swap inside n8n only |
 | AI agent | AI SDK + DeepSeek (`@ai-sdk/deepseek`, decision 0016) on a route handler, streaming; UI loaded on tap | Model chosen in P7 plan |
 | Hosting | Vercel (owner already connected); region set by decision | |
-| Tests | Vitest (unit), Playwright + axe (e2e/a11y), Lighthouse CI | |
+| Tests | Vitest (unit), Playwright + axe (e2e/a11y); Lighthouse for information only | N1 |
 
 **Version-sensitive APIs:** before writing code for Next.js, React, Tailwind or any library, read the installed version and use its docs (see [02](02-anti-hallucination-and-edit-safety.md) §2).
 
@@ -82,6 +82,8 @@
 
 1. **Native first.** Prefer platform features (`<dialog>`, `:has()`, container queries, `Intl`, CSS animations) when they cover the need.
 2. Every new package needs, in an approved plan: the package, the **verified** version, and one sentence on why native or hand-rolled code is worse.
-3. **Banned by default:** jQuery, CSS frameworks other than Tailwind, UI kits/templates, page builders, styled-components/Emotion/Sass, Lodash/Moment, `motion`/Framer Motion, Lottie, Lenis or any smooth-scroll/scroll-jacking library, React Hook Form, `lucide-react` and other icon libraries, state libraries where React state suffices, `next-seo`. **GSAP** is allowed only on page tier T2/T3, loaded when its section is visible, never on Home (decision 0005).
+3. **Banned by default:** jQuery, CSS frameworks other than Tailwind, templates and themes, page builders, styled-components/Emotion/Sass, Lodash/Moment, Lottie, React Hook Form, `lucide-react` and other icon libraries, state libraries where React state suffices, `next-seo`.
+   - **Allowed by the owner's overrule** (decision [0033](../decisions/0033-redesign-v3.md) §4; the library table in `docs/plans/2026-10-17-redesign-v3.md`): GSAP (ScrollTrigger, SplitText, MotionPath) on any page, Lenis (smooth scroll, never scroll-jacking: native scrolling under reduced motion), `three` with `@react-three/fiber` and `@react-three/drei` (dynamic import only), Radix primitives, and KokonutUI and Aceternity components copied in through the shadcn CLI, with `motion` (`motion/react`) inside them.
+   - **A copied component is our code from then on:** restyled through the tokens, logical CSS only, accessible, with its reduced-motion fallback, and its icons swapped for the in-house UI glyphs. Its own dependencies are verified at install (02 §2) and named in its commit.
 4. Never edit `package-lock.json` by hand; only via npm commands in an approved plan.
-5. **Visual references are never copied.** Snippets collected as inspiration (e.g. `Planning Folder/Components references/`, which depend on `motion/react`, icon libraries and remote assets) are rebuilt natively from the effects library ([13](13-experience-design.md) §9; conflict C23).
+5. **Visual references are rebuilt or copied by effect ID.** A snippet collected as inspiration (e.g. `Planning Folder/Components references/`) is used only through an effect ID in [13](13-experience-design.md) §4: rebuilt natively, or copied in under rule 3 when its registry is allowed. Remote assets are never hot-linked (13 §9; C23, decision 0033).

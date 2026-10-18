@@ -1,6 +1,6 @@
 # 04 · Build Sequence & Task Plans
 
-> **Applies to:** planning and ordering of all work · **Precedence:** below 00 · **Last reviewed:** 2026-10-09 (Build Mode, decision 0029)
+> **Applies to:** planning and ordering of all work · **Precedence:** below 00 · **Last reviewed:** 2026-10-18 (the plan template's Figma line, decision 0033)
 
 ---
 
@@ -27,11 +27,13 @@
 | **P4 Data & schema engine** | Content types, catalogue data, `src/lib/site-config.ts`, `src/lib/schema/` `@id` graph builders (spec: `docs/plans/2026-09-29-schema-system.md`), the schema registry `docs/seo/schema-graph.md`, `src/lib/geo/` builders, facts allowlist | unit tests + `check:schema` |
 | **P5 Homepage** | Sections per `docs/design/home.md` (blueprint order); demos stubbed behind lightweight triggers | page gates (see [03](03-verification-gates.md) §2) + the effects feasibility gate re-run on the full Home |
 | **P6 Core pages** | Every page follows its row in the [URL registry](../seo/url-registry.md) and its blueprint in the [SEO/GEO Domination Engine](../seo/seo-geo-domination-engine.md) §3, in waves W1 → W2. Services hub + pilot service page → review → remaining services; the Automation page (`/services/ai-automation`, the AI Automation pillar page); solutions; industries; pricing; about; contact; book-audit; privacy; terms | 03 §2 per branch (batches of up to 10 per template) |
-| **P7 Live demos & tools** | AI agent (load on tap), ROI calculator, workflow explorer, 60-second test, header speed chip + Page Nutrition Label, AI View; Deepzeta Sync, the tools hub at `/tools` (Website & AI Search Health Check, Social Media Content Planner) | per-demo cost/mitigation stated; Home's `lhci` unchanged |
+| **P7 Live demos & tools** | AI agent (load on tap), ROI calculator, workflow explorer, 60-second test, header speed chip + Page Nutrition Label, AI View; Deepzeta Sync, the tools hub at `/tools` (Website & AI Search Health Check, Social Media Content Planner) | per-demo loading stated (07 §4) |
 | **P8 Resources, case studies & Studio** | Registry wave W3 (engine §3). Glossary, comparisons, guides (bylined by the founder); case studies only with owner-confirmed real data; Designer Studio index + one pilot concept → owner review → the other concepts | 03 §2 per branch |
 | **P9 GEO layer** | `llms.txt`, `llms-full.txt`, robots AI-bot tiers, sitemap | `check:schema` + SEO/GEO audit |
 | **P10 Launch readiness** | Full `verify`, manual checklists, redirects, 404, monitoring, Vercel deploy, set `SITE_INDEXING=on` in Vercel Production and redeploy (lifts the pre-launch lock, decision 0013), Search Console | owner sign-off |
 | **P11 Arabic (after launch)** | `/ar` tree, native GCC content, hreflang, Arabic fonts; English must not regress | parity + English regression gates |
+
+**Website v3 ([decision 0033](../decisions/0033-redesign-v3.md))** rebuilds the P1, P2, P5 and P6 surfaces from the approved Figma file, in its own Phases A–E (`docs/plans/2026-10-17-redesign-v3.md`). Their effects feasibility gates and `lhci` exits no longer apply (N1).
 | **P12 pSEO (after V1)** | **Reminder:** starts only when every V1 row in the URL registry is live and indexing is stable; then remind the owner and write the pSEO plan from engine §10. Dimensions: industries, industry × emirate, integrations, comparisons. Fact packs, ≤ 30% similarity to siblings, batches of up to 10 a week through pull requests | per-batch gates + owner review |
 
 ---
@@ -54,7 +56,7 @@ Keep plans short: one or two screens. The rules are cited, never restated.
 ```markdown
 # Plan: <title>
 Status: DRAFT | APPROVED (owner, date) | DONE
-Phase: P<n> · Branch: <type>/<slug> · Page tier: <T1 | standard | n/a>
+Phase: P<n> · Branch: <type>/<slug> · Figma frames: <node ids | n/a>
 
 ## Goal
 <the North Star part served, one line; what ships>
@@ -67,7 +69,7 @@ Phase: P<n> · Branch: <type>/<slug> · Page tier: <T1 | standard | n/a>
 1. <step>
 
 ## Effect register (visual work only; IDs from docs/ai/13 §4)
-| Section | Effect ID | Cost → mitigation |
+| Section | Effect ID | Purpose · reduced-motion fallback · loading |
 |---|---|---|
 
 ## Dependencies, risks (only if real)

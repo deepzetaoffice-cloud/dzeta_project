@@ -1,6 +1,6 @@
 # Automation: "Control Room"
 
-Status: CONFIRMED · Page tier: T2 · Decision 0008 · Effects: [13](../ai/13-experience-design.md)
+Status: NOT REDESIGNED (decision 0033: the frame and content decisions below stand; the Signal & Depth styling, page tier and effect IDs are superseded, and the page gets a Figma design before it is built) · Decision 0008 · Effects: [13](../ai/13-experience-design.md)
 
 This is one page, never two competing ones: the AI Automation pillar page at `/services/ai-automation` (C6 resolved to the pillars). The header's "Automation" item links here.
 

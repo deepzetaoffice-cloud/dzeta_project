@@ -1,63 +1,45 @@
 # Services hub (`/services`)
 
-Status: CONFIRMED (the owner's approval of the P6 part A plan, 2026-10-07) · Page tier: T2 · Decisions 0008 and 0026 · Effects: [13](../ai/13-experience-design.md) · Content rules: [engine §3](../seo/seo-geo-domination-engine.md)
-
-Registry row R010. The content order comes from engine §3 (Hub) and R010's intent.
+Status: CONFIRMED (Figma approved 2026-10-18) · Decision 0033 · Effects: [13](../ai/13-experience-design.md) · Figma: page Services hub (`1:6`), Desktop 1440 `58:34`, Mobile 390 `58:2466` · Content: `src/content/en/services-hub.ts`, `navigation.ts`, `faq-bank.ts`, the catalogue · Registry: R010 · Content rules: [engine §3](../seo/seo-geo-domination-engine.md)
 
 ## Idea
 
-A calm directory with a chooser. A buyer finds the right service by problem (the chooser) or by pillar (the directories). A utility page: no signature moment.
+A calm, colourful directory. A buyer finds the right service by problem (the chooser) or by pillar (the bento of directories). A utility page: no signature moment.
 
-## Order
+## Sections
 
-1. **Breadcrumb:** Home › Services.
-2. **Hero:** the H1, a 40–60-word direct answer, the primary CTA. See "Hero details" below.
-3. **"Which service do you need?":** a table (`<caption>`, `scope`) of common problems in the owner's words → the service. A row links when its service is live.
-4. **Start here:** the Free AI Automation Audit and the other starter offers (catalogue §0), each linked when live. The audit CTA stands in until R002 ships.
-5. **Four pillar directories,** in catalogue order:
-   - the Tier 3 head, the pillar's name and promise (catalogue)
-   - a 40–75-word lede
-   - the catalogue's sub-groups, listing every lead and core service by its exact name
-   - a live service is a link; the rest are plain text
-   - add-ons stay on pillar pages (registry §3.4)
-6. **Ongoing care and Solutions:** the AI Ops Retainer; the six bundle names, and the solutions hub once R090 ships.
-7. **FAQ:** 4–6 questions (the FAQ module, [faq.md](faq.md)).
-8. **The next step:** the footer's finale ([footer.md](footer.md)).
+| # | Figma section | Content | Effects |
+|---|---|---|---|
+| 01 | Hero · compact stage + Dot Field | The breadcrumb Home / Services (visible, with its BreadcrumbList); the H1 (`text-hero-line`); the direct answer; "Book a free AI audit"; "Find your service by problem" (to §02); four pillar chips (to each directory) | `dot-field` (a hovered pillar chip lights its pillar's dots), `press-scale` |
+| 02 | Which service do you need? | [01] "Common problems and the service for each": a real `<table>` with a `<caption>` and `scope` (Your problem → The service), 8 rows in the owner's words. A row links when its service is live. Stacked rows below 640 px, never a sideways scroll | `section-reveal` |
+| 03 | Start here | [02] "Starter offers": the catalogue's §0 offers as three cards (0.1 Free AI Automation Audit, with "Book a free AI audit"; 0.2 AI Readiness Assessment; 0.3 Website & AI Search Health Check). Each card is a link once its page is live | `hover-lift` |
+| 04 | Every service, by pillar | [03] "Four pillars": a bento of four pillar panels in catalogue order. Each has its Pillar pixels mark, name, a 40–75-word lede, every lead and core service by its exact catalogue name (a link when live, plain text otherwise), and "All {pillar} services" | `section-reveal`, `hover-lift` on live service links |
+| 05 | Ongoing care · Solutions | [04] the AI Ops Retainer and the care add-ons as chips; [05] "Bundles · Solutions": the six bundle names (links once R090 and the bundle pages ship) | — |
+| 06 | FAQ | [06] the FAQ module ([faq.md](faq.md)), 4–6 hub questions from `faq-bank.ts` | `accordion` |
+| — | Footer | [footer.md](footer.md) | |
 
 ## Hero details
 
-- **The H1 and the answer are the LCP:** visible at first paint, with no entrance animation (13 §3 rule 2).
-- **The H1's size:** `text-h1` below 640 px, the statement size (`text-statement`) from 640 px, as Home since P5 S7. So Linux and Android font wrapping never puts it under the European consent banner at 360 × 640.
-- **The primary CTA** joins the hand-off (C42, [conversion-path.md](conversion-path.md)).
+- **The H1 and the direct answer are the LCP:** visible at first paint, with no entrance animation (13 §3).
+- **The stage is compact** (706 px at 1440 in Figma): the hub is a utility page. `dot-field` is a background; it carries no content.
 
-## Effects
+## Content flags (raised with the owner, not changed silently)
 
-- `glass-frost`: the directory panels.
-- `hover-underline`: links, the breadcrumb's included.
-- `hover-guide-line`: the chooser table's rows.
-- `scroll-reveal`: sections.
-- `hover-charge`, `pointer-magnet` and `touch-press`: the primary CTA.
-
-No story graphics and no signature moment. One Tier 3 head per pillar section, so few Tier 3 stories start in one viewport (05 §6).
-
-## Icons
-
-- **Tier 3:** one head per pillar section.
-- **Tier 2:** beside a service that has one. A service without a Tier 2 icon shows its pillar's pixel, as in the mega menu ([header.md](header.md)).
-- **Tier 1:** UI.
+- **"Learn more" on the starter offers (§03)** is a banned anchor (08 §2.9; `check:links`). Each card's link text is the offer's name instead.
+- **The Websites lede** promises "built to pass Core Web Vitals on every page". Under 10 §3.7 it changes to what we do, for example "optimised for mobile networks and measured against Core Web Vitals at launch", unless real measurements back it.
+- **"E-Invoicing Ready ⏰":** the clock implies a deadline. It stays only with an APPROVED citation for the UAE e-invoicing dates (10 §3.5); otherwise it's the name alone.
+- **The FAQ answers** in the frame are `[[TODO]]`; they come from `faq-bank.ts`'s hub questions, written by the Content Writer.
 
 ## Layout and access
 
-- **The table** becomes stacked rows below 640 px. It never scrolls the page sideways.
 - **Every link names its service.**
-- **Reduce effects and no-JS** show everything.
-- **No client JavaScript of its own.** The FAQ module's enhancement is the module's, loaded on use.
+- **No client JavaScript of its own** beyond `dot-field` (loaded in view) and the FAQ's accordion.
+- **Reduce effects and no-JS** show everything: static dots, every answer in the HTML.
 
 ## Shell links to the hub
 
-- **Header:** the first link of the mega menu, in the full panel and the lite panel ([header.md](header.md)).
-- **Footer:** among the footer's service links ([footer.md](footer.md)).
+The mega menu's "All services" link (its first link), the mobile menu's "All services", and the footer's Services column ([header.md](header.md), [footer.md](footer.md)).
 
 ## Breakpoints
 
-360, 390, 768, 1024, 1280 and 1536 px (05 §7).
+Checked side by side with `58:34` and `58:2466` at 390, 834 and 1440 px.

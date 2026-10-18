@@ -16,11 +16,11 @@ This is deepzeta's own website and its first case study. Speed, custom code, SEO
 |---|---|
 | Any code change (which gates, what evidence) | `docs/ai/03-verification-gates.md` |
 | Planning, phases, the plan template | `docs/ai/04-build-sequence.md` |
-| Styling, tokens, components, icons, motion | `docs/ai/05-design-system.md` + `Planning Folder/For Ai/DeepZeta Icon Master Rules.md` |
-| Any effect, animation, hover, scroll, 3D, glass or animated explainer | `docs/ai/13-experience-design.md` (effects only by ID) |
+| Styling, tokens, components, icons, motion | `docs/ai/05-design-system.md` + `Planning Folder/For Ai/DeepZeta Icon Master Rules.md` + the Figma file "Deepzeta AI · Website v3" (`tYw7bSV9m4zX2vrVs7XYpE`, decision 0033) |
+| Any effect, animation, hover, scroll, 3D, video or animated explainer | `docs/ai/13-experience-design.md` (effects only by ID, from the Figma motion spec) |
 | Building a page, the header, the footer or a demo surface | Its spec in `docs/design/` (index: `docs/design/README.md`) |
 | TypeScript, Next.js, dependencies, security | `docs/ai/06-code-standards.md` |
-| Images, fonts, scripts, animation, anything that affects speed | `docs/ai/07-performance-budget.md` |
+| Images, video, fonts, scripts, anything that affects speed | `docs/ai/07-performance-budget.md` (guidance and reporting, no budgets) + `docs/ai/08-seo-geo-aeo-schema.md` §7 (`MediaAsset`) |
 | Metadata, headings, schema, robots, sitemap, `llms.txt` | `docs/ai/08-seo-geo-aeo-schema.md` |
 | Page content structure, internal links, FAQ, E-E-A-T, robots/llms content, pSEO | `docs/seo/seo-geo-domination-engine.md` |
 | Adding, naming or linking any page (every URL) | `docs/seo/url-registry.md` |
@@ -31,29 +31,27 @@ This is deepzeta's own website and its first case study. Speed, custom code, SEO
 | Something the sources disagree on | `docs/ai/conflict-register.md` |
 | Before writing any plan | `docs/ai/lessons-learned.md` |
 
-## Build Mode (decision 0029, 2026-10-09)
+## Build Mode (decisions 0029 and 0033)
 
-Build fast, test what matters. **Never relaxed:** Home's performance (07 in full, `lhci` on every change that can reach Home), design (tokens, logical CSS, effects by ID, the `docs/design/` specs, contrast, axe), SEO/GEO (`check:schema`, `check:seo`, `check:links`, `check:facts`, the registry and the engine's blueprints, no invented facts).
+Build fast, test what matters. **Never relaxed:** design (the approved Figma file and the `docs/design/` specs, tokens, logical CSS, effects by ID, contrast, axe, reduced motion and pause controls), SEO/GEO (`check:schema`, `check:seo` with the SEO contract, `check:links`, `check:facts`, the registry and the engine's blueprints, no invented facts). **Performance is measured and reported, never a gate** (N1, 0033): no `lhci`, no floors, no weight limits, and copy never promises a score.
 - **Plans:** one template plan covers a page type's pilot and every copy (batches of up to 10, no more plans); short plans for unique builds; no written plan for a change of up to 3 files with no dependency and no protected file (04 §4).
-- **Gates by risk (03 §2):** `verify:fast` per commit; per branch the local static gates + `verify:ci` green in CI; `lhci` only when the change can reach Home (Home, the shell, any CSS, `src/lib/fx/`, tracking, the root layout, `next.config`, dependencies). Non-Home pages: no lab performance gate; 70 in PSI on production before launch.
+- **Gates by risk (03 §2):** `verify:fast` per commit; per branch the local static gates + `verify:ci` green in CI (with `knip` from Phase C); a Lighthouse and a bundle report attached for information.
 - **Records:** decisions only for real choices; reports short (02 §5); progress one line per batch; this section stays short.
 - **Parallel tracks** in their own worktrees (04 §1). The owner's "merge" per batch (0017).
 
 ## Current state
 
-- **Live (13 of 100 V1 URLs):** `/`, `/services`, and 11 service pages from the template (the pilot R027 and batch 1: R029, R031–R034, R038, R051, R068, R070, R076). Production serves `main` (`d8ba3eb`, 2026-10-10).
-- **Built:** P0 foundation, tokens, themes, fonts (0012, 0015) · P1 brand primitives (0018) · P2 shell, header, mega menu, footer, effect controllers (0019) · P3 analytics, consent, GTM (0021, owner setup `docs/owner/p3-tracking-setup-guide.md`) · P4 schema engine (`src/lib/schema/`, registry `docs/seo/schema-graph.md`) · P5 Home (`docs/plans/2026-10-06-p5-homepage.md`) · P6 A1 + A2 (`docs/plans/2026-10-07-p6a-core-pages-foundation.md`: the services hub, the template pilot) · the CTA set (0024: phone and WhatsApp `+971 54 547 6335`, the floating WhatsApp button, the header's "Deepzeta AI" button via `agentHref()`) · the full header menu · Home's proof cards and the watch-build scene.
-- **Home's weight (C73):** production measures 193,416 B against the 190,868 B hard limit (2026-10-09). The owner checked PSI (Performance at its best) and chose **no performance edits for now**; re-checked on production before launch. Home's PSI SEO score shows 66 only because of the pre-launch `noindex` lock (0013), lifted at P10.
-- **Next:**
-  1. **The flagship Custom-Coded Websites page** (R060): `docs/plans/2026-10-10-flagship-websites-page.md` (DRAFT; the owner chose it first), on `feat/flagship-websites`.
-  2. Then the template plans, in order: the conversational services (`story-chat`), the free AI audit page (a form now, Cal.com later; the owner, 2026-10-10), company and legal, pillars, solutions, industries. Service batch 2 waits until the plans are done (the owner).
-  3. The ~38 other standard service pages under the standing plan `docs/plans/2026-10-08-service-pages-standing-plan.md` (batches of up to 10); 1F.2 waits for APPROVED citations. P7 demos and tools and P8 resources follow as parallel tracks.
+- **Website v3 rebuild in progress** (decision 0033; plan `docs/plans/2026-10-17-redesign-v3.md`; branch `claude/redesign-v3-69988d`). The owner rejected "Signal & Depth" (0008) on 2026-10-17 and approved the Figma file "Deepzeta AI · Website v3" (`tYw7bSV9m4zX2vrVs7XYpE`) on 2026-10-18: Direction B "Spectrum" with C's diagrams, solid violet `#6430FA` (no green), light only, the rotating hero phrase over one stable H1, KokonutUI + Motion allowed.
+  - **Done:** Phase A (the rules reset) and Phase B (the Figma design; 05, 13 and `docs/design/` rewritten from it).
+  - **Next:** Phase C, the fresh foundation (delete the old visual code, keep tracking/schema/SEO/content verbatim, `tokens.css` from the Figma variables, the SEO contract, `knip`, the review page rebuilt, C81); then Phase D, the 15 URLs in order: the shell, Home, the hub + 11 service pages, the flagship, privacy, 404 and the error page. Each owner approval comes at a phase boundary; Phase E (the swap) only on the owner's "merge".
+  - **Open with the owner:** adding the white-background logo variants as locked files (C78); the newsletter's promise line and service (C84); the content flags in 0033 (Core Web Vitals promises, "performance budgets enforced", the Lighthouse step in the flagship terminal); the video loops (V01–V04 required, the owner's folder path to come).
+- **Live (15 URLs in code, the old design until the swap):** `/`, `/services`, 11 service pages from the template (the pilot R027 and batch 1: R029, R031–R034, R038, R051, R068, R070, R076), `/services/custom-coded-websites` and `/privacy`.
+- **Built before v3 and kept verbatim:** P3 analytics, consent, GTM (0021, owner setup `docs/owner/p3-tracking-setup-guide.md`) · P4 schema engine (`src/lib/schema/`, registry `docs/seo/schema-graph.md`) · the content in `src/content/**` · the CTA set's click contract (0024 as amended by 0033: phone and WhatsApp `+971 54 547 6335`, the floating WhatsApp button, the header's audit button with its WhatsApp fallback).
 - **Automation Track A (the WhatsApp agent):** the plan `docs/plans/2026-10-07-automation-pipeline.md` (decision 0027, C72), merged as docs; no website code. Deepzeta is client #1 of the n8n + Supabase stack. The owner's setup is `docs/owner/n8n-automation-setup-guide.md`; go-live only after the owner's full test. **Remind:** the team WhatsApp number for alerts.
 - **Owner items:** every manual task before launch is in `docs/owner/pre-launch-register.md`.
-- **Parked for owner sessions:** the 15+ Studio concepts, the Deepzeta Sync sales automation, the App demo. The **Designer Studio is performance-exempt** (decision 0031): `/studio` and `/studio/<slug>` carry no Lighthouse floor, page-weight ceiling or Core Web Vitals lab gate — limitless design. **Remind:** pSEO starts only after every V1 registry row is live (engine §10).
-- **Stack:** Next.js 16.3.7, React 19.3, TypeScript 6.0.3, Tailwind 4.3 (0012); motion native-first, GSAP only on non-Home pages (0004, 0005); Design Direction v2 "Signal & Depth" (0008). Domain `deepzeta.ai` (0006), brand "Deepzeta AI" (C29), entity Deepzeta Digital Solutions L.L.C. (D2), the four pillars (C6). Decisions index: `docs/decisions/README.md`.
-- **Local runs:** `.env.local` (`docs/owner/p0-setup-guide.md`); e2e and `lhci` need `NEXT_PUBLIC_SITE_URL` and `SITE_INDEXING=on` in the shell, and `.env.local` holds the real `NEXT_PUBLIC_GTM_ID` (CI has it too; e2e stubs GTM, 09 §4). Tracking names come only from the taxonomy (09 §3).
-
+- **Parked for owner sessions:** the 15+ Studio concepts (0032 is the Studio's UI-kit decision, recorded in another session), the Deepzeta Sync sales automation, the App demo. **Remind:** pSEO starts only after every V1 registry row is live (engine §10).
+- **Stack:** Next.js 16.3.7, React 19.3, TypeScript 6.0.3, Tailwind 4.3 (0012); v3 adds GSAP, Lenis, React Three Fiber (lazy), Radix, KokonutUI/Aceternity components with Motion, `knip` (0033). Domain `deepzeta.ai` (0006), brand "Deepzeta AI" (C29), entity Deepzeta Digital Solutions L.L.C. (D2), the four pillars (C6). Decisions index: `docs/decisions/README.md`.
+- **Local runs:** `.env.local` (`docs/owner/p0-setup-guide.md`); e2e needs `NEXT_PUBLIC_SITE_URL` and `SITE_INDEXING=on` in the shell, and `.env.local` holds the real `NEXT_PUBLIC_GTM_ID` (CI has it too; e2e stubs GTM, 09 §4). Tracking names come only from the taxonomy (09 §3).
 ## Working agreement
 
 1. Check whether a plan is needed (04 §4). If yes, write it short (`/plan-task`) and wait for the owner's approval; a template plan covers its copies.

@@ -1,6 +1,6 @@
 # 11 · Internationalisation & RTL Readiness
 
-> **Applies to:** layout, CSS, URLs, schema, content structure now; Arabic content after launch · **Precedence:** below 00 · **Last reviewed:** 2026-09-29
+> **Applies to:** layout, CSS, URLs, schema, content structure now; Arabic content after launch · **Precedence:** below 00 · **Last reviewed:** 2026-10-18 (§ Arabic gates, decision 0033)
 
 **Owner decision (2026-09-26):** English launches first. Arabic follows after launch, written to the standard of a **native GCC Arabic content writer, never a translation**. See `docs/decisions/0002-english-first-arabic-after-launch.md`.
 
@@ -30,8 +30,8 @@
 - hreflang with language-only codes (`en`, `ar`, `x-default` → English), generated from the same builder, reciprocity checked (08 §1).
 - Schema is generated per locale. Arabic pages never carry English schema text. Page `@id`s carry the locale through the page URL; `#organization` and `#website` stay single entities shared by both locales (08 §3 rule 6).
 - Arabic body links point to Arabic pages.
-- **English regression gate:** Arabic work must not change English titles, canonicals, content or Lighthouse scores (> 2-point drop blocks).
-- **Lighthouse per locale:** Arabic pages meet the same page-tier floors as their English partners (decision 0005).
+- **English regression gate:** Arabic work must not change English titles, canonicals or content.
+- **Lighthouse per locale:** Arabic pages get the same Lighthouse report as their English partners, for information (N1, decision 0033).
 - **Parity gate:** every English content entry has an Arabic partner by stable id (or is explicitly marked English-only).
 - **Slugs under `/ar`** (Arabic script or English) are decided in P11 from Arabic keyword research.
 

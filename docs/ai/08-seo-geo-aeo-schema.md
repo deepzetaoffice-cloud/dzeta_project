@@ -1,6 +1,6 @@
 # 08 · SEO, GEO, AEO & Structured Data
 
-> **Applies to:** every page, metadata, content structure, schema, robots, sitemap, llms files · **Precedence:** below 00 · **Last reviewed:** 2026-09-30
+> **Applies to:** every page, metadata, content structure, schema, robots, sitemap, llms files · **Precedence:** below 00 · **Last reviewed:** 2026-10-18 (§1 lengths, §6 media sitemap, §7 the SEO contract; decision 0033)
 
 SEO, GEO (AI engines) and AEO (answer engines) are services Deepzeta AI sells. The site must demonstrate them. Every rule here that can be checked by a machine is a gate ([03](03-verification-gates.md)): `check:seo`, `check:schema`, `check:links`.
 
@@ -10,10 +10,10 @@ SEO, GEO (AI engines) and AEO (answer engines) are services Deepzeta AI sells. T
 
 | Item | Rule |
 |---|---|
-| Title | Unique, primary topic first. The **full rendered title, including the brand suffix, is 50–60 characters**. The suffix ` \| {brand name}` (today ` \| Deepzeta AI`, read from the site config) is added **once**, by the root title template only; page titles never include the brand. An over-length title fails `check:seo` and is rewritten by a person, never truncated in code. |
-| Description | Unique, 140–160 characters, key point in the first 120, one concrete fact, ends with an action. Out-of-range lengths fail `check:seo`. |
+| Title | Unique, primary topic first. The **full rendered title, including the brand suffix, is 30–60 characters** (Google truncates by pixel width, so aim for 50–60). The suffix ` \| {brand name}` (today ` \| Deepzeta AI`, read from the site config) is added **once**, by the root title template only; page titles never include the brand. An over-length title fails `check:seo` and is rewritten by a person, never truncated in code. |
+| Description | Unique, 120–160 characters, answer-first: the key point in the first 120, one concrete fact, ends with an action. Out-of-range lengths fail `check:seo`. |
 | Canonical | Self-referencing absolute URL, set **by each page, never in a layout** (a layout canonical leaks the home URL onto any page that forgets its own). Built with `siteUrl()` / `absoluteUrl()` from `NEXT_PUBLIC_SITE_URL`, validated in `src/lib/env.ts`. No hostname literal anywhere in code (C27). |
-| Open Graph | title, description, url, a 1200×630 image that returns 200 (`check:seo`), `og:locale` from the locale constant, `og:type` (`website`/`article`) |
+| Open Graph | title, description, url, a 1200×630 image for **every page**, rendered in code with `next/og` from the page title and the stage gradient (no photo text overlay; the Figma media plan's U01–U15), that returns 200 (`check:seo`), `og:locale` from the locale constant, `og:type` (`website`/`article`) |
 | Twitter | `summary_large_image` |
 | Robots | Index/follow for public pages; `noindex` for thank-you, drafts, utility pages, Designer Studio concept routes (`/studio/<slug>`) and tool result views; `/api/` disallowed. Every non-production deployment (`VERCEL_ENV` ≠ `production`) also sends `X-Robots-Tag: noindex` and serves a disallow-all `robots.txt`. **Production before launch** also sends `X-Robots-Tag: noindex` until the owner sets `SITE_INDEXING=on` (the pre-launch lock, [decision 0013](../decisions/0013-pre-launch-indexing-lock.md)). Its `robots.txt` is the launch file, so crawlers can read the `noindex` (Google ignores a `noindex` it can't fetch). |
 | Alternates (after Arabic, P11) | hreflang with **language-only** codes `en` and `ar`, plus `x-default` → English, so the whole GCC is covered rather than one country. Built by one locale-aware builder; reciprocity is tested. |
@@ -171,7 +171,41 @@ What the files say (their structure and what's included) is in engine §9. **Goo
 
 ## 6. Sitemap
 
-- One `src/app/sitemap.ts`, generated from content data, with real `lastModified` values from content metadata.
+- One `src/app/sitemap.ts`, generated from content data, with real `lastModified` values from content metadata. Each entry lists its page's images and videos (from `MediaAsset`, §7): image entries for the content images, video entries for every video with its title, description, poster and duration.
 - No `priority` or `changefreq` (Google ignores them).
 - `check:seo` asserts that the sitemap's URLs equal the set of indexable built routes. Studio concept routes, tool result views and every other `noindex` route are excluded.
 - After launch, each entry gets `alternates.languages` for its Arabic partner (§1).
+
+---
+
+## 7. The SEO contract: `PageSeo` and `MediaAsset`
+
+Every page and every media file is described by typed data in `src/lib/seo/` (added in Phase C of the v3 rebuild, decision [0033](../decisions/0033-redesign-v3.md)). `check:seo` and `check:schema` fail the build when a rule breaks ([03](03-verification-gates.md) §1). Character counts are common practice; Google truncates by pixel width, not characters.
+
+**`PageSeo`** (one per route, beside its content file)
+
+| Field | Rule |
+|---|---|
+| `title` | 30–60 characters in the rendered `<title>`, format `{Topic} \| Deepzeta AI` (the suffix from the root template, §1), unique |
+| `description` | 120–160 characters, unique, answer-first (§1) |
+| `canonical` | The page's own absolute path, built with `absoluteUrl()` (§1) |
+| `ogImage` | Generated per page with `next/og`, 1200 × 630 |
+| `h1` | Exactly one H1 on the page; heading levels never skip (§2.1) |
+| `breadcrumbs` | The visible trail and its `BreadcrumbList`, word for word (§3.7); Home has none |
+| `robots` | `index` unless the route is in §1's `noindex` list |
+
+**`MediaAsset`** (one per image, video, screen recording or 3D poster; the Figma media plan, frame `63:33`, lists every asset)
+
+| Kind | Required |
+|---|---|
+| Every asset | An `id` from the media plan (P01, V01, SR01, U01, S01…), a file name in lowercase kebab-case that names place + subject + city (for example `speed-to-lead-whatsapp-notification-dubai-night`; the build adds `-1600w.avif`), width and height |
+| Image | `alt`, ≤ 125 characters, written per page and per slot, saying what the image shows in this context; or `decorative: true` (then `alt=""`). An optional visible caption |
+| Video loop | A poster (its matching photo), the photo as the fallback, `muted`, `playsInline`, a pause control when it runs longer than 5 s (13 §2), and a title and description |
+| Video with content (the founder video, a screen recording that explains) | Title, description, poster, WebVTT captions, a transcript on the page, duration and upload date, emitted as `VideoObject` (`@id` `{page URL}#video-{id}`) and listed in the sitemap |
+| 3D scene | Its poster as a `MediaAsset` image with `alt`; the scene itself is `aria-hidden` when the poster's text says the same |
+
+**Rules**
+- **Media never carries the page's facts alone.** Every claim a photo, video or scene shows is also in the HTML text (§2.11).
+- **No text in images** (13 §11); OG images are the one exception, rendered in code from the page title.
+- **Honest labels:** a screen recording of a real system is captioned "Built by Deepzeta AI"; anything illustrative is labelled "Example" (10 §3.6).
+- **Site:** `sitemap.ts` with the image and video entries (§6), `llms.txt` (§4), and hreflang-ready alternates for Arabic later (§1).

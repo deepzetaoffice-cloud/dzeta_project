@@ -1,343 +1,310 @@
 # 13 · Experience Design: Effects, Motion & Interaction
 
-> **Applies to:** every visual effect, animation, pointer/scroll/hover behaviour, 3D, glass and story graphic · **Precedence:** below 00; tokens live in [05](05-design-system.md), costs in [07](07-performance-budget.md) · **Last reviewed:** 2026-10-01
-> **Decision:** [0008](../decisions/0008-design-language-signal-and-depth.md) (Design Direction v2 "Signal & Depth") · **Surface specs:** [docs/design/](../design/README.md)
+> **Applies to:** every visual effect, animation, pointer/scroll/hover behaviour, 3D, video and story graphic · **Precedence:** below 00; tokens live in [05](05-design-system.md), loading habits in [07](07-performance-budget.md) · **Last reviewed:** 2026-10-18 (rewritten from the approved Figma motion spec, decision 0033)
+> **Source:** Figma "Deepzeta AI · Website v3" (`tYw7bSV9m4zX2vrVs7XYpE`), page Motion spec (`1:10`, frame `62:33`) · **Decision:** [0033](../decisions/0033-redesign-v3.md) · **Surface specs:** [docs/design/](../design/README.md)
 
-This file is the **only** home for effect definitions, limits, fallbacks and choreography. Other files cite effect IDs from here and never restate these rules.
+This file is the **only** home for effect definitions, triggers, fallbacks and choreography. Other files cite effect IDs from here and never restate these rules.
 
 ---
 
-## 1. The design language: Signal & Depth
+## 1. The design language: Spectrum, with diagrams
 
-**Depth is how it looks.** The site is a deep-navy space with four depth planes:
-
-| Plane | Holds |
-|---|---|
-| **Z0** Deep field | Navy, the blueprint grid, static signal glows |
-| **Z1** Content | Text and sections |
-| **Z2** Glass | Panels and cards |
-| **Z3** Signal | The pixel, CTAs, highlights |
-
-- Parallax speed and glass level follow the plane.
-- Light comes **from above**. This is direction-neutral, so LTR and RTL match.
-- On fine-pointer devices, the visitor's pointer is a second light.
-
-**Signal is how it moves.**
-- The Zeta Pixel travels through workflows, lands on CTAs, and assembles into the logo's four-pixel cluster at key moments.
-- Every motion is *trigger → action → result*, like the automations deepzeta sells.
-- The icon motion vocabulary (Pop · Drop · Stamp · Travel · Assemble, Icon Master Rules §7.3) is the motion vocabulary of the whole site.
-
-The language combines the blueprint's direction A "Signal Grid" (brand surfaces) with direction B "Control Room" (data surfaces: demos, tools, reports).
+- **Spectrum is how it looks:**
+  - a light canvas, with the logo-gradient stage behind each hero
+  - the pillar colours as the colour code
+  - bright slabs and real UAE photos and video
+  - solid violet for every action ([05](05-design-system.md) §1)
+- **The diagram language is how it explains** (direction C). Every "how it works" moment is a numbered system diagram with:
+  - mono labels
+  - a visible step list
+  - a scrubber
+  - the active step in signal orange, done steps in violet
+- **Every motion has a purpose:** to **explain**, to give **feedback**, or to show **state**. "It looks cool" is never a purpose. The purpose is written in each effect's row (§4) and in each plan's effect register (§10).
 
 ## 2. Principles
 
-1. **Responsive motion** (owner decision, 2026-09-29). Nothing moves unless the visitor scrolls, hovers, taps or focuses. There is no ambient, idle or looping animation anywhere. Stories play once, and a replay control is offered.
-2. **Wow on demand.** Heavy experiences never load on first view: WebGL, concept sites, the app demo, GSAP scenes. They start after LCP on capable devices, or when the visitor taps "Play", "Launch" or "Open".
-3. **One signature moment per viewport, plus at most two supporting effects.**
-   - A signature moment is a `glass-liquid` element, a `depth-*` scene, a `scroll-pinned-scene`, `type-letter-assemble`, or a playing `story-*`.
-   - Persistent chrome doesn't count (the header, `scroll-journey-line`).
-4. **Loud / quiet rhythm.** A calm, spacious section follows every statement section (spacing tokens in 05 §4).
-5. **The pixel marks value, progress or the current place, never decoration** (§8).
-6. **Big type is a material.** One statement headline per page (`--dz-text-statement`, 05 §3).
-7. **The final state exists as real HTML text.** Reduced motion, no-JS, AI crawlers and print all get the complete content.
-8. **Progressive enhancement.** Server-rendered content and layout come first. Effects attach afterwards and never hold content hostage.
-9. **Proof over decoration.** Where possible, the effect *is* the proof: real speed numbers, real audit data, flows that mirror real automations.
-10. **Focus parity.** Keyboard focus gets the same state as hover. Touch gets an equivalent, never a missing feature.
-11. **Reduce effects.** Visitors get a "Reduce effects" switch in the header menu and the footer.
-    - **Turned on by:** the switch itself, or any of these:
-      - `prefers-reduced-motion: reduce`
-      - `prefers-contrast: more`
-      - `forced-colors: active`
-      - `prefers-reduced-transparency: reduce` (where supported)
-      - low-end device hints: Save-Data and `deviceMemory` (Chromium-only hints)
-    - **When on:**
-      - static final states
-      - `glass-frost` instead of live blur
-      - no pointer effects
-      - no 3D motion
+1. **Purpose first.** An effect that explains nothing, confirms nothing and shows no state is cut.
+2. **Wow on demand, never in the way.** Heavy experiences (3D, pinned scenes, video, physics) load after the first paint and only in view ([07](07-performance-budget.md) §3). The content is complete without them.
+3. **One signature moment per viewport, plus at most two supporting effects.** A signature moment is a named scene in §5. Persistent chrome doesn't count (the header, `reading-progress`).
+4. **Loud / quiet rhythm.** A calm section follows every signature section, and two pinned scenes never sit back to back.
+5. **The final state exists as real HTML text.** Reduced motion, no-JS, AI crawlers and print all get the complete content.
+6. **Progressive enhancement.** Server-rendered content and layout come first. Effects attach afterwards and never hold content hostage.
+7. **Proof over decoration.** Where possible, the effect *is* the proof:
+   - this visit's real LCP (`lcp-stamp`)
+   - the real n8n flow at the end of `workflow-connect`
+   - this site's real source code (`code-page-compare`)
+   - a real recorded run of this site's checks (`terminal-replay`)
+8. **Focus parity.** Keyboard focus gets the same state as hover. Touch gets an equivalent tap state, never a missing feature.
+9. **Autoplay comes with a pause** (WCAG 2.2.2). Anything that moves on its own for more than 5 s can be paused:
+   - **Content motion has a control in its own section:** the hero rotator, the marquee, every video loop.
+   - **Ambient decoration is stopped by the Reduce effects switch:** the status pulse, the beams.
+   - Everything pauses off-screen and in a hidden tab.
+10. **Reduced motion ≠ none.** Under `prefers-reduced-motion: reduce` or the Reduce effects switch, short opacity cross-fades stay. Movement, parallax, pinning, 3D, smooth scrolling and autoplay go. Each effect's fallback is its "Reduced motion" cell.
+11. **The Reduce effects switch** sits in the footer's legal line. It is on when:
+    - the visitor turns it on (the choice is remembered)
+    - `prefers-reduced-motion: reduce`, `prefers-contrast: more`, `forced-colors: active` or `prefers-reduced-transparency: reduce` (where supported) is set
+    - Save-Data or a low `deviceMemory` is reported (Chromium-only hints)
 12. **Story arc.** Every page follows the same arc:
 
     **Hook → Pain → System → Show → Proof → Plan → Action**
 
-    - The Hook is the H1 plus the direct answer, so the answer still comes first (10 §5, 08 §2).
-    - Calm sections sit between the loud ones.
-13. **Density by page tier:**
-
-    | Tier | Effects allowed |
-    |---|---|
-    | T1 | Native CSS plus first-party JS within the caps in §7, at first load |
-    | T2 | T1 plus GSAP islands, loaded when visible |
-    | T3 | The full toolkit, including `depth-webgl` |
+    The Hook is the H1 plus the direct answer, so the answer still comes first (10 §5, 08 §2).
 
 ## 3. Hard rules for every effect
 
-1. **Animate `transform` and `opacity` only**, plus colour transitions for state changes.
-   - One named exception: the `type-outline-spotlight` ripple, which animates an SVG displacement filter (decision 0009, conflict C26).
-2. **The LCP element** (usually the H1) is visible, unclipped and in its final position at first paint. It has no entrance animation and never starts at `opacity: 0`.
-3. **Hidden start states** are declared only inside `@media (prefers-reduced-motion: no-preference)`, and inside `@supports` for scroll-driven effects. Content can never get stuck invisible.
-4. **Fallbacks:**
-   - **Scrubbed effects** (linked to scroll position) fall back to the static final state. There is no JavaScript polyfill on T1.
-   - **One-shot effects** may fall back to the one shared IntersectionObserver that adds `.is-in`.
-5. **`will-change`** only while an effect is running.
-6. **Every effect has** a light-mode variant, an RTL behaviour, and a row in the behaviour matrix (§6).
-7. **Plans cite effects.** Every plan that uses an effect cites its ID, its page tier, and its cost and mitigation (§10).
-8. **Verify items.** Anything marked **verify** in this file is checked against current browser-support data and the installed versions at build time, never from memory (02 §2).
+1. **Animate `transform`, `opacity`, `clip-path` and `filter` only**, plus colour for state changes.
+   - Never width, height, top, left or box-shadow. The accordion's `grid-template-rows` is the one named exception, because it never moves other content during reading.
+2. **UI timing:** 150–250 ms with `--dz-motion-ease-out` for buttons, chips, menus and popovers. Story scenes may run longer.
+3. **Exits are faster than entries.** Never animate from `scale(0)`: enter from 0.95 plus opacity.
+4. **Press:** everything you can press scales to `--dz-motion-scale-press` (0.97) on `:active` in 160 ms (`press-scale`).
+5. **Hover needs a pointer:** hover effects live only inside `@media (hover: hover) and (pointer: fine)`.
+6. **No motion on repeats:** keyboard-repeated actions are instant (arrow keys on sliders, rails and the compare handle; Esc).
+7. **The LCP element** (usually the H1) is visible, unclipped and in its final position at first paint. It has no entrance animation and never starts at `opacity: 0`.
+8. **Hidden start states** are declared only inside `@media (prefers-reduced-motion: no-preference)`, and only once the effect's script has run. Content can never get stuck invisible.
+9. **Off-screen work stops:** loops, videos, 3D render loops and pointer tracking pause outside the viewport and in a hidden tab.
+10. **`will-change`** only while an effect is running.
+11. **Every effect has** a reduced-motion fallback (§4), an RTL behaviour (inline-start origins mirror; the pixels never mirror), and a row in the behaviour matrix (§6).
+12. **Plans cite effects.** Every plan that uses an effect cites its ID, its purpose and its fallback (§10).
+13. **Verify items.** Anything marked **verify** in this file is checked against current browser-support data and the installed versions at build time, never from memory (02 §2).
 
 ## 4. Effects library
 
 - IDs are kebab-case, **append-only and never reused**, like the analytics taxonomy.
-- Page tiers (decision 0005): T1 Home, T2 money pages, T3 experience pages.
+- The columns are the Figma motion spec's.
+- A new effect needs a new row here first, added to Figma's Motion spec page in the same change.
 
-### 4.1 Glass
+### 4.1 Global and UI
 
-| ID | Effect | Where / limits | Fallback |
-|---|---|---|---|
-| `glass-tint` | Translucent navy fill + hairline border | Everywhere | — |
-| `glass-frost` | **Baked frost.** The frosted look comes from a shared grain/pre-blurred texture plus an inner highlight edge; no runtime blur | The default "glass", everywhere | `glass-tint` |
-| `glass-live` | `backdrop-filter` blur + saturation | Header, mega menu, modals and sheets, and ≤ 2 feature panels per viewport; never over long scrolling lists | `glass-frost` |
-| `glass-liquid` | `glass-live` + a specular rim on the top edge + a reflection sheen that follows the pointer or sweeps once on hover + edge refraction via SVG displacement where supported (**verify**: Chromium-only, and `@supports` can't detect it reliably). Refraction is a Lab-confirmed Chromium-only extra (0009) | One per view: hero proof card, mega-menu demo card, Tools "full report" panel, Studio device frame. Desktop fine-pointer only | `glass-live`, then `glass-frost` |
+| ID | Where | Purpose | Trigger | Timing · easing | Reduced motion | Build |
+|---|---|---|---|---|---|---|
+| `press-scale` | Every button, chip, card | Feedback | `:active` (pointer, or Enter/Space once) | scale 0.97 · 160 ms · ease-out; release 160 ms | Kept (no movement beyond 3%) | CSS transition on transform |
+| `hover-lift` | Service cards, door cards, concept cards | Feedback | Pointer enters (`hover: hover` only) | translateY −4 px + Elevation 2 · 220 ms · ease-out | Shadow change only | CSS |
+| `focus-ring` | Everything interactive | State | `:focus-visible` | Instant: 2 px white + 2 px `#3741FD` ring | Same | CSS |
+| `section-reveal` | Section headings, card groups | Explain | Enters the viewport once | opacity 0→1, translateY 12→0 · 400 ms · ease-out · 50 ms stagger | Opacity only, 200 ms | IntersectionObserver + CSS / GSAP |
+| `smooth-scroll` | Whole page | Feedback | Wheel, trackpad, touch | Lenis, lerp 0.1, synced with ScrollTrigger | Off: native scrolling | `lenis` |
 
-Text on any glass sits on at least the minimum tint (`--dz-glass-tint-min`, 05 §4). That tint keeps WCAG AA contrast whatever passes behind it.
+### 4.2 Header, mega menu, mobile menu, footer
 
-### 4.2 Pointer: "the visitor carries the light"
+| ID | Where | Purpose | Trigger | Timing · easing | Reduced motion | Build |
+|---|---|---|---|---|---|---|
+| `header-condense` | Header | State | Scroll past 80 px | The pill narrows and shortens via transform/clip · 250 ms · ease-out | Instant swap | GSAP ScrollTrigger + CSS |
+| `reading-progress` | Scrolled header | State | Scroll position | scaleX 0→1 of the violet line, scroll-linked, linear | Shown, static at the current value | CSS scroll-timeline / GSAP |
+| `status-pulse` | Status island dot | State | The agent is live | Opacity 1→0.4→1 · 2 s loop | Off (solid dot) | CSS keyframes |
+| `status-expand` | Status island | Feedback | Hover or focus | Width + a second line in · 220 ms · ease-out | Opacity only | CSS |
+| `mega-menu-open` | Header → mega menu | State | Click or Enter on Services (never hover-intent alone) | opacity + translateY 8→0 · 250 ms · ease-out, origin at the trigger; Esc closes instantly | Opacity 150 ms | Radix Navigation Menu + CSS |
+| `mega-preview-swap` | Mega menu preview rail | Explain | Hover or focus a pillar column | Poster cross-fade 220 ms, then the pillar loop plays muted | Instant poster swap, no autoplay | CSS + `<video>` |
+| `mobile-menu-sheet` | Mobile header → full-screen menu | State | Tap Menu | translateY −4% → 0 + opacity · 300 ms · ease/drawer; links stagger 30 ms | Opacity only | Native `<dialog class="dz-sheet">` + CSS (C83) |
+| `accordion` | FAQ, the mobile menu's pillars | State | Click, tap or Enter | grid-template-rows 0fr→1fr · 220 ms · ease-out; the + / − icon cross-fades | Instant | Radix Accordion + CSS |
+| `beams` | Footer audit panel | Explain: points to the audit CTA | The panel in view | Beams fall 3–5 s linear, burst on the edge | Off (static beams) | Aceternity Background Beams With Collision |
+| `wordmark-spotlight` | Footer giant wordmark | Feedback | Pointer over (`hover: hover`) | A radial mask of the logo gradient follows the cursor, spring 0.5 s / bounce 0 | Static outline | Aceternity Text Hover Effect |
 
-**When it runs:** only under `(hover: hover) and (pointer: fine)`, and only while a target is in view. It stops when the tab is hidden.
+### 4.3 Home: signature moments
 
-**How it works:** one shared controller.
-- Writes are batched with requestAnimationFrame.
-- Rects are cached, so there are no layout reads per move.
-- No React state per move.
-- It moves pre-painted layers with `translate` inside an `overflow: clip` parent, writing only to that layer.
+| ID | Where | Purpose | Trigger | Timing · easing | Reduced motion | Build |
+|---|---|---|---|---|---|---|
+| `hero-word-rotator` | Hero headline | Explain | Autoplay; pauses on hover/focus, off-screen, in a hidden tab, and by its pause button | Dwell 2.4 s · letters enter rotateX 70°→0 + blur 8→0, 18 ms stagger, 560 ms ease-out · exit 320 ms in-out · slab morph 420 ms · sweep 900 ms · pixel burst 240 ms | Opacity cross-fade 200 ms; the slab swaps without motion | GSAP SplitText or KokonutUI TX-02 extended |
+| `background-paths` | Hero stage | Feedback | Pointer moves (`hover: hover`) | Lines part within 120 px of the cursor, spring back | Static lines | KokonutUI BG-02, recoloured |
+| `message-to-booking` | Hero 3D phone scene | Explain | Scroll-pinned ~150 vh; drag rotates the phone | 0–25% the lead drops into the stack · 25–50% the reply types in · 50–75% the slot locks · 75–100% the CRM card fills and "Team notified" lands; drag ±25° with a spring release | No pin; the final state; the phone poster image | R3F (lazy) + GSAP ScrollTrigger |
+| `pixels-to-doors` | Four doors | Explain | The section enters the viewport | The 4 logo pixels fly along curves into the 4 cards · 600 ms in-out · 80 ms stagger | Cards shown in place | GSAP MotionPath |
+| `door-tilt` | Door cards | Feedback | Pointer over (`hover: hover`) | rotateX/Y ≤ 6° toward the pointer + glare, spring (stiffness 150, damping 18) | None | CSS 3D + small JS |
+| `door-video` | Door cards | Explain | The card in view | Poster → muted loop; pauses off-screen; a pause control | Poster only, no autoplay | `<video>` + IntersectionObserver |
+| `problem-reveal` | "Sound familiar?" rows | Explain | Hover or tap a row | The "With Deepzeta AI" side wipes in (clip-path) 420 ms ease-out; a strike-through draws on "Today" | Both sides shown | CSS clip-path |
+| `workflow-connect` | "See an automation run" | Explain | Scroll-pinned ~200 vh | Nodes appear 01→05; connectors draw in signal orange; the step list and scrubber sync; ends by cross-fading into the real n8n recording | No pin; every node and the recording shown | GSAP ScrollTrigger (+ R3F optional) |
+| `exploded-layers` | "This page is the proof" | Explain | Scroll; the "How AI reads this page" toggle | The Design, Code, Schema and SEO layers separate in depth; the toggle swaps the section into the AI view in 220 ms | Layers flat; toggle instant | R3F planes (lazy) or CSS 3D |
+| `lcp-stamp` | "This page is the proof" | State | After load (PerformanceObserver) | This visit's real LCP counts in over 600 ms ease-out; never a promised score (10 §3.7) | The value appears without counting | JS |
+| `industry-rail` | "Built for your industry" | Explain | Desktop: vertical scroll drives the rail (pinned); mobile: swipe with momentum + snap | Photos move 0.85× inside their cards (depth parallax) | Plain horizontal scroll, no parallax | GSAP ScrollTrigger · KokonutUI CD-07 |
+| `industry-flip` | Industry cards | State | Click, tap or Enter | rotateY 180° · 560 ms · in-out; the back face lists the automations | Cross-fade 200 ms | CSS 3D |
+| `roi-count-up` | ROI calculator | Feedback | Slider drag or input | The result counts to the new value in 400 ms ease-out (tabular figures); the slider fill sloshes (spring); arrow keys update instantly | Instant numbers | KokonutUI IN-07 + JS |
+| `marquee` | Platform strip | Explain | Always; pauses on hover, focus and its pause button | A linear loop, 40 s per cycle | A static wrapped list | CSS |
 
-**Two notes:**
-- `passive` has no effect on `pointermove`.
-- INP doesn't count pointermove, but work done there can delay the next tap.
+### 4.4 Other pages
 
-| ID | Effect | Where |
-|---|---|---|
-| `pointer-spotlight` | A soft light layer follows the pointer inside a card | Service cards, Home doors, tool panels |
-| `pointer-magnet` | Drifts ≤ `--dz-magnet-max` toward the pointer, snaps back with `--dz-ease-pop` | Primary CTA and a few key controls |
-| `pointer-tilt` | 3D tilt ≤ `--dz-tilt-max`, with an opposing glare layer | Showcase and feature cards |
-| `pointer-grid-wake` | The blueprint grid brightens near the pointer, and the brightened lines carry the signal gradient (a gradient layer masked to the grid lines, moved by counter-transform) | Hero, chapter openers |
+| ID | Where | Purpose | Trigger | Timing · easing | Reduced motion | Build |
+|---|---|---|---|---|---|---|
+| `dot-field` | Services hub hero | Feedback | The pointer; hovering a pillar chip | Dots near the cursor light; the chip lights its pillar's dots | Static dots | KokonutUI BG-01 |
+| `macbook-scroll` | Custom-coded websites hero | Explain | Scroll | The lid opens 75°→0° and scales up; this site fades in on the screen | The laptop open, static | Aceternity Macbook Scroll / the R3F flagship laptop |
+| `code-page-compare` | Code ↔ Page | Explain | Drag; ← → move 5% instantly | A clip-path inset follows the handle; one 1.2 s hint on first view | No hint; the handle still works | Aceternity Compare |
+| `terminal-replay` | "Watch this site run its own checks" | Explain | Play | Lines type at the recorded timing; play, pause, scrub | The full log shown | JS (`build-run.ts` data) |
+| `drape` | Privacy hero | Feedback | The pointer pushes the cloth | A gentle cloth simulation | Static pleats | KokonutUI BG-06 (WebGL, lazy) |
+| `shape-throw` | 404 | Feedback | Drag and throw (velocity > 0.11 throws) | Physics with friction; the chips are links | Static; the links work | KokonutUI BG-03 |
 
-On touch devices none of these run; the static state is complete on its own.
+### 4.5 Retired IDs (Signal & Depth, decision 0008)
 
-### 4.3 Hover (one behaviour per element type)
+Retired from the site's own surfaces by decision 0033 and **never reused**. They stay listed so older plans still pass `check:effects`. A new plan cites only §4.1–§4.4.
 
-Hover effects run 150–250 ms and use the easing tokens. `:focus-visible` triggers the same state. Single passes that travel or sweep may take longer, as the Design Lab set them (0009, recorded in 0019): `hover-pixel-hop` 450 ms plus up to 162 ms of stagger, the `hover-charge` sheen 700 ms, the `glass-liquid` sheen 1,100 ms. None blocks input.
+The Designer Studio's concept sites have their own looks, so their plans may still cite these IDs. A surface not yet redesigned (Deepzeta Sync, the automation page, the app demo) gets v3 IDs when its Figma design is approved.
 
-| ID | Element | Behaviour |
-|---|---|---|
-| `hover-underline` | Text link | The underline draws from inline-start (`scaleX`; the origin mirrors in RTL) |
-| `hover-charge` | Primary CTA | A light bead follows the pointer across the inside of the button, an inner rim light fades in, a sheen crosses once, the arrow nudges and the pixel pops. On touch: the sheen on tap |
-| `hover-outline` | Secondary button | A gradient outline fades in; the label shifts 4 px |
-| `hover-card` | Service card | `pointer-spotlight` + the Tier 2 icon story + a 4 px lift |
-| `hover-window` | Showcase card | The image scales inside a fixed frame + `pointer-tilt` + the caption rises |
-| `hover-pixel-hop` | Nav item | The current-place marker is a miniature of the logo's four-pixel cluster (upright, exact gradients). It travels to the hovered item, and its small pixels settle a beat later |
-| `hover-guide-line` | List or table row | A pillar-colour line grows at inline-start |
-| `hover-glow` | Icon-only button | The icon plays its own micro-story and its pixel glows 0 → 0.6 (Icon Master Rules §4.4 and §7; drawn to the approved icon prototype). **The social letter tiles** (C49), which have no pixel: the tile lifts 2 px, a glow in the platform's own colour fades 0 → 0.6, a sheen crosses once and the letter pops; TikTok's T splits into its cyan and red. Static under Reduce effects |
-| `hover-peek` | Editorial image | Shifts ≤ 8 px toward the pointer |
-
-### 4.4 Scroll
-
-**Technique**
-- Native CSS scroll-driven animations (`animation-timeline: view()` / `scroll()`), inside `@supports`.
-- **verify** support. At the time of writing: Chromium and Safari 26+; Firefox only behind a flag.
-- Declare `animation-timeline` **after** the `animation` shorthand, because the shorthand resets it.
-- GSAP ScrollTrigger only on T2/T3, and only when native CSS can't express the effect.
-- **No scroll-jacking, no smooth-scroll libraries** (decision 0004).
-
-| ID | Effect | Limits |
-|---|---|---|
-| `scroll-reveal` | Rise 24 px + fade in, once | The default for sections |
-| `scroll-parallax` | Z0/Z2 layers move at their plane's speed, ≤ ±60 px | Images and decoration only; body text never moves while being read |
-| `scroll-scale-dock` | A statement or image changes scale as it reaches the reading position | — |
-| `scroll-assemble` | Parts fly in on 35° paths and lock into place | Uses the "Assemble" vocabulary |
-| `scroll-pinned-scene` | A native `position: sticky` scene whose story scrubs with scroll | See the pinned-scene rules below |
-| `scroll-drift` | A row moves only while the visitor scrolls | Replaces marquees |
-| `scroll-journey-line` | A page-progress line on the inline-start edge, with a travelling pixel that lands on the footer CTA | Sitewide chrome |
-| `scroll-signal-beams` | Beams run once along the grid lines when a chapter enters, then land | Once per chapter, never a loop (confirmed in 0009) |
-
-**`scroll-pinned-scene` rules**
-- At most 1 per page on T1/T2, and ≤ 250vh long.
-- Ancestors use `overflow: clip` (never `hidden` or `auto`) and no `content-visibility`.
-- Use `svh`/`dvh` units.
-- Unpins on short viewports, at high zoom, and when Reduce effects is on.
-- Every step is reachable by keyboard, and anchor links land on a step start.
-
-### 4.5 Kinetic type
-
-**Rules**
-- Text is split on the server (0 client JS), at **word** level by default.
-- The accessible name stays one plain text source. Never add a duplicated visually-hidden copy; crawlers would read it twice.
-- Split spans are verified with VoiceOver, NVDA and TalkBack (**verify**).
-- Arabic: word-level splitting only, and no letter-spacing (11 §1).
-- One kinetic statement per viewport.
-- Never on body text; never an entrance animation on the LCP element.
-
-| ID | Effect | Limits |
-|---|---|---|
-| `type-line-rise` | Lines rise from a mask | — |
-| `type-word-stagger` | Words arrive in sequence | ≤ 12 words, ≤ 600 ms |
-| `type-letter-assemble` | Letters fly in on 35° paths | One per page, ≤ 24 characters, Latin only |
-| `type-scroll-highlight` | Words brighten from mist to white as they cross the reading line | An opacity cross-fade of two layers, not a colour animation |
-| `type-outline-fill` | Outline text cross-fades to the `--dz-grad-zeta` fill | Built as SVG text, so it stays sharp at any size |
-| `type-outline-spotlight` | The Designer Studio hero word, filled with the zeta gradient. A frosted-glass lens follows the pointer. The letter edges ripple a few pixels toward the direction the pointer moves (a "water touch"), then settle. The word underneath drifts its gradient slightly | Studio hero only; fine pointer only; static gradient word otherwise. The ripple is the one paint-based exception (§3) |
-
-### 4.6 3D
-
-| ID | Effect | Where |
-|---|---|---|
-| `depth-css` | CSS 3D transforms: tilt planes, perspective-stacked glass, device frames, the laptop lid, pixel cubes | Everywhere |
-| `depth-layered` | In-house renders (AVIF/WebP) split into 2–3 depth layers, moved by pointer or scroll ("fake 3D") | Everywhere, within the image budget |
-| `depth-webgl` | Real-time WebGL (05 §5 rule 5) | T3 only; see the rules below |
-
-**`depth-webgl` rules**
-- Gated on the device: WebGL2, device hints, Save-Data, and Reduce effects.
-- Render-on-demand; stops when idle or off-screen.
-- Starts on the first real input, because shader compilation is a long task.
-- Uses an SVG/CSS poster, so it can never be the LCP element.
-- **Never used for brand marks** (the logo, the pixel, the cluster).
-
-### 4.7 Tactile
-
-| ID | Effect |
+| ID | Was |
 |---|---|
-| `touch-press` | `scale(.97)` while pressed (**verify** how iOS handles `:active`) |
-| `touch-stamp` | Success confirmation (form sent, slot booked), with `--dz-ease-pop` |
-| `touch-snap` | Toggles and sliders overshoot slightly |
-| `touch-nudge` | Error: ±4 px over 240 ms; a colour change only when Reduce effects is on |
-| `touch-haptic` | A 10 ms vibration on key confirmations, after a user gesture, where supported (**verify**: Android Chromium). Never the only feedback. Confirmed in 0009 |
+| `glass-tint` | Translucent navy fill + hairline |
+| `glass-frost` | Baked frost texture |
+| `glass-live` | Live `backdrop-filter` blur |
+| `glass-liquid` | Live glass + rim, sheen and refraction |
+| `pointer-spotlight` | A light layer following the pointer in a card |
+| `pointer-magnet` | A CTA drifting toward the pointer |
+| `pointer-tilt` | A 3D tilt with glare (now `door-tilt`) |
+| `pointer-grid-wake` | The blueprint grid brightening near the pointer |
+| `hover-underline` | A link underline drawn from inline-start |
+| `hover-charge` | The primary CTA's light bead and sheen |
+| `hover-outline` | The secondary button's gradient outline |
+| `hover-card` | The service card's spotlight, icon story and lift (now `hover-lift`) |
+| `hover-window` | The showcase card's image scale and tilt |
+| `hover-pixel-hop` | The nav's travelling cluster marker |
+| `hover-guide-line` | A pillar line at a row's inline-start |
+| `hover-glow` | An icon button's micro-story and glow |
+| `hover-peek` | An editorial image shifting toward the pointer |
+| `scroll-reveal` | Rise and fade once (now `section-reveal`) |
+| `scroll-parallax` | Plane-speed parallax |
+| `scroll-scale-dock` | A statement scaling into place |
+| `scroll-assemble` | Parts flying in on 35° paths |
+| `scroll-pinned-scene` | A sticky scene scrubbed by scroll |
+| `scroll-drift` | A row moving while the visitor scrolls |
+| `scroll-journey-line` | The page-progress line and its pixel |
+| `scroll-signal-beams` | Beams running once along the grid |
+| `type-line-rise` | Lines rising from a mask |
+| `type-word-stagger` | Words arriving in sequence |
+| `type-letter-assemble` | Letters flying in on 35° paths |
+| `type-scroll-highlight` | Words brightening at the reading line |
+| `type-outline-fill` | Outline text filling with the zeta gradient |
+| `type-outline-spotlight` | The Studio hero word's lens and ripple |
+| `depth-css` | CSS 3D planes and device frames |
+| `depth-layered` | Renders split into depth layers |
+| `depth-webgl` | Real-time WebGL |
+| `touch-press` | Press scale (now `press-scale`) |
+| `touch-stamp` | A success stamp |
+| `touch-snap` | Toggles overshooting |
+| `touch-nudge` | An error nudge |
+| `touch-haptic` | A 10 ms vibration |
+| `story-flow` | A workflow diagram (now `workflow-connect`) |
+| `story-chat` | A conversation playing out |
+| `story-before-after` | A with/without slider (now `code-page-compare`, `problem-reveal`) |
+| `story-data` | Charts from the visitor's inputs |
+| `story-system-map` | A bundle as an orbit of services |
+| `story-terminal` | A typed terminal (now `terminal-replay`) |
 
-### 4.8 Story graphics (animated explainers)
+## 5. Signature moments per page
 
-| ID | Graphic | Rules |
+| Page | Signature moments (one per viewport) | Supporting |
 |---|---|---|
-| `story-flow` | Data-driven workflow diagram (trigger → AI → actions → outcome). **The pixel is the customer's request travelling through the automation.** Glass nodes, frost connectors, official monochrome platform marks | The Home version is CSS/SVG only |
-| `story-chat` | A conversation plays out: typing → reply pops → a booking card stamps → a calendar drop | deepzeta's own chat styling, never a copy of WhatsApp's interface; the official mark only as a label; labelled "Example conversation" |
-| `story-before-after` | One scenario with and without automation, or "Code ↔ Page" | A keyboard-operable slider (arrow keys), or scroll-scrubbed |
-| `story-data` | Charts and gauges | Only the visitor's own inputs (with the formula shown) or real measurements |
-| `story-system-map` | A bundle as a system: its Tier 3 icon sits in a glass hub on depth rings; the services orbit as glass chips with their Tier 2 icons; curved connectors draw in on view. Hover or focus a service: its connector lights in the signal gradient and a pixel travels from the hub to it | Connectors and the travelling pixel are transform/opacity; the draw-in plays once |
-| `story-terminal` | A typed terminal in a macOS-style window (close, minimise, maximise buttons), running longer, multi-step commands | Real commands and output only (our build, our checks, our Lighthouse CI, a tool's real steps), or labelled "Example" |
+| Home | `message-to-booking` (hero) · `pixels-to-doors` + `door-video` (four doors) · `workflow-connect` · `exploded-layers` + `lcp-stamp` · `industry-rail` + `industry-flip` · `roi-count-up` | `hero-word-rotator` (the hero's headline), `background-paths`, `marquee`, `problem-reveal`, `door-tilt`, `section-reveal` |
+| Services hub | — (a directory, calm) | `dot-field`, `hover-lift`, `accordion`, `section-reveal` |
+| Service template | — (one diagram, calm) | The C diagram (Diagram step + Scrubber, static or `section-reveal`), `hover-lift`, `accordion` |
+| Custom-coded websites | `macbook-scroll` · `code-page-compare` · `terminal-replay` | `hover-lift`, `accordion`, `section-reveal` |
+| Privacy | — | `drape` (hero background) |
+| 404 | `shape-throw` | — |
+| Every page | — | The shell: `header-condense`, `reading-progress`, `status-pulse`, `status-expand`, `mega-menu-open`, `mega-preview-swap`, `mobile-menu-sheet`, `beams`, `wordmark-spotlight`, `press-scale`, `focus-ring`, `smooth-scroll` |
 
-**Every story has:**
-- a **visible** HTML step list, so HowTo schema stays honest (08 §3)
+**The Home hero's rotator** (decision 0033 §3):
+- The H1 is one stable sentence and the accessible name. The rotating phrases are `aria-hidden` and are never part of the H1's text.
+- Only the first phrase is in the server HTML, so crawlers read the H1 alone.
+- The pause button is an Icon button with a label ("Pause the rotating words" / "Play…").
+
+**Pinned scenes** (`message-to-booking`, `workflow-connect`, `industry-rail` on desktop):
+- each ≤ 250 vh, with a calm section between two of them
+- ancestors use `overflow: clip` (never `hidden` or `auto`) and no `content-visibility`
+- `svh`/`dvh` units
+- unpinned on short viewports, at high zoom and under Reduce effects
+- every step reachable by keyboard (the scrubber's steps are buttons), and an anchor link lands on a step start
+
+**Story graphics** (every diagram, scene and replay) have:
+- a **visible** HTML step list, so HowTo stays honest (08 §3)
 - a static final state
-- Play / Pause / Replay / step controls when it runs longer than 5 s (WCAG 2.2.2), keyboard-operable
+- play, pause and step controls when they run longer than 5 s
 - a pause if the visitor scrolls away mid-play
-- its script stored as typed data in `src/content/`, written by the Content Writer
+- their script stored as typed data in `src/content/`, labelled "Example" where it isn't real
 
-## 5. Named compositions (built only from the library)
-
-| Name | Where | Built from |
-|---|---|---|
-| **The Assembly** | Home hero | `depth-css` pixel cubes + `scroll-assemble` (see below) |
-| **The Landing** | Footer finale | `scroll-journey-line` lands, then `scroll-assemble` of the cluster |
-| **Watch this page build itself** | Home §06 | `scroll-pinned-scene` + a `depth-css` laptop. Grid → wireframe → type → glass → content → schema tags → a stamp showing this visit's real LCP |
-| **AI View** | Header | X-ray mode (`docs/design/header.md`) |
-| **Page Nutrition Label** | Footer | `story-data` from this visit's real measurements (`docs/design/footer.md`) |
-| **Device Stage** | Studio | A `glass-liquid` device frame around a sandboxed iframe |
-| **Control Room board** | Automation, Deepzeta Sync | `story-flow` / `story-terminal` in direction-B styling |
-
-**How The Assembly works**
-- The four cluster pixels fly in on 35° paths on the first scroll and lock beside the headline.
-- They stay upright and are never rotated, in the exact `--dz-pixel-*` gradients, with no outlines.
-- The pointer moves them in depth only.
-- CSS only.
-
-## 6. Behaviour matrix (summary; each plan fills in rows for its own effects)
+## 6. Behaviour matrix (each plan fills in rows for its own effects)
 
 | Situation | Behaviour |
 |---|---|
-| Desktop, fine pointer | The full library, within the page tier |
-| Touch | No pointer effects; hover states become tap and focus states; scroll effects still run |
-| Low-end device or Save-Data | Reduce effects on (§2.11): no `glass-live` or `glass-liquid`, no `depth-webgl` |
-| Reduced motion / Reduce effects on | Static final states; `glass-frost`; stories show the final frame and the step list |
-| No JavaScript | Full content and layout; one-shot effects shown in their final state; scroll-driven CSS still works where supported |
-| Forced colours / more contrast | Glass becomes solid surfaces in system colours; gradients drop; focus rings stay visible |
-| RTL | Logical properties; inline-start origins mirror; the pixel and the cluster never mirror (Icon Master Rules §9) |
-| Light mode | Glass becomes frosted white; depth uses soft shadows instead of glow; darker gradient variants (05 §2) |
+| Desktop, fine pointer | The full library |
+| Touch | No hover or pointer effects; tap states instead; scroll effects and swipe rails still run; `door-tilt`, `background-paths`, `wordmark-spotlight` off |
+| Low-end device or Save-Data | Reduce effects on (§2.11): no 3D (posters), no autoplay video (posters), no smooth scroll |
+| No WebGL2 | Every R3F scene shows its poster |
+| Reduced motion / Reduce effects on | Each effect's "Reduced motion" cell; no pinning, parallax, 3D, Lenis or autoplay; short cross-fades stay |
+| No JavaScript | Full content and layout; every scene in its final state; native scrolling; the mobile menu's links reachable from the page's own navigation fallback |
+| Forced colours / more contrast | Gradients and slabs drop to system colours; borders stay visible; the focus ring stays |
+| RTL | Logical properties; inline-start origins mirror (the reading progress grows from inline-start, the compare handle's arrows swap); the pixels and the logo never mirror (Icon Master Rules §9) |
+| Hidden tab or off-screen | Loops, videos, render loops and pointer tracking pause |
 
-## 7. Byte caps (compressed)
+## 7. Build technique and loading
 
-The P2 effects feasibility gate (04 §2) confirmed these in the lab, with the shell's every T1 effect on ([decision 0019](../decisions/0019-layout-shell.md)). A budget Android phone checks the GPU side before launch (C51), and P5 re-runs the gate on the full Home.
+- **One engine per effect.**
+  - **GSAP** (ScrollTrigger, SplitText, MotionPath) runs scroll scenes and timelines. **Lenis** runs smooth scrolling, synced with ScrollTrigger through one ticker.
+  - **Motion** (`motion/react`) runs only inside copied KokonutUI and Aceternity components.
+  - **CSS** runs everything a transition or keyframe can do.
+- **Loading** ([07](07-performance-budget.md) §3):
+  - GSAP and Lenis load with the first section that needs them.
+  - R3F scenes are dynamic imports, mounted in view after the first paint.
+  - Videos load near the viewport.
+  - KokonutUI backgrounds load in view.
+- **Tokens:** timings, easings, scales and tilts come from 05 §5, read from CSS custom properties.
+- **Copied components** (N2, decision 0033): restyled to tokens and logical CSS, their icons swapped for the in-house glyphs, a reduced-motion branch added where they lack one, and no remote assets.
 
-| Item | Cap | Measured at the end of P2 |
-|---|---|---|
-| All first-party JS on Home at first load (T1 "native", decision 0008): effects, UI and, from P3, tracking | ≤ 11 KB (10 KB until P3; [decision 0021](../decisions/0021-analytics-and-consent.md)) | 10,884 B (P3 step B6): the root error page, `next/link`, the effect runtime (8,052 B at the end of P2) and the tracking runtime with the consent defaults, `trackEvent()` and the taxonomy's parameter rules |
-| Shared pointer controller | ≤ 1.5 KB | 604 B |
-| Shared IntersectionObserver (reveals, icons, CTA handoff) | ≤ 0.5 KB | 293 B |
-| Story controls (shared) | ≤ 2 KB | Not built yet |
-| Each `story-*` (data + SVG) | ≤ 6 KB | Not built yet |
-| Glass grain texture | ≤ 2 KB | 304 B |
-| Speed chip (with `web-vitals`) | Measured in its plan | — |
-| AI View, Nutrition Label, Device Stage, tools, app demo | Load on open or tap; budgeted in their own plans (07 §2) | — |
+## 8. The Zeta Pixel
 
-The controllers are measured each on its own: minified with its sibling imports kept external, then gzip level 6, the compression `next start` serves. The build merges them into one module, which is smaller.
-
-## 8. The Zeta Pixel as a sitewide marker
-
-- The pixel always marks one of three things:
+- **The pixel marks one of four things:**
   - **value:** the moment the client wins
-  - **progress:** the journey line
-  - **the current place:** the nav
+  - **progress:** the reading progress, the scrubber
+  - **the current place:** the active nav item, in violet with its pixel
+  - **a pillar:** the Pillar pixels marks
+- **It is never a cursor follower.** In `pixels-to-doors` the logo's four pixels become the four pillar doors. In `shape-throw` they are the 404's throwable shapes beside the page links.
 
-  It is never decoration and never a cursor follower.
-- The signature motifs (the Z ribbon, the four-pixel cluster, the blueprint grid) follow 05 §1.
-- The four-pixel cluster appears outside Tier 3 icons in exactly three places:
-  - **The Assembly** (decision 0008)
-  - **The Landing** (decision 0008)
-  - the miniature **current-place marker** in the navigation (decision 0009)
+## 9. Visual references and the components we copy
 
-## 9. Visual references from the owner
+The owner's references (animejs.com, media-harbour.com, 71three.com, wassimnasr.com, the Figma Moodboard) are references only. The components below may be copied in under N2 (decision 0033) and restyled. `Planning Folder/Components references/` snippets follow the same rule (06 §5.5).
 
-The files in `Planning Folder/Components references/` are **visual references only**.
-- They are never copied. They depend on `motion/react`, remote assets and a UI-kit structure, which N2 and decision 0004 rule out.
-- Each one maps to a native rebuild:
-
-| Reference | Native rebuild |
-|---|---|
-| Compare | `story-before-after`: "Code ↔ Page" on the Websites page; Home §03; Automation |
-| Mac-style terminal | `story-terminal`: Websites page, Automation, the Deepzeta Sync live log |
-| Apple card carousel | The Studio gallery + Device Stage |
-| Macbook Scroll | The `depth-css` laptop in "Watch this page build itself" |
-| Text Hover Effect | `type-outline-spotlight` (Studio hero) |
-| Background Beams With Collision | `scroll-signal-beams`, once per chapter; its endless loop is rejected |
+| Source | Component | Effect ID / component |
+|---|---|---|
+| KokonutUI | AI-02 AI Input Search | The AI input (05 §7) |
+| KokonutUI | NV-09 Status Island | `status-pulse`, `status-expand` |
+| KokonutUI | BG-01 Dot field | `dot-field` |
+| KokonutUI | BG-02 Background Paths | `background-paths` |
+| KokonutUI | BG-03 Shape throw | `shape-throw` |
+| KokonutUI | BG-06 Drape | `drape` |
+| KokonutUI | TX-02 (text rotator) | `hero-word-rotator` (or GSAP SplitText) |
+| KokonutUI | CD-07 (card rail) | `industry-rail` |
+| KokonutUI | IN-07 (slider) | `roi-count-up` |
+| Aceternity | Background Beams With Collision | `beams` |
+| Aceternity | Text Hover Effect | `wordmark-spotlight` |
+| Aceternity | Macbook Scroll | `macbook-scroll` |
+| Aceternity | Compare | `code-page-compare` |
 
 ## 10. Effect register (how plans use this file)
 
-**What every plan includes** (04 §4), when it adds or changes a visual surface:
-- the page tier
-- the effect IDs used, per section
-- for each effect: its cost and mitigation, its byte cap, and any **verify** item
+**What every plan includes** (04 §4), when it adds or changes a visual surface, as a table headed "Effect register" with an "Effect ID" column (`check:effects` reads it):
+- the section
+- the effect IDs used
+- for each effect: its purpose, its reduced-motion fallback, its build technique and how it loads, and any **verify** item
 
 **Who checks it:**
 - The Reviewer checks the diff against the register.
-- The Performance & Accessibility Auditor checks the byte caps, the per-viewport limit, the live-blur limit, the LCP rule, the Reduce effects modes and the pause controls.
+- The Accessibility & Performance Auditor checks the LCP rule, the pause controls, the reduced-motion and Reduce effects behaviour, keyboard access, and the per-viewport limit. It reports performance for information.
 
-**New effects:** a new effect needs a new ID added here first (append-only).
+## 11. Imagery and video direction
 
-## 11. Imagery direction
-
-**Three families only:**
-1. **Brand 3D renders**, made in-house and lit from above: glass pixels, Z-ribbon light, navy depth.
-2. **Product/UI screens**: real, or clearly labelled demo screens.
-3. **UAE context photography**, licensed or commissioned, with one baked "Signal grade" (navy shadows, cyan–violet highlights).
-
-**Never:**
-- robots, brains, handshakes, or generic stock (Icon Master Rules §8.2 applies to imagery too)
-- AI-generated people shown as clients or team
-
-Formats and sizes: 07 §3. Text in images: 11 §1.
+- **Photos:** UAE places, with only hands, backs, spaces and devices.
+  - Natural colour with a subtle cool violet grade. The subject is centred, so every photo crops to 3:2 (desktop) and 4:5 (mobile).
+  - The 21 V1 photos were made with ElevenLabs. Owner photos need at least 3000 px on the long edge.
+- **Video loops:** image-to-video from the matching photo, with the start frame equal to the end frame.
+  - 6 s, silent, 30 fps; `-desktop.mp4` at 1440 × 1080 and `-mobile.mp4` at 1080 × 1350. The owner makes them.
+  - The build makes the web MP4, WebM and poster. The photo is always the poster and the fallback.
+- **Screen recordings:** real systems with demo data only, 1920 × 1080 at 60 fps, 6–12 s loops. Captioned "Built by Deepzeta AI", or labelled "Example".
+- **3D scenes:** built in code, with GLB (Draco) models of about 5 MB at most and a 2400 px poster.
+- **Never:**
+  - AI-generated people shown as clients or team
+  - readable text or logos in images
+  - robots, brains, handshakes, or generic stock (Icon Master Rules §8.2 applies)
+  - a staged result passed off as real
+- **Every asset** is a `MediaAsset` with its SEO file name and per-slot alt text (08 §7). The full list is the Figma media plan (page Media plan, frame `63:33`).
 
 ## 12. Verify list (checked at build time, never from memory)
 
-- Scroll-driven animation support.
-- `backdrop-filter: url()` support.
-- `prefers-reduced-transparency` support.
-- How screen readers handle split text.
-- How iOS handles `:active`.
-- `navigator.vibrate` support.
-- Glass inside 3D transforms (engine bugs).
-- Which Core Web Vitals each browser reports (for the Nutrition Label).
-- How `content-visibility` interacts with sticky scenes and overflowing effects.
+- GSAP's licence for SplitText and MotionPath, and how SplitText keeps one accessible name (its `aria` option) with VoiceOver, NVDA and TalkBack.
+- Lenis with ScrollTrigger, `position: sticky`, anchor links (`scroll-padding` for the header) and keyboard scrolling.
+- The Content Security Policy (`security-headers.ts`, kept verbatim) against: React's inline `style` attributes from Motion and GSAP, WebGL, `blob:` URLs, and `media-src` for videos. `tracking.spec.ts` fails on any violation on Home or the review page.
+- drei's Draco decoder is self-hosted: its default fetches from gstatic.com, which the CSP and `tracking.spec.ts` ("nothing else third-party") forbid.
+- Muted inline autoplay on iOS Safari, and Low Power Mode (the poster stays).
+- `prefers-reduced-transparency` support; scroll-driven animation (`scroll-timeline`) support for `reading-progress`.
+- WebGL2 availability and the `deviceMemory` / Save-Data hints.
+- How `content-visibility` interacts with the pinned scenes.
