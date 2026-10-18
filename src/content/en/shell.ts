@@ -27,6 +27,25 @@ export const shellContent = {
   deviceSettingNote: 'Your device settings turn this on.',
   // The mega menu's rail card (header.md); shown on the review page until P7's demos ship
   demoCard: 'Try a live demo',
+  // The mega menu (header.md; Figma 37:862): its top row's label, and the preview rail's chip before
+  // the pillar's name. "Live preview" waits for the pillar's video loop; until then the poster shows.
+  megaLabel: 'Services · four pillars',
+  previewLabel: 'Preview',
+  // The status island (header.md; Figma 34:105), rendered only while the WhatsApp agent is live: its
+  // label and the line it expands to (the WhatsApp AI Agent's outcome, navigation.ts)
+  agentStatus: 'Agent online',
+  agentStatusLine: 'Instant Arabic and English replies, around the clock',
+  // The footer's "Back to top ↑" (footer.md §4); the arrow is drawn beside it
+  backToTop: 'Back to top',
+  // The audit panel's mono label and its "In one session we map" strip (footer.md §1; Figma 39:709)
+  finaleLabel: 'Free AI Automation Audit',
+  finaleMapLabel: 'In one session we map',
+  finaleMap: ['Sales', 'Operations', 'Admin'],
+  finaleMapLine: '…and show which automations pay back first. No obligation, no jargon.',
+  // The footer's contact column title (footer.md §2) and its WhatsApp line's prefix; the number itself
+  // comes from siteConfig
+  contactLabel: 'Contact',
+  whatsappLinePrefix: 'WhatsApp',
   // The footer nav's accessible name, distinct from the header's "Main" (part C)
   footerNavLabel: 'Footer',
   // Before the footer's hours (siteConfig.openingHours, facts §2), shown so P4's #organization may carry them (0019)

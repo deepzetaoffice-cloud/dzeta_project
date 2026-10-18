@@ -62,9 +62,12 @@ describe('the locked logo', () => {
 // The owner's white-background logos (C78): locked, byte for byte, as the owner supplied them on
 // 2026-10-18 (their raw bytes: .gitattributes keeps their line endings).
 const LIGHT_LOGOS = {
-  'Coded_Logo_SVG_Do_not_touch_the_code_WhiteBG.svg': '08a5932506e290a4149067d76ef573648216a4a161654685fa58b141802deaf0',
-  'DeepZeta_Logo_Full_Lockup_D_As_Symbol_WhiteBG.svg': '438ebee7c1a509ef03c12c2d68e542a7a5cf16d1e46d942931ef4385196c868a',
-  'DeepZeta_Wordmark_D_As_Symbol_Plus_Pixels_WhiteBG.svg': '83923af324a9b9ac23c3a43a01e418ee51500f0980d72183affd89327a0fd3ef',
+  'Coded_Logo_SVG_Do_not_touch_the_code_WhiteBG.svg':
+    '08a5932506e290a4149067d76ef573648216a4a161654685fa58b141802deaf0',
+  'DeepZeta_Logo_Full_Lockup_D_As_Symbol_WhiteBG.svg':
+    '438ebee7c1a509ef03c12c2d68e542a7a5cf16d1e46d942931ef4385196c868a',
+  'DeepZeta_Wordmark_D_As_Symbol_Plus_Pixels_WhiteBG.svg':
+    '83923af324a9b9ac23c3a43a01e418ee51500f0980d72183affd89327a0fd3ef',
   'DeepZeta_Wordmark_D_As_Symbol_Plus_Pixels_centered_WhiteBG.svg':
     'dcab7dc4ab9881c683c1b653ad9c390643a84a7931df2c04906355f9e72e975b',
   'DeepZeta_Wordmark_D_As_Symbol_WhiteBG.svg': '598f57ba86a0ad98afbfce589d156e598a5a8bd0a9e7eaa48edc63a84842444d',

@@ -96,8 +96,440 @@
     }
   }
 
-  /* The mobile menu (header.md): a full-screen native modal dialog (tracking.spec.ts opens
-     dialog.dz-sheet). mobile-menu-sheet: the panel moves in from −4% with an opacity fade. */
+  /* The header (header.md; Figma 36:285): fixed over the page, its pill centred in the page's width.
+     Only the pill takes the pointer. The pill's fill is its own layer, so header-condense can clip it
+     and move the contents by transform alone; the space it takes never changes (13 §3 rule 1). */
+  .dz-header {
+    --dz-dir: 1;
+    position: fixed;
+    inset-block-start: 0;
+    inset-inline: 0;
+    z-index: var(--dz-layer-header);
+    padding-block-start: var(--dz-layout-stage-inset);
+    padding-inline: max(2 * var(--dz-layout-stage-inset), env(safe-area-inset-left), env(safe-area-inset-right));
+    pointer-events: none;
+    container-type: inline-size;
+  }
+
+  [dir='rtl'] .dz-header {
+    --dz-dir: -1;
+  }
+
+  /* Mobile · top 358 × 56 → Mobile · scrolled 358 × 52; Desktop · on stage 1376 × 64 → Desktop ·
+     scrolled 1120 × 56. --dz-condense-x/-y are how far the fill's clip comes in on each side. */
+  .dz-header-pill {
+    --dz-pill-block: 3.5rem;
+    --dz-condense-x: 0rem;
+    --dz-condense-y: 0.125rem;
+    --dz-logo-scale: 0.9;
+    --dz-logo-shift: 0rem;
+    --dz-end-shift: 0rem;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--dz-space-2);
+    max-inline-size: var(--dz-layout-content-max);
+    block-size: var(--dz-pill-block);
+    margin-inline: auto;
+    margin-block-start: calc(var(--dz-layout-header-height) - var(--dz-pill-block));
+    padding-inline: var(--dz-space-4) 0.375rem;
+    pointer-events: auto;
+    isolation: isolate;
+    @variant xl {
+      --dz-pill-block: 4rem;
+      --dz-condense-x: max(0rem, (min(100cqi, var(--dz-layout-content-max)) - 70rem) / 2);
+      --dz-condense-y: 0.25rem;
+      --dz-logo-scale: 0.82;
+      --dz-logo-shift: calc(var(--dz-condense-x) - 0.25rem);
+      --dz-end-shift: calc(var(--dz-condense-x) - 0.125rem);
+      gap: var(--dz-space-6);
+      padding-inline: 1.625rem var(--dz-space-2);
+    }
+  }
+
+  /* Elevation 2 as Figma draws it (a drop shadow at half the blur), on a parent, so the clip below
+     doesn't cut it */
+  .dz-header-bg {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    filter: drop-shadow(0 var(--dz-elevation-2-y) calc(var(--dz-elevation-2-blur) / 2) var(--dz-color-shadow-ink));
+  }
+
+  .dz-header-fill {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    border: var(--dz-border-width) solid transparent;
+    border-radius: var(--dz-radius-full);
+    background-color: var(--dz-color-bg-glass-header);
+    clip-path: inset(0 round var(--dz-radius-full));
+  }
+
+  /* Desktop · light page: a page that doesn't open on a stage gets the solid pill with its hairline */
+  :root:not(:has([data-stage-hero])) .dz-header:not([data-condensed]) .dz-header-fill {
+    border-color: var(--dz-color-border-default);
+    background-color: var(--dz-color-bg-surface);
+  }
+
+  .dz-header[data-condensed] .dz-header-fill {
+    clip-path: inset(var(--dz-condense-y) var(--dz-condense-x) round var(--dz-radius-full));
+  }
+
+  .dz-header-logo {
+    transform-origin: 0 50%;
+  }
+
+  [dir='rtl'] .dz-header-logo {
+    transform-origin: 100% 50%;
+  }
+
+  .dz-header[data-condensed] .dz-header-logo {
+    translate: calc(var(--dz-dir) * var(--dz-logo-shift)) 0;
+    scale: var(--dz-logo-scale);
+  }
+
+  .dz-header[data-condensed] :is(.dz-header-cta, .dz-header-menu) {
+    translate: calc(-1 * var(--dz-dir) * var(--dz-end-shift)) 0;
+  }
+
+  .dz-header[data-condensed] .dz-header-island {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  /* Mobile · scrolled adds the WhatsApp button beside Menu (C83), where the status island was */
+  .dz-header-wa {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-end: calc(0.375rem + 2.75rem + var(--dz-space-2));
+    translate: 0 -50%;
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .dz-header[data-condensed] .dz-header-wa {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .dz-header-fill,
+  .dz-header-logo,
+  .dz-header-cta,
+  .dz-header-menu,
+  .dz-header-island,
+  .dz-header-wa,
+  .dz-progress {
+    @variant fx {
+      transition:
+        clip-path var(--dz-motion-duration-menu) var(--dz-motion-ease-out),
+        translate var(--dz-motion-duration-menu) var(--dz-motion-ease-out),
+        scale var(--dz-motion-duration-menu) var(--dz-motion-ease-out),
+        opacity var(--dz-motion-duration-menu) var(--dz-motion-ease-out),
+        visibility var(--dz-motion-duration-menu),
+        border-color var(--dz-motion-duration-menu) var(--dz-motion-ease-out),
+        background-color var(--dz-motion-duration-menu) var(--dz-motion-ease-out);
+    }
+  }
+
+  /* reading-progress: the violet line along the condensed pill's lower edge, scroll-linked */
+  .dz-progress {
+    position: absolute;
+    inset-inline: var(--dz-condense-x);
+    inset-block-end: var(--dz-condense-y);
+    block-size: 0.1875rem;
+    background-color: var(--dz-color-accent-violet);
+    transform-origin: 0 50%;
+    scale: var(--dz-progress, 0) 1;
+    opacity: 0;
+  }
+
+  [dir='rtl'] .dz-progress {
+    transform-origin: 100% 50%;
+  }
+
+  .dz-header[data-condensed] .dz-progress {
+    opacity: 1;
+  }
+
+  @supports (animation-timeline: scroll()) {
+    .dz-progress {
+      animation: dz-progress linear both;
+      animation-timeline: scroll(root block);
+    }
+  }
+
+  /* The nav items (Nav item 34:126): violet on hover with a pointer, and for the current section,
+     which also shows its Zeta pixel (13 §8) */
+  .dz-nav-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--dz-space-1);
+    min-block-size: 2.75rem;
+    padding-inline: var(--dz-space-3);
+    border-radius: var(--dz-radius-full);
+    color: var(--dz-color-text-primary);
+    font-size: var(--dz-font-size-nav);
+    font-weight: var(--dz-font-weight-semibold);
+    line-height: var(--dz-leading-ui);
+    white-space: nowrap;
+    @media (hover: hover) and (pointer: fine) {
+      &:is(a, button):hover {
+        color: var(--dz-color-text-violet);
+      }
+    }
+  }
+
+  .dz-nav-link[aria-current] {
+    color: var(--dz-color-text-violet);
+  }
+
+  .dz-nav-link[aria-current]::after {
+    content: '';
+    position: absolute;
+    inset-block-end: 0.25rem;
+    inset-inline: 0;
+    inline-size: 0.25rem;
+    block-size: 0.25rem;
+    margin-inline: auto;
+    border-radius: var(--dz-radius-xs);
+    background-color: var(--dz-color-accent-violet);
+  }
+
+  .dz-header:has(.dz-mega:popover-open) [popovertarget] {
+    color: var(--dz-color-text-violet);
+  }
+
+  .dz-header:has(.dz-mega:popover-open) .dz-mega-chevron {
+    rotate: 180deg;
+  }
+
+  .dz-mega-chevron {
+    @variant fx {
+      transition: rotate var(--dz-motion-duration-fast) var(--dz-motion-ease-out);
+    }
+  }
+
+  /* Round icon buttons (Icon button 33:239): 44 px, the hit area */
+  .dz-icon-button {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    inline-size: 2.75rem;
+    block-size: 2.75rem;
+    border: var(--dz-border-width) solid var(--dz-color-border-default);
+    border-radius: var(--dz-radius-full);
+    background-color: var(--dz-color-bg-surface);
+    color: var(--dz-color-text-primary);
+    @variant fx {
+      &:active {
+        scale: var(--dz-motion-scale-press);
+      }
+    }
+  }
+
+  .dz-icon-button-primary {
+    border-color: transparent;
+    background-color: var(--dz-color-action-primary);
+    color: var(--dz-color-text-on-color);
+  }
+
+  /* The status island (34:105): status-pulse on the dot; status-expand shows the compact island's
+     second line in a bubble under it, on hover with a pointer or on focus */
+  .dz-pulse {
+    @variant fx {
+      animation: dz-pulse var(--dz-motion-duration-dwell) var(--dz-motion-ease-in-out) infinite;
+    }
+  }
+
+  .dz-island-line {
+    position: absolute;
+    inset-block-start: calc(100% + var(--dz-space-2));
+    inset-inline-end: 0;
+    inline-size: max-content;
+    max-inline-size: 16rem;
+    padding: var(--dz-space-2) var(--dz-space-3);
+    border-radius: var(--dz-radius-md);
+    background-color: var(--dz-color-bg-surface);
+    box-shadow: var(--dz-elevation-2);
+    color: var(--dz-color-text-secondary);
+    opacity: 0;
+    pointer-events: none;
+    @variant fx {
+      translate: 0 -0.25rem;
+      transition:
+        opacity var(--dz-motion-duration-base) var(--dz-motion-ease-out),
+        translate var(--dz-motion-duration-base) var(--dz-motion-ease-out);
+    }
+  }
+
+  .dz-island:focus-visible .dz-island-line {
+    opacity: 1;
+    translate: none;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .dz-island:hover .dz-island-line {
+      opacity: 1;
+      translate: none;
+    }
+  }
+
+  /* The mega menu (37:862): a native popover under the pill, from 1,280 px. mega-menu-open: it fades
+     in and drops 8 px into place; under Reduce effects it only fades. Esc closes it at once. */
+  .dz-mega {
+    position: fixed;
+    inset: auto;
+    inset-block-start: calc(var(--dz-layout-stage-inset) + var(--dz-layout-header-height) + var(--dz-space-3));
+    inset-inline: 0;
+    inline-size: min(100% - 4 * var(--dz-layout-stage-inset), var(--dz-layout-content-max));
+    max-block-size: calc(100dvh - var(--dz-layout-stage-inset) - var(--dz-layout-header-height) - var(--dz-space-6));
+    margin: 0 auto;
+    padding: var(--dz-space-6);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    border: 0;
+    border-radius: var(--dz-radius-2xl);
+    background-color: var(--dz-color-bg-surface);
+    color: var(--dz-color-text-primary);
+    box-shadow: var(--dz-elevation-3);
+    @variant max-xl {
+      display: none;
+    }
+  }
+
+  @supports not selector(:popover-open) {
+    .dz-mega {
+      display: none;
+    }
+  }
+
+  .dz-mega:popover-open {
+    transition:
+      opacity var(--dz-motion-duration-fast) var(--dz-motion-ease-out),
+      display var(--dz-motion-duration-fast) allow-discrete,
+      overlay var(--dz-motion-duration-fast) allow-discrete;
+    @starting-style {
+      opacity: 0;
+    }
+    @variant fx {
+      transition:
+        opacity var(--dz-motion-duration-menu) var(--dz-motion-ease-out),
+        translate var(--dz-motion-duration-menu) var(--dz-motion-ease-out),
+        display var(--dz-motion-duration-menu) allow-discrete,
+        overlay var(--dz-motion-duration-menu) allow-discrete;
+      @starting-style {
+        opacity: 0;
+        translate: 0 -0.5rem;
+      }
+    }
+  }
+
+  /* mega-preview-swap: the active pillar's column takes its wash and its "All" link turns violet; its
+     door photo cross-fades in */
+  .dz-mega-col {
+    @variant fx {
+      transition: background-color var(--dz-motion-duration-base) var(--dz-motion-ease-out);
+    }
+  }
+
+  .dz-mega[data-pillar='ai'] .dz-mega-col-ai {
+    --dz-mega-all: var(--dz-color-text-violet);
+    background-color: var(--dz-color-bg-wash-ai);
+  }
+
+  .dz-mega[data-pillar='web'] .dz-mega-col-web {
+    --dz-mega-all: var(--dz-color-text-violet);
+    background-color: var(--dz-color-bg-wash-websites);
+  }
+
+  .dz-mega[data-pillar='software'] .dz-mega-col-software {
+    --dz-mega-all: var(--dz-color-text-violet);
+    background-color: var(--dz-color-bg-wash-software);
+  }
+
+  .dz-mega[data-pillar='ranking'] .dz-mega-col-ranking {
+    --dz-mega-all: var(--dz-color-text-violet);
+    background-color: var(--dz-color-bg-wash-growth);
+  }
+
+  .dz-mega-all {
+    color: var(--dz-mega-all, var(--dz-color-text-primary));
+  }
+
+  /* The C diagram language's mono labels (the mega menu's and the footer's section titles). Figma
+     draws them in signal orange, which is 2.84:1 on white; signal is for markers only (C80), so the
+     orange is the pixel beside the label and the label itself is ink/secondary (AA). */
+  .dz-mono-label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--dz-space-2);
+    color: var(--dz-color-text-secondary);
+    font-family: var(--dz-font-family-mono);
+    font-size: var(--dz-font-size-label);
+    line-height: var(--dz-leading-label);
+    letter-spacing: var(--dz-tracking-label);
+    text-transform: uppercase;
+    &::before {
+      content: '';
+      flex-shrink: 0;
+      inline-size: 0.375rem;
+      block-size: 0.375rem;
+      border-radius: var(--dz-radius-xs);
+      background-color: var(--dz-color-accent-signal);
+    }
+  }
+
+  /* The mobile menu's nav items: Display 22 px, as the Figma sheet draws them */
+  .dz-sheet-link {
+    font-family: var(--dz-font-family-display);
+    font-size: 1.375rem;
+    font-weight: var(--dz-font-weight-medium);
+    line-height: var(--dz-leading-h3);
+    letter-spacing: var(--dz-tracking-h3);
+  }
+
+  /* The pillar names and the rail's service: Heading/H4 at the size the Figma panel draws at every
+     width (20 px), so four columns fit from 1,280 px */
+  .dz-mega-title {
+    font-size: 1.25rem;
+    font-weight: var(--dz-font-weight-bold);
+    line-height: var(--dz-leading-h4);
+    letter-spacing: var(--dz-tracking-h4);
+  }
+
+  .dz-mega-item {
+    color: var(--dz-color-text-primary);
+    @media (hover: hover) and (pointer: fine) {
+      &:is(a):hover {
+        color: var(--dz-color-text-violet);
+      }
+    }
+  }
+
+  .dz-mega-item-muted {
+    color: var(--dz-color-text-secondary);
+  }
+
+  .dz-mega-preview {
+    opacity: 0;
+    @variant fx {
+      transition: opacity var(--dz-motion-duration-base) var(--dz-motion-ease-out);
+    }
+  }
+
+  .dz-mega[data-pillar='ai'] [data-preview='ai'],
+  .dz-mega[data-pillar='web'] [data-preview='web'],
+  .dz-mega[data-pillar='software'] [data-preview='software'],
+  .dz-mega[data-pillar='ranking'] [data-preview='ranking'] {
+    opacity: 1;
+  }
+
+  /* The mobile menu (header.md; Figma 38:583): a full-screen native modal dialog on the stage gradient
+     with a soft glow (tracking.spec.ts opens dialog.dz-sheet). mobile-menu-sheet: the panel moves in
+     from −4% with an opacity fade. The CTA bar stays pinned at the bottom. */
   .dz-sheet {
     position: fixed;
     inset: 0;
@@ -109,9 +541,11 @@
     padding: 0;
     padding-inline: max(env(safe-area-inset-left), env(safe-area-inset-right));
     border: 0;
-    background-color: var(--dz-color-bg-canvas);
-    color: var(--dz-color-text-primary);
+    background-color: var(--dz-color-bg-stage-2);
+    background-image: var(--dz-grad-stage);
+    color: var(--dz-color-text-on-color);
     overflow-y: auto;
+    overscroll-behavior: contain;
     @variant fx {
       transition:
         display var(--dz-motion-duration-menu) allow-discrete,
@@ -124,13 +558,39 @@
   }
 
   .dz-sheet-panel {
+    position: relative;
+    display: flex;
+    flex-direction: column;
     min-block-size: 100%;
-    padding-block-end: max(var(--dz-space-6), env(safe-area-inset-bottom));
     @variant fx {
       transition:
         opacity var(--dz-motion-duration-menu) var(--dz-motion-ease-drawer),
         translate var(--dz-motion-duration-menu) var(--dz-motion-ease-drawer);
     }
+  }
+
+  .dz-sheet-panel::before {
+    content: '';
+    position: absolute;
+    inset-block-start: -6.25rem;
+    inset-inline-start: -7.5rem;
+    inline-size: 22.5rem;
+    block-size: 18.75rem;
+    border-radius: var(--dz-radius-full);
+    background-image: radial-gradient(closest-side, var(--dz-p-glow-white-55), transparent);
+    pointer-events: none;
+  }
+
+  .dz-sheet-scroll {
+    position: relative;
+    flex: 1;
+    padding-block-start: max(var(--dz-space-2), env(safe-area-inset-top));
+  }
+
+  .dz-sheet-bar {
+    position: sticky;
+    inset-block-end: 0;
+    padding-block-end: max(var(--dz-space-6), env(safe-area-inset-bottom));
   }
 
   .dz-sheet:not([open]) {
@@ -153,6 +613,235 @@
         translate: 0 -4%;
       }
     }
+  }
+
+  /* The mobile menu's pillars (accordion): glass cards over the stage; the open one turns white.
+     C85: the names are large bold white text, so the glass fill stays. */
+  .dz-accordion {
+    padding: var(--dz-space-4);
+    border: var(--dz-border-width) solid var(--dz-color-border-on-color);
+    border-radius: var(--dz-radius-lg);
+    background-color: var(--dz-color-bg-glass-on-color);
+    color: var(--dz-color-text-on-color);
+    @variant fx {
+      interpolate-size: allow-keywords;
+      transition:
+        background-color var(--dz-motion-duration-base) var(--dz-motion-ease-out),
+        color var(--dz-motion-duration-base) var(--dz-motion-ease-out);
+      &::details-content {
+        block-size: 0;
+        overflow-y: clip;
+        transition:
+          block-size var(--dz-motion-duration-base) var(--dz-motion-ease-out),
+          content-visibility var(--dz-motion-duration-base) allow-discrete;
+      }
+      &[open]::details-content {
+        block-size: auto;
+      }
+    }
+  }
+
+  .dz-accordion[open] {
+    border-color: transparent;
+    background-color: var(--dz-color-bg-surface);
+    color: var(--dz-color-text-primary);
+  }
+
+  /* Buttons beside the audit CTA (Button 33:213): Secondary on white, and On colour over the stage.
+     C85: On colour's labels are small white text, so it keeps the 1.5 px border and drops the glass. */
+  .dz-button-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--dz-space-2);
+    min-block-size: 2.75rem;
+    padding-inline: var(--dz-space-3);
+    border: var(--dz-border-width-strong) solid var(--dz-color-border-default);
+    border-radius: var(--dz-radius-full);
+    background-color: var(--dz-color-bg-surface);
+    color: var(--dz-color-text-primary);
+    font-size: var(--dz-font-size-button-m);
+    font-weight: var(--dz-font-weight-bold);
+    line-height: var(--dz-leading-ui);
+    white-space: nowrap;
+  }
+
+  .dz-button-on-color {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--dz-space-3);
+    min-block-size: 3.5rem;
+    padding-inline: var(--dz-space-6);
+    border: var(--dz-border-width-strong) solid var(--dz-color-border-on-color);
+    border-radius: var(--dz-radius-full);
+    color: var(--dz-color-text-on-color);
+    font-size: var(--dz-font-size-button-l);
+    font-weight: var(--dz-font-weight-bold);
+    line-height: var(--dz-leading-ui);
+    white-space: nowrap;
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        border-color: var(--dz-color-text-on-color);
+      }
+    }
+  }
+
+  /* The footer's audit panel (39:672): its heading, the CTA's on-stage rim, the glow and the beams */
+  .dz-finale-heading {
+    font-family: var(--dz-font-family-display);
+    font-size: 2.125rem;
+    font-weight: var(--dz-font-weight-medium);
+    line-height: var(--dz-leading-h2);
+    letter-spacing: var(--dz-tracking-h2);
+    @variant md {
+      font-size: 2rem;
+    }
+  }
+
+  .dz-finale-cta {
+    border: var(--dz-border-width-strong) solid var(--dz-color-border-on-color);
+  }
+
+  .dz-finale-glow {
+    position: absolute;
+    inset-block-start: -8.75rem;
+    inset-inline-start: -7.5rem;
+    inline-size: 31.25rem;
+    block-size: 21.25rem;
+    border-radius: var(--dz-radius-full);
+    background-image: radial-gradient(closest-side, var(--dz-p-glow-white-55), transparent);
+    opacity: 0.6;
+  }
+
+  /* beams (Aceternity Background Beams With Collision, in CSS): each ray falls the panel's height and
+     bursts on its edge, only while the panel is in view; still, they rest where Figma draws them */
+  .dz-beam {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: var(--dz-beam-at);
+    inline-size: 0.125rem;
+    @variant lg {
+      inset-inline-start: var(--dz-beam-at-lg);
+    }
+  }
+
+  .dz-beam-ray {
+    position: absolute;
+    inset-inline: 0;
+    inset-block-start: var(--dz-beam-top);
+    block-size: calc(var(--dz-beam-length) * 100%);
+    background-image: linear-gradient(
+      to bottom,
+      transparent,
+      color-mix(in srgb, var(--dz-color-text-on-color) 70%, transparent)
+    );
+  }
+
+  .dz-beam-burst {
+    position: absolute;
+    inset-block-end: -0.4375rem;
+    inset-inline-start: 50%;
+    inline-size: 2.875rem;
+    block-size: 0.875rem;
+    margin-inline-start: -1.4375rem;
+    border-radius: var(--dz-radius-full);
+    background-image: radial-gradient(closest-side, var(--dz-p-glow-white-55), transparent);
+    opacity: 0;
+  }
+
+  .dz-beam[data-burst] .dz-beam-burst {
+    opacity: 1;
+  }
+
+  .dz-finale {
+    @variant fx {
+      & .dz-beam-ray {
+        inset-block-start: 0;
+        animation: dz-beam-fall var(--dz-beam-duration) linear var(--dz-beam-delay) infinite paused;
+      }
+      & .dz-beam-burst {
+        opacity: 0;
+        animation: dz-beam-burst var(--dz-beam-duration) linear var(--dz-beam-delay) infinite paused;
+      }
+      &[data-inview] :is(.dz-beam-ray, .dz-beam-burst) {
+        animation-play-state: running;
+      }
+    }
+  }
+
+  /* The giant wordmark (39:881): an outline across the panel; wordmark-spotlight fills it with the
+     logo gradient under a fine pointer, in a soft circle that eases after the cursor */
+  .dz-footer-panel {
+    container-type: inline-size;
+  }
+
+  .dz-wordmark {
+    display: grid;
+    font-family: var(--dz-font-family-display);
+    font-size: min(17.5cqi, 14.75rem);
+    font-weight: var(--dz-font-weight-semibold);
+    line-height: 1;
+    letter-spacing: -0.06em;
+    text-align: center;
+    user-select: none;
+    /* positioned, so the three layers paint in order (the outline's opacity would lift it above) */
+    & > * {
+      position: relative;
+      grid-area: 1 / 1;
+    }
+    & > *::before {
+      content: attr(data-word);
+    }
+    @variant fx {
+      @media (hover: hover) and (pointer: fine) {
+        transition:
+          --dz-spot-x var(--dz-motion-duration-exit) var(--dz-motion-ease-out),
+          --dz-spot-y var(--dz-motion-duration-exit) var(--dz-motion-ease-out);
+        &[data-lit] .dz-wordmark-fill {
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  /* The variable font's contours overlap inside each letter, so the stroke is drawn twice as wide and
+     a fill in the panel's colour covers its inner half and those overlaps: only a clean outline shows */
+  .dz-wordmark-outline {
+    color: transparent;
+    -webkit-text-stroke: calc(2 * var(--dz-border-width)) var(--dz-color-accent-violet);
+    opacity: 0.35;
+  }
+
+  .dz-wordmark-knock {
+    color: var(--dz-color-bg-surface);
+  }
+
+  .dz-wordmark-fill {
+    color: transparent;
+    background-image: var(--dz-grad-logo);
+    background-clip: text;
+    mask-image: radial-gradient(circle at var(--dz-spot-x) var(--dz-spot-y), black, transparent 25%);
+    opacity: 0;
+    @variant fx {
+      transition: opacity var(--dz-motion-duration-base) var(--dz-motion-ease-out);
+    }
+  }
+
+  @media (forced-colors: active) {
+    .dz-wordmark-outline {
+      -webkit-text-stroke-color: CanvasText;
+    }
+  }
+
+  /* <main> keeps the floating header's space clear, unless the page opens on a hero stage, which
+     holds the header inside its own top (SiteShell, data-stage-hero) */
+  .dz-main {
+    padding-block-start: calc(var(--dz-layout-stage-inset) + var(--dz-layout-header-height));
+  }
+
+  .dz-main:has(> [data-stage-hero]) {
+    padding-block-start: 0;
   }
 
   /* The sticky CTA bar (conversion-path.md), below 1,280 px: shown (data-shown, src/lib/fx/cta.ts)
@@ -383,5 +1072,64 @@
   scroll-padding-block-end: calc(var(--dz-consent-height) + var(--dz-focus-width) + 2 * var(--dz-focus-offset));
   & body {
     padding-block-end: var(--dz-consent-height);
+  }
+}
+
+/* The registered properties and keyframes the shell's effects use (the components above) */
+@property --dz-spot-x {
+  syntax: '<percentage>';
+  inherits: true;
+  initial-value: 50%;
+}
+
+@property --dz-spot-y {
+  syntax: '<percentage>';
+  inherits: true;
+  initial-value: 50%;
+}
+
+@keyframes dz-progress {
+  from {
+    scale: 0 1;
+  }
+  to {
+    scale: 1 1;
+  }
+}
+
+@keyframes dz-pulse {
+  50% {
+    opacity: 0.4;
+  }
+}
+
+@keyframes dz-beam-fall {
+  0% {
+    translate: 0 -100%;
+    opacity: 1;
+  }
+  92% {
+    translate: 0 calc((1 / var(--dz-beam-length) - 1) * 100%);
+    opacity: 1;
+  }
+  100% {
+    translate: 0 calc((1 / var(--dz-beam-length) - 1) * 100%);
+    opacity: 0;
+  }
+}
+
+@keyframes dz-beam-burst {
+  0%,
+  90% {
+    opacity: 0;
+    scale: 0.6;
+  }
+  95% {
+    opacity: 1;
+    scale: 1;
+  }
+  100% {
+    opacity: 0;
+    scale: 1.3;
   }
 }

@@ -13,7 +13,9 @@ import { shellContent } from '@/content/en/shell';
 // - The consent banner follows it, shown only while a European visitor hasn't chosen (C52): first in
 //   the reading order after the skip link, which still jumps past it to <main>.
 // - <main> takes focus from the skip link (tabIndex -1); it's no control, so it shows no ring. It fills
-//   at least the first screen below the header, so the footer always starts below the fold.
+//   at least the first screen, so the footer always starts below the fold. The header floats over the
+//   page: <main> keeps its space clear (dz-main), unless the page opens on a hero stage, which holds
+//   the header inside its top (data-stage-hero).
 // - The sticky bar and the float come last, so they're the last tab stops while they show.
 
 export type SiteShellProps = { review?: boolean; children: ReactNode };
@@ -29,7 +31,7 @@ export function SiteShell({ review = false, children }: SiteShellProps) {
       </a>
       <ConsentBanner />
       <SiteHeader review={review} />
-      <main id="main" tabIndex={-1} className="min-h-[calc(100svh-var(--dz-layout-header-height))] focus:outline-none">
+      <main id="main" tabIndex={-1} className="dz-main min-h-svh focus:outline-none">
         {children}
       </main>
       <SiteFooter review={review} />

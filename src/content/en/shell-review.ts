@@ -7,7 +7,7 @@ export const shellReviewContent = {
   banner: 'Review build: links are placeholders',
   heading: 'Shell review',
   intro:
-    'This page shows the header, the menus, the footer and the display preferences with every item on. Scroll it to see the glass pass over light and dark content.',
+    'This page shows the header, the mega menu, the mobile menu, the status island and the footer with every item on. Scroll it to see the header condense and its reading progress run.',
   // The icons drawn in P2, for the owner's verdict (plan K6). Names and "the pixel is" come from the
   // icon registry.
   icons: {
@@ -18,17 +18,17 @@ export const shellReviewContent = {
     interfaceHeading: 'Interface icons',
     interfaceLabels: { chevron: 'Chevron (opens below)', 'external-link': 'External link (new tab)' },
   },
-  // Alternating themes, so the header's glass is seen over both.
+  // Alternating surfaces, so the header's pill is seen over both.
   sections: [
     {
       theme: 'light',
       heading: 'Light section',
-      body: 'A light section under the navy header. The glass must keep the header readable over it.',
+      body: 'A section on the canvas. The header pill stays readable over it.',
     },
     {
       theme: 'dark',
-      heading: 'Dark section',
-      body: 'A dark section. The header’s edge and highlight separate it from the page.',
+      heading: 'Muted section',
+      body: 'A section on the muted surface. The pill’s shadow separates it from the page.',
     },
     {
       theme: 'light',
@@ -37,7 +37,7 @@ export const shellReviewContent = {
     },
     {
       theme: 'dark',
-      heading: 'Second dark section',
+      heading: 'Second muted section',
       body: 'The last section before the footer.',
     },
   ],

@@ -270,8 +270,10 @@
   --dz-glow-white: 0 0 var(--dz-glow-blur) var(--dz-p-glow-white-55);
   --dz-glow-cyan: 0 0 var(--dz-glow-blur) var(--dz-p-glow-cyan-55);
 
-  /* Hairlines and outlines */
+  /* Hairlines and outlines; the stronger one is the Button's 1.5 px stroke (Figma Button 33:213:
+     Secondary and On colour) */
   --dz-border-width: 1px;
+  --dz-border-width-strong: 1.5px;
 
   /* Focus (a base style; consent.spec.ts reads the two widths): 2 px of border/focus with a 2 px white gap */
   --dz-focus-width: 2px;

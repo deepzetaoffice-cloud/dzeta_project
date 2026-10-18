@@ -9,10 +9,11 @@ import { shellContent } from '@/content/en/shell';
 // - The H1 is the page's LCP element: visible, unclipped and in place at first paint, with no entrance
 //   animation (13 §3 rule 7). Its text is one stable sentence (heroAnswer.heading).
 // - The direct answer follows it (08 §2.2), then the audit CTA and the AI agent's demo trigger.
+// - data-stage-hero: the header floats inside the stage's top, so the stage reserves its space.
 export function Hero() {
   return (
-    <section aria-labelledby="home-heading" className="px-stage-inset">
-      <div className="mx-auto max-w-page rounded-stage bg-(image:--dz-grad-stage) px-gutter pt-12 pb-section text-on-color sm:pt-16">
+    <section aria-labelledby="home-heading" data-stage-hero="" className="px-stage-inset pt-stage-inset">
+      <div className="mx-auto max-w-page rounded-stage bg-(image:--dz-grad-stage) px-gutter pt-[calc(var(--dz-layout-header-height)+var(--dz-space-12))] pb-section text-on-color">
         <h1 id="home-heading" className="max-w-4xl text-hero-line text-on-color">
           {heroAnswer.heading}
         </h1>

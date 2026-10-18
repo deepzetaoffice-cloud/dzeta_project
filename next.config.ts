@@ -1,5 +1,6 @@
 import type { NextConfig } from 'next';
 import { LOGO_URL, LOGO_VERSION } from './src/lib/brand.ts';
+import { LIGHT_WORDMARK_URL, LIGHT_WORDMARK_VERSION } from './src/lib/brand-light.ts';
 import { env } from './src/lib/env.ts';
 import { assetSecurityHeaders, securityHeaders } from './src/lib/security-headers.ts';
 import { isIndexable, noindexHeaders } from './src/lib/seo/indexing.ts';
@@ -15,6 +16,13 @@ if (currentEnv.vercelEnv === 'production' && !indexable) {
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  // The photos through next/image (07; 08 §7): AVIF, then WebP, at 800, 1200, 1600 and 2400 px, and
+  // 400 px for small slots such as the mega menu's preview.
+  images: {
+    formats: ['image/avif', 'image/webp'],
+    deviceSizes: [800, 1200, 1600, 2400],
+    imageSizes: [400],
+  },
   experimental: {
     // Unmatched URLs need one 404 across multiple root layouts (English now, Arabic in P11).
     globalNotFound: true,
@@ -55,6 +63,12 @@ const nextConfig: NextConfig = {
       {
         source: LOGO_URL,
         has: [{ type: 'query', key: 'v', value: LOGO_VERSION }],
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
+      },
+      // The white-background wordmark likewise (src/lib/brand-light.ts; C78)
+      {
+        source: LIGHT_WORDMARK_URL,
+        has: [{ type: 'query', key: 'v', value: LIGHT_WORDMARK_VERSION }],
         headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
       },
       // The visitor's region for consent, from Vercel's country header, as a Server-Timing value the
