@@ -829,3 +829,627 @@ export const customCodedWebsitesFaq: readonly FaqQuestion[] = [
       'Every custom-coded site includes analytics, consent and conversion tracking, set up with Consent Mode v2, so your tags follow each visitor’s choice. Visitors can change that choice at any time. This site works the same way: “Cookie settings” sits at the bottom of every page. If you also want click-ID capture and offline conversion upload, add Analytics & Tracking Setup.',
   },
 ];
+
+// The questions on the AI Lead Qualification & Scoring page (/services/ai-lead-qualification-scoring,
+// R028): 6, the core service range of 5–7 (engine §3; the page's word count keeps it under 1,400);
+// cost and timeline first (§6.2 rule 3). Each first sentence stands alone (≤ 25 words); each answer
+// is 40–90 words and names at most one other service. No promise of more sales or lower ad costs
+// (catalogue §9). Sources: catalogue 0.1 (the written summary, next steps and a quote), 1B.2, 1B.5
+// (nurture stops on a reply), 1K.1 (data rules in every automation project), 6.3, §8 (CRMs). The ids
+// carry the stem "lead-scoring"; none repeats a question on Home, the hub or another service page.
+export const aiLeadQualificationScoringFaq: readonly FaqQuestion[] = [
+  {
+    // 64 words; first sentence 21
+    id: 'what-does-lead-scoring-cost',
+    topic: 'cost',
+    question: 'How much does AI lead qualification and scoring cost?',
+    answer:
+      'AI Lead Qualification & Scoring is priced after a free AI audit, because the cost depends on how your leads arrive. The main drivers are how many lead sources and channels the questions run on, how detailed your scoring rules are, and whether conversion data goes back to Google Ads and Meta. The audit ends with a written summary, next steps and a quote.',
+  },
+  {
+    // 59 words; first sentence 21
+    id: 'how-long-does-lead-scoring-take',
+    topic: 'timeline',
+    question: 'How long does it take to start scoring our leads?',
+    answer:
+      'We confirm a timeframe for lead scoring after the free AI audit, once we have seen where your leads come from. Scoring leads from one website form is a smaller build than asking questions on WhatsApp, scoring across several sources and sending conversion data back to your ad accounts. You can start with one source and add more later.',
+  },
+  {
+    // 58 words; first sentence 20
+    id: 'who-sets-the-lead-scoring-rules',
+    topic: 'ownership',
+    question: 'Who decides what makes a lead hot or cold?',
+    answer:
+      'You do: the questions, the scoring rules and the line between hot and cold are your settings, agreed before launch. A low score never turns a lead away; it moves the lead into nurture, and any reply reaches your team. Once real leads come through, you can compare their scores with what happened next and adjust the rules.',
+  },
+  {
+    // 56 words; first sentence 22
+    id: 'how-does-lead-scoring-reach-google-ads',
+    topic: 'integrations',
+    question: 'How does lead data get back to Google Ads and Meta?',
+    answer:
+      'When a lead is qualified or becomes a sale, that event is sent back to Google Ads and Meta as conversion data. Which leads became sales is read from your CRM: HubSpot, Zoho CRM, Pipedrive, Salesforce or Odoo. If your tracking isn’t set up yet, Analytics & Tracking Setup adds click-ID capture and offline conversion upload.',
+  },
+  {
+    // 58 words; first sentence 23
+    id: 'can-lead-scoring-ask-in-arabic',
+    topic: 'arabic',
+    question: 'Can the qualifying questions be asked in Arabic?',
+    answer:
+      'Yes: each question can be written in Arabic and English, and the lead is asked in the language they used to reach you. Answers in either language are scored by the same rules, so a lead who writes in Arabic isn’t ranked lower for it. Each version is written for your business rather than translated word for word.',
+  },
+  {
+    // 55 words; first sentence 18
+    id: 'what-data-does-lead-scoring-use',
+    topic: 'data-privacy',
+    question: 'What information does scoring use about each lead?',
+    answer:
+      'Scoring uses the lead’s answers to your questions and their behaviour with you, such as how they reply. Every automation project we build includes consent wording, retention and access rules, and a record of what each AI step uses. You decide which staff can see the answers and scores, and how long they are kept.',
+  },
+];
+
+// The questions on the Proposal Automation page (/services/proposal-automation, R030): 7, the core
+// service range of 5–7 (engine §3; the page has no try-it band, so the word count stays under 1,400);
+// cost and timeline first (§6.2 rule 3). Each first sentence stands alone (≤ 25 words); each answer is
+// 40–90 words and names at most one other service. No promise of more wins (catalogue §9). Sources:
+// catalogue 0.1 (the written summary, next steps and a quote), 1B.4, 1B.6, 1H.2 (AI drafts in Arabic
+// and English, reviewed by a person), 1K.1 (retention and access rules, a record of what each AI step
+// uses), §8 (CRMs; Jais and Falcon among the AI models, as Home's Arabic answer says). The ids carry
+// the stem "proposal-automation"; none repeats a question on Home, the hub or another service page
+// (the quotation page's timeline and Arabic questions ask about quotes).
+export const proposalAutomationFaq: readonly FaqQuestion[] = [
+  {
+    // 52 words; first sentence 16
+    id: 'what-does-proposal-automation-cost',
+    topic: 'cost',
+    question: 'How much does Proposal Automation cost?',
+    answer:
+      'Proposal Automation is priced after a free AI audit, because the cost depends on your proposals. The main drivers are how many templates you need, how much of each proposal changes per client, and which CRM the details come from. The audit ends with a written summary, next steps and a quote.',
+  },
+  {
+    // 56 words; first sentence 21
+    id: 'how-soon-can-proposal-automation-start',
+    topic: 'timeline',
+    question: 'How soon could our first automated proposal go out?',
+    answer:
+      'We confirm a timeframe for Proposal Automation after the free AI audit, once we have seen your current proposals and CRM. One template for one kind of job is a smaller build than several templates, each with its own AI-written sections and follow-ups. You can start with your most common proposal and add the others later.',
+  },
+  {
+    // 48 words; first sentence 20
+    id: 'does-proposal-automation-check-ai-text',
+    topic: 'ownership',
+    question: 'Will AI-written text reach clients without anyone checking it?',
+    answer:
+      'No: the AI drafts the client-specific sections, and a person on your staff reviews them before any proposal is sent. Your reviewer can edit, rewrite or reject each section. The parts that stay the same, such as your company profile and terms, come straight from your approved templates.',
+  },
+  {
+    // 59 words; first sentence 17
+    id: 'will-proposal-automation-win-more-work',
+    topic: 'results',
+    question: 'Will automated proposals help us win more work?',
+    answer:
+      'We can’t promise more wins: a client’s decision depends on your price, your offer and the competition. What changes is the work around each proposal. Drafts start from your templates and CRM instead of a blank page, you see which proposals were opened, and follow-ups go out without anyone having to remember. Judge the change on your own deals.',
+  },
+  {
+    // 49 words; first sentence 15
+    id: 'which-crm-feeds-proposal-automation',
+    topic: 'integrations',
+    question: 'Which CRM can our proposals pull client details from?',
+    answer:
+      'Proposals can pull client and deal details from HubSpot, Zoho CRM, Pipedrive, Salesforce or Odoo. The details come across when the deal reaches the stage you choose, so nobody retypes them. If your client details still live in spreadsheets, CRM Setup & Automation can set up the CRM first.',
+  },
+  {
+    // 51 words; first sentence 24
+    id: 'can-proposal-automation-draft-in-arabic',
+    topic: 'arabic',
+    question: 'Can the AI draft proposal sections in Arabic?',
+    answer:
+      'Yes: templates can be set up in Arabic and English, and the AI drafts the tailored sections in either language for staff to review. AI models with strong Arabic support, such as Jais and Falcon, are among those we build with. Your reviewer checks each Arabic section before it goes out.',
+  },
+  {
+    // 53 words; first sentence 24
+    id: 'what-does-proposal-automation-ai-see',
+    topic: 'data-privacy',
+    question: 'What client information does the AI see when it drafts?',
+    answer:
+      'The AI drafts from the fields you choose, such as the client’s details in the CRM deal and the brief your team has recorded. Every automation project we build includes retention and access rules and a record of what each AI step uses, so you can check which data went into each draft.',
+  },
+];
+
+// The questions on the Viewing & Site-Visit Scheduling page (/services/viewing-site-visit-scheduling,
+// R035): 6, the core service range of 5–7 (engine §3); cost and timeline first (§6.2 rule 3). Each
+// first sentence stands alone (≤ 25 words); each answer is 40–90 words and names no other service. No
+// figure for time saved: none is measured (facts §5). Sources: catalogue 0.1 (the written summary,
+// next steps and a quote), 1C.1 (calendars, channels), 1C.3, 1K.1 (retention and access rules, a
+// record of what each step uses), §8 (calendars, CRMs). The ids carry the stem "viewing-scheduling";
+// none repeats a question on Home, the hub or another service page (the booking and reminder pages'
+// calendar and Arabic questions ask about bookings and reminders).
+export const viewingSiteVisitSchedulingFaq: readonly FaqQuestion[] = [
+  {
+    // 59 words; first sentence 20
+    id: 'what-does-viewing-scheduling-cost',
+    topic: 'cost',
+    question: 'How much does viewing and site-visit scheduling cost?',
+    answer:
+      'Viewing & Site-Visit Scheduling is priced after a free AI audit, once we know how your team books visits today. The main drivers are how many agents or surveyors the schedule covers, which calendars and channels it connects, and how your areas and routes should be planned. The audit ends with a written summary, next steps and a quote.',
+  },
+  {
+    // 57 words; first sentence 24
+    id: 'how-soon-can-viewing-scheduling-start',
+    topic: 'timeline',
+    question: 'How soon can viewings be booked automatically?',
+    answer:
+      'We set a timeframe for viewing scheduling after the free AI audit, once we know your calendars and how your team covers its areas. Booking viewings into one team’s calendars is a smaller build than covering several teams, site surveys and inspections, with routes planned across the city. You can start with one team and add more.',
+  },
+  {
+    // 57 words; first sentence 16
+    id: 'does-viewing-scheduling-cut-driving-time',
+    topic: 'results',
+    question: 'Will route-friendly scheduling cut our agents’ driving time?',
+    answer:
+      'We can’t promise a figure for time saved, because traffic, clients and listings change every day. What the schedule does is offer times that keep each agent’s or surveyor’s visits in a sensible order, instead of wherever a gap happens to be. Compare your team’s days before and after, and judge the change on your own diary.',
+  },
+  {
+    // 52 words; first sentence 21
+    id: 'where-does-viewing-scheduling-book-visits',
+    topic: 'integrations',
+    question: 'Will bookings land in our agents’ calendars and our CRM?',
+    answer:
+      'Yes: viewings and visits are booked into Google Calendar, Outlook or Cal.com, so each agent keeps the calendar they already use. Each booking can also be logged against the deal in HubSpot, Zoho CRM, Pipedrive, Salesforce or Odoo. Your existing setup is checked during the free AI audit, before anything is built.',
+  },
+  {
+    // 45 words; first sentence 21
+    id: 'can-viewing-scheduling-run-in-arabic',
+    topic: 'arabic',
+    question: 'Do viewing reminders work for Arabic-speaking clients?',
+    answer:
+      'Yes: every booking message and reminder can go out in Arabic or English, matched to the language the client wrote in. Agents get their own reminders in the language your team works in. The Arabic is written for your clients, not run through a translator.',
+  },
+  {
+    // 55 words; first sentence 17
+    id: 'who-sees-viewing-scheduling-details',
+    topic: 'data-privacy',
+    question: 'Who can see our clients’ details and the addresses they visit?',
+    answer:
+      'Only the people you choose: you decide which staff see each client’s name, number and viewing address. As in every automation project we build, retention and access rules are agreed before launch, with a record of what data each step uses. Reminders carry only what each person needs to reach the right place on time.',
+  },
+];
+
+// The questions on the Job & Work-Order Management Automation page
+// (/services/job-work-order-management, R040): 6, within the core service range of 5–7 (engine §3;
+// the page's word count keeps it under 1,400); cost and timeline first (§6.2 rule 3). Each first
+// sentence stands alone (≤ 25 words); each answer is 40–90 words and names at most one other service.
+// No promise of faster jobs or arrival times (facts §5). Sources: catalogue 0.1 (the written summary
+// and quote), 1E.1, 1B.3, 1K.1 (retention and access rules, a record of what each step uses), 6.1 (the
+// AI Ops Retainer), §8 (accounting and ERP). The ids carry the stem "work-order"; none repeats a
+// question on Home, the hub or another service page.
+export const jobWorkOrderManagementFaq: readonly FaqQuestion[] = [
+  {
+    // 72 words; first sentence 22
+    id: 'what-does-work-order-automation-cost',
+    topic: 'cost',
+    question: 'How much does job and work-order automation cost?',
+    answer:
+      'Job & Work-Order Management Automation is priced after a free AI audit, because the cost depends on how your jobs run today. The main drivers are how many places jobs start from, how many job types and checklists you need, and how assignment should work across your teams and areas. Connecting your accounting system for invoices adds to the build. The audit ends with a written summary, next steps and a quote.',
+  },
+  {
+    // 63 words; first sentence 23
+    id: 'how-long-does-work-order-automation-take',
+    topic: 'timeline',
+    question: 'How long does it take to automate our jobs and work orders?',
+    answer:
+      'We confirm a timeframe after the free AI audit, once we have seen how jobs reach you and how your technicians report back. Creating jobs from WhatsApp requests, with customer updates, is a smaller build than adding skill-based assignment, mobile checklists, signatures and automatic invoices. You can start with one job type and add the rest once your team is used to it.',
+  },
+  {
+    // 59 words; first sentence 16
+    id: 'can-work-orders-start-from-quotes-and-end-in-invoices',
+    topic: 'integrations',
+    question: 'Can a job start from an accepted quote and end as an invoice?',
+    answer:
+      'Yes: an accepted quote can become a job automatically, and a completed job triggers the invoice. Jobs can also start from phone calls and WhatsApp requests. The invoice can be raised in Zoho Books, QuickBooks, Xero, Odoo or SAP Business One. If you also want quotes built, sent and tracked automatically, the Automated Quotation & Quote Tracking System covers that.',
+  },
+  {
+    // 45 words; first sentence 21
+    id: 'can-work-order-updates-be-in-arabic',
+    topic: 'arabic',
+    question: 'Can customers get their job updates in Arabic?',
+    answer:
+      'Yes: job updates such as “technician on the way” can go out in Arabic, English or both, set for each customer. Replies from customers, in either language, go to a person on your team. Your technicians’ checklists can follow the language your team works in.',
+  },
+  {
+    // 48 words; first sentence 16
+    id: 'who-sees-work-order-photos-and-signatures',
+    topic: 'data-privacy',
+    question: 'Who can see the photos and signatures from each job?',
+    answer:
+      'You decide: access rules set which staff can see each job’s photos, signatures and customer details. Retention and access rules come with every automation project we build, along with a record of what data each step uses. You also decide how long job records and photos are kept.',
+  },
+  {
+    // 56 words; first sentence 19
+    id: 'what-if-work-order-teams-change',
+    topic: 'support',
+    question: 'What happens when we add technicians, areas or job types?',
+    answer:
+      'New technicians, skills and areas are added to the assignment rules, and new jobs follow them from then on. A new job type gets its own checklist in the same way. For bigger changes, such as connecting a new place jobs come from, the AI Ops Retainer covers fixes, updates and new small automations each month.',
+  },
+];
+
+// The questions on the Maintenance Contract & Preventive Maintenance Scheduling page
+// (/services/preventive-maintenance-scheduling, R041): 7, the core service range of 5–7 (engine §3);
+// cost and timeline first (§6.2 rule 3). Each first sentence stands alone (≤ 25 words); each answer
+// is 40–90 words and names at most one other service. No promise that no visit is missed (facts §5).
+// Sources: catalogue 0.1 (the written summary and quote), 1E.2, 1K.1 (retention and access rules),
+// 6.1 (the AI Ops Retainer), §8 (calendars, CRMs) and §9 (consent and opt-out). The ids carry the
+// stem "amc"; none repeats a question on Home, the hub or another service page.
+export const preventiveMaintenanceSchedulingFaq: readonly FaqQuestion[] = [
+  {
+    // 56 words; first sentence 18
+    id: 'what-does-amc-scheduling-cost',
+    topic: 'cost',
+    question: 'How much does AMC and preventive maintenance scheduling cost?',
+    answer:
+      'Maintenance Contract & Preventive Maintenance Scheduling is priced after a free AI audit, once we know your contracts. The main drivers are how many contract types and visit plans you run, where your contract details are kept today, and which channels the reminders use. The audit ends with a written summary, next steps and a quote.',
+  },
+  {
+    // 54 words; first sentence 21
+    id: 'how-soon-can-amc-scheduling-start',
+    topic: 'timeline',
+    question: 'How soon can our maintenance visits be scheduled automatically?',
+    answer:
+      'We set a timeframe after the free AI audit, once we have seen how your contracts and visit plans are recorded. Contracts already kept in a CRM or a tidy spreadsheet are a smaller job than contracts spread across paper files and inboxes. Reminder wording and timing are agreed with you during the build.',
+  },
+  {
+    // 56 words; first sentence 18
+    id: 'which-calendar-does-amc-scheduling-use',
+    topic: 'integrations',
+    question: 'Which calendar do the scheduled visits go into?',
+    answer:
+      'Scheduled visits go into Google Calendar or Outlook, so your team works from the calendar it already knows. Contract details can be read from your CRM, such as HubSpot, Zoho CRM or Odoo, or from the spreadsheet you use today. If your contracts live somewhere else, the free AI audit checks whether that system can connect.',
+  },
+  {
+    // 42 words; first sentence 19
+    id: 'can-amc-reminders-be-in-arabic',
+    topic: 'arabic',
+    question: 'Can visit reminders go to clients in Arabic?',
+    answer:
+      'Yes: visit reminders can be written in Arabic, English or both, and you choose the language for each client. The Arabic is written natively, not translated from the English. Reminders to your own team can follow the language your technicians work in.',
+  },
+  {
+    // 60 words; first sentence 22
+    id: 'will-amc-scheduling-stop-missed-visits',
+    topic: 'results',
+    question: 'Will automatic scheduling mean no more missed visits?',
+    answer:
+      'We can’t promise that no visit is ever missed: a client may cancel, or a site may be closed on the day. What scheduling changes is the routine: every visit in each contract is in the calendar, and reminders reach the client and your team before it. You can compare missed visits before and after launch on your own records.',
+  },
+  {
+    // 50 words; first sentence 17
+    id: 'what-client-data-does-amc-scheduling-use',
+    topic: 'data-privacy',
+    question: 'What client information does the scheduling use?',
+    answer:
+      'AMC scheduling uses what the contract already holds: the client’s name, contact details, site and visit plan. Retention and access rules come with every automation project we build, so you decide which staff see each contract and how long records are kept. Clients can stop the reminders at any time.',
+  },
+  {
+    // 58 words; first sentence 18
+    id: 'what-if-an-amc-contract-changes',
+    topic: 'support',
+    question: 'What happens when a contract changes or is renewed?',
+    answer:
+      'When a contract is renewed, its next year of visits is scheduled the same way as the first. If a client adds equipment or changes the visit plan, the contract is updated and the schedule follows from then on. For new contract types or new connections, the AI Ops Retainer covers updates and new small automations each month.',
+  },
+];
+
+// The questions on the Inventory & Stock Automation page (/services/inventory-stock-automation,
+// R042): 7, the core service range of 5–7 (engine §3); cost and timeline first (§6.2 rule 3). Each
+// first sentence stands alone (≤ 25 words); each answer is 40–90 words and names at most one other
+// service. The forecast has no accuracy figure (facts §5): it works from the business's own sales
+// history (1E.3). Sources: catalogue 0.1 (the written summary and quote), 1E.3, 1E.6 (approval
+// chains), 1K.1 (retention and access rules, a record of what each AI step uses), §8 (e-commerce,
+// accounting and ERP; the accounting line is conditional, since which of them hold stock is a vendor
+// fact). The ids carry the stem "inventory"; none repeats a question on Home, the hub or another
+// service page.
+export const inventoryStockAutomationFaq: readonly FaqQuestion[] = [
+  {
+    // 57 words; first sentence 20
+    id: 'what-does-inventory-automation-cost',
+    topic: 'cost',
+    question: 'How much does inventory and stock automation cost?',
+    answer:
+      'Inventory & Stock Automation is priced after a free AI audit, because the cost depends on where your stock lives. The main drivers are how many places you hold or sell stock, which systems hold the counts today, and whether you add AI demand forecasting. The audit ends with a written summary, next steps and a quote.',
+  },
+  {
+    // 58 words; first sentence 19
+    id: 'how-long-does-inventory-automation-take',
+    topic: 'timeline',
+    question: 'How long does it take to get our stock in sync?',
+    answer:
+      'We confirm a timeframe after the free AI audit, once we have seen how your stock is recorded today. Syncing one shop with one online store is a smaller job than joining several locations, a warehouse and an ERP. Stock counts are checked with you before the sync goes live, so every channel starts from the right numbers.',
+  },
+  {
+    // 59 words; first sentence 21
+    id: 'which-systems-does-inventory-automation-connect',
+    topic: 'integrations',
+    question: 'Which store and accounting systems can the stock sync connect?',
+    answer:
+      'The stock sync connects online stores on Shopify, WooCommerce or a custom build with the stock in your shop and warehouse. If your counts or purchases are kept in Odoo, Zoho Books, QuickBooks, Xero or SAP Business One, the sync can read them from there. The free AI audit confirms how your own systems connect before anything is built.',
+  },
+  {
+    // 54 words; first sentence 21
+    id: 'how-accurate-is-inventory-demand-forecasting',
+    topic: 'results',
+    question: 'How accurate is the AI demand forecast?',
+    answer:
+      'We don’t quote an accuracy figure, because a forecast depends on your own sales history and how steady your demand is. AI forecasts demand from your past sales, so the forecast is a guide for planning purchases, not a promise. Comparing it with what actually sells shows you how far to rely on it.',
+  },
+  {
+    // 54 words; first sentence 17
+    id: 'does-inventory-automation-place-orders',
+    topic: 'ownership',
+    question: 'Does the system place orders with suppliers by itself?',
+    answer:
+      'No: Inventory & Stock Automation suggests reorders, and a person on your team decides what is bought. Each suggestion shows the item and the quantity to reorder, for you to check, change or approve. If you want purchase requests routed through approval chains with a full audit trail, Task & Approval Workflows adds that.',
+  },
+  {
+    // 50 words; first sentence 21
+    id: 'can-inventory-alerts-be-in-arabic',
+    topic: 'arabic',
+    question: 'Can stock alerts and item names be in Arabic?',
+    answer:
+      'Yes: low-stock alerts and reorder suggestions can be sent in Arabic, English or both, set for each person who receives them. Item names written in Arabic are kept as written, next to their English names. Whichever language an item is listed in, it shares one stock count across every channel.',
+  },
+  {
+    // 50 words; first sentence 16
+    id: 'what-data-does-inventory-forecasting-use',
+    topic: 'data-privacy',
+    question: 'What data does the forecasting use, and who sees it?',
+    answer:
+      'The AI demand forecast uses your sales history and stock records, not your customers’ personal details. Retention and access rules come with every automation project we build, along with a record of what data each AI step uses. You decide which staff can see sales figures and change stock counts.',
+  },
+];
+
+// The questions on the Ticketing & Complaint Tracking System page (/services/ticketing-complaint-tracking,
+// R037): 6, within the core service range of 5–7 (engine §3; the page's word count keeps it under
+// 1,400); cost and timeline first (§6.2 rule 3). Each first sentence stands alone (≤ 25 words); each
+// answer is 40–90 words and names no other service. No promise of fewer complaints or faster
+// resolution (facts §5). Sources: catalogue 0.1 (the written summary and quote), 1D.2, 1K.1
+// (retention and access rules, a record of what each system uses), §8 (messaging, CRMs). The ids carry
+// the stem "ticketing"; none repeats a question on Home, the hub or another service page (the job page's
+// Arabic question asks about job updates).
+export const ticketingComplaintTrackingFaq: readonly FaqQuestion[] = [
+  {
+    // 62 words; first sentence 17
+    id: 'what-does-ticketing-cost',
+    topic: 'cost',
+    question: 'How much does a ticketing and complaint tracking system cost?',
+    answer:
+      'A ticketing system is priced after a free AI audit, once we know how complaints reach you. The main drivers are the number of channels, how many teams and escalation levels the rules cover, and the reports you need. Connecting your CRM or several branches adds its own work. The written summary after the audit sets out next steps and the price.',
+  },
+  {
+    // 53 words; first sentence 19
+    id: 'how-long-does-ticketing-take',
+    topic: 'timeline',
+    question: 'How long does it take to set up complaint tracking?',
+    answer:
+      'We set the timeframe after the free AI audit, once we have mapped how your team handles complaints today. Logging WhatsApp and email complaints with timers is a smaller build than adding several teams, escalation levels, phone complaints and root-cause reports. Your stages, timers and update wording are agreed with you before launch.',
+  },
+  {
+    // 54 words; first sentence 14
+    id: 'which-channels-does-ticketing-log',
+    topic: 'integrations',
+    question: 'Which channels can complaints be logged from?',
+    answer:
+      'Complaints can be logged from WhatsApp, Instagram, Messenger, SMS, email and your website forms. A phone complaint is logged by whoever takes the call, so it gets a ticket number too. Updates go back on the channel the complaint came from, and each ticket can be linked to the customer’s record in your CRM.',
+  },
+  {
+    // 56 words; first sentence 19
+    id: 'can-ticketing-updates-be-in-arabic',
+    topic: 'arabic',
+    question: 'Can customers follow their complaint in Arabic?',
+    answer:
+      'Yes: every update can be written in Arabic and English, and each customer receives the language they wrote in. The ticket number stays the same in both, so your team and the customer always refer to the same complaint. The Arabic wording is written for your business, not translated from the English at the last minute.',
+  },
+  {
+    // 54 words; first sentence 16
+    id: 'who-sees-ticketing-complaints',
+    topic: 'data-privacy',
+    question: 'Who can see a complaint and the customer’s details?',
+    answer:
+      'Access rules you set decide who sees each ticket, the customer’s details and the message history. As in every automation project we build, retention rules set how long complaint records are kept, and a record shows what data each automation uses. A complaint that names a member of staff can be limited to managers.',
+  },
+  {
+    // 55 words; first sentence 20
+    id: 'will-ticketing-reduce-complaints',
+    topic: 'results',
+    question: 'Will a ticketing system mean fewer complaints?',
+    answer:
+      'Not by itself: a ticketing system tracks each complaint to a resolution, but fewer complaints come from fixing their causes. That is what the root-cause reports are for: they show which problems keep returning. We don’t promise a drop in complaints or faster resolution times; you see the change on your own tickets after launch.',
+  },
+];
+
+// The questions on the Loyalty, Renewal & Win-Back Automation page
+// (/services/loyalty-renewal-win-back-automation, R039): 6, within the core service range of 5–7
+// (engine §3; the page's word count keeps it under 1,400); cost and timeline first (§6.2 rule 3). Each
+// first sentence stands alone (≤ 25 words); each answer is 40–90 words and names no other service. No
+// figure for customers won back (facts §5). Sources: catalogue 0.1 (the written summary and quote),
+// 1D.4, 1H.1 (consent and opt-out management), 1K.1 (retention and access rules), §8 (CRMs) and §9
+// (consent and a human). The ids carry the stem "win-back-automation"; none repeats a question on Home,
+// the hub or another service page.
+export const loyaltyRenewalWinBackAutomationFaq: readonly FaqQuestion[] = [
+  {
+    // 60 words; first sentence 19
+    id: 'what-does-win-back-automation-cost',
+    topic: 'cost',
+    question: 'How much does Loyalty, Renewal & Win-Back Automation cost?',
+    answer:
+      'Loyalty, Renewal & Win-Back Automation is priced after a free AI audit, based on what you want to automate. The main drivers are which messages you need, such as renewals, service-due reminders, birthday offers, win-backs and referrals, where your customer dates are kept, and how many channels and languages each uses. The written summary after the audit includes the quote.',
+  },
+  {
+    // 56 words; first sentence 23
+    id: 'how-soon-can-win-back-automation-start',
+    topic: 'timeline',
+    question: 'How soon can renewal reminders and win-back messages start?',
+    answer:
+      'The timeframe is set after the free AI audit, once we know where your customer dates are kept and how complete they are. Renewal reminders from one CRM are a smaller build than adding birthday offers, win-back campaigns and referrals across several systems. You can start with one kind of message and add the others later.',
+  },
+  {
+    // 58 words; first sentence 15
+    id: 'who-can-win-back-automation-message',
+    topic: 'data-privacy',
+    question: 'Which past customers can a win-back campaign message?',
+    answer:
+      'A win-back campaign messages only customers whose consent you hold and who haven’t opted out. Each message checks that status before it goes out, carries consent wording and offers an easy way to stop. Retention and access rules are agreed with you before launch, so you decide how long customer history is kept and who can see it.',
+  },
+  {
+    // 52 words; first sentence 22
+    id: 'can-win-back-automation-send-arabic-offers',
+    topic: 'arabic',
+    question: 'Can birthday offers and reminders go out in Arabic?',
+    answer:
+      'Yes: every reminder and offer can be written in Arabic and English, and each customer receives the language set on their record. An offer keeps the same terms in both versions, so nobody is promised something different. The Arabic is written for your customers, not translated from the English word for word.',
+  },
+  {
+    // 54 words; first sentence 14
+    id: 'will-win-back-automation-bring-customers-back',
+    topic: 'results',
+    question: 'How many lost customers will a win-back campaign bring back?',
+    answer:
+      'We can’t predict how many customers will return, and we won’t promise a figure. What a win-back campaign changes is that inactive customers hear from you, with an offer you choose, instead of nobody getting in touch. You can measure it on your own records: compare renewals and returning customers before and after launch.',
+  },
+  {
+    // 54 words; first sentence 20
+    id: 'who-decides-win-back-automation-offers',
+    topic: 'ownership',
+    question: 'Who decides the offers and when each message goes out?',
+    answer:
+      'You do: each offer, its wording and its timing are your decisions, and nothing goes out until you approve it. You choose how far ahead renewal reminders start, how long a customer must be inactive before a win-back, and when referral requests are sent. Offers and timings can be changed whenever your business changes.',
+  },
+];
+
+// The questions on the Task & Approval Workflows page (/services/task-approval-workflows, R043): 6,
+// within the core service range of 5–7 (engine §3; the page's word count keeps it under 1,400); cost
+// and timeline first (§6.2 rule 3). Each first sentence stands alone (≤ 25 words); each answer is
+// 40–90 words and names at most one other service. Sources: catalogue 0.1 (the written summary and
+// quote), 1E.6, 1G.3 (approvals through WhatsApp or web), 1J.1 (access by role), 1K.1 (retention and
+// access rules, a record of what each system uses), 6.1 (the AI Ops Retainer), §8 (accounting and
+// ERP). The ids carry the stem "approval-workflows"; none repeats a question on Home, the hub or another
+// service page.
+export const taskApprovalWorkflowsFaq: readonly FaqQuestion[] = [
+  {
+    // 60 words; first sentence 17
+    id: 'what-do-approval-workflows-cost',
+    topic: 'cost',
+    question: 'How much do automated approval workflows cost?',
+    answer:
+      'Approval workflows are priced after a free AI audit, once we know your request types and approvers. The main drivers are how many kinds of request you automate, how many steps each approval chain has, and whether approved requests pass on to your accounting system. A single leave or expense workflow is a smaller build than several chains across departments.',
+  },
+  {
+    // 57 words; first sentence 18
+    id: 'how-long-do-approval-workflows-take',
+    topic: 'timeline',
+    question: 'How long does it take to set up approval workflows?',
+    answer:
+      'We set a timeframe after the free AI audit, once your request types and approval chains are mapped. One workflow, such as leave requests with a single approver, is a smaller build than purchase approvals with limits, several steps and an accounting connection. You can start with one request type and add others once it runs well.',
+  },
+  {
+    // 60 words; first sentence 17
+    id: 'can-approval-workflows-run-on-whatsapp',
+    topic: 'integrations',
+    question: 'Can managers approve requests from WhatsApp or email?',
+    answer:
+      'Yes: approval requests can reach managers by WhatsApp or email, so they can decide from a phone. Those who prefer a screen can use a simple web page instead. Each decision is written to the audit trail, whichever channel it came from. Approved expenses and purchases can then be recorded in Zoho Books, QuickBooks, Xero, Odoo or SAP Business One.',
+  },
+  {
+    // 54 words; first sentence 22
+    id: 'can-approval-workflows-be-in-arabic',
+    topic: 'arabic',
+    question: 'Can request forms and reminders be in Arabic?',
+    answer:
+      'Yes: request forms, reminders and decision messages can be written in Arabic and English, and each person sees the language they choose. A request made in Arabic keeps its wording in the audit trail, so the record shows exactly what was asked. Both languages follow the same approval chain, so nothing is routed differently.',
+  },
+  {
+    // 60 words; first sentence 18
+    id: 'who-sees-approval-workflows-records',
+    topic: 'data-privacy',
+    question: 'Who can see the requests and the audit trail?',
+    answer:
+      'Only the people you choose: access by role decides who sees each request, its attachments and its history. As in every automation project we build, retention and access rules are agreed with you before launch, and a record shows what data each workflow uses. A leave request, for example, can be visible only to the employee, their manager and HR.',
+  },
+  {
+    // 52 words; first sentence 21
+    id: 'what-if-approval-workflows-approvers-change',
+    topic: 'support',
+    question: 'What happens when our approvers or limits change?',
+    answer:
+      'You change the approval chain or its limits in one place, and new requests follow the new route from then on. Reminders and the audit trail work the same way after the change. For new request types or bigger changes, the AI Ops Retainer covers updates and new small automations each month.',
+  },
+];
+
+// The questions on the Invoicing & Payment Collection Automation page
+// (/services/invoicing-payment-collection, R044): 7, the core service range of 5–7 (engine §3); cost
+// and timeline first (§6.2 rule 3). Each first sentence stands alone (≤ 25 words); each answer is
+// 40–90 words and names at most one other service. No promise of faster payment (facts §5). The
+// e-invoicing answer names UAE E-Invoicing Readiness & Integration (1F.2) from its own catalogue
+// bullets only, with no rule, phase or date (no citation row is APPROVED). Sources: catalogue 0.1 (the
+// written summary and quote), 1F.1, 1F.2, 1K.1 (retention and access rules, a record of what each
+// system uses), §8 (accounting and ERP) and §9 (consent and a human). The ids carry the stem
+// "invoicing-automation"; none repeats a question on Home, the hub or another service page (the job
+// page's integrations question asks about quotes becoming jobs).
+export const invoicingPaymentCollectionFaq: readonly FaqQuestion[] = [
+  {
+    // 57 words; first sentence 21
+    id: 'what-does-invoicing-automation-cost',
+    topic: 'cost',
+    question: 'How much does invoicing and payment collection automation cost?',
+    answer:
+      'Invoicing automation is priced after a free AI audit, once we have seen where your jobs, orders and accounts are kept. The main drivers are how many places invoices start from, which accounting system they are created in, and how far payment matching needs to go. Fees charged by your payment provider are separate from our work.',
+  },
+  {
+    // 58 words; first sentence 19
+    id: 'how-long-does-invoicing-automation-take',
+    topic: 'timeline',
+    question: 'How long does it take to automate invoicing and reminders?',
+    answer:
+      'The timeframe is confirmed after the free AI audit, once we know your accounting system and where invoices start. Invoices from one job system with payment links and reminders are a smaller build than adding several sources, payment matching and an overdue report across branches. Nothing switches over until the new invoices are checked with your accounts team.',
+  },
+  {
+    // 52 words; first sentence 23
+    id: 'which-accounting-systems-does-invoicing-automation-use',
+    topic: 'integrations',
+    question: 'Which accounting systems can the invoices be created in?',
+    answer:
+      'Invoices can be created in Zoho Books, QuickBooks, Xero, Odoo or SAP Business One, so your numbering and records stay in one place. Payments are matched back in the same system, and the ledger is updated there. If you use another system, the free AI audit checks whether it can be connected.',
+  },
+  {
+    // 45 words; first sentence 17
+    id: 'does-invoicing-automation-cover-e-invoicing',
+    topic: 'integrations',
+    question: 'Does invoicing automation cover UAE e-invoicing?',
+    answer:
+      'Not on its own: e-invoicing is the job of UAE E-Invoicing Readiness & Integration, a separate service. It reviews your invoicing data and systems, then connects your accounting or ERP system to an accredited service provider. The free AI audit can look at both together.',
+  },
+  {
+    // 49 words; first sentence 21
+    id: 'can-invoicing-automation-remind-in-arabic',
+    topic: 'arabic',
+    question: 'Can payment reminders go out in Arabic?',
+    answer:
+      'Yes: payment reminders and the messages that carry each invoice can be written in Arabic and English, set for each client. The wording is agreed with you, so a reminder sounds like your business in either language. A client who replies in Arabic or English reaches your accounts team.',
+  },
+  {
+    // 50 words; first sentence 12
+    id: 'who-sees-invoicing-automation-records',
+    topic: 'data-privacy',
+    question: 'Who can see our invoices and payment records?',
+    answer:
+      'Only the staff you choose see invoices, payments and the overdue report. Every automation project we build comes with retention and access rules and a record of the data each step uses. Reminders carry only what they need: the client’s name, the invoice, the amount due and the payment link.',
+  },
+  {
+    // 56 words; first sentence 16
+    id: 'will-invoicing-automation-get-us-paid-faster',
+    topic: 'results',
+    question: 'Will automated reminders get us paid faster?',
+    answer:
+      'We can’t promise faster payment: when a client pays depends on them and on your terms. What changes is the routine: invoices go out as soon as the work is recorded, each with a payment link, and no reminder depends on someone remembering. You can compare overdue invoices before and after launch, on your own numbers.',
+  },
+];
