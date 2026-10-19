@@ -37,6 +37,15 @@ Status: ACCEPTED (owner, in chat, 2026-10-19). Narrows [0033](0033-redesign-v3.m
   - The site's own code logs nothing.
 - **SEO (69)** fails only "Page is blocked from indexing" (the 0013 lock).
 
+## Amendment (owner, in chat, 2026-10-19): Home's mobile Performance at 90+ is enough
+
+- The owner: "Keep same as now. I checked the performance score is 90+. Leave the audit for home page and continue next build." Decision 1 now reads: Home aims for 100 in Accessibility, Best Practices, SEO and Agentic Browsing, 100 in desktop Performance and **90 or more in mobile Performance**. The Home speed pass is parked; nothing in it was changed.
+- PageSpeed Insights on production after 0035 (2026-10-19, mobile): 99 in one run (FCP 1.2 s, LCP 1.7 s, TBT 50 ms, CLS 0, Speed Index 2.5 s) and 91 in the next (FCP 2.0 s, LCP 3.0 s, Speed Index 4.2 s).
+- What makes the score swing, for a later pass:
+  - The 91 run loaded by 0.49 s but drew its first frame at 2.3 s. Headless Chrome then gives the page a frame about once a second when the page can't draw just after it arrives; a late first frame pulls every script into Lighthouse's estimate.
+  - Measured locally with live-like latency, two things each cost one such second: the render-blocking stylesheet request and the font preloads, which Chrome now holds rendering for. With both gone (CSS inline, no preloads) a page with Home's head and a plain body drew at 0.25 s; the hero still cost one more second, cause not found.
+  - Neither is design-neutral: no font preloads means a font swap on first visits; Next's `inlineCss` adds the CSS to every page's HTML twice.
+
 ## Consequences
 
 - 00 N1, 03 and 07 say performance is never a blocker. This record narrows that for the scores above; the rule-file wording is proposed to the owner, not edited unasked (00 §5).
