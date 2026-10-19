@@ -114,11 +114,16 @@
 
   /* hero-word-rotator: the previous phrase fading above, the slab with the current phrase, its glow
      and the logo pixels that pop as a phrase lands */
+  /* The previous phrase, faded: at the h4 size on phones (Figma 56:810), h3 from 768 px */
   .dz-rotator-prev {
     font-family: var(--dz-font-family-display);
-    font-size: var(--dz-font-size-h3);
+    font-size: var(--dz-font-size-h4);
     font-weight: var(--dz-font-weight-medium);
-    line-height: var(--dz-leading-h3);
+    line-height: var(--dz-leading-h4);
+    @variant md {
+      font-size: var(--dz-font-size-h3);
+      line-height: var(--dz-leading-h3);
+    }
     letter-spacing: var(--dz-tracking-h2);
     opacity: 0.22;
     filter: blur(0.0625rem);
@@ -518,6 +523,11 @@
   .dz-letter {
     display: inline-block;
     white-space: pre;
+  }
+
+  /* A word of the slab's phrase stays on one line; the phrase wraps only between chunks (slab.ts) */
+  .dz-slab-chunk {
+    white-space: nowrap;
   }
 
   .dz-phone-chat {

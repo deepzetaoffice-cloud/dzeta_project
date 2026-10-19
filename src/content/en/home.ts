@@ -8,13 +8,14 @@ import { siteConfig } from '@/lib/site-config';
 
 // The hero's direct answer (engine §2: the hero-answer module; 08 §2.3 quotable first sentence)
 export const heroAnswer = {
-  // H1 ≤ 70 characters (engine §2 hero-answer); the statement, the page's LCP element (13 §3 rule 2)
-  heading: 'AI automation and custom-coded websites for UAE businesses',
+  // H1 ≤ 70 characters (65; engine §2 hero-answer); the statement, with the hero answer the page's LCP
+  // candidate (13 §3 rule 7). Figma 50:158's words (the owner, 2026-10-19; home.md's flag)
+  heading: 'AI automation and custom-coded websites, built for UAE businesses',
   // The H1's visible tail (home.md §01): the rotator's phrase stands in for the lead-in, which stays
   // in the H1 for crawlers and screen readers, visually hidden. Always the end of `heading`.
-  headingTail: 'for UAE businesses',
+  headingTail: 'built for UAE businesses',
   // The location chip over the headline (Figma 50:159)
-  location: 'Based in Dubai · serving the UAE first, then the GCC',
+  location: 'Based in Dubai · UAE · GCC',
   // The direct answer, 40–60 words, naming Deepzeta AI, what we build and where (engine §3.1)
   answer: `${siteConfig.brandName} builds online growth for every business: custom-coded, high-performance websites with SEO and AI search visibility built in, and AI automation systems that answer customers, follow up leads and run daily operations. Based in Dubai, serving the UAE first, then the GCC.`,
   // The secondary CTA beside the primary (home.md §01; the primary is the shell's audit CTA)

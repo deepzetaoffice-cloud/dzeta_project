@@ -1,4 +1,5 @@
 import { wirePause } from '@/lib/fx/home/interactions';
+import { slabChunks } from '@/lib/fx/home/slab';
 import { bezierPath, desktop, pointerFine, seconds } from '@/lib/fx/motion';
 
 // Home's effects (docs/ai/13 §4.3), started only while effects are on (index.ts). GSAP loads here,
@@ -70,16 +71,24 @@ function setSteps(root: HTMLElement, attr: string, step: number) {
 
 // The phrase as one span per letter (the server renders the first one the same way), so no single
 // big text block ever forms: the slab is never the page's LCP element
+// The phrase as letter spans in their chunks (slab.ts), as the server renders the first one
 function letters(word: HTMLElement, phrase: string): HTMLElement[] {
   word.replaceChildren(
-    ...[...phrase].map((letter) => {
-      const span = document.createElement('span');
-      span.className = 'dz-letter';
-      span.textContent = letter;
-      return span;
+    ...slabChunks(phrase).map((part) => {
+      const chunk = document.createElement('span');
+      chunk.className = 'dz-slab-chunk';
+      chunk.append(
+        ...[...part].map((letter) => {
+          const span = document.createElement('span');
+          span.className = 'dz-letter';
+          span.textContent = letter;
+          return span;
+        }),
+      );
+      return chunk;
     }),
   );
-  return [...word.children] as HTMLElement[];
+  return [...word.querySelectorAll<HTMLElement>('.dz-letter')];
 }
 
 function rotator(gsap: Gsap, ease: Eases, time: Times): Stop {

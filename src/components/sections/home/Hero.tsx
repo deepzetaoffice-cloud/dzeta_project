@@ -3,6 +3,7 @@ import { auditHref, CtaButton, whatsappHref } from '@/components/ui/CtaButton';
 import { Glyph } from '@/components/ui/Glyph';
 import { heroAgent, heroAnswer, heroRotator } from '@/content/en/home';
 import { shellContent } from '@/content/en/shell';
+import { slabChunks } from '@/lib/fx/home/slab';
 
 // Home §01, the hero (docs/design/home.md; Figma 50:36, copy 50:158, scene 50:215). On the stage,
 // which holds the floating header in its top (data-stage-hero).
@@ -50,13 +51,16 @@ export function Hero() {
         <span aria-hidden="true" className="dz-hero-glow dz-hero-glow-a" />
         <span aria-hidden="true" className="dz-hero-glow dz-hero-glow-b" />
 
-        <div className="relative mx-auto grid max-w-[77.5rem] justify-items-center gap-6 px-gutter pt-[calc(var(--dz-layout-header-height)+var(--dz-space-4))] md:pt-[calc(var(--dz-layout-header-height)+var(--dz-space-8))] text-center">
-          <p className="inline-flex min-h-9 items-center gap-2 rounded-full border border-line-on-color px-3 text-caption">
+        <div className="relative mx-auto grid max-w-[77.5rem] justify-items-center gap-4 px-gutter pt-[calc(var(--dz-layout-header-height)+var(--dz-space-2))] md:gap-6 md:pt-[calc(var(--dz-layout-header-height)+var(--dz-space-8))] text-center">
+          <p className="inline-flex min-h-8 items-center md:min-h-9 gap-2 rounded-full border border-line-on-color px-3 text-caption">
             <span aria-hidden="true" className="size-2 rounded-xs bg-on-color" />
             {heroAnswer.location}
           </p>
 
-          <div className="dz-rotator grid w-full justify-items-center gap-1.5" data-phrases={phrases.join('|')}>
+          <div
+            className="dz-rotator grid w-full justify-items-center gap-1 md:gap-1.5"
+            data-phrases={phrases.join('|')}
+          >
             <p aria-hidden="true" className="dz-rotator-prev">
               {phrases[phrases.length - 1]}
             </p>
@@ -64,11 +68,16 @@ export function Hero() {
               <span aria-hidden="true" className="dz-rotator-glow" />
               <span className="dz-slab" data-slab="1">
                 {/* One span per letter: the rotator animates them, and no single big text block forms,
-                    so the slab never becomes the page's LCP element */}
+                    so the slab never becomes the page's LCP element. The letters sit in chunks that
+                    wrap only after a space or a hyphen (slab.ts). */}
                 <span className="dz-slab-word">
-                  {[...phrases[0]].map((letter, i) => (
-                    <span key={i} className="dz-letter">
-                      {letter}
+                  {slabChunks(phrases[0]).map((chunk, c) => (
+                    <span key={c} className="dz-slab-chunk">
+                      {[...chunk].map((letter, i) => (
+                        <span key={i} className="dz-letter">
+                          {letter}
+                        </span>
+                      ))}
                     </span>
                   ))}
                 </span>
@@ -80,7 +89,7 @@ export function Hero() {
                 <span />
               </span>
             </div>
-            <h1 id="home-heading" className="text-hero-line text-on-color">
+            <h1 id="home-heading" className="relative text-hero-line text-on-color">
               <span className="sr-only">{lead} </span>
               {headingTail}
               <span aria-hidden="true">.</span>
