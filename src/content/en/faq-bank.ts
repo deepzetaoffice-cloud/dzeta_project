@@ -80,7 +80,7 @@ export const homeFaq: readonly FaqQuestion[] = [
     topic: 'results',
     question: 'Do you guarantee rankings, leads or results?',
     answer:
-      'No — and we would question anyone who does. We build to measurable targets, like a reply within 60 seconds to every new lead, and we show you the numbers our own site achieves as the working example. What we guarantee is the engineering: custom code, performance budgets enforced in our pipeline, and AI-search-ready structure on every page we ship.',
+      'No — and we would question anyone who does. We build to measurable targets, like a reply within 60 seconds to every new lead, and we show you the numbers our own site achieves as the working example. What we guarantee is the engineering: custom code, speed measured and reported at launch, and AI-search-ready structure on every page we ship.',
   },
   {
     id: 'what-happens-after-launch',

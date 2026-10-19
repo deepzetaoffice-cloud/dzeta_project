@@ -848,7 +848,7 @@ If a tool has an API, it can usually be connected. The automations connect the p
 You do — completely. The code, the workflows, the accounts and the data belong to your business, in your name, from day one. We build on your accounts, document everything and hand over full access at launch. If you later want another team to run or extend the system, nothing is locked and there is nothing to buy back from us.
 
 ### Do you guarantee rankings, leads or results?
-No — and we would question anyone who does. We build to measurable targets, like a reply within 60 seconds to every new lead, and we show you the numbers our own site achieves as the working example. What we guarantee is the engineering: custom code, performance budgets enforced in our pipeline, and AI-search-ready structure on every page we ship.
+No — and we would question anyone who does. We build to measurable targets, like a reply within 60 seconds to every new lead, and we show you the numbers our own site achieves as the working example. What we guarantee is the engineering: custom code, speed measured and reported at launch, and AI-search-ready structure on every page we ship.
 
 ### What happens after launch — am I on my own?
 No. Launch is a step, not the end. We watch the numbers with you, fix what surfaces in the first weeks, and there is an ongoing care retainer for businesses that want us to keep running and improving the systems. You can also run everything yourself: the handover includes documentation and training for your team.
