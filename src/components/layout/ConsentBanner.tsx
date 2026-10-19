@@ -8,30 +8,29 @@ import { isLive, routePath } from '@/lib/routes';
 // (13 §2.1), and everyone else never sees it. Without JavaScript nothing runs, so it isn't shown.
 // - An <aside> landmark, placed after the skip link: first in the reading and Tab order, but it never
 //   takes focus by itself. Its title is a <p>, so no page's outline changes.
-// - Accept all and Reject all are the same size and weight (consent-copy.md principle 2); neither is
-//   on the action gradient, so the one-gradient-CTA rule holds (C42). Choose settings opens the second
-//   layer. TrackingRuntime handles the three buttons (data-consent-action).
+// - Accept all and Reject all are the same size and weight (consent-copy.md principle 2): Secondary
+//   buttons, neither violet. Choose settings opens the second layer. TrackingRuntime handles the three
+//   buttons (data-consent-action).
 // - The privacy policy link appears once /privacy (R006) is live (04 §1.4), in the actions row after
 //   Choose settings: on its own line it made the banner cover seven H1s at 360 × 640 (the owner moved
 //   it there, 2026-10-12, the privacy page plan). Accept all stays the banner's first Tab stop.
 // - Its content sits in a data-nosnippet <div>: the banner is in every page's HTML (hidden by CSS for
 //   most visitors), so its text must never become a search snippet or an AI answer. Google honours the
 //   attribute on div, span and section, not on aside.
-// - glass-frost on the navy chrome: it sits over the whole scrolling page, and on a phone the header
-//   pill is already the one live blur (effects.css). The muted tint: more opaque behind a paragraph,
-//   and the tint check:contrast gates the link colour on.
+// - v3 (decision 0033): a white panel at Elevation 3 with a hairline edge (globals.css), solid in
+//   forced colours.
 
 export function ConsentBanner() {
   const { banner } = consentContent;
   return (
     <aside
       aria-labelledby="dz-consent-title"
-      data-theme="dark"
-      className="dz-consent dz-glass dz-glass--muted"
+
+      className="dz-consent"
       data-consent-banner=""
     >
       <div data-nosnippet="">
-        <p id="dz-consent-title" className="font-bold text-fg-strong">
+        <p id="dz-consent-title" className="font-bold text-ink">
           {banner.title}
         </p>
         <p className="mt-2 text-small">{banner.body}</p>
@@ -45,14 +44,14 @@ export function ConsentBanner() {
           <button
             type="button"
             data-consent-action="choose"
-            className="dz-underline dz-target ms-1 min-h-11 text-small font-medium text-link"
+            className="underline underline-offset-4 ms-1 min-h-11 text-small font-medium text-link"
           >
             {banner.choose}
           </button>
           {isLive('R006') ? (
             <a
               href={routePath('R006')}
-              className="dz-underline dz-target ms-1 inline-flex min-h-11 items-center text-small font-medium text-link"
+              className="underline underline-offset-4 ms-1 inline-flex min-h-11 items-center text-small font-medium text-link"
             >
               {banner.policyLink}
             </a>

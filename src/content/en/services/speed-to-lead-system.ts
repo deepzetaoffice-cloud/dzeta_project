@@ -22,6 +22,11 @@ export const speedToLeadSystem: ServicePageContent = {
   // 53 words: what it is, the outcome (a design target), who it's for
   answer: `The Speed-to-Lead System by ${siteConfig.brandName} is built to reply to every new lead within 60 seconds, on WhatsApp, SMS or email, then route it to the right salesperson. It is for UAE businesses that get enquiries from ads, property portals, their website and calls, and can’t afford to answer them hours later.`,
 
+  // The hero photo (service-page.md, the media plan)
+  heroPhotoAlt: 'A phone lit up on a desk at night, the Dubai skyline and the Burj Khalifa behind it',
+  // The facts §6 design target, never a measured result: the chip always carries "design target"
+  heroStat: { value: 'First reply within 60 seconds', qualifier: 'design target' },
+
   // 2 · The problem it solves (before-after, at most 5 rows; catalogue 1B.1's five capabilities)
   problem: {
     heading: 'Where leads slip away',
@@ -51,7 +56,7 @@ export const speedToLeadSystem: ServicePageContent = {
   },
 
   // 3 · How it works (story-flow): catalogue 1B.1's list as one example flow, labelled "Example".
-  // Each title ≤ 5 words, each text ≤ 20 words (types.ts)
+  // Each title ≤ 5 words, each text ≤ 20 words (types.ts); the diagram's boxes as in Figma 59:34
   how: {
     heading: 'How the Speed-to-Lead System works',
     lede: 'The Speed-to-Lead System sits between your lead sources and your sales team. It catches each enquiry, sends the first reply and makes sure a named salesperson picks it up. Here is one example flow for a property enquiry; your sources, messages and routing rules are set up around how your team sells.',
@@ -59,25 +64,31 @@ export const speedToLeadSystem: ServicePageContent = {
       {
         title: 'A buyer enquires',
         text: 'A buyer asks about an apartment on a property portal such as Bayut, Property Finder or Dubizzle.',
+        node: { label: 'Portal lead', line: 'Bayut · Property Finder · Dubizzle' },
       },
       {
         title: 'The first reply goes out',
         text: 'Within 60 seconds, the buyer gets a reply in your agency’s name on WhatsApp, or by SMS or email.',
+        node: { label: 'First reply', line: 'WhatsApp · SMS · email' },
       },
       {
         title: 'An AI call-back, if enabled',
         text: 'If you switch it on, an AI voice calls the buyer straight away, in Arabic or English.',
+        node: { label: 'AI call-back', line: 'Arabic or English · optional' },
       },
       {
         title: 'Routed to the right salesperson',
         text: 'Your routing rules pick the salesperson, for example by area or language, and pass them the lead.',
+        node: { label: 'Routing', line: 'By area or language' },
       },
       {
         title: 'The manager steps in',
         text: 'If nobody responds, the manager gets an alert and can hand the lead to someone else.',
+        node: { label: 'Manager alert', line: 'If nobody responds' },
       },
     ],
     exampleLabel: 'Example flow',
+    figure: 'A property enquiry',
   },
 
   // 4 · What you get (at most 8, each from catalogue 1B.1, or §9 for the consent and human line)

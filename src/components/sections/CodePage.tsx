@@ -1,73 +1,70 @@
-// "Code ↔ Page" (story-before-after, 13 §4.8; docs/design/service-page.md, the Websites page's
-// extras; the plan docs/plans/2026-10-10-flagship-websites-page.md). The page side is this page's
-// real hero (ServiceHero in preview mode, inert and hidden from assistive technology); the code side
-// is that hero's real source, read from the repository when the page is built, so the two can never
-// drift apart. Server-rendered: without JavaScript the two sides sit one above the other, and
-// RevealSlider (StoryControls.tsx) turns them into one frame with a native range input.
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import type { ReactNode } from 'react';
-import { RevealSlider } from '@/components/sections/StoryControls';
-import { ServiceHero, type ServiceSectionProps } from '@/components/sections/service/ServiceSections';
-import type { WebsitesExtras } from '@/content/en/services/types';
+import { SectionHeading } from '@/components/sections/SectionHeading';
+import { CODE_PAGE_ID, FlagshipHero, type FlagshipProps } from '@/components/sections/service/FlagshipSections';
 
-const SOURCE = 'src/components/sections/service/ServiceSections.tsx';
+// "Code ↔ Page" (docs/design/custom-coded-websites.md §02; code-page-compare, 13 §4.4): this page's real
+// opening section beside the real source that renders it, read from the repository at build time,
+// never typed by hand (10 §3.6). One box, two layers: the page underneath, the code over it, clipped
+// from the inline start to the handle (--dz-split). The handle is a native range input, so it drags,
+// takes ← → in 5% steps and has a name; src/lib/fx/flagship.ts moves the clip with it and plays the
+// one hint on first view. Without JavaScript the split rests at the middle.
 
-/** The hero's source as it ships: from `export function ServiceHero` to its closing brace */
-export function heroSource(): string {
+const SOURCE = 'src/components/sections/service/FlagshipSections.tsx';
+
+/** The hero's source as it ships: from `export function FlagshipHero` to its closing brace */
+function heroSource(): string {
   const text = readFileSync(join(process.cwd(), SOURCE), 'utf8').replace(/\r\n/g, '\n');
-  const start = text.indexOf('export function ServiceHero');
+  const start = text.indexOf('export function FlagshipHero');
   const end = text.indexOf('\n}\n', start);
-  if (start < 0 || end < 0) throw new Error(`ServiceHero not found in ${SOURCE}`);
+  if (start < 0 || end < 0) throw new Error(`FlagshipHero not found in ${SOURCE}`);
   return text.slice(start, end + 2);
 }
 
-// Token colouring at build time (no highlighter library, no client JavaScript): comments, strings,
-// JSX tags, keywords and attribute names, each a class the template stylesheet colours with tokens
-const TOKEN =
-  /(\/\/[^\n]*)|('(?:[^'\\\n]|\\.)*'|"(?:[^"\\\n]|\\.)*"|`(?:[^`\\]|\\.)*`)|(<\/?[A-Za-z][\w.]*|\/?>)|\b(export|function|const|return|null|undefined|true|false)\b|([A-Za-z][\w-]*)(?==)/g;
-const KINDS = ['comment', 'string', 'tag', 'keyword', 'attr'] as const;
-
-export function highlight(source: string): ReactNode[] {
-  const nodes: ReactNode[] = [];
-  let last = 0;
-  for (const match of source.matchAll(TOKEN)) {
-    const index = match.index ?? 0;
-    if (index > last) nodes.push(source.slice(last, index));
-    const kind = KINDS[match.slice(1).findIndex((group) => group !== undefined)];
-    nodes.push(
-      <span key={index} className={`dz-tok-${kind}`}>
-        {match[0]}
-      </span>,
-    );
-    last = index + match[0].length;
-  }
-  if (last < source.length) nodes.push(source.slice(last));
-  return nodes;
-}
-
-export function CodePage({ labels, ...hero }: ServiceSectionProps & { labels: WebsitesExtras['codePage'] }) {
+export function CodePage(props: FlagshipProps) {
+  const labels = props.extras.codePage;
   return (
-    <figure className="dz-codepage" data-codepage="">
-      <div className="dz-codepage-frame">
-        <div className="dz-codepage-page" aria-hidden="true" inert>
-          <span className="dz-codepage-tag">{labels.pageLabel}</span>
-          <div className="dz-codepage-canvas">
-            <ServiceHero {...hero} preview />
+    <section aria-labelledby="code-page-heading" id={CODE_PAGE_ID} className="mx-auto max-w-page px-gutter py-section">
+      <SectionHeading
+        id="code-page-heading"
+        index={1}
+        eyebrow={labels.label}
+        heading={labels.heading}
+        lede={labels.caption}
+      />
+      <figure className="mt-12" data-compare="">
+        <div className="dz-compare">
+          {/* The page side repeats the hero above, so it's hidden from screen readers and can't take focus */}
+          <div className="dz-compare-page" aria-hidden="true" inert>
+            <FlagshipHero {...props} preview />
           </div>
+          <div className="dz-compare-code" dir="ltr">
+            <pre className="font-mono text-small">
+              <code>{heroSource()}</code>
+            </pre>
+          </div>
+          <span aria-hidden="true" className="dz-compare-tag dz-compare-tag-page">
+            {labels.pageLabel}
+          </span>
+          <span aria-hidden="true" className="dz-compare-tag dz-compare-tag-code">
+            {labels.codeLabel}
+          </span>
+          <span aria-hidden="true" className="dz-compare-handle">
+            <span className="dz-compare-knob" />
+          </span>
+          <input
+            type="range"
+            min={0}
+            max={100}
+            step={5}
+            defaultValue={50}
+            aria-label={labels.sliderLabel}
+            className="dz-compare-range"
+            data-compare-range=""
+          />
         </div>
-        <div className="dz-codepage-code" data-theme="dark">
-          <span className="dz-codepage-tag">{labels.codeLabel}</span>
-          <pre>
-            <code>{highlight(heroSource())}</code>
-          </pre>
-        </div>
-      </div>
-      <RevealSlider label={labels.sliderLabel} />
-      <figcaption className="mt-4 max-w-measure text-small">
-        <span className="font-bold text-fg-strong">{labels.label}</span>{' '}
-        <span className="text-fg-muted">{labels.caption}</span>
-      </figcaption>
-    </figure>
+        <figcaption className="mt-4 text-small text-ink-secondary">{labels.hint}</figcaption>
+      </figure>
+    </section>
   );
 }

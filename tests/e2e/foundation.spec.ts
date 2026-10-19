@@ -41,56 +41,66 @@ test.describe('Home', () => {
     await context.close();
   });
 
-  // docs/ai/13 §3 rule 2: the LCP element is visible, unclipped and in its final position at first
-  // paint. It has no entrance animation and never starts hidden, not even through an ancestor.
-  test('the LCP element is the H1, and it is visible and in place from first paint', async ({ page }) => {
+  // docs/ai/13 §3 rule 7: the LCP element (usually the H1) is visible, unclipped and in its final
+  // position at first paint. It has no entrance animation and never starts hidden, not even through an
+  // ancestor. On Home it may be the H1 or the hero's direct answer (the owner, 2026-10-19: Figma shows
+  // only the H1's tail, so the answer paragraph can be the larger block); both are held to the rule.
+  test('the LCP element is the H1 or the hero answer, both visible and in place from first paint', async ({ page }) => {
     await page.goto('/', { waitUntil: 'commit' });
-    const h1 = page.locator('h1');
-    await h1.waitFor({ state: 'attached' });
-    const boxAtFirstPaint = await h1.boundingBox();
-
-    const firstPaintStyle = await h1.evaluate((el) => {
-      let opacity = 1;
-      for (let node: Element | null = el; node; node = node.parentElement) {
-        opacity *= Number(getComputedStyle(node).opacity);
-      }
-      const s = getComputedStyle(el);
-      return {
-        opacity,
-        visibility: s.visibility,
-        animation: s.animationName,
-        transform: s.transform,
-        translate: s.translate,
-        scale: s.scale,
-        rotate: s.rotate,
-        clipPath: s.clipPath,
-      };
-    });
-    expect(firstPaintStyle).toEqual({
-      opacity: 1,
-      visibility: 'visible',
-      animation: 'none',
-      transform: 'none',
-      translate: 'none',
-      scale: 'none',
-      rotate: 'none',
-      clipPath: 'none',
-    });
+    const candidates = [page.locator('h1'), page.locator('[data-hero-answer]')];
+    const boxesAtFirstPaint: ({ x: number; y: number; width: number; height: number } | null)[] = [];
+    for (const candidate of candidates) {
+      await candidate.waitFor({ state: 'attached' });
+      boxesAtFirstPaint.push(await candidate.boundingBox());
+      const firstPaintStyle = await candidate.evaluate((el) => {
+        let opacity = 1;
+        for (let node: Element | null = el; node; node = node.parentElement) {
+          opacity *= Number(getComputedStyle(node).opacity);
+        }
+        const s = getComputedStyle(el);
+        return {
+          opacity,
+          visibility: s.visibility,
+          animation: s.animationName,
+          transform: s.transform,
+          translate: s.translate,
+          scale: s.scale,
+          rotate: s.rotate,
+          clipPath: s.clipPath,
+        };
+      });
+      expect(firstPaintStyle).toEqual({
+        opacity: 1,
+        visibility: 'visible',
+        animation: 'none',
+        transform: 'none',
+        translate: 'none',
+        scale: 'none',
+        rotate: 'none',
+        clipPath: 'none',
+      });
+    }
 
     await page.waitForLoadState('load');
-    expect(await h1.boundingBox()).toEqual(boxAtFirstPaint);
+    for (const [index, candidate] of candidates.entries()) {
+      expect(await candidate.boundingBox()).toEqual(boxesAtFirstPaint[index]);
+    }
 
-    const lcpTag = await page.evaluate(
+    const lcp = await page.evaluate(
       () =>
         new Promise<string>((resolve) => {
           setTimeout(() => resolve('no LCP entry within 3 s'), 3000);
           new PerformanceObserver((list) => {
             const entries = list.getEntries() as (PerformanceEntry & { element?: Element | null })[];
-            resolve(entries.at(-1)?.element?.tagName ?? 'unknown');
+            const element = entries.at(-1)?.element;
+            if (!element) resolve('unknown');
+            else if (element.tagName === 'H1') resolve('H1');
+            else if (element.hasAttribute('data-hero-answer')) resolve('hero answer');
+            else resolve(`${element.tagName}.${element.className}`);
           }).observe({ type: 'largest-contentful-paint', buffered: true });
         }),
     );
-    expect(lcpTag).toBe('H1');
+    expect(['H1', 'hero answer']).toContain(lcp);
   });
 
   test('logs no console errors or CSP report-only violations', async ({ page }) => {

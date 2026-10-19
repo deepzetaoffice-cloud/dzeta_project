@@ -1,232 +1,200 @@
-import { Icon } from '@/components/icons/Icon';
-import type { Pillar, Tier3Name } from '@/components/icons/registry';
-import { DisplayControls } from '@/components/layout/DisplayControls';
-import { navigation } from '@/content/en/navigation';
+import type { ReactNode } from 'react';
+import type { Pillar } from '@/components/icons/registry';
+import { Glyph } from '@/components/ui/Glyph';
+import { Photo } from '@/components/ui/Photo';
+import { PillarMark } from '@/components/ui/PillarMark';
+import { navigation, type MenuColumn } from '@/content/en/navigation';
 import { shellContent } from '@/content/en/shell';
-import { isShown, navHref } from '@/lib/routes';
+import { photo, PILLAR_DOOR } from '@/lib/media/photos';
+import { isShown, navHref, type RouteId } from '@/lib/routes';
 
-// The mega menu, "Services" (docs/design/header.md; P2 plan, I). The button opens a popover, so Esc and
-// a click outside close it and focus returns to the button, with no JavaScript; the platform exposes
-// the expanded state, so no aria-expanded is written, and it's never role="menu" (06 §3). It opens on
-// click only.
-// - Four pillar columns, each a subgrid, so the heads (the Tier 3 icon beside the name and the promise
-//   line), the service rows and the "All … services" links line up across the columns. A service row
-//   lights on hover and focus, with a guide line in its pillar's colour (hover-guide-line) and its own
-//   icon's story (hover-glow). The column hosts only its Tier 3 head (dz-t3-host), so one row never
-//   plays the other rows' icons.
-// - A strip below (the owner's rearrangement, 2026-10-01): the solutions on a line of their own; then
-//   the rail (the review page's demo card, glass-liquid, production with P7's demos, and the rail links)
-//   and, at the inline end, the two display switches side by side (Q2). The columns get the full width.
-// The strip's links and "All … services" are one line of small text, so each gets a 44 px hit area
-// (dz-target, 05 §7); wrapped lines keep a gap wide enough that two hit areas never overlap.
-// Only live pages are linked: every column, item and strip link renders, but as muted text while its
-// page is unshipped (04 §1.4; plan 2026-10-08-header-full-menu). Items marked `mega: false` stay out
-// of the menu (the owner, 2026-10-01). The review page links every item as a fragment of itself.
-// Loaded on intent (L8, decision 0026; header.md): the popover always holds a small server-rendered
-// lite panel (the hub, then the pillar pages — live ones as links, unshipped as text), so no-JS
-// visitors and crawlers reach every service through the hub. The full panel (the columns and the
-// strip, MegaMenuPanel) stays out of every
-// page's first load: the button is a lazy region (data-fx-lazy="mega"), and the first pointer or
-// focus on it fetches the panel as a static fragment (/shell/mega-menu, R179) into its mount. The
-// review page renders the full panel inline.
+// The mega menu (header.md; Figma 37:862, open over Home 37:863), from 1,280 px. A native popover
+// (`popover="auto"`) that the Services button opens on click or Enter, never on hover-intent alone:
+// Esc, a click outside or a followed link close it, and focus returns to Services, all without
+// JavaScript. It's a disclosure of links, never role="menu" (06 §3). Its links are in the page's HTML,
+// so crawlers and no-JS visitors reach every service (0026).
+// - Four pillar columns in the catalogue order: the Pillar pixels mark, the name, the promise, the
+//   menu services with their outcomes (navigation.ts, byte for byte) and "All {pillar} services".
+// - The preview rail: the hovered or focused pillar's door photo (P01–P04) and service
+//   (mega-preview-swap, src/lib/fx/mega.ts sets data-pillar and the two lines), then the Solutions,
+//   the side links and, on the review page, "Try a live demo".
+// - Every item renders; it's a link only while its page is live (04 §1.4), as in the header.
 
-const PANEL = 'dz-mega';
+export const MEGA_ID = 'dz-mega';
 
-const HEAD: Record<Pillar, Tier3Name> = {
-  ai: 'ai-automation',
-  web: 'websites',
-  software: 'software',
-  ranking: 'growth-ranking',
+const WASH: Record<Pillar, string> = {
+  ai: 'dz-mega-col-ai',
+  web: 'dz-mega-col-web',
+  software: 'dz-mega-col-software',
+  ranking: 'dz-mega-col-ranking',
 };
 
-// Every column and every item render: an item is a link only while its page is live, else the menu
-// shows it as muted text. Items marked `mega: false` stay out (the owner, 2026-10-01).
-export function megaColumns() {
-  return navigation.columns.map((column) => ({
-    ...column,
-    items: column.items.filter((item) => !('mega' in item && item.mega === false)),
-  }));
-}
+const BAR: Record<Pillar, string> = {
+  ai: 'bg-(image:--dz-grad-pillar-ai)',
+  web: 'bg-(image:--dz-grad-pillar-websites)',
+  software: 'bg-(image:--dz-grad-pillar-software)',
+  ranking: 'bg-(image:--dz-grad-pillar-growth)',
+};
 
-// The lite panel's links: the hub, then the pillar pages. The render site chooses a link or muted text.
-export function megaLiteLinks() {
-  return [
-    { route: 'R010' as const, label: navigation.hubLabel },
-    ...navigation.columns.map((column) => ({ route: column.route, label: column.name })),
-  ];
-}
-
-export type MegaMenuProps = { review: boolean };
-
-export function MegaMenu({ review }: MegaMenuProps) {
-  const lite = megaLiteLinks();
-  return (
-    <>
-      <button
-        type="button"
-        popoverTarget={PANEL}
-        className="dz-mega-button inline-flex min-h-11 items-center gap-1 rounded-pill px-2.5 xl:px-3 text-small font-medium text-fg hover:text-fg-strong"
-        data-fx-lazy={!review ? 'mega' : undefined}
-      >
-        {navigation.servicesLabel}
-        <Icon name="chevron" size={16} className="dz-mega-chevron" />
-      </button>
-      <div id={PANEL} popover="auto" data-theme="dark" className="dz-mega dz-glass dz-glass--live dz-glass--muted">
-        <ul className="dz-mega-lite mb-6 flex flex-wrap items-center gap-x-5 gap-y-3 text-small">
-          {lite.map((link) =>
-            isShown(link.route, review) ? (
-              <li key={link.route}>
-                <a href={navHref(link.route, review)} className="dz-underline dz-target font-bold text-fg-strong">
-                  {link.label}
-                </a>
-              </li>
-            ) : (
-              <li key={link.route}>
-                <span className="font-bold text-fg-muted">{link.label}</span>
-              </li>
-            ),
-          )}
-        </ul>
-        {review ? <MegaMenuPanel review /> : <div data-mega-full="" />}
-      </div>
-    </>
+// A link while its page is live (or on the review page), else the same text, muted
+function MaybeLink({
+  route,
+  review,
+  className,
+  muted,
+  children,
+}: {
+  route: RouteId;
+  review: boolean;
+  className: string;
+  muted: string;
+  children: ReactNode;
+}) {
+  return isShown(route, review) ? (
+    <a href={navHref(route, review)} className={className}>
+      {children}
+    </a>
+  ) : (
+    <span className={`${className} ${muted}`}>{children}</span>
   );
 }
 
-// The full panel: the four columns and the strip. Inline on the review page; elsewhere served as a
-// static fragment (src/app/shell/mega-menu/route.ts, R179) and fetched on intent (mega-enhance.ts).
-export function MegaMenuPanel({ review }: MegaMenuProps) {
-  const columns = megaColumns();
-  const solutions = navigation.solutions.items;
-  const rail = navigation.rail;
+function Column({ column, review }: { column: MenuColumn; review: boolean }) {
+  const items = column.items.filter((item) => item.mega !== false);
   return (
-    <>
-      <div className="grid gap-x-6 gap-y-8 lg:grid-cols-4">
-        {columns.map((column) => {
-          const title = `${PANEL}-${column.pillar}`;
-          return (
-            // A host for the Tier 3 head only, not focusable itself: hovering the column, or focusing a
-            // link in it, replays the head icon's story (05 §6).
-            <div
-              key={column.pillar}
-              className={`dz-t3-host dz-pillar--${column.pillar} row-span-3 grid grid-rows-subgrid content-start gap-y-3`}
-            >
-              <div className="flex items-start gap-3">
-                <Icon name={HEAD[column.pillar]} size={64} />
-                <div className="grid gap-1 pt-1">
-                  <p id={title} className="font-bold text-fg-strong">
-                    {column.name}
-                  </p>
-                  <p className="text-small text-fg-muted">{column.promise}</p>
-                </div>
-              </div>
-              <ul aria-labelledby={title} className="-mx-3 grid content-start gap-0.5">
-                {column.items.map((item) => {
-                  const live = isShown(item.route, review);
-                  const content = (
-                    <>
-                      {'icon' in item && item.icon ? (
-                        <Icon name={item.icon} size={24} />
-                      ) : (
-                        <span aria-hidden="true" className="dz-mega-pixel" />
-                      )}
-                      {/* The space keeps the name and the outcome two words apart for text readers and
-                            crawlers, which read the link's text as one run; the grid doesn't render it. */}
-                      <span className="grid gap-0.5 leading-snug">
-                        <span className={live ? 'font-medium text-fg-strong' : 'font-medium text-fg-muted'}>
-                          {item.name}
-                        </span>{' '}
-                        <span className="text-fg-muted">{item.outcome}</span>
-                      </span>
-                    </>
-                  );
-                  return (
-                    <li key={item.route}>
-                      {live ? (
-                        <a
-                          href={navHref(item.route, review)}
-                          className="dz-menu-row dz-icon-host flex items-start gap-3 rounded-md px-3 py-1.5 text-small"
-                        >
-                          {content}
-                        </a>
-                      ) : (
-                        <span className="flex items-start gap-3 rounded-md px-3 py-1.5 text-small">{content}</span>
-                      )}
-                    </li>
-                  );
-                })}
-              </ul>
-              {isShown(column.route, review) ? (
-                <a
-                  href={navHref(column.route, review)}
-                  className="dz-underline dz-target dz-menu-all self-end justify-self-start text-small font-medium text-balance text-link"
-                >
-                  {column.allLabel}
-                  <Icon name="arrow" size={16} className="dz-menu-arrow ms-1.5 align-middle" />
-                </a>
-              ) : (
-                <span className="dz-menu-all self-end justify-self-start text-small font-medium text-balance text-fg-muted">
-                  {column.allLabel}
-                </span>
-              )}
-            </div>
-          );
-        })}
+    <div
+      data-mega-col={column.pillar}
+      className={`dz-mega-col grid min-w-0 flex-1 content-start gap-3.5 rounded-lg p-4 ${WASH[column.pillar]}`}
+    >
+      <div className="grid gap-2">
+        <p className="dz-mega-title flex items-center gap-2.5">
+          <PillarMark pillar={column.pillar} shape="pixels" className="h-7" />
+          <MaybeLink route={column.route} review={review} className="text-ink" muted="">
+            {column.name}
+          </MaybeLink>
+        </p>
+        <p className="max-w-[12.5rem] text-small text-ink-secondary">{column.promise}</p>
+        <span aria-hidden="true" className={`h-0.75 w-full rounded-xs ${BAR[column.pillar]}`} />
       </div>
-      <div className="mt-6 grid gap-3 border-t border-hairline pt-5 text-small">
-        <div className="flex flex-wrap items-center gap-x-5 gap-y-6">
-          {isShown(navigation.solutions.route, review) ? (
-            <a
-              href={navHref(navigation.solutions.route, review)}
-              className="dz-underline dz-target font-bold text-fg-strong"
+      <ul className="grid gap-3.5">
+        {items.map((item) => (
+          <li key={item.route} data-mega-item="" data-name={item.name} data-outcome={item.outcome}>
+            <MaybeLink
+              route={item.route}
+              review={review}
+              className="dz-mega-item grid gap-0.5 rounded-sm"
+              muted="dz-mega-item-muted"
             >
-              {navigation.solutions.label}
-            </a>
-          ) : (
-            <span className="font-bold text-fg-muted">{navigation.solutions.label}</span>
-          )}
-          <ul className="flex flex-wrap items-center gap-x-5 gap-y-6">
-            {solutions.map((item) => (
+              <span className="text-[length:var(--dz-font-size-nav)] leading-(--dz-leading-body) font-semibold">
+                {item.name}
+              </span>
+              <span className="text-caption text-ink-tertiary">{item.outcome}</span>
+            </MaybeLink>
+          </li>
+        ))}
+      </ul>
+      <MaybeLink
+        route={column.route}
+        review={review}
+        className="dz-mega-all inline-flex w-fit items-center gap-1.5 text-caption"
+        muted="text-ink-secondary"
+      >
+        {column.allLabel}
+        <Glyph name="arrow-up-right" className="size-3.5" />
+      </MaybeLink>
+    </div>
+  );
+}
+
+export function MegaMenu({ review }: { review: boolean }) {
+  const first = navigation.columns[0];
+  const firstItem = first.items[0];
+  return (
+    <div id={MEGA_ID} popover="auto" className="dz-mega" data-pillar={first.pillar}>
+      <div className="flex items-center justify-between gap-6">
+        <p className="dz-mono-label">{shellContent.megaLabel}</p>
+        <a
+          href={navHref('R010', review)}
+          className="inline-flex min-h-11 items-center gap-1.5 text-button-m text-violet hover:underline"
+        >
+          {navigation.hubLabel}
+          <Glyph name="arrow-up-right" className="size-4.5" />
+        </a>
+      </div>
+      <div className="mt-5 flex items-start gap-4">
+        <div className="flex min-w-0 flex-1 gap-2">
+          {navigation.columns.map((column) => (
+            <Column key={column.pillar} column={column} review={review} />
+          ))}
+        </div>
+        <div className="grid w-[20.625rem] shrink-0 content-start gap-4 rounded-xl bg-canvas p-4">
+          <div className="relative h-[11.875rem] overflow-hidden rounded-lg bg-surface-muted">
+            {navigation.columns.map((column) => (
+              <div key={column.pillar} data-preview={column.pillar} className="dz-mega-preview absolute inset-0">
+                <Photo
+                  asset={photo(PILLAR_DOOR[column.pillar], { decorative: true })}
+                  sizes="20rem"
+                  className="size-full object-cover"
+                />
+                <span
+                  aria-hidden="true"
+                  className={`absolute inset-0 opacity-45 mix-blend-multiply ${BAR[column.pillar]}`}
+                />
+                <span className="absolute start-3 top-3 rounded-full bg-surface px-3 py-1 font-mono text-label text-ink uppercase">
+                  {shellContent.previewLabel} · {column.name}
+                </span>
+              </div>
+            ))}
+          </div>
+          <div className="grid gap-1">
+            <p data-mega-name="" className="dz-mega-title text-ink">
+              {firstItem.name}
+            </p>
+            <p data-mega-outcome="" className="text-small text-ink-secondary">
+              {firstItem.outcome}
+            </p>
+          </div>
+          <hr className="border-line" />
+          <p className="dz-mono-label">{navigation.solutions.label}</p>
+          <ul className="flex flex-wrap gap-1.5">
+            {navigation.solutions.items.map((item) => (
               <li key={item.route}>
-                {isShown(item.route, review) ? (
-                  <a href={navHref(item.route, review)} className="dz-underline dz-target text-fg">
-                    {item.name}
-                  </a>
-                ) : (
-                  <span className="text-fg-muted">{item.name}</span>
-                )}
+                <MaybeLink
+                  route={item.route}
+                  review={review}
+                  className="inline-flex min-h-9 items-center rounded-full border border-line bg-surface px-3 text-caption text-ink"
+                  muted="text-ink-secondary"
+                >
+                  {item.name}
+                </MaybeLink>
               </li>
             ))}
           </ul>
-        </div>
-        <div className="flex flex-wrap items-center justify-between gap-x-10 gap-y-3">
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-6">
-            {review ? (
-              <a
-                href="#shell-demo"
-                className="dz-glass dz-glass--live dz-glass--liquid inline-flex min-h-11 items-center rounded-pill px-5 font-bold text-fg-strong"
-              >
-                <span aria-hidden="true" className="dz-liquid-sheen" />
-                {shellContent.demoCard}
-              </a>
-            ) : null}
-            <ul className="flex flex-wrap items-center gap-x-4 gap-y-6">
-              {rail.map((link) => (
-                <li key={link.route}>
-                  {isShown(link.route, review) ? (
-                    <a href={navHref(link.route, review)} className="dz-underline dz-target font-medium text-fg-strong">
-                      {link.label}
-                    </a>
-                  ) : (
-                    <span className="font-medium text-fg-muted">{link.label}</span>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <DisplayControls place="mega" layout="row" />
+          <ul className="flex flex-wrap gap-x-3.5 gap-y-2 text-caption">
+            {navigation.rail.map((link) => (
+              <li key={link.route}>
+                <MaybeLink
+                  route={link.route}
+                  review={review}
+                  className="text-ink hover:text-violet"
+                  muted="text-ink-secondary"
+                >
+                  {link.label}
+                </MaybeLink>
+              </li>
+            ))}
+          </ul>
+          {review ? (
+            <a
+              href="#shell-demo"
+              className="dz-press flex min-h-11 items-center justify-between rounded-lg bg-action px-4 py-3 text-button-m text-on-color"
+            >
+              {shellContent.demoCard}
+              <Glyph name="arrow-up-right" className="size-4.5" />
+            </a>
+          ) : null}
         </div>
       </div>
-    </>
+    </div>
   );
 }

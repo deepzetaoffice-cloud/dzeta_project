@@ -1,51 +1,71 @@
-// The lightweight demo trigger (P5 S6; 04 §2's P5 row: "demos stubbed behind lightweight
-// triggers"). A server-rendered button (data-demo="<id>") that is its own lazy region
-// (data-fx-lazy="demo"): the first pointer, focus or click on it imports demo-enhance.ts, which
-// opens the stub panel and fires demo_open — never at first load (07 §2). The panel is honest: it
-// says the live demo arrives with the next phase and offers the audit CTA (10 §3.6 — no fake demo).
-// Its markup is server-rendered once per page (DemoPanelTemplate) and cloned on use, so no React
-// renderer ships to the browser (the P6 A1 audit: the old lazy chunk carried react-dom/server,
-// 66.5 KB gzip).
+import type { Tier1Name } from '@/components/icons/registry';
 import { auditHref } from '@/components/ui/CtaButton';
-import { Icon } from '@/components/icons/Icon';
+import { Glyph, glyphFor } from '@/components/ui/Glyph';
 import { demoStub } from '@/content/en/demos';
 import { shellContent } from '@/content/en/shell';
 
+// A demo's trigger (07 §4: the live demos come in P7). A button: the lazy demo enhancement
+// (src/lib/fx/demo.ts) clones the page's one panel template after it and fires demo_open when it
+// opens (09 §3). Each trigger is its own lazy region (data-fx-lazy="demo"), so the enhancement loads
+// on the first pointer, focus or click on it. The panel says honestly that the demo isn't live yet and offers
+// the audit.
+
 export type DemoStubProps = {
-  /** The demo's id in the taxonomy (demo_open's demo_id): 'ai-agent', 'workflow-explorer', 'roi-calculator', 'speed-to-lead' */
+  /** The demo's id in the taxonomy (demo_open's demo_id) */
   demoId: string;
   /** The trigger's label */
   label: string;
-  /** The trigger's icon (Tier 1) */
-  icon?: 'send' | 'arrow' | 'check' | 'globe' | 'chevron';
+  /** The trigger's glyph, by the content's interface name */
+  icon?: Tier1Name;
+  /** The button's look (05 §7): Secondary on white, On colour over the stage (border only, C85), or
+      Inverse (ink, the final CTA's test card) */
+  tone?: 'secondary' | 'onColor' | 'inverse';
   className?: string;
 };
 
-// The trigger only: a real <button> (keyboard-operable, focus parity) whose panel arrives on first use
-export function DemoStub({ demoId, label, icon = 'arrow', className }: DemoStubProps) {
+const LOOK = {
+  secondary: 'min-h-14 border-line-strong bg-surface px-6 text-button-l text-ink',
+  onColor: 'min-h-14 border-line-on-color px-6 text-button-l text-on-color',
+  inverse: 'min-h-11 border-transparent bg-action-inverse px-5 text-button-m text-on-color',
+} as const;
+
+export function DemoStub({ demoId, label, icon = 'arrow', tone = 'secondary', className }: DemoStubProps) {
+  const glyph = glyphFor(icon);
   return (
-    <button type="button" className={`dz-demo-trigger ${className ?? ''}`} data-demo={demoId} data-fx-lazy="demo">
-      <Icon name={icon} size={20} />
-      {label}
+    <button
+      type="button"
+      className={['dz-press inline-flex items-center gap-2 rounded-full border', LOOK[tone], className]
+        .filter(Boolean)
+        .join(' ')}
+      data-demo={demoId}
+      data-fx-lazy="demo"
+    >
+      {tone === 'inverse' ? label : null}
+      {glyph ? <Glyph name={glyph} className={tone === 'inverse' ? 'size-4.5' : 'size-5'} /> : null}
+      {tone === 'inverse' ? null : label}
     </button>
   );
 }
 
-// The panel's markup, once per page that has a demo trigger: hidden (out of the layout and the
-// accessibility tree) until demo-enhance.ts clones it next to the trigger that was used.
+// The demo stubs' panel, once per page: hidden until a trigger clones it.
 export function DemoPanelTemplate() {
   return (
     <div hidden data-demo-template="">
       <div
-        className="dz-glass dz-demo-panel rounded-2xl p-6"
+        className="rounded-lg border border-line bg-surface p-6 text-ink shadow-2"
         role="dialog"
         aria-modal="false"
         aria-label={demoStub.title}
       >
         <h3 className="text-h4">{demoStub.title}</h3>
-        <p className="mt-2 max-w-measure text-small text-fg-muted">{demoStub.line}</p>
+        <p className="mt-2 max-w-measure text-small text-ink-secondary">{demoStub.line}</p>
         <div className="mt-4 flex flex-wrap gap-3">
-          <a className="dz-cta dz-cta--primary" href={auditHref()} data-cta="page" data-cta-id="book_audit">
+          <a
+            className="dz-press inline-flex min-h-11 items-center rounded-full bg-action px-5 text-button-m text-on-color"
+            href={auditHref()}
+            data-cta="page"
+            data-cta-id="book_audit"
+          >
             {shellContent.cta}
           </a>
         </div>

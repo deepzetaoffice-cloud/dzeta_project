@@ -1,0 +1,132 @@
+/* The other inner pages: the privacy policy, the 404 and the error page (privacy.md, not-found.md;
+   Figma 61:34, 61:1054). Tokens only (05 §1); every motion rests in its final state outside the fx
+   variant (13 §3 rules 8 and 10). */
+
+@layer components {
+  /* The privacy page (privacy.md; Figma 61:34) */
+
+  /* §01 drape: soft vertical pleats, white into violet soft, 3 rem apart; the veil keeps the middle pale
+     under the text. src/lib/fx/privacy.ts paints the same pleats on the canvas and lets the pointer
+     push them (effects on, a fine pointer and WebGL only); the CSS pleats rest underneath otherwise. */
+  .dz-drape {
+    isolation: isolate;
+  }
+
+  .dz-drape-pleats,
+  .dz-drape-canvas,
+  .dz-drape-veil {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    pointer-events: none;
+  }
+
+  .dz-drape-pleats {
+    background-image: repeating-linear-gradient(
+      90deg,
+      var(--dz-color-bg-surface) 0,
+      var(--dz-color-bg-violet-soft) 1.5rem,
+      var(--dz-color-bg-surface) 3rem
+    );
+  }
+
+  .dz-drape-veil {
+    background-image: radial-gradient(ellipse 42% 58% at 50% 50%, var(--dz-p-white-92), transparent);
+  }
+
+  /* §03 The contents: the section being read is marked (aria-current, set by the page's scene) */
+  .dz-toc-link {
+    display: flex;
+    align-items: center;
+    gap: var(--dz-space-2);
+    min-block-size: 2.25rem;
+    padding-inline: var(--dz-space-3);
+    border-radius: var(--dz-radius-md);
+    color: var(--dz-color-text-secondary);
+    &:hover {
+      color: var(--dz-color-text-primary);
+    }
+  }
+
+  .dz-toc-link[aria-current] {
+    background-color: var(--dz-color-bg-violet-soft);
+    color: var(--dz-color-text-violet);
+    font-weight: var(--dz-font-weight-medium);
+    &::before {
+      content: '';
+      flex-shrink: 0;
+      inline-size: 0.375rem;
+      block-size: 0.375rem;
+      border-radius: var(--dz-radius-full);
+      background-color: var(--dz-color-accent-violet);
+    }
+  }
+
+  /* The 404 and the error page (not-found.md; Figma 61:1054): one calm stage, the copy in its middle */
+  .dz-lost {
+    min-block-size: calc(100svh - var(--dz-layout-stage-inset));
+  }
+
+  .dz-lost-code::before {
+    content: attr(data-word);
+    content: attr(data-word) / '';
+    display: block;
+    color: transparent;
+    font-family: var(--dz-font-family-display);
+    font-size: calc(var(--dz-font-size-hero-word) * 1.6);
+    font-weight: var(--dz-font-weight-medium);
+    line-height: 1;
+    -webkit-text-stroke: 0.125rem var(--dz-color-text-on-color);
+  }
+
+  /* shape-throw: the shapes rest at their spots; src/lib/fx/shapes.ts lets a fine pointer throw them */
+  .dz-shapes {
+    position: absolute;
+    inset: 0;
+  }
+
+  .dz-shape {
+    position: absolute;
+    user-select: none;
+  }
+
+  .dz-lost[data-armed] .dz-shape {
+    cursor: grab;
+    touch-action: none;
+  }
+
+  .dz-lost[data-armed] .dz-shape[data-held] {
+    z-index: 1;
+    cursor: grabbing;
+  }
+
+  .dz-shape-chip {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 2.75rem;
+    padding-inline: var(--dz-space-5);
+    border-radius: var(--dz-radius-full);
+    background-color: var(--dz-color-bg-surface);
+    box-shadow: var(--dz-elevation-2);
+    color: var(--dz-color-text-violet);
+    font-size: var(--dz-font-size-button-m);
+    font-weight: var(--dz-font-weight-bold);
+    white-space: nowrap;
+  }
+
+  .dz-shapes li:nth-child(even) .dz-shape-chip {
+    border: var(--dz-border-width-strong) solid var(--dz-color-border-on-color);
+    background-color: transparent;
+    box-shadow: none;
+    color: var(--dz-color-text-on-color);
+  }
+
+  .dz-shape-pixels {
+    block-size: 3.5rem;
+    opacity: 0.9;
+    @variant lg {
+      block-size: 5rem;
+    }
+  }
+}

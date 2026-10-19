@@ -34,20 +34,21 @@ describe('the error page', () => {
   it('has the branded title, the heading and the copy', () => {
     const html = render();
     expect(html).toContain(`<title>${errorContent.title} | ${siteConfig.brandName}</title>`);
-    expect(html).toContain(`<h1 class="text-h1">${errorContent.heading}</h1>`);
+    expect(html).toContain(`<h1 class="text-hero-line text-on-color">${errorContent.heading}</h1>`);
     expect(html).toContain(errorContent.body);
   });
 
-  it('shows the logo, named, in a navy header', () => {
+  it('shows the white-background wordmark, named, on a white pill in its header (C78)', () => {
     expect(render()).toMatch(
-      new RegExp(`<header data-theme="dark"[^>]*><span[^>]*role="img" aria-label="${siteConfig.brandName}"`),
+      new RegExp(`<header[^>]*><span class="[^"]*bg-surface[^"]*"><img [^>]*alt="${siteConfig.brandName}"`),
     );
   });
 
-  it('offers "Try again" as a button and the home page as a link with 44 px targets', () => {
+  // The button is min-h-14 (56 px); the link's dz-button-on-color sets 3.5 rem (globals.css)
+  it('offers "Try again" as a button and the home page as a link, both at least 44 px tall', () => {
     const html = render();
-    expect(html).toMatch(new RegExp(`<button type="button" class="min-h-11[^"]*">${errorContent.retry}</button>`));
-    expect(html).toMatch(new RegExp(`<a class="inline-flex min-h-11[^"]*" href="/">${errorContent.homeLink}</a>`));
+    expect(html).toMatch(new RegExp(`<button type="button" class="[^"]*min-h-14[^"]*">${errorContent.retry}</button>`));
+    expect(html).toMatch(new RegExp(`<a class="[^"]*dz-button-on-color[^"]*" href="/">${errorContent.homeLink}</a>`));
   });
 
   it('"Try again" calls retry once', () => {

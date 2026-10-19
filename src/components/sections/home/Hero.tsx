@@ -1,110 +1,182 @@
-// Home §01, the hero (P5 S4; docs/design/home.md "Hero details"; engine §3.1 order 1). The
-// statement H1 is the LCP element: visible, unclipped and in place at first paint, with no
-// entrance animation (13 §3 rule 2) — it renders before anything else here. Effects, all by ID
-// (13 §4): pointer-grid-wake on the Z0 layer (the shared pointer controller writes --dz-fx-x/y),
-// glass-liquid on the proof card (one per view; desktop fine-pointer only via the fx variant),
-// story-chat inside it (CSS one-shot, plays once in view ~2.5 s, "Example conversation" label —
-// 10 §3.6), and The Assembly (depth-css + scroll-assemble): the four cluster pixels fly in on
-// 35° paths on the first scroll and lock beside the headline, CSS only, static assembled
-// otherwise and under Reduce effects (13 §5). The primary CTA is the shell's audit CTA
-// (hover-charge + pointer-magnet, CtaButton); the secondary is hover-outline.
-import { auditHref } from '@/components/ui/CtaButton';
-import { CtaButton } from '@/components/ui/CtaButton';
-import { Icon } from '@/components/icons/Icon';
-import { Logo } from '@/components/ui/Logo';
-import { heroAnswer } from '@/content/en/home';
+import { HeroScene } from '@/components/sections/home/HeroScene';
+import { auditHref, CtaButton, whatsappHref } from '@/components/ui/CtaButton';
+import { Glyph } from '@/components/ui/Glyph';
+import { heroAgent, heroAnswer, heroRotator } from '@/content/en/home';
 import { shellContent } from '@/content/en/shell';
+import { slabChunks } from '@/lib/fx/home/slab';
 
-// The Assembly's four pixels: the logo's four-pixel cluster as CSS blocks, each on its exact
-// --dz-pixel-* gradient, upright, never rotated, no outlines (13 §5, C20). The cluster appears
-// beside the headline; the scroll-assemble transform is CSS-only (effects.css).
-function TheAssembly() {
-  return (
-    <span className="dz-assembly" aria-hidden="true">
-      <span className="dz-assembly-px dz-assembly-px--ai" />
-      <span className="dz-assembly-px dz-assembly-px--web" />
-      <span className="dz-assembly-px dz-assembly-px--software" />
-      <span className="dz-assembly-px dz-assembly-px--ranking" />
-    </span>
-  );
-}
+// Home §01, the hero (docs/design/home.md; Figma 50:36, copy 50:158, scene 50:215). On the stage,
+// which holds the floating header in its top (data-stage-hero).
+// - The H1 is one stable sentence (heroAnswer.heading) and is never animated (13 §3 rule 7). Its
+//   visible part is the tail; the lead-in stays in it for crawlers and screen readers, visually
+//   hidden, while the rotator's phrase stands in for it on screen.
+// - The rotator (hero-word-rotator, decision 0033 §3) sits beside the H1, aria-hidden, with only its
+//   first phrase in the HTML; src/lib/fx/home/rotator.ts plays the rest. Its pause button is labelled
+//   (WCAG 2.2.2), and it also pauses on hover, focus, off-screen and in a hidden tab.
+// - The direct answer follows (08 §2.2), then the AI input: until the website agent ships, sending
+//   opens WhatsApp with the visitor's text (src/lib/fx/home/agent.ts), and the note says so. The CSP
+//   allows forms to post only to this site, so the script opens the link; without it, the chips and
+//   the button do nothing harmful.
+// - background-paths: the stage's lines part around the pointer (src/lib/fx/home/paths.ts).
+// - C85: the chips are small white labels over the stage, so they keep their border and drop the glass.
 
-// story-chat (13 §4.8): a conversation plays once, ~2.5 s, when the card enters the view. The
-// final state (both bubbles visible, the booking confirmed) is the resting state, so no-JS and
-// Reduce effects visitors see it complete. Labelled "Example conversation" (10 §3.6). The replay
-// control arrives with the lazy enhancement (S6); the chat itself is pure CSS delays.
-function StoryChat() {
-  return (
-    <div
-      className="dz-story-chat"
-      role="img"
-      aria-label="An example conversation: a customer asks about availability on WhatsApp, an AI agent replies in seconds and confirms a booking for Tuesday at 4pm."
-      data-fx-once=""
-    >
-      <p className="dz-chat-bubble dz-chat-bubble--customer">Hi, do you have anything available this week?</p>
-      <p className="dz-chat-bubble dz-chat-bubble--agent">
-        Yes — I can book you in on Tuesday at 4pm. Shall I confirm?
-      </p>
-      <p className="dz-chat-note">Booked · Tuesday 16:00</p>
-    </div>
-  );
-}
+// The background paths (Figma 50:40, KokonutUI BG-02): sixteen curves fanning across the stage
+const PATHS = Array.from({ length: 16 }, (_, i) => {
+  const y = 230 + i * 34;
+  const bend = 140 - i * 18;
+  return `M-40 ${y} C 360 ${y - bend}, 1040 ${y + bend}, 1460 ${y - bend / 2}`;
+});
 
 export function Hero() {
+  const { heading, headingTail } = heroAnswer;
+  const lead = heading.slice(0, heading.length - headingTail.length).trim();
+  const phrases = heroRotator.phrases;
   return (
-    <section aria-labelledby="home-heading" className="dz-hero relative overflow-clip">
-      {/* Z0: the blueprint grid and its glow. pointer-grid-wake brightens the grid near the
-          pointer (the shared controller writes --dz-fx-x/y on this section's data-fx-pointer). */}
-      <div className="dz-hero-z0" aria-hidden="true">
-        <div className="dz-hero-grid" />
-        <div className="dz-hero-glow" />
-        {/* The locked logo's Z mark, cropped (the file untouched), with one light sweep on load */}
-        <Logo variant="mark" decorative className="dz-hero-mark" />
-      </div>
+    <section aria-labelledby="home-heading" data-stage-hero="" className="px-stage-inset pt-stage-inset">
+      <div
+        data-fx-scene="home-hero"
+        className="dz-hero relative mx-auto max-w-page overflow-hidden rounded-stage bg-(image:--dz-grad-stage) text-on-color"
+      >
+        <svg
+          aria-hidden="true"
+          className="dz-hero-paths pointer-events-none absolute inset-x-0 top-0 h-[75rem] w-full"
+          viewBox="0 0 1408 1200"
+          preserveAspectRatio="xMidYMin slice"
+          fill="none"
+        >
+          {PATHS.map((d) => (
+            <path key={d} d={d} />
+          ))}
+        </svg>
+        <span aria-hidden="true" className="dz-hero-glow dz-hero-glow-a" />
+        <span aria-hidden="true" className="dz-hero-glow dz-hero-glow-b" />
 
-      <div className="relative z-1 mx-auto grid max-w-page gap-10 px-gutter pt-section pb-section lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:items-center">
-        <div>
-          {/* The Assembly locks beside the headline after its flight. It floats inline-start of
-              the H1's first line on wide screens and above it on narrow ones, never adding a
-              block of height before the H1 (the H1 stays the page's LCP, and the European
-              banner's reserved band never covers it at 360 × 640). Below 640 px the H1 takes the
-              h1 size. At the statement size its third line filled the 328 px box exactly, so Linux
-              and Android glyph widths wrapped it to six lines, under the banner (CI, 2026-10-06).
-              At the display size Montserrat and its fallback wrapped to different line counts, so
-              the font swap shifted the page. At the h1 size both give the same four lines, and the
-              widest line keeps 10% slack. */}
-          <div className="dz-hero-statement flex flex-wrap items-center gap-x-4 gap-y-2">
-            <h1 id="home-heading" className="text-h1 text-balance sm:text-statement">
-              {heroAnswer.heading}
+        <div className="relative mx-auto grid max-w-[77.5rem] justify-items-center gap-4 px-gutter pt-[calc(var(--dz-layout-header-height)+var(--dz-space-2))] md:gap-6 md:pt-[calc(var(--dz-layout-header-height)+var(--dz-space-8))] text-center">
+          <p className="inline-flex min-h-8 items-center md:min-h-9 gap-2 rounded-full border border-line-on-color px-3 text-caption">
+            <span aria-hidden="true" className="size-2 rounded-xs bg-on-color" />
+            {heroAnswer.location}
+          </p>
+
+          <div
+            className="dz-rotator grid w-full justify-items-center gap-1 md:gap-1.5"
+            data-phrases={phrases.join('|')}
+          >
+            <p aria-hidden="true" className="dz-rotator-prev">
+              {phrases[phrases.length - 1]}
+            </p>
+            <div aria-hidden="true" className="dz-rotator-slot">
+              <span aria-hidden="true" className="dz-rotator-glow" />
+              <span className="dz-slab" data-slab="1">
+                {/* One span per letter: the rotator animates them, and no single big text block forms,
+                    so the slab never becomes the page's LCP element. The letters sit in chunks that
+                    wrap only after a space or a hyphen (slab.ts). */}
+                <span className="dz-slab-word">
+                  {slabChunks(phrases[0]).map((chunk, c) => (
+                    <span key={c} className="dz-slab-chunk">
+                      {[...chunk].map((letter, i) => (
+                        <span key={i} className="dz-letter">
+                          {letter}
+                        </span>
+                      ))}
+                    </span>
+                  ))}
+                </span>
+              </span>
+              <span aria-hidden="true" className="dz-burst">
+                <span />
+                <span />
+                <span />
+                <span />
+              </span>
+            </div>
+            <h1 id="home-heading" className="relative text-hero-line text-on-color">
+              <span className="sr-only">{lead} </span>
+              {headingTail}
+              <span aria-hidden="true">.</span>
             </h1>
-            <TheAssembly />
+            <div className="mt-3 flex flex-wrap items-center justify-center gap-3.5">
+              <button
+                type="button"
+                className="dz-rotator-pause dz-hit"
+                aria-label={heroRotator.pause}
+                aria-pressed="false"
+                data-label-pause={heroRotator.pause}
+                data-label-play={heroRotator.play}
+              >
+                <span className="dz-hit-face">
+                  <Glyph name="pause" className="dz-rotator-pause-icon size-4" />
+                  <Glyph name="play" className="dz-rotator-play-icon size-4" />
+                </span>
+              </button>
+              <span aria-hidden="true" className="dz-rotator-progress">
+                {phrases.map((phrase, index) => (
+                  <span key={phrase} data-active={index === 0 ? '' : undefined} />
+                ))}
+              </span>
+              <span aria-hidden="true" className="dz-rotator-count font-mono text-step">
+                01 / {String(phrases.length).padStart(2, '0')}
+              </span>
+              <a
+                href="#how-we-work"
+                className="inline-flex min-h-9 items-center rounded-full border border-line-on-color px-3 text-caption hover:border-on-color"
+              >
+                {heroRotator.seeHow} <span aria-hidden="true">&nbsp;→</span>
+              </a>
+            </div>
           </div>
-          <p className="mt-6 max-w-measure text-lead">{heroAnswer.answer}</p>
-          <div className="mt-8 flex flex-wrap items-center gap-4">
-            <CtaButton href={auditHref()} label={shellContent.cta} variant="primary" />
-            {/* The secondary CTA (hover-outline): the AI agent demo stub, its own lazy region (demo-enhance.ts) */}
-            <a
-              className="dz-cta dz-cta--outline dz-magnet inline-flex min-h-12 items-center gap-2.5 rounded-pill px-5.5 font-bold no-underline"
-              href={auditHref()}
-              data-demo="ai-agent"
-              data-fx-lazy="demo"
-              data-cta="page"
-            >
-              <Icon name="send" size={20} />
-              {heroAnswer.tryAgent}
-            </a>
-          </div>
+
+          {/* With the H1, the page's LCP candidate (the owner, 2026-10-19): static from first paint */}
+          <p className="max-w-[51.25rem] text-lead" data-hero-answer="">
+            {heroAnswer.answer}
+          </p>
+
+          <form
+            className="dz-agent grid w-full max-w-[45rem] justify-items-center gap-2.5"
+            data-fx-agent=""
+            data-wa={whatsappHref() ?? undefined}
+            noValidate
+          >
+            <div className="dz-agent-field">
+              <label htmlFor="dz-agent-input" className="sr-only">
+                {heroAgent.label}
+              </label>
+              <input
+                id="dz-agent-input"
+                name="text"
+                type="text"
+                autoComplete="off"
+                enterKeyHint="send"
+                placeholder={heroAgent.placeholder}
+                className="min-w-0 flex-1 bg-transparent text-lead text-ink placeholder:text-ink-tertiary focus:outline-none"
+              />
+              <span className="hidden shrink-0 items-center gap-1.5 rounded-full bg-violet-soft px-3 py-2 text-caption text-violet sm:inline-flex">
+                <span aria-hidden="true" className="size-2 rounded-full bg-accent-online" />
+                {heroAgent.mode}
+              </span>
+              <button type="submit" aria-label={heroAgent.send} className="dz-press dz-agent-send">
+                <Glyph name="arrow-up-right" className="size-5.5" />
+              </button>
+            </div>
+            <p className="text-caption">{heroAgent.note}</p>
+            <ul className="flex flex-wrap justify-center gap-2.5">
+              {heroAgent.chips.map((chip) => (
+                <li key={chip}>
+                  <button
+                    type="button"
+                    data-agent-chip={chip}
+                    className="dz-press inline-flex min-h-11 items-center rounded-full border border-line-on-color px-3 text-caption hover:border-on-color"
+                  >
+                    {chip}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </form>
+
+          <CtaButton variant="primary" href={auditHref()} label={shellContent.cta} className="dz-cta-rim" />
         </div>
 
-        {/* The proof card: glass-liquid (one per view), story-chat inside, plays once in view.
-            data-fx-once sits on the chat itself: the one-shot CSS targets .dz-story-chat.is-in */}
-        <div className="dz-glass dz-hero-proof">
-          <p className="font-mono text-caption uppercase tracking-eyebrow text-fg-muted">{heroAnswer.proofEyebrow}</p>
-          <h2 className="mt-2 text-h3">{heroAnswer.proofHeading}</h2>
-          <div className="mt-4">
-            <StoryChat />
-          </div>
-        </div>
+        <HeroScene />
       </div>
     </section>
   );

@@ -4,8 +4,10 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 import { GET } from '@/app/brand/deepzeta-logo.svg/route';
+import { GET as getLightWordmark } from '@/app/brand/deepzeta-wordmark-light.svg/route';
 import { Logo } from '@/components/ui/Logo';
 import { LOCKED_LOGO_PATH, LOGO_CROPS, LOGO_SHAPES, LOGO_URL, LOGO_VERSION, LOGO_VERSIONED_URL } from '@/lib/brand';
+import { LIGHT_LOGO_DIR, LIGHT_WORDMARK_FILE, LIGHT_WORDMARK_VERSION } from '@/lib/brand-light';
 import { siteConfig } from '@/lib/site-config';
 
 // P1 plan, section E. The locked logo is recorded by the SHA-256 of its committed (LF) bytes: 23,026 B,
@@ -54,6 +56,38 @@ describe('the locked logo', () => {
     const served = Buffer.from(await response.arrayBuffer());
     expect(served.equals(readFileSync(LOCKED_LOGO_PATH))).toBe(true);
     expect(lfSha256(served)).toBe(LOCKED_LOGO_SHA256);
+  });
+});
+
+// The owner's white-background logos (C78): locked, byte for byte, as the owner supplied them on
+// 2026-10-18 (their raw bytes: .gitattributes keeps their line endings).
+const LIGHT_LOGOS = {
+  'Coded_Logo_SVG_Do_not_touch_the_code_WhiteBG.svg':
+    '08a5932506e290a4149067d76ef573648216a4a161654685fa58b141802deaf0',
+  'DeepZeta_Logo_Full_Lockup_D_As_Symbol_WhiteBG.svg':
+    '438ebee7c1a509ef03c12c2d68e542a7a5cf16d1e46d942931ef4385196c868a',
+  'DeepZeta_Wordmark_D_As_Symbol_Plus_Pixels_WhiteBG.svg':
+    '83923af324a9b9ac23c3a43a01e418ee51500f0980d72183affd89327a0fd3ef',
+  'DeepZeta_Wordmark_D_As_Symbol_Plus_Pixels_centered_WhiteBG.svg':
+    'dcab7dc4ab9881c683c1b653ad9c390643a84a7931df2c04906355f9e72e975b',
+  'DeepZeta_Wordmark_D_As_Symbol_WhiteBG.svg': '598f57ba86a0ad98afbfce589d156e598a5a8bd0a9e7eaa48edc63a84842444d',
+  'DeepZeta_Wordmark_WhiteBG.svg': 'b8e3d323914b86d9d873fd63a98977986a1f00c9ec5858aff81f2b6a5bc57920',
+  'DeepZeta_ai_Domain_Lockup_WhiteBG.svg': '761340c0adc5c96b5c300144cfe2d4d11b7af827d11fa735bb465c1c2ee6bbb0',
+  'DeepZeta_ai_Wordmark_domain_WhiteBG.svg': '49383c3447330b7f17bcc3c9204827986d007b6b9365a433f881fabcb347d8f3',
+} as const;
+const rawSha256 = (bytes: Buffer) => createHash('sha256').update(bytes).digest('hex');
+
+describe('the white-background logos', () => {
+  it.each(Object.entries(LIGHT_LOGOS))('%s is unchanged', (file, sha) => {
+    expect(rawSha256(readFileSync(`${LIGHT_LOGO_DIR}/${file}`))).toBe(sha);
+  });
+
+  it('the header wordmark is served byte for byte at a URL versioned by its own hash', async () => {
+    const response = getLightWordmark();
+    expect(response.headers.get('content-type')).toBe('image/svg+xml');
+    const served = Buffer.from(await response.arrayBuffer());
+    expect(served.equals(readFileSync(`${LIGHT_LOGO_DIR}/${LIGHT_WORDMARK_FILE}`))).toBe(true);
+    expect(LIGHT_WORDMARK_VERSION).toBe(rawSha256(served).slice(0, 8));
   });
 });
 

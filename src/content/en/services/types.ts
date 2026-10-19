@@ -10,8 +10,12 @@ export type ServiceDemoId = 'ai-agent' | 'workflow-explorer' | 'roi-calculator' 
 /** One row of the problem → outcome rows (story-before-after): at most 5 */
 export type BeforeAfterRow = { before: string; after: string };
 
-/** One step of the example flow (story-flow): 3–7, each title ≤ 5 words, each text ≤ 20 words */
-export type FlowStep = { title: string; text: string };
+/**
+ * One step of the example flow (story-flow): 3–7, each title ≤ 5 words, each text ≤ 20 words. `node`
+ * is its box in the system diagram (Figma "Diagram step"): a one- or two-word label and the platforms
+ * or the condition under it; without it the box shows the title.
+ */
+export type FlowStep = { title: string; text: string; node?: { label: string; line?: string } };
 
 /** A service page's copy (engine §3.1's order; docs/design/service-page.md) */
 export type ServicePageContent = {
@@ -25,10 +29,20 @@ export type ServicePageContent = {
   heading: string;
   /** The direct answer under the H1: 40–60 words, names Deepzeta AI, the outcome and who it's for */
   answer: string;
+  /** The hero photo's alt text, written for this page (08 §7; the photo is src/lib/media/photos.ts's) */
+  heroPhotoAlt: string;
+  /**
+   * The hero photo's stat chip: only a design target the facts file allowlists (facts §6), with its
+   * qualifier, e.g. "First reply within 60 seconds" + "design target". Left out otherwise
+   */
+  heroStat?: { value: string; qualifier: string };
   /** "The problem it solves": a lede (≤ 40 words) and at most 5 before → after rows */
   problem: { heading: string; lede: string; rows: readonly BeforeAfterRow[] };
-  /** "How it works": a lede and 3–7 steps from the catalogue's list, shown as a labelled example */
-  how: { heading: string; lede: string; steps: readonly FlowStep[]; exampleLabel: string };
+  /**
+   * "How it works": a lede and 3–7 steps from the catalogue's list, shown as a labelled example.
+   * `figure` names the example in the figure's caption ("Fig. 1 — A property enquiry · example")
+   */
+  how: { heading: string; lede: string; steps: readonly FlowStep[]; exampleLabel: string; figure?: string };
   /** "What you get": at most 8 deliverables, each from the catalogue */
   deliverables: { heading: string; items: readonly string[] };
   /** "Works with": platform names as text (catalogue §8 and the service's entry) */
@@ -66,10 +80,18 @@ export type ServicePageContent = {
  * service page"; the plan docs/plans/2026-10-10-flagship-websites-page.md)
  */
 export type WebsitesExtras = {
-  /** "Code ↔ Page" (story-before-after) beside the How-it-works steps */
+  /** The hero's extras (Figma 60:34): the tag after the catalogue number, and the link to Code ↔ Page */
+  hero: { tag: string; seeCode: string };
+  /** The proof section's C diagram eyebrow (the steps' eyebrow is how.exampleLabel) */
+  proofEyebrow: string;
+  /** "Code ↔ Page" (code-page-compare): the page's real opening section beside its real source */
   codePage: {
-    /** The figure's visible label, e.g. "Code ↔ Page" */
+    /** The figure's visible label, e.g. "Code ↔ Page" (also the section's eyebrow) */
     label: string;
+    /** The section's heading */
+    heading: string;
+    /** The line under the slider: how to move it */
+    hint: string;
     /** One sentence under it: what the two sides are (the real hero, its real source) */
     caption: string;
     /** The two sides' names */
@@ -107,7 +129,10 @@ export type ServicesHubContent = {
   heading: string;
   /** 40–60 words, names Deepzeta AI */
   answer: string;
-  /** "Which service do you need?": problems in the owner's words → a service by catalogue number */
+  /** The hero's second button, to the chooser (Figma 58:1623) */
+  findByProblem: string;
+  /** "Which service do you need?": problems in the owner's words → a service by catalogue number. The
+      caption is also the section's eyebrow (Figma 58:1645). */
   chooser: {
     heading: string;
     lede: string;
@@ -118,12 +143,19 @@ export type ServicesHubContent = {
     rows: readonly { problem: string; catalogueNumber: string }[];
   };
   /** "Start here": the starter offers by catalogue number, one line each */
-  startHere: { heading: string; lede: string; items: readonly { offerNumber: string; line: string }[] };
+  startHere: {
+    eyebrow: string;
+    heading: string;
+    lede: string;
+    /** The free offer's tag beside its number */
+    freeLabel: string;
+    items: readonly { offerNumber: string; line: string }[];
+  };
   /** The four pillar directories: one lede each (40–75 words); names come from the catalogue */
-  pillars: { heading: string; ledes: Readonly<Record<Pillar, string>> };
+  pillars: { eyebrow: string; heading: string; ledes: Readonly<Record<Pillar, string>> };
   /** "Ongoing care": services by catalogue number */
-  care: { heading: string; lede: string; catalogueNumbers: readonly string[] };
+  care: { eyebrow: string; heading: string; lede: string; catalogueNumbers: readonly string[] };
   /** "Solutions": the bundles (names from the catalogue) */
-  solutions: { heading: string; lede: string };
-  faq: { heading: string; lede: string };
+  solutions: { eyebrow: string; heading: string; lede: string };
+  faq: { eyebrow: string; heading: string; lede: string };
 };

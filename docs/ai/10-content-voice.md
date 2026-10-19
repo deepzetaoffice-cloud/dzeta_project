@@ -1,6 +1,6 @@
 # 10 · Content & Brand Voice
 
-> **Applies to:** all website copy (English now; Arabic rules in [11](11-i18n-rtl-readiness.md) §3) · **Precedence:** below 00 · **Last reviewed:** 2026-09-30
+> **Applies to:** all website copy (English now; Arabic rules in [11](11-i18n-rtl-readiness.md) §3) · **Precedence:** below 00 · **Last reviewed:** 2026-10-18 (§3 rule 7, decision 0033)
 
 ---
 
@@ -27,11 +27,12 @@
 3. **No unproven superlatives** ("best", "world-class", "#1", "leading") unless backed by a named, verifiable source.
 4. Partner/certification badges (Google Partner, Meta Partner, n8n, etc.) only if the owner confirms the status is real and current.
 5. Legal/regulatory statements (UAE PDPL, e-invoicing dates, health-data rules) cite the official source and are re-checked before publishing.
-6. **Showcase content** (decision 0008, conflict C18):
+6. **Showcase content** (conflict C18):
    - **Labels.** Concept sites carry "Concept by Deepzeta AI · fictional business". Demo data carries "Demo · sample data". Conversations, flows and logs that aren't real carry "Example".
    - **Concepts.** Fictional business names are checked against real UAE businesses and trademarks. Concepts contain no named testimonials, reviews, ratings, client logos or statistics.
    - **Tools.** Visible results are real computations. No invented findings, no fake urgency. Money figures come only from the visitor's own inputs, with the formula shown.
-   - **Terminal and log content** is real (our build, our Lighthouse CI, a tool's real steps) or labelled "Example".
+   - **Terminal and log content** is real (our build, our checks, a tool's real steps) or labelled "Example". A replayed recording says so ("replayed, not live") with the date and commit it was recorded from.
+7. **No score promises** (N1, decision 0033). Copy never promises a Lighthouse or PageSpeed score, to a client or about this site. A Core Web Vitals result ("passes Core Web Vitals", "LCP under 2.5 s") is claimed only when a real measurement shows it, with where and when it was measured (N3). Describe the work instead: images, fonts and code optimised for mobile networks; Core Web Vitals measured and reported at launch. A live measurement of this visit (the LCP stamp, 13 §4.3) is shown as it is, never as a promise.
 
 ## 4. Banned words and patterns
 

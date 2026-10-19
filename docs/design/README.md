@@ -1,66 +1,71 @@
 # Design specs (surfaces)
 
-> **What this is:** composition specs for each surface of the deepzeta website:
-> - which effects go where (IDs from [docs/ai/13](../ai/13-experience-design.md))
-> - content slots, states, breakpoints and icons
+> **What this is:** composition specs for each surface of the Deepzeta AI website:
+> - the section order, the Figma frames to build from, and the effects in each section (IDs from [docs/ai/13](../ai/13-experience-design.md))
+> - content slots and where their copy lives, media slots, states and the contracts the code must keep
 >
-> **Rank:** a design source at 00 §3 level 5, alongside the Planning Folder sources. Where a spec differs from the blueprint, the conflict register records it (C16–C24).
+> **Source:** the approved Figma file "Deepzeta AI · Website v3" (`tYw7bSV9m4zX2vrVs7XYpE`, approved by the owner on 2026-10-18; decision [0033](../decisions/0033-redesign-v3.md)). The frames are the visual source; these specs carry what a frame can't show.
 >
-> **Last reviewed:** 2026-10-01
+> **Rank:** a design source at 00 §3 level 5. Where a spec and its Figma frame differ, the frame wins and the spec is corrected.
+>
+> **Last reviewed:** 2026-10-18
 
 **Specs never restate rules.** Each topic lives in one place:
 
 | Topic | Lives in |
 |---|---|
-| Tokens | 05 |
-| Effects | 13 |
-| Costs | 07 |
-| Content structure | 10 and 08 |
+| Tokens, components | 05 |
+| Effects and motion | 13 |
+| Loading habits | 07 |
+| Content structure | 10 and 08, the engine's blueprints |
+| Media metadata | 08 §7 |
 | RTL | 11 |
-| Icons | Icon Master Rules |
+| Icons | 05 §6 and the Icon Master Rules |
 
-Decision: [0008](../decisions/0008-design-language-signal-and-depth.md). These files are protected; edits need the owner's approval (00 §5). Prototypes in `prototypes/` are never a source.
+These files are protected; edits need the owner's approval (00 §5). Prototypes in `prototypes/` are never a source.
 
 ## Status legend
 
 | Status | Meaning |
 |---|---|
-| **CONFIRMED** | Approved by the owner; build it. |
-| **LAB** | Decided in the Design Lab prototype; don't build yet. |
+| **CONFIRMED** | Approved by the owner in Figma; build it. |
 | **LATER** | Parked for a later owner session; don't build. |
 | **OPEN (Cn)** | Blocked by an open conflict or decision. |
+| **NOT REDESIGNED** | Its frame and content decisions stand, but its Signal & Depth styling is superseded (0033); it gets a Figma design before it's built. |
 
 ## Index
 
-| Spec | Surface | Page tier | Status |
+| Spec | Surface | Figma (desktop / mobile) | Status |
 |---|---|---|---|
-| [header.md](header.md) | Header "Proof Bar", mega menu, mobile sheet, AI View | All pages | CONFIRMED |
-| [footer.md](footer.md) | Footer "The Landing", Page Nutrition Label | All pages | CONFIRMED |
-| [conversion-path.md](conversion-path.md) | Book-audit flow, floating elements, sticky CTA | All pages | CONFIRMED |
-| [home.md](home.md) | Home, 12 sections | T1 | CONFIRMED |
-| [services-hub.md](services-hub.md) | Services hub (`/services`): the chooser and the four pillar directories | T2 | CONFIRMED |
-| [service-page.md](service-page.md) | Service page visual treatment | T2 | CONFIRMED |
-| [automation.md](automation.md) | Automation "Control Room" | T2 | CONFIRMED |
-| [studio.md](studio.md) | Designer Studio index + concept frame | T2 / T3 | CONFIRMED frame; concepts LATER |
-| [tools.md](tools.md) | Deepzeta Sync (tools hub, `/tools`) + tool page anatomy | T2 | CONFIRMED frame and two tools; sales flow LATER |
-| [app-demo.md](app-demo.md) | App demo | T3 | LATER (frame proposed) |
-| [faq.md](faq.md) | FAQ module "Questions, answered" | Every page with a FAQ | LAB (validate in the Design Lab) |
+| [header.md](header.md) | Header, mega menu, mobile menu | `36:285`, `37:863`, `38:583` | CONFIRMED |
+| [footer.md](footer.md) | Footer: the audit panel, columns, legal line, wordmark | `39:1070` | CONFIRMED (newsletter OPEN, C84) |
+| [conversion-path.md](conversion-path.md) | The CTA set, the sticky bar, the WhatsApp float, the consent banner, the tracking contract | Shell frames + C83 | CONFIRMED |
+| [home.md](home.md) | Home, 12 sections + footer | `50:35` / `56:810` | CONFIRMED |
+| [services-hub.md](services-hub.md) | Services hub (`/services`) | `58:34` / `58:2466` | CONFIRMED |
+| [service-page.md](service-page.md) | The service template (11 pages; the frame is the Speed-to-Lead System) | `59:34` / `59:873` | CONFIRMED |
+| [custom-coded-websites.md](custom-coded-websites.md) | The flagship `/services/custom-coded-websites` | `60:34` / `60:827` | CONFIRMED |
+| [privacy.md](privacy.md) | `/privacy` | `61:34` / `61:594` | CONFIRMED |
+| [not-found.md](not-found.md) | The 404 and the error page | `61:1054` / `61:1200` | CONFIRMED |
+| [faq.md](faq.md) | The FAQ module "Questions, answered" | FAQ item `35:333` | CONFIRMED |
+| [automation.md](automation.md) | Automation "Control Room" | — | NOT REDESIGNED |
+| [studio.md](studio.md) | Designer Studio index + concept frame | — | NOT REDESIGNED (concepts LATER) |
+| [tools.md](tools.md) | Deepzeta Sync (tools hub, `/tools`) + tool page anatomy | — | NOT REDESIGNED |
+| [app-demo.md](app-demo.md) | App demo | — | LATER |
+
+The motion spec (page Motion spec, `62:33`) and the media plan (page Media plan, `63:33`) are in the same file.
 
 ## How builders use a spec
 
-1. The page plan (04 §4) copies the spec's effect IDs into its effect register, with costs (13 §10).
-2. Content comes from `src/content/` (10); schema comes from the builders (08).
-3. Anything marked LAB, LATER or OPEN is not built.
+1. **The page plan** (04 §4) copies the spec's effect IDs into its effect register (13 §10).
+2. **Content** comes from `src/content/` (10), and schema comes from the builders (08). A copy difference between a Figma frame and `src/content/` is raised with the owner, never changed silently.
+3. **Media** comes from the media plan, through `MediaAsset` (08 §7). A missing video loop uses its photo.
+4. **Each piece is checked side by side** with its Figma frames at 390, 834 and 1440 px in the browser pane, before the owner's review.
+5. **Anything marked LATER, OPEN or NOT REDESIGNED is not built.**
 
 ## Change log
 
 | Date | Change | Approved by |
 |---|---|---|
 | 2026-09-29 | Design Direction v2 "Signal & Depth": all specs created | Owner (plan `docs/plans/2026-09-29-design-direction-v2.md`) |
-| 2026-09-29 | Lab v1 verdicts: header nav marker is the mini cluster; Studio hero word; terminal window; system map | Owner (decision 0009) |
-| 2026-09-29 | C6 resolved to the four pillars: mega-menu columns, Home doors, footer columns and pillar colours; Automation page URL `/services/ai-automation` | Owner (conflict C6) |
-| 2026-09-29 | The tools hub is named **Deepzeta Sync** (URL stays `/tools`); it joins the header nav, mega-menu rail, mobile sheet and footer Company links once the page ships | Owner (conflict C31) |
-| 2026-09-30 | FAQ module spec added (LAB); Home §09 has 4 industry-group tiles; Home and service pages use the FAQ module | Owner (plan approval: SEO/GEO Domination Engine) |
-| 2026-10-01 | P2 Layout shell built: header.md (the inline logo, live-only nav, the mega menu's full-width columns and strip, three services out of the menu, "Designer Studio", the popover and the modal sheet, the sheet's heading-size items, the display controls never in the bar, Reduce effects = `glass-frost`), footer.md (the display headline C41, live-only columns, the social letter tiles C49, the display controls, the `<address>`), conversion-path.md (the C42 hand-off, the sticky bar) | Owner (P2 plan approval with its end-of-phase edits; verdicts at steps 8, 11, 13 and 15; decision 0019) |
-| 2026-10-02 | P3 Analytics & consent: footer.md (the opening hours line, part A; the Cookie settings button at the legal line's inline end, for every visitor), conversion-path.md (the consent banner, Europe only: `glass-frost` with the muted tint, first in the Tab order after the skip link, the sticky bar hidden while it shows, the scroll reserve, the settings dialog) | Owner (P3 plan approval, section O; this row approved at part B's close, 2026-10-02) |
-| 2026-10-07 | P6 part A2, S7: services-hub.md created (`/services`, R010, T2: the chooser table, the starter offers, the four pillar directories, the FAQ; no signature moment; the H1 at `text-h1` below 640 px); header.md (the hub is the mega menu's first link; L8: the full panel loads on intent, a server-rendered lite panel holds the hub and the live pillar pages); footer.md (L9: the service links are the hub and the live pillar pages, not every service) | Owner (P6 part A plan approval, 2026-10-07: "approve, 1 yes, 2 yes, 3 Speed-to-Lead"; Q2 (b) and (c); decision 0026) |
+| 2026-09-29 to 2026-10-07 | Lab v1 verdicts, C6 pillars, Deepzeta Sync, the FAQ module, the P2 shell, P3 consent, the services hub (see git history) | Owner (decisions 0009, 0019, 0026) |
+| 2026-10-18 | **Website v3 "Spectrum":** the specs for the shell and the 15 URLs rewritten from the approved Figma file; `custom-coded-websites.md`, `privacy.md` and `not-found.md` added; the specs of surfaces not yet redesigned marked NOT REDESIGNED | Owner (Figma approval, 2026-10-18; decision 0033) |

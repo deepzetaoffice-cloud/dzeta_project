@@ -76,7 +76,8 @@ async function render(page, spec, navy, logoDataUrl) {
 }
 
 async function main() {
-  const navy = readToken('--dz-navy');
+  // The app icons keep a dark plate: the locked logo is dark-only (C78; decision 0033)
+  const navy = readToken('--dz-p-ink-950');
   const logoDataUrl = `data:image/svg+xml;base64,${readFileSync(LOCKED_LOGO_PATH).toString('base64')}`;
   const browser = await chromium.launch();
   try {

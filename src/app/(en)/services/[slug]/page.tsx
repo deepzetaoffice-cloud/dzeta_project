@@ -11,12 +11,12 @@ import {
   ServiceTryUaePairs,
 } from '@/components/sections/service/ServiceSections';
 import { JsonLd } from '@/components/seo/JsonLd';
-import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { services as catalogueServices, type CatalogueService } from '@/content/catalogue';
 import { servicePages } from '@/content/en/services';
+import { serviceTemplate } from '@/content/en/services/template';
 import { isLivePath, routeIdForPath } from '@/lib/routes';
 import { serviceGraph, serviceTrail } from '@/lib/schema/graphs/service';
-import { absoluteUrl } from '@/lib/url';
+import { pageMetadata } from '@/lib/seo/page-seo';
 
 // The service template (/services/<slug>; engine §3.1; docs/design/service-page.md; the P6 part A
 // plan, S11). T2. Only live service pages are built (dynamicParams = false): any other slug is a 404,
@@ -49,11 +49,11 @@ function pageFor(slug: string) {
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const found = pageFor((await params).slug);
   if (!found) return {};
-  return {
+  return pageMetadata({
     title: found.page.content.title,
     description: found.page.content.description,
-    alternates: { canonical: absoluteUrl(found.path) },
-  };
+    path: found.path,
+  });
 }
 
 export default async function ServicePage({ params }: { params: Params }) {
@@ -66,8 +66,7 @@ export default async function ServicePage({ params }: { params: Params }) {
     <>
       {/* The page block: Service, WebPage (mainEntity → #service), BreadcrumbList, FAQPage */}
       <JsonLd graph={serviceGraph(slug, route)} />
-      <Breadcrumbs trail={serviceTrail(slug, route)} />
-      <ServiceHero {...props} />
+      <ServiceHero {...props} trail={serviceTrail(slug, route)} />
       <ServiceProblem {...props} />
       <ServiceHow {...props} />
       <ServiceDeliverables {...props} />
@@ -75,9 +74,16 @@ export default async function ServicePage({ params }: { params: Params }) {
       <ServiceTryUaePairs {...props} />
       {/* The FAQ module (faq.md): zero JS for the base; its enhancement loads on use */}
       <div data-fx-lazy="faq" className="mx-auto max-w-page px-gutter py-section">
-        <Faq heading={page.content.faq.heading} lede={page.content.faq.lede} questions={page.faq} />
+        <Faq
+          heading={page.content.faq.heading}
+          lede={page.content.faq.lede}
+          questions={page.faq}
+          index={5}
+          eyebrow={serviceTemplate.eyebrows.faq}
+          layout="stacked"
+        />
       </div>
-      {/* The demo stubs' panel, once per page: hidden until a trigger clones it (demo-enhance.ts) */}
+      {/* The demo stubs' panel, once per page: hidden until a trigger clones it (src/lib/fx/demo.ts) */}
       <DemoPanelTemplate />
     </>
   );

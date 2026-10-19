@@ -34,6 +34,9 @@ export const localAiDominance: ServicePageContent = {
   // for (catalogue 7.4 and 5.1's local businesses)
   answer: `Local AI Dominance (Bilingual, Hyperlocal) by ${siteConfig.brandName} helps customers find you in each area and emirate you serve. We optimise your Google Business Profile in Arabic and English, work on map pack ranking, keep your details consistent everywhere and build local AI-search visibility. It is for clinics, gyms, car services and other businesses that serve their area.`,
 
+  // The hero photo (service-page.md, the media plan)
+  heroPhotoAlt: 'A hand holding a phone with a map pin, in front of the wind towers of Al Fahidi in Dubai',
+
   // 2 · The problem it solves (before-after, at most 5 rows; 4A.3's four items). The lede is 37 words
   problem: {
     heading: 'Where nearby customers miss you',

@@ -1,180 +1,289 @@
-/* Design tokens (docs/ai/05; decision 0015). The only file with raw values (05 §1, check:tokens).
+/* Design tokens, Website v3 "Spectrum" (docs/ai/05; decision 0033). The only file with raw values
+   (05 §1, check:tokens). Every name is the Figma variable's WEB code syntax (Figma file
+   tYw7bSV9m4zX2vrVs7XYpE, the Design system page), so a design value and its code are one name.
 
    One shape, which scripts/check-contrast.mjs reads and fails loudly on if it changes:
-   - flat blocks only: a selector list, then declarations
-   - declarations end with `;`, and custom properties hold one value each
-   Sections:
-   1. Brand primitives in :root. They never change with the theme.
-   2. Semantic tokens, which switch with the theme. Components use these, never a primitive that
-      changes meaning between themes. Every first visit is dark; light comes only from the visitor's
-      choice, `data-theme='light'` (05 §1, owner decision 2026-09-30, 0015). So there is no
-      prefers-color-scheme block.
-   3. The Tailwind mapping in @theme blocks. Browsers skip @theme, so the tokens specimen
-      (docs/design/prototypes/tokens-specimen.html) can link this file as it is. */
+   - flat blocks only: a selector, then declarations ending with `;`, one value per custom property
+   1. The primitives in the first :root block (the Figma Primitives collection). Components never
+      use them directly. src/lib/tokens.ts reads this block for the manifest and the viewport.
+   2. Everything components use in the second :root block: the semantic colours (Color), the
+      gradients and slabs (the paint styles), type (Type), layout (Layout, fluid from 390 to 1440 px),
+      spacing, radius, elevation (Effects) and motion (Motion).
+   3. The discrete layout tokens in @media blocks (the grid's columns).
+   4. The Tailwind mapping in @theme blocks. Light only in V1 (C77): there is no theme block. */
 
-/* 1. Brand primitives */
+/* 1. Primitives */
 :root {
-  /* Colours (05 §2) */
-  --dz-navy: #010413;
-  --dz-navy-900: #050a1c;
-  --dz-navy-850: #08122e;
-  --dz-navy-800: #0b1c4a;
-  --dz-navy-700: #16224a;
-  --dz-border: #33457f;
-  /* 4.48:1 on navy: labels in large text and disabled states only (0015) */
-  --dz-slate: #5d73b8;
-  --dz-mist: #9fb0e0;
-  --dz-frost: #c9d4ff;
-  --dz-white: #f4f6fb;
-  --dz-cyan: #08c6fd;
-  --dz-azure: #1a84fd;
-  --dz-royal: #2139f6;
-  --dz-violet: #7946fc;
-  --dz-ice: #7cf3ff;
-  --dz-sky: #3da9fc;
-  /* Solid fills carry navy text; white only in large text, 4.16:1 (0015) */
-  --dz-signal: #2f6bff;
-  --dz-violet-soft: #a78bff;
-  --dz-magenta: #a040f2;
-  --dz-ok: #22d3a6;
-  --dz-warn: #ffb547;
-  --dz-bad: #ff5a6e;
-  /* The colour system's info tone (C22) */
-  --dz-info: #3da9fc;
+  --dz-p-pillar-ai-1: #03d4fc;
+  --dz-p-pillar-ai-2: #04c1fd;
+  --dz-p-pillar-ai-3: #09a5fc;
+  --dz-p-pillar-websites-1: #21befc;
+  --dz-p-pillar-websites-2: #3092fd;
+  --dz-p-pillar-websites-3: #4264fd;
+  --dz-p-pillar-software-1: #3166fb;
+  --dz-p-pillar-software-2: #2a4dfc;
+  --dz-p-pillar-software-3: #3741fd;
+  --dz-p-pillar-growth-1: #6430fa;
+  --dz-p-pillar-growth-2: #592bfd;
+  --dz-p-pillar-growth-3: #4c27fb;
+  --dz-p-stage-1: #2563fd;
+  --dz-p-stage-2: #3a4bfd;
+  --dz-p-stage-3: #5a2bfd;
+  --dz-p-ink-950: #0b0a2a;
+  --dz-p-ink-900: #14133a;
+  --dz-p-ink-700: #2e2d57;
+  --dz-p-ink-600: #4b4f66;
+  --dz-p-ink-500: #6b6f86;
+  --dz-p-ink-400: #9497ac;
+  --dz-p-ink-300: #c3c5d3;
+  --dz-p-ink-200: #dde0ea;
+  --dz-p-ink-100: #eceef5;
+  --dz-p-ink-50: #f7f7ff;
+  --dz-p-white: #ffffff;
+  --dz-p-vibrant-sun: #ffe55c;
+  --dz-p-vibrant-apricot: #ffb867;
+  --dz-p-vibrant-blush: #ffa8da;
+  --dz-p-vibrant-peach: #ffd0b0;
+  --dz-p-vibrant-ice: #b8fff6;
+  --dz-p-vibrant-orchid: #ffb0f3;
+  --dz-p-vibrant-cream: #ffd9b8;
+  --dz-p-glow-cyan: #03d4fc;
+  --dz-p-glow-pink: #ff4fa3;
+  --dz-p-signal-orange: #ff6b2c;
+  /* WhatsApp's own colours: inside the chat mock only (05 §2, decision 0033 §2) */
+  --dz-p-whatsapp-green: #1daa61;
+  --dz-p-whatsapp-bubble: #d9fdd3;
+  --dz-p-whatsapp-wallpaper: #efe7dd;
+  --dz-p-wash-ai: #daf6fe;
+  --dz-p-wash-websites: #ddeaff;
+  --dz-p-wash-software: #e0e4ff;
+  --dz-p-wash-growth: #e9e0ff;
+  --dz-p-status-success: #127a43;
+  --dz-p-status-error: #d93644;
+  --dz-p-status-warning: #b76e00;
+  --dz-p-white-16: #ffffff29;
+  --dz-p-white-45: #ffffff73;
+  --dz-p-white-92: #ffffffeb;
+  --dz-p-ink-shadow: #0b0a2a24;
+  --dz-p-violet-300: #b9a2ff;
+  --dz-p-violet-100: #efe9ff;
+  --dz-p-ink-scrim-24: #0b0a2a3d;
+  /* Figma's photo scrim (the industry cards: ink at 78% at the foot) */
+  --dz-p-ink-scrim-78: #0b0a2ac7;
+  /* Not Figma variables: the effect styles' glow colours (Glow/Violet, Glow/White, Glow/Cyan) */
+  --dz-p-glow-violet-50: #6430fa80;
+  --dz-p-glow-white-55: #ffffff8c;
+  --dz-p-glow-cyan-55: #03d4fc8c;
+}
 
-  /* Gradients (05 §2) */
-  --dz-grad-signal: linear-gradient(135deg, #08c6fd 0%, #1a84fd 50%, #7946fc 100%);
-  --dz-grad-zeta: linear-gradient(150deg, #09e8fe 0%, #00b5fc 25%, #147bfc 50%, #4639f9 75%, #602cfa 100%);
-  --dz-grad-action: linear-gradient(90deg, #08c6fd, #2f6bff);
-  --dz-grad-action-deep: linear-gradient(90deg, #1a84fd 0%, #2139f6 100%);
-  --dz-grad-fold: linear-gradient(160deg, #006de5 0%, #16c5ff 33%, #516cfc 67%, #7946fc 100%);
-  --dz-grad-line-cyan: linear-gradient(90deg, #00d8ee 0%, #058fee 50%, #0d48e6 100%);
-  --dz-grad-line-violet: linear-gradient(90deg, #4a22ea 0%, #662de8 50%, #a040f2 100%);
-  --dz-glow-hero: radial-gradient(
-    ellipse 48% 55% at 50% 40%,
-    rgba(24, 70, 210, 0.55) 0%,
-    rgba(12, 34, 120, 0.26) 45%,
-    rgba(1, 4, 19, 0) 78%
-  );
-  --dz-grid-line: rgba(26, 132, 253, 0.07);
-  --dz-grid-size: 80px;
+/* 2. What components use */
+:root {
+  color-scheme: light;
 
-  /* Pillar pixels: 3 stops, top to bottom; the solid colour below 20 px; the glow colour
-     (Icon Master Rules §5.2, C6, C22). Each stop is its own token, because SVG gradients take their
-     stops one by one (the icons' shared definitions, P1); the CSS gradients are built from them. */
-  --dz-pixel-ai-top: #03d4fc;
-  --dz-pixel-ai-mid: #04c1fd;
-  --dz-pixel-ai-bottom: #09a5fc;
-  --dz-pixel-ai: linear-gradient(
+  /* Color (mode Light) */
+  --dz-color-bg-canvas: var(--dz-p-ink-50);
+  --dz-color-bg-surface: var(--dz-p-white);
+  --dz-color-bg-surface-muted: var(--dz-p-ink-100);
+  --dz-color-bg-inverse: var(--dz-p-ink-950);
+  --dz-color-bg-glass-on-color: var(--dz-p-white-16);
+  --dz-color-bg-glass-header: var(--dz-p-white-92);
+  --dz-color-bg-stage-1: var(--dz-p-stage-1);
+  --dz-color-bg-stage-2: var(--dz-p-stage-2);
+  --dz-color-bg-stage-3: var(--dz-p-stage-3);
+  --dz-color-bg-wash-ai: var(--dz-p-wash-ai);
+  --dz-color-bg-wash-websites: var(--dz-p-wash-websites);
+  --dz-color-bg-wash-software: var(--dz-p-wash-software);
+  --dz-color-bg-wash-growth: var(--dz-p-wash-growth);
+  --dz-color-bg-chat-wallpaper: var(--dz-p-whatsapp-wallpaper);
+  --dz-color-bg-chat-bubble-own: var(--dz-p-whatsapp-bubble);
+  --dz-color-text-chat-status: var(--dz-p-whatsapp-green);
+  --dz-color-bg-violet-soft: var(--dz-p-violet-100);
+  --dz-color-bg-scrim: var(--dz-p-ink-scrim-24);
+  --dz-color-bg-photo-scrim: var(--dz-p-ink-scrim-78);
+  --dz-color-text-primary: var(--dz-p-ink-950);
+  --dz-color-text-secondary: var(--dz-p-ink-600);
+  --dz-color-text-tertiary: var(--dz-p-ink-500);
+  --dz-color-text-on-color: var(--dz-p-white);
+  --dz-color-text-on-vibrant: var(--dz-p-ink-950);
+  --dz-color-text-link: var(--dz-p-pillar-software-3);
+  /* Never body text (C80): numbers and markers beside a label only */
+  --dz-color-text-signal: var(--dz-p-signal-orange);
+  --dz-color-text-online: var(--dz-p-pillar-growth-1);
+  --dz-color-text-error: var(--dz-p-status-error);
+  --dz-color-text-violet: var(--dz-p-pillar-growth-1);
+  --dz-color-action-primary: var(--dz-p-pillar-growth-1);
+  --dz-color-action-primary-end: var(--dz-p-pillar-growth-3);
+  --dz-color-action-on-color: var(--dz-p-pillar-growth-1);
+  --dz-color-action-inverse: var(--dz-p-ink-950);
+  --dz-color-action-whatsapp: var(--dz-p-pillar-growth-1);
+  --dz-color-accent-ai: var(--dz-p-pillar-ai-3);
+  --dz-color-accent-websites: var(--dz-p-pillar-websites-2);
+  --dz-color-accent-software: var(--dz-p-pillar-software-2);
+  --dz-color-accent-growth: var(--dz-p-pillar-growth-2);
+  --dz-color-accent-violet: var(--dz-p-pillar-growth-1);
+  --dz-color-accent-signal: var(--dz-p-signal-orange);
+  --dz-color-accent-online: var(--dz-p-pillar-growth-1);
+  --dz-color-accent-violet-on-dark: var(--dz-p-violet-300);
+  --dz-color-border-default: var(--dz-p-ink-200);
+  --dz-color-border-strong: var(--dz-p-ink-300);
+  --dz-color-border-on-color: var(--dz-p-white-45);
+  --dz-color-border-focus: var(--dz-p-pillar-software-3);
+  --dz-color-border-error: var(--dz-p-status-error);
+  /* Not a Figma variable (C85): a form field's edge identifies it, so it needs 3:1 (WCAG 1.4.11);
+     border/strong gives 1.7:1 */
+  --dz-color-border-field: var(--dz-p-ink-500);
+  --dz-color-shadow-ink: var(--dz-p-ink-shadow);
+
+  /* Gradients and slabs (the paint styles; 05 §2.3). Pixels run top to bottom (Icon Master Rules). */
+  --dz-grad-pillar-ai: linear-gradient(
     180deg,
-    var(--dz-pixel-ai-top) 0%,
-    var(--dz-pixel-ai-mid) 50%,
-    var(--dz-pixel-ai-bottom) 100%
+    var(--dz-p-pillar-ai-1) 0%,
+    var(--dz-p-pillar-ai-2) 50%,
+    var(--dz-p-pillar-ai-3) 100%
   );
-  --dz-pixel-ai-solid: #04c1fd;
-  --dz-pixel-ai-glow: #08c6fd;
-  --dz-pixel-web-top: #21befc;
-  --dz-pixel-web-mid: #3092fd;
-  --dz-pixel-web-bottom: #4264fd;
-  --dz-pixel-web: linear-gradient(
+  --dz-grad-pillar-websites: linear-gradient(
     180deg,
-    var(--dz-pixel-web-top) 0%,
-    var(--dz-pixel-web-mid) 50%,
-    var(--dz-pixel-web-bottom) 100%
+    var(--dz-p-pillar-websites-1) 0%,
+    var(--dz-p-pillar-websites-2) 50%,
+    var(--dz-p-pillar-websites-3) 100%
   );
-  --dz-pixel-web-solid: #3092fd;
-  --dz-pixel-web-glow: #3092fd;
-  --dz-pixel-software-top: #3166fb;
-  --dz-pixel-software-mid: #2a4dfc;
-  --dz-pixel-software-bottom: #3741fd;
-  --dz-pixel-software: linear-gradient(
+  --dz-grad-pillar-software: linear-gradient(
     180deg,
-    var(--dz-pixel-software-top) 0%,
-    var(--dz-pixel-software-mid) 50%,
-    var(--dz-pixel-software-bottom) 100%
+    var(--dz-p-pillar-software-1) 0%,
+    var(--dz-p-pillar-software-2) 50%,
+    var(--dz-p-pillar-software-3) 100%
   );
-  --dz-pixel-software-solid: #2f55fc;
-  --dz-pixel-software-glow: #2f6bff;
-  --dz-pixel-ranking-top: #6430fa;
-  --dz-pixel-ranking-mid: #592bfd;
-  --dz-pixel-ranking-bottom: #4c27fb;
-  --dz-pixel-ranking: linear-gradient(
+  --dz-grad-pillar-growth: linear-gradient(
     180deg,
-    var(--dz-pixel-ranking-top) 0%,
-    var(--dz-pixel-ranking-mid) 50%,
-    var(--dz-pixel-ranking-bottom) 100%
+    var(--dz-p-pillar-growth-1) 0%,
+    var(--dz-p-pillar-growth-2) 50%,
+    var(--dz-p-pillar-growth-3) 100%
   );
-  --dz-pixel-ranking-solid: #5a2cfb;
-  --dz-pixel-ranking-glow: #7946fc;
+  --dz-grad-logo: linear-gradient(
+    90deg,
+    var(--dz-p-pillar-ai-1) 0%,
+    var(--dz-p-pillar-websites-2) 50%,
+    var(--dz-p-pillar-growth-3) 100%
+  );
+  --dz-grad-stage: linear-gradient(120deg, var(--dz-p-stage-1) 0%, var(--dz-p-stage-2) 50%, var(--dz-p-stage-3) 100%);
+  --dz-grad-action: linear-gradient(90deg, var(--dz-p-pillar-growth-1) 0%, var(--dz-p-pillar-growth-3) 100%);
+  --dz-slab-1: var(--dz-p-white);
+  --dz-slab-2: var(--dz-p-vibrant-sun);
+  --dz-slab-3: var(--dz-p-vibrant-blush);
+  --dz-slab-4: var(--dz-p-vibrant-ice);
+  --dz-slab-5: var(--dz-p-vibrant-peach);
+  --dz-slab-6: var(--dz-p-vibrant-orchid);
 
-  /* Light mode, "paper blueprint" (05 §2, 0015) */
-  --dz-paper: #f4f6fb;
-  --dz-card-light: #ffffff;
-  --dz-ink: #16224a;
-  --dz-ink-muted: #34446f;
-  --dz-hairline-light: rgba(22, 34, 74, 0.14);
-  --dz-link-light: #1557c9;
-  --dz-accent-light: #0a6be0;
-  /* First stop #0098d8 → #0094d3: 2.996:1 on paper was below 3:1 for large text (0015) */
-  --dz-grad-zeta-light: linear-gradient(150deg, #0094d3, #0a6be0, #4639f9, #602cfa);
-
-  /* Fonts. next/font sets --font-montserrat and --font-jetbrains-mono on <html>
-     (src/styles/fonts.ts). Montserrat's size-matched fallbacks are the two families from
-     font-fallbacks.css, Arial then Roboto (Android); the mono's is built in by next/font. */
-  --dz-font-sans:
-    var(--font-montserrat), 'dz-sans-fallback-arial', 'dz-sans-fallback-roboto', ui-sans-serif, system-ui, sans-serif;
-  --dz-font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
-
-  /* Type scale (05 §3). Fluid sizes run from 360 to 1280 px wide; the rem part keeps browser zoom
-     working (WCAG 1.4.4). */
-  --dz-text-statement: clamp(2.6rem, 1.4339rem + 5.1826vw, 5.58rem);
-  --dz-text-statement-leading: 0.98;
-  --dz-text-statement-tracking: -0.035em;
-  --dz-text-statement-weight: 800;
-  --dz-text-display: clamp(2.2rem, 1.4174rem + 3.4783vw, 4.2rem);
-  --dz-text-display-leading: 1.02;
-  --dz-text-display-tracking: -0.035em;
-  --dz-text-display-weight: 800;
-  --dz-text-h1: clamp(2rem, 1.5304rem + 2.087vw, 3.2rem);
-  --dz-text-h1-leading: 1.05;
-  --dz-text-h1-tracking: -0.03em;
-  --dz-text-h1-weight: 700;
-  --dz-text-h2: clamp(1.6rem, 1.287rem + 1.3913vw, 2.4rem);
-  --dz-text-h2-leading: 1.1;
-  --dz-text-h2-tracking: -0.02em;
-  --dz-text-h2-weight: 700;
-  --dz-text-h3: clamp(1.3rem, 1.0652rem + 1.0435vw, 1.9rem);
-  --dz-text-h3-leading: 1.25;
-  --dz-text-h3-tracking: -0.02em;
-  --dz-text-h3-weight: 700;
-  --dz-text-h4: 1.25rem;
-  --dz-text-h4-leading: 1.3;
-  --dz-text-h4-weight: 700;
-  --dz-text-lead: clamp(1.125rem, 1.0565rem + 0.3043vw, 1.3rem);
-  --dz-text-lead-leading: 1.55;
-  --dz-text-body: 1rem;
-  --dz-text-body-leading: 1.6;
-  --dz-text-small: 0.875rem;
-  --dz-text-small-leading: 1.5;
-  /* Eyebrows and labels, set in JetBrains Mono */
-  --dz-text-caption: 0.75rem;
-  --dz-text-caption-leading: 1.4;
-  --dz-text-caption-tracking: 0.04em;
-  --dz-text-caption-weight: 500;
-  /* Uppercase eyebrows in caption type: the Lab's wider tracking (owner, specimen review, 0015) */
-  --dz-text-eyebrow-tracking: 0.16em;
-
-  /* Spacing and layout (05 §4). The rest of the spacing uses the Tailwind scale. */
-  --dz-space-section: clamp(3rem, 1.8261rem + 5.2174vw, 6rem);
-  --dz-space-chapter: clamp(4.5rem, 2.837rem + 7.3913vw, 8.75rem);
-  --dz-space-statement: clamp(6rem, 3.6522rem + 10.4348vw, 12rem);
-  --dz-gutter: clamp(1rem, 0.413rem + 2.6087vw, 2.5rem);
-  --dz-container: 1140px;
-  /* The body measure, 65ch of Montserrat 400 in 1rem text, in rem: ch is measured in whichever font
-     is showing, so it changed width when the font swapped (0015). `npm run fonts:fallback` prints it. */
+  /* Type: families (next/font sets the --font-* variables on <html>, src/styles/fonts.ts) */
+  --dz-font-family-display: var(--font-unbounded), ui-sans-serif, system-ui, sans-serif;
+  --dz-font-family-body: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
+  --dz-font-family-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --dz-font-weight-regular: 400;
+  --dz-font-weight-medium: 500;
+  --dz-font-weight-semibold: 600;
+  --dz-font-weight-bold: 700;
+  /* Type: sizes, fluid from the Mobile value at 390 px to the Desktop value at 1440 px (05 §3); the
+     Tablet values fall on the line within 3 px. The rem part keeps browser zoom working (WCAG 1.4.4). */
+  --dz-font-size-hero-word: clamp(2.625rem, 1.5571rem + 4.381vw, 5.5rem);
+  --dz-font-size-hero-line: clamp(1.5625rem, 0.75rem + 3.3333vw, 3.75rem);
+  --dz-font-size-h2: clamp(2rem, 1.35rem + 2.6667vw, 3.75rem);
+  --dz-font-size-h3: clamp(1.5rem, 1.3607rem + 0.5714vw, 1.875rem);
+  --dz-font-size-h4: clamp(1.25rem, 1.1571rem + 0.381vw, 1.5rem);
+  --dz-font-size-lead: clamp(1.0625rem, 0.9929rem + 0.2857vw, 1.25rem);
+  --dz-font-size-body: clamp(1rem, 0.9768rem + 0.0952vw, 1.0625rem);
+  --dz-font-size-small: clamp(0.875rem, 0.8518rem + 0.0952vw, 0.9375rem);
+  --dz-font-size-caption: 0.8125rem;
+  --dz-font-size-label: clamp(0.6875rem, 0.6643rem + 0.0952vw, 0.75rem);
+  --dz-font-size-button-l: 1.0625rem;
+  --dz-font-size-button-m: 0.9375rem;
+  --dz-font-size-nav: 0.9375rem;
+  /* Type: the text styles' line heights and tracking */
+  --dz-leading-hero-word: 1.08;
+  --dz-leading-hero-line: 1.15;
+  --dz-leading-h2: 1.1;
+  --dz-leading-h3: 1.15;
+  --dz-leading-h4: 1.25;
+  --dz-leading-lead: 1.55;
+  --dz-leading-body: 1.6;
+  --dz-leading-small: 1.5;
+  --dz-leading-ui: 1.2;
+  --dz-leading-caption: 1.4;
+  --dz-leading-label: 1.3;
+  --dz-tracking-hero-word: -0.04em;
+  --dz-tracking-hero-line: -0.03em;
+  --dz-tracking-h2: -0.03em;
+  --dz-tracking-h3: -0.02em;
+  --dz-tracking-h4: -0.01em;
+  --dz-tracking-label: 0.03em;
+  --dz-tracking-step: 0.02em;
+  /* The body measure (05 §3): 60–75 characters */
   --dz-measure: 43rem;
 
-  /* Stacking order (05 §4), used as z-(--dz-layer-header). Not the depth planes Z0–Z3. */
+  /* Layout (Mobile / Tablet / Desktop, fluid like the type) */
+  --dz-layout-gutter: clamp(1rem, 0.6286rem + 1.5238vw, 2rem);
+  --dz-layout-section-y: clamp(3.5rem, 2.5714rem + 3.8095vw, 6rem);
+  --dz-layout-content-max: 86rem;
+  --dz-layout-header-height: clamp(4rem, 3.4429rem + 2.2857vw, 5.5rem);
+  --dz-layout-stage-inset: clamp(0.5rem, 0.3143rem + 0.7619vw, 1rem);
+  --dz-layout-columns: 4;
+  --dz-layout-column-gap: clamp(0.75rem, 0.4714rem + 1.1429vw, 1.5rem);
+  --dz-layout-card-gap: clamp(1rem, 0.8143rem + 0.7619vw, 1.5rem);
+  /* The page container: the content width plus its two gutters (1440 px at the desktop design width) */
+  --dz-layout-page-max: calc(var(--dz-layout-content-max) + 2 * var(--dz-layout-gutter));
+  /* The sticky CTA bar's height, which the page's end and the WhatsApp float keep clear of */
+  --dz-sticky-height: 4.75rem;
+
+  /* Spacing (the Tailwind scale, 4 px base) */
+  --dz-space-0: 0rem;
+  --dz-space-1: 0.25rem;
+  --dz-space-2: 0.5rem;
+  --dz-space-3: 0.75rem;
+  --dz-space-4: 1rem;
+  --dz-space-5: 1.25rem;
+  --dz-space-6: 1.5rem;
+  --dz-space-8: 2rem;
+  --dz-space-10: 2.5rem;
+  --dz-space-12: 3rem;
+  --dz-space-16: 4rem;
+  --dz-space-20: 5rem;
+  --dz-space-24: 6rem;
+  --dz-space-30: 7.5rem;
+
+  /* Radius */
+  --dz-radius-xs: 0.375rem;
+  --dz-radius-sm: 0.625rem;
+  --dz-radius-md: 0.875rem;
+  --dz-radius-lg: 1.25rem;
+  --dz-radius-xl: 1.75rem;
+  --dz-radius-2xl: 2.125rem;
+  --dz-radius-stage: 2.75rem;
+  --dz-radius-full: 999px;
+
+  /* Elevation (the Effects collection and the effect styles) */
+  --dz-elevation-1-y: 0.75rem;
+  --dz-elevation-1-blur: 1.875rem;
+  --dz-elevation-2-y: 1.25rem;
+  --dz-elevation-2-blur: 3.125rem;
+  --dz-elevation-3-y: 2.5rem;
+  --dz-elevation-3-blur: 5rem;
+  --dz-glow-blur: 3.75rem;
+  --dz-elevation-1: 0 var(--dz-elevation-1-y) var(--dz-elevation-1-blur) var(--dz-color-shadow-ink);
+  --dz-elevation-2: 0 var(--dz-elevation-2-y) var(--dz-elevation-2-blur) var(--dz-color-shadow-ink);
+  --dz-elevation-3: 0 var(--dz-elevation-3-y) var(--dz-elevation-3-blur) var(--dz-color-shadow-ink);
+  --dz-glow-violet: 0 0 var(--dz-glow-blur) var(--dz-p-glow-violet-50);
+  --dz-glow-white: 0 0 var(--dz-glow-blur) var(--dz-p-glow-white-55);
+  --dz-glow-cyan: 0 0 var(--dz-glow-blur) var(--dz-p-glow-cyan-55);
+
+  /* Hairlines and outlines; the stronger one is the Button's 1.5 px stroke (Figma Button 33:213:
+     Secondary and On colour) */
+  --dz-border-width: 1px;
+  --dz-border-width-strong: 1.5px;
+
+  /* Focus (a base style; consent.spec.ts reads the two widths): 2 px of border/focus with a 2 px white gap */
+  --dz-focus-width: 2px;
+  --dz-focus-offset: 2px;
+
+  /* Stacking (05 §4) */
   --dz-layer-base: 0;
   --dz-layer-raised: 10;
   --dz-layer-sticky: 20;
@@ -184,291 +293,174 @@
   --dz-layer-toast: 60;
   --dz-layer-consent: 70;
 
-  /* Radius (05 §4) */
-  --dz-radius-sm: 8px;
-  --dz-radius-md: 12px;
-  --dz-radius-lg: 18px;
-  --dz-radius-xl: 22px;
-  --dz-radius-pill: 999px;
-
-  /* Focus ring (05 §7): the colour is the semantic --dz-focus */
-  --dz-focus-width: 2px;
-  --dz-focus-offset: 2px;
-  /* Touch targets (05 §7): at least 44 × 44 px */
-  --dz-target-min: 2.75rem;
-
-  /* Motion (05 §5) */
-  --dz-ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
-  --dz-ease-pop: cubic-bezier(0.2, 0.9, 0.3, 1.35);
-  --dz-ease-travel: cubic-bezier(0.65, 0, 0.3, 1);
-  --dz-dur-fast: 150ms;
-  --dz-dur-base: 250ms;
-  /* One Tier 2 icon story (Icon Master Rules §7.1): every story runs on this one timeline, so none
-     can pass the cap. */
-  --dz-dur-story: 900ms;
-  /* One Tier 3 story, the signature icons' cap (§2, §7.1); every part of it runs inside this timeline */
-  --dz-dur-story-signature: 1600ms;
-  /* Tier 3 layers in grid units (1px is one unit in an icon's viewBox): the depth layer's offset down
-     and to the right (§5.3), and where each cluster pixel starts its flight, on the logo's 35° (§3) */
-  --dz-story-depth-x: 1.5px;
-  --dz-story-depth-y: 1.8px;
-  --dz-story-assemble-x: -10px;
-  --dz-story-assemble-y: 7px;
-  /* The nav marker's travel (hover-pixel-hop), the hover-charge sheen, the 4 px nudge of a hover
-     label or arrow (13 §4.3), and touch-press (13 §4.7) */
-  --dz-dur-travel: 450ms;
-  --dz-dur-sheen: 700ms;
-  --dz-nudge: 4px;
-  --dz-press-scale: 0.97;
-  /* The Drop vocabulary (Icon Master Rules §7.3) for the mega menu and the sheet: they arrive from this
-     far above */
-  --dz-drop: -0.5rem;
-  /* type-word-stagger (13 §4.5): each whole item rises this far, one step after the last (≤ 600 ms in all) */
-  --dz-stagger-step: 60ms;
-  --dz-stagger-rise: 0.75rem;
-  /* hover-underline (13 §4.3) */
-  --dz-underline-width: 1px;
-
-  /* The header (P2; header.md): the pill's height, its inset from the viewport's edge, how far its
-     background layer shrinks when the page scrolls (the Lab's 0.86), and the nav marker's height */
-  --dz-header-height: 3.75rem;
-  --dz-header-inset: 0.75rem;
-  --dz-header-condense: 0.86;
-  --dz-hop-size: 0.875rem;
-  /* The mega menu's gap below the pill, and a lit row on its navy glass (frost at 6%) */
-  --dz-mega-gap: 0.5rem;
-  --dz-menu-hover: rgba(201, 212, 255, 0.06);
-
-  /* glass-liquid (13 §4.1; the Lab's values): the specular rim on the top edge and the sheen that
-     crosses once on hover. No refraction (P2 plan, finding 9). */
-  --dz-liquid-rim: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.55),
-    rgba(255, 255, 255, 0.04) 30%,
-    rgba(124, 243, 255, 0.25)
-  );
-  --dz-liquid-sheen: linear-gradient(
-    100deg,
-    rgba(255, 255, 255, 0) 30%,
-    rgba(255, 255, 255, 0.16) 50%,
-    rgba(255, 255, 255, 0) 70%
-  );
-  --dz-dur-liquid: 1100ms;
-
-  /* The CTA (P2): the outline at rest and its hover gradient's width; hover-charge's bead, rim light
-     and sheen (the Lab's values) */
-  --dz-cta-edge: rgba(201, 212, 255, 0.28);
-  --dz-cta-outline-width: 1.5px;
-  --dz-cta-bead-size: 6rem;
-  --dz-cta-bead: radial-gradient(closest-side, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0));
-  --dz-cta-rim: inset 0 0 0 1.5px rgba(255, 255, 255, 0.55), inset 0 10px 18px -10px rgba(255, 255, 255, 0.75);
-  --dz-cta-sheen: linear-gradient(
-    100deg,
-    rgba(255, 255, 255, 0) 30%,
-    rgba(255, 255, 255, 0.55) 50%,
-    rgba(255, 255, 255, 0) 70%
-  );
-  --dz-tilt-max: 5deg;
-  --dz-magnet-max: 7px;
-
-  /* The footer (P2 part C; footer.md). The Landing's cluster and how far each pixel flies in, on the
-     logo's 35° (scroll-assemble); the journey line and its progress pixel (scroll-journey-line); the
-     sticky CTA bar's height above the safe area, which the footer's end keeps clear on mobile. */
-  --dz-landing-size: 3rem;
-  --dz-landing-travel-x: -2.5rem;
-  --dz-landing-travel-y: 1.75rem;
-  --dz-journey-width: 2px;
-  --dz-journey-pixel: 0.5rem;
-  --dz-sticky-height: 4.5rem;
-  /* The consent banner and Cookie settings (P3 plan, D and E): the banner's width as a corner panel
-     from 640 px, the settings dialog's width, the banner's height (0 until the tracking runtime
-     measures it; the page's end and focused controls scroll clear of it), and the dim behind the
-     dialog: navy at 64%. */
-  --dz-consent-width: 28rem;
-  --dz-consent-dialog-width: 36rem;
-  --dz-consent-height: 0rem;
-  --dz-scrim: rgba(1, 4, 19, 0.64);
-
-  /* The social letter tiles (conflict C49): each platform's own colour, read from its own pages (P2
-     plan, step 13), inside the signal-gradient edge. Instagram's gradient is approximated from
-     instagram.com's icon; its letter sits on the centre colour, which its glow uses too. TikTok, X and
-     Threads are black, so the edge draws their boundary on navy. */
-  --dz-social-linkedin: #0a66c2;
-  --dz-social-instagram: linear-gradient(35deg, #fba012 0%, #f82779 48%, #d13aa4 72%, #771cf1 100%);
-  --dz-social-instagram-centre: #f82779;
-  --dz-social-facebook: #0866ff;
-  --dz-social-youtube: #ff0033;
-  --dz-social-black: #000000;
-  --dz-social-tiktok-cyan: #25f4ee;
-  --dz-social-tiktok-red: #fe2c55;
-  --dz-social-snapchat: #fffc00;
-  --dz-social-pinterest: #e60023;
-  /* The tile inside its 44 px target, its edge, the letter, the lift and pop on hover, how far the glow
-     reaches past the tile, and TikTok's cyan and red split. The letter is 19 px at weight 800: large
-     text in WCAG terms, so 3:1 is AA for it (P2 step 16; it was 17 px). */
-  --dz-social-tile: 2.5rem;
-  --dz-social-edge: 1.5px;
-  --dz-social-letter: 1.1875rem;
-  --dz-social-letter-weight: 800;
-  --dz-social-lift: -2px;
-  --dz-social-pop: 1.08;
-  --dz-social-glow-reach: 0.5rem;
-  --dz-social-split: 1.5px;
-
-  /* Glass (05 §4; 13 §4.1). The tints and edges switch with the theme (section 2). */
-  --dz-glass-edge-width: 1px;
-  /* glass-live and glass-liquid only: 17px is the Lab-confirmed blur (0009), the saturations the Lab's */
-  --dz-glass-blur: 17px;
-  --dz-glass-saturate: 1.4;
-  --dz-glass-saturate-liquid: 1.6;
-  /* glass-frost's baked grain: white specks at 6% at most, which check:contrast reads from the file */
-  --dz-grain: url('/brand/glass-grain.svg');
+  /* Motion (the Motion collection; 13 §3) */
+  --dz-motion-duration-press: 160ms;
+  --dz-motion-duration-fast: 180ms;
+  --dz-motion-duration-base: 220ms;
+  --dz-motion-duration-menu: 250ms;
+  --dz-motion-duration-exit: 320ms;
+  --dz-motion-duration-story: 560ms;
+  --dz-motion-duration-sweep: 900ms;
+  --dz-motion-duration-dwell: 2400ms;
+  --dz-motion-stagger-letter: 18ms;
+  --dz-motion-stagger-item: 50ms;
+  --dz-motion-scale-press: 0.97;
+  --dz-motion-tilt-max-deg: 6deg;
+  --dz-motion-parallax-photo: 0.9;
+  --dz-motion-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --dz-motion-ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --dz-motion-ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  --dz-motion-ease-hover: ease;
 }
 
-/* 2. Semantic tokens: dark, the default. Any element can carry data-theme='dark' (the header, the
-   CTA band and the footer stay navy in both themes, 05 §2). */
-:root,
-[data-theme='dark'] {
-  color-scheme: dark;
-  --dz-bg: var(--dz-navy);
-  --dz-surface: var(--dz-navy-850);
-  --dz-text: var(--dz-frost);
-  --dz-text-strong: var(--dz-white);
-  --dz-text-muted: var(--dz-mist);
-  --dz-link: var(--dz-sky);
-  --dz-focus: var(--dz-ice);
-  --dz-hairline: var(--dz-navy-700);
-  /* Gradient headline words sit on --dz-bg, never on a card (2.83:1 on navy-850, 0015) */
-  --dz-grad-headline: var(--dz-grad-zeta);
-  /* Glass tints: navy-850 at the lowest alpha that keeps text at 4.5:1 (and the focus ring at 3:1) over
-     the brightest surface that can pass behind, a white card, with the grain's brightest speck on top
-     (check:contrast). -min is the least any text sits on (13 §4.1); -muted carries the panels' mist
-     text, their links, and mist on a lit menu row (0.89: links set it, P2 step 12). */
-  --dz-glass-tint-min: rgba(8, 18, 46, 0.73);
-  --dz-glass-tint-muted: rgba(8, 18, 46, 0.89);
-  --dz-glass-edge: rgba(201, 212, 255, 0.14);
-  --dz-glass-highlight: rgba(255, 255, 255, 0.1);
+/* 3. Discrete layout tokens (05 §4: 4 columns, 8 from md, 12 from lg) */
+@media (min-width: 48rem) {
+  :root {
+    --dz-layout-columns: 8;
+  }
 }
 
-/* Light, chosen by the visitor (the switch comes with the header in P2) */
-[data-theme='light'] {
-  color-scheme: light;
-  --dz-bg: var(--dz-paper);
-  --dz-surface: var(--dz-card-light);
-  --dz-text: var(--dz-ink);
-  --dz-text-strong: var(--dz-navy);
-  --dz-text-muted: var(--dz-ink-muted);
-  --dz-link: var(--dz-link-light);
-  --dz-focus: var(--dz-royal);
-  --dz-hairline: var(--dz-hairline-light);
-  --dz-grad-headline: var(--dz-grad-zeta-light);
-  /* Frosted white glass (13 §6), checked over the darkest surface, navy */
-  --dz-glass-tint-min: rgba(255, 255, 255, 0.66);
-  --dz-glass-tint-muted: rgba(255, 255, 255, 0.7);
-  --dz-glass-edge: rgba(22, 34, 74, 0.14);
-  --dz-glass-highlight: rgba(255, 255, 255, 0.9);
+@media (min-width: 64rem) {
+  :root {
+    --dz-layout-columns: 12;
+  }
 }
 
-/* 3. Tailwind mapping. Tailwind's default colours, fonts, sizes and radii are removed, so an
-   off-brand one can't be written. The spacing scale and the breakpoints stay (05 §4, §7). */
+/* 4. The Tailwind mapping. Tailwind's default colours, fonts, sizes, radii and shadows are removed,
+   so an off-brand one can't be written. The spacing scale (4 px) stays; the breakpoints are 05 §4's. */
 @theme {
   --color-*: initial;
   --font-*: initial;
   --text-*: initial;
   --radius-*: initial;
-  /* 05 §7's narrowest width, 360 px. Below it, down to the 320 px reflow width (WCAG 1.4.10), the
-     compact header tightens (max-xs). */
-  --breakpoint-xs: 22.5rem;
+  --shadow-*: initial;
+  --breakpoint-*: initial;
+  --breakpoint-sm: 40rem;
+  --breakpoint-md: 48rem;
+  --breakpoint-lg: 64rem;
+  --breakpoint-xl: 80rem;
+  --breakpoint-2xl: 96rem;
 }
 
-/* `inline`: utilities read the --dz-* variables directly, so they follow the theme. */
+/* `inline`: utilities read the --dz-* variables directly. */
 @theme inline {
-  /* Semantic colours: bg-bg, bg-surface, text-fg, text-fg-strong, text-fg-muted, text-link,
-     outline-focus, border-hairline */
-  --color-bg: var(--dz-bg);
-  --color-surface: var(--dz-surface);
-  --color-fg: var(--dz-text);
-  --color-fg-strong: var(--dz-text-strong);
-  --color-fg-muted: var(--dz-text-muted);
-  --color-link: var(--dz-link);
-  --color-focus: var(--dz-focus);
-  --color-hairline: var(--dz-hairline);
+  /* bg-canvas, bg-surface, text-ink, text-ink-secondary, text-link, border-line… */
+  --color-canvas: var(--dz-color-bg-canvas);
+  --color-surface: var(--dz-color-bg-surface);
+  --color-surface-muted: var(--dz-color-bg-surface-muted);
+  --color-inverse: var(--dz-color-bg-inverse);
+  --color-glass-on-color: var(--dz-color-bg-glass-on-color);
+  --color-glass-header: var(--dz-color-bg-glass-header);
+  --color-violet-soft: var(--dz-color-bg-violet-soft);
+  --color-scrim: var(--dz-color-bg-scrim);
+  --color-wash-ai: var(--dz-color-bg-wash-ai);
+  --color-wash-websites: var(--dz-color-bg-wash-websites);
+  --color-wash-software: var(--dz-color-bg-wash-software);
+  --color-wash-growth: var(--dz-color-bg-wash-growth);
+  --color-ink: var(--dz-color-text-primary);
+  --color-ink-secondary: var(--dz-color-text-secondary);
+  --color-ink-tertiary: var(--dz-color-text-tertiary);
+  --color-on-color: var(--dz-color-text-on-color);
+  --color-on-vibrant: var(--dz-color-text-on-vibrant);
+  --color-link: var(--dz-color-text-link);
+  --color-violet: var(--dz-color-text-violet);
+  --color-signal: var(--dz-color-text-signal);
+  --color-error: var(--dz-color-text-error);
+  --color-action: var(--dz-color-action-primary);
+  --color-action-end: var(--dz-color-action-primary-end);
+  --color-action-inverse: var(--dz-color-action-inverse);
+  --color-accent-ai: var(--dz-color-accent-ai);
+  --color-accent-websites: var(--dz-color-accent-websites);
+  --color-accent-software: var(--dz-color-accent-software);
+  --color-accent-growth: var(--dz-color-accent-growth);
+  --color-accent-violet: var(--dz-color-accent-violet);
+  --color-accent-online: var(--dz-color-accent-online);
+  --color-accent-signal: var(--dz-color-accent-signal);
+  --color-accent-violet-on-dark: var(--dz-color-accent-violet-on-dark);
+  --color-line: var(--dz-color-border-default);
+  --color-line-strong: var(--dz-color-border-strong);
+  --color-line-on-color: var(--dz-color-border-on-color);
+  --color-focus: var(--dz-color-border-focus);
+  --color-line-field: var(--dz-color-border-field);
 
-  /* Brand colours, for surfaces that never switch */
-  --color-navy: var(--dz-navy);
-  --color-navy-900: var(--dz-navy-900);
-  --color-navy-850: var(--dz-navy-850);
-  --color-navy-800: var(--dz-navy-800);
-  --color-navy-700: var(--dz-navy-700);
-  --color-border: var(--dz-border);
-  --color-slate: var(--dz-slate);
-  --color-mist: var(--dz-mist);
-  --color-frost: var(--dz-frost);
-  --color-white: var(--dz-white);
-  --color-cyan: var(--dz-cyan);
-  --color-azure: var(--dz-azure);
-  --color-royal: var(--dz-royal);
-  --color-violet: var(--dz-violet);
-  --color-violet-soft: var(--dz-violet-soft);
-  --color-ice: var(--dz-ice);
-  --color-sky: var(--dz-sky);
-  --color-signal: var(--dz-signal);
-  --color-magenta: var(--dz-magenta);
-  --color-ok: var(--dz-ok);
-  --color-warn: var(--dz-warn);
-  --color-bad: var(--dz-bad);
-  --color-info: var(--dz-info);
+  --font-display: var(--dz-font-family-display);
+  --font-body: var(--dz-font-family-body);
+  --font-mono: var(--dz-font-family-mono);
 
-  --font-sans: var(--dz-font-sans);
-  --font-mono: var(--dz-font-mono);
+  --text-hero-word: var(--dz-font-size-hero-word);
+  --text-hero-word--line-height: var(--dz-leading-hero-word);
+  --text-hero-word--letter-spacing: var(--dz-tracking-hero-word);
+  --text-hero-word--font-weight: var(--dz-font-weight-semibold);
+  --text-hero-line: var(--dz-font-size-hero-line);
+  --text-hero-line--line-height: var(--dz-leading-hero-line);
+  --text-hero-line--letter-spacing: var(--dz-tracking-hero-line);
+  --text-hero-line--font-weight: var(--dz-font-weight-medium);
+  --text-h2: var(--dz-font-size-h2);
+  --text-h2--line-height: var(--dz-leading-h2);
+  --text-h2--letter-spacing: var(--dz-tracking-h2);
+  --text-h2--font-weight: var(--dz-font-weight-medium);
+  --text-h3: var(--dz-font-size-h3);
+  --text-h3--line-height: var(--dz-leading-h3);
+  --text-h3--letter-spacing: var(--dz-tracking-h3);
+  --text-h3--font-weight: var(--dz-font-weight-medium);
+  --text-h4: var(--dz-font-size-h4);
+  --text-h4--line-height: var(--dz-leading-h4);
+  --text-h4--letter-spacing: var(--dz-tracking-h4);
+  --text-h4--font-weight: var(--dz-font-weight-bold);
+  --text-lead: var(--dz-font-size-lead);
+  --text-lead--line-height: var(--dz-leading-lead);
+  --text-body: var(--dz-font-size-body);
+  --text-body--line-height: var(--dz-leading-body);
+  --text-small: var(--dz-font-size-small);
+  --text-small--line-height: var(--dz-leading-small);
+  --text-caption: var(--dz-font-size-caption);
+  --text-caption--line-height: var(--dz-leading-caption);
+  --text-caption--font-weight: var(--dz-font-weight-medium);
+  --text-label: var(--dz-font-size-label);
+  --text-label--line-height: var(--dz-leading-label);
+  --text-label--letter-spacing: var(--dz-tracking-label);
+  --text-step: var(--dz-font-size-label);
+  --text-step--line-height: var(--dz-leading-label);
+  --text-step--letter-spacing: var(--dz-tracking-step);
+  --text-step--font-weight: var(--dz-font-weight-medium);
+  --text-button-l: var(--dz-font-size-button-l);
+  --text-button-l--line-height: var(--dz-leading-ui);
+  --text-button-l--font-weight: var(--dz-font-weight-bold);
+  --text-button-m: var(--dz-font-size-button-m);
+  --text-button-m--line-height: var(--dz-leading-ui);
+  --text-button-m--font-weight: var(--dz-font-weight-bold);
+  --text-nav: var(--dz-font-size-nav);
+  --text-nav--line-height: var(--dz-leading-ui);
+  --text-nav--font-weight: var(--dz-font-weight-semibold);
 
-  --text-statement: var(--dz-text-statement);
-  --text-statement--line-height: var(--dz-text-statement-leading);
-  --text-statement--letter-spacing: var(--dz-text-statement-tracking);
-  --text-statement--font-weight: var(--dz-text-statement-weight);
-  --text-display: var(--dz-text-display);
-  --text-display--line-height: var(--dz-text-display-leading);
-  --text-display--letter-spacing: var(--dz-text-display-tracking);
-  --text-display--font-weight: var(--dz-text-display-weight);
-  --text-h1: var(--dz-text-h1);
-  --text-h1--line-height: var(--dz-text-h1-leading);
-  --text-h1--letter-spacing: var(--dz-text-h1-tracking);
-  --text-h1--font-weight: var(--dz-text-h1-weight);
-  --text-h2: var(--dz-text-h2);
-  --text-h2--line-height: var(--dz-text-h2-leading);
-  --text-h2--letter-spacing: var(--dz-text-h2-tracking);
-  --text-h2--font-weight: var(--dz-text-h2-weight);
-  --text-h3: var(--dz-text-h3);
-  --text-h3--line-height: var(--dz-text-h3-leading);
-  --text-h3--letter-spacing: var(--dz-text-h3-tracking);
-  --text-h3--font-weight: var(--dz-text-h3-weight);
-  --text-h4: var(--dz-text-h4);
-  --text-h4--line-height: var(--dz-text-h4-leading);
-  --text-h4--font-weight: var(--dz-text-h4-weight);
-  --text-lead: var(--dz-text-lead);
-  --text-lead--line-height: var(--dz-text-lead-leading);
-  --text-body: var(--dz-text-body);
-  --text-body--line-height: var(--dz-text-body-leading);
-  --text-small: var(--dz-text-small);
-  --text-small--line-height: var(--dz-text-small-leading);
-  --text-caption: var(--dz-text-caption);
-  --text-caption--line-height: var(--dz-text-caption-leading);
-  --text-caption--letter-spacing: var(--dz-text-caption-tracking);
-  --text-caption--font-weight: var(--dz-text-caption-weight);
-  /* tracking-eyebrow, with font-mono text-caption uppercase (a text-* utility doesn't set the font family) */
-  --tracking-eyebrow: var(--dz-text-eyebrow-tracking);
-
-  /* py-section, py-chapter, py-statement, px-gutter; max-w-page, max-w-measure */
-  --spacing-section: var(--dz-space-section);
-  --spacing-chapter: var(--dz-space-chapter);
-  --spacing-statement: var(--dz-space-statement);
-  --spacing-gutter: var(--dz-gutter);
-  --container-page: var(--dz-container);
+  /* px-gutter, py-section; max-w-page, max-w-content, max-w-measure */
+  --spacing-gutter: var(--dz-layout-gutter);
+  --spacing-section: var(--dz-layout-section-y);
+  --spacing-card-gap: var(--dz-layout-card-gap);
+  --spacing-column-gap: var(--dz-layout-column-gap);
+  --spacing-header: var(--dz-layout-header-height);
+  --spacing-stage-inset: var(--dz-layout-stage-inset);
+  --container-page: var(--dz-layout-page-max);
+  --container-content: var(--dz-layout-content-max);
   --container-measure: var(--dz-measure);
 
+  --radius-xs: var(--dz-radius-xs);
   --radius-sm: var(--dz-radius-sm);
   --radius-md: var(--dz-radius-md);
   --radius-lg: var(--dz-radius-lg);
   --radius-xl: var(--dz-radius-xl);
-  --radius-pill: var(--dz-radius-pill);
+  --radius-2xl: var(--dz-radius-2xl);
+  --radius-stage: var(--dz-radius-stage);
+  --radius-full: var(--dz-radius-full);
+
+  --shadow-1: var(--dz-elevation-1);
+  --shadow-2: var(--dz-elevation-2);
+  --shadow-3: var(--dz-elevation-3);
+  --shadow-glow-violet: var(--dz-glow-violet);
+  --shadow-glow-white: var(--dz-glow-white);
+  --shadow-glow-cyan: var(--dz-glow-cyan);
+
+  --ease-out: var(--dz-motion-ease-out);
+  --ease-in-out: var(--dz-motion-ease-in-out);
+  --ease-drawer: var(--dz-motion-ease-drawer);
 }

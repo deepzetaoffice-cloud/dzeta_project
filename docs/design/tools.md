@@ -1,6 +1,6 @@
 # Deepzeta Sync (the tools hub, `/tools`)
 
-Status: CONFIRMED (frame and the two tools); the sales automation behind them is LATER · Page tier: T2 · Decision 0008 · Effects: [13](../ai/13-experience-design.md)
+Status: NOT REDESIGNED (decision 0033: the frame and the two tools below stand; the Signal & Depth styling, page tier and effect IDs are superseded, and the page gets a Figma design before it is built); the sales automation behind them is LATER · Decision 0008 · Effects: [13](../ai/13-experience-design.md)
 
 ## Idea
 

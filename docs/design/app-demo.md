@@ -1,6 +1,6 @@
 # App demo
 
-Status: LATER (frame proposed; details in an owner session) · Page tier: T3 · Decision 0008 · Effects: [13](../ai/13-experience-design.md)
+Status: LATER (frame proposed; details in an owner session; its Signal & Depth styling superseded by decision 0033) · Decision 0008 · Effects: [13](../ai/13-experience-design.md)
 
 ## What exists
 

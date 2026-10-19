@@ -1,13 +1,13 @@
 # 12 · Git Workflow
 
-> **Applies to:** every change committed to the repository · **Precedence:** below 00 · **Last reviewed:** 2026-10-09 (Build Mode, decision 0029)
+> **Applies to:** every change committed to the repository · **Precedence:** below 00 · **Last reviewed:** 2026-10-18 (no `lhci`, decision 0033)
 
 ---
 
 ## 1. Branches
 
 - `main` is **production**: Vercel publishes every change on it to deepzeta.ai. Nobody (human or AI) commits on `main`. Work reaches it only as the merge of a task branch ([decision 0017](../decisions/0017-owner-approved-merges.md)), when all of these are true:
-  - the branch's gates pass ([03](03-verification-gates.md) §2, gates by risk: the local static gates, and `lhci` when the change can reach Home)
+  - the branch's gates pass ([03](03-verification-gates.md) §2, gates by risk: the local static gates)
   - CI is green on the branch's head commit
   - the short report (02 §5) has been sent
   - the owner has said **"merge"** in chat for that work (one "merge" per batch, decision 0029)
@@ -32,7 +32,7 @@ The merge commit's message (or a PR's description, if the owner opens one) follo
 Merge branch '<branch>'
 
 <what shipped, one or two lines; the plan's path>
-Gates: <gate → result, one line each; Home's lhci when it ran>
+Gates: <gate → result, one line each>
 ```
 
 ## 4. Forbidden without explicit owner approval in the current request

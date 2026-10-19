@@ -1,45 +1,74 @@
-# Footer: "The Landing"
+# Footer: the audit panel and the sectioned footer
 
-Status: CONFIRMED · Page tier: all pages · Decision 0008 · Effects: [13](../ai/13-experience-design.md)
+Status: CONFIRMED (Figma approved 2026-10-18); the newsletter OPEN (C84) · As built in Phase D1 (2026-10-19; the owner approved this sync the same day) · All pages · Decision 0033 · Effects: [13](../ai/13-experience-design.md) · Figma: Footer set `39:1070` (Desktop 1440 × 1556, Mobile 390 × 2056), Footer column `36:287`
 
 ## Idea
 
-Every page ends with a landing. The journey line that followed the visitor down the page arrives, and the logo's four pixels assemble into the cluster.
+Every page ends on the one goal. First an audit panel that points to the free AI audit, then a footer split into clear sections, and finally a giant wordmark that lights under the pointer.
 
-## Finale (pre-footer)
+## 1. The audit panel (the finale)
 
-- `scroll-journey-line` lands, then The Landing plays: `scroll-assemble` of the cluster (13 §5). The four pixels fly in on 35° paths once, when the finale enters (the shared observer); otherwise, and under Reduce effects, the cluster is shown assembled.
-- A headline follows, an `<h2>` at the **display size** (`--dz-text-display`, C41): each page's one statement headline is its own (13 §2.6).
-- Then the primary CTA, "Book a free AI audit", with WhatsApp as the secondary action once the number is confirmed. The finale's CTA joins the hand-off (C42, conversion-path.md).
+- **A stage-gradient panel** with `beams` falling toward its edge (they point to the CTA), drawn in CSS (not Aceternity or Motion). In view only (`src/lib/fx/footer.ts`); static under Reduce effects.
+- **The content:**
+  - the mono label "Free AI Automation Audit"
+  - the `<h2>` "Find out what to automate first." (`shellContent.finaleHeading`), pinned at the size the Figma component draws (32 px desktop, 34 px mobile)
+  - its line (`finaleLine`)
+  - the "In one session we map" strip: 01 Sales · 02 Operations · 03 Admin, then "…and show which automations pay back first. No obligation, no jargon."
+- **The actions:**
+  - "Book a free AI audit" (Primary, L): `footer [data-cta="primary"]`, `cta_location` `finale` (`tracking.spec.ts`)
+  - "Chat on WhatsApp" and "Call +971 54 547 6335" (On colour), each present only while its fact is CONFIRMED (facts §2)
 
-## Page Nutrition Label
+## 2. The sections (a `<nav>` named "Footer")
 
-- **A `glass-frost` panel**, styled like a food label, showing this visit's real measurements:
-  - page weight
-  - number of requests
-  - JS / CSS / font KB
-  - LCP, CLS, and INP (INP appears after the first interaction)
-  - third-party scripts loaded before consent
-- **How it measures:** `web-vitals` and the Resource Timing API. The method is stated under the table: "Measured on your device just now. Cross-origin and cached files may show 0 KB."
-- **When a browser can't measure a metric**, the label says "not measured in this browser". It never shows a substitute number.
-- **The header speed chip** opens this label expanded.
+| Section | Contents |
+|---|---|
+| Brand | The wordmark (05 §6), the brand line from the site config ("Deepzeta AI builds online growth for every business."), and the newsletter field **only once it works** (C84) |
+| Services | AI Automation · Websites · Software · Growth & Ranking · All services |
+| Solutions | AI Front Desk · Quote-to-Cash System · Get Found by AI · E-Commerce Growth Engine · Launch Pack · E-Invoicing Ready |
+| Company | About · Contact · Deepzeta Sync · Editorial policy |
+| Resources | Resources · Glossary |
+| Contact | An `<address>` from the site config: the office address, `hello@deepzeta.ai` (a `mailto:` link, `contact_click` `email`), the phone and WhatsApp (each only once CONFIRMED), and the opening hours line byte for byte (facts §2; "Monday to Friday, 08:00–17:00 GST (UTC+4); closed Saturday and Sunday" today) |
 
-## Body
+- **The section titles** are mono labels: ink/secondary with a signal-orange pixel (C80; Figma draws them in orange, 2.84:1 on white).
+- **Live links only.** A link renders only while its registry row is live, so the columns fill in as pages ship (the P2 rule, kept). A section with no live link yet is left out.
+- **Every footer href equals its target's canonical path** (`check:links`).
 
-- **Links** (in a `<nav>` named "Footer"; only live registry rows render, so the columns appear as pages ship, P2 Q1):
-  - service links (L9, Q2 (c), decision 0019's proposal, decision 0026): the services hub (`/services`, [services-hub.md](services-hub.md)) and the live pillar pages, not every service
-  - Company, Resources, Legal. Company includes Deepzeta Sync (`/tools`) once the page ships.
-- **Social links:** Deepzeta's own letter tiles (C49), one per profile in facts §2.1: in · Ig · f · YT · T · X · @ · S · P, each filled with its platform's colour inside the signal-gradient edge, linked per the rules in the facts file. Hover: `hover-glow` (13 §4.3); touch: `touch-press`.
-- **Controls:** the display controls (Reduce effects beside the theme switch, 05 §1) and a language switch placeholder (hidden until Arabic).
-- **Business name, address and phone:** an `<address>` from the site config, each line shown only once CONFIRMED in `docs/facts/company-facts.md`. A PENDING value (the phone, WhatsApp) is left out, never filled with a placeholder.
-- **Opening hours** (the owner, 2026-10-02; P3 plan, A): their own line after the `<address>`, "Opening hours: " and the fact from the site config, byte for byte (facts §2).
-- **The legal line:** "© 2026 Deepzeta Digital Solutions L.L.C.", with **Cookie settings** at its inline end for every visitor (P3, docs/ai/09 §2.7): a button that opens the consent settings, hidden in place until it works.
-- **On mobile,** "See how AI reads this page" also appears here. It shares the same AI View state as the header.
+## 3. Social
 
-## Light mode
+- One link per profile in facts §2.1: LinkedIn, Instagram, Facebook, YouTube, TikTok, X, Threads, Snapchat, Pinterest. Each shows the platform's name and ↗.
+- Each link's accessible name is "Deepzeta AI on {platform}" (`shellContent.socialLinkName`; `tracking.spec.ts` clicks "Deepzeta AI on LinkedIn").
+- `outbound_click` fires with its domain.
 
-The finale band and the footer stay navy in both themes, because the logo's white "Deep" needs navy.
+## 4. The legal line
+
+- "© 2026 Deepzeta Digital Solutions L.L.C." (the legal name from the site config).
+- Privacy and Terms (each a link once live).
+- **The Reduce effects switch** (13 §2.11): a switch button, remembered; turned on and labelled "Your device settings turn this on" when a device preference forces it.
+- **Cookie settings** (C83): a button that opens the consent settings dialog, for every visitor, hidden in place until it works (09 §2.7; `consent.spec.ts`).
+- "Back to top ↑", a link to `#top` (`foundation.spec.ts` allows one link to `#main`, the skip link's).
+
+## 5. The giant wordmark
+
+- "Deepzeta" across the full width as an outline. Under the pointer, a radial mask of the logo gradient follows the cursor (`wordmark-spotlight`).
+- It is `aria-hidden` and drawn from `data-word` as CSS generated content with empty alt text, so it adds no duplicate text node: the brand's name is already in the legal line and the logo.
+
+## Mobile (390)
+
+The same order, stacked:
+1. the audit panel (without the "In one session" strip)
+2. the brand block
+3. the columns in pairs
+4. contact
+5. social
+6. the legal line
+7. the wordmark
+
+## States
+
+- Default · the beams playing or static · the spotlight following or static
+- Reduce effects on: no beams, no spotlight, everything else the same
+- No JavaScript: every link and the address work; Cookie settings hidden; Reduce effects follows the device preference only
 
 ## Icons
 
-Tier 1 arrows and external-link; the social letter tiles (C49).
+UI glyphs: arrow up-right, WhatsApp, phone, mail, globe, calendar.

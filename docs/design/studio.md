@@ -1,8 +1,8 @@
 # Designer Studio
 
-Status: CONFIRMED (frame); the 15+ concepts are LATER (owner session) · Decision 0008 · Effects: [13](../ai/13-experience-design.md)
+Status: CONFIRMED (frame); the 15+ concepts are LATER (owner session) · Decision 0008 · Performance: exempt (decision 0031) · Effects: [13](../ai/13-experience-design.md)
 
-**Page tiers:** index **T2**, concept pages **T3**.
+**Performance:** **exempt** — the index (`/studio`) and every concept page (`/studio/<slug>`) carry no Lighthouse floor, no page-weight ceiling and no Core Web Vitals lab gate (decision 0031). Limitless design within the honesty and accessibility rules.
 
 ## Idea
 
@@ -34,7 +34,7 @@ The heavy experiences load only when the visitor opens one ("wow on demand"), so
 - **Search:** `noindex, follow`; not in the sitemap or the `llms` files; no business schema (08).
 - **Chrome:** a small "Concept by Deepzeta AI · fictional business" bar with a back link. The deepzeta header instruments don't appear.
 - **Honesty:** fictional names are checked against real UAE businesses and trademarks. No fake reviews or stats (10 §3).
-- **Speed:** Core Web Vitals hard limits still apply.
+- **Speed:** no performance floor, page-speed target or Core Web Vitals lab gate (decision 0031).
 
 ## Concept spec template
 

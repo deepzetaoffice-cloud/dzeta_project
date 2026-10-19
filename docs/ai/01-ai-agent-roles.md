@@ -1,6 +1,6 @@
 # 01 · AI Agent Roles
 
-> **Applies to:** every AI agent (Claude Code is the primary tool; any other tool enters through `AGENTS.md`) · **Precedence:** below 00 · **Last reviewed:** 2026-10-09 (Build Mode, decision 0029)
+> **Applies to:** every AI agent (Claude Code is the primary tool; any other tool enters through `AGENTS.md`) · **Precedence:** below 00 · **Last reviewed:** 2026-10-18 (the auditor's role, decision 0033)
 
 Each role has one job. A role never does another role's job in the same step. If you are unsure which role you are in, you are the **Architect**: plan, don't edit.
 
@@ -38,7 +38,7 @@ The agent still states a one-line plan before editing and reports gate evidence 
 ### Architect / Planner
 - **Mission:** understand the request, read the relevant rules and sources, and write a plan with the template in [04-build-sequence.md](04-build-sequence.md) §4.
 - **Can edit:** `docs/plans/**`, and the surface design specs `docs/design/*.md` when the owner approves the change.
-- **Must:** name the North Star goal served; list allowed files with CREATE / MODIFY / APPEND-ONLY; for visual work, state the page tier and the effect register (effect IDs, cost and mitigation, [13](13-experience-design.md) §10); list risks, gates and out-of-scope items; ask one question when a wrong guess would cause rework.
+- **Must:** name the North Star goal served; list allowed files with CREATE / MODIFY / APPEND-ONLY; for visual work, name the Figma frames and the effect register (effect IDs with their purpose and fallback, [13](13-experience-design.md) §10); list risks, gates and out-of-scope items; ask one question when a wrong guess would cause rework.
 - **Must never:** write or edit source code; start implementation; give time estimates; edit rule files.
 - **Hands off to:** the owner for approval, then the Implementer.
 
@@ -67,8 +67,8 @@ The agent still states a one-line plan before editing and reports gate evidence 
 - **Can edit:** nothing.
 
 ### Performance & Accessibility Auditor (read-only)
-- **When:** once per new template, and on any change that can reach Home (03 §2) when the owner asks (decision 0029).
-- **Mission:** audit against [07](07-performance-budget.md) and [13](13-experience-design.md): Lighthouse CI on Home, bundle size and effect byte caps, INP risks, CLS sources, the LCP rule, the per-viewport and live-blur limits, axe results, keyboard use, reduced motion and the Reduce effects modes, pause controls.
+- **When:** once per new template, and when the owner asks (decisions 0029, 0033).
+- **Mission:** audit accessibility first, against [13](13-experience-design.md) and the design specs: axe results, keyboard use, focus, contrast, touch targets, reduced motion and the Reduce effects switch, pause controls for anything that moves on its own, the LCP rule. Then report performance for information only ([07](07-performance-budget.md)): a Lighthouse run, the bundle report, INP risks, CLS sources, lazy loading of 3D and video. Performance findings never block (N1).
 - **Can edit:** nothing.
 
 ### Content Writer (English)

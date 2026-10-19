@@ -18,8 +18,9 @@
 // "can understand and cite" is 2.1's own capability wording, never a promise (catalogue §9); no
 // claim that this site has an llms.txt (engine §9.2 is planned, not built); no content-editing or
 // CMS claim (2.1 lists none); no live speed badge (blueprint demo 5 isn't built).
-// The Core Web Vitals thresholds are written as 2.1 writes them, always as what every page is
-// "built to pass", never as a measured result. `tryIt` is left out: the page's proof is the build
+// Core Web Vitals are what every page is optimised for and measured against, and the results are
+// reported at launch, never a promised score (the owner, 2026-10-19; custom-coded-websites.md's
+// flags; 10 §3.7). The thresholds appear only as the measure, from facts §6. `tryIt` is left out: the page's proof is the build
 // terminal, and AI View may join later (the plan, question 3). The steps are our real process, not
 // an example; `exampleLabel` names them so. The FAQ questions are in faq-bank.ts
 // (customCodedWebsitesFaq).
@@ -30,15 +31,19 @@ export const customCodedWebsites: ServicePageContent = {
   catalogueNumber: '2.1',
   // 40 characters; rendered with " | Deepzeta AI", 54 (08 §1: 50–60)
   title: 'Custom-Coded Websites for UAE Businesses',
-  // 145 characters: the key point in the first 120 (custom-coded, SEO, GEO and AI search built in;
-  // 2.1's own lists), one concrete fact (Core Web Vitals), ends with the action (08 §1)
-  description: `${siteConfig.brandName} builds custom-coded websites with SEO, GEO and AI search built in, every page designed to pass Core Web Vitals. Book a free AI audit.`,
+  // 159 characters: the key point in the first 120 (custom-coded, SEO, GEO and AI search built in;
+  // 2.1's own lists), one concrete fact (measured against Core Web Vitals), ends with the action (08 §1)
+  description: `${siteConfig.brandName} builds custom-coded websites with SEO, GEO and AI search built in, optimised for mobile and measured against Core Web Vitals. Book a free AI audit.`,
   // 40 characters, one statement headline (the navigation's outcome line: "Built to load fast and
   // bring in business"); at most 3 lines at 360 px under the breadcrumb
   heading: 'Custom-coded websites built to load fast',
-  // 58 words: the full catalogue name, what it is (2.1's stack, no page builders or templates), the
-  // outcome (Core Web Vitals, SEO, GEO and AI ranking built in) and who it's for (2.1's "Best for")
-  answer: `Custom-Coded High-Performance Websites by ${siteConfig.brandName} are custom-coded in Next.js, TypeScript and Tailwind CSS, with no page builders or templates. Every page is built to pass Core Web Vitals, with SEO, GEO and AI ranking built in during development. They suit any UAE business that wants a website that brings leads and sales, not just an online brochure.`,
+  // 60 words: the full catalogue name, what it is (2.1's stack, no page builders or templates), the
+  // outcome (optimised for mobile, measured against Core Web Vitals, SEO, GEO and AI ranking built in)
+  // and who it's for (2.1's "Best for")
+  answer: `Custom-Coded High-Performance Websites by ${siteConfig.brandName} are custom-coded in Next.js, TypeScript and Tailwind CSS, with no page builders or templates. Every page is optimised for mobile networks and measured against Core Web Vitals, with SEO, GEO and AI ranking built in. They suit any UAE business that wants a website that brings leads and sales, not just an online brochure.`,
+
+  // The hero photo (service-page.md, the media plan)
+  heroPhotoAlt: 'A laptop and a phone showing the same website on a white desk, the Dubai skyline behind them',
 
   // 2 · The problem it solves (before-after, 5 rows; 2.1's four lists). The lede is 40 words
   problem: {
@@ -51,7 +56,8 @@ export const customCodedWebsites: ServicePageContent = {
       },
       {
         before: 'Pages are slow to appear on a phone over a mobile network.',
-        after: 'Images, fonts and code are optimised, and every page is built to pass Core Web Vitals.',
+        after:
+          'Images, fonts and code are optimised for mobile networks, and every page is measured against Core Web Vitals.',
       },
       {
         before: 'Search and AI engines find no clear, structured facts about what you offer and where.',
@@ -114,13 +120,13 @@ export const customCodedWebsites: ServicePageContent = {
     exampleLabel: 'How we build',
   },
 
-  // 4 · What you get (8, the maximum; each from 2.1's lists, each ≤ 20 words). The thresholds are
-  // facts §6's allowlist, written as 2.1 writes them
+  // 4 · What you get (8, the maximum; each from 2.1's lists, each ≤ 20 words). Core Web Vitals as the
+  // measure, reported at launch, never a promised result
   deliverables: {
     heading: 'What you get',
     items: [
       'A website designed and coded for your business, with no page builders, themes or pre-designed templates',
-      'Every page built to pass Core Web Vitals: LCP under 2.5 s, INP under 200 ms, CLS under 0.1',
+      'Every page optimised for mobile networks and measured against Core Web Vitals, with the results reported at launch',
       'Optimised images, fonts and code, accessible design, and a performance report at launch',
       'Arabic and English pages, with a true right-to-left layout for Arabic',
       'Technical SEO: clean URLs, a sitemap and internal linking, plus local SEO for each area or emirate you serve',
@@ -170,7 +176,7 @@ export const customCodedWebsites: ServicePageContent = {
       {
         question: 'Is your current site slow on a phone?',
         answer:
-          'Then start with speed: a custom-coded site carries only the code each page needs, built to pass Core Web Vitals.',
+          'Then start with speed: a custom-coded site carries only the code each page needs, optimised for mobile networks and measured against Core Web Vitals.',
       },
       {
         question: 'Do your customers read Arabic as well as English?',
@@ -238,8 +244,13 @@ export const customCodedWebsites: ServicePageContent = {
 // own build and checks (build-run.ts), so neither carries an "Example" label (10 §3.6); the terminal
 // says plainly that it is a recording, never live.
 export const customCodedWebsitesExtras: WebsitesExtras = {
+  // Figma 60:34's own labels (approved with the file)
+  hero: { tag: 'Flagship', seeCode: 'See the code behind this page' },
+  proofEyebrow: 'Proof',
   codePage: {
     label: 'Code ↔ Page',
+    heading: 'The page and the code that renders it',
+    hint: 'Reveal the code behind the page: drag the handle, or use ← → when it has focus.',
     // 30 words, one sentence
     caption:
       'The page side is this page’s real opening section; the code side is the source code that renders it, read from this site’s repository each time the site is built.',
@@ -249,9 +260,9 @@ export const customCodedWebsitesExtras: WebsitesExtras = {
   },
   terminal: {
     heading: 'Watch this site run its own checks',
-    // 35 words (≤ 40): what the run is, and that it is replayed, not live. It names only the steps the
+    // 30 words (≤ 40): what the run is, and that it is replayed, not live. It names only the steps the
     // recording holds (build-run.ts)
-    lede: 'This is a recording of a real run of this site’s own build and quality checks: the build, the structured-data, SEO and link checks, then the homepage’s Lighthouse checks. It is replayed, not live.',
+    lede: 'This is a recording of a real run of this site’s own build and quality checks: the build, then the structured-data, SEO and link checks. It is replayed, not live.',
     windowTitle: `${siteConfig.brandName} · build and checks`,
     recordedLabel: 'Recorded on {date} from commit {commit}',
     controls: {

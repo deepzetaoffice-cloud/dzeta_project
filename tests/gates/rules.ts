@@ -1,3 +1,6 @@
+import { DESCRIPTION_LENGTH, TITLE_LENGTH } from '../../src/lib/seo/page-seo';
+import { ALT_MAX, MEDIA_FILE_NAME } from '../../src/lib/seo/media';
+
 // Pure assertion logic for the HTML gates (docs/ai/03 · check:seo, check:schema, check:links).
 // The crawler (crawl.ts) collects PageData from the built site; these functions judge it. They are
 // unit-tested with failing fixtures (tests/unit/gate-rules.test.ts), so each gate can really fail.
@@ -17,14 +20,17 @@ export type PageData = {
   navLists: string[][]; // raw hrefs in the header and the footer, one array per list (crawl.ts)
   jsonLd: string[]; // raw script contents
   bodyText?: string; // the visible text of <main>, whitespace-normalised (crawl.ts; P5 parity)
+  // The SEO contract (08 §7; decision 0033), from crawl.ts
+  meta?: Record<string, string[]>; // og:* and twitter:* values by property or name
+  images?: { src: string; alt: string | null; width: string | null; height: string | null }[];
+  videos?: { src: string; poster: string | null; captions: number; loop: boolean; muted: boolean }[];
 };
 
 // Printed with every run so the output never claims more than it checked (plan section E).
 export const SKIPPED = {
   seo: [
-    'Open Graph and Twitter tags: og:title, og:description, og:url, og:locale, og:type, twitter:card (enabled in P4, with the metadata builder)',
-    'og:image returns 200 (enabled in P4, with OG images)',
-    'sitemap parity (enabled in P9, with the sitemap)',
+    "per-page OG images at 1200 × 630 from next/og (Phase D; today every page shares the site's default image)",
+    "the sitemap's image and video entries (with the first MediaAsset on a page, Phase D)",
     'noindex routes absent from the llms files (enabled in P9, with the llms files)',
   ],
   schema: [
@@ -79,17 +85,85 @@ export function seoProblems(page: PageData, { siteUrl, brandName }: SeoOptions):
   if (!title.endsWith(suffix) || title.toLowerCase().split(brandWord).length !== 2) {
     problems.push(`title must end with "${suffix}" and name the brand exactly once: "${title}"`);
   }
-  if (title.length < 50 || title.length > 60) problems.push(`title is ${title.length} characters (50–60): "${title}"`);
+  if (title.length < TITLE_LENGTH.min || title.length > TITLE_LENGTH.max) {
+    problems.push(`title is ${title.length} characters (${TITLE_LENGTH.min}–${TITLE_LENGTH.max}): "${title}"`);
+  }
 
   if (page.descriptions.length !== 1) problems.push(`expected one meta description, found ${page.descriptions.length}`);
   const description = page.descriptions[0] ?? '';
-  if (description.length < 140 || description.length > 160) {
-    problems.push(`description is ${description.length} characters (140–160)`);
+  if (description.length < DESCRIPTION_LENGTH.min || description.length > DESCRIPTION_LENGTH.max) {
+    problems.push(
+      `description is ${description.length} characters (${DESCRIPTION_LENGTH.min}–${DESCRIPTION_LENGTH.max})`,
+    );
   }
 
   if (page.h1Count !== 1) problems.push(`expected one H1, found ${page.h1Count}`);
   if (page.keywordsMetaCount > 0) problems.push('the keywords meta tag is banned');
   problems.push(...canonicalProblems(page, siteUrl));
+  if (page.meta) problems.push(...socialProblems(page, title, description));
+  problems.push(...mediaProblemsIn(page));
+  return problems;
+}
+
+// 08 §1: Open Graph and Twitter, from the one metadata builder (src/lib/seo/page-seo.ts)
+function socialProblems(page: PageData, title: string, description: string): string[] {
+  const meta = page.meta ?? {};
+  const one = (key: string) => (meta[key]?.length === 1 ? meta[key][0] : undefined);
+  const problems: string[] = [];
+  if (one('og:title') !== title) problems.push(`og:title must equal the title: "${one('og:title') ?? ''}"`);
+  if (one('og:description') !== description) problems.push('og:description must equal the description');
+  if (one('og:url') !== page.canonicals[0]) problems.push(`og:url must equal the canonical: "${one('og:url') ?? ''}"`);
+  if (!one('og:type')) problems.push('expected one og:type');
+  if (!one('og:locale')) problems.push('expected one og:locale');
+  if (!meta['og:image']?.length) problems.push('expected an og:image');
+  if (one('twitter:card') !== 'summary_large_image') problems.push('twitter:card must be summary_large_image');
+  return problems;
+}
+
+// The file name an image is served under, without its folder, its extension or a width suffix. A
+// next/image URL carries the source in its `url` parameter.
+export function mediaFileName(src: string): string {
+  let path = src;
+  try {
+    const url = new URL(src, 'http://local');
+    path = url.pathname.startsWith('/_next/image') ? (url.searchParams.get('url') ?? '') : url.pathname;
+  } catch {
+    // An unparsable src is judged as written.
+  }
+  const base = path.split('/').pop() ?? '';
+  return base.replace(/\.[a-z0-9]+$/i, '').replace(/-\d+w$/, '');
+}
+
+// 08 §7, the MediaAsset rules as the browser receives them: every image has alt (≤ 125 characters,
+// or "" when decorative), width and height, and a descriptive kebab-case file name; every video has a
+// poster, and captions unless it's a muted loop.
+export function mediaProblemsIn(page: PageData): string[] {
+  const problems: string[] = [];
+  for (const image of page.images ?? []) {
+    if (image.src.startsWith('data:')) continue;
+    const name = mediaFileName(image.src);
+    if (image.alt === null) problems.push(`an <img> has no alt attribute: ${image.src}`);
+    else if (image.alt.length > ALT_MAX)
+      problems.push(`alt text is ${image.alt.length} characters (≤ ${ALT_MAX}): ${name}`);
+    if (!image.width || !image.height) problems.push(`an <img> needs width and height: ${name}`);
+    if (!MEDIA_FILE_NAME.test(name)) problems.push(`"${name}" isn't a descriptive kebab-case file name`);
+  }
+  for (const video of page.videos ?? []) {
+    if (!video.poster) problems.push(`a <video> has no poster: ${video.src}`);
+    if (!(video.loop && video.muted) && video.captions === 0)
+      problems.push(`a <video> with content has no captions: ${video.src}`);
+  }
+  return problems;
+}
+
+// 08 §6: the sitemap lists exactly the indexable built pages.
+export function sitemapProblems(sitemapUrls: string[], indexableUrls: string[]): string[] {
+  const listed = new Set(sitemapUrls);
+  const built = new Set(indexableUrls.map((url) => url.replace(/\/$/, '')));
+  const problems: string[] = [];
+  for (const url of built) if (!listed.has(url)) problems.push(`an indexable page is missing from the sitemap: ${url}`);
+  for (const url of listed)
+    if (!built.has(url)) problems.push(`the sitemap lists a page that isn't an indexable built page: ${url}`);
   return problems;
 }
 

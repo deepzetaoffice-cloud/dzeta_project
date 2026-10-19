@@ -26,6 +26,7 @@ $rel = $rel -replace '\\', '/'
 
 $rules = @(
     @{ Pattern = '^Planning Folder/For Ai/deepZeta Ai Logo/'; Why = 'The logo SVG is locked and is never edited, reformatted or optimised (docs/ai/00 section 5).' },
+    @{ Pattern = '^src/brand/white-bg/'; Why = 'The owner''s white-background logos are locked and never edited, reformatted or optimised (C78; docs/ai/00 section 5).' },
     @{ Pattern = '(^|/)\.env(\.(?!example$)[^/]*)?$'; Why = 'Environment files hold secrets and are never edited by agents. Only .env.example may be changed, through an approved plan.' },
     @{ Pattern = '(^|/)package-lock\.json$'; Why = 'The lockfile changes only through npm commands in an approved plan, never by direct edit (docs/ai/06 section 5).' }
 )

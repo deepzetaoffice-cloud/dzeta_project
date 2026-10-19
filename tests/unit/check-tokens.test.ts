@@ -24,6 +24,13 @@ describe('check:tokens', () => {
     expect(rulesFound('src/components/ui/Card.tsx', `className="w-[37px]"`)).toContain('raw-px-arbitrary');
   });
 
+  it('fails a raw easing curve outside the tokens file (05 §5)', () => {
+    expect(rulesFound('src/components/ui/Example.tsx', "const ease = 'cubic-bezier(0.23, 1, 0.32, 1)';")).toEqual([
+      'raw-easing',
+    ]);
+    expect(rulesFound('src/styles/tokens.css', '--dz-motion-ease-out: cubic-bezier(0.23, 1, 0.32, 1);')).toEqual([]);
+  });
+
   it('fails physical-direction classes, CSS properties and style props', () => {
     expect(rulesFound('src/components/ui/Card.tsx', `className="ml-4 text-right"`)).toContain('physical-class');
     expect(rulesFound('src/components/ui/Card.tsx', `className="md:-left-2"`)).toContain('physical-class');

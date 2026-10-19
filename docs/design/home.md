@@ -1,47 +1,59 @@
 # Home
 
-Status: CONFIRMED · Decision 0008 · Effects: [13](../ai/13-experience-design.md)
+Status: CONFIRMED (Figma approved 2026-10-18) · As built in Phase D2 (2026-10-19; the owner approved this sync the same day) · Decision 0033 · Effects: [13](../ai/13-experience-design.md) §4.3, §5 · Figma: page Home (`1:5`), Desktop 1440 `50:35`, Mobile 390 `56:810` · Content: `src/content/en/home.ts`, `faq-bank.ts` · Registry: R001
 
-**Page tier: T1** (≥ 95). At first load only native CSS plus ≤ 10 KB of first-party effect JS (decision 0008).
-
-**Section order:** blueprint §8 (understand → believe → try → book).
+**Section order:** understand → believe → try → book (blueprint §8; engine §3.1).
 
 ## Story arc
 
-Hook (H1 + direct answer) → Pain (§03) → System (§04) → Show (§05) → Proof (§06) → Plan (§07, §08) → Action (§11).
+Hook (§01: the H1 + direct answer) → Pain (§03) → System (§04, §05) → Show (§06) → Proof (§07, §08) → Plan (§09, §10) → Action (§12).
 
 ## Sections
 
-| # | Section | Effects | Notes |
-|---|---|---|---|
-| 01 | Hero | Primary CTA: `hover-charge` + `pointer-magnet`. "Try our AI agent": `hover-outline`. Background: `pointer-grid-wake`. **Signature:** `story-chat` in a `glass-liquid` proof card, then **The Assembly** (13 §5) on first scroll | See "Hero details" below. |
-| 02 | Proof strip | `scroll-drift` | Tool names as plain text. Client logos and partner badges appear only once confirmed (facts §5). |
-| 03 | Problem → outcome | `story-before-after` rows; the pixel travels each connector | Outcomes use allowlisted design targets until measured results exist (facts §6). |
-| 04 | Four doors | `glass-frost` cards, Tier 3 icon stories, `hover-card`, `pointer-tilt` | The four pillars (C6), each linking to its pillar page; AI Automation and Websites lead. |
-| 05 | Workflow explorer (demo 3) | Accessible tabs that switch a `story-flow` (CSS/SVG only) | Tabs use roving tabindex, arrow keys and `aria-controls` (v1 lesson). |
-| 06 | Proof | Until real case-study figures exist: **"Watch this page build itself"** (13 §5), a `scroll-pinned-scene` with a `depth-css` laptop | The final stamp shows this visit's real LCP. Real figures replace the scene once they exist. |
-| 07 | How we work | Tier 2 step icons (Audit, Build, Launch, Improve), a journey-line segment, `scroll-reveal` | Timeframes appear only once confirmed. |
-| 08 | ROI calculator (demo 2) | `story-data`, `touch-snap` sliders, a `glass-live` result panel | Uses the visitor's own inputs; the formula is shown. |
-| 09 | Industries | Calm tiles, `hover-window` | Four tiles, one per catalogue industry group, each linking to its page (URL registry R101–R104). Industry icons in Tier 1 style (Icon Master Rules §14.2 recommendation). |
-| 10 | FAQ | The FAQ module ([faq.md](faq.md)) | 8 questions (engine §3). The most breathing room on the page. |
-| 11 | Final CTA | The Landing (footer.md), the audit form, and the 60-second WhatsApp test (demo 4) in a `glass-live` panel; `touch-stamp` on success | |
-| 12 | Footer | See footer.md | |
+| # | Figma section | Content | Effects | Media |
+|---|---|---|---|---|
+| 01 | Hero · stage (signature 1: from message to booking) | The location chip ("Based in Dubai · UAE · GCC", Figma's text); the **H1** and the rotator (below); "See how we work →" (to §08); the direct answer (`heroAnswer.answer`); the AI input (placeholder "Ask our AI agent anything, in Arabic or English…", the "WhatsApp mode" chip) with three suggestion chips; "Book a free AI audit" | `hero-word-rotator` + its pause button, `background-paths`, **`message-to-booking`** (the phone, calendar and CRM cards, "Drag to rotate", the scrubber "Scroll to run the example": 01 Message · 02 Reply · 03 Booked · 04 CRM) | The phone is CSS 3D with real HTML text (no S01 GLB or posters needed); SR02, SR03, SR04 (optional recordings) |
+| 02 | Platform strip · marquee | "The platforms we build on" + the platform names as plain text (`proofStrip`; catalogue §8). No client logos or partner badges (facts §5) | `marquee` + its pause button; a wrapped list on phones and under Reduce effects | — |
+| 03 | Problem → outcome | [01] "Three leaks" · "Sound familiar?" · lede; three rows "Today" → "With Deepzeta AI", each opening to its 40–75-word answer (`problemOutcome`). The 60-second reply is labelled a design target, not a measured result (facts §6) | `problem-reveal`, `section-reveal` | — |
+| 04 | Four doors (signature 2) | [02] "Four pillars" · "Four ways we build your growth" · lede; four door cards (number, pillar, promise, three services, "All {pillar} services", linking to the hub's pillar section until the pillar page ships); the closing line. No "▶ Live loop" badge until V01–V04 exist | **`pixels-to-doors`**, `door-video`, `door-tilt`, `hover-lift` | P01–P04 (posters) + V01–V04 (loops; mobile: the Momentum Rail) |
+| 05 | How an automation works (signature 3) | [03] "Example workflow" · "See an automation run" · lede; "Fig. 2 — one workflow, end to end · example"; the five steps as a visible ordered list (01 Lead · 02 AI reply · 03 Booking + CRM · 04 Reminder · 05 Review); the diagram's nodes with their pillar chips; "Ends on the real flow ↓" and SR01 join once the real flow is recorded | **`workflow-connect`** (pinned ~200 vh; vertical on mobile), the Scrubber | S02 (optional 3D), U22 (poster); SR01: the real n8n flow, captioned "Built by Deepzeta AI" |
+| 06 | This page is the proof (signature 4) | [04] "This page is the proof" · "Watch this page build itself" · lede; the "How AI reads this page" toggle; "This visit's LCP — s, measured live"; the four layers 01 Design · 02 Code · 03 Schema · 04 SEO, showing this page's real `<title>`, description, H1, step list, JSON-LD (the organization node of the page's own graph) and the recorded build (`build-run.ts`); the `llms.txt` line joins once the file exists | **`exploded-layers`**, `lcp-stamp` | S03, U23/U24 (posters) |
+| 07 | Illustrative proof · concepts | [05] "Concepts" · "The kind of system we build"; three concept cards (`illustrativeProof`), each labelled "Concept by Deepzeta AI · fictional business" (C18) | `hover-lift`, `section-reveal` | — |
+| 08 | How we work | [06] "Audit → Build → Launch → Improve" · "How we work" · lede; four step cards (`howWeWork`) | `section-reveal` | P21 (+ V21 optional) |
+| 09 | Industries (signature 5) | [07] "Four industry groups" · "Built for your industry" · lede; four cards (B2B, Corporate & Tech · E-Commerce & Consumer Brands · Real Estate, Construction & Professional · Local, Medical & Field Services), each flipping to its ready-made automations and "See the {group} page" (a link once R101–R104 ship) | **`industry-rail`** (pinned on desktop; swipe on mobile), `industry-flip` | P05–P08 (+ V05–V08 optional) |
+| 10 | ROI calculator (signature 6) | [08] "Your numbers only" · "What is manual work really costing you?" · lede; three sliders (hours per week, cost per hour in AED, weeks per year) labelled "Example inputs — move the sliders to your numbers"; the yearly value and the formula, always shown | **`roi-count-up`** | — |
+| 11 | FAQ | [09] the FAQ module ([faq.md](faq.md)): 8 questions from `faq-bank.ts`, "Ask our AI agent", FAQPage schema | `accordion` | — |
+| 12 | Final CTA | "Start with a free AI automation audit" + its line + "Book a free AI audit"; the "Demo" panel "The speed-to-lead test" (the 60-second target, facts §6) + "Take the speed-to-lead test" | `section-reveal` | — |
+| — | Footer | [footer.md](footer.md) | | |
 
-### Hero details
+## The hero, in detail
 
-- **The statement H1 is the LCP:** visible at first paint, with no entrance animation.
-- **The Z0 layer:** the grid, plus the locked logo's Z mark (cropped with `viewBox`; the file is untouched) with one light sweep on load.
-- **`story-chat`** plays once (~2.5 s), with a replay control, labelled "Example conversation".
+- **The H1 is one stable sentence and, with the direct answer, the page's LCP candidate** (the owner, 2026-10-19: Figma shows only the H1's tail, so the answer paragraph can be the larger block; `foundation.spec.ts` accepts either, `data-hero-answer`):
+  - both visible at first paint, with no entrance animation (13 §3 rule 7)
+  - its text content is exactly the stable sentence (`heroAnswer.heading`), for crawlers and screen readers alike
+  - its visible part is the tail ("built for UAE businesses."); the lead-in is visually hidden
+  - it paints above the slab's glow (it is positioned), so its first line stays crisp white
+- **The rotator** (decision 0033 §3) sits in the same headline block, outside the `<h1>` element:
+  - `aria-hidden`, with only its first phrase in the server HTML
+  - the six phrases in order: Business-centric → Growth formula → Branding → Custom-coded websites → AI Automation → Social media strategy
+  - one span per letter (so the slab never becomes the LCP element), grouped in chunks that wrap only after a space or a hyphen (`src/lib/fx/home/slab.ts`): "Business- / centric" on phones, as Figma 56:810 draws it
+  - each phrase in solid violet on its slab (`--dz-slab-1` to `-6`), with the "01 / 06" counter
+  - the pause button (Icon button, labelled) stops it; it also pauses on hover and focus, off-screen and in a hidden tab
+- **The AI input** opens the website agent (P7). Until the agent ships, sending opens WhatsApp with the visitor's text prefilled, and the input says so. Never a fake chat. The suggestion chips fill the input.
+- **The phone scene** labels its conversation "Example conversation" (10 §3.6). It is real HTML: the phone is CSS 3D (not R3F) with a dragged ±25° turn and a spring, and the server renders its final state, so no-JS visitors and Reduce effects see the whole story.
+- **The scrubber's steps are buttons,** so the scene can be run by keyboard. On desktop the scene pins for about 150 vh; with reduced motion there is no pin, and all four states show.
+
+## Content flags (raised with the owner, not changed silently)
+
+- **Resolved (2026-10-19): the H1's words.** `home.ts` now reads Figma's sentence, "AI automation and custom-coded websites, built for UAE businesses" (the owner's decision).
+- **Resolved: the new copy the Figma file adds** (the rotator's phrases, the owner's own, decision 0033 §3; the location chip; the AI input's placeholder and chips; the doors' and the scene's labels; §06's layer lines) is in `home.ts` from the Figma text, approved with the file.
+- **Resolved: §09's back faces** come from the catalogue's best-fit table (§7.5, `bestFitAutomations`); no TODO ships.
+- **Resolved: §06's code layer** replays this site's real recorded output (`build-run.ts`, re-recorded on the v3 build, commit `f85a0d4`, 2026-10-19), with its commit and date shown.
 
 ## Per-viewport check
 
-- **Hero:** one signature at a time. First the proof card; after the first scroll, The Assembly.
-- **§06:** the pinned scene is the signature. Nothing else moves there.
+One signature moment in view at a time (13 §2.3): the hero scene, then the doors, the workflow, the proof, the rail and the calculator, with a calm section (§02, §03, §07, §08, §11) between the loud ones. Two pinned scenes are never adjacent.
 
-## Feasibility gate
+## Breakpoints
 
-Before P5 is done, measure the Home shell with every T1 effect switched on:
-- with `lhci` (must reach ≥ 95)
-- on a budget Android phone
-
-See 04 §2.
+Checked side by side with `50:35` and `56:810` at 390, 834 and 1440 px, plus 360 (the consent banner never covers the H1 at 360 × 640) and 1280.

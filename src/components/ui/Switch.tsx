@@ -1,18 +1,16 @@
-// A switch (P2 plan, C4): a <button role="switch"> with a visible label, in one look everywhere.
-// - A display switch (`kind`): preferences.ts owns its state. It sets aria-checked on every copy at
-//   once, and handles the click. While a device setting decides Reduce effects, it also sets
-//   aria-disabled and points aria-describedby at the note that explains why (data-note); otherwise the
-//   note is neither shown nor read. The switches show only once the runtime has started (effects.css),
-//   in menus and the footer, never above the fold. Its width comes from where it sits (DisplayControls).
+// A switch: a <button role="switch"> with a visible label, in one look everywhere (globals.css).
+// - The Reduce effects switch (`kind="effects"`, the footer): preferences.ts owns its state. It sets
+//   aria-checked on every copy at once and handles the click. While a device setting decides Reduce
+//   effects, it also sets aria-disabled and points aria-describedby at the note that explains why
+//   (data-note). The switch shows once the runtime has started (globals.css).
 // - A controlled switch (`checked` and `onCheckedChange`), for a client component that owns the state:
-//   Cookie settings' groups (P3 plan, E).
-// touch-snap: the thumb overshoots a little (effects.css).
+//   Cookie settings' groups.
 
 export type SwitchProps = {
   label: string;
   className?: string;
 } & (
-  | { kind: 'theme' | 'effects'; /** The id of the note that explains a locked state */ note?: string }
+  | { kind: 'effects'; /** The id of the note that explains a locked state */ note?: string }
   | { kind?: undefined; checked: boolean; onCheckedChange: (checked: boolean) => void }
 );
 
@@ -28,7 +26,7 @@ export function Switch(props: SwitchProps) {
       data-dz-switch={display ? props.kind : undefined}
       onClick={display ? undefined : () => props.onCheckedChange(!props.checked)}
       className={[
-        'dz-switch inline-flex min-h-11 items-center gap-3 rounded-md text-start whitespace-nowrap text-fg-strong',
+        'dz-switch inline-flex min-h-11 items-center gap-3 rounded-md text-start whitespace-nowrap text-ink',
         className,
       ]
         .filter(Boolean)

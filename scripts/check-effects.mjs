@@ -9,7 +9,8 @@ import { pathToFileURL } from 'node:url';
 
 const LIBRARY_FILE = 'docs/ai/13-experience-design.md';
 const PLANS_DIR = 'docs/plans';
-const EFFECT_ID = /`([a-z0-9]+(?:-[a-z0-9]+)+)`/g;
+// One word or kebab-case: the v3 motion spec (decision 0033) has one-word IDs such as `marquee`.
+const EFFECT_ID = /`([a-z0-9]+(?:-[a-z0-9]+)*)`/g;
 
 // IDs defined in 13 §4: the first column of each library table row.
 export function libraryIds(markdown) {
@@ -18,7 +19,7 @@ export function libraryIds(markdown) {
   for (const line of markdown.split(/\r?\n/)) {
     if (/^## 4\./.test(line)) inLibrary = true;
     else if (/^## /.test(line)) inLibrary = false;
-    const row = inLibrary && line.match(/^\|\s*`([a-z0-9]+(?:-[a-z0-9]+)+)`\s*\|/);
+    const row = inLibrary && line.match(/^\|\s*`([a-z0-9]+(?:-[a-z0-9]+)*)`\s*\|/);
     if (row) ids.add(row[1]);
   }
   return ids;

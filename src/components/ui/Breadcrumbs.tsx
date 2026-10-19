@@ -1,16 +1,20 @@
 import { shellContent } from '@/content/en/shell';
 import { routePath, type RouteId } from '@/lib/routes';
 
-// The visible breadcrumb trail (engine §5.1: every inner page has one; P6 part A2, S8). Plain links
-// from the route helpers (06 §2.4, C67), Home first, the current page last as text with
-// aria-current="page". The BreadcrumbList schema (S9) reads the same trail, so the two can't drift.
-// hover-underline on the links (13 §4.3); logical CSS only, so it reads right to left in Arabic.
+// The visible breadcrumb trail (engine §5.1: every inner page has one). Plain links from the route
+// helpers (06 §2.4, C67), Home first, the current page last as text with aria-current="page". The
+// BreadcrumbList schema reads the same trail through fullTrail(), so the two can't drift (08 §3.7).
+// Logical CSS only, so it reads right to left in Arabic. `onColor` is the C diagram mono label inside a
+// hero stage (Figma 58:34, 59:34: "HOME / SERVICES"), white on the stage gradient; `mono` is the same
+// label on a light hero (Figma 61:34).
 
 export type Crumb = { route: RouteId; label: string };
 
 export type BreadcrumbsProps = {
   /** The trail after Home: each ancestor, then the current page (rendered as text) */
   trail: readonly Crumb[];
+  tone?: 'default' | 'onColor' | 'mono';
+  className?: string;
 };
 
 /** The full trail, Home included: what the page shows and what its BreadcrumbList states */
@@ -19,25 +23,44 @@ export const fullTrail = (trail: readonly Crumb[]): readonly Crumb[] => [
   ...trail,
 ];
 
-export function Breadcrumbs({ trail }: BreadcrumbsProps) {
+export function Breadcrumbs({
+  trail,
+  tone = 'default',
+  className = 'mx-auto max-w-page px-gutter pt-6',
+}: BreadcrumbsProps) {
   const crumbs = fullTrail(trail);
+  const onColor = tone === 'onColor';
+  const mono = onColor || tone === 'mono';
   return (
-    <nav aria-label={shellContent.breadcrumbLabel} className="mx-auto max-w-page px-gutter pt-4 sm:pt-8">
-      <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 text-small text-fg-muted">
+    <nav aria-label={shellContent.breadcrumbLabel} className={className}>
+      <ol
+        className={
+          mono
+            ? `flex flex-wrap items-center gap-x-3 font-mono text-label uppercase ${onColor ? 'text-on-color' : 'text-ink-secondary'}`
+            : 'flex flex-wrap items-center gap-x-2 gap-y-1 text-small'
+        }
+      >
         {crumbs.map((crumb, index) => {
           const last = index === crumbs.length - 1;
           return (
-            <li key={crumb.route} className="inline-flex items-center gap-x-2">
+            <li
+              key={crumb.route}
+              className={mono ? 'inline-flex items-center gap-x-3' : 'inline-flex items-center gap-x-2'}
+            >
               {last ? (
-                <span aria-current="page" className="text-fg">
-                  {crumb.label}
-                </span>
+                <span aria-current="page">{crumb.label}</span>
               ) : (
                 <>
-                  <a href={routePath(crumb.route)} className="dz-underline dz-target text-fg-muted hover:text-fg">
+                  <a
+                    href={routePath(crumb.route)}
+                    className={[
+                      'inline-flex items-center underline-offset-4 hover:underline',
+                      mono ? 'min-h-8' : 'min-h-11',
+                    ].join(' ')}
+                  >
                     {crumb.label}
                   </a>
-                  <span aria-hidden="true">›</span>
+                  <span aria-hidden="true">/</span>
                 </>
               )}
             </li>
