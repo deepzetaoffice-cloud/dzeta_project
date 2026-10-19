@@ -113,8 +113,18 @@
           },
           {
             "@type": "ListItem",
+            "name": "AI Lead Qualification & Scoring",
+            "url": "https://deepzeta.ai/services/ai-lead-qualification-scoring#service"
+          },
+          {
+            "@type": "ListItem",
             "name": "Automated Quotation & Quote Tracking System",
             "url": "https://deepzeta.ai/services/automated-quotation-tracking#service"
+          },
+          {
+            "@type": "ListItem",
+            "name": "Proposal Automation",
+            "url": "https://deepzeta.ai/services/proposal-automation#service"
           },
           {
             "@type": "ListItem",
@@ -138,8 +148,48 @@
           },
           {
             "@type": "ListItem",
+            "name": "Viewing & Site-Visit Scheduling",
+            "url": "https://deepzeta.ai/services/viewing-site-visit-scheduling#service"
+          },
+          {
+            "@type": "ListItem",
+            "name": "Ticketing & Complaint Tracking System",
+            "url": "https://deepzeta.ai/services/ticketing-complaint-tracking#service"
+          },
+          {
+            "@type": "ListItem",
             "name": "Review & Reputation Automation",
             "url": "https://deepzeta.ai/services/review-reputation-automation#service"
+          },
+          {
+            "@type": "ListItem",
+            "name": "Loyalty, Renewal & Win-Back Automation",
+            "url": "https://deepzeta.ai/services/loyalty-renewal-win-back-automation#service"
+          },
+          {
+            "@type": "ListItem",
+            "name": "Job & Work-Order Management Automation",
+            "url": "https://deepzeta.ai/services/job-work-order-management#service"
+          },
+          {
+            "@type": "ListItem",
+            "name": "Maintenance Contract & Preventive Maintenance Scheduling",
+            "url": "https://deepzeta.ai/services/preventive-maintenance-scheduling#service"
+          },
+          {
+            "@type": "ListItem",
+            "name": "Inventory & Stock Automation",
+            "url": "https://deepzeta.ai/services/inventory-stock-automation#service"
+          },
+          {
+            "@type": "ListItem",
+            "name": "Task & Approval Workflows",
+            "url": "https://deepzeta.ai/services/task-approval-workflows#service"
+          },
+          {
+            "@type": "ListItem",
+            "name": "Invoicing & Payment Collection Automation",
+            "url": "https://deepzeta.ai/services/invoicing-payment-collection#service"
           },
           {
             "@type": "ListItem",
@@ -183,8 +233,22 @@
           {
             "@type": "Offer",
             "itemOffered": {
+              "@id": "https://deepzeta.ai/services/ai-lead-qualification-scoring#service",
+              "name": "AI Lead Qualification & Scoring"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
               "@id": "https://deepzeta.ai/services/automated-quotation-tracking#service",
               "name": "Automated Quotation & Quote Tracking System"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@id": "https://deepzeta.ai/services/proposal-automation#service",
+              "name": "Proposal Automation"
             }
           },
           {
@@ -218,8 +282,64 @@
           {
             "@type": "Offer",
             "itemOffered": {
+              "@id": "https://deepzeta.ai/services/viewing-site-visit-scheduling#service",
+              "name": "Viewing & Site-Visit Scheduling"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@id": "https://deepzeta.ai/services/ticketing-complaint-tracking#service",
+              "name": "Ticketing & Complaint Tracking System"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
               "@id": "https://deepzeta.ai/services/review-reputation-automation#service",
               "name": "Review & Reputation Automation"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@id": "https://deepzeta.ai/services/loyalty-renewal-win-back-automation#service",
+              "name": "Loyalty, Renewal & Win-Back Automation"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@id": "https://deepzeta.ai/services/job-work-order-management#service",
+              "name": "Job & Work-Order Management Automation"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@id": "https://deepzeta.ai/services/preventive-maintenance-scheduling#service",
+              "name": "Maintenance Contract & Preventive Maintenance Scheduling"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@id": "https://deepzeta.ai/services/inventory-stock-automation#service",
+              "name": "Inventory & Stock Automation"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@id": "https://deepzeta.ai/services/task-approval-workflows#service",
+              "name": "Task & Approval Workflows"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@id": "https://deepzeta.ai/services/invoicing-payment-collection#service",
+              "name": "Invoicing & Payment Collection Automation"
             }
           },
           {

@@ -60,3 +60,14 @@ its own plan.
 (batches record themselves here)
 
 - **Batch 1 (2026-10-09, `content/services-batch-1`):** 1B.3, 1B.5, 1B.6, 1C.1, 1C.2, 1D.3, 1I.2, 4A.1, 4A.3, 4B.6 live (R029, R031–R034, R038, R051, R068, R070, R076). Beyond the copy: the template names each page's demo (`tryIt.demoId`, optional), eight new Tier 2 icons, six headings shortened to clear the European banner at 360 px, and the header's unlinked items in the link colour (the owner). Gates: build, schema/seo/links/facts, e2e services + themes 101/101, Home lhci (perf 96, LCP 2,717 ms). Deferred: the conversational services (1A.1, 1A.2) wait for a `story-chat` variant of the template; 2.1 waits for its spec extras; 1F.2 waits for APPROVED citations.
+- **Batch 2 (2026-10-19, on the v3 template, branch `claude/redesign-v3-69988d`):**
+  - **Live:** 1B.2, 1B.4, 1C.3, 1D.2, 1D.4, 1E.1, 1E.2, 1E.3, 1E.6 and 1F.1 (R028, R030, R035, R037, R039–R044). Each has 6–7 FAQ questions, cost and timeline first.
+  - **Beyond the table, by the owner's instruction** ("each with a new ElevenLabs hero photo like P09–P20"): the hero photos P22–P31 (ElevenLabs Seedream 5 Lite, 4:3 at 3K, exported at 2400 × 1800; two had a light blur over paper patches so no text-like marks remain), their entries in `src/lib/media/photos.ts` (`PHOTOS`, `SERVICE_PHOTO`) and their files in `public/media/photos/`.
+  - **Also beyond the table:**
+    - `docs/facts/agent-knowledge.md`, regenerated for the new FAQ answers. The owner re-uploads it.
+    - `tests/fixtures/schema/services-hub.json`: the hub's ItemList and OfferCatalog grow by the ten services, the approved fixture diff.
+  - **Headings:** five were shortened to two lines at 360 px so the European banner clears them, the same fix as batch 1. Measured on every page, since `consent.spec.ts` covers Home only.
+  - **Gates:** `verify:ci` green locally (typecheck, lint, tokens, contrast, format, facts, rules, effects, knip, 492 unit tests, build; `check:schema`, `check:seo` and `check:links` on 25 pages; e2e 51/51).
+  - **No Lighthouse:** none run (0034: no speed testing off Home).
+  - **Proposed to the owner:** ten media rows for `docs/design/service-page.md`'s table (protected).
+  - **Still deferred:** 1A.*, 1D.1, 1F.2 and 1F.3.

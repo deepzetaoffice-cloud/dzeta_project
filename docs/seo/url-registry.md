@@ -97,23 +97,23 @@ A row is never deleted, and an ID is never reused.
 | R025 | `/services/internal-knowledge-assistant` | Service ⭐ | AI Automation | 1A.6 | An AI assistant that answers staff questions from company documents | T2 | P6 | W2 | planned | index | — |
 | R026 | `/services/custom-ai-agents` | Service ⭐ | AI Automation | 1A.7 | A custom AI agent built for a specific business task | T2 | P6 | W2 | planned | index | — |
 | R027 | `/services/speed-to-lead-system` | Service 🔥 | AI Automation | 1B.1 | Reply to every new lead within 60 seconds (a design target, facts §6) | T2 | P6 | W1 | live | index | — |
-| R028 | `/services/ai-lead-qualification-scoring` | Service ⭐ | AI Automation | 1B.2 | Qualify and score leads automatically so sales calls the best first | T2 | P6 | W2 | planned | index | — |
+| R028 | `/services/ai-lead-qualification-scoring` | Service ⭐ | AI Automation | 1B.2 | Qualify and score leads automatically so sales calls the best first | T2 | P6 | W2 | live | index | — |
 | R029 | `/services/automated-quotation-tracking` | Service 🔥 | AI Automation | 1B.3 | Send quotes fast and track every quote until it's won or lost | T2 | P6 | W1 | live | index | — |
-| R030 | `/services/proposal-automation` | Service ⭐ | AI Automation | 1B.4 | Generate proposals automatically from templates and CRM data | T2 | P6 | W2 | planned | index | — |
+| R030 | `/services/proposal-automation` | Service ⭐ | AI Automation | 1B.4 | Generate proposals automatically from templates and CRM data | T2 | P6 | W2 | live | index | — |
 | R031 | `/services/sales-follow-up-nurture` | Service ⭐ | AI Automation | 1B.5 | Automatic follow-up and nurture sequences so no lead goes cold | T2 | P6 | W2 | live | index | — |
 | R032 | `/services/crm-setup-automation` | Service ⭐ | AI Automation | 1B.6 | Set up a CRM (HubSpot, Zoho and others) and automate it | T2 | P6 | W2 | live | index | — |
 | R033 | `/services/booking-automation-system` | Service 🔥 | AI Automation | 1C.1 | Let customers book appointments automatically, any time | T2 | P6 | W1 | live | index | — |
 | R034 | `/services/appointment-reminders-no-show-reduction` | Service ⭐ | AI Automation | 1C.2 | Automatic reminders that cut missed appointments | T2 | P6 | W2 | live | index | — |
-| R035 | `/services/viewing-site-visit-scheduling` | Service ⭐ | AI Automation | 1C.3 | Schedule property viewings and site visits automatically | T2 | P6 | W2 | planned | index | — |
+| R035 | `/services/viewing-site-visit-scheduling` | Service ⭐ | AI Automation | 1C.3 | Schedule property viewings and site visits automatically | T2 | P6 | W2 | live | index | — |
 | R036 | `/services/ai-customer-support-automation` | Service ⭐ | AI Automation | 1D.1 | Answer common customer support questions with AI, with human handover | T2 | P6 | W2 | planned | index | — |
-| R037 | `/services/ticketing-complaint-tracking` | Service ⭐ | AI Automation | 1D.2 | Track every complaint and ticket until it's resolved | T2 | P6 | W2 | planned | index | — |
+| R037 | `/services/ticketing-complaint-tracking` | Service ⭐ | AI Automation | 1D.2 | Track every complaint and ticket until it's resolved | T2 | P6 | W2 | live | index | — |
 | R038 | `/services/review-reputation-automation` | Service 🔥 | AI Automation | 1D.3 | Ask happy customers for reviews automatically and respond to reviews | T2 | P6 | W1 | live | index | — |
-| R039 | `/services/loyalty-renewal-win-back-automation` | Service ⭐ | AI Automation | 1D.4 | Automate renewals, loyalty and win-back messages | T2 | P6 | W2 | planned | index | — |
-| R040 | `/services/job-work-order-management` | Service ⭐ | AI Automation | 1E.1 | Automate jobs and work orders from request to completion | T2 | P6 | W2 | planned | index | — |
-| R041 | `/services/preventive-maintenance-scheduling` | Service ⭐ | AI Automation | 1E.2 | Schedule maintenance contracts and preventive maintenance automatically | T2 | P6 | W2 | planned | index | — |
-| R042 | `/services/inventory-stock-automation` | Service ⭐ | AI Automation | 1E.3 | Automate stock levels, alerts and reorders | T2 | P6 | W2 | planned | index | — |
-| R043 | `/services/task-approval-workflows` | Service ⭐ | AI Automation | 1E.6 | Automate internal tasks and approvals | T2 | P6 | W2 | planned | index | — |
-| R044 | `/services/invoicing-payment-collection` | Service ⭐ | AI Automation | 1F.1 | Send invoices and collect payments automatically | T2 | P6 | W2 | planned | index | — |
+| R039 | `/services/loyalty-renewal-win-back-automation` | Service ⭐ | AI Automation | 1D.4 | Automate renewals, loyalty and win-back messages | T2 | P6 | W2 | live | index | — |
+| R040 | `/services/job-work-order-management` | Service ⭐ | AI Automation | 1E.1 | Automate jobs and work orders from request to completion | T2 | P6 | W2 | live | index | — |
+| R041 | `/services/preventive-maintenance-scheduling` | Service ⭐ | AI Automation | 1E.2 | Schedule maintenance contracts and preventive maintenance automatically | T2 | P6 | W2 | live | index | — |
+| R042 | `/services/inventory-stock-automation` | Service ⭐ | AI Automation | 1E.3 | Automate stock levels, alerts and reorders | T2 | P6 | W2 | live | index | — |
+| R043 | `/services/task-approval-workflows` | Service ⭐ | AI Automation | 1E.6 | Automate internal tasks and approvals | T2 | P6 | W2 | live | index | — |
+| R044 | `/services/invoicing-payment-collection` | Service ⭐ | AI Automation | 1F.1 | Send invoices and collect payments automatically | T2 | P6 | W2 | live | index | — |
 | R045 | `/services/uae-e-invoicing` | Service 🔥 | AI Automation | 1F.2 | Get ready for UAE e-invoicing and connect to an accredited provider | T2 | P6 | W1 | planned | index | Official dates in the citation register |
 | R046 | `/services/ai-document-data-extraction` | Service ⭐ | AI Automation | 1F.3 | Extract data from invoices and documents with AI (OCR) | T2 | P6 | W2 | planned | index | — |
 | R047 | `/services/recruitment-automation` | Service ⭐ | AI Automation | 1G.1 | Automate candidate screening, scheduling and updates | T2 | P6 | W2 | planned | index | — |
@@ -264,3 +264,4 @@ The blueprint's draft slugs (for example `web-development`, `ai-chatbots`, `/aud
 | 2026-10-09 | R029, R031, R032, R033, R034, R038, R051, R068, R070, R076 → live (service batch 1 from the pilot template: the standing plan `docs/plans/2026-10-08-service-pages-standing-plan.md`, decision 0029) | Owner ("start service batch", 2026-10-09) |
 | 2026-10-10 | R060 `/services/custom-coded-websites` → live (the flagship Websites page on its own route, with Code ↔ Page and the build terminal: `docs/plans/2026-10-10-flagship-websites-page.md`) | Owner ("approved", 2026-10-10) |
 | 2026-10-16 | R140 `/studio` and R160 `/studio/<slug>` → performance-exempt (no Lighthouse floor, page-weight ceiling or Core Web Vitals lab gate; limitless design): decision 0031 | Owner (in chat, 2026-10-16) |
+| 2026-10-19 | R028, R030, R035, R037, R039, R040, R041, R042, R043, R044 → live (service batch 2 from the v3 service template, each with its hero photo P22–P31: the standing plan `docs/plans/2026-10-08-service-pages-standing-plan.md`) | Owner ("build service batch 2 … each with a new ElevenLabs hero photo", 2026-10-19) |

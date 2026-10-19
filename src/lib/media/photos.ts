@@ -35,6 +35,17 @@ export const PHOTOS = {
   P20: { id: 'P20', fileName: 'custom-coded-website-laptop-phone-dubai', width: 2400, height: 1800 },
   // The audit session: Home's How we work
   P21: { id: 'P21', fileName: 'free-ai-audit-process-map-session-dubai', width: 2400, height: 1800 },
+  // Service batch 2's heroes (the service pages' standing plan; ElevenLabs Seedream 5 Lite, 2026-10-19)
+  P22: { id: 'P22', fileName: 'ai-lead-qualification-phone-dashboard-business-bay', width: 2400, height: 1800 },
+  P23: { id: 'P23', fileName: 'proposal-automation-document-laptop-difc', width: 2400, height: 1800 },
+  P24: { id: 'P24', fileName: 'viewing-scheduling-keys-phone-map-dubai-hills-villa', width: 2400, height: 1800 },
+  P25: { id: 'P25', fileName: 'ticketing-complaint-board-laptop-dubai-office', width: 2400, height: 1800 },
+  P26: { id: 'P26', fileName: 'loyalty-win-back-offer-phone-dubai-mall-cafe', width: 2400, height: 1800 },
+  P27: { id: 'P27', fileName: 'work-order-technician-tablet-ac-unit-dubai-rooftop', width: 2400, height: 1800 },
+  P28: { id: 'P28', fileName: 'preventive-maintenance-plant-room-gauge-dubai', width: 2400, height: 1800 },
+  P29: { id: 'P29', fileName: 'inventory-stock-barcode-scan-dubai-boutique', width: 2400, height: 1800 },
+  P30: { id: 'P30', fileName: 'approval-workflow-phone-receipts-dubai-coworking', width: 2400, height: 1800 },
+  P31: { id: 'P31', fileName: 'invoice-payment-collection-phone-dubai-marina', width: 2400, height: 1800 },
 } as const satisfies Record<string, PhotoFile>;
 
 export type PhotoId = keyof typeof PHOTOS;
@@ -61,6 +72,16 @@ export const SERVICE_PHOTO: Record<string, PhotoId> = {
   'local-ai-dominance': 'P18',
   'ai-ad-creative': 'P19',
   'custom-coded-websites': 'P20',
+  'ai-lead-qualification-scoring': 'P22',
+  'proposal-automation': 'P23',
+  'viewing-site-visit-scheduling': 'P24',
+  'ticketing-complaint-tracking': 'P25',
+  'loyalty-renewal-win-back-automation': 'P26',
+  'job-work-order-management': 'P27',
+  'preventive-maintenance-scheduling': 'P28',
+  'inventory-stock-automation': 'P29',
+  'task-approval-workflows': 'P30',
+  'invoicing-payment-collection': 'P31',
 };
 
 // One use of a photo: what it shows in this slot, or decorative (alt="") beside text that says it
