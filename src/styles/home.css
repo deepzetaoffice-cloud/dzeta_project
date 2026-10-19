@@ -45,6 +45,12 @@
     color: var(--dz-color-text-secondary);
   }
 
+  /* The rotator's pause button holds its place from the first paint, invisible (so not focusable or
+     announced) until the rotator runs and marks it ready: showing it never shifts the hero */
+  .dz-rotator-pause:not([data-ready]) {
+    visibility: hidden;
+  }
+
   .dz-hit[aria-pressed='true'] .dz-rotator-pause-icon,
   .dz-hit[aria-pressed='false'] .dz-rotator-play-icon {
     display: none;
@@ -136,7 +142,8 @@
     align-items: center;
     justify-content: center;
     inline-size: 100%;
-    min-block-size: calc(var(--dz-font-size-hero-word) * 2.3);
+    /* Two lines of the slab (about 2.36 em) fit, so a phrase of one line or two never resizes it */
+    min-block-size: calc(var(--dz-font-size-hero-word) * 2.4);
     @variant md {
       min-block-size: calc(var(--dz-font-size-hero-word) * 1.7);
     }

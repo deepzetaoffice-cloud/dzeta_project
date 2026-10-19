@@ -108,7 +108,7 @@ function rotator(gsap: Gsap, ease: Eases, time: Times): Stop {
   let paused = false;
   let hovered = false;
   let visible = true;
-  pause.hidden = false;
+  pause.dataset.ready = '';
 
   const show = (next: number) => {
     const old = phrases[index] ?? '';
@@ -197,7 +197,7 @@ function rotator(gsap: Gsap, ease: Eases, time: Times): Stop {
     root.removeEventListener('focusin', enter);
     root.removeEventListener('focusout', leave);
     document.removeEventListener('visibilitychange', schedule);
-    pause.hidden = true;
+    delete pause.dataset.ready;
     // Back to the first phrase, the state the HTML holds
     index = 0;
     letters(word, phrases[0] ?? '');

@@ -102,7 +102,6 @@ export function Hero() {
                 aria-pressed="false"
                 data-label-pause={heroRotator.pause}
                 data-label-play={heroRotator.play}
-                hidden
               >
                 <span className="dz-hit-face">
                   <Glyph name="pause" className="dz-rotator-pause-icon size-4" />
