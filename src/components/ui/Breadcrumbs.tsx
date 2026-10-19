@@ -30,13 +30,16 @@ export function Breadcrumbs({
 }: BreadcrumbsProps) {
   const crumbs = fullTrail(trail);
   const onColor = tone === 'onColor';
+  // The mono label sits in a hero, above the H1: it stays on one line whatever font has loaded (a
+  // late font that rewrapped it would shift the whole hero, CLS), and the current page's name
+  // shortens with an ellipsis on screen if it must. Screen readers still hear the full name.
   const mono = onColor || tone === 'mono';
   return (
-    <nav aria-label={shellContent.breadcrumbLabel} className={className}>
+    <nav aria-label={shellContent.breadcrumbLabel} className={mono ? `min-w-0 max-w-full ${className}` : className}>
       <ol
         className={
           mono
-            ? `flex flex-wrap items-center gap-x-3 font-mono text-label uppercase ${onColor ? 'text-on-color' : 'text-ink-secondary'}`
+            ? `flex min-w-0 flex-nowrap items-center gap-x-3 font-mono text-label uppercase ${onColor ? 'text-on-color' : 'text-ink-secondary'}`
             : 'flex flex-wrap items-center gap-x-2 gap-y-1 text-small'
         }
       >
@@ -45,10 +48,18 @@ export function Breadcrumbs({
           return (
             <li
               key={crumb.route}
-              className={mono ? 'inline-flex items-center gap-x-3' : 'inline-flex items-center gap-x-2'}
+              className={
+                mono
+                  ? last
+                    ? 'inline-flex min-h-8 min-w-0 items-center'
+                    : 'inline-flex shrink-0 items-center gap-x-3'
+                  : 'inline-flex items-center gap-x-2'
+              }
             >
               {last ? (
-                <span aria-current="page">{crumb.label}</span>
+                <span aria-current="page" className={mono ? 'block truncate' : undefined}>
+                  {crumb.label}
+                </span>
               ) : (
                 <>
                   <a
