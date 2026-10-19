@@ -1,6 +1,6 @@
 # Footer: the audit panel and the sectioned footer
 
-Status: CONFIRMED (Figma approved 2026-10-18); the newsletter OPEN (C84) · All pages · Decision 0033 · Effects: [13](../ai/13-experience-design.md) · Figma: Footer set `39:1070` (Desktop 1440 × 1556, Mobile 390 × 2056), Footer column `36:287`
+Status: CONFIRMED (Figma approved 2026-10-18); the newsletter OPEN (C84) · As built in Phase D1 (2026-10-19; the owner approved this sync the same day) · All pages · Decision 0033 · Effects: [13](../ai/13-experience-design.md) · Figma: Footer set `39:1070` (Desktop 1440 × 1556, Mobile 390 × 2056), Footer column `36:287`
 
 ## Idea
 
@@ -8,10 +8,10 @@ Every page ends on the one goal. First an audit panel that points to the free AI
 
 ## 1. The audit panel (the finale)
 
-- **A stage-gradient panel** with `beams` falling toward its edge (they point to the CTA). In view only; static under Reduce effects.
+- **A stage-gradient panel** with `beams` falling toward its edge (they point to the CTA), drawn in CSS (not Aceternity or Motion). In view only (`src/lib/fx/footer.ts`); static under Reduce effects.
 - **The content:**
   - the mono label "Free AI Automation Audit"
-  - the `<h2>` "Find out what to automate first." (`shellContent.finaleHeading`)
+  - the `<h2>` "Find out what to automate first." (`shellContent.finaleHeading`), pinned at the size the Figma component draws (32 px desktop, 34 px mobile)
   - its line (`finaleLine`)
   - the "In one session we map" strip: 01 Sales · 02 Operations · 03 Admin, then "…and show which automations pay back first. No obligation, no jargon."
 - **The actions:**
@@ -29,6 +29,7 @@ Every page ends on the one goal. First an audit panel that points to the free AI
 | Resources | Resources · Glossary |
 | Contact | An `<address>` from the site config: the office address, `hello@deepzeta.ai` (a `mailto:` link, `contact_click` `email`), the phone and WhatsApp (each only once CONFIRMED), and the opening hours line byte for byte (facts §2; "Monday to Friday, 08:00–17:00 GST (UTC+4); closed Saturday and Sunday" today) |
 
+- **The section titles** are mono labels: ink/secondary with a signal-orange pixel (C80; Figma draws them in orange, 2.84:1 on white).
 - **Live links only.** A link renders only while its registry row is live, so the columns fill in as pages ship (the P2 rule, kept). A section with no live link yet is left out.
 - **Every footer href equals its target's canonical path** (`check:links`).
 
@@ -44,12 +45,12 @@ Every page ends on the one goal. First an audit panel that points to the free AI
 - Privacy and Terms (each a link once live).
 - **The Reduce effects switch** (13 §2.11): a switch button, remembered; turned on and labelled "Your device settings turn this on" when a device preference forces it.
 - **Cookie settings** (C83): a button that opens the consent settings dialog, for every visitor, hidden in place until it works (09 §2.7; `consent.spec.ts`).
-- "Back to top ↑", which moves focus to the top of `<main>`.
+- "Back to top ↑", a link to `#top` (`foundation.spec.ts` allows one link to `#main`, the skip link's).
 
 ## 5. The giant wordmark
 
 - "Deepzeta" across the full width as an outline. Under the pointer, a radial mask of the logo gradient follows the cursor (`wordmark-spotlight`).
-- It is `aria-hidden`: the brand's name is already in the legal line and the logo.
+- It is `aria-hidden` and drawn from `data-word` as CSS generated content with empty alt text, so it adds no duplicate text node: the brand's name is already in the legal line and the logo.
 
 ## Mobile (390)
 
