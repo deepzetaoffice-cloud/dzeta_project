@@ -290,16 +290,26 @@ test.describe('The GTM loader (09 §2.1, C56; gtm.ts)', () => {
 
   const buildHasGtm = (csp: string | undefined) => (csp ?? '').includes('googletagmanager.com');
 
-  test('one container request after hydration, after the consent default, and nothing else third-party', async ({
+  const containerRequests = (requests: string[]) => requests.filter((url) => GTM_SCRIPT.test(url)).length;
+
+  test('no container until the first action, then one, after the consent default, and nothing else third-party', async ({
     page,
   }) => {
     const requests = await stubThirdParties(page);
     const response = await page.goto('/');
     test.skip(!buildHasGtm(response?.headers()['content-security-policy']), 'no GTM ID in this build (C5 pending)');
     await page.waitForLoadState('networkidle');
-    // The container is fetched past the first paint (decision 0022), so it can land after the idle
-    // window closes: poll for exactly one request, then read the data layer once it's there.
-    await expect.poll(() => requests.filter((url) => GTM_SCRIPT.test(url)).length).toBe(1);
+    // GTM waits for the visitor's first action (decision 0035): a visitor who never acts loads no tag
+    expect(containerRequests(requests)).toBe(0);
+    expect(
+      (await dataLayer(page)).some((entry) => typeof entry === 'object' && entry !== null && 'gtm.start' in entry),
+    ).toBe(false);
+    // A scroll is a first action; a second action loads nothing more
+    await page.mouse.wheel(0, 400);
+    await expect.poll(() => containerRequests(requests)).toBe(1);
+    await page.keyboard.press('Tab');
+    await page.waitForTimeout(300);
+    expect(containerRequests(requests)).toBe(1);
     // The loader's gtm.start lands after the consent default (09 §2.2): the container only runs once
     // dataLayer[0] has set the Consent Mode state it reads.
     const layer = await dataLayer(page);
@@ -311,14 +321,18 @@ test.describe('The GTM loader (09 §2.1, C56; gtm.ts)', () => {
 
   test.describe('in Europe (DE)', () => {
     test.use(fromCountry('DE'));
-    test('the container still loads while consent is denied: the tags wait inside GTM, not here', async ({ page }) => {
+    test('the container loads on the first action while consent is denied: the tags wait inside GTM, not here', async ({
+      page,
+    }) => {
       const requests = await stubThirdParties(page);
       const response = await page.goto('/');
       test.skip(!buildHasGtm(response?.headers()['content-security-policy']), 'no GTM ID in this build (C5 pending)');
       await page.waitForLoadState('networkidle');
       expect((await dataLayer(page))[0]).toEqual({ gtag: ['consent', 'default', DENIED] });
-      // Past the first paint (decision 0022), so it can arrive after the idle window: poll.
-      await expect.poll(() => requests.some((url) => GTM_SCRIPT.test(url))).toBe(true);
+      expect(containerRequests(requests)).toBe(0);
+      // A key press is a first action (decision 0035)
+      await page.keyboard.press('Tab');
+      await expect.poll(() => containerRequests(requests)).toBe(1);
     });
   });
 });
