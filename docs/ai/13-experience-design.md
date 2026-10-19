@@ -1,6 +1,6 @@
 # 13 · Experience Design: Effects, Motion & Interaction
 
-> **Applies to:** every visual effect, animation, pointer/scroll/hover behaviour, 3D, video and story graphic · **Precedence:** below 00; tokens live in [05](05-design-system.md), loading habits in [07](07-performance-budget.md) · **Last reviewed:** 2026-10-18 (rewritten from the approved Figma motion spec, decision 0033)
+> **Applies to:** every visual effect, animation, pointer/scroll/hover behaviour, 3D, video and story graphic · **Precedence:** below 00; tokens live in [05](05-design-system.md), loading habits in [07](07-performance-budget.md) · **Last reviewed:** 2026-10-19 (the build column, §5, §6, §7, §9 and §12 synced with the Phase D build; the owner approved it the same day)
 > **Source:** Figma "Deepzeta AI · Website v3" (`tYw7bSV9m4zX2vrVs7XYpE`), page Motion spec (`1:10`, frame `62:33`) · **Decision:** [0033](../decisions/0033-redesign-v3.md) · **Surface specs:** [docs/design/](../design/README.md)
 
 This file is the **only** home for effect definitions, triggers, fallbacks and choreography. Other files cite effect IDs from here and never restate these rules.
@@ -80,53 +80,53 @@ This file is the **only** home for effect definitions, triggers, fallbacks and c
 | `press-scale` | Every button, chip, card | Feedback | `:active` (pointer, or Enter/Space once) | scale 0.97 · 160 ms · ease-out; release 160 ms | Kept (no movement beyond 3%) | CSS transition on transform |
 | `hover-lift` | Service cards, door cards, concept cards | Feedback | Pointer enters (`hover: hover` only) | translateY −4 px + Elevation 2 · 220 ms · ease-out | Shadow change only | CSS |
 | `focus-ring` | Everything interactive | State | `:focus-visible` | Instant: 2 px white + 2 px `#3741FD` ring | Same | CSS |
-| `section-reveal` | Section headings, card groups | Explain | Enters the viewport once | opacity 0→1, translateY 12→0 · 400 ms · ease-out · 50 ms stagger | Opacity only, 200 ms | IntersectionObserver + CSS / GSAP |
-| `smooth-scroll` | Whole page | Feedback | Wheel, trackpad, touch | Lenis, lerp 0.1, synced with ScrollTrigger | Off: native scrolling | `lenis` |
+| `section-reveal` | Section headings, card groups | Explain | Enters the viewport once | opacity 0→1, translateY 12→0 · 400 ms · ease-out · 50 ms stagger | Opacity only, 200 ms | IntersectionObserver + CSS; built on the service diagram, which lights its steps once (`src/lib/fx/service.ts`) |
+| `smooth-scroll` | Whole page | Feedback | Wheel, trackpad, touch | Lenis, lerp 0.1, synced with ScrollTrigger | Off: native scrolling | Not used in the v3 build: the site scrolls natively (Lenis isn't installed) |
 
 ### 4.2 Header, mega menu, mobile menu, footer
 
 | ID | Where | Purpose | Trigger | Timing · easing | Reduced motion | Build |
 |---|---|---|---|---|---|---|
-| `header-condense` | Header | State | Scroll past 80 px | The pill narrows and shortens via transform/clip · 250 ms · ease-out | Instant swap | GSAP ScrollTrigger + CSS |
-| `reading-progress` | Scrolled header | State | Scroll position | scaleX 0→1 of the violet line, scroll-linked, linear | Shown, static at the current value | CSS scroll-timeline / GSAP |
+| `header-condense` | Header | State | Scroll past 80 px | The pill narrows and shortens via transform/clip · 250 ms · ease-out | Instant swap | CSS clip and transform + a small scroll listener (`src/lib/fx/header.ts`) |
+| `reading-progress` | Scrolled header | State | Scroll position | scaleX 0→1 of the violet line, scroll-linked, linear | Shown, static at the current value | CSS scroll timeline; a small script keeps `--dz-progress` where it isn't supported |
 | `status-pulse` | Status island dot | State | The agent is live | Opacity 1→0.4→1 · 2 s loop | Off (solid dot) | CSS keyframes |
 | `status-expand` | Status island | Feedback | Hover or focus | Width + a second line in · 220 ms · ease-out | Opacity only | CSS |
-| `mega-menu-open` | Header → mega menu | State | Click or Enter on Services (never hover-intent alone) | opacity + translateY 8→0 · 250 ms · ease-out, origin at the trigger; Esc closes instantly | Opacity 150 ms | Radix Navigation Menu + CSS |
-| `mega-preview-swap` | Mega menu preview rail | Explain | Hover or focus a pillar column | Poster cross-fade 220 ms, then the pillar loop plays muted | Instant poster swap, no autoplay | CSS + `<video>` |
+| `mega-menu-open` | Header → mega menu | State | Click or Enter on Services (never hover-intent alone) | opacity + translateY 8→0 · 250 ms · ease-out, origin at the trigger; Esc closes instantly | Opacity 150 ms | Native popover (`popover="auto"`) + CSS |
+| `mega-preview-swap` | Mega menu preview rail | Explain | Hover or focus a pillar column | Poster cross-fade 220 ms, then the pillar loop plays muted | Instant poster swap, no autoplay | CSS + the door photos (`src/lib/fx/mega.ts`); `<video>` once V01–V04 exist |
 | `mobile-menu-sheet` | Mobile header → full-screen menu | State | Tap Menu | translateY −4% → 0 + opacity · 300 ms · ease/drawer; links stagger 30 ms | Opacity only | Native `<dialog class="dz-sheet">` + CSS (C83) |
-| `accordion` | FAQ, the mobile menu's pillars | State | Click, tap or Enter | grid-template-rows 0fr→1fr · 220 ms · ease-out; the + / − icon cross-fades | Instant | Radix Accordion + CSS |
-| `beams` | Footer audit panel | Explain: points to the audit CTA | The panel in view | Beams fall 3–5 s linear, burst on the edge | Off (static beams) | Aceternity Background Beams With Collision |
-| `wordmark-spotlight` | Footer giant wordmark | Feedback | Pointer over (`hover: hover`) | A radial mask of the logo gradient follows the cursor, spring 0.5 s / bounce 0 | Static outline | Aceternity Text Hover Effect |
+| `accordion` | FAQ, the mobile menu's pillars | State | Click, tap or Enter | grid-template-rows 0fr→1fr · 220 ms · ease-out; the + / − icon cross-fades | Instant | Native exclusive `<details name>` + CSS (`::details-content`) |
+| `beams` | Footer audit panel | Explain: points to the audit CTA | The panel in view | Beams fall 3–5 s linear, burst on the edge | Off (static beams) | CSS keyframes, run only in view (`src/lib/fx/footer.ts`) |
+| `wordmark-spotlight` | Footer giant wordmark | Feedback | Pointer over (`hover: hover`) | A radial mask of the logo gradient follows the cursor, spring 0.5 s / bounce 0 | Static outline | CSS mask + a small pointer script (`src/lib/fx/footer.ts`) |
 
 ### 4.3 Home: signature moments
 
 | ID | Where | Purpose | Trigger | Timing · easing | Reduced motion | Build |
 |---|---|---|---|---|---|---|
-| `hero-word-rotator` | Hero headline | Explain | Autoplay; pauses on hover/focus, off-screen, in a hidden tab, and by its pause button | Dwell 2.4 s · letters enter rotateX 70°→0 + blur 8→0, 18 ms stagger, 560 ms ease-out · exit 320 ms in-out · slab morph 420 ms · sweep 900 ms · pixel burst 240 ms | Opacity cross-fade 200 ms; the slab swaps without motion | GSAP SplitText or KokonutUI TX-02 extended |
-| `background-paths` | Hero stage | Feedback | Pointer moves (`hover: hover`) | Lines part within 120 px of the cursor, spring back | Static lines | KokonutUI BG-02, recoloured |
-| `message-to-booking` | Hero 3D phone scene | Explain | Scroll-pinned ~150 vh; drag rotates the phone | 0–25% the lead drops into the stack · 25–50% the reply types in · 50–75% the slot locks · 75–100% the CRM card fills and "Team notified" lands; drag ±25° with a spring release | No pin; the final state; the phone poster image | R3F (lazy) + GSAP ScrollTrigger |
+| `hero-word-rotator` | Hero headline | Explain | Autoplay; pauses on hover/focus, off-screen, in a hidden tab, and by its pause button | Dwell 2.4 s · letters enter rotateX 70°→0 + blur 8→0, 18 ms stagger, 560 ms ease-out · exit 320 ms in-out · slab morph 420 ms · sweep 900 ms · pixel burst 240 ms | Opacity cross-fade 200 ms; the slab swaps without motion | GSAP with one span per letter, in chunks that wrap only between words (`src/lib/fx/home/slab.ts`); no SplitText |
+| `background-paths` | Hero stage | Feedback | Pointer moves (`hover: hover`) | Lines part within 120 px of the cursor, spring back | Static lines | SVG paths + a small pointer script (`src/lib/fx/home/effects.ts`) |
+| `message-to-booking` | Hero 3D phone scene | Explain | Scroll-pinned ~150 vh; drag rotates the phone | 0–25% the lead drops into the stack · 25–50% the reply types in · 50–75% the slot locks · 75–100% the CRM card fills and "Team notified" lands; drag ±25° with a spring release | No pin; the final state; the phone poster image | CSS 3D phone with real HTML text + GSAP ScrollTrigger; no R3F |
 | `pixels-to-doors` | Four doors | Explain | The section enters the viewport | The 4 logo pixels fly along curves into the 4 cards · 600 ms in-out · 80 ms stagger | Cards shown in place | GSAP MotionPath |
 | `door-tilt` | Door cards | Feedback | Pointer over (`hover: hover`) | rotateX/Y ≤ 6° toward the pointer + glare, spring (stiffness 150, damping 18) | None | CSS 3D + small JS |
-| `door-video` | Door cards | Explain | The card in view | Poster → muted loop; pauses off-screen; a pause control | Poster only, no autoplay | `<video>` + IntersectionObserver |
+| `door-video` | Door cards | Explain | The card in view | Poster → muted loop; pauses off-screen; a pause control | Poster only, no autoplay | `<video>` + IntersectionObserver, once V01–V04 exist (not built yet) |
 | `problem-reveal` | "Sound familiar?" rows | Explain | Hover or tap a row | The "With Deepzeta AI" side wipes in (clip-path) 420 ms ease-out; a strike-through draws on "Today" | Both sides shown | CSS clip-path |
-| `workflow-connect` | "See an automation run" | Explain | Scroll-pinned ~200 vh | Nodes appear 01→05; connectors draw in signal orange; the step list and scrubber sync; ends by cross-fading into the real n8n recording | No pin; every node and the recording shown | GSAP ScrollTrigger (+ R3F optional) |
-| `exploded-layers` | "This page is the proof" | Explain | Scroll; the "How AI reads this page" toggle | The Design, Code, Schema and SEO layers separate in depth; the toggle swaps the section into the AI view in 220 ms | Layers flat; toggle instant | R3F planes (lazy) or CSS 3D |
+| `workflow-connect` | "See an automation run" | Explain | Scroll-pinned ~200 vh | Nodes appear 01→05; connectors draw in signal orange; the step list and scrubber sync; ends by cross-fading into the real n8n recording | No pin; every node and the recording shown | GSAP ScrollTrigger; the n8n recording joins once SR01 exists |
+| `exploded-layers` | "This page is the proof" | Explain | Scroll; the "How AI reads this page" toggle | The Design, Code, Schema and SEO layers separate in depth; the toggle swaps the section into the AI view in 220 ms | Layers flat; toggle instant | CSS 3D |
 | `lcp-stamp` | "This page is the proof" | State | After load (PerformanceObserver) | This visit's real LCP counts in over 600 ms ease-out; never a promised score (10 §3.7) | The value appears without counting | JS |
-| `industry-rail` | "Built for your industry" | Explain | Desktop: vertical scroll drives the rail (pinned); mobile: swipe with momentum + snap | Photos move 0.85× inside their cards (depth parallax) | Plain horizontal scroll, no parallax | GSAP ScrollTrigger · KokonutUI CD-07 |
+| `industry-rail` | "Built for your industry" | Explain | Desktop: vertical scroll drives the rail (pinned); mobile: swipe with momentum + snap | Photos move 0.85× inside their cards (depth parallax) | Plain horizontal scroll, no parallax | GSAP ScrollTrigger on desktop; native momentum scroll with snap on phones |
 | `industry-flip` | Industry cards | State | Click, tap or Enter | rotateY 180° · 560 ms · in-out; the back face lists the automations | Cross-fade 200 ms | CSS 3D |
-| `roi-count-up` | ROI calculator | Feedback | Slider drag or input | The result counts to the new value in 400 ms ease-out (tabular figures); the slider fill sloshes (spring); arrow keys update instantly | Instant numbers | KokonutUI IN-07 + JS |
+| `roi-count-up` | ROI calculator | Feedback | Slider drag or input | The result counts to the new value in 400 ms ease-out (tabular figures); the slider fill sloshes (spring); arrow keys update instantly | Instant numbers | Native range inputs + JS (`src/lib/fx/home/interactions.ts`) |
 | `marquee` | Platform strip | Explain | Always; pauses on hover, focus and its pause button | A linear loop, 40 s per cycle | A static wrapped list | CSS |
 
 ### 4.4 Other pages
 
 | ID | Where | Purpose | Trigger | Timing · easing | Reduced motion | Build |
 |---|---|---|---|---|---|---|
-| `dot-field` | Services hub hero | Feedback | The pointer; hovering a pillar chip | Dots near the cursor light; the chip lights its pillar's dots | Static dots | KokonutUI BG-01 |
-| `macbook-scroll` | Custom-coded websites hero | Explain | Scroll | The lid opens 75°→0° and scales up; this site fades in on the screen | The laptop open, static | Aceternity Macbook Scroll / the R3F flagship laptop |
-| `code-page-compare` | Code ↔ Page | Explain | Drag; ← → move 5% instantly | A clip-path inset follows the handle; one 1.2 s hint on first view | No hint; the handle still works | Aceternity Compare |
-| `terminal-replay` | "Watch this site run its own checks" | Explain | Play | Lines type at the recorded timing; play, pause, scrub | The full log shown | JS (`build-run.ts` data) |
-| `drape` | Privacy hero | Feedback | The pointer pushes the cloth | A gentle cloth simulation | Static pleats | KokonutUI BG-06 (WebGL, lazy) |
-| `shape-throw` | 404 | Feedback | Drag and throw (velocity > 0.11 throws) | Physics with friction; the chips are links | Static; the links work | KokonutUI BG-03 |
+| `dot-field` | Services hub hero | Feedback | The pointer; hovering a pillar chip | Dots near the cursor light; the chip lights its pillar's dots | Static dots | CSS dots + a small pointer script (`src/lib/fx/hub.ts`); the chips light their pillar by CSS `:has` |
+| `macbook-scroll` | Custom-coded websites hero | Explain | Scroll | The lid opens 75°→0° and scales up; this site fades in on the screen | The laptop open, static | CSS 3D laptop, its screen in HTML + GSAP ScrollTrigger (`src/lib/fx/flagship.ts`) |
+| `code-page-compare` | Code ↔ Page | Explain | Drag; ← → move 5% instantly | A clip-path inset follows the handle; one 1.2 s hint on first view | No hint; the handle still works | A native range input + CSS clip-path (`src/lib/fx/flagship.ts`) |
+| `terminal-replay` | "Watch this site run its own checks" | Explain | Play | Lines appear one by one at a set pace, commands typing in (the recording keeps no per-line timing); play, pause, replay, next step, a progress bar | The full log shown | JS (`build-run.ts` data; `src/lib/fx/flagship.ts`) |
+| `drape` | Privacy hero | Feedback | The pointer pushes the cloth | A gentle cloth simulation | Static pleats | CSS pleats + a small raw-WebGL shader, no library, lazy (`src/lib/fx/privacy.ts`) |
+| `shape-throw` | 404 | Feedback | Drag and throw (velocity > 0.11 throws) | Physics with friction; the chips are links | Static; the links work | A small custom physics script (`src/lib/fx/shapes.ts`) |
 
 ### 4.5 Retired IDs (Signal & Depth, decision 0008)
 
@@ -186,13 +186,13 @@ The Designer Studio's concept sites have their own looks, so their plans may sti
 
 | Page | Signature moments (one per viewport) | Supporting |
 |---|---|---|
-| Home | `message-to-booking` (hero) · `pixels-to-doors` + `door-video` (four doors) · `workflow-connect` · `exploded-layers` + `lcp-stamp` · `industry-rail` + `industry-flip` · `roi-count-up` | `hero-word-rotator` (the hero's headline), `background-paths`, `marquee`, `problem-reveal`, `door-tilt`, `section-reveal` |
-| Services hub | — (a directory, calm) | `dot-field`, `hover-lift`, `accordion`, `section-reveal` |
-| Service template | — (one diagram, calm) | The C diagram (Diagram step + Scrubber, static or `section-reveal`), `hover-lift`, `accordion` |
-| Custom-coded websites | `macbook-scroll` · `code-page-compare` · `terminal-replay` | `hover-lift`, `accordion`, `section-reveal` |
+| Home | `message-to-booking` (hero) · `pixels-to-doors` + `door-video` (four doors; the video once V01–V04 exist) · `workflow-connect` · `exploded-layers` + `lcp-stamp` · `industry-rail` + `industry-flip` · `roi-count-up` | `hero-word-rotator` (the hero's headline), `background-paths`, `marquee`, `problem-reveal`, `door-tilt` |
+| Services hub | — (a directory, calm) | `dot-field`, `hover-lift`, `accordion` |
+| Service template | — (one diagram, calm) | The C diagram (the step list beside the system diagram), lit in order once on view (`section-reveal`), `hover-lift`, `accordion` |
+| Custom-coded websites | `macbook-scroll` · `code-page-compare` · `terminal-replay` | `hover-lift`, `accordion` |
 | Privacy | — | `drape` (hero background) |
 | 404 | `shape-throw` | — |
-| Every page | — | The shell: `header-condense`, `reading-progress`, `status-pulse`, `status-expand`, `mega-menu-open`, `mega-preview-swap`, `mobile-menu-sheet`, `beams`, `wordmark-spotlight`, `press-scale`, `focus-ring`, `smooth-scroll` |
+| Every page | — | The shell: `header-condense`, `reading-progress`, `status-pulse`, `status-expand` (while the agent is live), `mega-menu-open`, `mega-preview-swap`, `mobile-menu-sheet`, `beams`, `wordmark-spotlight`, `press-scale`, `focus-ring`. The site scrolls natively (`smooth-scroll` isn't used) |
 
 **The Home hero's rotator** (decision 0033 §3):
 - The H1 is one stable sentence and the accessible name. The rotating phrases are `aria-hidden` and are never part of the H1's text.
@@ -219,9 +219,9 @@ The Designer Studio's concept sites have their own looks, so their plans may sti
 |---|---|
 | Desktop, fine pointer | The full library |
 | Touch | No hover or pointer effects; tap states instead; scroll effects and swipe rails still run; `door-tilt`, `background-paths`, `wordmark-spotlight` off |
-| Low-end device or Save-Data | Reduce effects on (§2.11): no 3D (posters), no autoplay video (posters), no smooth scroll |
-| No WebGL2 | Every R3F scene shows its poster |
-| Reduced motion / Reduce effects on | Each effect's "Reduced motion" cell; no pinning, parallax, 3D, Lenis or autoplay; short cross-fades stay |
+| Low-end device or Save-Data | Reduce effects on (§2.11): no 3D or WebGL, no autoplay video (posters) |
+| No WebGL | The drape keeps its CSS pleats; there are no R3F scenes (the 3D is CSS) |
+| Reduced motion / Reduce effects on | Each effect's "Reduced motion" cell; no pinning, parallax, 3D, WebGL or autoplay; short cross-fades stay |
 | No JavaScript | Full content and layout; every scene in its final state; native scrolling; the mobile menu's links reachable from the page's own navigation fallback |
 | Forced colours / more contrast | Gradients and slabs drop to system colours; borders stay visible; the focus ring stays |
 | RTL | Logical properties; inline-start origins mirror (the reading progress grows from inline-start, the compare handle's arrows swap); the pixels and the logo never mirror (Icon Master Rules §9) |
@@ -229,15 +229,14 @@ The Designer Studio's concept sites have their own looks, so their plans may sti
 
 ## 7. Build technique and loading
 
-- **One engine per effect.**
-  - **GSAP** (ScrollTrigger, SplitText, MotionPath) runs scroll scenes and timelines. **Lenis** runs smooth scrolling, synced with ScrollTrigger through one ticker.
-  - **Motion** (`motion/react`) runs only inside copied KokonutUI and Aceternity components.
-  - **CSS** runs everything a transition or keyframe can do.
+- **One engine per effect** (as built in Phase D, 2026-10-19):
+  - **GSAP** 3.15.0 (ScrollTrigger, CustomEase, MotionPath; no SplitText) runs the scroll scenes and timelines, on Home and the flagship only. Its curves and timings come from the motion tokens (`src/lib/fx/motion.ts`).
+  - **CSS** runs everything a transition, keyframe, scroll timeline or 3D transform can do, with the platform's own popover, `<dialog>` and `<details>` for the menus and accordions.
+  - **Small scripts** in `src/lib/fx/` handle pointers, physics and the drape's raw WebGL, with no library.
+  - Not used: Lenis, React Three Fiber, Radix, Motion and copied KokonutUI or Aceternity components. Decision 0033 still allows them; a plan that adds one names it.
 - **Loading** ([07](07-performance-budget.md) §3):
-  - GSAP and Lenis load with the first section that needs them.
-  - R3F scenes are dynamic imports, mounted in view after the first paint.
-  - Videos load near the viewport.
-  - KokonutUI backgrounds load in view.
+  - A page's scripts load as its scene (`data-fx-scene`, `src/lib/fx/scenes.ts`) once the page is interactive, never before the first paint; GSAP loads inside the scenes that need it.
+  - Videos load near the viewport, once they exist.
 - **Tokens:** timings, easings, scales and tilts come from 05 §5, read from CSS custom properties.
 - **Copied components** (N2, decision 0033): restyled to tokens and logical CSS, their icons swapped for the in-house glyphs, a reduced-motion branch added where they lack one, and no remote assets.
 
@@ -252,7 +251,7 @@ The Designer Studio's concept sites have their own looks, so their plans may sti
 
 ## 9. Visual references and the components we copy
 
-The owner's references (animejs.com, media-harbour.com, 71three.com, wassimnasr.com, the Figma Moodboard) are references only. The components below may be copied in under N2 (decision 0033) and restyled. `Planning Folder/Components references/` snippets follow the same rule (06 §5.5).
+The owner's references (animejs.com, media-harbour.com, 71three.com, wassimnasr.com, the Figma Moodboard) are references only. The components below may be copied in under N2 (decision 0033) and restyled. `Planning Folder/Components references/` snippets follow the same rule (06 §5.5). **As built (2026-10-19), none was copied:** each effect below is the site's own code, with the component as its reference.
 
 | Source | Component | Effect ID / component |
 |---|---|---|
@@ -300,11 +299,11 @@ The owner's references (animejs.com, media-harbour.com, 71three.com, wassimnasr.
 
 ## 12. Verify list (checked at build time, never from memory)
 
-- GSAP's licence for SplitText and MotionPath, and how SplitText keeps one accessible name (its `aria` option) with VoiceOver, NVDA and TalkBack.
-- Lenis with ScrollTrigger, `position: sticky`, anchor links (`scroll-padding` for the header) and keyboard scrolling.
+- GSAP's licence for MotionPath (free since 3.13; checked at install). SplitText isn't used: the rotator's letters are the site's own spans, `aria-hidden` beside the stable H1.
+- Lenis isn't used; anchors use `scroll-padding` for the header with native scrolling.
 - The Content Security Policy (`security-headers.ts`, kept verbatim) against: React's inline `style` attributes from Motion and GSAP, WebGL, `blob:` URLs, and `media-src` for videos. `tracking.spec.ts` fails on any violation on Home or the review page.
-- drei's Draco decoder is self-hosted: its default fetches from gstatic.com, which the CSP and `tracking.spec.ts` ("nothing else third-party") forbid.
+- If a plan adds R3F: drei's Draco decoder is self-hosted, since its default fetches from gstatic.com, which the CSP and `tracking.spec.ts` ("nothing else third-party") forbid.
 - Muted inline autoplay on iOS Safari, and Low Power Mode (the poster stays).
 - `prefers-reduced-transparency` support; scroll-driven animation (`scroll-timeline`) support for `reading-progress`.
-- WebGL2 availability and the `deviceMemory` / Save-Data hints.
+- WebGL availability for the drape (it falls back to its CSS pleats) and the `deviceMemory` / Save-Data hints.
 - How `content-visibility` interacts with the pinned scenes.
