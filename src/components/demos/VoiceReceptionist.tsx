@@ -118,7 +118,9 @@ function Console({ copy, agent }: { copy: Copy; agent: VoiceAgent }) {
       setPhase('idle');
       return;
     }
-    startSession({ conversationToken: token, connectionType: 'webrtc' });
+    // `channel` tells the agent this is a website conversation, so it asks for a callback number
+    // instead of offering "the number you're calling from" (the agent's default is "phone")
+    startSession({ conversationToken: token, connectionType: 'webrtc', dynamicVariables: { channel: 'website' } });
   }, [startSession, agent]);
 
   const end = useCallback(() => {
