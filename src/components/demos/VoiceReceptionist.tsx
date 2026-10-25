@@ -10,10 +10,12 @@
 import { ConversationProvider, useConversation } from '@elevenlabs/react';
 import { useCallback, useEffect, useRef, useState, type CSSProperties, type FormEvent } from 'react';
 import { Glyph } from '@/components/ui/Glyph';
-import type { aiReceptionist } from '@/content/en/ai-receptionist';
+import type { VoiceDemoCopy } from '@/content/en/ai-receptionist';
 import { FX_MEDIA } from '@/lib/fx/preferences';
 
-type Copy = typeof aiReceptionist;
+type Copy = VoiceDemoCopy;
+// Which agent the session route starts: the receptionist by default, or the founder's AI twin
+export type VoiceAgent = 'receptionist' | 'clone';
 type Line = { id: number; role: 'user' | 'agent'; text: string };
 type Phase = 'idle' | 'connecting' | 'live' | 'ended';
 type Problem = keyof Copy['console']['errors'] | null;
@@ -21,9 +23,10 @@ type Problem = keyof Copy['console']['errors'] | null;
 const BARS = 36;
 const BAR_INDEXES = Array.from({ length: BARS }, (_, index) => index);
 
-async function fetchToken(): Promise<string | 'offline' | 'failed'> {
+async function fetchToken(agent: VoiceAgent): Promise<string | 'offline' | 'failed'> {
   try {
-    const response = await fetch('/api/voice-session', { cache: 'no-store' });
+    const url = agent === 'clone' ? '/api/voice-session?agent=clone' : '/api/voice-session';
+    const response = await fetch(url, { cache: 'no-store' });
     if (response.status === 503) return 'offline';
     if (!response.ok) return 'failed';
     const data = (await response.json()) as { token?: unknown };
@@ -37,17 +40,17 @@ function effectsOn(): boolean {
   return window.matchMedia(FX_MEDIA).matches && document.documentElement.dataset.effects !== 'reduced';
 }
 
-export type VoiceReceptionistProps = { copy: Copy };
+export type VoiceReceptionistProps = { copy: Copy; agent?: VoiceAgent };
 
-export function VoiceReceptionist({ copy }: VoiceReceptionistProps) {
+export function VoiceReceptionist({ copy, agent = 'receptionist' }: VoiceReceptionistProps) {
   return (
     <ConversationProvider>
-      <Console copy={copy} />
+      <Console copy={copy} agent={agent} />
     </ConversationProvider>
   );
 }
 
-function Console({ copy }: VoiceReceptionistProps) {
+function Console({ copy, agent }: { copy: Copy; agent: VoiceAgent }) {
   const text = copy.console;
   const [phase, setPhase] = useState<Phase>('idle');
   const [problem, setProblem] = useState<Problem>(null);
@@ -92,14 +95,14 @@ function Console({ copy }: VoiceReceptionistProps) {
 
   // A token on the visitor's intent (pointer, focus or touch on Start), so the click starts at once
   const prefetch = useCallback(() => {
-    tokenRef.current ??= fetchToken();
-  }, []);
+    tokenRef.current ??= fetchToken(agent);
+  }, [agent]);
 
   const start = useCallback(async () => {
     setProblem(null);
     setPhase('connecting');
     setLines([]);
-    const tokenPromise = tokenRef.current ?? fetchToken();
+    const tokenPromise = tokenRef.current ?? fetchToken(agent);
     tokenRef.current = null; // one token per call
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -116,7 +119,7 @@ function Console({ copy }: VoiceReceptionistProps) {
       return;
     }
     startSession({ conversationToken: token, connectionType: 'webrtc' });
-  }, [startSession]);
+  }, [startSession, agent]);
 
   const end = useCallback(() => {
     endSession();

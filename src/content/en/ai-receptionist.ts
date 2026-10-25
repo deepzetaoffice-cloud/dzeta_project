@@ -69,3 +69,12 @@ export const aiReceptionist = {
     body: 'We build AI receptionists like Sara for UAE businesses: trained on your services, speaking your brand’s language, answering on your own number.',
   },
 } as const;
+
+// The shape every voice demo's copy shares (this page and /ai-voice-clone), with the literal strings
+// widened so another page's copy can fill it
+type Widen<T> = T extends string
+  ? string
+  : T extends readonly (infer Item)[]
+    ? readonly Widen<Item>[]
+    : { readonly [Key in keyof T]: Widen<T[Key]> };
+export type VoiceDemoCopy = Widen<typeof aiReceptionist>;

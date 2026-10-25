@@ -11,6 +11,8 @@
 import { contentSecurityPolicy, securityHeaders, type SecurityOptions } from './security-headers.ts';
 
 export const VOICE_DEMO_PATH = '/ai-receptionist';
+// The founder's AI twin (docs/plans/2026-10-25-ai-voice-clone-demo.md): the same console, same headers
+export const VOICE_CLONE_PATH = '/ai-voice-clone';
 
 const EXTRA_SOURCES: Record<string, readonly string[]> = {
   'script-src': ['blob:'],

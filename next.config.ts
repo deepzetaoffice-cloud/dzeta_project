@@ -3,7 +3,7 @@ import { LOGO_URL, LOGO_VERSION } from './src/lib/brand.ts';
 import { LIGHT_WORDMARK_URL, LIGHT_WORDMARK_VERSION } from './src/lib/brand-light.ts';
 import { env } from './src/lib/env.ts';
 import { assetSecurityHeaders, securityHeaders } from './src/lib/security-headers.ts';
-import { VOICE_DEMO_PATH, voiceDemoHeaders } from './src/lib/voice-demo-headers.ts';
+import { VOICE_CLONE_PATH, VOICE_DEMO_PATH, voiceDemoHeaders } from './src/lib/voice-demo-headers.ts';
 import { isIndexable, noindexHeaders } from './src/lib/seo/indexing.ts';
 import { regionHeaderRules } from './src/lib/tracking/region.ts';
 
@@ -59,6 +59,10 @@ const nextConfig: NextConfig = {
       // sitewide values there.
       {
         source: VOICE_DEMO_PATH,
+        headers: voiceDemoHeaders(securityOptions),
+      },
+      {
+        source: VOICE_CLONE_PATH,
         headers: voiceDemoHeaders(securityOptions),
       },
       {

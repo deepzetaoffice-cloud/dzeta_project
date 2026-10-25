@@ -22,8 +22,13 @@ function reply(status: number, body: Record<string, string>) {
 export async function GET(request: Request) {
   if (!sameOrigin(request)) return reply(403, { error: 'forbidden' });
 
+  // No parameter: the receptionist (/ai-receptionist). `agent=clone`: the founder's AI twin
+  // (/ai-voice-clone, docs/plans/2026-10-25-ai-voice-clone-demo.md). Anything else is refused.
+  const agent = new URL(request.url).searchParams.get('agent');
+  if (agent !== null && agent !== 'clone') return reply(400, { error: 'unknown' });
+
   const apiKey = process.env.ELEVENLABS_API_KEY;
-  const agentId = process.env.ELEVENLABS_AGENT_ID;
+  const agentId = agent === 'clone' ? process.env.ELEVENLABS_CLONE_AGENT_ID : process.env.ELEVENLABS_AGENT_ID;
   if (!apiKey || !agentId) return reply(503, { error: 'offline' });
 
   try {
