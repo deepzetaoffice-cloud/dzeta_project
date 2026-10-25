@@ -33,6 +33,7 @@
     "analyze": "next experimental-analyze --output"
   },
   "dependencies": {
+    "@elevenlabs/react": "1.19.1",
     "gsap": "3.15.0",
     "next": "16.3.7",
     "react": "19.3.0",

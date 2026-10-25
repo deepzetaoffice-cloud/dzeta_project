@@ -3,6 +3,7 @@ import { LOGO_URL, LOGO_VERSION } from './src/lib/brand.ts';
 import { LIGHT_WORDMARK_URL, LIGHT_WORDMARK_VERSION } from './src/lib/brand-light.ts';
 import { env } from './src/lib/env.ts';
 import { assetSecurityHeaders, securityHeaders } from './src/lib/security-headers.ts';
+import { VOICE_DEMO_PATH, voiceDemoHeaders } from './src/lib/voice-demo-headers.ts';
 import { isIndexable, noindexHeaders } from './src/lib/seo/indexing.ts';
 import { regionHeaderRules } from './src/lib/tracking/region.ts';
 
@@ -39,10 +40,11 @@ const nextConfig: NextConfig = {
   // browsers, so /_next/static chunks carry just nosniff — with the full set on chunks, GTM's hosts
   // cost ~3.7 KB of headers on every first load for no effect (C5's measurement).
   async headers() {
-    const security = securityHeaders({
+    const securityOptions = {
       gtm: currentEnv.gtm !== null,
       https: currentEnv.siteUrl.startsWith('https:'),
-    });
+    };
+    const security = securityHeaders(securityOptions);
     return [
       {
         // Everything except /_next/ files: pages, robots.txt, the icons and the logo. The region rule
@@ -51,6 +53,13 @@ const nextConfig: NextConfig = {
         // robots.txt (its noindex is checked, foundation.spec.ts).
         source: '/:path((?!_next/).*)',
         headers: [...security, ...noindexHeaders(indexable)],
+      },
+      // The AI receptionist demo's microphone and voice connection, on that page only
+      // (src/lib/voice-demo-headers.ts): it follows the rule above, so its two headers replace the
+      // sitewide values there.
+      {
+        source: VOICE_DEMO_PATH,
+        headers: voiceDemoHeaders(securityOptions),
       },
       {
         // Build output chunks and other /_next/ responses: the one header an asset response needs.
