@@ -226,6 +226,8 @@ A row is never deleted, and an ID is never reused.
 | R179 | `/shell/mega-menu` | System | noindex | The mega menu's full panel as a static HTML fragment, fetched when a visitor reaches for the menu (decision 0026, L8; the P6 part A plan, A2). Never linked, never in the sitemap or llms; sent with `X-Robots-Tag: noindex` |
 | R178 | `/brand/*` | System | — | Brand files: the byte-identical logo, the manifest's 512 px icons, the square logo PNG (the schema `#logo`, P4) |
 | R165 | `/shell-review` | Utility | noindex | The complete shell (header, mega menu, mobile sheet, footer) for review and tests, P2. Local, CI and preview builds only; 404 in production. Never linked, never in the sitemap or `llms` files |
+| R180 | `/ai-receptionist` | Live demo | noindex | live. Talk to Deepzeta AI's own AI receptionist in the browser (plan `docs/plans/2026-10-25-ai-receptionist-demo.md`). Shared by link by the owner; not linked, not in the sitemap or `llms` files. Distinct from R021, the service page that sells the AI Voice Receptionist |
+| R181 | `/ai-voice-clone` | Live demo | noindex | live. Talk to the founder's AI twin, in his own cloned voice made with his permission (plan `docs/plans/2026-10-25-ai-voice-clone-demo.md`). Shared by link by the owner; not linked, not in the sitemap or `llms` files |
 
 ---
 
@@ -265,3 +267,5 @@ The blueprint's draft slugs (for example `web-development`, `ai-chatbots`, `/aud
 | 2026-10-10 | R060 `/services/custom-coded-websites` → live (the flagship Websites page on its own route, with Code ↔ Page and the build terminal: `docs/plans/2026-10-10-flagship-websites-page.md`) | Owner ("approved", 2026-10-10) |
 | 2026-10-16 | R140 `/studio` and R160 `/studio/<slug>` → performance-exempt (no Lighthouse floor, page-weight ceiling or Core Web Vitals lab gate; limitless design): decision 0031 | Owner (in chat, 2026-10-16) |
 | 2026-10-19 | R028, R030, R035, R037, R039, R040, R041, R042, R043, R044 → live (service batch 2 from the v3 service template, each with its hero photo P22–P31: the standing plan `docs/plans/2026-10-08-service-pages-standing-plan.md`) | Owner ("build service batch 2 … each with a new ElevenLabs hero photo", 2026-10-19) |
+| 2026-10-25 | R180 `/ai-receptionist` → live, noindex (the AI receptionist demo: `docs/plans/2026-10-25-ai-receptionist-demo.md`) | Owner (in chat, 2026-10-25) |
+| 2026-10-25 | R181 `/ai-voice-clone` → live, noindex (the AI voice clone demo: `docs/plans/2026-10-25-ai-voice-clone-demo.md`) | Owner (in chat, 2026-10-25) |

@@ -1,0 +1,168 @@
+/* The AI receptionist demo (/ai-receptionist; docs/plans/2026-10-25-ai-receptionist-demo.md). Tokens
+   only (05 §1), logical properties only (11 §1). Motion lives only under the fx condition (the same
+   media query and Reduce effects attribute as globals.css's fx variant, 13 §2.10): without it the orb
+   rests at its size and the state shows through colour and the status text. Loaded by the page only. */
+
+.dz-voice {
+  --dz-voice-size: min(19rem, 70vw);
+  display: grid;
+  gap: var(--dz-space-5);
+  padding: var(--dz-space-6);
+  border: var(--dz-border-width) solid var(--dz-color-border-default);
+  border-radius: var(--dz-radius-2xl);
+  background-color: var(--dz-color-bg-surface);
+  color: var(--dz-color-text-primary);
+  box-shadow: var(--dz-elevation-3);
+}
+
+/* The status pill: quiet at rest, violet while she speaks, green-dot "online" while she listens */
+.dz-voice-status {
+  background-color: var(--dz-color-bg-surface-muted);
+  color: var(--dz-color-text-secondary);
+}
+.dz-voice-status > span:first-child {
+  background-color: var(--dz-color-text-tertiary);
+}
+.dz-voice[data-state='connecting'] .dz-voice-status {
+  color: var(--dz-color-text-primary);
+}
+.dz-voice[data-state='listening'] .dz-voice-status,
+.dz-voice[data-state='speaking'] .dz-voice-status {
+  background-color: var(--dz-color-bg-violet-soft);
+  color: var(--dz-color-text-violet);
+}
+.dz-voice[data-state='listening'] .dz-voice-status > span:first-child,
+.dz-voice[data-state='speaking'] .dz-voice-status > span:first-child {
+  background-color: var(--dz-color-accent-online);
+}
+
+/* The stage: the orb in the middle, the ring of level bars around it */
+.dz-voice-stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  inline-size: var(--dz-voice-size);
+  block-size: var(--dz-voice-size);
+  margin-inline: auto;
+}
+
+.dz-voice-orb {
+  position: relative;
+  inline-size: calc(var(--dz-voice-size) * 0.58);
+  block-size: calc(var(--dz-voice-size) * 0.58);
+  overflow: hidden;
+  border-radius: var(--dz-radius-full);
+  background-image: var(--dz-grad-logo);
+  box-shadow: var(--dz-glow-violet);
+  transform: scale(var(--dz-voice-level, 1));
+  filter: saturate(0.55);
+  opacity: 0.9;
+}
+.dz-voice[data-state='connecting'] .dz-voice-orb {
+  opacity: 0.7;
+}
+.dz-voice[data-state='listening'] .dz-voice-orb,
+.dz-voice[data-state='speaking'] .dz-voice-orb {
+  filter: none;
+  opacity: 1;
+}
+
+/* A soft highlight, so the orb reads as a sphere */
+.dz-voice-orb-shine {
+  position: absolute;
+  inset-block-start: 10%;
+  inset-inline-start: 18%;
+  inline-size: 42%;
+  block-size: 34%;
+  border-radius: var(--dz-radius-full);
+  background-image: radial-gradient(closest-side, var(--dz-p-white-45), transparent);
+}
+
+.dz-voice-ring {
+  position: absolute;
+  inset: 0;
+}
+.dz-voice-ring > span {
+  position: absolute;
+  inset-block-end: 50%;
+  inset-inline-start: calc(50% - var(--dz-space-1) / 2);
+  inline-size: var(--dz-space-1);
+  block-size: calc(var(--dz-voice-size) * 0.11);
+  border-radius: var(--dz-radius-full);
+  background-color: var(--dz-color-accent-violet);
+  opacity: 0.35;
+  transform-origin: 50% 100%;
+  transform: rotate(calc(var(--dz-voice-i) * 10deg)) translateY(calc(var(--dz-voice-size) * -0.36))
+    scaleY(var(--dz-voice-bar, 0.12));
+}
+.dz-voice[data-state='listening'] .dz-voice-ring > span,
+.dz-voice[data-state='speaking'] .dz-voice-ring > span {
+  opacity: 0.85;
+}
+
+/* The transcript */
+.dz-voice-log-wrap {
+  display: grid;
+  gap: var(--dz-space-3);
+  padding: var(--dz-space-4);
+  border-radius: var(--dz-radius-xl);
+  background-color: var(--dz-color-bg-surface-muted);
+}
+
+.dz-voice-log {
+  display: grid;
+  align-content: start;
+  gap: var(--dz-space-2);
+  min-block-size: 6rem;
+  max-block-size: 16rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.dz-voice-line {
+  max-inline-size: 85%;
+  padding-block: var(--dz-space-2);
+  padding-inline: var(--dz-space-3);
+  border-radius: var(--dz-radius-lg);
+  background-color: var(--dz-color-bg-surface);
+  font-size: var(--dz-font-size-small);
+  line-height: var(--dz-leading-small);
+}
+.dz-voice-line[data-role='user'] {
+  justify-self: end;
+  background-color: var(--dz-color-bg-violet-soft);
+  color: var(--dz-color-text-violet);
+}
+
+/* The steps under the hero: Direction C's numbered steps (13 §1) */
+.dz-voice-step-number {
+  font-family: var(--dz-font-family-mono);
+  font-size: var(--dz-font-size-label);
+  letter-spacing: var(--dz-tracking-step);
+  color: var(--dz-color-text-violet);
+}
+
+/* Motion, only while effects are on (13 §2.10–§2.11) */
+@media (prefers-reduced-motion: no-preference) and (prefers-contrast: no-preference) and (forced-colors: none) {
+  :root:not([data-effects='reduced']) .dz-voice-orb {
+    transition:
+      transform var(--dz-motion-duration-press) var(--dz-motion-ease-out),
+      filter var(--dz-motion-duration-base) var(--dz-motion-ease-out),
+      opacity var(--dz-motion-duration-base) var(--dz-motion-ease-out);
+  }
+  :root:not([data-effects='reduced']) .dz-voice-ring > span {
+    transition:
+      transform var(--dz-motion-duration-press) var(--dz-motion-ease-out),
+      opacity var(--dz-motion-duration-base) var(--dz-motion-ease-out);
+  }
+}
+
+/* Reduced motion or Reduce effects: the orb and ring hold still whatever the script set */
+@media (prefers-reduced-motion: reduce) {
+  .dz-voice-orb {
+    transform: none;
+  }
+  .dz-voice-ring > span {
+    transform: rotate(calc(var(--dz-voice-i) * 10deg)) translateY(calc(var(--dz-voice-size) * -0.36)) scaleY(0.3);
+  }
+}
