@@ -166,3 +166,10 @@
     transform: rotate(calc(var(--dz-voice-i) * 10deg)) translateY(calc(var(--dz-voice-size) * -0.36)) scaleY(0.3);
   }
 }
+
+/* No sticky audit bar on the voice demos (owner, 2026-10-25): the call is the page's one action.
+   Scoped to a page holding the console, so the rule can't reach another page after a client
+   navigation keeps this stylesheet loaded. The shared bar (StickyCta, globals.css) is unchanged. */
+:root:has(.dz-voice) .dz-sticky {
+  display: none;
+}
